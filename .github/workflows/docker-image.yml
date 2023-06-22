@@ -39,4 +39,11 @@ jobs:
       - name: Deploy static site to S3 bucket
         run: |
           aws s3 sync /home/runner/work/SeezItt-web-app/SeezItt-web-app/ s3://dev-web.seezitt.com --delete
-          cloudfront create-invalidation --distribution-id E31IHGDBABEUV4 --paths /*
+          
+      - name: Run invalidation
+        uses: lbertenasco/s3-deploy@v1
+        with:
+            folder: /home/runner/work/SeezItt-web-app/SeezItt-web-app/
+            bucket: ${{ secrets.S3_BUCKET }}
+            dist-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+            invalidation: / *
