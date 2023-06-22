@@ -38,12 +38,12 @@ jobs:
 
       - name: Deploy static site to S3 bucket
         run: |
-          aws s3 sync /home/runner/work/SeezItt-web-app/SeezItt-web-app/ s3://dev-web.seezitt.com --delete
+          aws s3 sync /home/runner/work/SeezItt-web-app/SeezItt-web-app/ s3://${{ secrets.DEV_S3_BUCKET }} --delete
           
       - name: Run invalidation
         uses: lbertenasco/s3-deploy@v1
         with:
             folder: /home/runner/work/SeezItt-web-app/SeezItt-web-app/
-            bucket: ${{ secrets.S3_BUCKET }}
-            dist-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+            bucket: ${{ secrets.DEV_S3_BUCKET }}
+            dist-id: ${{ secrets.DEV_CLOUDFRONT_DISTRIBUTION_ID }}
             invalidation: / *
