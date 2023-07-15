@@ -25,6 +25,7 @@ export const SideNavBar = ({ className }: SideNavBarProps) => {
                 >
                     {/* <img src={homeIcon} alt="" className={classNames(styles.selectedStroke)} /> */}
                     <svg
+                        id="svg-section"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"
@@ -50,6 +51,7 @@ export const SideNavBar = ({ className }: SideNavBarProps) => {
                     onClick={() => handleLinkClick(1)}
                 >
                     <svg
+                        id="svg-section"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"
@@ -98,6 +100,7 @@ export const SideNavBar = ({ className }: SideNavBarProps) => {
                     onClick={() => handleLinkClick(2)}
                 >
                     <svg
+                        id="svg-section"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"
@@ -133,6 +136,7 @@ export const SideNavBar = ({ className }: SideNavBarProps) => {
                     onClick={() => handleLinkClick(3)}
                 >
                     <svg
+                        id="svg-section"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"
@@ -168,6 +172,7 @@ export const SideNavBar = ({ className }: SideNavBarProps) => {
                     onClick={() => handleLinkClick(4)}
                 >
                     <svg
+                        id="svg-section"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"

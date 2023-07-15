@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import styles from './suggested-activity.module.scss';
+import profileIcon from '../../assets/profileIcon.png';
 
 export interface SuggestedActivityProps {
     className?: string;
@@ -11,12 +12,130 @@ export const SuggestedActivity = ({ className }: SuggestedActivityProps) => {
             <div className={styles.suggestedAccountsDiv}>
                 <div className={styles.suggestedHeader}>
                     <h4 className={styles.headerTitle}>Suggested Accounts</h4>
-                    <a href="">See All</a>
+                    <a href="" className={styles.linkText}>
+                        See All
+                    </a>
                 </div>
-                <div className={styles.suggestedContent} />
+
+                <div className={styles.suggestedContent}>
+                    <img src={profileIcon} alt="" className={styles.plusIconStyle} />
+                    <div className={styles.accountName}>
+                        <h4 className={styles.nameText}>@bts_official_bighit</h4>
+                        <h4 className={styles.subNameText}>BTS</h4>
+                    </div>
+
+                    <div className="svgStyle">
+                        <svg
+                            id="svg-section"
+                            width="35"
+                            height="36"
+                            viewBox="0 0 35 36"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <circle cx="17.5" cy="18" r="17" fill="white" stroke="#5448B2" />
+                            <path
+                                fill-rule="evenodd"
+                                clip-rule="evenodd"
+                                d="M15.4967 21.0268C11.8694 21.0268 8.77148 21.5751 8.77148 23.7718C8.77148 25.9686 11.8505 26.5367 15.4967 26.5367C19.125 26.5367 22.2219 25.9875 22.2219 23.7916C22.2219 21.5958 19.1438 21.0268 15.4967 21.0268Z"
+                                stroke="#5448B2"
+                                stroke-width="0.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                            <path
+                                fill-rule="evenodd"
+                                clip-rule="evenodd"
+                                d="M15.4963 17.8937C17.8771 17.8937 19.8068 15.964 19.8068 13.5832C19.8068 11.2024 17.8771 9.27271 15.4963 9.27271C13.1165 9.27271 11.1868 11.2024 11.1868 13.5832C11.1783 15.9555 13.0939 17.8852 15.4671 17.8937H15.4963Z"
+                                stroke="#5448B2"
+                                stroke-width="0.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                            <path
+                                d="M24.298 14.8582V18.6422"
+                                stroke="#5448B2"
+                                stroke-width="0.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                            <path
+                                d="M26.2286 16.7501H22.3691"
+                                stroke="#5448B2"
+                                stroke-width="0.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                    </div>
+                </div>
             </div>
-            <div className={styles.seperatorDiv} />
-            <div className={styles.activityDiv} />
+            <div className={styles.seperatorDiv}>
+                <hr className={styles.speratorLine} />
+            </div>
+            <div className={styles.activityDiv}>
+                <div className={styles.suggestedHeader}>
+                    <h4 className={styles.headerTitle}>Activity</h4>
+                    <a href="" className={styles.linkText}>
+                        See All
+                    </a>
+                </div>
+                <div className={styles.suggestedContent}>
+                    <img src={profileIcon} alt="" className={styles.plusIconStyle} />
+                    <div className={styles.accountName}>
+                        <h4 className={styles['normal-word']}>
+                            <span className={styles.nameText}>Abelrahman</span>{' '}
+                            <span>started following you.</span>
+                            <span className={styles.subNameText}> 1 hr</span>
+                        </h4>
+                    </div>
+
+                    <div className="svgStyle">
+                        <svg
+                            id="svg-section"
+                            width="35"
+                            height="36"
+                            viewBox="0 0 35 36"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <circle cx="17.5" cy="18" r="17" fill="white" stroke="#5448B2" />
+                            <path
+                                fill-rule="evenodd"
+                                clip-rule="evenodd"
+                                d="M15.4967 21.0268C11.8694 21.0268 8.77148 21.5751 8.77148 23.7718C8.77148 25.9686 11.8505 26.5367 15.4967 26.5367C19.125 26.5367 22.2219 25.9875 22.2219 23.7916C22.2219 21.5958 19.1438 21.0268 15.4967 21.0268Z"
+                                stroke="#5448B2"
+                                stroke-width="0.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                            <path
+                                fill-rule="evenodd"
+                                clip-rule="evenodd"
+                                d="M15.4963 17.8937C17.8771 17.8937 19.8068 15.964 19.8068 13.5832C19.8068 11.2024 17.8771 9.27271 15.4963 9.27271C13.1165 9.27271 11.1868 11.2024 11.1868 13.5832C11.1783 15.9555 13.0939 17.8852 15.4671 17.8937H15.4963Z"
+                                stroke="#5448B2"
+                                stroke-width="0.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                            <path
+                                d="M24.298 14.8582V18.6422"
+                                stroke="#5448B2"
+                                stroke-width="0.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                            <path
+                                d="M26.2286 16.7501H22.3691"
+                                stroke="#5448B2"
+                                stroke-width="0.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                        </svg>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
