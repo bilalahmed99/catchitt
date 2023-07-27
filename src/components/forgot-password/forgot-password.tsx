@@ -7,7 +7,7 @@ import atForgotPwd from '../../assets/atForgotPwd.png';
 import resend from '../../assets/resend.png';
 import { useState } from 'react';
 import cookies from 'js-cookie';
-import i18next from 'i18next';
+// import i18next from 'i18next';
 // import { useTranslation } from 'react-i18next';
 
 export interface ForgotPasswordProps {
@@ -55,7 +55,7 @@ export const ForgotPassword = ({ className }: ForgotPasswordProps) => {
     const [responseResult, setResponseResult] = useState('');
 
     const handleLanguageChange = (code: string, name: string) => {
-        i18next.changeLanguage(code);
+        // i18next.changeLanguage(code);
         setLanguageSelector(name);
     };
 

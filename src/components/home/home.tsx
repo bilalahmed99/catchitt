@@ -3,7 +3,6 @@ import styles from './home.module.scss';
 import { TopBar } from '../top-bar/top-bar';
 import { SideNavBar } from '../side-nav-bar/side-nav-bar';
 import { SuggestedActivity } from '../suggested-activity/suggested-activity';
-import { ViewSwitchers } from '../view-switchers/view-switchers';
 import { Post } from '../post/post';
 import { useAuthStore } from '../../store/authStore';
 import { Navigate } from 'react-router-dom';
@@ -33,7 +32,7 @@ export const Home = ({ className }: HomeProps) => {
                         </div>
                     </div>
                     <div className={styles.middleSectionDiv}>
-                        <ViewSwitchers />
+                        {/* <ViewSwitchers /> */}
                         <Post />
                     </div>
                 </div>

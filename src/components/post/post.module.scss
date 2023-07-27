@@ -4,9 +4,26 @@
   justify-items: start;
   gap: 0px 32px;
   background-color: #fafafa;
+  overflow-y: auto;
   // width: 676px;
   // height: 753px;height:100px;height:100px;height:100%;height:100%;min-height:100px;min-height:100px;min-height:100px;min-height:100px;
 }
+
+/* Hide the scrollbar for Chrome, Safari, and newer Edge */
+.root::-webkit-scrollbar {
+  width: 0.5em; /* Set the width of the scrollbar */
+}
+
+.root::-webkit-scrollbar-track {
+  background-color: transparent; /* Set the color of the track */
+}
+
+.root::-webkit-scrollbar-thumb {
+  background-color: #b4b4b4; /* Set the color of the scrollbar thumb */
+  border-radius: 4px; /* Optionally, add rounded corners to the thumb */
+}
+
+
 .postContainer {
   background-color: #754d4d;
   width: 100%;
@@ -141,4 +158,84 @@
   padding-bottom: 0px;
 }
 .interactionDiv {
+  display: flex;
+  flex-direction: column;
+  // position: inherit;
+}
+
+/* Add your existing styles here */
+
+/* Style for the menu */
+.menu {
+  display: none;
+  width: 290px;
+  height: 312px;
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 24px;
+  list-style-type: none;
+  margin: 0;
+  box-shadow: 10px 10px 4px -15px rgba(0, 0, 0, 0.07);
+
+  border-radius: 8px;
+  // box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.08);
+}
+
+.menu li {
+  cursor: pointer;
+  padding: 8px;
+}
+
+.popMenu {
+  position: absolute;
+  top: 733px;
+  left: 948px;
+  
+}
+
+.menuItems {
+  width: 100%;
+  display: flex;
+  padding: 6px 28px 16px 0px;
+  align-items: center;
+  gap: 8px;
+
+  color: var(--default-body, #222);
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.menuItemsSvgs {
+  width: 24px;
+  height: 24px;
+}
+
+/* CSS for the ReportPopup */
+.reportPopup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+}
+
+/* CSS for the Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.185);
+  z-index: 998; /* Make sure it covers other elements */
+}
+
+.viewSwitchersDiv {
+  padding: 20px 0 40px 0;
 }

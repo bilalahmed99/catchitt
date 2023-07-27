@@ -41,6 +41,7 @@ export const ActivityPage: React.FC<Activity> = ({ className, createdTime }) => 
             if (response.ok) {
                 const responseData = await response.json();
                 setActivityData(responseData.data.data);
+                // console.log(responseData);
             } else {
                 const errorResponseData = await response.json();
                 const errorMessageFromServer = errorResponseData.message; // Assuming the error message is returned in a 'message' field

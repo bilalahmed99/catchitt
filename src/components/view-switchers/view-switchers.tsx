@@ -4,13 +4,17 @@ import { useState } from 'react';
 
 export interface ViewSwitchersProps {
     className?: string;
+    onTabChange: (index: number) => void;
 }
 
-export const ViewSwitchers = ({ className }: ViewSwitchersProps) => {
-    const [selectedLink, setSelectedLink] = useState<number | null>(null);
+export const ViewSwitchers = ({ className, onTabChange }: ViewSwitchersProps) => {
+    const [selectedLink, setSelectedLink] = useState<number | null>(1);
+
     const handleLinkClick = (index: number) => {
         setSelectedLink(index);
+        onTabChange(index); // Notify the parent component about the selected tab index
     };
+
     return (
         <div className={classNames(styles.root, className)}>
             <button
