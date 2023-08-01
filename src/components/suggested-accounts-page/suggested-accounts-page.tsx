@@ -91,7 +91,7 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
                             <div key={account._id} className={styles.accountCardDiv}>
                                 <div className={styles.userInfoFrame}>
                                     <img
-                                        src={account.avatar}
+                                        src={account.avatar || 'https://via.placeholder.com/128'}
                                         alt={account.name}
                                         className={styles.avatarImgCircle}
                                     />

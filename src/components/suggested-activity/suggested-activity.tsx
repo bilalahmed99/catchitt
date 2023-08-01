@@ -134,7 +134,10 @@ export const SuggestedActivity = ({
                                     <div key={account._id} className={styles.suggestedItem}>
                                         <div style={{ display: 'flex', flexDirection: 'row' }}>
                                             <img
-                                                src={account.avatar}
+                                                src={
+                                                    account.avatar ||
+                                                    'https://via.placeholder.com/128'
+                                                }
                                                 alt=""
                                                 className={styles.plusIconStyle}
                                             />
@@ -222,7 +225,10 @@ export const SuggestedActivity = ({
                                     <div key={activity._id} className={styles.suggestedItem}>
                                         <div style={{ display: 'flex', flexDirection: 'row' }}>
                                             <img
-                                                src={activity.avatar}
+                                                src={
+                                                    activity.avatar ||
+                                                    'https://via.placeholder.com/128'
+                                                }
                                                 alt=""
                                                 className={styles.plusIconStyle}
                                             />

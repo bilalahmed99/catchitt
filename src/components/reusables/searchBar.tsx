@@ -4,9 +4,10 @@ import './components-styles.css';
 
 interface InputFieldProps {
     onChange?: any;
+    placeholder?: string;
 }
 
-const SearchBar: React.FC<InputFieldProps> = ({ onChange }) => {
+const SearchBar: React.FC<InputFieldProps> = ({ onChange, placeholder }) => {
     return (
         <>
             {/* <div className={'searchBar'}> */}

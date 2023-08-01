@@ -1,10 +1,9 @@
 import classNames from 'classnames';
 import styles from './post.module.scss';
 // import postExample from '../../assets/postExample.png';
-import { useRef, useState, useEffect } from 'react';
-import { ReasonReportPopup, FormData } from '../reason-report-popup/reason-report-popup';
+import { useRef, useState, useEffect, SetStateAction } from 'react';
+import { ReasonReportPopup } from '../reason-report-popup/reason-report-popup';
 // import ReactPlayer from 'react-player';
-import ReactHlsPlayer from 'react-hls-player';
 import { useAuthStore } from '../../store/authStore';
 import { Navigate } from 'react-router-dom';
 import { ViewSwitchers } from '../view-switchers/view-switchers';
@@ -12,12 +11,20 @@ import MenuItem from '@mui/material/MenuItem';
 import { styled, alpha } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Menu, { MenuProps } from '@mui/material/Menu';
+import { Box, Modal, Typography } from '@mui/material';
+import confirmationIcon from '../../assets/confirmationIcon.png';
+import VideoPlayer from '../reusables/VideoPlayer';
+import shareIconinPopup from '../../assets/shareIconInPopUp.png';
+import profileIcon from '../../assets/profileIcon.png';
+import ReactHlsPlayer from '@gumlet/react-hls-player';
+import { useInView } from 'react-intersection-observer';
 
 interface PostProps {
     className?: string;
 }
 
 interface Post {
+    collections: number;
     showReportPopup: any;
     className?: string;
     mediaId: string;
@@ -54,13 +61,253 @@ interface Post {
 }
 
 export const Post: React.FC<PostProps> = ({ className }) => {
+    const videoRef = useRef<any>(null); // Use `any` type to avoid TypeScript errors
+    const [videoElement, inView] = useInView({
+        triggerOnce: true,
+        threshold: 0.1, // Adjust the threshold as needed
+    });
+
+    useEffect(() => {
+        if (inView) {
+            videoRef.current?.play();
+        } else {
+            videoRef.current?.pause();
+        }
+    }, [inView]);
+
+    const [selectedTab, setSelectedTab] = useState<number>(1);
+    const [currentLikeMediaId, setCurrentLikeMediaId] = useState('');
+    const [currentBookmarkMediaId, setCurrentBookmarkMediaId] = useState('');
+    const [currentPostUser, setCurrentPostUser] = useState('');
+    const [currentMediaId, setCurrentMediaId] = useState('');
+    // const [currentCommentMediaId, setCurrentCommentMediaId] = useState('');
+
+    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+    const token = useAuthStore((state) => state.token);
+
+    const [errorMessage, setErrorMessage] = useState('');
+    const [postData, setPostData] = useState<Post[]>([]);
+    const API_KEY = process.env.VITE_API_URL;
+    const endPoint = '/media-content/videos/feed';
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
+
+    const [openConfirmation, setOpenConfirmation] = useState(false);
+    const handleOpenConfirmation = () => {
+        setOpenConfirmation(true);
+        setShowReportPopup(false);
     };
+    const handleCloseConfirmation = () => setOpenConfirmation(false);
+
+    const [openSharePopup, setOpenSharePopup] = useState(false);
+    const handleOpenSharePopup = (
+        event: React.MouseEvent<HTMLElement>,
+        mediaId: SetStateAction<string>
+    ) => {
+        setCurrentMediaId(mediaId);
+        setOpenSharePopup(true);
+    };
+
+    const [openCommentPopup, setOpenCommentPopup] = useState(false);
+    const handleOpenCommentPopup = (event: React.MouseEvent<HTMLElement>, mediaId: string) => {
+        setCurrentMediaId(mediaId);
+        setOpenCommentPopup(true);
+    };
+
+    const handleCloseSharePopup = () => setOpenSharePopup(false);
+    const handleCloseCommentPopup = () => setOpenCommentPopup(false);
+
+    const handleClickMore = (
+        event: React.MouseEvent<HTMLElement>,
+        mediaId: SetStateAction<string>
+    ) => {
+        event.preventDefault();
+        setAnchorEl(event.currentTarget);
+        setCurrentMediaId(mediaId);
+    };
+
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+    const handleLikeClick = (
+        event: React.MouseEvent<HTMLElement>,
+        mediaId: SetStateAction<string>
+    ) => {
+        // event.preventDefault();
+        setCurrentLikeMediaId(mediaId);
+        // handleLikePost();
+    };
+
+    const handleBookmarkClick = (event: React.MouseEvent<HTMLElement>, mediaId: string) => {
+        setCurrentBookmarkMediaId(mediaId);
+    };
+
+    useEffect(() => {
+        if (currentLikeMediaId !== '') {
+            handleLikePost();
+        }
+        // if (currentLikeMediaId !== '') {
+        //     handleLikePost();
+        // }
+        if (currentBookmarkMediaId !== '') {
+            handleBookmarkPost();
+            // handleFetchActivity();
+        }
+        if (currentPostUser !== '') {
+            handleFollowClick();
+            // handleFetchActivity();
+        }
+    }, [currentLikeMediaId, currentBookmarkMediaId, currentPostUser]);
+
+    const handleLikePost = async () => {
+        try {
+            const response = await fetch(
+                `https://dev.seezitt.com/api/media-content/like/${currentLikeMediaId}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (response.ok) {
+                // const responseData = await response.json();
+                // console.log(responseData);
+                handleFetchActivity();
+                setCurrentLikeMediaId('');
+            } else {
+                console.log(response);
+                const errorResponseData = await response.json();
+                const errorMessageFromServer = errorResponseData.message; // Assuming the error message is returned in a 'message' field
+                setErrorMessage(errorMessageFromServer);
+            }
+        } catch (error) {
+            // console.error(error);
+            console.log(errorMessage);
+        }
+    };
+
+    const handleBookmarkPost = async () => {
+        try {
+            const response = await fetch(
+                `https://dev.seezitt.com/api/media-content/collections/${currentBookmarkMediaId}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (response.ok) {
+                // const responseData = await response.json();
+                // console.log(responseData);
+                console.log(response);
+                handleFetchActivity();
+                setCurrentBookmarkMediaId('');
+            } else {
+                console.log(response);
+                const errorResponseData = await response.json();
+                const errorMessageFromServer = errorResponseData.message; // Assuming the error message is returned in a 'message' field
+                setErrorMessage(errorMessageFromServer);
+            }
+        } catch (error) {
+            // console.error(error);
+            console.log(errorMessage);
+        }
+    };
+
+    const handleStartWatching = async (mediaId: string) => {
+        try {
+            const response = await fetch(
+                `https://dev.seezitt.com/api/media-content/mark-as-started-watching/${mediaId}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (response.ok) {
+                // console.log(response);
+                handleFetchActivity();
+                // console.log('video started watching');
+            } else {
+                console.log(response);
+                const errorResponseData = await response.json();
+                const errorMessageFromServer = errorResponseData.message; // Assuming the error message is returned in a 'message' field
+                setErrorMessage(errorMessageFromServer);
+            }
+        } catch (error) {
+            // console.error(error);
+            console.log(errorMessage);
+        }
+    };
+
+    const handleEndWatching = async (mediaId: string) => {
+        try {
+            const response = await fetch(
+                `https://dev.seezitt.com/api/media-content/mark-as-watched-till-end/${mediaId}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (response.ok) {
+                // console.log(response);
+                handleFetchActivity();
+                // console.log('video ENDED watching');
+            } else {
+                console.log(response);
+                const errorResponseData = await response.json();
+                const errorMessageFromServer = errorResponseData.message; // Assuming the error message is returned in a 'message' field
+                setErrorMessage(errorMessageFromServer);
+            }
+        } catch (error) {
+            // console.error(error);
+            console.log(errorMessage);
+        }
+    };
+
+    const handleFollowClick = async () => {
+        try {
+            const response = await fetch(
+                `https://dev.seezitt.com/api/profile/follow/${currentPostUser}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            if (response.ok) {
+                // const responseData = await response.json();
+                // console.log(responseData);
+                console.log(response);
+                handleFetchActivity();
+                setCurrentPostUser('');
+            } else {
+                console.log(response);
+                const errorResponseData = await response.json();
+                const errorMessageFromServer = errorResponseData.message; // Assuming the error message is returned in a 'message' field
+                setErrorMessage(errorMessageFromServer);
+            }
+        } catch (error) {
+            // console.error(error);
+            console.log(errorMessage);
+        }
     };
 
     const StyledMenu = styled((props: MenuProps) => (
@@ -104,34 +351,68 @@ export const Post: React.FC<PostProps> = ({ className }) => {
         },
     }));
 
-    const [selectedTab, setSelectedTab] = useState<number>(1);
+    const style = {
+        position: 'absolute' as 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 588,
+        height: 'auto',
+        minHeight: 550,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        borderRadius: '8px',
 
-    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-    const token = useAuthStore((state) => state.token);
-    // const [currentPage, setCurrentPage] = useState(1);
-    // const [hasMore, setHasMore] = useState(true);
-    // const itemsPerPage = 9;
-    const [errorMessage, setErrorMessage] = useState('');
-    const [postData, setPostData] = useState<Post[]>([]);
-    const API_KEY = process.env.VITE_API_URL;
-    const endPoint = '/media-content/videos/feed';
+        boxShadow: 24,
+        p: '32px',
 
-    // const menuRef = useRef<HTMLUListElement>(null);
-    // const parentRef = useRef<HTMLDivElement>(null); // Add parentRef
-    const videoRef = useRef<HTMLVideoElement>(null);
+        display: 'inline-flex',
+        padding: '32px',
+        flexDirection: 'column',
+        alignItems: 'center',
+        // gap: '32px',
+    };
 
-    // const [menuVisible, setMenuVisible] = useState(false);
-    // const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
+    const styleٍShare = {
+        position: 'absolute' as 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 588,
+        height: 'auto',
+        minHeight: 550,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: '24px 16px',
+        borderRadius: '8px',
+        display: 'inline-flex',
+        padding: '32px',
+        flexDirection: 'column',
+        alignItems: 'center',
+        // gap: '32px',
+    };
 
-    // const handleSelectedChoicesChange = (choices: FormData) => {
-    //     setSelectedChoices(choices);
-    // };
-
-    // const handleSubmit = () => {
-    //     // Use the selectedChoices in the fetch request body here
-    //     console.log(selectedChoices);
-    //     // Perform the fetch request with the selectedChoices data
-    // };
+    const styleComment = {
+        position: 'absolute' as 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '1141px',
+        height: '815px',
+        minHeight: '815px',
+        bgcolor: 'background.paper',
+        border: 'none',
+        boxShadow: 24,
+        // p: '24px 16px',
+        borderRadius: '8px',
+        display: 'flex',
+        // padding: '32px',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        // gap: '32px',
+    };
 
     const handleFetchActivity = async () => {
         try {
@@ -143,7 +424,7 @@ export const Post: React.FC<PostProps> = ({ className }) => {
             if (response.ok) {
                 const responseData = await response.json();
                 setPostData(responseData.data);
-                console.log(postData);
+                // console.log(postData);
             } else {
                 const errorResponseData = await response.json();
                 const errorMessageFromServer = errorResponseData.message; // Assuming the error message is returned in a 'message' field
@@ -163,19 +444,10 @@ export const Post: React.FC<PostProps> = ({ className }) => {
         return <Navigate to="/auth" />;
     }
 
-    // useEffect(() => {
-    //     let handler = () => {
-    //         setMenuVisible(false);
-    //         document.removeEventListener('mousedown', handler);
-    //     };
-    //     document.addEventListener('mousedown', handler);
-    // });
-
     const [showReportPopup, setShowReportPopup] = useState(false);
     const [, setShowOverlay] = useState(false);
 
     function handleReportClick() {
-        // setMenuVisible(false); // Close the menu when Report is clicked
         handleClose();
         setShowReportPopup(true); // Show the report popup
         setShowOverlay(true); // Show the overlay
@@ -213,15 +485,18 @@ export const Post: React.FC<PostProps> = ({ className }) => {
                     <ViewSwitchers onTabChange={handleTabChange} />
                 </div>
                 {filteredPosts?.map((post) => (
-                    <div key={post.mediaId}>
-                        {showReportPopup && ( // Use local state for showReportPopup
+                    <div key={post.mediaId} style={{ marginBottom: '32px' }}>
+                        {/* {setCurrentPostUser(post.user._id)} */}
+                        {showReportPopup ? (
                             <div className={styles.overlay}>
                                 <div className={styles.reportPopup}>
+                                    {/* /** //useState to track the clicked post's media ID */}
                                     <ReasonReportPopup
-                                        mediaId={post.mediaId} // Pass the mediaId as a prop
-                                        onClose={() => {}}
+                                        mediaId={currentMediaId}
+                                        onSubmit={() => setShowReportPopup(false)} // Pass the onClose function
+                                        handleOpen={handleOpenConfirmation}
+                                        handleClose={handleCloseConfirmation}
                                     />
-                                    {/* <h4>{post.mediaId}</h4> */}
                                 </div>
                                 <button
                                     onClick={() => handleCloseReportPopup()}
@@ -234,7 +509,258 @@ export const Post: React.FC<PostProps> = ({ className }) => {
                                     Close
                                 </button>
                             </div>
+                        ) : (
+                            ''
                         )}
+                        {openConfirmation && (
+                            <div>
+                                {/* <Button onClick={handleOpenConfirmation}>Open modal</Button> */}
+                                <Modal
+                                    open={openConfirmation}
+                                    onClose={handleCloseConfirmation}
+                                    aria-labelledby="modal-modal-title"
+                                    aria-describedby="modal-modal-description"
+                                >
+                                    <Box sx={style}>
+                                        <Typography
+                                            id="modal-modal-title"
+                                            variant="h6"
+                                            component="h2"
+                                            sx={{
+                                                /* H2/Semibold */
+                                                fontFamily: 'Poppins',
+                                                fontSize: '18px',
+                                                fontStyle: 'normal',
+                                                fontWeight: 600,
+                                                lineHeight: '120%',
+                                                paddingBottom: '32px',
+                                            }}
+                                        >
+                                            Report submitted
+                                        </Typography>
+                                        <img
+                                            src={confirmationIcon}
+                                            alt=""
+                                            style={{
+                                                width: '164px',
+                                                height: '164px',
+                                                marginBottom: '34px',
+                                            }}
+                                        />
+                                        <div className={styles.thankyouDiv}>
+                                            <Typography
+                                                id="modal-modal-title"
+                                                variant="h6"
+                                                component="h2"
+                                                sx={{
+                                                    /* H2/Semibold */
+                                                    fontFamily: 'Poppins',
+                                                    fontSize: '18px',
+                                                    fontStyle: 'normal',
+                                                    fontWeight: 600,
+                                                    lineHeight: '120%',
+                                                    marginBottom: '18px',
+                                                    padding: '0',
+                                                }}
+                                            >
+                                                Thank you
+                                            </Typography>
+                                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                                                Your report helps us provide a safe and supportive
+                                                environment.
+                                            </Typography>
+                                        </div>
+                                        <Button
+                                            onClick={handleCloseConfirmation}
+                                            variant="contained"
+                                            sx={{
+                                                background: '#5448B2',
+                                                width: '369px',
+                                                height: ' 58px',
+                                                padding: '16px 16px',
+                                                marginBottom: '24px ',
+                                            }}
+                                        >
+                                            Done
+                                        </Button>
+                                        <Button
+                                            variant="outlined"
+                                            sx={{
+                                                border: '1px solid var(--foundation-primary-primary-500, #5448B2)',
+                                                width: '369px',
+                                                height: ' 58px',
+                                                padding: '16px 16px',
+                                                // marginBottom: '24px ',
+                                            }}
+                                        >
+                                            View your reports
+                                        </Button>
+                                    </Box>
+                                </Modal>
+                            </div>
+                        )}
+                        {/** Share Modal */}
+                        {openSharePopup && (
+                            <div>
+                                {/* <Button onClick={handleOpenConfirmation}>Open modal</Button> */}
+                                <Modal
+                                    open={openSharePopup}
+                                    onClose={handleCloseSharePopup}
+                                    aria-labelledby="modal-modal-title"
+                                    aria-describedby="modal-modal-description"
+                                >
+                                    <Box sx={styleٍShare}>
+                                        <div className={styles['searchBar-Div']}>
+                                            <input
+                                                className={styles.mySearchInput}
+                                                placeholder="Search accounts and videos"
+                                                // onChange={onChange}
+                                            />
+                                            <img
+                                                src={shareIconinPopup}
+                                                alt=""
+                                                style={{
+                                                    width: '57.58px',
+                                                    height: '57.58px',
+                                                    marginLeft: '16px',
+                                                }}
+                                            />
+                                        </div>
+
+                                        <div className={styles.userDiv}>
+                                            <div className={styles.userInfoFrame}>
+                                                <img
+                                                    src={profileIcon}
+                                                    alt={'account.name'}
+                                                    className={styles.avatarImgCircle}
+                                                />
+                                                <h4 className={styles.userNameText}>Basma Bahaa</h4>
+                                            </div>
+                                            <div className={styles.btnsDiv}>
+                                                <button className={styles.btnsDivShareOutlined}>
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="16"
+                                                        height="16"
+                                                        viewBox="0 0 16 16"
+                                                        fill="none"
+                                                    >
+                                                        <path
+                                                            d="M13.3873 2.60707C14.2802 3.49992 14.4712 4.8414 13.8893 5.93858L10.0603 2.10513C10.4778 1.88303 10.9353 1.77642 11.384 1.77642C12.1169 1.77198 12.8409 2.06071 13.3873 2.60707ZM9.80262 2.2606L13.7338 6.20066C13.6316 6.34724 13.5206 6.48939 13.3873 6.61821C13.3473 6.65818 13.3074 6.69372 13.2674 6.7337L9.26513 2.73145C9.30511 2.68703 9.34509 2.64705 9.38063 2.60707C9.51389 2.47381 9.65159 2.36276 9.80262 2.2606ZM9.07413 2.96243L13.032 6.92026C12.379 7.38667 11.5705 7.55547 10.7799 7.38223L8.61216 5.21009C8.44336 4.42385 8.60772 3.61541 9.07413 2.96243ZM10.5 7.51993L8.01249 9.79424C7.68378 9.55881 7.35507 9.27897 7.04413 8.96359C6.73319 8.65265 6.45334 8.32838 6.20459 7.9819L8.48334 5.49438L10.5 7.51993Z"
+                                                            fill="#5448B2"
+                                                        />
+                                                        <path
+                                                            d="M5.99701 10.3636C6.19572 10.3636 6.35681 10.2026 6.35681 10.0038C6.35681 9.80513 6.19572 9.64404 5.99701 9.64404C5.7983 9.64404 5.63721 9.80513 5.63721 10.0038C5.63721 10.2026 5.7983 10.3636 5.99701 10.3636Z"
+                                                            fill="#5448B2"
+                                                        />
+                                                        <path
+                                                            d="M7.78556 10.0036L6.05318 11.5894C5.75112 11.3628 5.45795 11.1052 5.1781 10.8298C4.9027 10.5499 4.64506 10.2523 4.40963 9.94137L5.99543 8.20898C6.24418 8.54658 6.52403 8.87084 6.82609 9.17734C7.13259 9.48384 7.45685 9.76369 7.78556 10.0036ZM6.65285 10.0036C6.65285 9.64375 6.35968 9.35058 5.99987 9.35058C5.64007 9.35058 5.3469 9.64375 5.3469 10.0036C5.3469 10.3634 5.64007 10.6565 5.99987 10.6565C6.35968 10.6565 6.65285 10.3634 6.65285 10.0036ZM5.82663 11.7892L3.28136 14.1169C3.23694 14.1568 3.17031 14.1568 3.13034 14.1124L2.95266 13.9347C2.94821 13.9258 2.93933 13.917 2.93045 13.9081C2.92156 13.8992 2.91268 13.8948 2.90379 13.8859L2.11312 13.0952C2.10867 13.0863 2.09979 13.0774 2.09091 13.0685C2.08202 13.0597 2.07314 13.0552 2.06425 13.0463L1.87769 12.8598C1.83771 12.8153 1.83327 12.7487 1.87325 12.7087L4.20974 10.159C4.44073 10.4655 4.69392 10.7543 4.96933 11.0341C5.24029 11.3095 5.52902 11.5627 5.82663 11.7892ZM2.61506 14.0147L2.53511 14.0946C2.45071 14.179 2.33966 14.2235 2.21973 14.2235C2.09979 14.2235 1.98874 14.179 1.90434 14.0946C1.7311 13.917 1.7311 13.6371 1.90434 13.4639L1.9843 13.3839L2.61506 14.0147Z"
+                                                            fill="#5448B2"
+                                                        />
+                                                    </svg>
+                                                    Duet
+                                                </button>
+                                                <button className={styles.btnsDivShareContained}>
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="16"
+                                                        height="16"
+                                                        viewBox="0 0 16 16"
+                                                        fill="none"
+                                                    >
+                                                        <path
+                                                            d="M14.2904 1.72148C13.9569 1.37923 13.4634 1.25172 13.0032 1.38594L2.27216 4.50651C1.78663 4.6414 1.44249 5.02862 1.34978 5.52053C1.25508 6.02116 1.58588 6.65669 2.01806 6.92244L5.37343 8.9847C5.71757 9.1961 6.16175 9.14308 6.44654 8.85585L10.2888 4.9897C10.4822 4.78837 10.8023 4.78837 10.9957 4.9897C11.1891 5.18431 11.1891 5.49973 10.9957 5.70105L7.14682 9.56788C6.86137 9.85444 6.80802 10.3007 7.0181 10.647L9.06828 14.036C9.30837 14.4387 9.72188 14.6668 10.1754 14.6668C10.2288 14.6668 10.2888 14.6668 10.3421 14.6601C10.8623 14.593 11.2758 14.2373 11.4292 13.734L14.6105 3.01669C14.7506 2.56035 14.6239 2.06374 14.2904 1.72148Z"
+                                                            fill="white"
+                                                        />
+                                                    </svg>
+                                                    Send
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </Box>
+                                </Modal>
+                            </div>
+                        )}
+                        {openCommentPopup ? (
+                            <div>
+                                {/* <Button onClick={handleOpenConfirmation}>Open modal</Button> */}
+                                <Modal
+                                    open={openCommentPopup}
+                                    onClose={handleCloseCommentPopup}
+                                    aria-labelledby="modal-modal-title"
+                                    aria-describedby="modal-modal-description"
+                                >
+                                    <Box sx={styleComment}>
+                                        <div
+                                            className={styles.mediaContainer}
+                                            // className={styles.postMediaContainer}
+                                            ref={videoElement}
+                                        >
+                                            <VideoPlayer
+                                                key={currentMediaId}
+                                                src={post.reducedVideoHlsUrl}
+                                                onStart={() => handleStartWatching(currentMediaId)}
+                                                onEnd={() => handleEndWatching(currentMediaId)}
+                                            />
+                                        </div>
+
+                                        <div className={styles.userDiv}>
+                                            <div className={styles.userInfoFrame}>
+                                                <img
+                                                    src={profileIcon}
+                                                    alt={'account.name'}
+                                                    className={styles.avatarImgCircle}
+                                                />
+                                                <h4 className={styles.userNameText}>Basma Bahaa</h4>
+                                            </div>
+                                            <div className={styles.btnsDiv}>
+                                                <button className={styles.btnsDivShareOutlined}>
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="16"
+                                                        height="16"
+                                                        viewBox="0 0 16 16"
+                                                        fill="none"
+                                                    >
+                                                        <path
+                                                            d="M13.3873 2.60707C14.2802 3.49992 14.4712 4.8414 13.8893 5.93858L10.0603 2.10513C10.4778 1.88303 10.9353 1.77642 11.384 1.77642C12.1169 1.77198 12.8409 2.06071 13.3873 2.60707ZM9.80262 2.2606L13.7338 6.20066C13.6316 6.34724 13.5206 6.48939 13.3873 6.61821C13.3473 6.65818 13.3074 6.69372 13.2674 6.7337L9.26513 2.73145C9.30511 2.68703 9.34509 2.64705 9.38063 2.60707C9.51389 2.47381 9.65159 2.36276 9.80262 2.2606ZM9.07413 2.96243L13.032 6.92026C12.379 7.38667 11.5705 7.55547 10.7799 7.38223L8.61216 5.21009C8.44336 4.42385 8.60772 3.61541 9.07413 2.96243ZM10.5 7.51993L8.01249 9.79424C7.68378 9.55881 7.35507 9.27897 7.04413 8.96359C6.73319 8.65265 6.45334 8.32838 6.20459 7.9819L8.48334 5.49438L10.5 7.51993Z"
+                                                            fill="#5448B2"
+                                                        />
+                                                        <path
+                                                            d="M5.99701 10.3636C6.19572 10.3636 6.35681 10.2026 6.35681 10.0038C6.35681 9.80513 6.19572 9.64404 5.99701 9.64404C5.7983 9.64404 5.63721 9.80513 5.63721 10.0038C5.63721 10.2026 5.7983 10.3636 5.99701 10.3636Z"
+                                                            fill="#5448B2"
+                                                        />
+                                                        <path
+                                                            d="M7.78556 10.0036L6.05318 11.5894C5.75112 11.3628 5.45795 11.1052 5.1781 10.8298C4.9027 10.5499 4.64506 10.2523 4.40963 9.94137L5.99543 8.20898C6.24418 8.54658 6.52403 8.87084 6.82609 9.17734C7.13259 9.48384 7.45685 9.76369 7.78556 10.0036ZM6.65285 10.0036C6.65285 9.64375 6.35968 9.35058 5.99987 9.35058C5.64007 9.35058 5.3469 9.64375 5.3469 10.0036C5.3469 10.3634 5.64007 10.6565 5.99987 10.6565C6.35968 10.6565 6.65285 10.3634 6.65285 10.0036ZM5.82663 11.7892L3.28136 14.1169C3.23694 14.1568 3.17031 14.1568 3.13034 14.1124L2.95266 13.9347C2.94821 13.9258 2.93933 13.917 2.93045 13.9081C2.92156 13.8992 2.91268 13.8948 2.90379 13.8859L2.11312 13.0952C2.10867 13.0863 2.09979 13.0774 2.09091 13.0685C2.08202 13.0597 2.07314 13.0552 2.06425 13.0463L1.87769 12.8598C1.83771 12.8153 1.83327 12.7487 1.87325 12.7087L4.20974 10.159C4.44073 10.4655 4.69392 10.7543 4.96933 11.0341C5.24029 11.3095 5.52902 11.5627 5.82663 11.7892ZM2.61506 14.0147L2.53511 14.0946C2.45071 14.179 2.33966 14.2235 2.21973 14.2235C2.09979 14.2235 1.98874 14.179 1.90434 14.0946C1.7311 13.917 1.7311 13.6371 1.90434 13.4639L1.9843 13.3839L2.61506 14.0147Z"
+                                                            fill="#5448B2"
+                                                        />
+                                                    </svg>
+                                                    Duet
+                                                </button>
+                                                <button className={styles.btnsDivShareContained}>
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        width="16"
+                                                        height="16"
+                                                        viewBox="0 0 16 16"
+                                                        fill="none"
+                                                    >
+                                                        <path
+                                                            d="M14.2904 1.72148C13.9569 1.37923 13.4634 1.25172 13.0032 1.38594L2.27216 4.50651C1.78663 4.6414 1.44249 5.02862 1.34978 5.52053C1.25508 6.02116 1.58588 6.65669 2.01806 6.92244L5.37343 8.9847C5.71757 9.1961 6.16175 9.14308 6.44654 8.85585L10.2888 4.9897C10.4822 4.78837 10.8023 4.78837 10.9957 4.9897C11.1891 5.18431 11.1891 5.49973 10.9957 5.70105L7.14682 9.56788C6.86137 9.85444 6.80802 10.3007 7.0181 10.647L9.06828 14.036C9.30837 14.4387 9.72188 14.6668 10.1754 14.6668C10.2288 14.6668 10.2888 14.6668 10.3421 14.6601C10.8623 14.593 11.2758 14.2373 11.4292 13.734L14.6105 3.01669C14.7506 2.56035 14.6239 2.06374 14.2904 1.72148Z"
+                                                            fill="white"
+                                                        />
+                                                    </svg>
+                                                    Send
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </Box>
+                                </Modal>
+                            </div>
+                        ) : (
+                            ''
+                        )}
+
                         <div className={styles.container}>
                             <div className={styles.postContainer}>
                                 {/* <h4>{post.mediaId}</h4> */}
@@ -243,7 +769,10 @@ export const Post: React.FC<PostProps> = ({ className }) => {
                                         <div className={styles['profilePic-UserNameDiv']}>
                                             <div>
                                                 <img
-                                                    src={post.user.avatar}
+                                                    src={
+                                                        post.user.avatar ||
+                                                        'https://via.placeholder.com/128'
+                                                    }
                                                     alt=""
                                                     className={styles.profilePicImg}
                                                 />
@@ -258,7 +787,14 @@ export const Post: React.FC<PostProps> = ({ className }) => {
                                             </div>
                                         </div>
                                         <div>
-                                            <button className={styles.followBtn}>
+                                            <button
+                                                className={
+                                                    post.user.isFollowed
+                                                        ? styles.followingBtn
+                                                        : styles.followBtn
+                                                }
+                                                onClick={() => setCurrentPostUser(post.user._id)}
+                                            >
                                                 {post.user.isFollowed ? 'Following' : 'Follow'}
                                             </button>
                                         </div>
@@ -267,93 +803,76 @@ export const Post: React.FC<PostProps> = ({ className }) => {
                                         <h4 className={styles.captionText}>{post.description}</h4>
                                     </div>
                                 </div>
-                                <div className={styles.postMediaContainer}>
-                                    {/* <img src={postExample} alt="" className={styles.mediaImg} /> */}
-                                    <ReactHlsPlayer
+                                <div className={styles.postMediaContainer} ref={videoElement}>
+                                    <VideoPlayer
+                                        key={post.mediaId}
                                         src={post.reducedVideoHlsUrl}
-                                        autoPlay={false}
-                                        controls={true}
-                                        width="100%"
-                                        height="100%"
-                                        playerRef={videoRef}
+                                        onStart={() => handleStartWatching(post.mediaId)}
+                                        onEnd={() => handleEndWatching(post.mediaId)}
                                     />
                                 </div>
                             </div>
                             <div className={styles.postInteractionContainer}>
                                 <div className={styles.interactionDiv}>
-                                    <svg
-                                        width="40"
-                                        height="40"
-                                        viewBox="0 0 40 40"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
+                                    <Button
+                                        className={styles.interactionDiv}
+                                        sx={{
+                                            margin: 0,
+                                            padding: 0,
+                                            minWidth: 0,
+                                        }}
+                                        onClick={(event) => handleLikeClick(event, post.mediaId)}
                                     >
-                                        <circle cx="20" cy="20" r="20" fill="#EAEAEA" />
-                                        <path
-                                            fillRule="evenodd"
-                                            clipRule="evenodd"
-                                            d="M24.6108 9.77856C25.3119 9.77856 26.0119 9.87745 26.6775 10.1008C30.7786 11.4341 32.2564 15.9341 31.0219 19.8674C30.3219 21.8774 29.1775 23.7119 27.6786 25.2108C25.5331 27.2886 23.1786 29.133 20.6442 30.7219L20.3664 30.8897L20.0775 30.7108C17.5342 29.133 15.1664 27.2886 13.0008 25.1997C11.5119 23.7008 10.3664 21.8774 9.65528 19.8674C8.39972 15.9341 9.8775 11.4341 14.0231 10.0774C14.3453 9.96634 14.6775 9.88856 15.0108 9.84523H15.1442C15.4564 9.79967 15.7664 9.77856 16.0775 9.77856H16.1997C16.8997 9.79967 17.5775 9.92189 18.2342 10.1452H18.2997C18.3442 10.1663 18.3775 10.1897 18.3997 10.2108C18.6453 10.2897 18.8775 10.3786 19.0997 10.5008L19.5219 10.6897C19.624 10.7441 19.7385 10.8272 19.8375 10.8991C19.9002 10.9446 19.9566 10.9856 19.9997 11.0119C20.0179 11.0226 20.0363 11.0333 20.0549 11.0442C20.1501 11.0998 20.2494 11.1577 20.3331 11.2219C21.5675 10.2786 23.0664 9.76745 24.6108 9.77856ZM27.5664 17.7786C28.0219 17.7663 28.4108 17.4008 28.4442 16.933V16.8008C28.4775 15.2441 27.5342 13.8341 26.0997 13.2897C25.6442 13.133 25.1442 13.3786 24.9775 13.8452C24.8219 14.3119 25.0664 14.823 25.5331 14.9886C26.2453 15.2552 26.7219 15.9563 26.7219 16.733V16.7674C26.7008 17.0219 26.7775 17.2674 26.9331 17.4563C27.0886 17.6452 27.3219 17.7552 27.5664 17.7786Z"
-                                            fill="#A9A9A9"
-                                        />
-                                    </svg>
-                                    <h4 className={styles.interactionText}>{post.likes}</h4>
+                                        <svg
+                                            width="40"
+                                            height="40"
+                                            viewBox="0 0 40 40"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <circle cx="20" cy="20" r="20" fill="#EAEAEA" />
+                                            <path
+                                                fillRule="evenodd"
+                                                clipRule="evenodd"
+                                                d="M24.6108 9.77856C25.3119 9.77856 26.0119 9.87745 26.6775 10.1008C30.7786 11.4341 32.2564 15.9341 31.0219 19.8674C30.3219 21.8774 29.1775 23.7119 27.6786 25.2108C25.5331 27.2886 23.1786 29.133 20.6442 30.7219L20.3664 30.8897L20.0775 30.7108C17.5342 29.133 15.1664 27.2886 13.0008 25.1997C11.5119 23.7008 10.3664 21.8774 9.65528 19.8674C8.39972 15.9341 9.8775 11.4341 14.0231 10.0774C14.3453 9.96634 14.6775 9.88856 15.0108 9.84523H15.1442C15.4564 9.79967 15.7664 9.77856 16.0775 9.77856H16.1997C16.8997 9.79967 17.5775 9.92189 18.2342 10.1452H18.2997C18.3442 10.1663 18.3775 10.1897 18.3997 10.2108C18.6453 10.2897 18.8775 10.3786 19.0997 10.5008L19.5219 10.6897C19.624 10.7441 19.7385 10.8272 19.8375 10.8991C19.9002 10.9446 19.9566 10.9856 19.9997 11.0119C20.0179 11.0226 20.0363 11.0333 20.0549 11.0442C20.1501 11.0998 20.2494 11.1577 20.3331 11.2219C21.5675 10.2786 23.0664 9.76745 24.6108 9.77856ZM27.5664 17.7786C28.0219 17.7663 28.4108 17.4008 28.4442 16.933V16.8008C28.4775 15.2441 27.5342 13.8341 26.0997 13.2897C25.6442 13.133 25.1442 13.3786 24.9775 13.8452C24.8219 14.3119 25.0664 14.823 25.5331 14.9886C26.2453 15.2552 26.7219 15.9563 26.7219 16.733V16.7674C26.7008 17.0219 26.7775 17.2674 26.9331 17.4563C27.0886 17.6452 27.3219 17.7552 27.5664 17.7786Z"
+                                                fill="#A9A9A9"
+                                            />
+                                        </svg>
+                                        <h4 className={styles.interactionText}>{post.likes}</h4>
+                                    </Button>
                                 </div>
                                 <div className={styles.interactionDiv}>
-                                    <svg
-                                        width="40"
-                                        height="40"
-                                        viewBox="0 0 40 40"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
+                                    <Button
+                                        className={styles.interactionDiv}
+                                        sx={{
+                                            margin: 0,
+                                            padding: 0,
+                                            minWidth: 0,
+                                        }}
+                                        onClick={(event) =>
+                                            handleOpenCommentPopup(event, post.mediaId)
+                                        }
                                     >
-                                        <circle cx="20" cy="20" r="20" fill="#EAEAEA" />
-                                        <path
-                                            fillRule="evenodd"
-                                            clipRule="evenodd"
-                                            d="M8.88818 20.017C8.88818 14.1638 13.566 8.88922 20.0215 8.88922C26.3326 8.88922 31.1104 14.0637 31.1104 19.9836C31.1104 26.8495 25.5104 31.1114 19.9993 31.1114C18.1771 31.1114 16.1549 30.6218 14.5326 29.6648C13.966 29.3199 13.4882 29.0639 12.8771 29.2642L10.6326 29.9319C10.066 30.1099 9.55485 29.6648 9.72152 29.0639L10.466 26.5713C10.5882 26.2263 10.566 25.8591 10.3882 25.5698C9.43263 23.8116 8.88818 21.8865 8.88818 20.017ZM18.5548 20.017C18.5548 20.8071 19.1882 21.4414 19.9771 21.4525C20.766 21.4525 21.3993 20.8071 21.3993 20.0282C21.3993 19.2381 20.766 18.6038 19.9771 18.6038C19.1993 18.5927 18.5548 19.2381 18.5548 20.017ZM23.6775 20.0283C23.6775 20.8072 24.3108 21.4526 25.0997 21.4526C25.8886 21.4526 26.5219 20.8072 26.5219 20.0283C26.5219 19.2382 25.8886 18.6039 25.0997 18.6039C24.3108 18.6039 23.6775 19.2382 23.6775 20.0283ZM14.8549 21.4525C14.0771 21.4525 13.4326 20.8071 13.4326 20.0282C13.4326 19.2381 14.066 18.6038 14.8549 18.6038C15.6437 18.6038 16.2771 19.2381 16.2771 20.0282C16.2771 20.8071 15.6437 21.4414 14.8549 21.4525Z"
-                                            fill="#A9A9A9"
-                                        />
-                                    </svg>
+                                        <svg
+                                            width="40"
+                                            height="40"
+                                            viewBox="0 0 40 40"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <circle cx="20" cy="20" r="20" fill="#EAEAEA" />
+                                            <path
+                                                fillRule="evenodd"
+                                                clipRule="evenodd"
+                                                d="M8.88818 20.017C8.88818 14.1638 13.566 8.88922 20.0215 8.88922C26.3326 8.88922 31.1104 14.0637 31.1104 19.9836C31.1104 26.8495 25.5104 31.1114 19.9993 31.1114C18.1771 31.1114 16.1549 30.6218 14.5326 29.6648C13.966 29.3199 13.4882 29.0639 12.8771 29.2642L10.6326 29.9319C10.066 30.1099 9.55485 29.6648 9.72152 29.0639L10.466 26.5713C10.5882 26.2263 10.566 25.8591 10.3882 25.5698C9.43263 23.8116 8.88818 21.8865 8.88818 20.017ZM18.5548 20.017C18.5548 20.8071 19.1882 21.4414 19.9771 21.4525C20.766 21.4525 21.3993 20.8071 21.3993 20.0282C21.3993 19.2381 20.766 18.6038 19.9771 18.6038C19.1993 18.5927 18.5548 19.2381 18.5548 20.017ZM23.6775 20.0283C23.6775 20.8072 24.3108 21.4526 25.0997 21.4526C25.8886 21.4526 26.5219 20.8072 26.5219 20.0283C26.5219 19.2382 25.8886 18.6039 25.0997 18.6039C24.3108 18.6039 23.6775 19.2382 23.6775 20.0283ZM14.8549 21.4525C14.0771 21.4525 13.4326 20.8071 13.4326 20.0282C13.4326 19.2381 14.066 18.6038 14.8549 18.6038C15.6437 18.6038 16.2771 19.2381 16.2771 20.0282C16.2771 20.8071 15.6437 21.4414 14.8549 21.4525Z"
+                                                fill="#A9A9A9"
+                                            />
+                                        </svg>
 
-                                    <h4 className={styles.interactionText}>
-                                        {post.comments.length}
-                                    </h4>
-                                </div>
-                                <div className={styles.interactionDiv}>
-                                    <svg
-                                        width="40"
-                                        height="40"
-                                        viewBox="0 0 40 40"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <circle cx="20" cy="20" r="20" fill="#EAEAEA" />
-                                        <path
-                                            fillRule="evenodd"
-                                            clipRule="evenodd"
-                                            d="M16.5548 9.22223H23.4104C26.4215 9.22223 28.8548 10.4111 28.8881 13.4333V30.3C28.8881 30.4889 28.8437 30.6778 28.7548 30.8445C28.6104 31.1111 28.3659 31.3111 28.0659 31.4C27.777 31.4889 27.4548 31.4445 27.1881 31.2889L19.9881 27.6889L12.777 31.2889C12.6115 31.3767 12.4215 31.4333 12.2326 31.4333C11.6104 31.4333 11.1104 30.9222 11.1104 30.3V13.4333C11.1104 10.4111 13.5548 9.22223 16.5548 9.22223ZM15.7997 17.6889H24.1664C24.6442 17.6889 25.0331 17.2989 25.0331 16.8112C25.0331 16.3223 24.6442 15.9334 24.1664 15.9334H15.7997C15.3219 15.9334 14.9331 16.3223 14.9331 16.8112C14.9331 17.2989 15.3219 17.6889 15.7997 17.6889Z"
-                                            fill="#A9A9A9"
-                                        />
-                                    </svg>
-
-                                    <h4 className={styles.interactionText}>{post.views}</h4>
-                                </div>
-                                <div className={styles.interactionDiv}>
-                                    <svg
-                                        width="40"
-                                        height="40"
-                                        viewBox="0 0 40 40"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <circle cx="20" cy="20" r="20" fill="#EAEAEA" />
-                                        <path
-                                            d="M32.1078 16.4905L24.7608 9.17628C24.579 8.9953 24.3639 8.90479 24.1151 8.90479C23.8664 8.90479 23.6511 8.9953 23.4694 9.17628C23.2876 9.35736 23.1966 9.57167 23.1966 9.81925V13.4764H19.9824C13.1613 13.4764 8.97626 15.3955 7.4263 19.2336C6.91943 20.5096 6.66602 22.0955 6.66602 23.9907C6.66602 25.5716 7.27351 27.7191 8.48839 30.4335C8.51703 30.5003 8.56709 30.6143 8.63897 30.7762C8.70242 30.9196 8.76698 31.0624 8.83267 31.2048C8.89026 31.3284 8.95249 31.4332 9.01938 31.5188C9.13407 31.6808 9.26807 31.7619 9.42116 31.7619C9.56465 31.7619 9.67708 31.7143 9.75845 31.6191C9.83962 31.524 9.88028 31.4048 9.88028 31.2623C9.88028 31.1763 9.86832 31.0503 9.84435 30.8835C9.82042 30.7168 9.80841 30.6051 9.80841 30.5479C9.76051 29.9005 9.73659 29.3143 9.73659 28.7909C9.73659 27.8291 9.82042 26.9671 9.98769 26.2053C10.1552 25.4433 10.3872 24.7839 10.6838 24.2267C10.9804 23.6693 11.3629 23.1887 11.8318 22.7839C12.3004 22.3791 12.805 22.0483 13.3455 21.7911C13.8861 21.5338 14.5222 21.3314 15.2541 21.1839C15.9858 21.0363 16.7224 20.9338 17.4639 20.8767C18.2054 20.8195 19.0448 20.791 19.9824 20.791H23.1966V24.4483C23.1966 24.6958 23.2874 24.9102 23.4691 25.0911C23.651 25.2719 23.8662 25.3625 24.1148 25.3625C24.3635 25.3625 24.5788 25.2719 24.7608 25.0911L32.1077 17.7766C32.2895 17.5956 32.3803 17.3814 32.3803 17.1338C32.3802 16.8862 32.2895 16.6718 32.1078 16.4905Z"
-                                            fill="#A9A9A9"
-                                        />
-                                    </svg>
-
-                                    <h4 className={styles.interactionText}>{post.shares}</h4>
+                                        <h4 className={styles.interactionText}>
+                                            {post.comments.length}
+                                        </h4>
+                                    </Button>
                                 </div>
                                 <div className={styles.interactionDiv}>
                                     <Button
@@ -367,7 +886,80 @@ export const Post: React.FC<PostProps> = ({ className }) => {
                                         aria-controls={open ? 'demo-positioned-menu' : undefined}
                                         aria-haspopup="true"
                                         aria-expanded={open ? 'true' : undefined}
-                                        onClick={handleClick}
+                                        onClick={(event) =>
+                                            handleBookmarkClick(event, post.mediaId)
+                                        }
+                                    >
+                                        <svg
+                                            width="40"
+                                            height="40"
+                                            viewBox="0 0 40 40"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <circle cx="20" cy="20" r="20" fill="#EAEAEA" />
+                                            <path
+                                                fillRule="evenodd"
+                                                clipRule="evenodd"
+                                                d="M16.5548 9.22223H23.4104C26.4215 9.22223 28.8548 10.4111 28.8881 13.4333V30.3C28.8881 30.4889 28.8437 30.6778 28.7548 30.8445C28.6104 31.1111 28.3659 31.3111 28.0659 31.4C27.777 31.4889 27.4548 31.4445 27.1881 31.2889L19.9881 27.6889L12.777 31.2889C12.6115 31.3767 12.4215 31.4333 12.2326 31.4333C11.6104 31.4333 11.1104 30.9222 11.1104 30.3V13.4333C11.1104 10.4111 13.5548 9.22223 16.5548 9.22223ZM15.7997 17.6889H24.1664C24.6442 17.6889 25.0331 17.2989 25.0331 16.8112C25.0331 16.3223 24.6442 15.9334 24.1664 15.9334H15.7997C15.3219 15.9334 14.9331 16.3223 14.9331 16.8112C14.9331 17.2989 15.3219 17.6889 15.7997 17.6889Z"
+                                                fill="#A9A9A9"
+                                            />
+                                        </svg>
+
+                                        <h4 className={styles.interactionText}>
+                                            {post.collections
+                                                ? Object.entries(post.collections).length
+                                                : 0}
+                                        </h4>
+                                    </Button>
+                                </div>
+                                <div className={styles.interactionDiv}>
+                                    <Button
+                                        className={styles.interactionDiv}
+                                        sx={{
+                                            margin: 0,
+                                            padding: 0,
+                                            minWidth: 0,
+                                        }}
+                                        id="demo-positioned-button"
+                                        aria-controls={open ? 'demo-positioned-menu' : undefined}
+                                        aria-haspopup="true"
+                                        aria-expanded={open ? 'true' : undefined}
+                                        onClick={(event) =>
+                                            handleOpenSharePopup(event, post.mediaId)
+                                        }
+                                        // onClick={(event) => handleClickMore(event, post.mediaId)}
+                                    >
+                                        <svg
+                                            width="40"
+                                            height="40"
+                                            viewBox="0 0 40 40"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <circle cx="20" cy="20" r="20" fill="#EAEAEA" />
+                                            <path
+                                                d="M32.1078 16.4905L24.7608 9.17628C24.579 8.9953 24.3639 8.90479 24.1151 8.90479C23.8664 8.90479 23.6511 8.9953 23.4694 9.17628C23.2876 9.35736 23.1966 9.57167 23.1966 9.81925V13.4764H19.9824C13.1613 13.4764 8.97626 15.3955 7.4263 19.2336C6.91943 20.5096 6.66602 22.0955 6.66602 23.9907C6.66602 25.5716 7.27351 27.7191 8.48839 30.4335C8.51703 30.5003 8.56709 30.6143 8.63897 30.7762C8.70242 30.9196 8.76698 31.0624 8.83267 31.2048C8.89026 31.3284 8.95249 31.4332 9.01938 31.5188C9.13407 31.6808 9.26807 31.7619 9.42116 31.7619C9.56465 31.7619 9.67708 31.7143 9.75845 31.6191C9.83962 31.524 9.88028 31.4048 9.88028 31.2623C9.88028 31.1763 9.86832 31.0503 9.84435 30.8835C9.82042 30.7168 9.80841 30.6051 9.80841 30.5479C9.76051 29.9005 9.73659 29.3143 9.73659 28.7909C9.73659 27.8291 9.82042 26.9671 9.98769 26.2053C10.1552 25.4433 10.3872 24.7839 10.6838 24.2267C10.9804 23.6693 11.3629 23.1887 11.8318 22.7839C12.3004 22.3791 12.805 22.0483 13.3455 21.7911C13.8861 21.5338 14.5222 21.3314 15.2541 21.1839C15.9858 21.0363 16.7224 20.9338 17.4639 20.8767C18.2054 20.8195 19.0448 20.791 19.9824 20.791H23.1966V24.4483C23.1966 24.6958 23.2874 24.9102 23.4691 25.0911C23.651 25.2719 23.8662 25.3625 24.1148 25.3625C24.3635 25.3625 24.5788 25.2719 24.7608 25.0911L32.1077 17.7766C32.2895 17.5956 32.3803 17.3814 32.3803 17.1338C32.3802 16.8862 32.2895 16.6718 32.1078 16.4905Z"
+                                                fill="#A9A9A9"
+                                            />
+                                        </svg>
+
+                                        <h4 className={styles.interactionText}>{post.shares}</h4>
+                                    </Button>
+                                </div>
+                                <div className={styles.interactionDiv}>
+                                    <Button
+                                        className={styles.interactionDiv}
+                                        sx={{
+                                            margin: 0,
+                                            padding: 0,
+                                            minWidth: 0,
+                                        }}
+                                        id="demo-positioned-button"
+                                        aria-controls={open ? 'demo-positioned-menu' : undefined}
+                                        aria-haspopup="true"
+                                        aria-expanded={open ? 'true' : undefined}
+                                        onClick={(event) => handleClickMore(event, post.mediaId)}
                                     >
                                         <svg
                                             className={styles.button}
@@ -386,7 +978,6 @@ export const Post: React.FC<PostProps> = ({ className }) => {
                                         </svg>
 
                                         <h4 className={styles.interactionText}>More</h4>
-                                        {/* Dashboard */}
                                     </Button>
                                     <StyledMenu
                                         id="demo-customized-menu"
@@ -397,6 +988,7 @@ export const Post: React.FC<PostProps> = ({ className }) => {
                                         open={open}
                                         onClose={handleClose}
                                     >
+                                        {/* <h4>{post.mediaId}</h4> */}
                                         <MenuItem
                                             onClick={handleClose}
                                             className={styles.menuItems}
@@ -486,6 +1078,7 @@ export const Post: React.FC<PostProps> = ({ className }) => {
                                         </MenuItem>
                                         <MenuItem
                                             onClick={handleReportClick}
+                                            // onClick={() => showReport(post.mediaId)}
                                             className={styles.menuItems}
                                         >
                                             <div className={styles.menuItemsSvgs}>

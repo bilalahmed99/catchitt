@@ -82,6 +82,7 @@
   width: 50px;
   margin-right: 16px;
   height: 50px;
+  border-radius: 64px;
 }
 .subNameText {
   color: #a9a9a9;
@@ -137,8 +138,9 @@
   width: 100%;
   display: flex;
   flex-direction: row;
-  // align-items: center;
+  align-items: center;
   // justify-items: flex-start;
   justify-content: space-between;
   // align-content: flex-start;
+  margin-bottom: 5px;
 }

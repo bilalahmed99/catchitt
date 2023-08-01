@@ -99,7 +99,7 @@ export const ActivityPage: React.FC<Activity> = ({ className, createdTime }) => 
                                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                                     <img
                                         src={
-                                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkLoOUlRkGCP9B9j1ZLs3DA9GSur6oneufQQh-etbGsw&s'
+                                            activity.userAvatar || 'https://via.placeholder.com/128'
                                         }
                                         alt=""
                                         className={styles.plusIconStyle}

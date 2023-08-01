@@ -5,6 +5,7 @@
   gap: 0px 32px;
   background-color: #fafafa;
   overflow-y: auto;
+  
   // width: 676px;
   // height: 753px;height:100px;height:100px;height:100%;height:100%;min-height:100px;min-height:100px;min-height:100px;min-height:100px;
 }
@@ -25,7 +26,7 @@
 
 
 .postContainer {
-  background-color: #754d4d;
+  // background-color: #754d4d;
   width: 100%;
   height: 100%;
   display: flex;
@@ -69,7 +70,10 @@
 }
 .postMediaContainer {
   width: 602px;
-  height: 598px;
+  height: 640px;
+  // min-height: 100%;
+  // margin-bottom: 100px;  
+  background-color: #000000;
 }
 .profilePic-UserNameDiv {
   display: flex;
@@ -94,7 +98,10 @@
   width: 43px;
   height: 44px;
   flex-shrink: 0;
+  border-radius: 64px;
 }
+
+
 .userSubText {
   /* Small/Regular */
   font-family: Poppins;
@@ -104,7 +111,7 @@
   line-height: 150%; /* 21px */
   color: #848484;
 }
-.followBtn {
+.followingBtn {
   border-radius: 6px;
   background-color: #5448b2;
   width: 108px;
@@ -122,6 +129,26 @@
   font-weight: 600;
   line-height: 120%; /* 16.8px */
 }
+
+.followBtn {
+  border-radius: 6px;
+  background-color: #ffffff;
+  width: 108px;
+  display: flex;
+  height: 32px;
+  padding: 0px 12px;
+  justify-content: center;
+  align-items: center;
+  border-color: #5448b2;
+  color: #5448b2;
+  /* Small/Semibold */
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 120%; /* 16.8px */
+}
+
 .captionText {
   color: #848484;
   /* Base/Regular */
@@ -238,4 +265,174 @@
 
 .viewSwitchersDiv {
   padding: 20px 0 40px 0;
+}
+
+#modal-modal-title {
+  color: var(--default-body, #222);
+
+/* H2/Semibold */
+font-family: Poppins;
+font-size: 18px;
+font-style: normal;
+font-weight: 600;
+line-height: 120%; /* 21.6px */
+}
+
+
+.thankyouDiv {
+  display: flex;
+width: 355px;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+gap: 18px;
+
+color: var(--default-body, #222);
+text-align: center;
+
+/* Base/Regular */
+font-family: Poppins;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 24px */
+margin-bottom: 27px;
+}
+
+.mySearchInput {
+  border-radius: 3px;
+  position: static;
+  margin: 0;
+  padding: 1.8rem 5rem 1.8rem 5rem;
+  margin-bottom: 22px; /* Set the desired width for the search bar */ /* Add this line to ensure the search bar doesn't exceed the viewport width */
+  height: 40px;
+  top: -120px;
+  border: 0 solid black;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0);
+  font-size: 16px;
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 21px;
+  color: #acacac;
+  background: no-repeat padding-box border-box 30px center / auto scroll
+    url(../../assets/search.png) #f8f8f8;
+  background-size: 4%;
+
+  &:focus {
+    border: 0 solid black;
+    outline: 0;
+    color: #000000;
+  }
+  width: 100%;
+}
+
+.searchBar-Div {
+  width: 100%;
+  // margin-right: 200px;
+  margin-left: 0px;
+  display: flex;
+}
+
+.userDiv {
+display: flex;
+width: 100%;
+height: 72pz;
+// flex-direction: column;
+justify-content: space-between;
+align-items: center;
+// padding: 16px;
+color: var(--default-body, #222);
+text-align: center;
+
+/* Base/Regular */
+font-family: Poppins;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 150%; /* 24px */
+// margin-bottom: 27px;
+}
+
+
+
+.userInfoFrame {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  gap: 16px;
+  margin: 16px;
+}
+
+.avatarImgCircle {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  border-radius: 64px;
+}
+
+.btnsDivShareOutlined {
+  gap: 8px;
+  display: flex;
+  min-width: 90px;
+height: 40px;
+padding: 0px 12px;
+justify-content: center;
+align-items: center;
+border-radius: 6px;
+border: 1px solid var(--foundation-primary-primary-500, #5448B2);
+background: var(--default-white, #FFF);
+color: var(--foundation-primary-primary-500, #5448B2);
+
+/* Small/Semibold */
+font-family: Poppins;
+font-size: 14px;
+font-style: normal;
+font-weight: 600;
+line-height: 120%; /* 16.8px */
+
+margin-right: 12px;
+}
+.btnsDivShareContained {
+  gap: 8px;
+  display: flex;
+  min-width: 90px;
+height: 40px;
+padding: 0px 12px;
+justify-content: center;
+align-items: center;
+border-radius: 6px;
+background: var(--foundation-primary-primary-500, #5448B2);
+border: 1px solid var(--foundation-primary-primary-500, #5448B2);
+
+color: var(--default-white, #FFF);
+
+/* Small/Semibold */
+font-family: Poppins;
+font-size: 14px;
+font-style: normal;
+font-weight: 600;
+line-height: 120%; /* 16.8px */
+
+margin-right: 12px;
+}
+
+
+.btnsDiv{ 
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.mediaContainer {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  // min-height: 815px;
+  // margin-bottom: 100px;  
+  background-color: #000000;
+  align-items: center;
+  justify-content: center;
 }
