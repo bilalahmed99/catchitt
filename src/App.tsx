@@ -45,13 +45,21 @@ function App() {
                         element={
                             <ActivityPage
                                 _id={''}
-                                userAvatar={''}
-                                userName={''}
                                 createdTime={0}
-                                triggeredUserName={''}
-                                triggeredUserAvatar={''}
                                 message={''}
-                                type={''}
+                                type={''} user={{
+                                    id: undefined,
+                                    avatar: undefined,
+                                    username: undefined,
+                                    name: '',
+                                    isVerified: false
+                                }} triggeredUser={{
+                                    _id: '',
+                                    avatar: '',
+                                    isVerified: false,
+                                    username: '',
+                                    name: ''
+                                }} isRead={false}
                             />
                         }
                     />

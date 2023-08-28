@@ -12,12 +12,12 @@ export interface ActivityPageProps { }
 
 interface Activity {
     className?: string;
-    _id: string;
+    _id?: string;
     createdTime: number;
     user: {
-        id: string,
-        avatar: string,
-        username: string,
+        id?: string,
+        avatar?: string,
+        username?: string,
         name: string
         isVerified: boolean,
     },
@@ -119,9 +119,6 @@ export const ActivityPage: React.FC<Activity> = ({ className, createdTime }) => 
                                         />
                                         <div className={styles.accountName}>
                                             <h6>
-                                                <span className={styles.nameText}>
-                                                    {activity.triggeredUser.name}
-                                                </span>{' '}
                                                 <span className={styles.messageText}>
                                                     {activity.message}
                                                 </span>{' '}
