@@ -29,7 +29,6 @@ import { Report } from './svg-components/Report';
 import { Share } from './svg-components/Share';
 import { More } from './svg-components/More';
 import { ArrowDown } from './svg-components/ArrowDown';
-import { Gift } from './svg-components/Gift';
 
 export const Post: React.FC<PostProps> = ({ className, post, startedIds, endedIds, refetch }) => {
     const buttonRef = useRef(null);
