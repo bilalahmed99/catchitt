@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Gift } from '../post/svg-components/Gift'
-import { SendComment } from '../post/svg-components/sendComment'
+import { SendComment } from '../post/svg-components/SendComment'
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Button } from '@mui/material';
