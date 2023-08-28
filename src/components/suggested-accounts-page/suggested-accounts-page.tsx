@@ -25,6 +25,8 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
 
     const [errorMessage, setErrorMessage] = useState('');
     const [accountsData, setAccountsData] = useState<Account[]>([]);
+    const [followLoading, setFollowLoading] = useState(false);
+    const [currentPostUser, setCurrentPostUser] = useState('');
 
     const API_KEY = process.env.VITE_API_URL;
     const suggestedEndPoint = '/profile/suggested-users';
@@ -62,6 +64,42 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
     //     setCurrentPage((prevPage) => prevPage - 1);
     // };
 
+    const handleFollowClick = async (account: Account) => {
+        try {
+            setFollowLoading(true); // Set loading state before API call
+
+            const response = await fetch(`${API_KEY}/profile/follow/${account._id}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (response.ok) {
+                // Handle success as needed
+            } else {
+                // Handle error as needed
+            }
+        } catch (error) {
+            // Handle error as needed
+        } finally {
+            await handleFetchSuggestedAccounts();
+            setFollowLoading(false); // Set loading state back to false after API call
+        }
+    };
+
+    const handleFollowBtnClicked = async (
+        event: React.MouseEvent<HTMLElement>,
+        account: Account
+    ) => {
+        console.log(account._id);
+        // setFollowLoading(true);
+        setCurrentPostUser(account._id);
+        await handleFollowClick(account);
+        // setFollowLoading(false);
+    };
+
     if (!isLoggedIn) {
         return <Navigate to="/auth" />;
     }
@@ -98,7 +136,19 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
                                     <h4 className={styles.userNameText}>{account.name}</h4>
                                 </div>
                                 <div className={styles.followBtnDiv}>
-                                    <button className={styles.followBtn}>Follow</button>
+                                    <button
+                                        // ref={buttonRef}
+                                        className={
+                                            account._id ? styles.followBtn : styles.followingBtn
+                                        }
+                                        onClick={(event) => handleFollowBtnClicked(event, account)}
+                                    >
+                                        {followLoading
+                                            ? '...'
+                                            : account._id
+                                            ? 'Follow'
+                                            : 'Following'}
+                                    </button>
                                 </div>
                             </div>
                         ))}

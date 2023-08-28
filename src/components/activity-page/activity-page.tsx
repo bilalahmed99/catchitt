@@ -6,19 +6,31 @@ import { SideNavBar } from '../side-nav-bar/side-nav-bar';
 import { SuggestedActivity } from '../suggested-activity/suggested-activity';
 import { useAuthStore } from '../../store/authStore';
 import { Navigate } from 'react-router-dom';
+import { Follow } from './svg-components/Follow'
 
-export interface ActivityPageProps {}
+export interface ActivityPageProps { }
 
 interface Activity {
     className?: string;
     _id: string;
-    userAvatar: string;
-    userName: string;
     createdTime: number;
-    triggeredUserName: string;
-    triggeredUserAvatar: string;
+    user: {
+        id: string,
+        avatar: string,
+        username: string,
+        name: string
+        isVerified: boolean,
+    },
+    triggeredUser: {
+        _id: string,
+        avatar: string,
+        isVerified: boolean,
+        username: string,
+        name: string
+    };
     message: string;
     type: string;
+    isRead: boolean,
 }
 
 export const ActivityPage: React.FC<Activity> = ({ className, createdTime }) => {
@@ -86,7 +98,7 @@ export const ActivityPage: React.FC<Activity> = ({ className, createdTime }) => 
             <div className={styles.container}>
                 <div className={styles.leftSide}>
                     <div className={styles.sideNavDiv}>
-                        <SideNavBar selectedIndex={null} />
+                        <SideNavBar selectedIndex={3} />
                     </div>
                     <div className={styles.suggestedActivityDiv}>
                         <SuggestedActivity showSuggestedContent={true} />
@@ -96,91 +108,53 @@ export const ActivityPage: React.FC<Activity> = ({ className, createdTime }) => 
                     <div className={styles.suggestedContent}>
                         {activityData.slice(firstIndex, lastIndex).map((activity) => (
                             <div key={activity._id} className={styles.suggestedItem}>
-                                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                    <img
-                                        src={
-                                            activity.userAvatar || 'https://via.placeholder.com/128'
-                                        }
-                                        alt=""
-                                        className={styles.plusIconStyle}
-                                    />
-                                    <div className={styles.accountName}>
-                                        <h6>
-                                            <span className={styles.nameText}>
-                                                {activity.triggeredUserName}
-                                            </span>{' '}
-                                            <span className={styles.messageText}>
-                                                {activity.message}
-                                            </span>{' '}
-                                            <span className={styles.timeText}>
-                                                {minutesAgo > 59
+                                <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                        <img
+                                            src={
+                                                activity.user.avatar || 'https://via.placeholder.com/128'
+                                            }
+                                            alt=""
+                                            className={styles.plusIconStyle}
+                                        />
+                                        <div className={styles.accountName}>
+                                            <h6>
+                                                <span className={styles.nameText}>
+                                                    {activity.triggeredUser.name}
+                                                </span>{' '}
+                                                <span className={styles.messageText}>
+                                                    {activity.message}
+                                                </span>{' '}
+                                                <span className={styles.timeText}>
+                                                    {/* {activity.createdTime}
+                                                {hoursAgo}
+                                                {hoursAgo > 59
                                                     ? `${hoursAgo}hr`
-                                                    : `${minutesAgo}m`}
-                                            </span>
-                                        </h6>
+                                                    : `${minutesAgo}m`} */}
+                                                </span>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        {activity.type === 'Follow' ? (
+                                            <button
+                                                className={styles.svgButton}
+                                            // onClick={(event) =>
+                                            //     handleFollowBtnClicked(event, activity.triggeredUser._id)
+                                            // }
+                                            >
+                                                <Follow />
+                                            </button>
+                                        ) : (
+                                            <img
+                                                className={styles.squareIconStyle}
+                                                src={activity.triggeredUser.avatar || 'https://via.placeholder.com/128'} // Use the appropriate property from the activity object
+                                                alt=""
+                                            />
+                                        )}
                                     </div>
                                 </div>
 
-                                <div className="svgStyle">
-                                    {activityData.map((activity) =>
-                                        activity.type === 'Follow' ? (
-                                            <svg
-                                                id="svg-section"
-                                                width="35"
-                                                height="36"
-                                                viewBox="0 0 35 36"
-                                                fill="none"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <circle
-                                                    cx="17.5"
-                                                    cy="18"
-                                                    r="17"
-                                                    fill="white"
-                                                    stroke="#5448B2"
-                                                />
-                                                <path
-                                                    fillRule="evenodd"
-                                                    clipRule="evenodd"
-                                                    d="M15.4967 21.0268C11.8694 21.0268 8.77148 21.5751 8.77148 23.7718C8.77148 25.9686 11.8505 26.5367 15.4967 26.5367C19.125 26.5367 22.2219 25.9875 22.2219 23.7916C22.2219 21.5958 19.1438 21.0268 15.4967 21.0268Z"
-                                                    stroke="#5448B2"
-                                                    strokeWidth="0.8"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                />
-                                                <path
-                                                    fillRule="evenodd"
-                                                    clipRule="evenodd"
-                                                    d="M15.4963 17.8937C17.8771 17.8937 19.8068 15.964 19.8068 13.5832C19.8068 11.2024 17.8771 9.27271 15.4963 9.27271C13.1165 9.27271 11.1868 11.2024 11.1868 13.5832C11.1783 15.9555 13.0939 17.8852 15.4671 17.8937H15.4963Z"
-                                                    stroke="#5448B2"
-                                                    strokeWidth="0.8"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                />
-                                                <path
-                                                    d="M24.298 14.8582V18.6422"
-                                                    stroke="#5448B2"
-                                                    strokeWidth="0.8"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                />
-                                                <path
-                                                    d="M26.2286 16.7501H22.3691"
-                                                    stroke="#5448B2"
-                                                    strokeWidth="0.8"
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                />
-                                            </svg>
-                                        ) : (
-                                            <img
-                                                src={activity.triggeredUserAvatar} // Use the appropriate property from the activity object
-                                                alt=""
-                                                className={styles.squareIconStyle}
-                                            />
-                                        )
-                                    )}
-                                </div>
                             </div>
                         ))}
                     </div>
