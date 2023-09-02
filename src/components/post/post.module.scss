@@ -185,11 +185,16 @@
 .captionText {
   color: #848484;
   /* Base/Regular */
+  text-align: left;
+  word-wrap: normal;
   font-family: Poppins;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: 150%; /* 24px */
+  max-width: 600px;
+  white-space: normal;
+  word-wrap: break-word;
 }
 .postMusicInfo {
   display: flex;
