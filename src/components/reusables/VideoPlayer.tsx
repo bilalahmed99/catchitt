@@ -10,9 +10,16 @@ interface VideoPlayerProps {
 const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, onStart, onEnd }) => {
     const playerRef = useRef<any>(null); // Use `any` type to avoid TypeScript errors
     const videoRef = useRef<HTMLDivElement>(null);
+    const currentVideoRef = useRef<any>(null);
 
     const intersectionOptions = {
         threshold: 1,
+    };
+
+    const pauseCurrentVideo = () => {
+        if (currentVideoRef.current && currentVideoRef.current !== playerRef.current) {
+            currentVideoRef.current.pause();
+        }
     };
 
     useEffect(() => {
@@ -35,6 +42,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, onStart, onEnd }) => {
 
         if (entry.isIntersecting) {
             playerRef.current?.play();
+            pauseCurrentVideo
             onStart();
         } else {
             playerRef.current?.pause();
