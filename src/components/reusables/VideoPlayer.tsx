@@ -42,7 +42,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, onStart, onEnd }) => {
 
         if (entry.isIntersecting) {
             playerRef.current?.play();
-            pauseCurrentVideo
+            // pauseCurrentVideo
             onStart();
         } else {
             playerRef.current?.pause();
