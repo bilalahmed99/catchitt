@@ -33,7 +33,7 @@ import { More } from './svg-components/More';
 // import { getCache, replaceCache } from '../../store/cachedBookmarks';
 import { useNavigate } from 'react-router-dom';
 
-export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, endedIds, avatar, isBookmarked, refetchBookmarks }) => {
+export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, endedIds, avatar, isBookmarked }) => {
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
     const navigate = useNavigate()
     const [videoElement, inView] = useInView({
@@ -58,13 +58,13 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
         setOpenCommentPopup(true);
     };
 
-
     const [anchors, setAnchors] = useState<{ more: null, share: null }>({ more: null, share: null });
     const buttonRef = useRef(null);
     const videoRef = useRef<any>(null); // Use `any` type to avoid TypeScript errors
+    const [bookMarkStatus, setBookMarkStatus] = useState(isBookmarked);
     const openMore = Boolean(anchors.more);
     const openShare = Boolean(anchors.share);
-
+	
     useEffect(() => {
         try {
             if (inView) {
@@ -194,7 +194,7 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
     const dHandleLikePost = useDebounce(handleLikePost, 3)
 
     const handleBookmarking = async () => {
-        await fetchInJSON(
+        const response = await fetchInJSON(
             `/media-content/collections/${post.mediaId}`,
             {
                 method: 'POST',
@@ -203,21 +203,21 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                     Authorization: `Bearer ${token}`,
                 },
             },
-            () => {
-                refetchBookmarks([])
-                handleFetchCurrentPost(post.mediaId)
-                // if (isLoggedIn) {
-                //     let oldCache = getCache()
-                //     if (oldCache.has(post.mediaId)) {
-                //         oldCache.delete(post.mediaId)
-                //     } else {
-                //         oldCache.add(post.mediaId)
-                //     }
-                //     replaceCache(Array.from(oldCache))
-                //     setToggleBookmark(() => oldCache.has(post.mediaId) ? true : false)
-                // }
-            }
+			() => {
+				setBookMarkStatus(prev => !prev)
+			}
+			// if (isLoggedIn) {
+			//     let oldCache = getCache()
+			//     if (oldCache.has(post.mediaId)) {
+			//         oldCache.delete(post.mediaId)
+			//     } else {
+			//         oldCache.add(post.mediaId)
+			//     }
+			//     replaceCache(Array.from(oldCache))
+			//     setToggleBookmark(() => oldCache.has(post.mediaId) ? true : false)
+			// }  
         );
+        console.log(response);
     };
     const dHandleBookmarking = useDebounce(handleBookmarking, 3)
 
@@ -287,6 +287,7 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
         setShowOverlay(false);
     }
 
+		console.log("isBookmarked", isBookmarked)
 
     return postData && (
         <div className={classNames(styles.root, className)}>
@@ -563,7 +564,7 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                                 }}
                             >
                                 <>
-                                    <Bookmark bookmarked={isBookmarked} />
+                                    <Bookmark bookmarked={bookMarkStatus} />
                                     <h4 className={styles.interactionText}></h4>
                                 </>
                             </Button>

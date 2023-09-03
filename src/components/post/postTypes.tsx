@@ -70,6 +70,5 @@ export interface PostProps {
     endedIds: MutableRefObject<Set<string>>;
     post: Post;
     avatar: string;
-    refetchBookmarks: Function;
     isBookmarked: boolean;
 }

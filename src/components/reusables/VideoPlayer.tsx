@@ -39,7 +39,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, onStart, onEnd }) => {
 
     const handleIntersection: IntersectionObserverCallback = (entries) => {
         const [entry] = entries;
-
+		// console.log("entries", entries)
         if (entry.isIntersecting) {
             playerRef.current?.play();
             // pauseCurrentVideo

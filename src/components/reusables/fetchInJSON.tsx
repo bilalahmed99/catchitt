@@ -7,7 +7,7 @@ export const fetchInJSON = async (request: string, init?: RequestInit | undefine
 		if (response.ok) {
 			const responseData = await response.json();
 			if (onResponse)
-				await onResponse(responseData)
+				onResponse(responseData)
 			return responseData
 		}
 	} catch (error) {

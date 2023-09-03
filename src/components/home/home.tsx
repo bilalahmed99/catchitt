@@ -18,7 +18,7 @@ export interface HomeProps {
 	className?: string;
 }
 
-export const Home = memo(({ className }: HomeProps) => {
+export const Home = ({ className }: HomeProps) => {
 	let avatarUrl = '';
 	const { onePost } = useParams()
 	const navigator = useNavigate()
@@ -39,35 +39,23 @@ export const Home = memo(({ className }: HomeProps) => {
 		if (onePost || location.pathname !== '/home')
 			handleFetchOnePost(onePost as string)
 		else
-			handleFetchPosts();
+			dHandleFetchPosts([]);
 		handleFetchUserBookmarks();
 		handleFetchProfileInfo();
 	}, []);
-
-
 
 	const handleFetchPosts = useCallback(async (page?: number) => {
 		if (onePost) {
 			setPostData([])
 		}
+
+		let link = isLoggedIn ?
+		 `/media-content/public/videos/feed/?page=${page ? page : 1}` 
+		 : `${endPoint}/?page=${page ? page : 1}`
+		
 		if (isLoggedIn) {
 			const res = await fetchInJSON(
-				`${endPoint}/?page=${page ? page : 1}`,
-				{
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${token}`,
-					},
-				}
-			)
-			if (page != 1)
-				setPostData((prev: []) => [...prev, ...res.data]);
-			else
-				setPostData([...res.data]);
-		} else {
-			const res = await fetchInJSON(
-				`/media-content/public/videos/feed/?page=${page ? page : 1}`,
+				link,
 				{
 					method: 'GET',
 					headers: {
@@ -81,12 +69,9 @@ export const Home = memo(({ className }: HomeProps) => {
 			else
 				setPostData([...res.data]);
 		}
-		// if (page != 1)
-		// 	setPostData((prev: []) => [...prev, ...res.data]);
-		// else
-		// 	setPostData([...res.data]);
-
 	}, []);
+	const dHandleFetchPosts = useDebounce(handleFetchPosts)
+
 
 	const handleFetchOnePost = async (myMediaId: string) => {
 		await fetchInJSON(
@@ -145,6 +130,7 @@ export const Home = memo(({ className }: HomeProps) => {
 		}
 		// Update the state with the fetched data
 	};
+	const dHandleFetchFollowingPosts = useDebounce(handleFetchFollowingPosts)
 
 	const handleFetchProfileInfo = useCallback(async () => {
 		try {
@@ -181,9 +167,9 @@ export const Home = memo(({ className }: HomeProps) => {
 		setPaginating(true)
 		page.current++
 		if (tab.current == 0) {
-			await handleFetchFollowingPosts(page.current);
+			await dHandleFetchFollowingPosts(page.current);
 		} else {
-			await handleFetchPosts(page.current);
+			await dHandleFetchPosts([page.current]);
 		}
 		setPaginating(false)
 	}
@@ -192,6 +178,10 @@ export const Home = memo(({ className }: HomeProps) => {
 	useEffect(() => {
 		document.querySelector('#root > div')?.addEventListener('scroll', handleScroll)
 		return () => { document.querySelector('#root > div')?.removeEventListener('scroll', handleScroll) }
+	}, [])
+
+	const isBookmarked = useCallback((mediaId: string) => {
+		return bookmarksData.find(e => e.mediaId == mediaId) ? true : false
 	}, [])
 
 	return (
@@ -240,8 +230,7 @@ export const Home = memo(({ className }: HomeProps) => {
 									startedIds={startedIds}
 									endedIds={endedIds}
 									avatar={avatarUrl}
-									refetchBookmarks={dHandleFetchUserBookmarks}
-									isBookmarked={bookmarksData.find(e => e.mediaId == p.mediaId) ? true : false}
+									isBookmarked={isBookmarked(p.mediaId)}
 								/>
 							))
 							:
@@ -257,4 +246,4 @@ export const Home = memo(({ className }: HomeProps) => {
 			</div>
 		</div>
 	);
-}, (prev, next) => prev.className == next.className);
+};
