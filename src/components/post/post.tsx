@@ -414,7 +414,7 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                             <Box sx={styleComment}>
                                 <div
                                     // className={styles.mediaContainer}
-                                    className={styles.postMediaContainer}
+                                    className={styles.postMediaContainerComment}
                                     key={postData.mediaId}
                                 >
                                     <VideoPlayer
