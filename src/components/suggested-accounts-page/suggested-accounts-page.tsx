@@ -7,6 +7,7 @@ import { SuggestedActivity } from '../suggested-activity/suggested-activity';
 import { useAuthStore } from '../../store/authStore';
 import { Navigate } from 'react-router-dom';
 import useDebounce from '../reusables/useDebounce';
+import { DefaultAvatar } from './svg-components/DefaultAvatar';
 
 export interface SuggestedAccountsPageProps {
 	className?: string;
@@ -148,11 +149,15 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
 		return (
 			<div key={account._id} className={styles.accountCardDiv}>
 				<div className={styles.userInfoFrame}>
-					<img
-						src={account.avatar || 'https://via.placeholder.com/128'}
-						alt={account.name}
-						className={styles.avatarImgCircle}
-					/>
+					{account.avatar === '' ? (
+						<DefaultAvatar />
+					) : (
+						<img
+							src={account.avatar}
+							alt={account.name}
+							className={styles.avatarImgCircle}
+						/>
+					)}
 					<h4 className={styles.userNameText}>{account.name}</h4>
 				</div>
 				<div className={styles.followBtnDiv}>

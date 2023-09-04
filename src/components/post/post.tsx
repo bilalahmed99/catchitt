@@ -589,7 +589,7 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                                 onClick={(e) => handleOpenSharePopup(e)}
                             >
                                 <Share />
-                                {/* <h4 className={styles.interactionText}>{postData.shares}</h4> */}
+                                <h4 className={styles.interactionText}>{postData.shares}</h4>
                             </Button>
                             <StyledMenu
                                 id="demo-customized-menu"

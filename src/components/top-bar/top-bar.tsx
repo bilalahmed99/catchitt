@@ -84,22 +84,28 @@ export const TopBar = ({ className }: TopBarProps) => {
 
                     {isLoggedIn ? (
                         <>
-                            {avatarUrl.length === 0 ? <DefaultAvatar /> : (
-                                <>
+                            {avatarUrl.length === 0 ?
+
+                                (<>
                                     <img src={plusIcon} alt="" className={styles.plusIconStyle} />
-                                    <img
-                                        src={avatarUrl}
-                                        alt=""
-                                        className={styles.plusIconStyle}
-                                        style={{
-                                            cursor: 'pointer',
-                                            borderRadius: '50%',
-                                            border: '1px solid #000',
-                                        }}
-                                        onClick={handleMenuClick} // Open dropdown menu on avatar click
-                                    />
-                                </>
-                            )}
+
+                                    <DefaultAvatar />
+                                </>) : (
+                                    <>
+                                        <img src={plusIcon} alt="" className={styles.plusIconStyle} />
+                                        <img
+                                            src={avatarUrl}
+                                            alt=""
+                                            className={styles.plusIconStyle}
+                                            style={{
+                                                cursor: 'pointer',
+                                                borderRadius: '50%',
+                                                border: '1px solid #000',
+                                            }}
+                                            onClick={handleMenuClick} // Open dropdown menu on avatar click
+                                        />
+                                    </>
+                                )}
                             <div className={styles.nameDiv}>
                                 <h4 className={styles.loggedName} onClick={handleMenuClick}>
                                     {userName}

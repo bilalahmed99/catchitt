@@ -4,7 +4,7 @@
   justify-items: start;
   gap: 0px 32px;
   background-color: #fafafa;
-  overflow-y: auto;
+  // overflow-y: auto;
 }
 
 /* Hide the scrollbar for Chrome, Safari, and newer Edge */
@@ -41,17 +41,19 @@
   height: 100%;
   flex-direction: column;
   align-items: end;
-  gap: 24px;
+  gap: 10px;
   padding-top: 0px;
   justify-items: baseline;
   align-content: end;
   justify-content: end;
   align-self: self-end;
+  margin-bottom: -40px;
 }
 .postCaptionContainer {
   display: flex;
   flex-direction: column;
   width: 602px;
+  height: 598px;
 }
 .postCreator {
   display: flex;
@@ -70,18 +72,19 @@
   align-items: baseline;
 }
 .postMediaContainer {
+  border-radius: 8px;
   min-width: 602px;
-  min-height: 640px;
-  width: 100%;
+  max-height: 598px;
+  // width: 100%;
   height: 100%;
-  max-height: 815px;
+  // max-height: 815px;
   background-color: #000000;
 }
 
 .postMediaContainer video {
-  // min-width: 602px;
-  max-height: 814px;
-  width: 100%;
+  max-height: 598px;
+  // width: 100%;
+  min-width: 602px;
   // height: 100%;
   max-width: 602px;
 }
@@ -143,6 +146,9 @@
   font-weight: 400;
   line-height: 150%; /* 21px */
   color: #848484;
+  margin: 0;
+  padding: 0;
+  text-align: start;
 }
 .followingBtn {
   border-radius: 6px;
@@ -209,8 +215,10 @@
   display: flex;
   flex-direction: row;
   column-gap: 32px;
-  height: 100%;
+  height: 700px;
   margin-right: 20px;
+  margin: 0;
+  margin-bottom: -20px
 }
 .interactionText {
   color: var(--default-body, #222);
@@ -226,6 +234,7 @@
 .interactionDiv {
   display: flex;
   flex-direction: column;
+  // gap: 0;
   // position: inherit;
 }
 
