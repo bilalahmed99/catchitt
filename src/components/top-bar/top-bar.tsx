@@ -6,6 +6,8 @@ import SearchBar from '../reusables/searchBar';
 import { useAuthStore } from '../../store/authStore';
 import { useEffect, useState } from 'react';
 // import { Button } from '@mui/material';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
 import { DefaultAvatar } from './svg-components/DefaultAvatar';
 
@@ -59,6 +61,16 @@ export const TopBar = ({ className }: TopBarProps) => {
         handleFetchProfileInfo();
     }, []);
 
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleMenuClick = (event: any) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <div className={classNames(styles.root, className)}>
             <div className={styles.logoDiv}>
@@ -69,34 +81,43 @@ export const TopBar = ({ className }: TopBarProps) => {
                     <SearchBar />
                 </div>
                 <div className={styles.plusProfileDiv}>
-                    <img src={plusIcon} alt="" className={styles.plusIconStyle} />
-                    <img
-                        src={avatarUrl === '' ? '' : avatarUrl}
-                        alt=""
-                        className={styles.plusIconStyle}
-                        style={{
-                            cursor: 'pointer',
-                            borderRadius: '50%',
-                            border: '1px solid #000',
-                        }}
-                    />
+
                     {isLoggedIn ? (
                         <>
+                            {avatarUrl.length === 0 ? <DefaultAvatar /> : (
+                                <>
+                                    <img src={plusIcon} alt="" className={styles.plusIconStyle} />
+                                    <img
+                                        src={avatarUrl}
+                                        alt=""
+                                        className={styles.plusIconStyle}
+                                        style={{
+                                            cursor: 'pointer',
+                                            borderRadius: '50%',
+                                            border: '1px solid #000',
+                                        }}
+                                        onClick={handleMenuClick} // Open dropdown menu on avatar click
+                                    />
+                                </>
+                            )}
                             <div className={styles.nameDiv}>
-                                <h4 className={styles.loggedName}>{userName}</h4>
+                                <h4 className={styles.loggedName} onClick={handleMenuClick}>
+                                    {userName}
+                                </h4>
+                                <Menu
+                                    anchorEl={anchorEl}
+                                    open={Boolean(anchorEl)}
+                                    onClose={handleClose}
+                                >
+                                    <MenuItem onClick={handleLogout}>Log Out</MenuItem>
+                                </Menu>
                             </div>
-                            <button className={styles.logoutBtn}
-                                onClick={handleLogout}>
-                                Log Out
-                            </button>
+
+
                         </>
-                    ) : (
-                        <button className={styles.loginBtn}
-                            onClick={handleLogin}>
-                            Log In
-                        </button>
-                    )
-                    }
+                    ) : <button className={styles.loginBtn} onClick={handleLogin}>
+                        Log In
+                    </button>}
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 export const DefaultAvatar = () => {
     return (
-        <svg width="111" height="110" viewBox="0 0 111 110" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+        <svg width="36px" height="36px" viewBox="0 0 111 110" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
             <circle cx="55.3914" cy="54.9676" r="54.9676" fill="url(#pattern0)" />
             <defs>
                 <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">

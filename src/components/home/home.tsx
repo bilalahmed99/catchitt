@@ -182,7 +182,6 @@ export const Home = ({ className }: HomeProps) => {
 	}, [])
 
 	const isBookmarked = useCallback((mediaId: string) => {
-		console.log('my bookamrks data', bookmarksData);
 		if (bookmarksData.length > 0)
 			return bookmarksData?.find(e => e.mediaId === mediaId) ? true : false
 		else
@@ -225,21 +224,40 @@ export const Home = ({ className }: HomeProps) => {
 							// Handle other tab conditions here if needed
 						}}
 					/>
-
 					{
-						postData.length > 0 ?
-							postData.map((p: PostType, i: number) => (
-								<Post
-									key={i}
-									post={p}
-									startedIds={startedIds}
-									endedIds={endedIds}
-									avatar={avatarUrl}
-									isBookmarked={isBookmarked(p.mediaId)}
-								/>
-							))
+						isLoggedIn
+							?
+							(
+								postData.length > 0 && bookmarksData.length > 0 ?
+									postData.map((p: PostType, i: number) => (
+										<Post
+											key={i}
+											post={p}
+											startedIds={startedIds}
+											endedIds={endedIds}
+											avatar={avatarUrl}
+											isBookmarked={isBookmarked(p.mediaId)}
+										/>
+									))
+									:
+									<div className={styles.center}><h1>..</h1></div>
+							)
 							:
-							<div className={styles.center}><h1>..</h1></div>
+							(
+								postData.length > 0 ?
+									postData.map((p: PostType, i: number) => (
+										<Post
+											key={i}
+											post={p}
+											startedIds={startedIds}
+											endedIds={endedIds}
+											avatar={avatarUrl}
+											isBookmarked={false}
+										/>
+									))
+									:
+									<div className={styles.center}><h1>..</h1></div>
+							)
 					}
 					{
 						paginating && postData.length > 0 &&
@@ -250,5 +268,5 @@ export const Home = ({ className }: HomeProps) => {
 				</div>
 			</div>
 		</div>
-	);
-};
+	)
+}

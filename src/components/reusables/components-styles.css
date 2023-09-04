@@ -6,9 +6,10 @@
     border-radius: 3px;
     position: static;
     margin: 0;
-    padding: 1.8rem 2rem 1.8rem 5rem; /* Adjusted padding values */
+    padding: 0px 2rem 0px 65px;    
     margin-bottom: 0;
     height: 40px;
+    max-height: 40px;
     top: -120px;
     border: 0 solid black;
     box-shadow: 0 3px 4px rgba(0, 0, 0, 0);
@@ -18,9 +19,9 @@
     font-weight: 400;
     line-height: 21px;
     color: #acacac;
-    background: no-repeat padding-box border-box 30px center / auto scroll
+    background: no-repeat padding-box border-box 20px center / auto scroll
       url(../../assets/search.png) #f8f8f8;
-    background-size: 2%;
+    background-size: 3%;
   
     width: 100%;
     &:focus {
