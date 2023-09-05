@@ -513,7 +513,7 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                                                             }}
                                                         >
                                                             <CommentIcon />
-                                                            <h4 className={styles.interactionText}>{postData.comments.length}</h4>
+                                                            <h4 className={styles.interactionTextComment}>{postData.comments.length}</h4>
                                                         </Button>
                                                     </div>
                                                     <div className={styles.interactionDivComment}>
@@ -536,7 +536,7 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                                                         >
                                                             <>
                                                                 <Bookmark bookmarked={bookMarkStatus} />
-                                                                <h4 className={styles.interactionText}></h4>
+                                                                <h4 className={styles.interactionTextComment}></h4>
                                                             </>
                                                         </Button>
                                                     </div>
@@ -555,7 +555,7 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                                                             onClick={(e) => handleOpenSharePopup(e)}
                                                         >
                                                             <Share />
-                                                            <h4 className={styles.interactionText}>{postData.shares}</h4>
+                                                            <h4 className={styles.interactionTextComment}>{postData.shares}</h4>
                                                         </Button>
                                                         <StyledMenu
                                                             id="demo-customized-menu"
@@ -586,7 +586,7 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                                                             onClick={(event) => handleClickMore(event)}
                                                         >
                                                             <More />
-                                                            <h4 className={styles.interactionText}>More</h4>
+                                                            <h4 className={styles.interactionTextComment}>More</h4>
                                                         </Button>
                                                         <StyledMenu
                                                             id="demo-customized-menu"
