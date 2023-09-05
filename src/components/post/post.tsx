@@ -496,7 +496,7 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                                                             }}
                                                         >
                                                             {postData.isLiked ? <Like liked={true} /> : <Like />}
-                                                            <h4 className={styles.interactionText}>{postData.likes}</h4>
+                                                            <h4 className={styles.interactionTextComment}>{postData.likes}</h4>
                                                         </Button>
                                                     </div>
                                                     <div className={styles.interactionDivComment}>
