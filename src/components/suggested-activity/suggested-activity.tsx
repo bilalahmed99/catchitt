@@ -7,6 +7,7 @@ import { differenceInDays, differenceInHours, differenceInMinutes } from 'date-f
 import { Follow } from './svg-components/Follow';
 import defaultProfileIcon from '../../assets/defaultProfileIcon.png'
 import useDebounce from '../reusables/useDebounce';
+import { Following } from './svg-components/Following';
 
 export interface SuggestedActivityProps {
     className?: string;
@@ -56,7 +57,7 @@ export const SuggestedActivity = memo(({
     const activityEndPoint = '/notification';
     const token = useAuthStore((state) => state.token);
     const [activityUserFollowed, setActivityUserFollowed] = useState(false);
-    const [suggestedUserFollowed, setSuggestedUserFollowed] = useState(randomAccs.map((user) => ({ isFollowed: false })));
+    const [followedAccounts, setFollowedAccounts] = useState<any>({}); // Initialize as an empty object
 
 
     const handleFetchSuggestedAccounts = async () => {
@@ -119,7 +120,11 @@ export const SuggestedActivity = memo(({
             if (response.ok) {
                 // Handle success as needed
                 console.log(`user: ${accountId} is followed`);
-                // setActivityUserFollowed(true)
+                // Update the followedAccounts state
+                setFollowedAccounts((prevFollowedAccounts: any) => ({
+                    ...prevFollowedAccounts,
+                    [accountId]: !prevFollowedAccounts[accountId], // Mark the account as followed
+                }));
             }
         } catch (error) {
             // Handle error as needed
@@ -210,16 +215,12 @@ export const SuggestedActivity = memo(({
                             <div key={account._id} className={styles.suggestedItem}>
                                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                                     <img
-                                        src={
-                                            account.avatar || defaultProfileIcon
-                                        }
+                                        src={account.avatar || defaultProfileIcon}
                                         alt=""
                                         className={styles.plusIconStyle}
                                     />
                                     <div className={styles.accountName}>
-                                        <h4
-                                            className={styles.nameText}
-                                        >{`@${account.name}`}</h4>
+                                        <h4 className={styles.nameText}>{`@${account.name}`}</h4>
                                     </div>
                                 </div>
                                 <div className="svgStyle">
@@ -229,7 +230,7 @@ export const SuggestedActivity = memo(({
                                             dHandleFollowBtnClicked([event, account._id])
                                         }
                                     >
-                                        <Follow />
+                                        {followedAccounts[account._id] ? (<Following />) : (<Follow />)}
                                     </button>
                                 </div>
                             </div>

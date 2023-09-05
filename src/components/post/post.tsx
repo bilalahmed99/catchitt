@@ -298,10 +298,6 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
     //     }
     // }, [])
 
-    useEffect(() => {
-        console.log(profileAvatar);
-    }, []);
-
     // useEffect(() => {
     //     console.log(profileAvatar);
     // }, [openCommentPopup]);
@@ -425,10 +421,6 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                         </Modal>
                     </div>
                 )}
-                {/** Share Modal */}
-                {/* {openSharePopup && (
-                    // <PopupModal open={openSharePopup} onClose={handleCloseSharePopup} />
-                )} */}
 
                 {openCommentPopup && (
                     <div>
@@ -453,8 +445,197 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                                 </div>
 
                                 <div className={styles.userCommentDiv}>
-                                    <div style={{ width: '100%', overflow: 'auto' }}>
-                                        <div className={styles.commentsHeaderDiv}>Comments</div>
+                                    <div style={{ width: '100%', overflow: 'auto', height: '100%' }}>
+                                        <div className={styles.commentsHeaderDiv}>
+                                            {/**  Post Creator Info */}
+                                            <div className={styles.postCaptionContainerComments}>
+                                                <div className={styles.postCreator}>
+                                                    <div className={styles['profilePic-UserNameDiv']}>
+                                                        <div>
+                                                            <img
+                                                                src={postData.user.avatar || profileIcon}
+                                                                alt=""
+                                                                className={styles.profilePicImg}
+                                                            />
+                                                        </div>
+                                                        <div className={styles.userDetailsDiv}>
+                                                            <h4 className={styles.userNameText}>{postData.user.name}</h4>
+                                                            <h4 className={styles.userSubText}>{postData.user.username}</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <button
+                                                            ref={buttonRef}
+                                                            className={postData.user.isFollowed ? styles.followingBtn : styles.followBtn}
+                                                            onClick={() => {
+                                                                if (isLoggedIn) { handleFollowClick(postData.user._id) }
+                                                                else {
+                                                                    navigate('/auth')
+                                                                }
+                                                            }}
+                                                        >
+                                                            {followLoading ? '...' : postData.user.isFollowed ? 'Following' : 'Follow'}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div className={styles.postText}>
+                                                    <h4 className={styles.captionText}>{postData.description}</h4>
+                                                </div>
+                                                <div className={styles.postInteractionContainerComment}>
+                                                    <div className={styles.interactionDivComment}>
+                                                        <Button
+                                                            className={styles.interactionDivComment}
+                                                            sx={{
+                                                                margin: 0,
+                                                                padding: 0,
+                                                                minWidth: 0,
+                                                            }}
+                                                            onClick={() => {
+                                                                if (isLoggedIn) { dHandleLikePost([post]) }
+                                                                else { navigate('/auth') }
+                                                            }}
+                                                        >
+                                                            {postData.isLiked ? <Like liked={true} /> : <Like />}
+                                                            <h4 className={styles.interactionText}>{postData.likes}</h4>
+                                                        </Button>
+                                                    </div>
+                                                    <div className={styles.interactionDivComment}>
+                                                        <Button
+                                                            className={styles.interactionDivComment}
+                                                            sx={{
+                                                                margin: 0,
+                                                                padding: 0,
+                                                                minWidth: 0,
+                                                            }}
+                                                            onClick={() => {
+                                                                if (isLoggedIn) { handleOpenCommentPopup() }
+                                                                else { navigate('/auth') }
+                                                            }}
+                                                        >
+                                                            <CommentIcon />
+                                                            <h4 className={styles.interactionText}>{postData.comments.length}</h4>
+                                                        </Button>
+                                                    </div>
+                                                    <div className={styles.interactionDivComment}>
+                                                        <Button
+                                                            className={styles.interactionDivComment}
+                                                            sx={{
+                                                                margin: 0,
+                                                                padding: 0,
+                                                                minWidth: 0,
+                                                            }}
+                                                            id="demo-positioned-button"
+                                                            aria-controls={openMore ? 'demo-positioned-menu' : undefined}
+                                                            aria-haspopup="true"
+                                                            aria-expanded={openMore ? 'true' : undefined}
+                                                            onClick={(e) => {
+                                                                e.preventDefault()
+                                                                if (isLoggedIn) { dHandleBookmarking([]) }
+                                                                else { navigate('/auth') }
+                                                            }}
+                                                        >
+                                                            <>
+                                                                <Bookmark bookmarked={bookMarkStatus} />
+                                                                <h4 className={styles.interactionText}></h4>
+                                                            </>
+                                                        </Button>
+                                                    </div>
+                                                    <div className={styles.interactionDivComment}>
+                                                        <Button
+                                                            className={styles.interactionDivComment}
+                                                            sx={{
+                                                                margin: 0,
+                                                                padding: 0,
+                                                                minWidth: 0,
+                                                            }}
+                                                            id="demo-positioned-button"
+                                                            aria-controls={openShare ? 'demo-positioned-menu' : undefined}
+                                                            aria-haspopup="true"
+                                                            aria-expanded={openShare ? 'true' : undefined}
+                                                            onClick={(e) => handleOpenSharePopup(e)}
+                                                        >
+                                                            <Share />
+                                                            <h4 className={styles.interactionText}>{postData.shares}</h4>
+                                                        </Button>
+                                                        <StyledMenu
+                                                            id="demo-customized-menu"
+                                                            MenuListProps={{
+                                                                'aria-labelledby': 'demo-customized-button',
+                                                            }}
+                                                            anchorEl={anchors.share}
+                                                            open={openShare}
+                                                            onClose={handleShareClose}
+                                                        >
+                                                            <MenuItem onClick={handleShareClose} className={styles.menuItems}>
+                                                                Link Copied!
+                                                            </MenuItem>
+                                                        </StyledMenu>
+                                                    </div>
+                                                    <div className={styles.interactionDivComment}>
+                                                        <Button
+                                                            className={styles.interactionDivComment}
+                                                            sx={{
+                                                                margin: 0,
+                                                                padding: 0,
+                                                                minWidth: 0,
+                                                            }}
+                                                            id="demo-positioned-button"
+                                                            aria-controls={openMore ? 'demo-positioned-menu' : undefined}
+                                                            aria-haspopup="true"
+                                                            aria-expanded={openMore ? 'true' : undefined}
+                                                            onClick={(event) => handleClickMore(event)}
+                                                        >
+                                                            <More />
+                                                            <h4 className={styles.interactionText}>More</h4>
+                                                        </Button>
+                                                        <StyledMenu
+                                                            id="demo-customized-menu"
+                                                            MenuListProps={{
+                                                                'aria-labelledby': 'demo-customized-button',
+                                                            }}
+                                                            anchorEl={anchors.more}
+                                                            open={openMore}
+                                                            onClose={handleClose}
+                                                        >
+                                                            <MenuItem onClick={handleClose} className={styles.menuItems}>
+                                                                <div className={styles.menuItemsSvgs}>
+                                                                    <Save />
+                                                                </div>
+                                                                Save Video
+                                                            </MenuItem>
+                                                            <MenuItem onClick={handleClose} className={styles.menuItems}>
+                                                                <div className={styles.menuItemsSvgs}>
+                                                                    <Copy />
+                                                                </div>
+                                                                Copy Link
+                                                            </MenuItem>
+                                                            <MenuItem onClick={handleClose} className={styles.menuItems}>
+                                                                <div className={styles.menuItemsSvgs}>
+                                                                    <NotInterested />
+                                                                </div>
+                                                                Not Interested
+                                                            </MenuItem>
+                                                            <MenuItem onClick={handleReportClick} className={styles.menuItems}>
+                                                                <div className={styles.menuItemsSvgs}>
+                                                                    <Report />
+                                                                </div>
+                                                                Report
+                                                            </MenuItem>
+                                                            <MenuItem onClick={handleClose} className={styles.menuItems}>
+                                                                <div className={styles.menuItemsSvgs}>
+                                                                    <Send />
+                                                                </div>
+                                                                Send
+                                                            </MenuItem>
+                                                        </StyledMenu>
+
+                                                        {/* ----------------------------------------- More Menue ----------------------------------------------------------------*/}
+                                                        <div></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {/**  Post Creator Info End */}
+                                        </div>
                                         {postData.comments.map((comment, i) => (
                                             <Comment key={i} comment={comment} handleReply={dHandleReply} handleLikeComment={dHandleLikeComment} />
                                         ))}
@@ -477,8 +658,6 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                                                     src={profileAvatar}
                                                     alt={''}
                                                     className={styles.avatarImgCircleCommentInputField}
-
-
                                                 />
                                                 <InputField
                                                     placeholder="Add comment..."
