@@ -18,7 +18,7 @@ const ComingSoon: React.FC = ({ className }: ComingSoonProps) => {
             <div className={styles.container}>
                 <div className={styles.leftSide}>
                     <div className={styles.sideNavDiv}>
-                        <SideNavBar selectedIndex={0} />
+                        <SideNavBar selectedIndex={null} />
                     </div>
                     <div className={styles.suggestedActivityDiv}>
                         <SuggestedActivity showActivity={true} showSuggestedContent={true} />
