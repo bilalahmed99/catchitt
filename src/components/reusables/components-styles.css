@@ -6,7 +6,7 @@
     border-radius: 3px;
     position: static;
     margin: 0;
-    padding: 0px 2rem 0px 65px;    
+    padding: 0px 2rem 0px 52px;    
     margin-bottom: 0;
     height: 40px;
     max-height: 40px;
@@ -20,7 +20,7 @@
     line-height: 21px;
     color: #acacac;
     background: no-repeat padding-box border-box 20px center / auto scroll
-      url(../../assets/search.png) #f8f8f8;
+      url(../../assets/Search.svg) #f8f8f8;
     background-size: 3%;
   
     width: 602px;
