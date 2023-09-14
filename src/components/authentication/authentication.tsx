@@ -55,7 +55,7 @@ const languages: Languages[] = [
 export const Authentication = (props: any) => {
     const currentLanguageCode = cookies.get('i18next') || 'en';
     const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     // const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
     const API_KEY = process.env.VITE_API_URL;

@@ -15,7 +15,6 @@ import { IntlProvider } from 'react-intl';
 import messages from '../src/languages-intl';
 
 
-
 // Functional component to handle the initial route navigation
 const InitialRouteHandler = () => {
     const navigate = useNavigate();
@@ -50,7 +49,6 @@ function App() {
 
     return (
         <IntlProvider locale={appLanguage} messages={messages[appLanguage]}>
-
             <div className={styles.App}>
                 <VideoProvider>
                     <Router>
@@ -68,7 +66,6 @@ function App() {
                         </Routes>
                     </Router>
                 </VideoProvider>
-
             </div>
         </IntlProvider>
     );
