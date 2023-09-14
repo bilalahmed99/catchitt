@@ -2,12 +2,11 @@ import classNames from 'classnames';
 import styles from './authentication.module.scss';
 import authSplashImg from '../../assets/authSplashImg.png';
 import Logo from '../../assets/Logo.png';
-// import googleIcon from '../../assets/googleIcon.png';
-// import facebookIcon from '../../assets/facebookIcon.png';
+import facebookIcon from '../../assets/facebookIcon.png';
 import appStoreBtn from '../../assets/appStoreBtn.png';
 import playStoreBtn from '../../assets/playStoreBtn.png';
 import InputField from '../reusables/InputField';
-// import IconButton from '@mui/material/IconButton';
+import IconButton from '@mui/material/IconButton';
 import { useAuthStore } from '../../store/authStore';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -326,14 +325,14 @@ export const Authentication = (props: any) => {
                         ) : null}
                 </div>
                 <div className={styles.afterTheFormDiv}>
-                    {/* <div className={styles.socialLoginsDiv}>
-                        <IconButton className={styles.socialLoginIconBtn}>
+                    <div className={styles.socialLoginsDiv}>
+                        {/* <IconButton className={styles.socialLoginIconBtn}>
                             <img src={googleIcon} alt="" className={styles.socialLoginIcon} />
-                        </IconButton>
+                        </IconButton> */}
                         <IconButton className={styles.socialLoginIconBtn}>
                             <img src={facebookIcon} alt="" className={styles.socialLoginIcon} />
                         </IconButton>
-                    </div> */}
+                    </div>
                     {form === 'signup' ? (
                         <p className={styles.formParagraph}>
                             Already have an account?{' '}

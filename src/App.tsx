@@ -36,8 +36,6 @@ const InitialRouteHandler = () => {
     return null; // Render nothing, as this component is used only for the initial route handling
 };
 
-
-
 function App() {
     const [appLanguage, setAppLanguage] = useState(
         (window.localStorage.getItem("lang") as string) || "en"
