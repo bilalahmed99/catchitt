@@ -52,7 +52,6 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
-  // overflow: hidden; /* Prevent scrolling */
 }
 
 /* Make the .container fill the entire viewport */
@@ -98,6 +97,7 @@ body {
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
+  height: 100%;
   justify-items: center;
   align-content: center;
   justify-content: center;
