@@ -3,7 +3,6 @@ import { Button } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import React, { ChangeEvent, useState } from 'react';
-import { Gift } from '../post/svg-components/Gift';
 import { SendComment } from '../post/svg-components/SendComment';
 
 interface InputFieldProps {
@@ -49,7 +48,8 @@ const InputField: React.FC<InputFieldProps> = ({ type, className, iconClick, pla
                     type === 'password' ? (
                         <InputAdornment position="end">
                             {showCommentIcons && (
-                                <Gift />
+                                // <Gift />
+                                ''
                             )}
                             {showPassword ? (
                                 <VisibilityOff onClick={handleTogglePasswordVisibility} />
@@ -61,7 +61,7 @@ const InputField: React.FC<InputFieldProps> = ({ type, className, iconClick, pla
                         <InputAdornment position="start">
                             {showCommentIcons && (
                                 <div style={{ display: "flex", gap: '16px' }}>
-                                    <Gift />
+                                    {/* <Gift /> */}
                                     <Button sx={{ margin: '0px', padding: '0px', minWidth: '0px' }}
                                         onClick={iconClick}>
                                         <SendComment />

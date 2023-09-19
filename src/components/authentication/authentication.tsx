@@ -1,4 +1,3 @@
-import IconButton from '@mui/material/IconButton';
 import classNames from 'classnames';
 import i18next from 'i18next';
 import cookies from 'js-cookie';
@@ -8,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import Logo from '../../assets/Logo.png';
 import appStoreBtn from '../../assets/appStoreBtn.png';
 import authSplashImg from '../../assets/authSplashImg.png';
-import facebookIcon from '../../assets/facebookIcon.png';
 import playStoreBtn from '../../assets/playStoreBtn.png';
 import { useAuthStore } from '../../store/authStore';
 import InputField from '../reusables/InputField';
@@ -260,11 +258,11 @@ export const Authentication = (props: any) => {
                                     {t('signup.text')}
                                 </button>
                             </div>
-                            <div className={styles.splitLinesDiv}>
+                            {/* <div className={styles.splitLinesDiv}>
                                 <hr className={styles.splitLine} />
                                 <p className={styles.formParagraph}>{t('or.text')}</p>
                                 <hr className={styles.splitLine} />
-                            </div>
+                            </div> */}
                         </form>
                     ) : /** Sign in Flow */
                         form === 'signin' ? (
@@ -325,11 +323,11 @@ export const Authentication = (props: any) => {
                                         {t('login.text')}
                                     </button>
                                 </div>
-                                <div className={styles.splitLinesDiv}>
+                                {/* <div className={styles.splitLinesDiv}>
                                     <hr className={styles.splitLine} />
                                     <p className={styles.formParagraph}>{t("or.text")}</p>
                                     <hr className={styles.splitLine} />
-                                </div>
+                                </div> */}
                             </form>
                         ) : null}
                 </div>
@@ -338,9 +336,9 @@ export const Authentication = (props: any) => {
                         {/* <IconButton className={styles.socialLoginIconBtn}>
                             <img src={googleIcon} alt="" className={styles.socialLoginIcon} />
                         </IconButton> */}
-                        <IconButton className={styles.socialLoginIconBtn}>
+                        {/* <IconButton className={styles.socialLoginIconBtn}>
                             <img src={facebookIcon} alt="" className={styles.socialLoginIcon} />
-                        </IconButton>
+                        </IconButton> */}
                     </div>
                     {form === 'signup' ? (
                         <p className={styles.formParagraph}>
