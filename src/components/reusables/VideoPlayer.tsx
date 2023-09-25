@@ -59,7 +59,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, onStart, onEnd }) => {
     return (
         <div ref={videoRef} style={{
             margin: 0, padding: 0, width: "602px",
-            height: "598px", borderRadius: '8px'
+            height: "605px", borderRadius: '8px'
         }}>
             <ReactHlsPlayer
                 src={src}

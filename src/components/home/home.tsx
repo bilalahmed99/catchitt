@@ -1,16 +1,15 @@
 import classNames from 'classnames';
-import styles from './home.module.scss';
-import { TopBar } from '../top-bar/top-bar';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAuthStore } from '../../store/authStore';
+import { Post } from '../post/post';
+import { BookmarkItem, Post as PostType } from '../post/postTypes';
+import { fetchInJSON } from '../reusables/fetchInJSON';
 import { SideNavBar } from '../side-nav-bar/side-nav-bar';
 import { SuggestedActivity } from '../suggested-activity/suggested-activity';
-import { Post } from '../post/post';
-import { useAuthStore } from '../../store/authStore';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { useEffect, useState, useRef, useCallback, useLayoutEffect, memo } from 'react';
+import { TopBar } from '../top-bar/top-bar';
 import { ViewSwitchers } from '../view-switchers/view-switchers';
-import { fetchInJSON } from '../reusables/fetchInJSON';
-import { BookmarkItem, Post as PostType } from '../post/postTypes';
-import { useParams } from 'react-router-dom'
+import styles from './home.module.scss';
 // import { getCache, replaceCache } from '../../store/cachedBookmarks';
 import useDebounce from '../reusables/useDebounce';
 
@@ -46,6 +45,12 @@ export const Home = ({ className }: HomeProps) => {
 		dHandleFetchUserBookmarks([]);
 		handleFetchProfileInfo();
 	}, []);
+
+	// useEffect(() => {
+	// 	dHandleFetchPosts([]);
+	// 	dHandleFetchUserBookmarks([]);
+	// 	handleFetchProfileInfo();
+	// }, [isLoggedIn])
 
 	const handleFetchPosts = useCallback(async (page?: number) => {
 		if (onePost) {
@@ -108,14 +113,16 @@ export const Home = ({ className }: HomeProps) => {
 	}, []);
 	const dHandleFetchUserBookmarks = useDebounce(handleFetchUserBookmarks)
 
-	const handleFetchFollowingPosts = async (page?: number) => {
+	const handleFetchFollowingPosts = async (page = 1) => {
 		if (onePost) {
-			setPostData([])
+			setPostData([]);
 		}
-		if (!isLoggedIn) { navigator('/auth') }
-		else {
-			const response = await fetchInJSON(
-				`${endPoint}/?page=${page ? page : 1}&followingsuggestions=1`,
+
+		if (!isLoggedIn) {
+			navigator('/suggestedAccounts');
+		} else {
+			const response = await fetch(
+				`${API_KEY}${endPoint}/?page=${page}&followingsuggestions=1`,
 				{
 					method: 'GET',
 					headers: {
@@ -123,17 +130,39 @@ export const Home = ({ className }: HomeProps) => {
 						Authorization: `Bearer ${token}`,
 					},
 				}
-			)
-			const followingData = (response as any).data as []; // Extract the data from the response
-			if (page != 1) {
-				setPostData((prev: []) => [...prev, ...followingData]);
+			);
+
+			if (response.ok) {
+				try {
+					const responseData = await response.json();
+
+					if (Array.isArray(responseData.data)) {
+						if (page !== 1) {
+							setPostData((prev: any) => [...prev, ...responseData.data]);
+						} else {
+							setPostData([...responseData.data]);
+						}
+					} else {
+						// Handle the case where responseData.data is not an array
+						console.error('Received non-iterable data:', responseData.data);
+						// You can setPostData to an empty array or handle it differently based on your needs.
+						setPostData([]);
+					}
+				} catch (error) {
+					console.error('Error parsing JSON response:', error);
+					// Handle JSON parsing error, e.g., setPostData to an empty array or show an error message.
+					setPostData([]);
+				}
 			} else {
-				setPostData([...followingData]);
+				// Handle non-OK response, e.g., show an error message or retry the request.
+				console.error('Non-OK response:', response.status);
+				// Handle the error as needed.
 			}
 		}
-		// Update the state with the fetched data
 	};
-	const dHandleFetchFollowingPosts = useDebounce(handleFetchFollowingPosts)
+
+	const dHandleFetchFollowingPosts = useDebounce(handleFetchFollowingPosts);
+
 
 	const handleFetchProfileInfo = async () => {
 		if (!isLoggedIn) { return }
@@ -191,6 +220,7 @@ export const Home = ({ className }: HomeProps) => {
 			return false;
 	}, [])
 
+
 	return (
 		<div className={classNames(styles.root, className)}>
 			<div className={styles.topBarDiv}>
@@ -217,7 +247,8 @@ export const Home = ({ className }: HomeProps) => {
 							}
 							if (i === 0) {
 								if (!isLoggedIn) {
-									navigator('/auth')
+									// navigator('/auth')
+									navigator({ pathname: '/suggested-accounts' }, { replace: true })
 								} else {
 									await handleFetchFollowingPosts(); // Fetch following posts when "Following" tab is selected
 								}

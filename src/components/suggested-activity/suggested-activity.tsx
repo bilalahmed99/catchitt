@@ -1,12 +1,12 @@
 import classNames from 'classnames';
-import { memo, useEffect, useState, useMemo } from 'react';
+import { differenceInDays, differenceInHours, differenceInMinutes } from 'date-fns';
+import { memo, useEffect, useState } from 'react';
 import { useAuthStore } from '../../store/authStore';
 import styles from './suggested-activity.module.scss';
-import { differenceInDays, differenceInHours, differenceInMinutes } from 'date-fns';
 
-import { Follow } from './svg-components/Follow';
-import defaultProfileIcon from '../../assets/defaultProfileIcon.png'
+import defaultProfileIcon from '../../assets/defaultProfileIcon.png';
 import useDebounce from '../reusables/useDebounce';
+import { Follow } from './svg-components/Follow';
 import { Following } from './svg-components/Following';
 
 export interface SuggestedActivityProps {
@@ -290,7 +290,7 @@ export const SuggestedActivity = memo(({
                                                                     dHandleFollowBtnClicked([event, activity.triggeredUser._id])
                                                                 }
                                                             >
-                                                                <Follow />
+                                                                {followedAccounts[activity.triggeredUser._id] ? (<Following />) : (<Follow />)}
                                                             </button>
                                                         ) : (
                                                             ''

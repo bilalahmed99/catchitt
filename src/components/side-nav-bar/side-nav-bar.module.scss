@@ -23,7 +23,7 @@
   color: #5448b2;
   display: flex;
   width: 100%;
-  padding: 16px 149px 16px 16px;
+  padding: 16px 0px 16px 16px;
   align-items: center;
   gap: 8px 8px;
   justify-content: start;
@@ -33,11 +33,11 @@
 }
 
 .selected {
-  background-color: #5448b2;
+  background-color: #5448b2 !important;
   color: #ffffff;
   display: flex;
   width: 293px;
-  padding: 16px 149px 16px 16px;
+  padding: 16px 0px 16px 16px;
   align-items: center;
   align-items: center;
   gap: 8px 8px;
@@ -68,8 +68,6 @@
   display: flex;
   justify-items: start;
   text-decoration: none;
+  
 }
 
-// .notificationsP {
-//   margin: 0px -24px 0px 0px;
-// }

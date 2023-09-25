@@ -12,14 +12,12 @@ import confirmationIcon from '../../assets/confirmationIcon.png';
 import profileIcon from '../../assets/defaultProfileIcon.png';
 import { useAuthStore } from '../../store/authStore';
 import { ReasonReportPopup } from '../reason-report-popup/reason-report-popup';
-import VideoPlayer from '../reusables/VideoPlayer';
-import styles from './post.module.scss';
-import { PostProps, Post as PostType } from './postTypes';
-// import { PopupModal } from '../reusables/popupModal';
 import InputField from '../reusables/InputField';
-// import { differenceInHours, differenceInDays, differenceInWeeks, format } from 'date-fns';
+import VideoPlayer from '../reusables/VideoPlayer';
 import useDebounce from '../reusables/useDebounce';
 import { Comment } from './comment';
+import styles from './post.module.scss';
+import { PostProps, Post as PostType } from './postTypes';
 
 import { fetchInJSON } from '../reusables/fetchInJSON';
 import { Bookmark } from './svg-components/Bookmark';
@@ -32,10 +30,12 @@ import { Save } from './svg-components/Save';
 import { Share } from './svg-components/Share';
 // import { getCache, replaceCache } from '../../store/cachedBookmarks';
 import { useNavigate } from 'react-router-dom';
+import soundIcon from './svg-components/soundIcon.svg';
 
 export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, endedIds, isBookmarked, profileAvatar }) => {
     // console.log('is bookmarked?', isBookmarked);
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+    const { selectedIndex, setIndex } = useAuthStore(); // Get selectedIndex and setIndex from the store
     const API_KEY = process.env.VITE_API_URL;
     const navigate = useNavigate()
     const [videoElement, inView] = useInView({
@@ -443,7 +443,7 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                                                     <div className={styles['profilePic-UserNameDiv']}>
                                                         <div>
                                                             <img
-                                                                src={postData.user.avatar || profileIcon}
+                                                                src={postData.user.avatar === '' ? profileIcon : postData.user.avatar}
                                                                 alt=""
                                                                 className={styles.profilePicImg}
                                                             />
@@ -645,7 +645,7 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                                         >
                                             <div style={{ display: 'flex', alignItems: 'center', marginRight: '5px' }}>
                                                 <img
-                                                    src={profileAvatar}
+                                                    src={profileAvatar === '' ? profileIcon : profileAvatar}
                                                     alt={''}
                                                     className={styles.avatarImgCircleCommentInputField}
                                                 />
@@ -675,7 +675,7 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                                 <div className={styles['profilePic-UserNameDiv']}>
                                     <div>
                                         <img
-                                            src={postData.user.avatar || profileIcon}
+                                            src={postData.user.avatar === '' ? profileIcon : postData.user.avatar}
                                             alt=""
                                             className={styles.profilePicImg}
                                         />
@@ -706,6 +706,16 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                             </div>
                             <div className={styles.postText}>
                                 <h4 className={styles.captionText}>{postData.description}</h4>
+                                <Box className={styles.soundDiv} onClick={() => {
+                                    setIndex(-1)
+                                    console.log("soundId:", postData.sound?._id);
+                                    navigate(`/sounds/soundId=${postData.sound?._id === undefined || null || "" ? "650afbc1b5a4b181b0353886" : postData.sound?._id}`);
+
+                                }}>
+                                    <img src={soundIcon} alt='' />
+                                    <p>{postData.sound?.title} - {postData.sound?.owner?.name}</p>
+                                    {/* <p>{postData.sound?._id}</p> */}
+                                </Box>
                             </div>
                         </div>
                         <div className={styles.postMediaContainer} ref={videoElement} >

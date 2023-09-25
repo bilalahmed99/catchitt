@@ -53,6 +53,24 @@ export interface Post {
     type: string;
     receivedGifts: any[]; // You can define a proper type for gifts if possible.
     taggedUsers: any[]; // You can define a proper type for users if possible.
+    sound: {
+        _id: string,
+        url: string,
+        owner: {
+            _id: string,
+            avatar: string,
+            username: string,
+            name: string,
+            isVerified: boolean
+        },
+        title: string,
+        category: {
+            _id: string,
+            name: string,
+            isActive: boolean
+        },
+        isBookmarked: boolean
+    },
 }
 
 export interface BookmarkItem {

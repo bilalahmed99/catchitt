@@ -6,6 +6,8 @@ interface AuthState {
     token: string | null;
     email: string | null;
     cache: any | null;
+    selectedIndex: number | null; // Define selectedIndex in your store
+    setIndex: (index: number) => void;
     login: (email: string, token: string, name?: string) => void; // Update the login function signature
     logout: () => void;
 }
@@ -24,16 +26,21 @@ export const useAuthStore = create<AuthState>((set) => {
         email: isLoggedIn ? email : '',
         token: isLoggedIn ? token : '',
         cache: isLoggedIn ? cache : '',
+
+        selectedIndex: 0, // Initialize selectedIndex
+        setIndex: (index: number) => set({ selectedIndex: index }),
+
         login: (email: string, token: string, name?: string, cache?: []) => {
             sessionStorage.setItem('token', token);
             sessionStorage.setItem('isLoggedIn', 'true');
             if (name) {
                 sessionStorage.setItem('name', name);
-                set({ isLoggedIn: true, name, email, token });
+                set({ isLoggedIn: true, name, email, token, selectedIndex: 0 }); // Reset selectedIndex to 0
             } else {
-                set({ isLoggedIn: true, email, token });
+                set({ isLoggedIn: true, email, token, selectedIndex: 0 });
             }
         },
+
         logout: () => {
             set({ isLoggedIn: false, name: '', email: '', token: '', cache: [] });
             sessionStorage.removeItem('token');

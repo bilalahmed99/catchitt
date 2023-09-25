@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
-import styles from './App.module.scss';
-import { Authentication } from './components/authentication/authentication';
-import { ForgotPassword } from './components/forgot-password/forgot-password';
-import { SetNewPassword } from './components/set-newPassword/set-newPassword';
-import { Home } from './components/home/home';
-import { SuggestedAccountsPage } from './components/suggested-accounts-page/suggested-accounts-page';
-import { ActivityPage } from './components/activity-page/activity-page';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { useAuthStore } from './store/authStore';
-import { useNavigate } from 'react-router-dom';
-import ComingSoon from './components/coming-soon/coming-soon';
-import { VideoProvider } from './components/reusables/VideoContext';
 import { IntlProvider } from 'react-intl';
+import { Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
 import messages from '../src/languages-intl';
+import styles from './App.module.scss';
+import { ActivityPage } from './components/activity-page/activity-page';
+import { Authentication } from './components/authentication/authentication';
+import ComingSoon from './components/coming-soon/coming-soon';
+import { ForgotPassword } from './components/forgot-password/forgot-password';
+import { Home } from './components/home/home';
+import { VideoProvider } from './components/reusables/VideoContext';
+import { SetNewPassword } from './components/set-newPassword/set-newPassword';
+import { SoundPage } from './components/sounds-page/sound-page';
+import { SuggestedAccountsPage } from './components/suggested-accounts-page/suggested-accounts-page';
+import { useAuthStore } from './store/authStore';
 
 
 // Functional component to handle the initial route navigation
@@ -37,6 +37,7 @@ const InitialRouteHandler = () => {
 };
 
 function App() {
+
     const [appLanguage, setAppLanguage] = useState(
         (window.localStorage.getItem("lang") as string) || "en"
     );
@@ -59,7 +60,8 @@ function App() {
                             <Route path="/home" element={<Home />} />
                             <Route path="/suggested-accounts" element={<SuggestedAccountsPage />} />
                             <Route path="/notifications" element={<ActivityPage />} />
-                            <Route path="/comingsoon" element={<ComingSoon />}
+                            <Route path="/comingsoon" element={<ComingSoon />} />
+                            <Route path="/sounds/:soundId" element={<SoundPage />}
                             />
                         </Routes>
                     </Router>

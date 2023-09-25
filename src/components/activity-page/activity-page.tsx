@@ -1,18 +1,16 @@
 import classNames from 'classnames';
-import styles from './activity-page.module.scss';
+import { differenceInDays, differenceInHours, differenceInMinutes } from 'date-fns';
 import { useEffect, useState } from 'react';
-import { TopBar } from '../top-bar/top-bar';
+import { Navigate, useNavigate } from 'react-router-dom';
+import profileIcon from '../../assets/defaultProfileIcon.png';
+import { useAuthStore } from '../../store/authStore';
 import { SideNavBar } from '../side-nav-bar/side-nav-bar';
 import { SuggestedActivity } from '../suggested-activity/suggested-activity';
-import { useAuthStore } from '../../store/authStore';
-import { Navigate } from 'react-router-dom';
-import { differenceInDays, differenceInHours, differenceInMinutes } from 'date-fns';
-import { useNavigate } from 'react-router-dom';
-import profileIcon from '../../assets/defaultProfileIcon.png';
+import { TopBar } from '../top-bar/top-bar';
+import styles from './activity-page.module.scss';
 
-import { Follow } from './svg-components/Follow'
-import { LeftArrow } from './svg-components/LeftArrow'
-import { IconButton, Button } from '@mui/material';
+import { IconButton } from '@mui/material';
+import { LeftArrow } from './svg-components/LeftArrow';
 
 export interface ActivityPageProps { className?: string }
 
@@ -39,20 +37,34 @@ interface Activity {
     isRead: boolean,
 }
 
+interface FollowedUser {
+    _id: string;
+    followed_userID: {
+        _id: string;
+        avatar: string;
+        username: string;
+        name: string;
+        isVerified: boolean;
+    };
+}
+
 export const ActivityPage = ({ className }: ActivityPageProps) => {
+    let globalUserId: string = '';
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
     const token = useAuthStore((state) => state.token);
     const [currentPage] = useState(1);
     const itemsPerPage = 9;
     const [errorMessage, setErrorMessage] = useState('');
     const [activityData, setActivityData] = useState<Activity[]>([]);
+    const [followedUsersData, setFollowedUsersData] = useState<FollowedUser[]>([]);
     const API_KEY = process.env.VITE_API_URL;
     const activityEndPoint = '/notification';
-
+    const [followLoading, setFollowLoading] = useState(false);
+    // const [followedAccounts, setFollowedAccounts] = useState<any>({}); // Initialize as an empty object
     const navigate = useNavigate();
 
     const handleGoBack = () => {
-        navigate(-1); // Navigate back to the previous page
+        navigate('/home'); // Navigate back to the previous page
     };
 
     const handleFetchActivity = async () => {
@@ -65,7 +77,10 @@ export const ActivityPage = ({ className }: ActivityPageProps) => {
             if (response.ok) {
                 const responseData = await response.json();
                 setActivityData(responseData.data.data);
-                // console.log(responseData);
+                // console.log(responseData.data.data[0].user._id);
+                globalUserId = responseData.data.data[0].user._id;
+                // console.log(`the global user id: ${globalUserId}`);
+                handleFetchFollowedUsers(globalUserId)
 
             } else {
                 const errorResponseData = await response.json();
@@ -78,9 +93,36 @@ export const ActivityPage = ({ className }: ActivityPageProps) => {
         }
     };
 
+    const handleFetchFollowedUsers = async (userId: string) => {
+        try {
+            const response = await fetch(`${API_KEY}/profile/${userId}/followers`, {
+                method: 'GET',
+                headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                setFollowedUsersData(responseData.data.data);
+                console.log(`the users I'm following: `);
+                console.log(responseData.data);
+                // handleFetchActivity;
+            }
+
+        } catch (error) {
+            // Handle any errors here.
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         handleFetchActivity();
-    }, [token]);
+        // handleFetchFollowedUsers(globalUserId);
+    }, [setFollowedUsersData, followLoading]);
+
+    useEffect(() => {
+        handleFetchActivity();
+        // handleFetchFollowedUsers(globalUserId);
+    }, []);
 
     if (!isLoggedIn) {
         return <Navigate to="/auth" />;
@@ -106,6 +148,30 @@ export const ActivityPage = ({ className }: ActivityPageProps) => {
             return `${minutesDifference}m`;
         }
     });
+
+    // const followedAccountsEndPoint = `profile/${activityData?.user.id}/following`;
+
+    const handleFollowClick = async (userId: any) => {
+        setFollowLoading(true); // Set loading state before API call
+        const response = await fetch(
+            `${API_KEY}/profile/follow/${userId}/`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            },
+        );
+        if (response.ok) {
+            console.log(`user: ${userId} is followed`);
+            // console.log(`the triggered notification user is: ${activi}`)
+            handleFetchFollowedUsers(globalUserId)
+        }
+        setFollowLoading(false); // Set loading state back to false after API call
+        // handleFetchActivity()
+        // handleFetchFollowedUsers()
+    };
 
     return (
         <div className={classNames(styles.root, className)}>
@@ -142,7 +208,7 @@ export const ActivityPage = ({ className }: ActivityPageProps) => {
                                             <div style={{ display: 'flex', flexDirection: 'row' }}>
                                                 <img
                                                     src={
-                                                        activity.user.avatar || profileIcon
+                                                        activity.triggeredUser.avatar || profileIcon
                                                     }
                                                     alt=""
                                                     className={styles.plusIconStyle}
@@ -159,12 +225,13 @@ export const ActivityPage = ({ className }: ActivityPageProps) => {
                                             <div>
                                                 {activity.type === 'Follow' ? (
                                                     <button
-                                                        className={styles.svgButton}
-                                                    // onClick={(event) =>
-                                                    //     handleFollowBtnClicked(event, activity.triggeredUser._id)
-                                                    // }
+                                                        className={followedUsersData.length > 0 && followedUsersData.some(user => user.followed_userID._id === activity.triggeredUser._id) ? styles.followingBtn : styles.followBtn}
+                                                        onClick={(event) =>
+                                                            handleFollowClick(activity.triggeredUser._id)
+                                                        }
                                                     >
-                                                        <Follow />
+
+                                                        {followedUsersData.length > 0 && followedUsersData.some(user => user.followed_userID._id === activity.triggeredUser._id) ? 'Following' : 'Follow'}
                                                     </button>
                                                 ) : (
                                                     <img

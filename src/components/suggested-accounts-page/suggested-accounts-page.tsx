@@ -1,14 +1,16 @@
-import { useEffect, useState, useRef, memo } from 'react';
 import classNames from 'classnames';
-import styles from './suggested-accounts-page.module.scss';
-import { TopBar } from '../top-bar/top-bar';
+import { memo, useEffect, useRef, useState } from 'react';
+import { useAuthStore } from '../../store/authStore';
+import useDebounce from '../reusables/useDebounce';
 import { SideNavBar } from '../side-nav-bar/side-nav-bar';
 import { SuggestedActivity } from '../suggested-activity/suggested-activity';
-import { useAuthStore } from '../../store/authStore';
-import { Navigate } from 'react-router-dom';
-import useDebounce from '../reusables/useDebounce';
+import { TopBar } from '../top-bar/top-bar';
+import styles from './suggested-accounts-page.module.scss';
 // import { DefaultAvatar } from './svg-components/DefaultAvatar';
+import { IconButton } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import defaultProfileIcon from '../../assets/defaultProfileIcon.png';
+import { LeftArrow } from './svg-components/LeftArrow';
 
 export interface SuggestedAccountsPageProps {
 	className?: string;
@@ -23,6 +25,7 @@ interface Account {
 export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps) => {
 	const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 	const token = useAuthStore((state) => state.token);
+	const navigator = useNavigate()
 
 	const [errorMessage, setErrorMessage] = useState('');
 	const [accountsData, setAccountsData] = useState<Account[]>([]);
@@ -31,7 +34,13 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
 
 	const API_KEY = process.env.VITE_API_URL;
 	const suggestedEndPoint = '/profile/suggested-users';
+	const publicSuggestedEndPoint = '/profile/public/suggested-users';
 
+	const navigate = useNavigate();
+
+	const handleGoBack = () => {
+		navigate('/home'); // Navigate back to the previous page
+	};
 
 	const removeDuplicates = (arr: any[]) => {
 		let all = [...accountsData, ...arr]
@@ -45,9 +54,11 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
 		if (done.current) {
 			return
 		}
-
+		const link = isLoggedIn ? `${API_KEY}${suggestedEndPoint}?page=${page.current}` :
+			`${API_KEY}${publicSuggestedEndPoint}?page=${page.current}`
 		try {
-			const response = await fetch(`${API_KEY}${suggestedEndPoint}?page=${page.current}`, {
+
+			const response = await fetch(link, {
 				method: 'GET',
 				headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
 			});
@@ -106,9 +117,9 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
 		dHandleFetchSuggestedAccounts([]);
 	}, []);
 
-	if (!isLoggedIn) {
-		return <Navigate to="/auth" />;
-	}
+	// if (!isLoggedIn) {
+	// 	return <Navigate to="/auth" />;
+	// }
 
 	console.log("accounts", accountsData.length)
 
@@ -118,6 +129,7 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
 		const [followLoading, setFollowLoading] = useState(false)
 
 		const handleFollowClick = async (account: Account) => {
+			if (!isLoggedIn) { navigator('/auth') }
 			try {
 				setFollowLoading(true); // Set loading state before API call
 				const res = await fetch(`${API_KEY}/profile/follow/${account._id}/`, {
@@ -201,6 +213,14 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
 					</div>
 				</div>
 				<div className={styles.middleSectionDiv}>
+					<div className={styles.pageHeader}>
+						<IconButton sx={{ margin: '0px', padding: '0px', alignSelf: 'center' }}
+							onClick={handleGoBack}
+						>
+							<LeftArrow />
+						</IconButton>
+						<h4>Suggested accounts</h4>
+					</div>
 					<div className={styles.gridContainer}>
 						{accountsData.map((account, i) => (
 							<SuggestedAccount key={i} account={account} />

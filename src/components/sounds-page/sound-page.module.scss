@@ -44,6 +44,7 @@
     align-items: flex-start;
     justify-content: space-between;
     border-radius: 8px;
+    padding: 0 30px;
 
   }
   .container {
@@ -168,10 +169,23 @@
     justify-content: space-between;
     line-height: 1;
     gap: 16px;
-    background: var(--default-white, #FFF);
-
+    background-color: transparent;
   }
-
+  .suggestedContent2 {
+    width: 100%;
+    // padding: 0px 31px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-items: center;
+    justify-content: start;
+    align-content: center;
+    justify-content: space-between;
+    line-height: 1;
+    gap: 16px;
+    background-color: transparent;
+  }
+  
   .nameText {
     color: var(--default-body, #222);
 
@@ -276,4 +290,135 @@
   .pageHeader h4{
    margin: 0px;
 
+  }
+
+  .soundInfo {
+    row-gap: 16px;
+  }
+
+  .soundTitle{
+    text-align: start;
+    margin-bottom: 0;
+    text-wrap: nowrap;
+    color: var(--default-body, #222);
+
+    /* H1/Semibold120 */
+    font-family: Poppins; 
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 120%; /* 24px */ 
+  }
+  .soundArtist{
+    text-align: start;
+    margin-bottom: 0;
+    text-wrap: nowrap;
+    color: var(--default-body, #222);
+
+    /* H2/Medium */
+    font-family: Poppins;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 150%; /* 27px */
+  }
+  .soundUsed{
+    text-align: start;
+    margin-bottom: 0;
+    text-wrap: nowrap;
+    color: var(--foundation-body-body-200, #999);
+
+    /* Base/Regular */
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%; /* 24px */
+  }
+
+  .postsList {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Three equal columns */
+    gap: 13px; /* Adjust the gap between images as needed */
+    width: 100%;
+  }
+  .postCard {
+    width: 190px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+  }
+
+  .postCard img{
+    width: 190px;
+    height: 246px;
+    border-radius: 8px;
+  }
+
+  .postCard h6{
+    min-height: 21px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    width: 190px;
+    text-align: start;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+
+    overflow: hidden;
+    color: var(--default-body, #222);
+    text-overflow: ellipsis;
+
+    /* Small/Regular */
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%; /* 21px */
+  }
+
+  .postInfo {
+    display: flex;
+    row-gap: 8px;
+    justify-content: space-between;
+  }
+
+  .postInfo p{
+    margin: 0;
+    padding: 0;
+  }
+
+  .postCreatorInfo {
+    display: flex;
+  }
+  .postCreatorInfo p{
+    align-self: center;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  .postCreatorInfo img{
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+    margin-right: 8px;
+  }
+
+  .viewsDiv {
+    display: flex;
+    align-self: center;
+
+    color: var(--foundation-body-body-300, #6B6B6B);
+
+    /* Small/Regular */
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%; /* 21px */
+  }
+  
+  .viewsDiv img{
+    width: 13.018px;
+    height: 14px;
+    align-self: center;
+    margin-right: 5px;
   }

@@ -1,27 +1,26 @@
 import classNames from 'classnames';
+import { Link, useNavigate } from 'react-router-dom'; // Import the necessary hooks
+import { useAuthStore } from '../../store/authStore';
 import styles from './side-nav-bar.module.scss';
-import { useState } from 'react';
-// import homeIcon from '../../assets/homeIcon.svg';
-import { Link } from 'react-router-dom';
-// import { useSelectedStore } from '../../store/authStore';
 
 export interface SideNavBarProps {
     className?: string;
     selectedIndex: number | null;
 }
 
-export const SideNavBar = ({ className, selectedIndex }: SideNavBarProps) => {
-    const [selectedLink, setSelectedLink] = useState<number | null>(selectedIndex);
-    const selectedPage = selectedLink;
-    selectedIndex = selectedPage;
-    const handleLinkClick = (index: number) => {
-        setSelectedLink(index);
-    };
+export const SideNavBar = ({ className }: SideNavBarProps) => {
+    const { selectedIndex, setIndex } = useAuthStore(); // Get selectedIndex and setIndex from the store
 
+    const navigate = useNavigate();
+
+    const handleLinkClick = (index: number) => {
+        setIndex(index); // Update the selectedIndex in the store
+        navigate(`/comingsoon`);
+    };
     return (
         <div className={classNames(styles.root, className)}>
             <div className={styles.cardDiv}>
-                <Link to="/home" reloadDocument={true} style={{ textDecoration: 'none' }}>
+                <Link to="/home" reloadDocument={false} style={{ textDecoration: 'none' }}>
                     <div
                         className={classNames(
                             `${selectedIndex === 0 ? styles.selected : styles.navLink}`
@@ -50,10 +49,12 @@ export const SideNavBar = ({ className, selectedIndex }: SideNavBarProps) => {
                         <p className={styles.linkWord}>Home</p>
                     </div>
                 </Link>
-                <Link to="/comingsoon" reloadDocument={true} style={{ textDecoration: 'none' }}>
+                <Link to="/comingsoon" reloadDocument={false} style={{ textDecoration: 'none' }}>
                     <div
                         className={classNames(
+                            // `${selectedIndex === 1 ? styles.selected : styles.navLink}`
                             `${selectedIndex === 1 ? styles.selected : styles.navLink}`
+
                         )}
                         onClick={() => handleLinkClick(1)}
                     >
@@ -99,10 +100,10 @@ export const SideNavBar = ({ className, selectedIndex }: SideNavBarProps) => {
                                 strokeLinejoin="round"
                             />
                         </svg>
-                        <p className={styles.linkWord}>Chat</p>
+                        <p className={styles.linkWord}>Chat (Coming Soon)</p>
                     </div>
                 </Link>
-                <Link to="/comingsoon" reloadDocument={true} style={{ textDecoration: 'none' }}>
+                <Link to="/comingsoon" reloadDocument={false} style={{ textDecoration: 'none' }}>
 
                     <div
                         className={classNames(
@@ -140,7 +141,7 @@ export const SideNavBar = ({ className, selectedIndex }: SideNavBarProps) => {
                                 strokeLinejoin="round"
                             />
                         </svg>
-                        <p className={styles.linkWord}>Discover</p>
+                        <p className={styles.linkWord}>Discover (Coming Soon)</p>
                     </div>
                 </Link>
                 <Link to="/notifications" style={{ textDecoration: 'none' }}>
@@ -183,10 +184,11 @@ export const SideNavBar = ({ className, selectedIndex }: SideNavBarProps) => {
                         </p>
                     </div>
                 </Link>
-                <Link to="/comingsoon" reloadDocument={true} style={{ textDecoration: 'none' }}>
+                <Link to="/comingsoon" reloadDocument={false} style={{ textDecoration: 'none' }}>
                     <div
                         className={classNames(
                             `${selectedIndex === 4 ? styles.selected : styles.navLink}`
+
                         )}
                         onClick={() => handleLinkClick(4)}
                     >

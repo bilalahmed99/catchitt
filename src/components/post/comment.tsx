@@ -1,14 +1,13 @@
-import classNames from 'classnames';
-import styles from './post.module.scss';
-import { useRef, useState, memo } from 'react';
 import Button from '@mui/material/Button';
+import { differenceInDays, differenceInHours, differenceInWeeks, format } from 'date-fns';
+import { memo, useRef, useState } from 'react';
 import profileIcon from '../../assets/profileIcon.png';
 import InputField from '../reusables/InputField';
-import { differenceInHours, differenceInDays, differenceInWeeks, format } from 'date-fns';
-import { Comment as CommentType } from './postTypes'
+import styles from './post.module.scss';
+import { Comment as CommentType } from './postTypes';
 
-import { CommentLike } from './svg-components/CommentLike';
 import { ArrowDown } from './svg-components/ArrowDown';
+import { CommentLike } from './svg-components/CommentLike';
 
 const Comment: React.FC<{ comment: CommentType, handleReply: Function, handleLikeComment: Function }> = memo(({ comment, handleReply, handleLikeComment }) => {
 
@@ -58,7 +57,7 @@ const Comment: React.FC<{ comment: CommentType, handleReply: Function, handleLik
 					<div className={styles.userInfoCommentDiv}>
 						<div className={styles.userInfoCommentFrame}>
 							<img
-								src={reply.user.avatar || profileIcon}
+								src={reply.user.avatar === '' ? profileIcon : reply.user.avatar}
 								alt={reply.user.name}
 								className={styles.avatarImgCircleComment}
 							/>
@@ -190,4 +189,4 @@ const Comment: React.FC<{ comment: CommentType, handleReply: Function, handleLik
 	)
 })
 
-export { Comment }
+export { Comment };

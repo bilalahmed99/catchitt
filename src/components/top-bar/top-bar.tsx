@@ -11,6 +11,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Media from 'react-media';
 import { useNavigate } from 'react-router-dom';
+import SearchBar from '../reusables/searchBar';
 import { DefaultAvatar } from './svg-components/DefaultAvatar';
 
 export interface TopBarProps {
@@ -88,7 +89,7 @@ export const TopBar = ({ className }: TopBarProps,) => {
             </div>
             <div className={styles.searchPlusProfileDiv}>
                 <div className={styles.searchBarDiv}>
-                    {/* <SearchBar /> */}
+                    <SearchBar />
                 </div>
 
                 <Media query={{ maxWidth: 1200 }}>
