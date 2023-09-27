@@ -214,17 +214,29 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
 						<SuggestedActivity showActivity={true} />
 					</div>
 				</div>
-				<div className={styles.middleSectionDiv}>
-					{!isLoggedIn ? <div className={styles.viewSwitchersDiv}>
-						<ViewSwitchers selectedIndex={selectedTab} onTabChange={async (selectedTab) => {
-							page.current = 1
-							tab.current = selectedTab
-							setTab(selectedTab)
-							if (selectedTab === 1) {
-								navigator({ pathname: '/home' }, { replace: true })
-							}
-						}} />
-					</div> :
+				{!isLoggedIn ?
+					<div className={styles.middleSectionDiv}>
+						<div className={styles.viewSwitchersDiv}>
+							<ViewSwitchers selectedIndex={selectedTab} onTabChange={async (selectedTab) => {
+								page.current = 1
+								tab.current = selectedTab
+								setTab(selectedTab)
+								if (selectedTab === 1) {
+									navigator({ pathname: '/home' }, { replace: true })
+								}
+							}} />
+						</div>
+						<div className={styles.gridContainer}>
+							{accountsData.map((account, i) => (
+								<SuggestedAccount key={i} account={account} />
+							))}
+						</div>
+					</div>
+					:
+					<div className={styles.middleSectionDiv} style={{
+						paddingTop: 0,
+						gap: 0,
+					}}>
 						<div className={styles.pageHeader}>
 							<IconButton sx={{ margin: '0px', padding: '0px', alignSelf: 'center' }}
 								onClick={handleGoBack}
@@ -233,14 +245,13 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
 							</IconButton>
 							<h4>Suggested accounts</h4>
 						</div>
-					}
-
-					<div className={styles.gridContainer}>
-						{accountsData.map((account, i) => (
-							<SuggestedAccount key={i} account={account} />
-						))}
+						<div className={styles.gridContainer}>
+							{accountsData.map((account, i) => (
+								<SuggestedAccount key={i} account={account} />
+							))}
+						</div>
 					</div>
-				</div>
+				}
 			</div>
 		</div>
 	);
