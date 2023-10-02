@@ -63,7 +63,7 @@ function App() {
                             <Route path="/notifications" element={<ActivityPage />} />
                             <Route path="/comingsoon" element={<ComingSoon />} />
                             <Route path="/sounds/:soundId" element={<SoundPage />} />
-                            <Route path="/SearchPage/:query" element={<SearchPage />}
+                            <Route path="/SearchPage/:query/:tab" element={<SearchPage />}
                             />
                         </Routes>
                     </Router>

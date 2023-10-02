@@ -438,7 +438,7 @@ h6 {
 .viewsDiv {
   display: flex;
   align-self: center;
-
+  align-items: center;
   color: var(--foundation-body-body-300, #6B6B6B);
 
   /* Small/Regular */
@@ -455,6 +455,10 @@ h6 {
   height: 14px;
   align-self: center;
   margin-right: 5px;
+}
+
+.viewsDiv p {
+  margin: 0;
 }
 
 .root {
@@ -1076,4 +1080,18 @@ h6 {
   width: 100%;
   align-items: center;
   justify-content: space-between;
+}
+
+.hashtagIcon {
+  width: 30px;
+  height: 30px;
+}
+
+.hashtagFrame {
+  display: flex;
+  width: 569px;
+  padding: 16px;
+  align-items: center;
+  gap: 16px;
+  border-radius: 4px;
 }

@@ -1,12 +1,15 @@
 import ClearIcon from '@mui/icons-material/Clear';
 import SearchIcon from '@mui/icons-material/Search';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { debounce } from "lodash";
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Tab } from 'react-tabs';
 import profileIcon from '../../assets/defaultProfileIcon.png';
 import filterIcon from '../../assets/filterIcon.png';
+import hashtagIcon from '../../assets/hashtagIcon.png';
 import { useAuthStore } from '../../store/authStore';
+import useDebounce from '../reusables/useDebounce';
 import { SideNavBar } from '../side-nav-bar/side-nav-bar';
 import playIcon from '../sounds-page/svg-components/playIcon.png';
 import { SuggestedActivity } from '../suggested-activity/suggested-activity';
@@ -82,6 +85,7 @@ interface Video {
 interface Hashtag {
     _id: string;
     name: string;
+    views: number;
 }
 
 interface Sound {
@@ -118,17 +122,27 @@ interface FollowedUser {
 
 
 export const SearchPage = () => {
-    const { query } = useParams();
+    const { query, tab } = useParams();
     const extractedValue = query?.replace('query=', '');
+    const extractedTab = tab || "All"; // Set a default value of "All" if tab is not present
     const [searchQuery, setSearchQuery] = useState(extractedValue);
-    const [searchResults, setSearchResults] = useState({
+    const [paginating, setPaginating] = useState(false)
+    const [searchResults, setSearchResults] = useState<{
+        usersData: any[];
+        videosData: any[];
+        hashtagsData: any[];
+        soundsData: any[];
+    }>({
         usersData: [],
         videosData: [],
-        soundsData: [],
         hashtagsData: [],
+        soundsData: [],
     });
-    const [selectedTab, setSelectedTab] = useState('All');
-    const [page, setPage] = useState(1)
+
+
+    const [selectedTab, setSelectedTab] = useState(extractedTab);
+    const refPage = useRef(1)
+    const mySearch = useRef('')
     const [pageSize, setPageSize] = useState(10)
     const API_KEY = process.env.VITE_API_URL;
     const token = useAuthStore((state) => state.token);
@@ -136,18 +150,12 @@ export const SearchPage = () => {
     const loggedUserId = useAuthStore((state) => state._id)
     let globalUserId = loggedUserId;
     const [followedUsersData, setFollowedUsersData] = useState<FollowedUser[]>([]);
-    const [searchResultsData, setSearchResultsData] = useState({
-        first3Users: [],
-        first3Videos: [],
-        first3Sounds: [],
-        first3Hashtags: [],
-    });
+    const [page, setPage] = useState(1)
 
 
-
-    const handleFetchSearch = async () => {
+    const handleFetchSearch = useCallback(async (searchQuery?: string, page?: number) => {
         try {
-            const response = await fetch(`${API_KEY}/discover/search?searchQuery=${searchQuery}`, {
+            const response = await fetch(`${API_KEY}/discover/search?searchQuery=${searchQuery}&page=${page ? page : 1}`, {
                 method: 'GET',
                 headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
             });
@@ -164,21 +172,52 @@ export const SearchPage = () => {
                 console.log(`the search results: `);
                 console.log(responseData.data);
                 // handleFetchActivity;
+                if (page != 1) {
+                    setSearchResults((prevResults) => ({
+                        usersData: [...prevResults.usersData, ...usersData],
+                        videosData: [...prevResults.videosData, ...videosData],
+                        hashtagsData: [...prevResults.hashtagsData, ...hashtagsData],
+                        soundsData: [...prevResults.soundsData, ...soundsData],
+                    }));
+                } else {
+                    setSearchResults({
+                        usersData,
+                        videosData,
+                        hashtagsData,
+                        soundsData,
+                    });
+                }
             }
-
         } catch (error) {
-            // Handle any errors here.
-            console.log(error)
+            console.log(error);
         }
-    }
+    }, []);
 
     useEffect(() => {
-        handleFetchSearch();
+        setSearchResults({
+            usersData: [],
+            videosData: [],
+            hashtagsData: [],
+            soundsData: [],
+        })
+        setPage(1)
+        handleFetchSearch(searchQuery, 1);
     }, [searchQuery]);
+
+    useEffect(() => {
+        handleFetchSearch(searchQuery, page);
+    }, [followedUsersData, page])
+
+    // useEffect(() => {
+    //     handleFetchSearch(searchQuery, refPage.current);
+    // }, [refPage])
 
     const handleSearchChange = (event: any) => {
         setSearchQuery(event.target.value);
+        debouncedFetchSearch(event.target.value, 1); // Pass the search query and page
     };
+    const debouncedFetchSearch = debounce(handleFetchSearch, 500); // Adjust the delay (500 ms in this example)
+
 
     const handleTabChange = (tab: any) => {
         setSelectedTab(tab);
@@ -226,11 +265,6 @@ export const SearchPage = () => {
     }
 
     useEffect(() => {
-        handleFetchSearch();
-        // handleFetchFollowedUsers(globalUserId);
-    }, [followedUsersData]);
-
-    useEffect(() => {
         // handleFetchSearch();
         if (loggedUserId)
             handleFetchFollowedUsers(loggedUserId);
@@ -248,8 +282,8 @@ export const SearchPage = () => {
                 return renderSoundsSearchResults(soundsData);
             case 'Users':
                 return renderUsersSearchResults(usersData);
-            // case 'Hashtags':
-            //     return renderHashtagsSearchResults(hashtagsData);
+            case 'Hashtags':
+                return renderHashtagsSearchResults(hashtagsData);
             default:
                 return null;
         }
@@ -336,6 +370,62 @@ export const SearchPage = () => {
         );
     };
 
+    const renderHashtagsSearchResults = (hashtagsData: Hashtag[]) => {
+        return (
+            <div className={styles.usersList}>
+                {hashtagsData?.map((hashtag, index) => (
+                    <div className={styles.hashtagFrame} key={index}>
+                        <img src={hashtagIcon} alt='' className={styles.hashtagIcon} />
+                        <div style={{ display: 'flex', justifyContent: 'space-between', width: 'inherit' }}>
+                            <div className={styles.userInfo}>
+                                <h4 className={styles.userNameText}>{hashtag.name}</h4>
+                            </div>
+                            {/* <div className={styles.viewsDiv}>
+                                <button
+                                    className={followedUsersData.length > 0 && followedUsersData.some(user => user.followed_userID._id === user._id) || user.isFollowed ? styles.followingBtn : styles.followBtn}
+                                    onClick={(event) =>
+                                        handleFollowClick(user._id)
+                                    }
+                                >
+                                    {followedUsersData.some(user => user.followed_userID._id === user._id) || user.isFollowed ? 'Following' : 'Follow'}
+                                </button>
+                            </div> */}
+                            <div className={styles.viewsDiv}>
+                                <p>{hashtag.views} views</p>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        );
+    };
+
+
+    function handleScroll(e: any) {
+        e.preventDefault()
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.querySelector('#root > div')?.scrollHeight as number;
+        const scrollPosition = e.target.scrollTop;
+        const threshold = 200;
+
+        if (windowHeight + scrollPosition >= documentHeight - threshold) {
+            dPaginate([])
+        }
+    }
+
+    const paginate = async () => {
+        setPaginating(true)
+        setPage((prevPage) => prevPage + 1); // Increment the page state
+        refPage.current++
+        // handleFetchSearch(searchQuery, refPage.current)
+    }
+    const dPaginate = useDebounce(paginate, 4)
+
+    useEffect(() => {
+        document.querySelector('#root > div')?.addEventListener('scroll', handleScroll)
+        return () => { document.querySelector('#root > div')?.removeEventListener('scroll', handleScroll) }
+    }, [])
+
 
 
     return (
@@ -419,6 +509,7 @@ export const SearchPage = () => {
                         <Tab onClick={() => handleTabChange('Videos')} className={selectedTab === 'Videos' ? styles.searchTabsSelected : styles.searchTab}>Videos</Tab>
                         <Tab onClick={() => handleTabChange('Sounds')} className={selectedTab === 'Sounds' ? styles.searchTabsSelected : styles.searchTab}>Sounds</Tab>
                         <Tab onClick={() => handleTabChange('Users')} className={selectedTab === 'Users' ? styles.searchTabsSelected : styles.searchTab}>Users</Tab>
+                        <Tab onClick={() => handleTabChange('Hashtags')} className={selectedTab === 'Hashtags' ? styles.searchTabsSelected : styles.searchTab}>Hashtags</Tab>
                     </div>
                     <div className={styles.container}>
                         {renderSearchResults()}

@@ -57,7 +57,7 @@ const GroupItems = styled('ul')({
 
 const SearchBar: React.FC<InputFieldProps> = ({ onChange, placeholder }, props: SimpleDialogProps) => {
     const navigate = useNavigate()
-
+    const tabValue = ''
     const [searchText, setSearchText] = useState('');
     const [recentSearches, setRecentSearches] = useState<string[]>([]);
     const { onClose, selectedValue, open } = props;
@@ -125,8 +125,14 @@ const SearchBar: React.FC<InputFieldProps> = ({ onChange, placeholder }, props: 
         setOpenDialog(false);
     };
 
-    const handeNavigation = () => {
-        navigate(`/searchPage/${searchText}`)
+    const handleNavigation = () => {
+        navigate(`/searchPage/${searchText}/All`)
+    }
+    const handleSoundsNavigation = () => {
+        navigate(`/searchPage/${searchText}/Sounds`)
+    }
+    const handleUsersNavigation = () => {
+        navigate(`/searchPage/${searchText}/Users`)
     }
 
     const handleFetchSearch = async () => {
@@ -158,7 +164,6 @@ const SearchBar: React.FC<InputFieldProps> = ({ onChange, placeholder }, props: 
     }
 
     useEffect(() => {
-
         handleFetchSearch()
     }, [searchQuery])
 
@@ -262,13 +267,13 @@ const SearchBar: React.FC<InputFieldProps> = ({ onChange, placeholder }, props: 
                                 )}
                                 {searchText !== '' && (
                                     <div className={'searchResultsDiv'}>
-                                        <div className={'searchSuggestionsTextDiv'}>
+                                        <div className={'searchSuggestionsTextDiv'} onClick={handleNavigation}>
                                             <img src={mySearchIconBlack} /> {searchText} results
                                         </div>
-                                        <div className={'searchSuggestionsTextDiv'}>
+                                        <div className={'searchSuggestionsTextDiv'} onClick={handleSoundsNavigation}>
                                             <img src={mySearchIconBlack} /> {searchText} sounds
                                         </div>
-                                        <div className={'searchSuggestionsTextDiv'}>
+                                        <div className={'searchSuggestionsTextDiv'} onClick={handleNavigation}>
                                             <img src={mySearchIconBlack} /> {searchText} videos
                                         </div>
                                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', }}>
@@ -291,7 +296,7 @@ const SearchBar: React.FC<InputFieldProps> = ({ onChange, placeholder }, props: 
                                                     </div>
                                                 ))}
                                             </div >
-                                            <div className={'seeMoreTextDiv'} onClick={handeNavigation}>View all results for {searchText}</div>
+                                            <div className={'seeMoreTextDiv'} onClick={handleNavigation}>View all results for {searchText}</div>
                                         </div>
                                     </div>
                                 )}
