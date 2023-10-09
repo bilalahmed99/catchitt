@@ -968,6 +968,18 @@ h6 {
   background: var(--default-white, #FFF);
 }
 
+.hashtagDataList {
+  display: flex;
+  height: 100%;
+  margin-top: 40px;
+  width: 638px;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: transparent;
+}
+
 .userNameText {
   color: var(--default-body, #222);
 
@@ -1094,4 +1106,77 @@ h6 {
   align-items: center;
   gap: 16px;
   border-radius: 4px;
+}
+
+.filterModalTitle {
+  color: var(--default-body, #222);
+
+  /* H1/Semibold120 */
+  font-family: Poppins;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 120%;
+  /* 24px */
+  text-align: center;
+  padding: 0;
+  margin-bottom: 24px;
+}
+
+.filtersFrame {
+  padding: 8px 0 16px 0;
+}
+
+.filterFrame h6,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+.filtersFrameTitle1 {
+  color: var(--default-body, #222);
+
+  /* H2/Semibold */
+  font-family: Poppins;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 120%;
+  /* 21.6px */
+}
+
+.applyBtn {
+  display: flex;
+  width: 232.5px;
+  height: 48px;
+  padding: 0px 16px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 6px;
+  background: var(--foundation-primary-primary-500, #5448B2);
+}
+
+.cancelBtn {
+  display: flex;
+  width: 232.5px;
+  height: 48px;
+  padding: 0px 16px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 6px;
+  border: 1px solid var(--foundation-primary-primary-500, #5448B2);
+  background: var(--default-white, #FFF);
+
+  color: var(--foundation-primary-primary-500, #5448B2);
+
+  /* Base/Semibold */
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 120%;
+  /* 19.2px */
+
 }
