@@ -870,7 +870,10 @@ export const SearchPage = () => {
     return (
         <div>
             <div className={styles.topBarDiv}>
-                <TopBar searchBar={false} />
+                {showHashtagPage ?
+                    <TopBar searchBar={true} /> :
+                    <TopBar searchBar={false} />
+                }
             </div>
             <div className={styles.container}>
                 <div className={styles.leftSide}>
@@ -944,7 +947,7 @@ export const SearchPage = () => {
                                 />
                                 <IconButton sx={{ padding: '0' }} onClick={handleOpen}>
                                     <img src={filterIcon} alt='' style={{
-                                        width: '40px', height: '40px'
+                                        width: '40px', height: '40px', display: selectedTab === 'Hashtags' ? 'none' : ''
                                     }} />
                                 </IconButton>
                             </div>

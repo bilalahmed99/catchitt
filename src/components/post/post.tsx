@@ -411,10 +411,12 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify({ giftId, mediaId }),
-            })
+                body: JSON.stringify({ giftId: giftId, mediaId: mediaId }),
+            },
+            )
+            async () => handleFetchCurrentPost(mediaId)
             const responseData = await response.json()
-            const myData = responseData.data
+            const myData = responseData.status
             console.log(` the send gift response: ${myData}`);
         } catch (error) {
             console.log(error);

@@ -211,7 +211,7 @@ const SearchBar: React.FC<InputFieldProps> = ({ onChange, placeholder }, props: 
                                 }}
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
-                                        handleSearch();
+                                        handleNavigation();
                                     }
                                 }}
                                 sx={{

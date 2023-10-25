@@ -1,14 +1,12 @@
-import { useState } from 'react';
 import './styles.css';
 
 interface Faq {
     question: any;
     answer: any;
-    open: boolean;
-    toggleOpen: any
+
 }
 
-const FaqItem = ({ question, answer, open, toggleOpen }: Faq) => {
+const FaqItem = ({ question, answer }: Faq) => {
     const details = document.querySelectorAll("details");
 
     // Add the onclick listeners.
@@ -22,8 +20,9 @@ const FaqItem = ({ question, answer, open, toggleOpen }: Faq) => {
             });
         });
     });
+
     return (
-        <details open={open} onClick={toggleOpen}>
+        <details>
             <summary>
                 <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                     <p>{question}</p>
@@ -37,14 +36,6 @@ const FaqItem = ({ question, answer, open, toggleOpen }: Faq) => {
 };
 
 const FaqContainer = () => {
-    const [openFaq, setOpenFaq] = useState<number | null>(null);
-
-    const toggleOpen = (index: number) => {
-        setOpenFaq(index); // Open the clicked FAQ
-        if (index !== openFaq) {
-            setOpenFaq(null)
-        }
-    };
 
     const faqData = [
         { question: 'Question 1', answer: 'Answer 1' },
@@ -60,8 +51,6 @@ const FaqContainer = () => {
                     key={index}
                     question={faq.question}
                     answer={faq.answer}
-                    open={index === openFaq}
-                    toggleOpen={() => toggleOpen(index)}
                 />
             ))}
         </div>

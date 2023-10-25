@@ -1060,6 +1060,7 @@ h6 {
   border-bottom: 2px solid #EAEAEA;
   height: 46px;
   margin-bottom: 37px;
+  cursor: pointer;
 }
 
 .searchTab {
@@ -1072,6 +1073,7 @@ h6 {
   flex-shrink: 0;
   border-bottom: 2px solid #EAEAEA;
   // margin-bottom: 37px;
+  cursor: pointer;
 }
 
 .searchTabsSelected {
@@ -1084,7 +1086,6 @@ h6 {
   flex-shrink: 0;
   // margin-bottom: 37px;
   border-bottom: 2px solid #5448B2;
-
 }
 
 .searchBar {
