@@ -64,7 +64,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, onStart, onEnd }) => {
             <ReactHlsPlayer
                 src={src}
                 autoPlay={false} // Set to false, as we will manually handle play/pause
-                controls={false}
+                controls={true}
                 // loop
                 playerRef={playerRef}
                 onEnded={handleEnded}

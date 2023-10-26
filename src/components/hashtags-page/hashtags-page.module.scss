@@ -388,18 +388,15 @@ h6 {
 }
 
 .postCard h6 {
-  min-height: 21px;
-  margin-bottom: 0;
-  padding-bottom: 0;
+  display: -webkit-box;
   width: 190px;
-  text-align: start;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
 
   overflow: hidden;
   color: var(--default-body, #222);
   text-overflow: ellipsis;
-
+  text-align: left;
   /* Small/Regular */
   font-family: Poppins;
   font-size: 14px;
@@ -457,4 +454,8 @@ h6 {
   height: 14px;
   align-self: center;
   margin-right: 5px;
+}
+
+.mediaDescription {
+  text-overflow: ellipsis;
 }
