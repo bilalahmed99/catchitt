@@ -20,7 +20,6 @@ import styles from './post.module.scss';
 import { PostProps, Post as PostType } from './postTypes';
 
 import { useNavigate } from 'react-router-dom';
-import coinChestPNG from '../../assets/CoinChestPNG.png';
 import arrowRightIcon from '../../assets/arrowRightIcon.png';
 import arrowRightIcon2 from '../../assets/arrowRightIcon2.png';
 import closeIcon from '../../assets/closeIcon.png';
@@ -221,6 +220,7 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
             (res: any) => {
                 setMessage('')
                 setPostData((res.data) as PostType)
+                console.log('post refreshed');
             }
         )
     }
@@ -396,14 +396,14 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
         setShowSentGift(false)
     }
 
-    const handleSendingGiftImage = (gift: Gift, mediaId: string) => {
+    const handleSendingGiftImage = (gift: Gift, mediaId: string, post: PostProps["post"]) => {
         handleCloseGiftsModal()
         sentGiftUrl.current = gift.imageUrl
         setShowSentGift(true)
-        handleSendGift(gift._id, mediaId)
+        handleSendGift(gift._id, mediaId, post)
     }
 
-    const handleSendGift = async (giftId: string, mediaId: string) => {
+    const handleSendGift = async (giftId: string, mediaId: string, post: PostProps["post"]) => {
         try {
             const response = await fetch(`${API_KEY}/gift/send`, {
                 method: 'POST',
@@ -412,17 +412,18 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                     Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({ giftId: giftId, mediaId: mediaId }),
-            },
-            )
-            async () => handleFetchCurrentPost(mediaId)
-            const responseData = await response.json()
-            const myData = responseData.status
-            console.log(` the send gift response: ${myData}`);
+            });
+
+            const responseData = await response.json();
+            const myData = responseData.status;
+            console.log(`The send gift response: ${myData}`);
+
+            // Move handleFetchCurrentPost outside the fetch block to ensure it runs after the fetch request.
+            await handleFetchCurrentPost(post.mediaId);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     }
-
     const handleEmailClick = () => {
         const email = 'info@ogoul.com';
         window.location.href = `mailto:${email}`;
@@ -753,8 +754,16 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                                             </div>
                                             <div className={styles.giftsReceivedDiv}>
                                                 <p className={styles.giftsText}>Gifts received</p>
-                                                {postData.receivedGifts.map((gift, i) => (
-                                                    <img src={coinChestPNG} alt='' width='50px' height='50px' />
+                                                {postData.receivedGifts.slice(-7).map((gift, i) => (
+                                                    <div className={styles.giftsReceivedImgDiv}>
+                                                        <img
+                                                            key={i}
+                                                            src={gift.giftId.imageUrl}
+                                                            alt=""
+                                                            width="50px"
+                                                            height="50px"
+                                                        />
+                                                    </div>
                                                 ))}
                                             </div>
                                             {postData.comments.map((comment, i) => (
@@ -821,7 +830,7 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                                                                         <p className={styles.giftPrice}>{gift.price}</p>
                                                                     </div>
                                                                     <button
-                                                                        onClick={() => handleSendingGiftImage(gift, postData.mediaId)}
+                                                                        onClick={() => handleSendingGiftImage(gift, postData.mediaId, post)}
                                                                         className={`${styles.giftSendBtn} ${showButton === i ? '' : styles.giftSendBtnHidden}`}>
                                                                         send
                                                                     </button>

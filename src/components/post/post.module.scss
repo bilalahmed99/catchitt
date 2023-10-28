@@ -652,7 +652,7 @@
 }
 
 .commentDiv Button {
-  margin-top: 10px;
+  // margin-top: 10px;
   color: var(--foundation-neutral-neutral-700, #848484);
 
   /* Small/Medium */
@@ -788,13 +788,30 @@
   font-weight: 600;
   line-height: 120%;
   /* 19.2px */
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+
 }
 
 .giftsReceivedDiv {
   height: 50px;
   display: flex;
   justify-content: start;
-  padding: 16px 32px;
+  padding: 0px 0px 0px 32px;
+  margin-top: 16px
+}
+
+.giftsReceivedDiv img {
+  height: 50px;
+  width: 50px;
+}
+
+.giftsReceivedImgDiv {
+  max-width: 50px;
+  max-height: 50px;
+  flex-shrink: 0;
 }
 
 .giftDiv {
@@ -811,6 +828,8 @@
 .giftDiv p {
   margin: 0;
 }
+
+
 
 .giftDiv:hover {
   border-radius: 4px 4px 0px 0px;

@@ -301,26 +301,36 @@ export const SearchPage = () => {
         }
 
         return (
-            <div className={styles.postsList}>
-                {filteredVideosData.map((video: Video, index) => (
-                    <div className={styles.postCard} key={index}>
-                        {/* Render your video card content here */}
-                        <img src={video.user.avatar} alt='' style={{ 'objectFit': 'cover' }} />
-                        <h6 className={styles.videoDescription}>{video.description}</h6>
-                        <div className={styles.postInfo}>
-                            <div className={styles.postCreatorInfo}>
-                                <img src={video.user.avatar === '' ? profileIcon : video.user.avatar} alt='' />
-                                <p>{video.user.name}</p>
-                            </div>
-                            <div className={styles.viewsDiv}>
-                                <img src={playIcon} alt='' />
-                                <p>{video.views}</p>
-                            </div>
-                        </div>
+            <>
+                {filteredVideosData.length === 0 ? (
+                    <div className={styles.usersList} style={{ alignItems: 'center' }}>
+                        <h6 style={{ fontSize: '2rem' }}>No results found</h6>
                     </div>
-                ))}
-            </div>
+                ) : (
+                    <div className={styles.postsList}>
+                        {filteredVideosData.map((video: Video, index) => (
+                            <div className={styles.postCard} key={index}>
+                                {/* Render your video card content here */}
+                                <img src={video.user.avatar} alt='' style={{ 'objectFit': 'cover' }} />
+                                <h6 className={styles.videoDescription}>{video.description}</h6>
+                                <div className={styles.postInfo}>
+                                    <div className={styles.postCreatorInfo}>
+                                        <img src={video.user.avatar === '' ? profileIcon : video.user.avatar} alt='' />
+                                        <p>{video.user.name}</p>
+                                    </div>
+                                    <div className={styles.viewsDiv}>
+                                        <img src={playIcon} alt='' />
+                                        <p>{video.views}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </>
+
         );
+
     };
 
     const renderSoundsSearchResults = (soundsData: Sound[]) => {
@@ -350,75 +360,94 @@ export const SearchPage = () => {
         })
 
         return (
-            <div className={styles.postsList}>
-                {filteredSounds?.map((sound, index) => (
-                    <div className={styles.postCard} key={index}>
-                        <img src={sound.owner.avatar} alt='' style={{ 'objectFit': 'cover' }} />
-                        <h6>{sound.title}</h6>
-                        <div className={styles.postInfo}>
-                            <div className={styles.postCreatorInfo}>
-                                <img src={sound.owner.avatar === '' ? profileIcon : sound.owner.avatar} alt='' />
-                                <p>{sound.owner.name}</p>
-                            </div>
-                            <div className={styles.viewsDiv}>
-                                <img src={playIcon} alt='' />
-                                <p>
-                                    {sound.usedCount}
-                                </p>
-                            </div>
-                        </div>
+            <>
+                {filteredSounds.length === 0 ? (
+                    <div className={styles.usersList} style={{ alignItems: 'center' }}>
+                        <h6 style={{ fontSize: '2rem' }}>No results found</h6>
                     </div>
-                ))}
-            </div>
+                ) : (
+                    <div className={styles.postsList}>
+                        {filteredSounds?.map((sound, index) => (
+                            <div className={styles.postCard} key={index}>
+                                <img src={sound.owner.avatar} alt='' style={{ 'objectFit': 'cover' }} />
+                                <h6>{sound.title}</h6>
+                                <div className={styles.postInfo}>
+                                    <div className={styles.postCreatorInfo}>
+                                        <img src={sound.owner.avatar === '' ? profileIcon : sound.owner.avatar} alt='' />
+                                        <p>{sound.owner.name}</p>
+                                    </div>
+                                    <div className={styles.viewsDiv}>
+                                        <img src={playIcon} alt='' />
+                                        <p>
+                                            {sound.usedCount}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </>
         );
     };
 
     const renderUsersSearchResults = (usersData: User[]) => {
-        const filteredUsersData = usersData.filter((user) => {
-            let limit = usersFilter.limit
-            if (usersFilter.limit >= 0 && usersFilter.limit <= 1000) {
-                limit = 10
-            }
-
+        const categoryFilter = usersData.filter((user) => {
             const isVerifiedMatch = usersFilter.category === 'verified' ? user.isVerified : true;
             const isFollowedMatch = usersFilter.category === 'followed' ? user.isFollowed : true;
-            const isNoLimitMatch = user.numberOfFollowers <= limit && user.numberOfFollowers > (limit / 10)
 
             return (
                 isVerifiedMatch &&
-                isFollowedMatch &&
-                isNoLimitMatch
+                isFollowedMatch
             );
         });
 
+        const filteredUsersData = categoryFilter.filter((user) => {
+            let userLimit = usersFilter.limit
+            if (usersFilter.limit == 0)
+                return true
+
+            let limit = user.numberOfFollowers <= userLimit
+                && user.numberOfFollowers > (userLimit == 1000 ? 0 : userLimit / 10)
+            return limit
+        })
+
         return (
-            <div className={styles.usersList}>
-                {filteredUsersData?.map((user, index) => (
-                    <div className={styles.userFrame} key={index}>
-                        <img src={user.avatar === '' ? profileIcon : user.avatar} alt='' className={styles.userImg} />
-                        <div style={{ display: 'flex', justifyContent: 'space-between', width: 'inherit' }}>
-                            <div className={styles.userInfo}>
-                                <h4 className={styles.userNameText}>@{user.username}</h4>
-                                <div style={{ display: 'flex', gap: '8px' }}>
-                                    <p>{user.name}</p>
-                                    <p>.</p>
-                                    <p><span style={{ fontWeight: '600' }}>{user.numberOfFollowers}</span> followers</p>
+            <>
+                {filteredUsersData.length === 0 ? (
+                    <div className={styles.usersList} style={{ alignItems: 'center' }}>
+                        <h6 style={{ fontSize: '2rem' }}>No results found</h6>
+                    </div>
+                ) : (
+                    <div className={styles.usersList}>
+                        {filteredUsersData?.map((user, index) => (
+                            <div className={styles.userFrame} key={index}>
+                                <img src={user.avatar === '' ? profileIcon : user.avatar} alt='' className={styles.userImg} />
+                                <div style={{ display: 'flex', justifyContent: 'space-between', width: 'inherit' }}>
+                                    <div className={styles.userInfo}>
+                                        <h4 className={styles.userNameText}>@{user.username}</h4>
+                                        <div style={{ display: 'flex', gap: '8px' }}>
+                                            <p>{user.name}</p>
+                                            <p>.</p>
+                                            <p><span style={{ fontWeight: '600' }}>{user.numberOfFollowers}</span> followers</p>
+                                        </div>
+                                    </div>
+                                    <div className={styles.viewsDiv}>
+                                        <button
+                                            className={followedUsersData.length > 0 && followedUsersData.some(user => user.followed_userID._id === user._id) || user.isFollowed ? styles.followingBtn : styles.followBtn}
+                                            onClick={(event) =>
+                                                handleFollowClick(user._id)
+                                            }
+                                        >
+                                            {followedUsersData.some(user => user.followed_userID._id === user._id) || user.isFollowed ? 'Following' : 'Follow'}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                            <div className={styles.viewsDiv}>
-                                <button
-                                    className={followedUsersData.length > 0 && followedUsersData.some(user => user.followed_userID._id === user._id) || user.isFollowed ? styles.followingBtn : styles.followBtn}
-                                    onClick={(event) =>
-                                        handleFollowClick(user._id)
-                                    }
-                                >
-                                    {followedUsersData.some(user => user.followed_userID._id === user._id) || user.isFollowed ? 'Following' : 'Follow'}
-                                </button>
-                            </div>
-                        </div>
+                        ))}
                     </div>
-                ))}
-            </div>
+                )}
+            </>
         );
     };
 
@@ -438,30 +467,38 @@ export const SearchPage = () => {
             );
         } else {
             return (
-                <div className={styles.usersList}>
-                    {hashtagsData?.map((hashtag, index) => (
-                        <div
-                            className={styles.hashtagFrame}
-                            key={index}
-                            onClick={() => {
-                                setSelectedHashtagName(hashtag.name.substring(1,)); // Store the clicked hashtag's name
-                                setSelectedHashtagViews(hashtag.views)
-                                setShowHashtagPage(true);
-                                console.log('toggled the hashtag page');
-                            }}
-                        >
-                            <img src={hashtagIcon} alt="" className={styles.hashtagIcon} />
-                            <div style={{ display: 'flex', justifyContent: 'space-between', width: 'inherit' }}>
-                                <div className={styles.userInfo}>
-                                    <h4 className={styles.userNameText}>{hashtag.name}</h4>
-                                </div>
-                                <div className={styles.viewsDiv}>
-                                    <p>{hashtag.views} views</p>
-                                </div>
-                            </div>
+                <>
+                    {hashtagsData.length === 0 ? (
+                        <div className={styles.usersList} style={{ alignItems: 'center' }}>
+                            <h6 style={{ fontSize: '2rem' }}>No results found</h6>
                         </div>
-                    ))}
-                </div>
+                    ) : (
+                        <div className={styles.usersList}>
+                            {hashtagsData?.map((hashtag, index) => (
+                                <div
+                                    className={styles.hashtagFrame}
+                                    key={index}
+                                    onClick={() => {
+                                        setSelectedHashtagName(hashtag.name.substring(1,)); // Store the clicked hashtag's name
+                                        setSelectedHashtagViews(hashtag.views)
+                                        setShowHashtagPage(true);
+                                        console.log('toggled the hashtag page');
+                                    }}
+                                >
+                                    <img src={hashtagIcon} alt="" className={styles.hashtagIcon} />
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', width: 'inherit' }}>
+                                        <div className={styles.userInfo}>
+                                            <h4 className={styles.userNameText}>{hashtag.name}</h4>
+                                        </div>
+                                        <div className={styles.viewsDiv}>
+                                            <p>{hashtag.views} views</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </>
             );
         }
     };

@@ -51,7 +51,7 @@ export interface Post {
     isLiked: boolean;
     category: string;
     type: string;
-    receivedGifts: any[]; // You can define a proper type for gifts if possible.
+    receivedGifts: ReceivedGift[];
     taggedUsers: any[]; // You can define a proper type for users if possible.
     sound: {
         _id: string,
@@ -71,6 +71,23 @@ export interface Post {
         },
         isBookmarked: boolean
     },
+}
+
+
+interface ReceivedGift {
+    giftId: {
+        _id: string;
+        name: string;
+        imageUrl: string;
+        price: number;
+    };
+    isSeen: boolean;
+    userId: {
+        _id: string;
+        avatar: string;
+        username: string;
+        name: string;
+    };
 }
 
 export interface BookmarkItem {

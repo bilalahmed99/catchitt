@@ -41,6 +41,7 @@ const Comment: React.FC<{ comment: CommentType, handleReply: Function, handleLik
 		reply: string;
 		likes: number;
 		id: number;
+		isLiked: boolean;
 		user: {
 			avatar: string;
 			name: string;
@@ -68,16 +69,25 @@ const Comment: React.FC<{ comment: CommentType, handleReply: Function, handleLik
 								</span>
 							</h4>
 						</div>
-						{/* <div className={styles.userCommmentLikesDiv}>
-							<Button onClick={() => handleLikeComment([`${comment.id}/${reply.id}`])}>
-								<CommentLike />
-							</Button>
-							{reply.likes}
-						</div> */}
+						<div className={styles.userCommmentLikesDiv}>
+						</div>
 					</div>
 					<div
 						className={styles.commentDiv}>
 						{reply.reply}
+						<Button
+							sx={{
+								textDecoration: 'none',
+								textTransform: 'none',
+								color: '#848484',
+								alignSelf: 'start',
+								padding: '8px 0px 0px 0px',
+								minWidth: '0',
+							}}
+							onClick={() => setIsReplyOpen(prev => !prev)}
+						>
+							Reply
+						</Button>
 					</div>
 				</div>
 			</div>
