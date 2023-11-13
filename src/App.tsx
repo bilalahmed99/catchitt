@@ -3,6 +3,9 @@ import { IntlProvider } from 'react-intl';
 import { Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
 import messages from '../src/languages-intl';
 import styles from './App.module.scss';
+import CommunityPage from './components/about-pages/community-guidelines';
+import PrivacyPage from './components/about-pages/privacy-policy';
+import { TermsPage } from './components/about-pages/terms-conditions';
 import { ActivityPage } from './components/activity-page/activity-page';
 import { Authentication } from './components/authentication/authentication';
 import ComingSoon from './components/coming-soon/coming-soon';
@@ -69,6 +72,9 @@ function App() {
                             <Route path="/settings/activity" element={<PushNotificationsPage />} />
                             <Route path="/sounds/:soundId" element={<SoundPage />} />
                             {/* <Route path="/hashtags/hashtag=:hashtagId" element={<HashtagsPage />} /> */}
+                            <Route path="/about/terms-conditions" element={<TermsPage />} />
+                            <Route path="/about/community-guidelines" element={<CommunityPage />} />
+                            <Route path="/about/privacy-policy" element={<PrivacyPage />} />
                             <Route path="/SearchPage/:query/:tab" element={<SearchPage />}
                             />
                         </Routes>

@@ -4,7 +4,10 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import atForgotPwd from '../../assets/atForgotPwd.png';
 import contentIcon from '../../assets/contentIcon.svg';
 import notificationBell from '../../assets/notificationBellIcon.svg';
+import privacyPolicyIcon from '../../assets/privacyPolicyIcon.svg';
 import reportProblem from '../../assets/reportProblemIcon.svg';
+import seezittLogoIcon from '../../assets/seezittLogoIcon.svg';
+import termsConfitionsIcon from '../../assets/termsConditionsIcon.svg';
 import { useAuthStore } from '../../store/authStore';
 import InputField from '../reusables/InputField';
 import { SideNavBar } from '../side-nav-bar/side-nav-bar';
@@ -317,6 +320,40 @@ const Account: React.FC = ({ className, setOpenChangeEmail, setOpenChangePasswor
                                     <div className={styles.settingName} onClick={handleEmailClick}>
                                         <img src={reportProblem} alt='' />
                                         <p>Report a problem</p>
+                                    </div>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8.5 5L15.5 12L8.5 19" stroke="#222222" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={styles.settingsWrapper}>
+                            <div className={styles.pageHeader}>
+                                <h4>About</h4>
+                            </div>
+                            <div className={styles.suggestedContent}>
+                                <div className={styles.accountCards}>
+                                    <div className={styles.settingName} onClick={() => navigate('/about/community-guidelines')}>
+                                        <img src={seezittLogoIcon} alt='' />
+                                        <p>Community guidelines</p>
+                                    </div>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8.5 5L15.5 12L8.5 19" stroke="#222222" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+                                <div className={styles.accountCards}>
+                                    <div className={styles.settingName} onClick={() => navigate('/about/terms-conditions')}>
+                                        <img src={termsConfitionsIcon} alt='' />
+                                        <p>Terms and conditions</p>
+                                    </div>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M8.5 5L15.5 12L8.5 19" stroke="#222222" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </div>
+                                <div className={styles.accountCards}>
+                                    <div className={styles.settingName} onClick={() => navigate('/about/privacy-policy')}>
+                                        <img src={privacyPolicyIcon} alt='' />
+                                        <p>Privacy Policy</p>
                                     </div>
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M8.5 5L15.5 12L8.5 19" stroke="#222222" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />

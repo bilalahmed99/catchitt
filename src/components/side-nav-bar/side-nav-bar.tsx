@@ -24,6 +24,12 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
 
     }
 
+    const handleEmailClick = () => {
+        const email = 'info@ogoul.com';
+        window.location.href = `mailto:${email}`;
+        setIndex(6)
+    }
+
     useEffect(() => {
         if (selectedIndex === 4) {
             setSettingsDropdown(true)
@@ -316,11 +322,28 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                                 onClick={() => {
                                     handleLinkClick(6)
                                     setSettingsDropdown(true)
+                                    handleEmailClick()
                                 }}
                             >
                                 <p className={classNames(styles.linkWord, styles.notificationsP)}
                                     style={{ paddingLeft: '30px' }}>
                                     Support
+                                </p>
+                            </div>
+                        </Link>
+                        <Link to="/settings/about/community-guidelines" reloadDocument={false} style={{ textDecoration: 'none' }}>
+                            <div
+                                className={classNames(
+                                    `${selectedIndex === 7 ? styles.selected : styles.navLink}`
+                                )}
+                                onClick={() => {
+                                    handleLinkClick(7)
+                                    setSettingsDropdown(true)
+                                }}
+                            >
+                                <p className={classNames(styles.linkWord, styles.notificationsP)}
+                                    style={{ paddingLeft: '30px' }}>
+                                    About
                                 </p>
                             </div>
                         </Link>
