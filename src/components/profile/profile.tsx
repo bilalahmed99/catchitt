@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuthStore } from '../../store/authStore';
 import { SideNavBar } from '../side-nav-bar/side-nav-bar';
 import { SuggestedActivity } from '../suggested-activity/suggested-activity';
@@ -22,6 +22,26 @@ export const Profile = (props: any) => {
     const [profileModal, setProfileModal] = useState(false);
     const [followModal, setFollowModal] = useState<null | string>(null);
     const [likesModal, setLikesModal] = useState(false);
+    const [profileData, setProfileData] = useState(null)
+    const [loading, setLoading] = useState(false)
+    const API_KEY = process.env.VITE_API_URL;
+    const token = useAuthStore((state) => state.token);
+
+    useEffect(() => {
+      fetch(`${API_KEY}/profile`, {
+            method: 'GET',
+            headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+        }).then((res) => res.json()).then((data) => {
+            setProfileData(data.data)
+            setLoading(false)
+        }).catch((err) => {
+            console.log(err);
+            setLoading(false)
+        })
+    }, [])
+    console.log("ProfileData", profileData);
+
+
     const tabs = [
         {
             title: 'Videos',
@@ -100,6 +120,7 @@ export const Profile = (props: any) => {
                 </Modal>
                 <div className={styles.middleSectionDiv}>
                     <ProfileHeader
+                        profileData={profileData}
                         onFollowModalActive={onFollowModalActive}
                         setProfileModal={setProfileModal}
                         setLikesModal={setLikesModal}
