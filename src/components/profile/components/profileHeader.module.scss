@@ -7,9 +7,12 @@
         height: 285px;
         border-radius: 8px;
         overflow: hidden;
+        background-color: rgb(200, 199, 199);
 
         .bannerImg {
             object-fit: cover;
+            width: 100%;
+            height: 100%;
         }
 
         .banerIcon {
@@ -47,6 +50,7 @@
 
             .avatarImg {
                 width: 100%;
+                height: 100%;
                 object-fit: cover;
 
             }
