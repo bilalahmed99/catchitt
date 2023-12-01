@@ -3,9 +3,10 @@ import style from './videoModel.module.scss'
 import VideoPlayer from '../../reusables/VideoPlayer'
 import ReactHlsPlayer from 'react-hls-player'
 interface Props {
-    onModalClose: any
+    onModalClose: any,
+    info: any
 }
-function VideoModel({ onModalClose }: Props) {
+function VideoModel({ onModalClose, info }: Props) {
     //For Images Ref.
     const [like, setLike] = useState(false)
     const [fvrt, setFvrt] = useState(false)
@@ -24,8 +25,15 @@ function VideoModel({ onModalClose }: Props) {
     //     playerRef.current.controls = !playerRef.current.controls;
     // }
 
-
-
+    const timeConverter = (time:any)  => {
+        const timestamp = time;
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        let createdTime = `${day}-${month}-${year}`
+        return createdTime
+    }
     return (
         <div className={style.div}>
             <div className={style['video-sec']}>
@@ -41,18 +49,18 @@ function VideoModel({ onModalClose }: Props) {
                         loop
                         autoPlay
                         /> */}
-                <video loop={false} controls={false} autoPlay={true} width='300px' src='https://media.istockphoto.com/id/482031426/video/melting-ice.mp4?s=mp4-640x640-is&k=20&c=57j7D8zFEa1o5IzLsNaOkXqBzFVWnKkgAs_19BW2Bn8=' />
+                <video loop={true} controls={false} autoPlay={true} width='300px' src={info.reducedVideoUrl} />
             </div>
             <div className={style['cotent-sec']}>
                 <img onClick={onModalClose} className={style['close-btn-img']} src="../../../../public/images/icons/Close Square.svg" alt="" />
                 <div className={style['info-sec']}>
-                    <img src="../../../../public/images/icons/Ellipse 1791.svg" alt="" />
+                    <img style={{ borderRadius: '50%' }} src={info.user.avatar} alt="" />
                     <div style={{ marginLeft: '16px' }}>
-                        <p className={style['name']}>Sara Said</p>
+                        <p className={style['name']}>{info.user.name}</p>
                         <div className='d-flex' >
-                            <p className={style['text2']}>Radwa Aly</p>
+                            <p className={style['text2']}>{info.user.username}</p>
                             <img className='mx-2' src="../../../../public/images/icons/Text.svg" alt="" />
-                            <p className={style['text2']}>30-6-2023</p>
+                            <p className={style['text2']}>{timeConverter(info.createdTime)}</p>
                         </div>
                     </div>
                     <div className={style['frdsBtn']}>
@@ -81,7 +89,7 @@ function VideoModel({ onModalClose }: Props) {
                                     <img src="../../../../public/images/icons/Heart2.svg" alt="" />
                             }
                         </div>
-                        <p className={style['text4']}>924.2K</p>
+                        <p className={style['text4']}>{info.likes}</p>
                     </div>
                     <div onClick={() => {
                         setFvrt(!fvrt)
@@ -115,7 +123,7 @@ function VideoModel({ onModalClose }: Props) {
                                     <img src="../../../../public/images/icons/share.svg" alt="" />
                             }
                         </div>
-                        <p className={style['text4']}>17.6K</p>
+                        <p className={style['text4']}>{info.shares}</p>
                         {/* DropDown for share btn */}
                         {
                             share ?

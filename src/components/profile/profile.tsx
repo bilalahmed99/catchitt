@@ -19,7 +19,7 @@ import VideoModel from './components/videoModel';
 
 export const Profile = (props: any) => {
     const { selectedIndex, setIndex } = useAuthStore();
-    const data2 = useAuthStore();
+    const authstore = useAuthStore();
     const [activeTab, setActiveTab] = useState('Videos');
     const [profileModal, setProfileModal] = useState(false);
     const [followModal, setFollowModal] = useState<null | string>(null);
@@ -29,6 +29,11 @@ export const Profile = (props: any) => {
     const API_KEY = process.env.VITE_API_URL;
     const token = useAuthStore((state) => state.token);
     const [videoModal, setVideoModal] = useState(false);
+    const [userVideos, setUserVideos] = useState([])
+    const [userlikedVideos, setUserlikedVideos] = useState([])
+    const [usertaggedVideos, setUsertaggedVideos] = useState([])
+    const [bookmarkVideos, setbookmarkVideos] = useState([])
+    const [videoModalInfo, setVideoModalInfo] = useState({})
 
     useEffect(() => {
         fetch(`${API_KEY}/profile`, {
@@ -41,6 +46,69 @@ export const Profile = (props: any) => {
             console.log(err);
             setLoading(false)
         })
+        // 63a04301a00ed2af91f17e1d user id contain videos
+        fetch(`${API_KEY}/profile/${authstore._id}/videos`, {
+            method: 'GET',
+            headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+
+                setUserVideos(data.data.data);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.log(err);
+                setLoading(false);
+            });
+
+        fetch(`${API_KEY}/profile/${authstore._id}/liked-videos`, {
+            method: 'GET',
+            headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+
+                setUserlikedVideos(data.data.data)
+                console.log(data.data.data);
+
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.log(err);
+                setLoading(false);
+            });
+
+        fetch(`${API_KEY}/profile/tagged-videos`, {
+            method: 'GET',
+            headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+
+                setUsertaggedVideos(data.data.data)
+                console.log(data.data.data);
+
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.log(err);
+                setLoading(false);
+            });
+
+        fetch(`${API_KEY}/filter/bookmarkedFilters`, {
+            method: 'GET',
+            headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setbookmarkVideos(data.data.data)
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.log(err);
+                setLoading(false);
+            });
 
         fetch(`${API_KEY}/profile/collection`, {
             method: 'GET',
@@ -50,42 +118,7 @@ export const Profile = (props: any) => {
         }).catch((err) => {
             console.log('collectons error', err);
         })
-
-        fetch(`${API_KEY}/filter/bookmarkedFilters`, {
-            method: 'GET',
-            headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
-        }).then((res) => res.json()).then((data) => {
-            console.log("bookmarkedFilters", data);
-        }).catch((err) => {
-            console.log('bookmarkedFilters error', err);
-        })
-    }, [])
-    console.log("ProfileData", profileData);
-
-    useEffect(() => {
-        fetch(`${API_KEY}/profile/tagged-videos`, {
-            method: 'GET',
-            headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
-        }).then((res) => res.json()).then((data) => {
-            console.log("tagged-videos", data);
-        }).catch((err) => {
-            console.log('tagged-videos error', err);
-        })
-    }, [])
-
-    useEffect(() => {
-        fetch(`${API_KEY}/profile/:${"6555c50cc3b547e239fbd119"}/liked-videos`, {
-            method: 'GET',
-            headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
-        }).then((res) => res.json()).then((data) => {
-            console.log("liked-videos", data);
-        }).catch((err) => {
-            console.log('liked-videos error', err);
-        })
-    }, [])
-    console.log('find out the id', data2);
-    "6555c50cc3b547e239fbd119"
-
+    }, []);
 
     const tabs = [
         {
@@ -128,8 +161,9 @@ export const Profile = (props: any) => {
     const onFollowModalActive = (tab: string | null) => {
         setFollowModal(tab);
     };
-    const onVideoModal = () => {
+    const onVideoModal = (video:any) => {
         setVideoModal(!videoModal)
+        setVideoModalInfo(video)
     }
     return (
         <div className={styles.root}>
@@ -169,7 +203,7 @@ export const Profile = (props: any) => {
                 <Modal open={videoModal}>
                     <ClickAwayListener onClickAway={() => setVideoModal(false)}>
                         <div className={styles.videoModalContainer}>
-                            <VideoModel onModalClose={() => setVideoModal(false)} />
+                            <VideoModel info={videoModalInfo} onModalClose={() => setVideoModal(false)} />
                         </div>
                     </ClickAwayListener>
                 </Modal>
@@ -197,15 +231,110 @@ export const Profile = (props: any) => {
                     <div className={styles.contentContainer}>
                         <p className={styles.title}>{activeTab}</p>
                         <div className={styles.posts}>
-                            {[...new Array(7)].map((item) => (
-                                <div key={item} onClick={onVideoModal} className={styles.post}>
-                                    <img src="../../../public/images/Rectangle 28250 (1).png" alt="" />
-                                    <div className={styles.views}>
-                                        <img src="../../../public/images/icons/views.svg" alt="" />
-                                        <p className={styles.viewsText}>14.9k</p>
-                                    </div>
+                            {activeTab === 'Videos' ?
+                                <div className={styles.posts}>
+                                    {userVideos &&
+                                        userVideos.map((item: any) => (
+                                            <div
+                                                key={item}
+                                                onClick={()=>onVideoModal(item)}
+                                                className={styles.post}
+                                            >
+                                                <img
+                                                    className={styles.thumbnail}
+                                                    src={item?.thumbnailUrl}
+                                                    alt=""
+                                                />
+                                                <div className={styles.views}>
+                                                    <img
+                                                        src="../../../public/images/icons/views.svg"
+                                                        alt=""
+                                                    />
+                                                    <p className={styles.viewsText}>{item.views}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+
                                 </div>
-                            ))}
+                                : null}
+                            {activeTab === 'Liked Videos' ?
+                                <div className={styles.posts}>
+                                    {userlikedVideos &&
+                                        userlikedVideos.map((item: any) => (
+                                            <div
+                                                key={item}
+                                                onClick={()=>onVideoModal(item)}
+                                                className={styles.post}
+                                            >
+                                                <img
+                                                    className={styles.thumbnail}
+                                                    src={item?.thumbnailUrl}
+                                                    alt=""
+                                                />
+                                                <div className={styles.views}>
+                                                    <img
+                                                        src="../../../public/images/icons/views.svg"
+                                                        alt=""
+                                                    />
+                                                    <p className={styles.viewsText}>{item.views}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+
+                                </div>
+                                : null}
+                            {activeTab === 'Bookmarks' ?
+                                <div className={styles.posts}>
+                                    {bookmarkVideos &&
+                                        bookmarkVideos.map((item: any) => (
+                                            <div
+                                                key={item}
+                                                onClick={()=>onVideoModal(item)}
+                                                className={styles.post}
+                                            >
+                                                <img
+                                                    className={styles.thumbnail}
+                                                    src={item?.thumbnailUrl}
+                                                    alt=""
+                                                />
+                                                <div className={styles.views}>
+                                                    <img
+                                                        src="../../../public/images/icons/views.svg"
+                                                        alt=""
+                                                    />
+                                                    <p className={styles.viewsText}>{item.views}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+
+                                </div>
+                                : null}
+                            {activeTab === 'Tagged Posts' ?
+                                <div className={styles.posts}>
+                                    {usertaggedVideos &&
+                                        usertaggedVideos.map((item: any) => (
+                                            <div
+                                                key={item}
+                                                onClick={()=>onVideoModal(item)}
+                                                className={styles.post}
+                                            >
+                                                <img
+                                                    className={styles.thumbnail}
+                                                    src={item?.thumbnailUrl}
+                                                    alt=""
+                                                />
+                                                <div className={styles.views}>
+                                                    <img
+                                                        src="../../../public/images/icons/views.svg"
+                                                        alt=""
+                                                    />
+                                                    <p className={styles.viewsText}>{item.views}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+
+                                </div>
+                                : null}
                         </div>
                     </div>
                 </div>
