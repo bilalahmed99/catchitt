@@ -17,7 +17,6 @@ import FollowModal from './components/FollowModal';
 import LikesModal from './components/LikesModal';
 import PublicProfileHeader from './components/publicProfileHeader';
 import { useParams } from 'react-router-dom';
-// import VideoModel from './components/videoModel';
 
 export const PublicProfile = (props: any) => {
     const { selectedIndex, setIndex } = useAuthStore();
@@ -176,8 +175,10 @@ export const PublicProfile = (props: any) => {
                                             </div>
                                         </div>
                                     ))}
+
                             </div>
-                        ) : (
+                        ) : null}
+                        {activeTab !== 'Videos' ? (
                             <div className={styles.privatepost}>
                                 <img
                                     style={{ marginTop: 48 }}
@@ -194,7 +195,7 @@ export const PublicProfile = (props: any) => {
                                     Tagged posts of sarasaid171 are currently hidden
                                 </p>
                             </div>
-                        )}
+                        ) : null}
                     </div>
                 </div>
             </div>
