@@ -90,7 +90,7 @@ export const Authentication = (props: any) => {
 
             if (response.ok) {
                 const responseData = await response.json();
-                const { email, token, _id, balance, username, name } = responseData.data; // Extract token from data object
+                const { email, accountType, token, _id, balance, username, name } = responseData.data; // Extract token from data object
                 // const name = responseData.name; // Assuming the 'name' field is present in the response data
                 useAuthStore.setState({
                     isLoggedIn: true,
@@ -100,7 +100,7 @@ export const Authentication = (props: any) => {
                     _id: _id,
                     balance: balance,
                 });
-                login(email, token, _id, balance, username, name); // Call the login function from the Zustand store
+                login(email, accountType, token, _id, balance, username, name); // Call the login function from the Zustand store
                 // console.log(responseData);
                 navigate('/home');
                 // handleSignIn(email, password)
@@ -141,17 +141,18 @@ export const Authentication = (props: any) => {
 
             if (response.ok) {
                 const responseData = await response.json();
-                const { email, token, _id, balance, username, name } = responseData.data; // Extract token value from data object
+                const { email, accountType, token, _id, balance, username, name } = responseData.data; // Extract token value from data object
                 // const name = responseData.data; // Assuming the 'name' field is present in the response data
                 useAuthStore.setState({
                     isLoggedIn: true,
+                    accountType: accountType,
                     name: name,
                     token: token,
                     _id: _id,
                     balance: balance,
                     username: username,
                 });
-                login(email, token, _id, balance, username, name); // Call the login function from the Zustand store
+                login(email, accountType, token, _id, balance, username, name); // Call the login function from the Zustand store
                 console.log(responseData);
                 navigate('/home');
             } else {

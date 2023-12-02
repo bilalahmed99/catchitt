@@ -2,6 +2,7 @@ import create from 'zustand';
 
 interface AuthState {
   isLoggedIn: boolean;
+  accountType: string | null;
   _id: string | null;
   token: string | null;
   email: string | null;
@@ -15,13 +16,14 @@ interface AuthState {
   setTab: (index: number) => void;
   settingsDropdown: boolean | null;
   setSettingsDropdown: (isOpen: boolean) => void;
-  login: (email: string, token: string, _id: string, balance: number, username: string, name: string) => void;
+  login: (email: string, accountType: string, token: string, _id: string, balance: number, username: string, name: string) => void;
   logout: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => {
   // Check if a user is already logged in based on localStorage
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  const accountType = localStorage.getItem('accountType')
   const _id = localStorage.getItem('_id');
   const email = localStorage.getItem('email');
   const token = localStorage.getItem('token');
@@ -34,6 +36,7 @@ export const useAuthStore = create<AuthState>((set) => {
 
   return {
     isLoggedIn,
+    accountType: isLoggedIn ? accountType : '',
     name: isLoggedIn ? name : '',
     username: isLoggedIn ? username: '',
     email: isLoggedIn ? email : '',
@@ -54,8 +57,9 @@ export const useAuthStore = create<AuthState>((set) => {
       localStorage.setItem('selectedTab', index.toString());
     },
 
-    login: (email: string, token: string, _id: string, balance: number, username: string, name: string,) => {
+    login: (email: string, accountType: string, token: string, _id: string, balance: number, username: string, name: string,) => {
       localStorage.setItem('token', token);
+      localStorage.setItem('accountType', accountType);
       localStorage.setItem('_id', _id);
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('balance', balance.toString());
@@ -64,14 +68,15 @@ export const useAuthStore = create<AuthState>((set) => {
       localStorage.setItem('name', name)
       if (name) {
         localStorage.setItem('name', name !== '' ? name : '');
-        set({ isLoggedIn: true, name, username, balance, email, token, _id, selectedIndex: 0 });
+        set({ isLoggedIn: true, accountType, name, username, balance, email, token, _id, selectedIndex: 0 });
       } else {
-        set({ isLoggedIn: true, name, username, balance, email, token, _id, selectedIndex: 0 });
+        set({ isLoggedIn: true, accountType, name, username, balance, email, token, _id, selectedIndex: 0 });
       }
     },
     logout: () => {
-      set({ isLoggedIn: false, name: '', username: '', email: '', token: '', _id: '', balance: 0, cache: [] });
+      set({ isLoggedIn: false, accountType: '', name: '', username: '', email: '', token: '', _id: '', balance: 0, cache: [] });
       localStorage.removeItem('token');
+      localStorage.removeItem('accountType');
       localStorage.removeItem('_id');
       localStorage.removeItem('isLoggedIn');
       localStorage.removeItem('name');
