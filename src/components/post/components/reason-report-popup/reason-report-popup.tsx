@@ -7,7 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import { useState } from 'react';
-import { useAuthStore } from '../../store/authStore';
+import { useAuthStore } from '../../../../store/authStore';
 
 export interface FormData {
     MISLEADING_INFO: boolean;
@@ -23,7 +23,6 @@ export interface ReasonReportPopupProps {
     onSubmit?: any;
     handleOpen?: any;
     handleClose?: any;
-    // onSelectedChoicesChange: (choices: FormData) => void; // Add a new prop to handle changes in selected choices
     mediaId: string;
 }
 
@@ -31,7 +30,6 @@ export const ReasonReportPopup = ({
     className,
     onSubmit,
     handleOpen,
-    // handleClose,
     mediaId,
 }: ReasonReportPopupProps) => {
     const token = useAuthStore((state) => state.token);
@@ -45,45 +43,16 @@ export const ReasonReportPopup = ({
         ANIMAL_CRUELTY: false,
     });
 
-    // const [open, setOpen] = useState(false);
-    // const handleClose = () => setOpen(false);
-
     const [firstFormVisible, setFirstFormVisible] = useState(true);
     const [selectedValue, setSelectedValue] = useState<string>('');
     const API_KEY = process.env.VITE_API_URL;
-
-    // const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     const { name, checked } = event.target;
-
-    //     // Update the selectedChoices prop with the latest data
-    //     setSelectedValues((prevValues) => {
-    //         if (checked) {
-    //             // If checked, add to the array if not already present
-    //             if (!prevValues.includes(name)) {
-    //                 return [...prevValues, name];
-    //             }
-    //         } else {
-    //             // If unchecked, remove from the array if present
-    //             return prevValues.filter((nam) => nam !== name);
-    //         }
-    //         // If no change, return the previous values
-    //         return prevValues;
-    //     });
-
-    //     // Update the form data
-    //     setFormData((prevData) => ({ ...prevData, [name]: checked }));
-    // };
 
     const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedValue(event.target.value);
     };
 
-
-
     const handleReportSubmit = async (event: React.FormEvent, mediaId: string) => {
         event.preventDefault();
-
-        // Use the selectedValue directly
         try {
             const response = await fetch(
                 `${API_KEY}/media-content/reports/:${mediaId}`,
@@ -96,20 +65,15 @@ export const ReasonReportPopup = ({
                     body: JSON.stringify({ reason: selectedValue }),
                 }
             );
-
             if (response.ok) {
-                // Handle success
                 const responseData = await response.json();
                 console.log(responseData);
-                handleOpen(); // Assuming this function opens another modal or dialog
+                handleOpen();
             } else {
-                // Handle the response from the server if needed
                 const errorResponseData = await response.json();
                 console.log(errorResponseData);
-                // Handle the error, show an error message, or take appropriate action
             }
         } catch (error) {
-            // Handle any errors
             console.error(error);
         }
     };
