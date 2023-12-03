@@ -23,6 +23,8 @@ const ProfileHeader: FunctionComponent<Props> = ({
     setLikesModal,
     profileData,
 }) => {
+    console.log('profileData',profileData);
+    
     return (
         <div className={styles.profileHeader}>
             <div className={styles.banner}>
