@@ -69,7 +69,7 @@ function App() {
                             <Route path="/notifications" element={<ActivityPage />} />
                             <Route path="/comingsoon" element={<ComingSoon />} />
                             <Route path="/profile" element={<Profile />} />
-                            <Route path="/public-profile/:id" element={<PublicProfile />} />
+                            <Route path="/profile/:id" element={<PublicProfile />} />
                             <Route path="/settings/account" element={<Account />} />
                             <Route path="/settings/account/activity" element={<PushNotificationsPage />} />
                             <Route path="/settings/account/privacy-settings" element={<PrivacySecurityPage />} />
