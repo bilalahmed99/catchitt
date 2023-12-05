@@ -2,9 +2,9 @@ import styles from './videoesMapin.module.scss'
 
 interface Type {
     videos: any,
-    openVideoModal:any
+    openVideoModal: any
 }
-export default function VideoesMaping({ videos , openVideoModal}: Type) {
+export default function VideoesMaping({ videos, openVideoModal }: Type) {
     return (
         <div className={styles.posts}>
             {videos &&
