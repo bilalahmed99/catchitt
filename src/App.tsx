@@ -13,15 +13,17 @@ import { ForgotPassword } from './components/forgot-password/forgot-password';
 import { Home } from './components/home/home';
 import { PrivacySecurityPage } from './components/privacy-security-page/privacy-security-page';
 import { Profile } from './components/profile/profile';
+import { PublicProfile } from './components/profile/publicProfile';
 import { PushNotificationsPage } from './components/push-notifications-page/push-notifications';
 import { VideoProvider } from './components/reusables/VideoContext';
 import { SearchPage } from './components/search-page/search-page';
 import { SetNewPassword } from './components/set-newPassword/set-newPassword';
 import Account from './components/settings-page/account';
+import BalancePage from './components/settings-page/components/balance-page';
+import TransactionHistoryPage from './components/settings-page/components/transaction-history-page';
 import { SoundPage } from './components/sounds-page/sound-page';
 import { SuggestedAccountsPage } from './components/suggested-accounts-page/suggested-accounts-page';
 import { useAuthStore } from './store/authStore';
-import { PublicProfile } from './components/profile/publicProfile';
 
 // Functional component to handle the initial route navigation
 const InitialRouteHandler = () => {
@@ -73,8 +75,9 @@ function App() {
                             <Route path="/settings/account" element={<Account />} />
                             <Route path="/settings/account/activity" element={<PushNotificationsPage />} />
                             <Route path="/settings/account/privacy-settings" element={<PrivacySecurityPage />} />
+                            <Route path="/settings/account/balance" element={<BalancePage />} />
+                            <Route path="/settings/account/transaction-history" element={<TransactionHistoryPage />} />
                             <Route path="/sounds/:soundId" element={<SoundPage />} />
-                            {/* <Route path="/hashtags/hashtag=:hashtagId" element={<HashtagsPage />} /> */}
                             <Route path="/about/terms-conditions" element={<TermsPage />} />
                             <Route path="/about/community-guidelines" element={<CommunityPage />} />
                             <Route path="/about/privacy-policy" element={<PrivacyPage />} />
