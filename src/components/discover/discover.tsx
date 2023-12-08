@@ -12,13 +12,12 @@ import Stories from './components/stories';
 import SuggestedFollower from './components/suggestedFollower';
 import VideoPanel from './components/videoPanel';
 import styles from './discover.module.scss';
-
-1
 export default function Discover() {
     const API_KEY = process.env.VITE_API_URL;
     const { selectedIndex, setIndex } = useAuthStore();
     const [trendingvideos, setTrendingvideos] = useState([])
     const [hashtagVideos, setHashtagVideos] = useState([])
+    const [stories, setStories] = useState([])
     const [videoModal, setVideoModal] = useState(false)
     const [videoModalInfo, setVideoModalInfo] = useState({})
     const token = useAuthStore((state) => state.token);
@@ -69,7 +68,6 @@ export default function Discover() {
             } catch (error) {
                 console.log('error trendinghashtags', error);
             }
-
             try {
                 const response = await fetch(`${API_KEY}/profile/public/suggested-users?page=1`, {
                     method: 'GET',
@@ -79,7 +77,6 @@ export default function Discover() {
                 if (response.ok) {
                     const responseData = await response.json();
                     setRandomAccs(getRandomAccounts(responseData.data.data, 10))
-                    console.log('fetched public suggested acccounts: ', randomAccs);
                 } else {
                     console.log(response);
                 }

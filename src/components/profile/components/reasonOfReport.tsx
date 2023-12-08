@@ -29,16 +29,19 @@ function ReasonOfReport({ onclose, video }: Types) {
             }
         }
     }
-    const submitH = () => {
+    const submitH = async () => {
         console.log(reasons
-            );
-        
-        try {
-            axios.post(`${API_KEY}/media-content/reports/${video.mediaId}`, JSON.stringify({reason: ["HATE_SPEECH"]})).then((res: any) => {
-                // setGreetings(true)
-                console.log('res', res);
-            })
+        );
 
+        try {
+            const response: any = await axios.post(`${API_KEY}/media-content/report/${video.mediaId}`, JSON.stringify({ reason: "HATE_SPEECH" }))
+            if (response.ok) {
+                const responseData: any = await response.json();
+                console.log('Success:', responseData);
+                // Handle non-successful responses here
+            } else {
+                alert('somrthing went wrong')
+            }
         } catch (error) {
             console.log('error', error);
 

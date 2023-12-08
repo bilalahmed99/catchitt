@@ -255,7 +255,7 @@ export const SuggestedActivity = memo(({
                     <div className={styles.suggestedContent}>
                         {randomAccs.map((account: Account) => (
                             <div key={account._id} className={styles.suggestedItem}>
-                                <Link to={`/public-profile/${account._id}`}>
+                                <Link to={`/profile/${account._id}`}>
                                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                                     <img
                                         src={account.avatar || defaultProfileIcon}

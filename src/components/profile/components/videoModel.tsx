@@ -1,6 +1,10 @@
 import { useRef, useState } from 'react'
 import style from './videoModel.module.scss'
 import defaultProfileIcon from '../../../assets/defaultProfileIcon.png'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 interface Props {
     onModalClose: any,
     info: any,
@@ -111,7 +115,14 @@ function VideoModel({ onModalClose, info, report, block }: Props) {
                                     </div>
                                     <div>
                                         <img src="../../../../public/images/icons/Frame.svg" alt="" />
-                                        <p className={style['text5']}>Copy link</p>
+                                        <p onClick={() => {
+                                            navigator.clipboard.writeText(info.reducedVideoUrl).then(() => {
+                                                toast.success("🎉 Copied successfully", {
+                                                    position: "bottom-right", // Set the position (top-right, top-center, top-left, bottom-right, bottom-center, bottom-left)
+                                                    autoClose: 2000, // Set the auto-close duration in milliseconds (e.g., 2000ms = 2 seconds)
+                                                });
+                                            })
+                                        }} className={style['text5']}>Copy link</p>
                                     </div>
                                 </div> : null
                         }
@@ -147,6 +158,9 @@ function VideoModel({ onModalClose, info, report, block }: Props) {
                         }
                     </div>
                 </div>
+            </div>
+            <div>
+                <ToastContainer />
             </div>
 
         </div>

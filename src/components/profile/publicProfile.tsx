@@ -31,14 +31,11 @@ export const PublicProfile = (props: any) => {
     const [videoModalInfo, setVideoModalInfo] = useState({})
     const [reportPopup, setReportPopup] = useState(false)
     const [blockPopup, setBlockPopup] = useState(false)
-    const [activeVideo, setActiveVideo] = useState()
-
-
-
-
     const API_KEY = process.env.VITE_API_URL;
     const token = useAuthStore((state) => state.token);
     const [videoModal, setVideoModal] = useState(false);
+
+    // Use Function For Get the User Followers
     useEffect(() => {
         fetch(`${API_KEY}/profile/${params.id}`, {
             method: 'GET',
@@ -66,8 +63,7 @@ export const PublicProfile = (props: any) => {
                 console.log(err);
                 setLoading(false);
             });
-    }, [params?.id]);
-
+    }, [params?.id])
     const tabs = [
         {
             title: 'Videos',
