@@ -1,9 +1,8 @@
 import { IconButton } from '@mui/material';
 import classNames from 'classnames';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuthStore } from '../../../store/authStore';
-// import PopupModalForVideoPlayer from '../../reusables/PopupModalForVideoPlayer';
 import PopupForReport from '../../profile/popups/PopupForReport';
 import PopupForBlock from '../../profile/popups/popupForBlock';
 import PopupForVideoPlayer from '../../profile/popups/popupForVideoPlayer';
@@ -13,6 +12,8 @@ import { SuggestedActivity } from '../../suggested-activity/suggested-activity';
 import { TopBar } from '../../top-bar/top-bar';
 import styles from './allVideos.module.scss';
 import VideoPanel from './videoPanel';
+
+
 
 export interface SuggestedAccountsPageProps {
 	className?: string;
@@ -27,23 +28,21 @@ interface Account {
 export const AllVideos = ({ className }: SuggestedAccountsPageProps) => {
 	const [videoModal, setVideoModal] = useState(false)
 	const [videoModalInfo, setVideoModalInfo] = useState({})
-	const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 	const token = useAuthStore((state) => state.token);
-	const navigator = useNavigate()
 	const params = useParams()
-	const { selectedTab, setTab } = useAuthStore();
 	const [trendingvideos, setTrendingvideos] = useState([]);
 	const [hashtagVideos, setHashtagVideos] = useState([]);
 	const [reportPopup, setReportPopup] = useState(false)
 	const [blockPopup, setBlockPopup] = useState(false)
-	const page = useRef(1)
-	const done = useRef(false)
-	const tab = useRef(1);
+	const [queryData, setQueryData] = useState<any>('');
 	const API_KEY = process.env.VITE_API_URL;
 
 	const navigate = useNavigate();
 
 	useEffect(() => {
+		const queryParams = new URLSearchParams(window.location.search);
+		const data = queryParams.get('hashtag');
+		setQueryData(data);
 		const apisIntigrations = async () => {
 			try {
 				const response = await fetch(`${API_KEY}/discover/trending/videos`, {
@@ -73,16 +72,14 @@ export const AllVideos = ({ className }: SuggestedAccountsPageProps) => {
 	}, [])
 
 	const handleGoBack = () => {
-		navigate('/home'); // Navigate back to the previous page
+		navigate('/discover'); // Navigate back to the previous page
 	};
 
-	console.log('hashtagVideos', hashtagVideos);
-	console.log('trendingvideos', trendingvideos);
 	const openvideomodal = (video: any) => {
 		setVideoModalInfo(video)
 		setVideoModal(true)
-
 	}
+
 
 	return (
 		<div className={classNames(styles.root, className)}>
@@ -114,17 +111,22 @@ export const AllVideos = ({ className }: SuggestedAccountsPageProps) => {
 					{params.id !== 'trending-videos' ?
 						hashtagVideos.map((obj: any, i) => {
 							return (
-								<div style={{ marginTop: 41 }} key={i} className={styles.postsp}>
-									<div className='d-flex justify-content-between'>
-										<p className={styles.trendingText}>{obj?.name}</p>
-									</div>
-									<div className={styles.posts}>
-										{
-											obj?.relatedVideos.map((video: any, i: any) => {
-												return <VideoPanel index={2} videomodal={() => openvideomodal(video)} video={video} />
-											})
-										}
-									</div>
+								<div>
+									{
+										obj?.name === queryData ?
+											<div style={{ marginTop: 41 }} key={i} className={styles.postsp}>
+												<div className='d-flex justify-content-between'>
+													<p className={styles.trendingText}>{obj?.name}</p>
+												</div>
+												<div className={styles.posts}>
+													{
+														obj?.relatedVideos.map((video: any, i: any) => {
+															return <VideoPanel index={2} videomodal={() => openvideomodal(video)} video={video} />
+														})
+													}
+												</div>
+											</div> : null
+									}
 								</div>
 							)
 						}) :
