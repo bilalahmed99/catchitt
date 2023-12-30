@@ -44,6 +44,8 @@ import { Report } from './svg-components/Report';
 import { Save } from './svg-components/Save';
 import { Share } from './svg-components/Share';
 import { ShareMobile } from './svg-components/ShareMobile';
+import bigCoin from './svg-components/bigCoin.svg';
+import cancelIcon from './svg-components/cancelIcon.svg';
 import soundIcon from './svg-components/soundIcon.svg';
 import soundIconMobile from './svg-components/soundIconMobile.svg';
 
@@ -60,15 +62,23 @@ interface Gift {
 }
 
 export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, endedIds, isBookmarked, profileAvatar }) => {
-    // console.log('is bookmarked?', isBookmarked);
+    const API_KEY = process.env.VITE_API_URL;
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
     const balance = useAuthStore((state) => state.balance);
     const { selectedIndex, setIndex } = useAuthStore(); // Get selectedIndex and setIndex from the store
     const [gifts, setGifts] = useState<any>([])
     const [showLess, setShowLess] = useState<boolean>(true)
 
+    const [selectedCoin, setSelectedCoin] = useState(null);
+    const [selectedPrice, setSelectedPrice] = useState(null);
+    const [selectedAmount, setSelectedAmount] = useState(null);
 
-    const API_KEY = process.env.VITE_API_URL;
+    const handleItemClick = (index: any, amount: any, price: any) => {
+        setSelectedCoin(index);
+        setSelectedPrice(price);
+        setSelectedAmount(amount)
+    };
+
     const navigate = useNavigate()
     const [videoElement, inView] = useInView({
         triggerOnce: true,
@@ -80,6 +90,9 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
     const [openRechargeBalanceModal, setOpenRechargeBalanceModal] = useState(false)
     const handleCloseRechargeBalanceModal = () => {
         setOpenRechargeBalanceModal(false)
+        setSelectedPrice(null)
+        setSelectedAmount(null)
+        setSelectedCoin(null)
     }
     const handleOpenRechargeBalanceModal = () => {
         setOpenGiftsModal(false)
@@ -90,9 +103,24 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
     const handleOpenGiftsModal = () => setOpenGiftsModal(true);
     const handleCloseGiftsModal = () => setOpenGiftsModal(false);
 
+    const [openPaymentMethodsModal, setOpenPaymentMethodsModal] = useState(false);
+    const handleOpenPaymentMethodsModal = () => {
+        setOpenPaymentMethodsModal(true);
+        setOpenRechargeBalanceModal(false);
+    }
+    const handleClosePaymentMethodsModal = () => {
+        setOpenPaymentMethodsModal(false);
+        setSelectedPrice(null)
+        setSelectedAmount(null)
+        setSelectedCoin(null)
+    }
+
     const [openCalculatorModal, setOpenCalculatorModal] = useState(false)
     const handleCloseCalculatorModal = () => {
         setOpenCalculatorModal(false)
+        setSelectedPrice(null)
+        setSelectedAmount(null)
+        setSelectedCoin(null)
     }
     const handleOpenCalculatorModal = () => {
         setOpenRechargeBalanceModal(false)
@@ -454,7 +482,41 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
         setOpenFaqsModal(false)
     }
 
-
+    const [paypalResponse, setPaypalResponse] = useState('');
+    const [openPaypalPage, setOpenPaypalPage] = useState(false)
+    const handleOpenPaypalPage = () => {
+        setOpenPaypalPage(true)
+    }
+    const handleClosePaypalPage = () => {
+        setOpenPaypalPage(false)
+    }
+    const handlePaypalRequest = async () => {
+        navigate('/payment/coins/100');
+        // try {
+        //     const response = await fetch(
+        //         `https://seezitt.com/payment/coins/100`,
+        //         {
+        //             method: 'GET',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //                 Authorization: `Bearer ${token}`,
+        //             },
+        //         },
+        //     );
+        //     if (response.ok) {
+        //         const htmlContent = await response.text();
+        //         setPaypalResponse(htmlContent);
+        //         console.log('it worked!!!!!');
+        //         handleOpenPaypalPage();
+        //     } else {
+        //         // Handle error response
+        //         console.log(response);
+        //     }
+        // } catch (error) {
+        //     // Handle fetch error
+        //     console.error(error);
+        // }
+    };
 
     return postData && (
         <div className={classNames(styles.root, className)}>
@@ -950,63 +1012,30 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                                         <img src={coinIcon} alt='' style={{ width: '16px', height: '16px' }} />
                                     </div>
                                 </div>
-
                                 <div className={styles.warningMsg}>
                                     <p>Pricing will change depending on payment method.</p>
                                     <img src={dangerIcon} alt='' />
                                 </div>
                                 <Box sx={pricesBox}>
-                                    <div className={styles.price}>
-                                        <div className={styles.coinsAmount}>
-                                            <img src={coinIcon} alt='' style={{ width: '16px', height: '16px' }} />
-                                            65</div>
-                                        <div className={styles.coinsPrice}>QAR 3.69</div>
-                                    </div>
-                                    <div className={styles.price}>
-                                        <div className={styles.coinsAmount}>
-                                            <img src={coinIcon} alt='' style={{ width: '16px', height: '16px' }} />
-                                            130</div>
-                                        <div className={styles.coinsPrice}>QAR 7.29</div>
-                                    </div>
-                                    <div className={styles.price}>
-                                        <div className={styles.coinsAmount}>
-                                            <img src={coinIcon} alt='' style={{ width: '16px', height: '16px' }} />
-                                            330</div>
-                                        <div className={styles.coinsPrice}>QAR 17.99</div>
-                                    </div>
-                                    <div className={styles.price}>
-                                        <div className={styles.coinsAmount}>
-                                            <img src={coinIcon} alt='' style={{ width: '16px', height: '16px' }} />
-                                            400</div>
-                                        <div className={styles.coinsPrice}>QAR 20.99</div>
-                                    </div>
-                                    <div className={styles.price}>
-                                        <div className={styles.coinsAmount}>
-                                            <img src={coinIcon} alt='' style={{ width: '16px', height: '16px' }} />
-                                            525</div>
-                                        <div className={styles.coinsPrice}>QAR 29.29</div>
-                                    </div>
-                                    <div className={styles.price}>
-                                        <div className={styles.coinsAmount}>
-                                            <img src={coinIcon} alt='' style={{ width: '16px', height: '16px' }} />
-                                            660</div>
-                                        <div className={styles.coinsPrice}>QAR 36.99</div>
-                                    </div>
-                                    <div className={styles.price}>
-                                        <div className={styles.coinsAmount}>
-                                            <img src={coinIcon} alt='' style={{ width: '16px', height: '16px' }} />
-                                            800</div>
-                                        <div className={styles.coinsPrice}>QAR 44.99</div>
-                                    </div>
-                                    <div className={styles.price}>
-                                        <div className={styles.coinsAmount}>
-                                            <img src={coinIcon} alt='' style={{ width: '16px', height: '16px' }} />
-                                            1321</div>
-                                        <div className={styles.coinsPrice}>QAR 74.29</div>
-                                    </div>
+                                    {[...Array(8)].map((_, index) => {
+                                        const amount = (index + 1) * 100;
+                                        const price = ((index + 1) * 1.00).toFixed(2);
+                                        const isSelected = selectedCoin === index;
+                                        return (
+                                            <div
+                                                className={`${styles.price} ${isSelected ? styles.selected : ''}`}
+                                                key={index}
+                                                onClick={() => handleItemClick(index, amount, price)}>
+                                                <div className={styles.coinsAmount}>
+                                                    <img src={coinIcon} alt='' style={{ width: '16px', height: '16px' }} />
+                                                    {amount}
+                                                </div>
+                                                <div className={styles.coinsPrice}>QAR {((index + 1) * 1.00).toFixed(2)}</div>
+                                            </div>
+                                        );
+                                    })}
                                     <div className={styles.price} onClick={handleOpenCalculatorModal}>
-                                        <div className={styles.coinsAmount} >
-                                            Custom</div>
+                                        <div className={styles.coinsAmount}>Custom</div>
                                         <div className={styles.coinsPriceCustom}>Larger amounts supported</div>
                                     </div>
                                 </Box>
@@ -1017,18 +1046,84 @@ export const Post: React.FC<PostProps> = memo(({ className, post, startedIds, en
                                     </div>
                                     <div className={styles.giftsBottomRightDiv}>
                                         <p className={styles.giftCoinsAmountText}>QAR 0</p>
-                                        {/* <IconButton onClick={handleOpenRechargeBalanceModal}> */}
                                         <img src={arrowRightIcon2} alt='' style={{ width: '16px', height: '16px' }} />
-                                        {/* </IconButton> */}
                                     </div>
                                 </div>
-                                <button className={styles.rechargeBtn}>
+                                <button className={styles.rechargeBtn}
+                                    onClick={handleOpenPaymentMethodsModal}>
                                     <p>Recharge</p>
                                 </button>
                                 {/* <Calculator /> */}
                             </Box>
                         </Modal>
                     </div>
+                )}
+                {openPaymentMethodsModal && (
+                    <div>
+                        <Modal
+                            open={openPaymentMethodsModal}
+                            onClose={handleClosePaymentMethodsModal}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                        >
+                            <Box sx={defModalStyle}>
+                                <div className={styles.rechargeModalHeader}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '66%' }}>
+                                        <p>{selectedAmount} Cesium</p>
+                                        <IconButton onClick={handleClosePaymentMethodsModal}>
+                                            <img src={cancelIcon} alt='' style={{ width: '20px', height: '20px' }} />
+                                        </IconButton>
+                                    </div>
+                                </div>
+                                <div className={styles.giftsBottomDiv} style={{ marginBottom: '32px', paddingBottom: '32px', borderBottom: '1px solid #EAEAEA' }}>
+                                    <div className={styles.giftsBottomLeftDiv}>
+                                        <img src={bigCoin} alt='' />
+                                        <p className={styles.giftCoinsText}>{selectedAmount} Cesium</p>
+                                    </div>
+                                    <div className={styles.giftsBottomRightDiv}>
+                                        <p className={styles.giftCoinsAmountText}>QAR {selectedPrice}</p>
+                                    </div>
+                                </div>
+                                <div className={styles.giftsBottomDivPaymentMethod} style={{ marginBottom: '32px', paddingBottom: '32px', borderBottom: '1px solid #EAEAEA' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px' }}>
+                                        <div className={styles.giftsBottomLeftDiv}>
+                                            <p className={styles.giftCoinsText}>Subtotal</p>
+                                        </div>
+                                        <div className={styles.giftsBottomRightDiv}>
+                                            <p className={styles.giftCoinsAmountText} style={{ color: '#222' }}>QAR {selectedPrice}</p>
+                                        </div>
+                                    </div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <div className={styles.giftsBottomLeftDiv}>
+                                            <p className={styles.giftCoinsText}>Tax</p>
+                                        </div>
+                                        <div className={styles.giftsBottomRightDiv}>
+                                            <p className={styles.giftCoinsAmountText} style={{ color: '#222' }}>QAR 0</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button className={styles.rechargeBtn}
+                                    onClick={handlePaypalRequest}>
+                                    <p>Proceed to payment method</p>
+                                </button>
+                                {/* <Calculator /> */}
+                            </Box>
+                        </Modal>
+                    </div>
+                )}
+                {openPaypalPage && (
+                    // ... rest of your code
+                    <Modal
+                        open={openPaypalPage}
+                        onClose={handleClosePaypalPage}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={paypalModal}>
+                            <iframe dangerouslySetInnerHTML={{ __html: paypalResponse }} />
+
+                        </Box>
+                    </Modal>
                 )}
                 {openCalculatorModal && (
                     <div>
@@ -1479,6 +1574,19 @@ const defModalStyle = {
     borderRadius: '8px',
     minWidth: 420,
     minHeight: 410,
+    // maxHeight: '549px',
+    padding: '24px',
+}
+const paypalModal = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    bgcolor: 'background.paper',
+    border: 'none', // Remove the border
+    borderRadius: '8px',
+    width: 'auto',
+    height: 'auto',
     // maxHeight: '549px',
     padding: '24px',
 }
