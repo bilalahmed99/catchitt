@@ -8,12 +8,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
-#     strategy:
-#       matrix:
-#         node-version: [14.x]
 
     steps:
       - uses: actions/checkout@v3
@@ -26,7 +21,8 @@ jobs:
         run: |
           cp -r .env.example .env
           sed -i 's/VITE_API_URL=/VITE_API_URL=${{ secrets.DEV_VITE_API_URL }}/' .env
-          
+          cat .env  # Print the content of the .env file for debugging
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
