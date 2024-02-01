@@ -16,6 +16,7 @@
     "@mui/material": "^5.14.2",
     "@types/lodash": "^4.14.199",
     "@types/react-lazyload": "^3.2.0",
+    "antd": "^5.12.8",
     "axios": "^1.5.0",
     "bootstrap": "^5.0.0-beta2",
     "bootstrap-select-sass": "^1.7.3",
