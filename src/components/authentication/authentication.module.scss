@@ -145,12 +145,19 @@ a {
   color: #574d68;
   margin-bottom: 40px;
   text-align: center;
+  @media screen and (max-width: 600px) {
+  font-size: 24px;
+  }
 }
 
 .formContainer {
 
   margin-right: 80px;
   margin-left: 80px;
+  @media screen and (max-width: 600px) {
+    margin-right: 0;
+    margin-left: 0;
+    }
   margin-bottom: 0px;
   display: flex;
   flex-direction: column;
@@ -317,8 +324,8 @@ a {
   justify-content: center;
   font-size: 16px;
   font-family: 'Poppins';
-  position: absolute;
-  bottom: 45px;
+  position: fixed;
+  bottom: 35px;
 }
 
 .splashImgDiv {
