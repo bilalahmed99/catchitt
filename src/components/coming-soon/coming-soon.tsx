@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAuthStore } from '../../store/authStore';
 import { SideNavBar } from '../side-nav-bar/side-nav-bar';
 import { SuggestedActivity } from '../suggested-activity/suggested-activity';
@@ -20,6 +20,7 @@ import seen from './svg-components/seen.svg';
 import emojie from './svg-components/emojie.svg';
 import share from './svg-components/reply.svg';
 import moreoptions from './svg-components/more-options.svg';
+import Layout from '../../shared/layout';
 
 export interface ComingSoonProps {
     className?: string;
@@ -44,15 +45,14 @@ const ComingSoon: React.FC = (className: ComingSoonProps) => {
         {},
         {},
     ]);
-    const [receivedMessages, setReceivedMessages] = useState([]);
+    const [receivedMessages, setReceivedMessages] = useState<any>([]);
     const [muteNotifications, setMuteNotifications] = useState(false);
     const [pinToTop, setPinToTop] = useState(false);
     const [showMenuBox, setShowMenuBox] = useState(false);
     const [message, setMessage] = useState('');
-    const div = useRef(null);
+    const div: any = useRef(null);
     const [blockUserPopup, setBlockUserPopup] = useState(false);
     const [onLongPressed, setOnLongPressed] = useState(false);
-
     const onLongPress = () => {
         setOnLongPressed(!onLongPressed);
         console.log('longpress is triggered');
@@ -67,15 +67,25 @@ const ComingSoon: React.FC = (className: ComingSoonProps) => {
         delay: 800,
     };
     const longPressEvent = useLongPress(onLongPress, onClick, defaultOptions);
-
+    const scrollToBottom = () => {
+        if (div.current) {
+            div.current.scrollTop = div.current.scrollHeight;
+        }
+    };
+    useEffect(() => {
+        scrollToBottom();
+    }, [receivedMessages]);
     const sendMessageHandler = () => {
-        console.log('Message Text : ', message);
-        setMessage('');
-        setReceivedMessages((current) => [
-            ...current,
-            { message, timestamp: '11:14 AM', user_avatar: userAvatar },
-        ]);
-        div.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (message.length > 0) {
+            console.log('Message Text : ', message);
+            setMessage('');
+            setReceivedMessages((current: any) => [
+                ...current,
+                { message, timestamp: '11:14 AM', user_avatar: userAvatar },
+            ]);
+        }
+
+        // div.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
 
     const blockUserHandler = () => {
@@ -85,19 +95,26 @@ const ComingSoon: React.FC = (className: ComingSoonProps) => {
     const blockUserFinallyHandler = () => {};
 
     return (
-        <div className={styles.root}>
-            <div className={styles.topBarDiv}>
-                <TopBar />
-            </div>
-            <div className={styles.container}>
-                <div className={styles.leftSide}>
-                    <div className={styles.sideNavDiv}>
-                        <SideNavBar selectedIndex={selectedIndex} />
-                    </div>
-                    <div className={styles.suggestedActivityDiv}>
-                        <SuggestedActivity showActivity={true} showSuggestedContent={true} />
-                    </div>
-                </div>
+        <Layout>
+            {/* <div className={styles.topBarDiv}>
+                    <TopBar />
+                </div> */}
+            <div
+                className={styles.container}
+                onClick={() => {
+                    if (showMenuBox) {
+                        setShowMenuBox(false);
+                    }
+                }}
+            >
+                {/* <div className={styles.leftSide}>
+                        <div className={styles.sideNavDiv}>
+                            <SideNavBar selectedIndex={selectedIndex} />
+                        </div>
+                        <div className={styles.suggestedActivityDiv}>
+                            <SuggestedActivity showActivity={true} showSuggestedContent={true} />
+                        </div>
+                    </div> */}
                 <div className={styles.middleSectionDiv}>
                     <div className={styles.suggestedContent}>
                         <div className={styles.chatlist}>
@@ -151,7 +168,12 @@ const ComingSoon: React.FC = (className: ComingSoonProps) => {
                                         alt=""
                                     />
                                     {showMenuBox && (
-                                        <div className={styles.dropdownMenu}>
+                                        <div
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                            }}
+                                            className={styles.dropdownMenu}
+                                        >
                                             <div className={styles.dropdownRow}>
                                                 <p>Mute notificaions</p>
                                                 <Switch
@@ -251,6 +273,7 @@ const ComingSoon: React.FC = (className: ComingSoonProps) => {
                                     onLongPressed && e.detail === 2 && setOnLongPressed(false);
                                 }}
                                 className={styles.userChatMessages}
+                                ref={div}
                             >
                                 {/* Message Sent */}
                                 <div className={styles.receiveMessageContainer}>
@@ -274,10 +297,12 @@ const ComingSoon: React.FC = (className: ComingSoonProps) => {
                                         </div>
                                     </div>
                                 </div>
+
                                 {receivedMessages.map((item, index) => (
                                     <>
                                         {/* Message Receive */}
-                                        <div ref={div} className={styles.sentMessageRowContainer}>
+
+                                        <div className={styles.sentMessageRowContainer}>
                                             <img
                                                 className={styles.userAvatarChatMessage}
                                                 src={item.user_avatar}
@@ -325,23 +350,37 @@ const ComingSoon: React.FC = (className: ComingSoonProps) => {
                                     </>
                                 ))}
                             </div>
-                            <div className={styles.messageBox}>
-                                <div className={styles.messageInput}>
-                                    <input
-                                        value={message}
-                                        onChange={(e) => setMessage(e.target.value)}
-                                        type="text"
-                                        name=""
-                                        id=""
-                                        placeholder="Write a message..."
-                                    />
-                                    <p onClick={sendMessageHandler} children="Send" />
+                            <form
+                                action=""
+                                onSubmit={(e) => {
+                                    e.preventDefault();
+                                    sendMessageHandler();
+                                }}
+                            >
+                                <div className={styles.messageBox}>
+                                    <div className={styles.messageInput}>
+                                        <input
+                                            value={message}
+                                            onChange={(e) => setMessage(e.target.value)}
+                                            type="text"
+                                            name=""
+                                            id=""
+                                            placeholder="Write a message..."
+                                        />
+                                        <p
+                                            style={{
+                                                color: message.length > 0 ? '#5448b2' : null,
+                                            }}
+                                            onClick={sendMessageHandler}
+                                            children="Send"
+                                        />
+                                    </div>
+                                    <div className={styles.controlsMessageBox}>
+                                        <img src={attachment} alt="" />
+                                        <img src={microphone} alt="" />
+                                    </div>
                                 </div>
-                                <div className={styles.controlsMessageBox}>
-                                    <img src={attachment} alt="" />
-                                    <img src={microphone} alt="" />
-                                </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -367,7 +406,7 @@ const ComingSoon: React.FC = (className: ComingSoonProps) => {
                     </div>
                 </div>
             )}
-        </div>
+        </Layout>
     );
 };
 

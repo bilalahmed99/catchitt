@@ -1,9 +1,9 @@
-.root {
-  display: flex;
-  flex-direction: column;
-  background-color: #fafafa;
-  width: 100%;
-}
+// .root {
+//   // display: flex;
+//   // flex-direction: column;
+//   // background-color: #fafafa;
+//   // width: 100%;
+// }
 
 .h1,
 .h2,
@@ -29,13 +29,13 @@ h6 {
   margin-bottom: 0px;
   padding: 0px;
 }
-.leftSide {
-  display: flex;
-  flex-direction: column;
-  width: 20%;
-  height: 100%;
-  // justify-content: center;
-}
+// .leftSide {
+//   display: flex;
+//   flex-direction: column;
+//   width: 20%;
+//   height: 100%;
+//   // justify-content: center;
+// }
 .suggestedActivityDiv {
   margin-top: 40px;
   margin-left: 40px;
@@ -45,27 +45,36 @@ h6 {
 
 .middleSectionDiv {
   display: inline-flex;
-  gap: 15%;
-  width: 100%;
+  // gap: 15%;
+  display: flex;
+  // width: 100%;
   background-color: transparent;
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
   border-radius: 8px;
-  margin-top: 45px;
-  height: 798px;
-  padding-right: 40px;
+  margin:45px 45px  45px 0px;
+  height:100%;
+  width: 100%;
+  overflow: hidden;
+
+  // padding-right: 40px;
 }
 .container {
   width: 100%;
   height: 100%;
-  display: grid;
+
+  display: flex;
   grid-template-columns: 0fr 1fr;
+  margin: auto;
   flex-direction: row;
-  gap: 0px 30px;
-  padding-right: 40px;
+  // gap: 0px 30px;
+  // padding-right: 40px;
   padding-top: 0px;
+  padding-bottom: 3%;
   // margin-top: 25px;
+  overflow: hidden;
+  margin-bottom: 3%;
 }
 
 .blockUserPopup {
@@ -106,21 +115,24 @@ h6 {
 }
 
 .suggestedContent {
+  margin: auto;
   width: 100%;
+  height: 100%;
   // padding: 20px 16px;
-  display: grid;
-  grid-template-columns: 1fr 2fr;
+  display: flex;
+  // grid-template-columns: 1fr 2fr;
   // align-content: center;
   line-height: 1;
   // gap: 16px;
   background: var(--default-white, #fff);
   // min-height: 770px;
-  border-radius: 16px;
 
   .chatlist {
     padding: 1.2rem;
     padding-right: 1rem;
     border-right: 1px solid #dfdfdf;
+    height: 100%;
+    overflow: scroll;
 
     .chatHeader {
       display: flex;
@@ -228,7 +240,9 @@ h6 {
   }
   .chatmessage {
     position: relative;
-    overflow-y: hidden;
+    height: 100%;
+    flex: 1;
+
     .messageHeader {
       padding: 0.8rem;
       display: flex;
@@ -417,8 +431,10 @@ h6 {
 
     .userChatMessages {
       padding: 1.5rem 1rem;
-      height: 400px;
+      height:350px;
       overflow-y: scroll;
+      padding-bottom: 40px;
+
 
       .sentMessageRowContainer {
         display: flex;
@@ -555,10 +571,16 @@ h6 {
       align-items: center;
       bottom: 0;
       position: absolute;
-      gap: 0.8rem;
+      // gap: 0.8rem;
       padding: 1.2rem;
       width: 100%;
       box-shadow: 10px 10px 8px 6px #888888;
+      position: absolute;
+      bottom: 0%;
+      left: 0%;
+      background-color: #FFF;
+
+      height: 100px;
 
       .messageInput {
         display: flex;
