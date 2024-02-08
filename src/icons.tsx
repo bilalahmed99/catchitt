@@ -9,5 +9,27 @@ import logo from '../assets/assets/icons/logo.svg';
 import createIcon from './assets/plusIcon.png';
 import avatar from '../assets/icons/avatar.svg';
 import defaultAvatar from './assets/defaultProfileIcon.png';
+import starMsg from './assets/starSvg.svg';
+import unStarMsg from './assets/unStar.svg';
+import copyMsg from './assets/copy.svg';
+import deleteMsg from './assets/delete.svg';
+import closeSvg from '../public/images/icons/Close Square.svg';
 
-export { googleIcon, fb, wn, apple, werfie, arrow, search, logo, createIcon, avatar , defaultAvatar };
+export {
+    googleIcon,
+    fb,
+    wn,
+    apple,
+    werfie,
+    arrow,
+    search,
+    logo,
+    createIcon,
+    avatar,
+    defaultAvatar,
+    closeSvg,
+    starMsg,
+    unStarMsg,
+    copyMsg,
+    deleteMsg,
+};

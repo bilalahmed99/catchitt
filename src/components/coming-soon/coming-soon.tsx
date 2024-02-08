@@ -20,7 +20,12 @@ import seen from './svg-components/seen.svg';
 import emojie from './svg-components/emojie.svg';
 import share from './svg-components/reply.svg';
 import moreoptions from './svg-components/more-options.svg';
-import Layout from '../../shared/layout';
+import PopupForReport from '../profile/popups/PopupForReport';
+import { closeSvg, copyMsg, deleteMsg, starMsg, unStarMsg } from '../../icons';
+import { ToastContainer, toast } from 'react-toastify';
+import LongPressButton from './components/LongPressEvent';
+import { ClickAwayListener, Modal } from '@mui/material';
+import { e } from 'mathjs';
 
 export interface ComingSoonProps {
     className?: string;
@@ -28,34 +33,159 @@ export interface ComingSoonProps {
 
 const ComingSoon: React.FC = (className: ComingSoonProps) => {
     const { selectedIndex, setIndex } = useAuthStore();
-    const [allChats, setAllChats] = useState([
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
+    const [allChats, setAllChats] = useState<any[]>([
+        {
+            id: 1,
+            name: 'Eromaisa',
+            lastMsg: 'Babe look at our ....',
+            ispined: false,
+            isFriend: false,
+            isStared: false,
+        },
+        {
+            id: 2,
+            name: 'zaman',
+            lastMsg: 'Babe look at our ....',
+            ispined: false,
+            isFriend: false,
+            isStared: false,
+        },
+        {
+            id: 3,
+            name: 'ahmad',
+            lastMsg: 'Babe look at our ....',
+            ispined: false,
+            isFriend: false,
+            isStared: false,
+        },
+        {
+            id: 4,
+            name: 'ameen',
+            lastMsg: 'Babe look at our ....',
+            ispined: false,
+            isFriend: false,
+            isStared: false,
+        },
+        {
+            id: 5,
+            name: 'ali',
+            lastMsg: 'Babe look at our ....',
+            ispined: false,
+            isFriend: false,
+            isStared: false,
+        },
+        {
+            id: 7,
+            name: 'Eromaisa',
+            lastMsg: 'Babe look at our ....',
+            ispined: false,
+            isFriend: false,
+            isStared: false,
+        },
+        {
+            id: 8,
+            name: 'Eromaisa',
+            lastMsg: 'Babe look at our ....',
+            ispined: false,
+            isFriend: false,
+            isStared: false,
+        },
+        {
+            id: 9,
+            name: 'Eromaisa',
+            lastMsg: 'Babe look at our ....',
+            ispined: false,
+            isFriend: false,
+            isStared: false,
+        },
+        {
+            id: 10,
+            name: 'Eromaisa',
+            lastMsg: 'Babe look at our ....',
+            ispined: false,
+            isFriend: false,
+            isStared: false,
+        },
+        {
+            id: 11,
+            name: 'Eromaisa',
+            lastMsg: 'Babe look at our ....',
+            ispined: false,
+            isFriend: false,
+            isStared: false,
+        },
+        {
+            id: 12,
+            name: 'Eromaisa',
+            lastMsg: 'Babe look at our ....',
+            ispined: false,
+            isFriend: false,
+            isStared: false,
+        },
+        {
+            id: 13,
+            name: 'Eromaisa',
+            lastMsg: 'Babe look at our ....',
+            ispined: false,
+            isFriend: false,
+            isStared: false,
+        },
+        {
+            id: 14,
+            name: 'Eromaisa',
+            lastMsg: 'Babe look at our ....',
+            ispined: false,
+            isFriend: false,
+            isStared: false,
+        },
+        {
+            id: 15,
+            name: 'Eromaisa',
+            lastMsg: 'Babe look at our ....',
+            ispined: false,
+            isFriend: false,
+            isStared: false,
+        },
     ]);
-    const [receivedMessages, setReceivedMessages] = useState<any>([]);
+
+    const [activeChat, setactiveChat] = useState<any>({});
+
+    const [receivedMessages, setReceivedMessages] = useState<any>([
+        {
+            message: 'hello',
+            timestamp: '11:14 AM',
+            user_avatar: '/src/components/coming-soon/svg-components/avatar.svg',
+            id: 1,
+        },
+        {
+            message: 'How are You',
+            timestamp: '11:14 AM',
+            user_avatar: '/src/components/coming-soon/svg-components/avatar.svg',
+            id: 2,
+        },
+        {
+            message: '??',
+            timestamp: '11:14 AM',
+            user_avatar: '/src/components/coming-soon/svg-components/avatar.svg',
+            id: 3,
+        },
+    ]);
+    const [sendMessages, setsendMessages] = useState<any>([]);
     const [muteNotifications, setMuteNotifications] = useState(false);
+    const [copyModal, setCopyModal] = useState(false);
+    const [activeMsg, setActiveMsg] = useState({});
+    const [tagMsg, setTagMsg] = useState(false);
     const [pinToTop, setPinToTop] = useState(false);
     const [showMenuBox, setShowMenuBox] = useState(false);
     const [message, setMessage] = useState('');
     const div: any = useRef(null);
     const [blockUserPopup, setBlockUserPopup] = useState(false);
+    const [reportPopup, setReportPopup] = useState(false);
     const [onLongPressed, setOnLongPressed] = useState(false);
-    const onLongPress = () => {
+
+    const onLongPress = (item: any) => {
         setOnLongPressed(!onLongPressed);
-        console.log('longpress is triggered');
+        console.log('longpress is triggered', item);
     };
 
     const onClick = () => {
@@ -66,55 +196,429 @@ const ComingSoon: React.FC = (className: ComingSoonProps) => {
         shouldPreventDefault: true,
         delay: 800,
     };
-    const longPressEvent = useLongPress(onLongPress, onClick, defaultOptions);
-    const scrollToBottom = () => {
-        if (div.current) {
-            div.current.scrollTop = div.current.scrollHeight;
-        }
-    };
-    useEffect(() => {
-        scrollToBottom();
-    }, [receivedMessages]);
-    const sendMessageHandler = () => {
-        if (message.length > 0) {
-            console.log('Message Text : ', message);
-            setMessage('');
-            setReceivedMessages((current: any) => [
-                ...current,
-                { message, timestamp: '11:14 AM', user_avatar: userAvatar },
-            ]);
-        }
+    const longPressEvent: any = useLongPress(onLongPress, onClick, defaultOptions);
 
+    const sendMessageHandler = (e: any) => {
+        e.preventDefault();
+
+        if (tagMsg) {
+            if (message) {
+                console.log('Message Text : ', message);
+                setMessage('');
+                setsendMessages((current: any) => [
+                    ...current,
+                    {
+                        message,
+                        timestamp: '11:14 AM',
+                        user_avatar: userAvatar,
+                        id: sendMessages.length,
+                        replyMsg: activeMsg,
+                    },
+                ]);
+            }
+            setActiveMsg({});
+            setTagMsg(false);
+        } else {
+            if (message) {
+                console.log('Message Text : ', message);
+                setMessage('');
+                setsendMessages((current: any) => [
+                    ...current,
+                    {
+                        message,
+                        timestamp: '11:14 AM',
+                        user_avatar: userAvatar,
+                        id: sendMessages.length,
+                    },
+                ]);
+            }
+        }
+        scrollToBottom();
         // div.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
 
     const blockUserHandler = () => {
         setBlockUserPopup(true);
+        setShowMenuBox(false);
     };
 
     const blockUserFinallyHandler = () => {};
+    const scrollToBottom = () => {
+        if (div.current) {
+            div.current.scrollTop = div.current.scrollHeight;
+        }
+    };
+    // useEffect(() => {
+    //     scrollToBottom();
+    //     console.log(receivedMessages);
+    // }, [receivedMessages, sendMessages]);
 
-    return (
-        <Layout>
-            {/* <div className={styles.topBarDiv}>
-                    <TopBar />
-                </div> */}
+    useEffect(() => {
+        allChats.forEach((chat: any) => {
+            if (chat?.id === 1) {
+                setactiveChat(chat);
+            }
+        });
+    }, []);
+
+    const Emoji = ({ id }: any) => {
+        return (
             <div
-                className={styles.container}
-                onClick={() => {
-                    if (showMenuBox) {
-                        setShowMenuBox(false);
-                    }
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                    // position: 'absolute',
+                    // top: '-80%',
+                    // right: '-150%',
+                    zIndex: 2,
+                    display: 'flex',
+                    width: '217px',
+                    height: 41,
+                    color: '#5448B2',
+                    textAlign: 'center',
+                    fontFamily: 'Poppins',
+                    fontSize: 20,
+                    fontStyle: 'normal',
+                    fontWeight: 600,
+                    lineHeight: 'normal',
+                    background: '#EEEDF7',
+                    borderRadius: 50,
+                    justifyContent: 'space-evenly',
+                    alignItems: 'center',
+                    flexDirection: 'row-reverse',
                 }}
             >
-                {/* <div className={styles.leftSide}>
-                        <div className={styles.sideNavDiv}>
-                            <SideNavBar selectedIndex={selectedIndex} />
-                        </div>
-                        <div className={styles.suggestedActivityDiv}>
-                            <SuggestedActivity showActivity={true} showSuggestedContent={true} />
-                        </div>
-                    </div> */}
+                <span
+                    style={{
+                        cursor: 'pointer',
+                        position: 'relative',
+                        zIndex: 5,
+                    }}
+                    onClick={() => emojiH(id, true)}
+                >
+                    ❤️{' '}
+                </span>
+                <span
+                    style={{
+                        cursor: 'pointer',
+                        position: 'relative',
+                        zIndex: 5,
+                    }}
+                    onClick={() => emojiH(id, true)}
+                >
+                    {' '}
+                    😂{' '}
+                </span>
+                <span
+                    style={{
+                        cursor: 'pointer',
+                        position: 'relative',
+                        zIndex: 5,
+                    }}
+                    onClick={() => emojiH(id, true)}
+                >
+                    {' '}
+                    🥰{' '}
+                </span>
+                <span
+                    style={{
+                        cursor: 'pointer',
+                        position: 'relative',
+                        zIndex: 5,
+                    }}
+                    onClick={() => emojiH(id, true)}
+                >
+                    {' '}
+                    😭{' '}
+                </span>
+                <span
+                    style={{
+                        cursor: 'pointer',
+                        position: 'relative',
+                        zIndex: 5,
+                    }}
+                    onClick={() => emojiH(id, true)}
+                >
+                    😳{' '}
+                </span>
+                <span
+                    style={{
+                        cursor: 'pointer',
+                        position: 'relative',
+                        zIndex: 5,
+                    }}
+                    onClick={() => emojiH(id, true)}
+                >
+                    {' '}
+                    👍{' '}
+                </span>
+                <span
+                    style={{
+                        cursor: 'pointer',
+                        position: 'relative',
+                        zIndex: 5,
+                    }}
+                    onClick={() => emojiH(id, true)}
+                    color="#5448B2"
+                >
+                    {' '}
+                    +
+                </span>
+            </div>
+        );
+    };
+
+    const emojiH = (id: number, boolean?: boolean, a?: string) => {
+        if (a) {
+            let tempArr: any[] = [];
+            if (!boolean) {
+                receivedMessages.forEach((msg: any, i: number) => {
+                    if (msg?.id === id) {
+                        tempArr.push({ ...msg, emoji: true, dropDown: false });
+                    } else {
+                        tempArr.push({ ...msg, emoji: false, dropDown: false });
+                    }
+                });
+                console.log(receivedMessages);
+            }
+
+            if (boolean) {
+                receivedMessages.forEach((msg: any, i: number) => {
+                    tempArr.push({ ...msg, emoji: false, dropDown: false, menu: false });
+                });
+            }
+
+            setReceivedMessages(tempArr);
+        } else {
+            let tempArr: any[] = [];
+            if (!boolean) {
+                sendMessages.forEach((msg: any, i: number) => {
+                    if (msg?.id === id) {
+                        tempArr.push({ ...msg, emoji: true, dropDown: false });
+                    } else {
+                        tempArr.push({ ...msg, emoji: false, dropDown: false });
+                    }
+                });
+                console.log(sendMessages);
+            }
+
+            if (boolean) {
+                sendMessages.forEach((msg: any, i: number) => {
+                    tempArr.push({ ...msg, emoji: false, dropDown: false, menu: false });
+                });
+            }
+
+            setsendMessages(tempArr);
+        }
+    };
+
+    const starH = (id: number, a?: string) => {
+        if (a) {
+            let tempArr: any[] = [];
+            receivedMessages.forEach((msg: any, i: number) => {
+                if (msg?.id === id) {
+                    if (msg?.star) {
+                        tempArr.push({
+                            ...msg,
+                            dropDown: false,
+                            emoji: false,
+                            star: false,
+                            menu: false,
+                        });
+                    } else {
+                        tempArr.push({
+                            ...msg,
+                            dropDown: false,
+                            emoji: false,
+                            star: true,
+                            menu: false,
+                        });
+                    }
+                } else {
+                    tempArr.push({ ...msg, dropDown: false, emoji: false });
+                }
+            });
+            setReceivedMessages(tempArr);
+        } else {
+            let tempArr: any[] = [];
+            sendMessages.forEach((msg: any, i: number) => {
+                if (msg?.id === id) {
+                    if (msg?.star) {
+                        tempArr.push({
+                            ...msg,
+                            dropDown: false,
+                            emoji: false,
+                            star: false,
+                            menu: false,
+                        });
+                    } else {
+                        tempArr.push({
+                            ...msg,
+                            dropDown: false,
+                            emoji: false,
+                            star: true,
+                            menu: false,
+                        });
+                    }
+                } else {
+                    tempArr.push({ ...msg, dropDown: false, emoji: false });
+                }
+            });
+            setsendMessages(tempArr);
+        }
+    };
+    const dropDH = (id: number, a?: string) => {
+        if (a) {
+            let tempArr: any[] = [];
+            receivedMessages.forEach((msg: any, i: number) => {
+                if (msg?.id === id) {
+                    tempArr.push({ ...msg, dropDown: true, emoji: false });
+                } else {
+                    tempArr.push({ ...msg, dropDown: false, emoji: false });
+                }
+            });
+            setReceivedMessages(tempArr);
+        } else {
+            let tempArr: any[] = [];
+            sendMessages.forEach((msg: any, i: number) => {
+                if (msg?.id === id) {
+                    tempArr.push({ ...msg, dropDown: true, emoji: false });
+                } else {
+                    tempArr.push({ ...msg, dropDown: false, emoji: false });
+                }
+            });
+            setsendMessages(tempArr);
+        }
+    };
+
+    const deleteMsgF = (id: number, a?: string) => {
+        if (a) {
+            let tempArr: any[] = [];
+            receivedMessages.forEach((msg: any, i: number) => {
+                if (msg?.id !== id) {
+                    tempArr.push({ ...msg, dropDown: false, emoji: false });
+                }
+            });
+            setReceivedMessages(tempArr);
+        } else {
+            let tempArr: any[] = [];
+            sendMessages.forEach((msg: any, i: number) => {
+                if (msg?.id !== id) {
+                    tempArr.push({ ...msg, dropDown: false, emoji: false });
+                }
+            });
+            setsendMessages(tempArr);
+        }
+    };
+
+    const copyH = (msg: any, a?: string) => {
+        if (a) {
+            let tempArr: any[] = [];
+            navigator.clipboard.writeText(msg).then(() => {
+                setCopyModal(true);
+            });
+
+            receivedMessages.forEach((msg: any, i: number) => {
+                tempArr.push({ ...msg, dropDown: false, emoji: false, menu: false });
+            });
+            receivedMessages(tempArr);
+        } else {
+            navigator.clipboard.writeText(msg).then(() => {
+                setCopyModal(true);
+            });
+
+            let tempArr: any[] = [];
+            sendMessages.forEach((msg: any, i: number) => {
+                tempArr.push({ ...msg, dropDown: false, emoji: false, menu: false });
+            });
+            setsendMessages(tempArr);
+        }
+    };
+    console.log(receivedMessages);
+
+    const chatswitcher = (chat: any) => {
+        let tempArr: any[] = [];
+        allChats.map((user: any) => {
+            if (user.id === chat.id) {
+                tempArr.push({ ...user, chats: sendMessages });
+            } else {
+                tempArr.push(user);
+            }
+        });
+        setAllChats(tempArr);
+        setactiveChat(chat);
+    };
+
+    useEffect(() => {
+        if (tagMsg) {
+            setTagMsg(false);
+        }
+        allChats.forEach((chat: any) => {
+            if (chat?.id === activeChat?.id) {
+                if (chat?.chats) {
+                    setsendMessages(chat?.chats);
+                } else {
+                    setsendMessages([]);
+                }
+            }
+        });
+    }, [activeChat]);
+    const MenuH = (item: any, a?: string) => {
+        if (a) {
+            let tempArr: any[] = [];
+            receivedMessages.forEach((msg: any, i: number) => {
+                if (msg?.id === item?.id) {
+                    tempArr.push({ ...msg, dropDown: false, emoji: false, menu: true });
+                } else {
+                    tempArr.push({ ...msg, dropDown: false, emoji: false, menu: false });
+                }
+            });
+            setReceivedMessages(tempArr);
+        } else {
+            let tempArr: any[] = [];
+            sendMessages.forEach((msg: any, i: number) => {
+                if (msg?.id === item?.id) {
+                    tempArr.push({ ...msg, dropDown: false, emoji: false, menu: true });
+                } else {
+                    tempArr.push({ ...msg, dropDown: false, emoji: false, menu: false });
+                }
+            });
+            setsendMessages(tempArr);
+        }
+    };
+
+    const globalClicker = () => {
+        if (showMenuBox) {
+            setShowMenuBox(false);
+        }
+
+        let tempArr: any[] = [];
+        receivedMessages.forEach((msg: any, i: number) => {
+            tempArr.push({ ...msg, dropDown: false, emoji: false, menu: false });
+        });
+        setReceivedMessages(tempArr);
+    };
+
+    useEffect(() => {
+        if (copyModal) {
+            setTimeout(() => {
+                setCopyModal(false);
+            }, 3000);
+        }
+    }, [copyModal]);
+    return (
+        <div className={styles.root} onClick={globalClicker}>
+            <div className={styles.topBarDiv}>
+                <TopBar />
+            </div>
+            <div className={styles.container}>
+                <div className={styles.leftSide}>
+                    <div className={styles.sideNavDiv}>
+                        <SideNavBar selectedIndex={selectedIndex} />
+                    </div>
+                    <div className={styles.suggestedActivityDiv}>
+                        <SuggestedActivity showActivity={true} showSuggestedContent={true} />
+                    </div>
+                </div>
                 <div className={styles.middleSectionDiv}>
                     <div className={styles.suggestedContent}>
                         <div className={styles.chatlist}>
@@ -127,16 +631,26 @@ const ComingSoon: React.FC = (className: ComingSoonProps) => {
                                 <input type="search" name="" id="" placeholder="Search" />
                             </div>
                             <div className={styles.chatListContainer}>
-                                {allChats.map((singleChat, index) => (
-                                    <div className={styles.allChats}>
+                                {allChats.map((singleChat: any, index: number) => (
+                                    <div
+                                        onClick={() => chatswitcher(singleChat)}
+                                        className={styles.allChats}
+                                        style={{
+                                            cursor: 'pointer',
+                                            background:
+                                                singleChat.id === activeChat?.id
+                                                    ? '#dfdfdf'
+                                                    : '#FFF',
+                                        }}
+                                    >
                                         <img
                                             className={styles.userAvatar}
                                             src={userAvatar}
                                             alt=""
                                         />
                                         <div className={styles.userNameNChat}>
-                                            <p>Eromaisa</p>
-                                            <p>Babe look at our ....</p>
+                                            <p>{singleChat?.name}</p>
+                                            <p>{singleChat?.lastMsg}</p>
                                         </div>
                                         <div className={styles.timeNCount}>
                                             <p>4:01 PM</p>
@@ -158,20 +672,21 @@ const ComingSoon: React.FC = (className: ComingSoonProps) => {
                             >
                                 <div className={styles.messageHeaderLeft}>
                                     <img className={styles.userAvatar} src={userAvatar} alt="" />
-                                    <p>Mohammad</p>
+                                    <p>{activeChat.name}</p>
                                 </div>
                                 <div className={styles.dropdownMenuContainer}>
                                     <img
-                                        onClick={() => setShowMenuBox(!showMenuBox)}
+                                        onClick={() => {
+                                            setShowMenuBox(!showMenuBox);
+                                        }}
                                         className={styles.dropdownMenuBoxImg}
                                         src={menuBox}
                                         alt=""
+                                        style={{ cursor: 'pointer' }}
                                     />
                                     {showMenuBox && (
                                         <div
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                            }}
+                                            onClick={(e) => e.stopPropagation()}
                                             className={styles.dropdownMenu}
                                         >
                                             <div className={styles.dropdownRow}>
@@ -222,7 +737,10 @@ const ComingSoon: React.FC = (className: ComingSoonProps) => {
                                                     />
                                                 </div>
                                             </div>
-                                            <div className={styles.dropdownRow}>
+                                            <div
+                                                className={styles.dropdownRow}
+                                                onClick={() => setReportPopup(true)}
+                                            >
                                                 <p className={styles.warningMenuItem}>Report</p>
                                                 <div
                                                     style={{ visibility: 'hidden' }}
@@ -275,88 +793,668 @@ const ComingSoon: React.FC = (className: ComingSoonProps) => {
                                 className={styles.userChatMessages}
                                 ref={div}
                             >
-                                {/* Message Sent */}
-                                <div className={styles.receiveMessageContainer}>
-                                    <div className={styles.receiveMessage}>
-                                        <p className={styles.receiveMessage}>Hello</p>
-                                        <div
-                                            className={styles.receiveMessageNoTimeStampContainer}
-                                        />
-                                    </div>
-                                </div>
-                                <div className={styles.receiveMessageContainer}>
-                                    <div className={styles.receiveMessage}>
-                                        <p className={styles.receiveMessage}>
-                                            It’s Mohamed from Ogoul
-                                        </p>
-                                        <div className={styles.receiveMessageTimeStampContainer}>
-                                            <p className={styles.receiveMessageTimeStamp}>
-                                                11:14 AM
-                                            </p>
-                                            <img className={styles.seenImage} src={seen} alt="" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {receivedMessages.map((item, index) => (
-                                    <>
-                                        {/* Message Receive */}
-
-                                        <div className={styles.sentMessageRowContainer}>
-                                            <img
-                                                className={styles.userAvatarChatMessage}
-                                                src={item.user_avatar}
-                                                alt=""
-                                            />
+                                {receivedMessages.map((item: any, index: number) => (
+                                    <LongPressButton onLongPress={() => MenuH(item, 'R')}>
+                                        <div onClick={(e) => e.stopPropagation()}>
                                             <div
-                                                {...longPressEvent}
-                                                className={styles.sentMessageContainer}
+                                                onClick={(e) => e.stopPropagation()}
+                                                style={{
+                                                    marginRight: `${
+                                                        item.message.length < 70
+                                                            ? 70 - item.message.length
+                                                            : 0
+                                                    }%`,
+                                                    display: 'flex',
+                                                    justifyContent: 'flex-end',
+                                                    alignItems: 'flex-end',
+                                                }}
                                             >
-                                                <p className={styles.sentMessage}>{item.message}</p>
-                                                <p className={styles.sentMessageTimeStamp}>
-                                                    {item.timestamp}
-                                                </p>
+                                                {item.emoji && <Emoji id={item?.id} />}
                                             </div>
-                                            {onLongPressed && (
-                                                <div className={styles.optionsContainer}>
-                                                    <img
-                                                        className={styles.longPressOptionImages}
-                                                        src={emojie}
-                                                        alt=""
-                                                    />
-                                                    <img
-                                                        className={styles.longPressOptionImages}
-                                                        src={share}
-                                                        alt=""
-                                                    />
-                                                    <img
-                                                        className={styles.longPressOptionImages}
-                                                        src={moreoptions}
-                                                        alt=""
-                                                    />
+                                            <div className={styles.sentMessageRowContainer}>
+                                                <div
+                                                    className={styles.sentMessageRowContainer}
+                                                    style={{
+                                                        cursor: 'pointer',
+                                                        display: item.emoji ? 'flex' : 'block',
+                                                        flexDirection: item?.emoji
+                                                            ? 'column'
+                                                            : 'row',
+                                                        // width: '100%',
+                                                    }}
+                                                >
+                                                    {!item?.replyMsg ? (
+                                                        <div
+                                                            className={
+                                                                styles.sentMessageRowContainer
+                                                            }
+                                                            {...longPressEvent}
+                                                            // style={{ width: '90%' }}
+                                                        >
+                                                            <img
+                                                                className={
+                                                                    styles.userAvatarChatMessage
+                                                                }
+                                                                src={item.user_avatar}
+                                                                alt=""
+                                                                style={{
+                                                                    alignSelf: 'flex-start',
+                                                                    visibility:
+                                                                        index > 0
+                                                                            ? 'hidden'
+                                                                            : 'visible',
+                                                                }}
+                                                            />
+                                                            <div
+                                                                {...longPressEvent}
+                                                                className={
+                                                                    styles.sentMessageContainer
+                                                                }
+                                                                // style={{ width: '100%' }}
+                                                            >
+                                                                <p
+                                                                    style={{
+                                                                        wordBreak: 'break-word',
+                                                                        textAlign: 'left',
+                                                                    }}
+                                                                    className={styles.sentMessage}
+                                                                >
+                                                                    {item.message}
+                                                                </p>
+                                                                <p
+                                                                    className={
+                                                                        styles.sentMessageTimeStamp
+                                                                    }
+                                                                >
+                                                                    {item.timestamp}
+                                                                </p>
+                                                            </div>
+                                                            {/* <div
+                                                                    className={
+                                                                        styles.receiveMessageTimeStampContainer
+                                                                    }
+                                                                >
+                                                                    {item?.star && (
+                                                                        <img
+                                                                            src={starMsg}
+                                                                            alt=""
+                                                                            style={{
+                                                                                paddingRight: 8,
+                                                                            }}
+                                                                        />
+                                                                    )}
+                                                                    <p
+                                                                        className={
+                                                                            styles.receiveMessageTimeStamp
+                                                                        }
+                                                                    >
+                                                                        {item?.timestamp}
+                                                                    </p>
+                                                                    <img
+                                                                        className={styles.seenImage}
+                                                                        src={seen}
+                                                                        alt=""
+                                                                    />
+                                                                </div> */}
+                                                        </div>
+                                                    ) : (
+                                                        <div>
+                                                            <div
+                                                                className={styles.receiveMessage}
+                                                                {...longPressEvent}
+                                                                style={{ display: 'flex', gap: 12 }}
+                                                            >
+                                                                <img
+                                                                    className={
+                                                                        styles.userAvatarChatMessage
+                                                                    }
+                                                                    src={item.user_avatar}
+                                                                    alt=""
+                                                                    style={{
+                                                                        alignSelf: 'flex-start',
+                                                                        visibility:
+                                                                            index > 0
+                                                                                ? 'hidden'
+                                                                                : 'visible',
+                                                                    }}
+                                                                />
+                                                                <div>
+                                                                    <div
+                                                                        style={{
+                                                                            background: '#5448b2',
+                                                                            width: '100%',
+                                                                            padding: '8px 6px',
+                                                                            borderRadius: 4,
+                                                                        }}
+                                                                    >
+                                                                        <div
+                                                                            style={{
+                                                                                background:
+                                                                                    '#EEEDF7',
+                                                                                borderRadius: 4,
+                                                                                padding: '8px 12px',
+                                                                            }}
+                                                                        >
+                                                                            <p
+                                                                                className={
+                                                                                    styles.primaryText
+                                                                                }
+                                                                                style={{
+                                                                                    textAlign:
+                                                                                        'left',
+                                                                                }}
+                                                                            >
+                                                                                {activeChat?.name}
+                                                                            </p>
+                                                                            <p
+                                                                                className={
+                                                                                    styles.blackText
+                                                                                }
+                                                                                style={{
+                                                                                    paddingTop: 4,
+                                                                                    textAlign:
+                                                                                        'left',
+                                                                                    wordBreak:
+                                                                                        'break-word',
+                                                                                }}
+                                                                            >
+                                                                                {
+                                                                                    item?.replyMsg
+                                                                                        ?.message
+                                                                                }
+                                                                            </p>
+                                                                        </div>
+                                                                        <p
+                                                                            style={{
+                                                                                wordBreak:
+                                                                                    'break-word',
+                                                                                textAlign: 'left',
+                                                                                color: 'white',
+                                                                                paddingTop: '10px',
+                                                                            }}
+                                                                            className={
+                                                                                styles.receiveMessage
+                                                                            }
+                                                                        >
+                                                                            {item?.message}
+                                                                        </p>
+                                                                    </div>
+                                                                    <p
+                                                                        className={
+                                                                            styles.sentMessageTimeStamp
+                                                                        }
+                                                                        style={{
+                                                                            fontSize: 11,
+                                                                            marginTop: 8,
+                                                                            textAlign: 'right',
+                                                                        }}
+                                                                    >
+                                                                        {item.timestamp}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )}
                                                 </div>
-                                            )}
-                                        </div>
-                                        {/* <div className={styles.sentMessageContainerOnwards}>
-                                            <div className={styles.sentMessageContainer}>
-                                                <p className={styles.sentMessage}>
-                                                    It’s Mohamed from Ogoul
-                                                </p>
-                                                <p className={styles.sentMessageTimeStamp}>
-                                                    11:14 AM
-                                                </p>
+                                                {item?.menu && (
+                                                    <div
+                                                        style={{ position: 'relative' }}
+                                                        className={styles.optionsContainer}
+                                                    >
+                                                        <img
+                                                            className={styles.longPressOptionImages}
+                                                            src={emojie}
+                                                            alt=""
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                emojiH(item.id, false, 'R');
+                                                            }}
+                                                        />
+                                                        <img
+                                                            onClick={() => {
+                                                                setActiveMsg(item);
+                                                                setTagMsg(true);
+                                                            }}
+                                                            className={styles.longPressOptionImages}
+                                                            src={share}
+                                                            alt=""
+                                                        />
+                                                        <div style={{ position: 'relative' }}>
+                                                            <img
+                                                                className={
+                                                                    styles.longPressOptionImages
+                                                                }
+                                                                src={moreoptions}
+                                                                alt=""
+                                                                onClick={() =>
+                                                                    dropDH(item?.id, 'R')
+                                                                }
+                                                            />
+                                                            {item?.dropDown && (
+                                                                <div
+                                                                    style={{
+                                                                        width: '111px',
+                                                                        height: '111px',
+                                                                        position: 'absolute',
+                                                                        justifyContent:
+                                                                            'space-between',
+                                                                        top: '100%',
+                                                                        zIndex: 6,
+                                                                        display: 'flex',
+                                                                        flexDirection: 'column',
+                                                                        background: '#F8F8F8',
+                                                                        borderRadius: 8,
+                                                                        padding: 12,
+                                                                    }}
+                                                                >
+                                                                    <div
+                                                                        style={{
+                                                                            display: 'flex',
+                                                                            gap: 8,
+                                                                        }}
+                                                                        className={styles.dropdm}
+                                                                        onClick={() =>
+                                                                            starH(item?.id, 'R')
+                                                                        }
+                                                                    >
+                                                                        <img
+                                                                            src={
+                                                                                !item?.star
+                                                                                    ? starMsg
+                                                                                    : unStarMsg
+                                                                            }
+                                                                            alt=""
+                                                                        />
+                                                                        <p
+                                                                            className={
+                                                                                styles.blackText
+                                                                            }
+                                                                        >
+                                                                            {item.star
+                                                                                ? 'UnStar'
+                                                                                : 'star'}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div
+                                                                        style={{
+                                                                            display: 'flex',
+                                                                            gap: 8,
+                                                                        }}
+                                                                        className={styles.dropdm}
+                                                                    >
+                                                                        <img src={copyMsg} alt="" />
+                                                                        <p
+                                                                            onClick={() =>
+                                                                                copyH(
+                                                                                    item?.message,
+                                                                                    'R'
+                                                                                )
+                                                                            }
+                                                                            className={
+                                                                                styles.blackText
+                                                                            }
+                                                                        >
+                                                                            Copy
+                                                                        </p>
+                                                                    </div>
+                                                                    <div
+                                                                        style={{
+                                                                            display: 'flex',
+                                                                            gap: 8,
+                                                                        }}
+                                                                        className={styles.dropdm}
+                                                                        onClick={() =>
+                                                                            deleteMsgF(
+                                                                                item?.id,
+                                                                                'R'
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <img
+                                                                            src={deleteMsg}
+                                                                            alt=""
+                                                                        />
+                                                                        <p
+                                                                            className={
+                                                                                styles.dengetText
+                                                                            }
+                                                                        >
+                                                                            Delete
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
-                                        </div> */}
-                                    </>
+                                        </div>
+                                    </LongPressButton>
+                                ))}
+                                {sendMessages.map((item: any, index: number) => (
+                                    <LongPressButton onLongPress={() => MenuH(item)}>
+                                        <div>
+                                            <div
+                                                style={{
+                                                    marginLeft: `${
+                                                        item.message.length < 70
+                                                            ? 70 - item.message.length
+                                                            : 0
+                                                    }%`,
+                                                }}
+                                            >
+                                                {item.emoji && <Emoji id={item?.id} />}
+                                            </div>
+                                            <div className={styles.sentMessageRowContainer2}>
+                                                <div
+                                                    className={styles.receiveMessageContainer}
+                                                    style={{
+                                                        cursor: 'pointer',
+                                                        display: item.emoji ? 'flex' : 'block',
+                                                        flexDirection: item?.emoji
+                                                            ? 'column'
+                                                            : 'row',
+                                                    }}
+                                                >
+                                                    {!item?.replyMsg ? (
+                                                        <div
+                                                            className={styles.receiveMessage}
+                                                            {...longPressEvent}
+                                                        >
+                                                            <p
+                                                                style={{
+                                                                    wordBreak: 'break-word',
+                                                                    textAlign: 'left',
+                                                                }}
+                                                                className={styles.receiveMessage}
+                                                            >
+                                                                {item?.message}
+                                                            </p>
+                                                            <div
+                                                                className={
+                                                                    styles.receiveMessageTimeStampContainer
+                                                                }
+                                                            >
+                                                                {item?.star && (
+                                                                    <img
+                                                                        src={starMsg}
+                                                                        alt=""
+                                                                        style={{ paddingRight: 8 }}
+                                                                    />
+                                                                )}
+                                                                <p
+                                                                    className={
+                                                                        styles.receiveMessageTimeStamp
+                                                                    }
+                                                                >
+                                                                    {item?.timestamp}
+                                                                </p>
+                                                                <img
+                                                                    className={styles.seenImage}
+                                                                    src={seen}
+                                                                    alt=""
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <div>
+                                                            <div
+                                                                className={styles.receiveMessage}
+                                                                {...longPressEvent}
+                                                            >
+                                                                <div
+                                                                    style={{
+                                                                        background: '#5448b2',
+                                                                        width: '100%',
+                                                                        padding: '8px 6px',
+                                                                        borderRadius: 4,
+                                                                    }}
+                                                                >
+                                                                    <div
+                                                                        style={{
+                                                                            background: '#EEEDF7',
+                                                                            borderRadius: 4,
+                                                                            padding: '8px 12px',
+                                                                        }}
+                                                                    >
+                                                                        <p
+                                                                            className={
+                                                                                styles.primaryText
+                                                                            }
+                                                                            style={{
+                                                                                textAlign: 'left',
+                                                                            }}
+                                                                        >
+                                                                            {activeChat?.name}
+                                                                        </p>
+                                                                        <p
+                                                                            className={
+                                                                                styles.blackText
+                                                                            }
+                                                                            style={{
+                                                                                paddingTop: 4,
+                                                                                textAlign: 'left',
+                                                                                wordBreak:
+                                                                                    'break-word',
+                                                                            }}
+                                                                        >
+                                                                            {
+                                                                                item?.replyMsg
+                                                                                    ?.message
+                                                                            }
+                                                                        </p>
+                                                                    </div>
+                                                                    <p
+                                                                        style={{
+                                                                            wordBreak: 'break-word',
+                                                                            textAlign: 'left',
+                                                                        }}
+                                                                        className={
+                                                                            styles.receiveMessage
+                                                                        }
+                                                                    >
+                                                                        {item?.message}
+                                                                    </p>
+                                                                </div>
+                                                                <div
+                                                                    className={
+                                                                        styles.receiveMessageTimeStampContainer
+                                                                    }
+                                                                >
+                                                                    {item?.star && (
+                                                                        <img
+                                                                            src={starMsg}
+                                                                            alt=""
+                                                                            style={{
+                                                                                paddingRight: 8,
+                                                                            }}
+                                                                        />
+                                                                    )}
+                                                                    <p
+                                                                        className={
+                                                                            styles.receiveMessageTimeStamp
+                                                                        }
+                                                                    >
+                                                                        {item?.timestamp}
+                                                                    </p>
+                                                                    <img
+                                                                        className={styles.seenImage}
+                                                                        src={seen}
+                                                                        alt=""
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                {item?.menu && (
+                                                    <div
+                                                        style={{ position: 'relative' }}
+                                                        className={styles.optionsContainer}
+                                                    >
+                                                        <img
+                                                            className={styles.longPressOptionImages}
+                                                            src={emojie}
+                                                            alt=""
+                                                            onClick={() => emojiH(item.id)}
+                                                        />
+                                                        <img
+                                                            onClick={() => {
+                                                                setActiveMsg(item);
+                                                                setTagMsg(true);
+                                                            }}
+                                                            className={styles.longPressOptionImages}
+                                                            src={share}
+                                                            alt=""
+                                                        />
+                                                        <div style={{ position: 'relative' }}>
+                                                            <img
+                                                                className={
+                                                                    styles.longPressOptionImages
+                                                                }
+                                                                src={moreoptions}
+                                                                alt=""
+                                                                onClick={() => dropDH(item?.id)}
+                                                            />
+                                                            {item?.dropDown && (
+                                                                <div
+                                                                    style={{
+                                                                        width: '111px',
+                                                                        height: '111px',
+                                                                        position: 'absolute',
+                                                                        justifyContent:
+                                                                            'space-between',
+                                                                        top: '100%',
+                                                                        zIndex: 6,
+                                                                        display: 'flex',
+                                                                        flexDirection: 'column',
+                                                                        background: '#F8F8F8',
+                                                                        borderRadius: 8,
+                                                                        padding: 12,
+                                                                    }}
+                                                                >
+                                                                    <div
+                                                                        style={{
+                                                                            display: 'flex',
+                                                                            gap: 8,
+                                                                        }}
+                                                                        className={styles.dropdm}
+                                                                        onClick={() =>
+                                                                            starH(item?.id)
+                                                                        }
+                                                                    >
+                                                                        <img
+                                                                            src={
+                                                                                !item?.star
+                                                                                    ? starMsg
+                                                                                    : unStarMsg
+                                                                            }
+                                                                            alt=""
+                                                                        />
+                                                                        <p
+                                                                            className={
+                                                                                styles.blackText
+                                                                            }
+                                                                        >
+                                                                            {item.star
+                                                                                ? 'UnStar'
+                                                                                : 'star'}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div
+                                                                        style={{
+                                                                            display: 'flex',
+                                                                            gap: 8,
+                                                                        }}
+                                                                        className={styles.dropdm}
+                                                                    >
+                                                                        <img src={copyMsg} alt="" />
+                                                                        <p
+                                                                            onClick={() =>
+                                                                                copyH(item?.message)
+                                                                            }
+                                                                            className={
+                                                                                styles.blackText
+                                                                            }
+                                                                        >
+                                                                            Copy
+                                                                        </p>
+                                                                    </div>
+                                                                    <div
+                                                                        style={{
+                                                                            display: 'flex',
+                                                                            gap: 8,
+                                                                        }}
+                                                                        className={styles.dropdm}
+                                                                        onClick={() =>
+                                                                            deleteMsgF(item?.id)
+                                                                        }
+                                                                    >
+                                                                        <img
+                                                                            src={deleteMsg}
+                                                                            alt=""
+                                                                        />
+                                                                        <p
+                                                                            className={
+                                                                                styles.dengetText
+                                                                            }
+                                                                        >
+                                                                            Delete
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </LongPressButton>
                                 ))}
                             </div>
-                            <form
-                                action=""
-                                onSubmit={(e) => {
-                                    e.preventDefault();
-                                    sendMessageHandler();
-                                }}
-                            >
+                            {tagMsg && (
+                                <div
+                                    style={{
+                                        width: '100%',
+                                        height: 78,
+                                        borderLeft: '6px solid #5448B2',
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        padding: '12px 16px',
+                                        position: 'absolute',
+                                        background: '#EAEAEA',
+                                        top: '75%',
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            justifyContent: 'space-between',
+                                        }}
+                                    >
+                                        <p className={styles.blackText}>
+                                            Replying to{' '}
+                                            <span className={styles.primaryText}>
+                                                {activeChat.name}
+                                            </span>
+                                        </p>
+                                        <p className={styles.black_300}>It’s Mohamed from Ogoul</p>
+                                    </div>
+                                    <img
+                                        style={{
+                                            width: 15,
+                                            height: 15,
+                                            borderRadius: '50%',
+                                            cursor: 'pointer',
+                                        }}
+                                        src={closeSvg}
+                                        onClick={() => setTagMsg(false)}
+                                        alt=""
+                                    />
+                                </div>
+                            )}
+                            <form action="" onSubmit={sendMessageHandler}>
                                 <div className={styles.messageBox}>
                                     <div className={styles.messageInput}>
                                         <input
@@ -368,9 +1466,7 @@ const ComingSoon: React.FC = (className: ComingSoonProps) => {
                                             placeholder="Write a message..."
                                         />
                                         <p
-                                            style={{
-                                                color: message.length > 0 ? '#5448b2' : null,
-                                            }}
+                                            style={{ color: message.length >= 1 ? '#5448b2' : '' }}
                                             onClick={sendMessageHandler}
                                             children="Send"
                                         />
@@ -406,7 +1502,29 @@ const ComingSoon: React.FC = (className: ComingSoonProps) => {
                     </div>
                 </div>
             )}
-        </Layout>
+            <div>
+                <ToastContainer />
+            </div>
+            <PopupForReport openReport={reportPopup} onReportClose={() => setReportPopup(false)} />
+            {copyModal && (
+                <div
+                    style={{
+                        width: 300,
+                        height: 60,
+                        background: '#FFFAE6',
+                        borderRadius: 10,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        position: 'fixed',
+                        bottom: 110,
+                        right: 40,
+                    }}
+                >
+                    <p className={styles.blackText_16}>🎉 Copied successfully</p>
+                </div>
+            )}
+        </div>
     );
 };
 
