@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { DEMI_USERS } from '../data';
 
 function useChat() {
     const [moreOptions, setMoreOptions] = useState<boolean>(false);
@@ -8,72 +9,23 @@ function useChat() {
     const [markTheMsgSafe, setMarkTheMsgSafe] = useState<boolean>(false);
     const [groupOptions, setGroupOptions] = useState<boolean>(false);
     const [smsRef, setSmsRef] = useState<string>('');
+    const [dangetBtnText, setdangetBtnText] = useState<string>('');
+    const [noOfDeleteSMS, setnoOfDeleteSMS] = useState<number>(0);
     const [copyModal, setCopyModal] = useState(false);
     const [replySms, setreplysms] = useState<boolean>(false);
-    const [staredmodal, setstaredmodal] = useState<boolean>(false);
+    const [forwardModal, setforwardModal] = useState<boolean>(false);
+    const [staredmodal, setstaredmodal] = useState<boolean>(true);
+    const [selectedData, setselectedData] = useState<any[]>([]);
     const [addMembersPopup, setAddMembersPopup] = useState<boolean>(false);
     const [showShortSidebar, setshowShortSidebar] = useState<boolean>(false);
+    const [DangerText, setDengerText] = useState<string>(
+        'Are you sure you want to block Mohamed ?'
+    );
     const [msg, setMsg] = useState<string>('');
     const [activeUser, setActiveUser] = useState<any>({});
     const [activeChat, setactiveChat] = useState<any>({});
 
-    const [users, setUsers] = useState<any[]>([
-        {
-            userId: 1,
-            userName: 'Eromaisa',
-            lastMsg:
-                'We really care about your safety. We will stop showing this message once you mark it safe.',
-            ispined: false,
-            lastSeen: '4:01 PM',
-            unReadMsgs: '201',
-        },
-        {
-            userId: 2,
-            userName: 'ahmad',
-            lastMsg:
-                'We really care about your safety. We will stop showing this message once you mark it safe.',
-            ispined: false,
-            unReadMsgs: '9',
-            lastSeen: '4:01 PM',
-        },
-        {
-            userId: 3,
-            userName: 'Group',
-            lastMsg:
-                'We really care about your safety. We will stop showing this message once you mark it safe.',
-            ispined: false,
-            unReadMsgs: '9',
-            lastSeen: '4:01 PM',
-            isGroup: true,
-        },
-        {
-            userId: 4,
-            userName: 'Eromaisa',
-            lastMsg:
-                'We really care about your safety. We will stop showing this message once you mark it safe.',
-            ispined: false,
-            unReadMsgs: '9',
-            lastSeen: '4:01 PM',
-        },
-        {
-            userId: 5,
-            userName: 'Eromaisa',
-            lastMsg:
-                'We really care about your safety. We will stop showing this message once you mark it safe.',
-            ispined: false,
-            unReadMsgs: '9',
-            lastSeen: '4:01 PM',
-        },
-        {
-            userId: 6,
-            userName: 'Eromaisa',
-            lastMsg:
-                'We really care about your safety. We will stop showing this message once you mark it safe.',
-            ispined: false,
-            unReadMsgs: '9',
-            lastSeen: '4:01 PM',
-        },
-    ]);
+    const [users, setUsers] = useState<any[]>(DEMI_USERS);
     const [chats, setchats] = useState<any[]>([
         {
             userId: 2,
@@ -203,7 +155,7 @@ function useChat() {
                             time: `${new Date().getHours()}:${new Date().getMinutes()}`,
                             emojis: false,
                             dropdown: false,
-                            id: activeChat.chats.length + 1,
+                            id: new Date().getTime(),
                             replysms: smsRef,
                         },
                     ],
@@ -219,7 +171,7 @@ function useChat() {
                             time: `${new Date().getHours()}:${new Date().getMinutes()}`,
                             emojis: false,
                             dropdown: false,
-                            id: activeChat.chats.length + 1,
+                            id: new Date().getTime(),
                         },
                     ],
                 });
@@ -230,11 +182,20 @@ function useChat() {
         setSmsRef('');
         scrollToBottom();
         setreplysms(false);
-        console.log(activeChat);
     };
-
-    const welcomeMsgH = () => {};
-
+    const multipleUnstarHandlr = () => {
+        let filteredArr = selectedData.map((item: any) => item.id);
+        const tempArr: any[] = [];
+        activeChat.chats.forEach((msg: any) => {
+            if (filteredArr.includes(msg.id)) {
+                tempArr.push({ ...msg, stared: false });
+            } else {
+                tempArr.push(msg);
+            }
+        });
+        setactiveChat({ ...activeChat, chats: tempArr });
+        setselectedData([]);
+    };
     const chatSwitchH = (e: any) => {
         users?.forEach((user) => {
             if (user.userId === e) {
@@ -415,7 +376,6 @@ function useChat() {
         const isNR: any[] = [];
         tempArr?.forEach((element: any) => {
             element.chats.forEach((chat: any) => {
-                console.log();
                 if (chat?.isrecevied) {
                     isR.push(chat);
                 } else {
@@ -431,7 +391,71 @@ function useChat() {
             setstaredMsgs([]);
         }
     }, [activeChat.userId, activeUser.userId]);
+
+    const onBlock = () => {
+        const tempchat: any = [];
+        let filteredArr = selectedData.map((item) => item.id);
+        activeChat?.chats?.forEach((item4: any) => {
+            if (!filteredArr.includes(item4.id)) {
+                tempchat.push(item4);
+            }
+        });
+        setactiveChat({ ...activeChat, chats: tempchat });
+        setdangetBtnText('');
+        setdangetBtnText('');
+        setblockPopup(false);
+        setselectedData([]);
+    };
+
+    const onChangeH = (item: any) => {
+        if (selectedData.find((ACHat: any) => ACHat?.id === item?.id)) {
+            let filterArr = selectedData.filter((chat: any) => {
+                if (chat?.id !== item.id) {
+                    return { ...chat, checked: true };
+                }
+            });
+            setselectedData(filterArr);
+        } else {
+            setselectedData([...selectedData, { ...item, checked: true }]);
+        }
+
+        let filterArr = activeChat?.chats?.map((chat: any) => {
+            if (chat?.id === item.id) {
+                return { ...chat, checked: true };
+            } else {
+                return chat;
+            }
+        });
+        setactiveChat({
+            ...activeChat,
+            chats: filterArr,
+        });
+    };
+
+    const deleteHandler = () => {
+        if (selectedData.length > 0) {
+            setdangetBtnText(
+                `Delete for me ${selectedData.length > 0 ? `(${selectedData.length})` : ''}`
+            );
+            setDengerText('Are you sure you want to delete this message?');
+            setblockPopup(true);
+        }
+    };
+
+    const onUsersInputChangeHandler = (e: any) => {
+        if (e.length > 0) {
+            const filteredUsers: any[] = DEMI_USERS?.filter((user: any) =>
+                user?.userName?.toLowerCase().includes(e.toLowerCase())
+            );
+
+            setUsers(filteredUsers);
+        } else {
+            setUsers(DEMI_USERS);
+        }
+    };
+
     return {
+        onUsersInputChangeHandler,
         moreOptions,
         setMoreOptions,
         reportPopup,
@@ -467,7 +491,6 @@ function useChat() {
         deleteH,
         globalClickH,
         submitH,
-        welcomeMsgH,
         chatSwitchH,
         userPinH,
         copyH,
@@ -481,6 +504,19 @@ function useChat() {
         staredMsgs,
         staredmodal,
         setstaredmodal,
+        DangerText,
+        dangetBtnText,
+        setDengerText,
+        setdangetBtnText,
+        onBlock,
+        selectedData,
+        setselectedData,
+        noOfDeleteSMS,
+        onChangeH,
+        deleteHandler,
+        multipleUnstarHandlr,
+        forwardModal,
+        setforwardModal,
     };
 }
 

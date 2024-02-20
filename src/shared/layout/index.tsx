@@ -17,6 +17,9 @@ function Layout(props: any) {
         showBlockPopup,
         closeBlockPopup,
         showShortSidebar,
+        DangerText,
+        dangetBtnText,
+        onBlock
     } = props || {};
     const showSidebar = useMediaQuery('(max-width:1000px)');
 
@@ -99,7 +102,7 @@ function Layout(props: any) {
                 onReportClose={closeReportPopup}
                 info={reportInfo}
             />
-            <BlockPopup openBlock={showBlockPopup} onBlockClose={closeBlockPopup} />
+            <BlockPopup onBlock={onBlock} dangetBtnText={dangetBtnText} DangerText={DangerText} openBlock={showBlockPopup} onBlockClose={closeBlockPopup} />
         </div>
     );
 }

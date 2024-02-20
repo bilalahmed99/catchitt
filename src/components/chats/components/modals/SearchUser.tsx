@@ -16,22 +16,22 @@ function SearchUser(props: any) {
             dropdown: false,
         },
         {
-            name: 'Mohamed Farag',
+            name: 'ahmad',
             id: 2,
             dropdown: false,
         },
         {
-            name: 'Mohamed Farag',
+            name: 'Eronisa',
             id: 3,
             dropdown: false,
         },
         {
-            name: 'Mohamed Farag',
+            name: 'ahmad',
             id: 4,
             dropdown: false,
         },
         {
-            name: 'Mohamed Farag',
+            name: 'Eronisa',
             id: 5,
             dropdown: false,
         },
@@ -47,6 +47,20 @@ function SearchUser(props: any) {
         },
     ];
 
+    const [users, setusers] = useState(data);
+
+    const onchangeH = (e: any) => {
+        if (e.length > 0) {
+            const filteredUsers: any[] = data?.filter((user: any) =>
+                user?.name?.toLowerCase().includes(e.toLowerCase())
+            );
+
+            setusers(filteredUsers);
+        } else {
+            setusers(data);
+        }
+    };
+
     const dropdownHandler = (user: any) => {};
 
     return (
@@ -57,18 +71,24 @@ function SearchUser(props: any) {
             <ClickAwayListener onClickAway={onClose}>
                 <div className={style.parent}>
                     <div>
-                        <Search placeholder="Search" />
+                        <Search onInputChangeHandler={onchangeH} placeholder="Search" />
                     </div>
                     <div className={style.users}>
-                        {data.map((user: any, i: number) => {
+                        {users.map((user: any, i: number) => {
                             return (
                                 <div className={style.user}>
                                     <div className={style.sec1}>
                                         <img src={avatar} alt="" />
-                                        <p>Mohamed Farag</p>
+                                        <p>{user.name}</p>
                                     </div>
                                     <div className={style.sec2}>
-                                        <button style={{ position: 'relative', zIndex: 1 , cursor:'pointer'}}>
+                                        <button
+                                            style={{
+                                                position: 'relative',
+                                                zIndex: 1,
+                                                cursor: 'pointer',
+                                            }}
+                                        >
                                             Message
                                         </button>
                                         <div

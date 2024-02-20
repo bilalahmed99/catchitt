@@ -1,30 +1,20 @@
-import { useEffect, useRef } from 'react';
-import {
-    avatar,
-    closeSvg,
-    friendsChatWelcomeSvg,
-    groupMembers,
-    groupWelcome,
-    notfriendsChatWelcome,
-    seenMsgSvg,
-    starMsg,
-} from '../../icons';
+import { closeSvg } from '../../icons';
 import Layout from '../../shared/layout';
 import Actions from './components/Actions';
 import ChatHeader from './components/ChatHeader';
 import DoMsg from './components/DoMsg';
 import DropDown from './components/DropDown';
 import GroupSideBar from './components/GroupSideBar';
-import LongPressButton from './components/LongPressEvent';
+import StaredMesagesSec from './components/StaredMesagesSec';
 import UserChats from './components/chats';
+import EditChatName from './components/modals/EditName';
+import Forwardusers from './components/modals/Forwardusers';
+import SearchUser from './components/modals/SearchUser';
 import ForFriends from './components/welcomeScreens/ForFriends';
 import ForGroups from './components/welcomeScreens/ForGroups';
 import ForPeoples from './components/welcomeScreens/ForPeoples';
 import hook from './hook/useChat';
 import style from './index.module.scss';
-import SearchUser from './components/modals/SearchUser';
-import EditChatName from './components/modals/EditName';
-import StaredMesagesSec from './components/StaredMesagesSec';
 import { setgroups } from 'process';
 
 function ChatsSec() {
@@ -70,6 +60,18 @@ function ChatsSec() {
         staredMsgs,
         staredmodal,
         setstaredmodal,
+        DangerText,
+        setDengerText,
+        dangetBtnText,
+        setdangetBtnText,
+        onBlock,
+        onChangeH,
+        deleteHandler,
+        multipleUnstarHandlr,
+        forwardModal,
+        setforwardModal,
+        selectedData,
+        onUsersInputChangeHandler,
     } = hook();
 
     return (
@@ -80,9 +82,17 @@ function ChatsSec() {
             showBlockPopup={blockPopup}
             closeBlockPopup={() => setblockPopup(false)}
             showShortSidebar={showShortSidebar}
+            DangerText={DangerText}
+            dangetBtnText={dangetBtnText}
+            onBlock={onBlock}
         >
             <div className={style.parent}>
-                <UserChats id={activeUser.userId} OnChatClick={chatSwitchH} data={users} />
+                <UserChats
+                    onUsersInputChangeHandler={onUsersInputChangeHandler}
+                    id={activeUser.userId}
+                    OnChatClick={chatSwitchH}
+                    data={users}
+                />
                 <div className={style.chat}>
                     <div className={style.sec1} ref={autoScrolElem}>
                         <ChatHeader
@@ -152,13 +162,20 @@ function ChatsSec() {
                         <DropDown
                             activeUser={activeUser}
                             pinUserH={userPinH}
-                            blockH={() => setblockPopup(true)}
+                            blockH={() => {
+                                setdangetBtnText('Block');
+                                setDengerText(
+                                    `Are you sure you want to block ${activeUser?.userName}?`
+                                );
+                                setblockPopup(true);
+                            }}
                             reportH={() => setreportPopup(true)}
                             staredModal={() => {
                                 setshowShortSidebar(true);
                                 setstaredmodal(true);
                                 setMoreOptions(false);
                             }}
+                            numberOfMessages={staredMsgs[0]?.chats?.length}
                         />
                     )}
                 </div>
@@ -173,6 +190,17 @@ function ChatsSec() {
                             pinUserH={userPinH}
                             showEditPopup={() => setEditGroupNameModal(!editGroupNameModal)}
                             addMembersHandler={() => setAddMembersPopup(true)}
+                            openStaredSMS={() => {
+                                setstaredmodal(true);
+                                setGroupOptions(false);
+                            }}
+                            numberOfMessages={staredMsgs[0]?.chats?.length}
+                            blockPopupHandler={() => {
+                                setdangetBtnText('Block');
+                                setDengerText(`Are you sure you want to block Hania?`);
+                                setblockPopup(true);
+                            }}
+                            reportPopupHandler={() => setreportPopup(true)}
                         />
                     </div>
                 )}
@@ -203,12 +231,27 @@ function ChatsSec() {
                             setshowShortSidebar(false);
                         }}
                         staredMsgs={staredMsgs}
+                        userName={activeUser?.userName}
+                        onChangeH={onChangeH}
+                        deleteHandler={deleteHandler}
+                        starHandler={valuesH2}
+                        multipleUnstarHandlr={multipleUnstarHandlr}
+                        showForwardModal={() => {
+                            if (selectedData.length > 0) {
+                                setforwardModal(true);
+                            }
+                        }}
+                        selectedData={selectedData}
                     />
                 )}
             </div>
             <SearchUser
                 onOpen={addMembersPopup}
-                blockPopupHandler={() => setblockPopup(true)}
+                blockPopupHandler={() => {
+                    setdangetBtnText('Block');
+                    setDengerText(`Are you sure you want to block ${activeUser?.userName}?`);
+                    setblockPopup(true);
+                }}
                 reportPopupHandler={() => setreportPopup(true)}
                 onClose={() => setAddMembersPopup(false)}
             />
@@ -217,6 +260,7 @@ function ChatsSec() {
                 onClose={() => setEditGroupNameModal(false)}
                 onSaveChanges={onSaveChanges}
             />
+            <Forwardusers onOpen={forwardModal} onClose={() => setforwardModal(false)} />
         </Layout>
     );
 }

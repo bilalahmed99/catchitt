@@ -8,7 +8,7 @@ import PrivacyPage from './components/about-pages/privacy-policy';
 import { TermsPage } from './components/about-pages/terms-conditions';
 import { ActivityPage } from './components/activity-page/activity-page';
 import { Authentication } from './components/authentication/authentication';
-import ComingSoon from './components/coming-soon/coming-soon';
+// import ComingSoon from './components/coming-soon/coming-soon';
 import { AllVideos } from './components/discover/components/allVideosPage';
 import Discover from './components/discover/discover';
 import { ForgotPassword } from './components/forgot-password/forgot-password';

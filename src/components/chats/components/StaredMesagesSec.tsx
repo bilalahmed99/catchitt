@@ -1,54 +1,129 @@
 import { useEffect, useState } from 'react';
-import { avatar, editInStaredMsg, rightArrow, starMsg } from '../../../icons';
+import {
+    avatar,
+    deleteMsg,
+    editInStaredMsg,
+    forwardMsg,
+    rightArrow,
+    starMsg,
+    tagMsg,
+    unStarMsg,
+} from '../../../icons';
 import Search from '../../../shared/navbar/components/Search';
-import useChat from '../hook/useChat';
-import useStaredMesages from '../hook/useStaredMesages';
 import style from './stared.module.scss';
-function StaredMesagesSec({ showEmptyContainer, staredMsgs: staredMsgsList , onBack }: any) {
+import { boolean } from 'mathjs';
+function StaredMesagesSec({
+    staredMsgs: staredMsgsList,
+    onBack,
+    userName,
+    deleteHandler,
+    onChangeH,
+    multipleUnstarHandlr,
+    showForwardModal,
+    selectedData,
+}: any) {
     const [staredMsgs, setstaredMsgs] = useState<any[]>([]);
+    const [isEditAble, setisEditAble] = useState<boolean>(false);
+    const [showEmptyContainer, setshowEmptyContainer] = useState<boolean>(true);
+    // const [isEditAble, setisEditAble] = useState<boolean>(false);
+
     useEffect(() => {
-        const isR: any[] = [];
-        const isNR: any[] = [];
+        const isReceivedChat: any[] = [];
+        const isNotReceivedChat: any[] = [];
         staredMsgsList?.forEach((element: any) => {
             element.chats.forEach((chat: any) => {
                 console.log();
                 if (chat?.isrecevied) {
-                    isR.push(chat);
+                    isReceivedChat.push(chat);
                 } else {
-                    isNR.push(chat);
+                    isNotReceivedChat.push(chat);
                 }
             });
         });
 
         setstaredMsgs([
             {
-                userName: staredMsgsList[1]?.userName,
+                userName: userName,
                 userId: staredMsgsList[1]?.userId,
-                chats: isR,
+                chats: isReceivedChat,
             },
             {
                 userName: 'You',
                 userId: staredMsgsList[1]?.userId,
-                chats: [...isNR],
+                chats: [...isNotReceivedChat],
             },
         ]);
     }, [staredMsgsList]);
+
+    useEffect(() => {
+        if (staredMsgsList[0]?.chats?.length > 0) {
+            setshowEmptyContainer(false);
+        } else {
+            setisEditAble(false);
+            setshowEmptyContainer(true);
+        }
+    }, [onChangeH]);
+
+    const SearchHandler = (e: any) => {
+        const isReceivedChat: any[] = [];
+        const isNotReceivedChat: any[] = [];
+        staredMsgsList?.forEach((element: any) => {
+            element.chats.forEach((chat: any) => {
+                console.log();
+                if (chat?.isrecevied) {
+                    isReceivedChat.push(chat);
+                } else {
+                    isNotReceivedChat.push(chat);
+                }
+            });
+        });
+
+        let filteredReceivedMessages: any = isReceivedChat.filter((chat: any) =>
+            chat?.msg?.toLowerCase()?.includes(e?.toLowerCase())
+        );
+        let filteredNotReceivedMessages: any = isNotReceivedChat.filter((chat: any) =>
+            chat?.msg?.toLowerCase()?.includes(e?.toLowerCase())
+        );
+
+        setstaredMsgs([
+            {
+                userName: userName,
+                userId: staredMsgsList[1]?.userId,
+                chats: filteredReceivedMessages,
+            },
+            {
+                userName: 'You',
+                userId: staredMsgsList[1]?.userId,
+                chats: [...filteredNotReceivedMessages],
+            },
+        ]);
+    };
 
     return (
         <div className={style.parent}>
             <div className={style.header}>
                 <div>
-                    <img onClick={onBack}  src={rightArrow} alt="" />
+                    <img onClick={onBack} src={rightArrow} alt="" />
                     <p>Starred messages</p>
                 </div>
-                {!showEmptyContainer && staredMsgs.length !== 0 && (
-                    <img style={{ cursor: 'pointer' }} src={editInStaredMsg} alt="" />
-                )}
+                {!showEmptyContainer &&
+                    (!isEditAble ? (
+                        <img
+                            onClick={() => setisEditAble(!isEditAble)}
+                            style={{ cursor: 'pointer', userSelect: 'none' }}
+                            src={editInStaredMsg}
+                            alt=""
+                        />
+                    ) : (
+                        <p onClick={() => setisEditAble(!isEditAble)} className={style.done}>
+                            Done
+                        </p>
+                    ))}
             </div>
-            {!showEmptyContainer && staredMsgs.length > 0 && (
+            {!showEmptyContainer && (
                 <div className={style.contentParent}>
                     <div>
-                        <Search placeholder="Search" />
+                        <Search onInputChangeHandler={SearchHandler} placeholder="Search" />
                     </div>
                     <div className={style.staredMsgsParent}>
                         {staredMsgs.map((chats: any, index: number) => {
@@ -68,21 +143,113 @@ function StaredMesagesSec({ showEmptyContainer, staredMsgs: staredMsgsList , onB
                                             return (
                                                 <div key={index2} className={style.chat}>
                                                     <div>
-                                                        <p
-                                                            className={
-                                                                chat.isreceived
-                                                                    ? style.isreceived
-                                                                    : style.userstarMsg
-                                                            }
-                                                        >
-                                                            {chat.msg}
-                                                        </p>
+                                                        {chat?.replysms ? (
+                                                            <div style={{ display: 'flex' }}>
+                                                                {isEditAble && (
+                                                                    <input
+                                                                        onChange={(e) => {
+                                                                            e.stopPropagation();
+                                                                            onChangeH(chat);
+                                                                        }}
+                                                                        style={{
+                                                                            width: 20,
+                                                                            height: 20,
+                                                                            background: '#5448B2',
+                                                                            borderRadius: 4,
+                                                                            cursor: 'pointer',
+                                                                            marginRight: '0.5rem',
+                                                                            margin: '1rem',
+                                                                        }}
+                                                                        type="checkbox"
+                                                                        checked={selectedData?.find(
+                                                                            (userchat: any) =>
+                                                                                userchat?.id ===
+                                                                                chat?.id
+                                                                        )}
+                                                                    />
+                                                                )}
+                                                                <div
+                                                                    className={style.tempparent}
+                                                                    onClick={(e) =>
+                                                                        e.stopPropagation()
+                                                                    }
+                                                                    style={{
+                                                                        marginLeft: isEditAble
+                                                                            ? '0.5rem'
+                                                                            : '3rem',
+                                                                    }}
+                                                                >
+                                                                    <div>
+                                                                        <p
+                                                                            className={
+                                                                                style.primaryText
+                                                                            }
+                                                                        >
+                                                                            {chat.userName}
+                                                                        </p>
+                                                                        <p
+                                                                            className={
+                                                                                style.prevmsg
+                                                                            }
+                                                                        >
+                                                                            {chat?.replysms}
+                                                                        </p>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p className={style.ans}>
+                                                                            {chat.msg}
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        ) : (
+                                                            <div style={{ display: 'flex' }}>
+                                                                {isEditAble && (
+                                                                    <input
+                                                                        onChange={(e) => {
+                                                                            e.stopPropagation();
+                                                                            onChangeH(chat);
+                                                                        }}
+                                                                        style={{
+                                                                            width: 20,
+                                                                            height: 20,
+                                                                            background: '#5448B2',
+                                                                            borderRadius: 4,
+                                                                            cursor: 'pointer',
+                                                                            marginRight: '0.5rem',
+                                                                            margin: '1rem',
+                                                                        }}
+                                                                        type="checkbox"
+                                                                        checked={selectedData?.find(
+                                                                            (userchat: any) =>
+                                                                                userchat?.id ===
+                                                                                chat?.id
+                                                                        )}
+                                                                    />
+                                                                )}
+                                                                <p
+                                                                    className={
+                                                                        chats.userName !== 'You'
+                                                                            ? style.isreceived
+                                                                            : style.userstarMsg
+                                                                    }
+                                                                    style={{
+                                                                        marginLeft: isEditAble
+                                                                            ? '0.5rem'
+                                                                            : '3rem',
+                                                                    }}
+                                                                >
+                                                                    {chat.msg}
+                                                                </p>
+                                                            </div>
+                                                        )}
                                                         <div
                                                             style={{
                                                                 display: 'flex',
                                                                 gap: '0.38rem',
                                                                 justifyContent: 'flex-end',
                                                                 marginTop: '0.5rem',
+                                                                width: '100%',
                                                             }}
                                                         >
                                                             <img src={starMsg} alt="" />
@@ -100,18 +267,45 @@ function StaredMesagesSec({ showEmptyContainer, staredMsgs: staredMsgsList , onB
                             );
                         })}
                     </div>
+                    {isEditAble && (
+                        <div className={style.bottomSide}>
+                            <img
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    showForwardModal();
+                                }}
+                                src={forwardMsg}
+                                alt=""
+                            />
+                            <img
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    multipleUnstarHandlr();
+                                }}
+                                src={unStarMsg}
+                                alt=""
+                            />
+                            <img
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    deleteHandler();
+                                }}
+                                src={deleteMsg}
+                                alt=""
+                            />
+                        </div>
+                    )}
                 </div>
             )}
-            {showEmptyContainer ||
-                (staredMsgs.length === 0 && (
-                    <div className={style.emptyContainer}>
-                        <img src={starMsg} alt="" />
-                        <p className={style.text_500}>No Starred Messages</p>
-                        <p className={style.text_400}>
-                            Tap and hold on any message to star it, so you can easily find it later.
-                        </p>
-                    </div>
-                ))}
+            {showEmptyContainer && (
+                <div className={style.emptyContainer}>
+                    <img src={starMsg} alt="" />
+                    <p className={style.text_500}>No Starred Messages</p>
+                    <p className={style.text_400}>
+                        Tap and hold on any message to star it, so you can easily find it later.
+                    </p>
+                </div>
+            )}
         </div>
     );
 }
