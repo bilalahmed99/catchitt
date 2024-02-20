@@ -3,9 +3,8 @@ import style from './DropDown.module.scss';
 import { rightArrow as arrow } from '../../../icons';
 import { useState } from 'react';
 function DropDown(props: any) {
-    const { blockH, reportH, pinUserH, activeUser , staredModal} = props || {};
+    const { blockH, reportH, pinUserH, activeUser, staredModal, numberOfMessages } = props || {};
     const [muteN, setmuteN] = useState(false);
-    const [pin, setpin] = useState(false);
     return (
         <div onClick={(e) => e.stopPropagation()} className={style.dropdownMenu}>
             <div className={style.dropdownRow}>
@@ -29,7 +28,7 @@ function DropDown(props: any) {
             <div onClick={staredModal} className={style.dropdownRow}>
                 <p>Starred Messages</p>
                 <div className={style.starredMessagesRow}>
-                    <p>None</p>
+                    <p> {numberOfMessages === 0 ? 'None' : numberOfMessages}</p>
                     <img className={style.arrowRight} src={arrow} alt="arrow right" />
                 </div>
             </div>

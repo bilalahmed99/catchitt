@@ -3,7 +3,7 @@ import Search from '../../../shared/navbar/components/Search';
 import UserChat from './chat';
 import style from './chats.module.scss';
 
-function UserChats({ data, OnChatClick, id }: any) {
+function UserChats({ data, OnChatClick, id , onUsersInputChangeHandler}: any) {
     return (
         <div className={style.chats}>
             <div className={style.chatHeader}>
@@ -11,7 +11,7 @@ function UserChats({ data, OnChatClick, id }: any) {
                 <img src={addChat} alt="" />
             </div>
             <div>
-                <Search placeholder={'Search'} />
+                <Search onInputChangeHandler={onUsersInputChangeHandler} placeholder={'Search'} />
             </div>
             <div className={style.userChats}>
                 {data.map((chat: any, index: number) => {

@@ -111,10 +111,20 @@ export default function SimpleListMenu({ blockPopupHandler, reportPopupHandler }
                 <MenuItem onClick={handleClose}>
                     <p className={`${style.p} ${style.black_500}`}>{options[2]}</p>
                 </MenuItem>
-                <MenuItem onClick={blockPopupHandler}>
+                <MenuItem
+                    onClick={() => {
+                        handleClose();
+                        blockPopupHandler();
+                    }}
+                >
                     <p className={`${style.p} ${style.warning_500}`}>{options[3]}</p>
                 </MenuItem>
-                <MenuItem onClick={reportPopupHandler}>
+                <MenuItem
+                    onClick={() => {
+                        handleClose();
+                        reportPopupHandler();
+                    }}
+                >
                     <p className={`${style.p} ${style.lp} ${style.warning_500}`}>{options[4]}</p>
                 </MenuItem>
             </StyledMenu>

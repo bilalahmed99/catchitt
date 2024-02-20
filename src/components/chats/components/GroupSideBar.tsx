@@ -9,8 +9,19 @@ import {
     search,
 } from '../../../icons';
 import style from './GroupSideBar.module.scss';
+import SimpleListMenu from './modals/Btn';
 function GroupSideBar(props: any) {
-    const { onBack, pinUserH, activeUser, showEditPopup , addMembersHandler} = props || {};
+    const {
+        onBack,
+        pinUserH,
+        activeUser,
+        showEditPopup,
+        addMembersHandler,
+        openStaredSMS,
+        numberOfMessages,
+        blockPopupHandler,
+        reportPopupHandler,
+    } = props || {};
     return (
         <div className={style.parent}>
             <div className={style.header}>
@@ -52,9 +63,12 @@ function GroupSideBar(props: any) {
                             height: '100%',
                             flexDirection: 'row-reverse',
                         }}
+                        onClick={openStaredSMS}
                     >
                         <img src={rightArrow} alt="" />
-                        <p className={style.text_200}>None</p>
+                        <p className={style.text_200}>
+                            {numberOfMessages === 0 ? 'None' : numberOfMessages}
+                        </p>
                     </div>
                 </div>
                 <div className={style.switchP}>
@@ -83,7 +97,29 @@ function GroupSideBar(props: any) {
                         </div>
                         <div>
                             <img src={comment} alt="" />
-                            <img src={moreinfouser} alt="" />
+                            <div
+                                style={{
+                                    cursor: 'pointer',
+                                    position: 'relative',
+                                    zIndex: 1,
+                                }}
+                            >
+                                <img src={moreinfouser} alt="" />
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: '100%',
+                                        height: '100%',
+                                    }}
+                                >
+                                    <SimpleListMenu
+                                        blockPopupHandler={blockPopupHandler}
+                                        reportPopupHandler={reportPopupHandler}
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div>
@@ -93,7 +129,29 @@ function GroupSideBar(props: any) {
                         </div>
                         <div>
                             <img src={comment} alt="" />
-                            <img src={moreinfouser} alt="" />
+                            <div
+                                style={{
+                                    cursor: 'pointer',
+                                    position: 'relative',
+                                    zIndex: 1,
+                                }}
+                            >
+                                <img src={moreinfouser} alt="" />
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: '100%',
+                                        height: '100%',
+                                    }}
+                                >
+                                    <SimpleListMenu
+                                        blockPopupHandler={blockPopupHandler}
+                                        reportPopupHandler={reportPopupHandler}
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div>
@@ -103,7 +161,29 @@ function GroupSideBar(props: any) {
                         </div>
                         <div>
                             <img src={comment} alt="" />
-                            <img src={moreinfouser} alt="" />
+                            <div
+                                style={{
+                                    cursor: 'pointer',
+                                    position: 'relative',
+                                    zIndex: 1,
+                                }}
+                            >
+                                <img src={moreinfouser} alt="" />
+                                <div
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        width: '100%',
+                                        height: '100%',
+                                    }}
+                                >
+                                    <SimpleListMenu
+                                        blockPopupHandler={blockPopupHandler}
+                                        reportPopupHandler={reportPopupHandler}
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

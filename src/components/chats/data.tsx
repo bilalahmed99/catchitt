@@ -1,10 +1,10 @@
-export const users = [
+export const DEMI_USERS = [
     {
         userId: 1,
         userName: 'Eromaisa',
         lastMsg:
             'We really care about your safety. We will stop showing this message once you mark it safe.',
-        ispined: true,
+        ispined: false,
         lastSeen: '4:01 PM',
         unReadMsgs: '201',
     },
@@ -19,16 +19,17 @@ export const users = [
     },
     {
         userId: 3,
-        userName: 'ahmad',
+        userName: 'Group',
         lastMsg:
             'We really care about your safety. We will stop showing this message once you mark it safe.',
         ispined: false,
         unReadMsgs: '9',
         lastSeen: '4:01 PM',
+        isGroup: true,
     },
     {
         userId: 4,
-        userName: 'ahmad',
+        userName: 'Eromaisa',
         lastMsg:
             'We really care about your safety. We will stop showing this message once you mark it safe.',
         ispined: false,
@@ -37,7 +38,7 @@ export const users = [
     },
     {
         userId: 5,
-        userName: 'ahmad',
+        userName: 'Eromaisa',
         lastMsg:
             'We really care about your safety. We will stop showing this message once you mark it safe.',
         ispined: false,
@@ -46,7 +47,7 @@ export const users = [
     },
     {
         userId: 6,
-        userName: 'ahmad',
+        userName: 'Eromaisa',
         lastMsg:
             'We really care about your safety. We will stop showing this message once you mark it safe.',
         ispined: false,
@@ -54,7 +55,6 @@ export const users = [
         lastSeen: '4:01 PM',
     },
 ];
-
 export const chats = [
     {
         userId: 2,
@@ -73,7 +73,7 @@ export const chats = [
                 time: '4:01 PM',
                 emojis: false,
                 dropdown: false,
-                showEmogis: false   ,
+                showEmogis: false,
                 id: 2,
             },
             {

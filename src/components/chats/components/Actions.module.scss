@@ -187,33 +187,33 @@
 }
 
 .primaryText {
-    color: var(--Foundation-Primary-primary-500, #5448b2);
-    text-align: left;
-    font-family: Poppins;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 120%;
-  }
-  .prevmsg {
-    color: var(--Default-body, #222);
-    text-align: left;
-    font-family: Poppins;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    word-break: break-all;
+  color: var(--Foundation-Primary-primary-500, #5448b2);
+  text-align: left;
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 120%;
+}
+.prevmsg {
+  color: var(--Default-body, #222);
+  text-align: left;
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  word-break: break-all;
 
-    line-height: 150%;
-  }
-  .ans {
-    text-align: left;
-    color: var(--Default-white, #fff);
-    font-family: Poppins;
-    font-size: 16px;
-    font-style: normal;
-    width: 100%;
-    font-weight: 400;
-    line-height: normal;
-    word-break: break-all;
-  }
+  line-height: 150%;
+}
+.ans {
+  text-align: left;
+  color: var(--Default-white, #fff);
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  width: 100%;
+  font-weight: 400;
+  line-height: normal;
+  word-break: break-all;
+}

@@ -2,14 +2,15 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { search } from '../../../icons';
 import { useState } from 'react';
 
-function Search({ placeholder }: any) {
+function Search({ placeholder, onInputChangeHandler }: any) {
     const { pathname } = useLocation();
 
     const [Search, setSearch] = useState<any>('');
     const navigate = useNavigate();
     const submitH = (e: any) => {
         e.preventDefault(); // navigate(`/searchPage/${searchText}/All`);
-        navigate(`/searchPage/${Search}/All`);
+        setSearch('');
+        // navigate(`/searchPage/${Search}/All`);
     };
     {
         /* {!pathname.includes('/searchPage/') ? <Search /> :null} */
@@ -44,7 +45,10 @@ function Search({ placeholder }: any) {
                     }}
                     type="search"
                     placeholder={placeholder}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => {
+                        onInputChangeHandler(e.target.value);
+                        setSearch(e.target.value);
+                    }}
                     value={Search}
                 />
             </form>

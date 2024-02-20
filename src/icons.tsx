@@ -40,6 +40,7 @@ import createIcon from './assets/plusIcon.png';
 import threeDotsInChatModalPopup from './assets/threeDotsForPopup.svg';
 import addimage from './assets/addimage.svg';
 import editInStaredMsg from './assets/editInStaredMsg.svg';
+import forwardMsg from './assets/forwardMsg.svg';
 export {
     googleIcon,
     fb,
@@ -82,5 +83,6 @@ export {
     forthTab,
     threeDotsInChatModalPopup,
     addimage,
-    editInStaredMsg
+    editInStaredMsg,
+    forwardMsg
 };

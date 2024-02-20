@@ -1,6 +1,6 @@
 .parent {
   width: 380px;
-  padding: 1.5rem 1rem;
+  padding:1.5rem 1rem 0rem 1rem;
   display: flex;
   flex-direction: column;
   background: var(--Default-white, #fff);
@@ -61,6 +61,7 @@
     flex-direction: column;
     flex: 1;
     overflow: scroll;
+    gap: 1.5rem;
     .msgParent {
       display: flex;
       justify-content: space-between;
@@ -86,14 +87,7 @@
       font-weight: 400;
       line-height: normal;
     }
-    .text_500 {
-      color: #000;
-      font-family: Poppins;
-      font-size: 1rem;
-      font-style: normal;
-      font-weight: 500;
-      line-height: 120%;
-    }
+   
     .text_400 {
       color: #000;
       text-align: center;
@@ -153,5 +147,94 @@
     }
 
     // margin-top: 1.5rem;
+  }
+  .tempparent {
+    margin-left: 2rem;
+    border-radius: 10px 10px 0px 10px;
+    background: var(--Foundation-Primary-primary-500, #5448b2);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    // width: 239px;
+    padding: 8px 6px;
+    align-items: flex-end;
+    gap: 10px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .tempparent > div:nth-child(1) {
+    padding: 8px 12px;
+    width: 100%;
+    border-radius: 4px;
+    background: var(--Foundation-Primary-primary-50, #eeedf7);
+  }
+  .tempparent > div:nth-child(2) {
+    padding: 0px 16px;
+  }
+
+  .primaryText {
+    color: var(--Foundation-Primary-primary-500, #5448b2);
+    text-align: left;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 120%;
+  }
+  .prevmsg {
+    color: var(--Default-body, #222);
+    text-align: left;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    word-break: break-all;
+
+    line-height: 150%;
+  }
+  .ans {
+    text-align: left;
+    color: var(--Default-white, #fff);
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    width: 100%;
+    font-weight: 400;
+    line-height: normal;
+    word-break: break-all;
+  }
+  .done {
+    color: var(--Foundation-Primary-primary-500, #5448b2);
+    font-family: Poppins;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .bottomSide {
+    display: flex;
+    justify-content: space-between;
+    // width: 23.75rem;
+    height: 3.5rem;
+    flex-shrink: 0;
+    background: var(--Default-white, #fff);
+    box-shadow: 0px -4px 20px 0px rgba(0, 0, 0, 0.03);
+    padding: 1rem 1.5rem;
+  }
+  .bottomSide > img{
+    cursor: pointer;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  .text_500 {
+    color: #000;
+    font-family: Poppins;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 120%;
   }
 }
