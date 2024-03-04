@@ -1,7 +1,7 @@
 import { useState } from "react"
 import style from "./comment.module.scss"
 import ReplyComment from "./replyComment"
-export default function Comment({ replyBtn, data , key1 }: any) {
+export default function Comment({ replyBtn, data, key1 }: any) {
     const [viewReplys, setviewReplys] = useState(false)
     const timeConverter = (time: any) => {
         const timestamp = time;
@@ -28,17 +28,17 @@ export default function Comment({ replyBtn, data , key1 }: any) {
             </div>
             <div className={style.commentH}>
                 <p className={style.comment}>{data.comment}</p>
-                <span style={{ cursor: 'pointer' }} className={style.replyBtn} onClick={() => replyBtn(data.user.name , data.id)}>Reply</span>
                 {
                     !viewReplys && data.replies.length > 0 ? <div onClick={() => setviewReplys(true)}>
                         <p className={style.replyBtn}>View replies ({data.replies.length})</p>
                         <img style={{ cursor: 'pointer' }} src="../../../../public/images/icons/commentSec/ArrowDown.svg" alt="" />
-                    </div> : null
+                    </div> : <span style={{ cursor: 'pointer' }} className={style.replyBtn} onClick={() => replyBtn(data.user.name, data.id)}>Reply</span>
+                      
                 }
             </div>
             {
                 viewReplys ?
-                    data.replies.map((reply: any , i:number) =>
+                    data.replies.map((reply: any, i: number) =>
                         <ReplyComment key2={i} reply={reply} />) : null
             }
             <hr />
