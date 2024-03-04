@@ -8,7 +8,7 @@ import { copyLink, notAllowed, report, saveVideo, send } from '../../../icons';
 import style from './index.module.scss';
 const options = ['View profile', 'Make admin', 'Remove from group', 'Block', 'Report'];
 
-export default function MORE_MENU_HOME({ visibleReportPopup }: any) {
+export default function MORE_MENU_HOME({ visibleReportPopup, url }: any) {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [selectedIndex, setSelectedIndex] = React.useState(1);
     const open = Boolean(anchorEl);
@@ -71,6 +71,8 @@ export default function MORE_MENU_HOME({ visibleReportPopup }: any) {
         },
     }));
 
+
+
     return (
         <div
             style={{
@@ -112,9 +114,14 @@ export default function MORE_MENU_HOME({ visibleReportPopup }: any) {
                     // display:'flex !important'
                 }}
             >
-                <MenuItem onClick={handleClose} style={{ padding: '0px', margin: '0px' }}>
-                    <div className={style.menuItem}>
+                <MenuItem onClick={handleClose} style={{ padding: '0px', margin: '0px', position: 'relative' }}>
+                    <div className={style.menuItem} >
                         <img src={saveVideo} />
+                        <a download={true} style={{
+                            width: '100%', height: '100%',position: 'absolute',
+                            top: 0,
+                            left: 0
+                        }} href={url}></a>
                         <p className={`${style.p} ${style.fp} ${style.black_500}`}>Save video</p>
                     </div>
                 </MenuItem>

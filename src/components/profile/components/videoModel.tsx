@@ -85,11 +85,16 @@ function VideoModel({ onModalClose, info, report, block, gifts, sendPopupHandler
                 });
                 const finalRes = await response.json();
                 console.log(finalRes.data);
-                const filteredCommnets:any = userComments.filter((userComment:any)=>userComment.id !== finalRes.data.id)
-                
+                const filteredCommnets: any = userComments.filter((userComment: any) => userComment.id !== finalRes.data.id)
+
                 if (finalRes?.data) {
                     setUserComments([...filteredCommnets, finalRes?.data]);
                 }
+                setReplySomeOne({
+                    status: false,
+                    userName: '',
+                    id: '',
+                })
             } catch (error) {
                 console.log(error);
             }

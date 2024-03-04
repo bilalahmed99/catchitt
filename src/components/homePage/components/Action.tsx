@@ -87,12 +87,12 @@ function Action({
                 )}
                 {obj.actionType === 'share' && (
                     <COPY_AND_SEND_MENU_HOME
-                        copyHandler={()=>copyHandler(post?.reducedVideoUrl)}
+                        copyHandler={() => copyHandler(post?.reducedVideoUrl)}
                         popupHandler={popupHandler}
                     />
                 )}
                 {obj.actionType === 'more' && (
-                    <MORE_MENU_HOME visibleReportPopup={visibleReportPopup} />
+                    <MORE_MENU_HOME url={post.originalUrl} visibleReportPopup={visibleReportPopup} />
                 )}
             </div>
             {obj?.actionType === 'like' ? (
