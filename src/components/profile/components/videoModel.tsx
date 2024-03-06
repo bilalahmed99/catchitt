@@ -26,6 +26,7 @@ function VideoModel({ onModalClose, info, report, block, gifts, sendPopupHandler
     const [fvrt, setFvrt] = useState(false);
     const [nofvrt, setnoFvrt] = useState<number>(256);
     const [share, setShare] = useState(false);
+    const [profileData, setProfileData] = useState<any>(null);
     const token = useAuthStore((state) => state.token);
     const [more, setMore] = useState(false);
     const [followedAccounts, setFollowedAccounts] = useState<any>({});
@@ -54,6 +55,21 @@ function VideoModel({ onModalClose, info, report, block, gifts, sendPopupHandler
     };
     const isMobile = useMediaQuery('(max-width:700px)');
 
+    const getProfileData = () => {
+
+        fetch(`${API_KEY}/profile`, {
+            method: 'GET',
+            headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setProfileData(data.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
     const likeHandler = async () => {
         try {
             if (like) {
@@ -74,6 +90,7 @@ function VideoModel({ onModalClose, info, report, block, gifts, sendPopupHandler
     };
 
     useEffect(() => {
+        getProfileData()
         setUserComments(info?.comments);
     }, []);
 
@@ -469,7 +486,7 @@ function VideoModel({ onModalClose, info, report, block, gifts, sendPopupHandler
                     </div>
                 ) : null}
                 <div className={`${style.addComment} ${!replySomeOne ? style.mkshadow : null}`}>
-                    <img src="../../../../public/images/icons/commentSec/user.svg" alt="" />
+                    <img style={{ borderRadius: '50%' }} src={profileData?.avatar || defaultProfileIcon} alt="" />
                     <div>
                         <input
                             value={comment}
