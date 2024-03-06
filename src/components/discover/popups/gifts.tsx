@@ -1,15 +1,20 @@
 import { ClickAwayListener, Modal } from '@mui/material'
 import style from './gifts.module.scss'
-import { useState } from 'react'
+import {  useEffect, useState } from 'react'
 import AllGiftsPopup from './allGiftsPopup'
 import RechargePopup from './rechargePopup'
 import FAQS from './FAQS'
 import CustomPopup from './custom'
-export default function Gifts({ openGifts, onGiftsClose }: any) {
+import { useAuthStore } from '../../../store/authStore'
+export default function Gifts({ openGifts, onGiftsClose , mediaId}: any) {
   const [showImg, setShowImg] = useState<any>({ status: false, img: '' })
   const [rechargePopup, setRechargePopup] = useState(false)
+  const [gifts, setGifts] = useState([])
   const [faqS, setFaqS] = useState(false)
   const [custom, setCustom] = useState(false)
+  const balance: number = useAuthStore((state: any) => state?.balance)
+  const API_KEY = process.env.VITE_API_URL;
+  const token = useAuthStore((state) => state.token);
   const ShowImage = (img: any) => {
     onGiftsClose()
     setShowImg({
@@ -17,12 +22,33 @@ export default function Gifts({ openGifts, onGiftsClose }: any) {
       img: img
     })
   }
+
+  const getGifts = async () => {
+    try {
+      const response: any = await fetch(`${API_KEY}/gift/`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const finalRes: any = await response.json()
+      setGifts(finalRes?.data)
+    } catch (error) {
+      console.log('error', error);
+    }
+  }
+
+  useEffect(() => {
+    getGifts()
+  }, [])
+
   return (
     <div className={style.parent}>
       <Modal open={openGifts} className={style.modal}>
         <ClickAwayListener onClickAway={onGiftsClose}>
           <div className={style.giftsPopup}>
-            <AllGiftsPopup openRechargePopup={() => {
+            <AllGiftsPopup mediaId={mediaId} allGifts={gifts} openRechargePopup={() => {
               onGiftsClose()
               setRechargePopup(true)
             }} sendImg={ShowImage} />
@@ -45,7 +71,7 @@ export default function Gifts({ openGifts, onGiftsClose }: any) {
       <Modal open={rechargePopup} className={style.modal}>
         <ClickAwayListener onClickAway={() => setRechargePopup(false)}>
           <div className={style.giftsPopup}>
-            <RechargePopup onCustomPopup={()=>{
+            <RechargePopup onCustomPopup={() => {
               setCustom(true)
               setRechargePopup(false)
             }} faqs={() => {

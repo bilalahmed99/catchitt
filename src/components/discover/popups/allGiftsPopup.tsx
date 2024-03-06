@@ -16,6 +16,8 @@ import img10 from '../../../../public/images/icons/gifts/SeezItt.svg'
 import img11 from '../../../../public/images/icons/gifts/StarPNG.svg'
 import img12 from '../../../../public/images/icons/gifts/TeddyBear.svg'
 import coin from '../../../../public/images/icons/gifts/coin.svg'
+import { useAuthStore } from '../../../store/authStore'
+import { json } from 'stream/consumers'
 
 const arr = [
     img1,
@@ -35,33 +37,63 @@ const arr = [
     img15,
     img16
 ]
-export default function AllGiftsPopup({ sendImg  , openRechargePopup}: any) {
+
+
+
+
+
+export default function AllGiftsPopup({ sendImg, openRechargePopup, allGifts, mediaId }: any) {
+    const balance: number = useAuthStore((state: any) => state?.balance)
+    const API_KEY = process.env.VITE_API_URL;
+    const token = useAuthStore((state) => state.token);
+
+    const sendAGift = async (giftData: any) => {
+        try {
+            const response: any = await fetch(`${API_KEY}/gift/send`, {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    giftId: giftData._id,
+                    mediaId
+                })
+            });
+            const finalRes: any = await response.json()
+            if (finalRes.status === 200) {
+                sendImg(giftData.imageUrl)
+            }
+        } catch (error) {
+            console.log('error', error);
+        }
+    }
     return (
         <div className={style.allGifts}>
             {
-                arr.map((gifImg: any, i: number) => (
-                    <div key={i} className={style.giftBoxParent}>
+                allGifts?.map((gifImg: any, i: number) => (
+                    <div key={i} className={style.giftBoxParent} >
                         <div className={style.gifBoxDiv1}>
-                            <img src={gifImg} alt="" />
-                            <div>
+                            <img style={{ width: 40, height: 40, display: 'block', margin: 'auto', padding: '0.25rem 0px' }} src={gifImg?.imageUrl} alt="" />
+                            <div style={{ marginTop: '0.5rem' }}>
                                 <img src={coin} alt="" />
-                                <p>5</p>
+                                <p>{gifImg?.price}</p>
                             </div>
                         </div>
-                        <div onClick={() => sendImg(gifImg)}>
-                            <p>Send</p>
+                        <div style={{ cursor: balance >= gifImg?.price ? 'pointer' : 'not-allowed' }} onClick={() => balance >= gifImg?.price ? sendAGift(gifImg) : null}>
+                            <p> Send</p>
                         </div>
                     </div>
                 ))
             }
             <div className={style.bottomSide}>
                 <div>
-                    <p className={style.balanceText}>Balance:  2</p>
+                    <p className={style.balanceText}>Balance:  {balance}</p>
                     <img src={coin} alt="" />
                 </div>
                 <div onClick={openRechargePopup}>
                     <img src={coin} alt="" />
-                    <p  className={style.rechargeText}>Recharge</p>
+                    <p className={style.rechargeText}>Recharge</p>
                     <img src="../../../../public/images/icons/rightArrow.svg" alt="" />
                 </div>
             </div>

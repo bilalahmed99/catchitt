@@ -12,7 +12,7 @@ import Forwardusers from '../../shared/popups/shareTo/Forwardusers';
 function HomePage() {
     const isMobile = useMediaQuery('(max-width:700px)');
     const { loading, videoes, activeTab, setActiveTab } = useHome();
-    const [videoModalInfo, setVideoModalInfo] = useState({});
+    const [videoModalInfo, setVideoModalInfo] = useState<any>({});
     const [reportPopup, setReportPopup] = useState(false);
     const [giftsPopup, setGiftsPopup] = useState(false);
     const [videoModal, setVideoModal] = useState(false);
@@ -69,7 +69,7 @@ function HomePage() {
                 onReportClose={() => setReportPopup(false)}
                 info={videoModalInfo}
             />
-            <Gifts openGifts={giftsPopup} onGiftsClose={() => setGiftsPopup(false)} />
+            <Gifts mediaId={videoModalInfo?.mediaId} openGifts={giftsPopup} onGiftsClose={() => setGiftsPopup(false)} />
             <Forwardusers onOpen={sendPopup} onClose={() => setSendPopup(false)} />
         </div>
     );

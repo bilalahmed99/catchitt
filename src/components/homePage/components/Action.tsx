@@ -63,7 +63,10 @@ function Action({
     }, [isLiked]);
     const [isActive, setIsActive] = useState(false);
     return (
-        <div className={style.useractions}>
+        <div style={{
+            position: 'relative',
+            zIndex: 2
+        }} className={style.useractions}>
             <div
                 style={{
                     width: 40,
@@ -75,6 +78,7 @@ function Action({
                     borderRadius: '50%',
                     cursor: 'pointer',
                     position: 'relative',
+                    zIndex: 2
                 }}
                 onClick={() => likeHandler()}
             >
