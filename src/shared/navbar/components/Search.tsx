@@ -1,12 +1,11 @@
-import { useLocation, useNavigate } from 'react-router-dom';
-import { search } from '../../../icons';
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { search } from '../../../icons';
 
 function Search({ placeholder, onInputChangeHandler, submitHandler }: any) {
     const { pathname } = useLocation();
 
     const [Search, setSearch] = useState<any>('');
-    const navigate = useNavigate();
     const submitH = (e: any) => {
         e.preventDefault(); // navigate(`/searchPage/${searchText}/All`);
         setSearch('');

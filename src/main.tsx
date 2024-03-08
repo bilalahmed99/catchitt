@@ -6,8 +6,10 @@ import HttpApi from 'i18next-http-backend';
 import { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import { initReactI18next } from 'react-i18next';
+import { Provider } from 'react-redux';
 import App from './App';
 import './index.css';
+import store from './redux/store';
 
 i18next
     .use(HttpApi)
@@ -27,19 +29,17 @@ i18next
         },
     });
 const loadingMarkup = (
-    <div className='py-4 text-center'>
+    <div className="py-4 text-center">
         <h3>Loading..</h3>
     </div>
 );
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement); // Use createRoot
 
-
 root.render(
-    <Suspense fallback={loadingMarkup}>
-        {/* <React.StrictMode> */}
-        <App />
-
-        {/* </React.StrictMode> */}
-    </Suspense>
+    <Provider store={store}>
+        <Suspense fallback={loadingMarkup}>
+            <App />
+        </Suspense>
+    </Provider>
 );

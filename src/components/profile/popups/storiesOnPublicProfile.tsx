@@ -40,7 +40,6 @@ export default function StoriesOnPublicProfile({ story, onclose, openReport }: a
             })
         }
     }, [])
-    console.log('stooooriesss',stories);
     
 
     const settings = {

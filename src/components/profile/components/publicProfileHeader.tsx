@@ -1,13 +1,14 @@
+import { Avatar, CircularProgress } from '@mui/material';
 import { FunctionComponent, useEffect, useState } from 'react';
-import styles from './profileHeader.module.scss';
-import ShareIcon from '../svg-components/ShareIcon';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { followingsMethod } from '../../../redux/AsyncFuncs';
+import COPY_AND_SEND_MENU from '../../../shared/Menu/copyAndSend';
 import LinkIcon from '../svg-components/LinkIcon';
 import MailIcon from '../svg-components/MailIcon';
-import { Avatar } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import ShareIcon from '../svg-components/ShareIcon';
+import styles from './profileHeader.module.scss';
 import { useAuthStore } from '../../../store/authStore';
-import COPY_AND_SEND_MENU from '../../../shared/Menu/copyAndSend';
-const API_KEY = process.env.VITE_API_URL;
 
 interface Props {
     setProfileModal: (value: boolean) => void;
@@ -23,7 +24,6 @@ interface Props {
 }
 
 const PublicProfileHeader: FunctionComponent<Props> = ({
-    setProfileModal,
     onFollowModalActive,
     setLikesModal,
     profileData,
@@ -32,33 +32,19 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
     showStories,
     copyHandler,
 }) => {
-    const auth = useAuthStore();
-    const token = useAuthStore((state) => state.token);
     const params: any = useParams();
-
     const [dropdown, setDropdown] = useState(false);
+    const [followBtnLoading, setfollowBtnLoading] = useState(false);
     const [stories, setStories] = useState([]);
+    const API_KEY = process.env.VITE_API_URL;
+    const token = useAuthStore((state) => state.token);
 
-    const [followedUsersData, setFollowedUsersData] = useState<any>([]);
-    const [followedAccounts, setFollowedAccounts] = useState<any>({}); // Initialize as an empty object
+    //@ts-ignore
+    const followings = useSelector((store) => store.reducers.followings);
 
-    const fetchFollowers = async () => {
-        try {
-            const response = await fetch(`${API_KEY}/profile/${auth._id}/followers`, {
-                method: 'GET',
-                headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
-            });
-
-            if (response.ok) {
-                const responseData = await response.json();
-                setFollowedUsersData(responseData.data.data);
-            }
-        } catch (error) {
-            alert('Somthing went wrong');
-            console.log(error);
-        }
-    };
+    const dispatch = useDispatch();
     useEffect(() => {
+        dispatch(followingsMethod());
         fetch(`${API_KEY}/media-content/stories`, {
             method: 'GET',
             headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
@@ -70,31 +56,11 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
             .catch((err) => {
                 console.log('collectons error', err);
             });
-        fetchFollowers();
     }, []);
 
     const manageFollowBtn = async () => {
-        try {
-            const response = await fetch(`${API_KEY}/profile/follow/${params?.id}/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            if (response.ok) {
-                // Update the followedAccounts state
-                setFollowedAccounts((prevFollowedAccounts: any) => ({
-                    ...prevFollowedAccounts,
-                    [params?.id]: !prevFollowedAccounts[params?.id], // Mark the account as followed
-                }));
-                fetchFollowers();
-            }
-        } catch (error) {
-            alert('Somthing went wrong');
-            console.log(error);
-        }
+        setfollowBtnLoading(true);
+        dispatch(followingsMethod(params?.id)).then(() => setfollowBtnLoading(false));
     };
 
     return (
@@ -168,9 +134,8 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
                     <button style={{ width: 112 }} className={styles.button}>
                         Messages
                     </button>
-
-                    {followedUsersData.length > 0 &&
-                    followedUsersData.some(
+                    {followings?.data?.length > 0 &&
+                    followings?.data?.some(
                         (user: any) => user.followed_userID._id === params?.id
                     ) ? (
                         <button
@@ -178,7 +143,11 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
                             className={styles.button2}
                             onClick={manageFollowBtn}
                         >
-                            Unfollow
+                            {!followBtnLoading ? (
+                                'Unfollow'
+                            ) : (
+                                <CircularProgress style={{ width: 16, height: 16 }} />
+                            )}
                         </button>
                     ) : (
                         <button
@@ -186,7 +155,11 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
                             style={{ background: '#5448b2', color: '#FFF', width: 116 }}
                             onClick={manageFollowBtn}
                         >
-                            Follow
+                            {!followBtnLoading ? (
+                                'Follow'
+                            ) : (
+                                <CircularProgress style={{ width: 16, height: 16 }} />
+                            )}
                         </button>
                     )}
                     <button
