@@ -83,7 +83,7 @@ function Forwardusers(props: any) {
                     <div className={style.users}>
                         {users.map((user: any, i: number) => {
                             return (
-                                <div className={style.user}>
+                                <div key={i} className={style.user}>
                                     <div className={style.sec1}>
                                         <input
                                             onChange={() => selectUserHandler(user)}

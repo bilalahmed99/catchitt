@@ -1,44 +1,17 @@
-import { Menu, MenuItem, imageListClasses, useMediaQuery } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useMediaQuery } from '@mui/material';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createIcon, defaultAvatar, logo } from '../../icons';
 import { useAuthStore } from '../../store/authStore';
 import style from './Navbar.module.scss';
-import Search from './components/Search';
 import NavbarMunu from './components/Menu';
+import Search from './components/Search';
 
 function Navbar() {
     const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-    const API_KEY = process.env.VITE_API_URL;
-    const token = useAuthStore((state) => state.token);
-    const [profileData, setProfileData] = useState<any>([]);
-
-    const handleFetchProfileInfo = async () => {
-        if (!isLoggedIn) {
-            return;
-        }
-        try {
-            const response = await fetch(`${API_KEY}/profile`, {
-                method: 'GET',
-                headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
-            });
-
-            if (response.ok) {
-                const responseData = await response.json();
-                setProfileData(responseData.data);
-            } else {
-                console.log(response);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    useEffect(() => {
-        handleFetchProfileInfo();
-    }, []);
     const name = useAuthStore((state) => state.name);
-
+    // @ts-ignore
+    const profileData = useSelector((store) => store?.reducers?.profile);
     const navigate = useNavigate();
     const logout = useAuthStore((state) => state.logout);
     const isMobile = useMediaQuery('(max-width:700px)');

@@ -1,53 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { videoLikehandle } from '../../../redux/AsyncFuncs';
 import COPY_AND_SEND_MENU_HOME from '../../../shared/Menu/copyAndSendForHome';
 import MORE_MENU_HOME from '../../../shared/Menu/more';
 import style from './Action.module.scss';
-import { useAuthStore } from '../../../store/authStore';
 
 function Action({
     obj,
     visibleReportPopup,
     likes,
-    comments,
     shares,
-    mediaId,
-    isLiked,
     popupHandler,
     copyHandler,
     showVideoModal,
     post,
-    commentsglobal
 }: any) {
-    const [videoesLikes, setvideoesLikes] = useState(likes);
-    const [comment, setComment] = useState(0);
-    const [videodata, setvideodata] = useState([]);
     const [fvrt, setFvrt] = useState(0);
-    const API_KEY = process.env.VITE_API_URL;
-    const token = useAuthStore((state) => state.token);
+    const dispatch = useDispatch();
 
-    const likeHandler = async () => {
+    const actionClickHandler = async () => {
         try {
+            // If user Click on Like Button
             if (obj.actionType === 'like') {
-                const response = await fetch(`${API_KEY}/media-content/like/${mediaId}/`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-type': 'application/json',
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+                dispatch(videoLikehandle(post.mediaId));
             }
+            // If user Click on Comment Button
             if (obj?.actionType === 'comment') {
                 showVideoModal(post);
             }
             setIsActive(!isActive);
-            if (isActive) {
-                setvideoesLikes(videoesLikes - 1);
-            } else {
-                setvideoesLikes(videoesLikes + 1);
-            }
         } catch (error) {
             console.log('error', error);
         }
+        // If user Click on Fvrt Button
         if (obj?.actionType === 'fvrt') {
             if (!isActive) {
                 setFvrt(fvrt + 1);
@@ -57,29 +42,27 @@ function Action({
         }
     };
 
+    const [isActive, setIsActive] = useState(false);
     useEffect(() => {
-        if (isLiked) {
+        if (post.isLiked) {
             if (obj.actionType === 'like') {
                 setIsActive(true);
             }
-        }
-    }, [isLiked]);
-    const [isActive, setIsActive] = useState(false);
-    useEffect(() => {
-        setvideodata(commentsglobal)
-        videodata?.map((data: any) => {
-            if (data?.mediaId === post?.mediaId) {
-                setComment(data?.comments)
+        } else {
+            if (obj.actionType === 'like') {
+                setIsActive(false);
             }
-        })
-    }, [commentsglobal])
-
+        }
+    }, [post.isLiked]);
 
     return (
-        <div style={{
-            position: 'relative',
-            zIndex: 2
-        }} className={style.useractions}>
+        <div
+            style={{
+                position: 'relative',
+                zIndex: 2,
+            }}
+            className={style.useractions}
+        >
             <div
                 style={{
                     width: 40,
@@ -91,9 +74,9 @@ function Action({
                     borderRadius: '50%',
                     cursor: 'pointer',
                     position: 'relative',
-                    zIndex: 2
+                    zIndex: 2,
                 }}
-                onClick={() => likeHandler()}
+                onClick={() => actionClickHandler()}
             >
                 {!obj.activeImage ? (
                     <img src={obj.img} alt="" />
@@ -109,15 +92,18 @@ function Action({
                     />
                 )}
                 {obj.actionType === 'more' && (
-                    <MORE_MENU_HOME url={post.originalUrl} visibleReportPopup={visibleReportPopup} />
+                    <MORE_MENU_HOME
+                        url={post.originalUrl}
+                        visibleReportPopup={visibleReportPopup}
+                    />
                 )}
             </div>
             {obj?.actionType === 'like' ? (
-                <p className={style.actionC}>{videoesLikes || 0}</p>
+                <p className={style.actionC}>{post.likes || 0}</p>
             ) : obj?.actionType === 'comment' ? (
-                <p className={style.actionC}>{comment}</p>
+                <p className={style.actionC}>{post?.comments?.length || 0}</p>
             ) : obj?.actionType === 'share' ? (
-                <p className={style.actionC}>{shares || 0}</p>
+                <p className={style.actionC}>{post.shares || 0}</p>
             ) : obj?.actionType === 'fvrt' ? (
                 <p className={style.actionC}>{fvrt}</p>
             ) : obj?.actionType === 'more' ? (

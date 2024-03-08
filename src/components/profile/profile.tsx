@@ -1,5 +1,7 @@
 import { ClickAwayListener, Modal } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Layout from '../../shared/layout';
 import { useAuthStore } from '../../store/authStore';
 import Gifts from '../discover/popups/gifts';
@@ -18,7 +20,6 @@ import { Liked } from './svg-components/Liked';
 import { Private } from './svg-components/Private';
 import { Tagged } from './svg-components/Tagged';
 import { VideoIcon } from './svg-components/VideoIcon';
-import { Navigate, useNavigate } from 'react-router-dom';
 
 export const Profile = (props: any) => {
     const { selectedIndex, setIndex } = useAuthStore();
@@ -28,7 +29,6 @@ export const Profile = (props: any) => {
     const [storyPopup, setStoryPopup] = useState(false);
     const [followModal, setFollowModal] = useState<null | string>(null);
     const [likesModal, setLikesModal] = useState(false);
-    const [profileData, setProfileData] = useState(null);
     const [loading, setLoading] = useState(false);
     const API_KEY = process.env.VITE_API_URL;
     const token = useAuthStore((state) => state.token);
@@ -42,6 +42,8 @@ export const Profile = (props: any) => {
     const [giftsPopup, setGiftsPopup] = useState(false);
     const [blockPopup, setBlockPopup] = useState(false);
     const [copyPopup, setcopyPopup] = useState(false);
+    // @ts-ignore
+    const profileData = useSelector((store) => store?.reducers?.profile);
 
     const navigate = useNavigate();
     const tabs = [
@@ -83,19 +85,6 @@ export const Profile = (props: any) => {
         setProfileModal(false);
     };
     useEffect(() => {
-        fetch(`${API_KEY}/profile`, {
-            method: 'GET',
-            headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                setProfileData(data.data);
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.log(err);
-                setLoading(false);
-            });
         // 63a04301a00ed2af91f17e1d user id contain videos
         fetch(`${API_KEY}/profile/${authstore._id}/videos`, {
             method: 'GET',

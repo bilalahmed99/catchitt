@@ -17,7 +17,6 @@ import img11 from '../../../../public/images/icons/gifts/StarPNG.svg'
 import img12 from '../../../../public/images/icons/gifts/TeddyBear.svg'
 import coin from '../../../../public/images/icons/gifts/coin.svg'
 import { useAuthStore } from '../../../store/authStore'
-import { json } from 'stream/consumers'
 
 const arr = [
     img1,

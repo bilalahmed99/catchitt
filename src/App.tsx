@@ -31,6 +31,7 @@ import { useAuthStore } from './store/authStore';
 import ChatsSec from './components/chats';
 import UploadSec from './components/uploadSec/uploadSec';
 import HomePage from './components/homePage';
+import useApp from './useApp';
 
 // Functional component to handle the initial route navigation
 const InitialRouteHandler = () => {
@@ -53,13 +54,14 @@ const InitialRouteHandler = () => {
 };
 
 function App() {
+    const {} = useApp();
 
     const [appLanguage, setAppLanguage] = useState(
-        (window.localStorage.getItem("lang") as string) || "en"
+        (window.localStorage.getItem('lang') as string) || 'en'
     );
     const setLanguage = (language: string) => {
         setAppLanguage(language);
-        window.localStorage.setItem("lang", language);
+        window.localStorage.setItem('lang', language);
     };
 
     return (
@@ -69,7 +71,15 @@ function App() {
                     <Router>
                         <Routes>
                             <Route path="/" element={<InitialRouteHandler />} />
-                            <Route path="/auth" element={<Authentication setLanguage={setLanguage} language={appLanguage} />} />
+                            <Route
+                                path="/auth"
+                                element={
+                                    <Authentication
+                                        setLanguage={setLanguage}
+                                        language={appLanguage}
+                                    />
+                                }
+                            />
                             <Route path="/forgot-password" element={<ForgotPassword />} />
                             <Route path="/retrieve/*" element={<SetNewPassword />} />
                             <Route path="/view/video/:onePost" element={<Home />} />
@@ -80,12 +90,27 @@ function App() {
                             <Route path="/profile" element={<Profile />} />
                             <Route path="/profile/:id" element={<PublicProfile />} />
                             <Route path="/settings/account" element={<Account />} />
-                            <Route path="/settings/account/activity" element={<PushNotificationsPage />} />
-                            <Route path="/settings/account/privacy-settings" element={<PrivacySecurityPage />} />
+                            <Route
+                                path="/settings/account/activity"
+                                element={<PushNotificationsPage />}
+                            />
+                            <Route
+                                path="/settings/account/privacy-settings"
+                                element={<PrivacySecurityPage />}
+                            />
                             <Route path="/settings/account/balance" element={<BalancePage />} />
-                            <Route path="/settings/account/transaction-history" element={<TransactionHistoryPage />} />
-                            <Route path="/settings/account/gift-revenue" element={<GiftRevenuePage />} />
-                            <Route path="/settings/account/withdrawal-limit" element={<WithdrawalLimitPage />} />
+                            <Route
+                                path="/settings/account/transaction-history"
+                                element={<TransactionHistoryPage />}
+                            />
+                            <Route
+                                path="/settings/account/gift-revenue"
+                                element={<GiftRevenuePage />}
+                            />
+                            <Route
+                                path="/settings/account/withdrawal-limit"
+                                element={<WithdrawalLimitPage />}
+                            />
                             <Route path="/sounds/:soundId" element={<SoundPage />} />
                             <Route path="/about/terms-conditions" element={<TermsPage />} />
                             <Route path="/about/community-guidelines" element={<CommunityPage />} />

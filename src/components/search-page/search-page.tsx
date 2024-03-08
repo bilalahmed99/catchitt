@@ -1350,35 +1350,9 @@ export const SearchPage = () => {
         // Add your modal content for 'Hashtags' tab here
         return <div>Hashtags Modal Content</div>;
     }, [open]);
-    const POPUPS = () => {
-        return (
-            <div>
-                <PopupForVideoPlayer
-                    onBlockPopup={() => setBlockPopup(true)}
-                    onReportPopup={() => setReportPopup(true)}
-                    videoModal={videoModal}
-                    onclose={() => setVideoModal(false)}
-                    info={videoModalInfo}
-                    gifts={() => setGiftPopup(true)}
-                />
-                <PopupForReport
-                    openReport={reportPopup}
-                    onReportClose={() => setReportPopup(false)}
-                    info={videoModalInfo}
-                />
-                <PopupForBlock
-                    openBlock={blockPopup}
-                    onBlockClose={() => setBlockPopup(false)}
-                    onReportClose={() => setReportPopup(false)}
-                    info={videoModalInfo}
-                />
-                <Gifts openGifts={giftPopup} onGiftsClose={() => setGiftPopup(false)} />
-            </div>
-        );
-    };
 
     return (
-        <Layout popups={<POPUPS />}>
+        <Layout>
             {/* <div className={styles.topBarDiv}>
                 {showHashtagPage ?
                     <TopBar searchBar={true} /> :
@@ -1544,6 +1518,28 @@ export const SearchPage = () => {
                         </div>
                     )}
                 </div>
+            </div>
+            <div>
+                <PopupForVideoPlayer
+                    onBlockPopup={() => setBlockPopup(true)}
+                    onReportPopup={() => setReportPopup(true)}
+                    videoModal={videoModal}
+                    onclose={() => setVideoModal(false)}
+                    info={videoModalInfo}
+                    gifts={() => setGiftPopup(true)}
+                />
+                <PopupForReport
+                    openReport={reportPopup}
+                    onReportClose={() => setReportPopup(false)}
+                    info={videoModalInfo}
+                />
+                <PopupForBlock
+                    openBlock={blockPopup}
+                    onBlockClose={() => setBlockPopup(false)}
+                    onReportClose={() => setReportPopup(false)}
+                    info={videoModalInfo}
+                />
+                <Gifts openGifts={giftPopup} onGiftsClose={() => setGiftPopup(false)} />
             </div>
         </Layout>
     );

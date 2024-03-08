@@ -1,25 +1,18 @@
-import * as React from 'react';
+import { alpha, styled } from '@mui/material';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import MenuItem from '@mui/material/MenuItem';
 import Menu, { MenuProps } from '@mui/material/Menu';
-import style from './menu.module.scss';
-import { alpha, styled } from '@mui/material';
+import MenuItem from '@mui/material/MenuItem';
+import * as React from 'react';
 import { goldCoin, logoutSvg, settingsDark, switchAcount, viewProfile } from '../../../icons';
+import style from './menu.module.scss';
 const options = ['View profile', 'Get Coins', 'Settings', 'Switch Account', 'Logout'];
 
 export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any) {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const [selectedIndex, setSelectedIndex] = React.useState(1);
     const open = Boolean(anchorEl);
     const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
-    };
-
-    const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
-        setSelectedIndex(index);
-        setAnchorEl(null);
     };
 
     const handleClose = () => {

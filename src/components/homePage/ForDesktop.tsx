@@ -1,5 +1,7 @@
 import { CircularProgress } from '@mui/material';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
     activeFvrt,
     activeLike,
@@ -10,28 +12,24 @@ import {
     like,
     moreInHome,
     music,
-    shareInHome
+    shareInHome,
 } from '../../icons';
+import { followingsMethod } from '../../redux/AsyncFuncs';
 import Layout from '../../shared/layout';
-import { useAuthStore } from '../../store/authStore';
 import Action from './components/Action';
 import CustomPlayer from './components/CustomPlayer';
-import useOnScreen from './components/onscreen';
 import style from './index.module.scss';
-import { useNavigate } from 'react-router-dom';
 
 function ForDesktop(props: any) {
-    const { videoes, activeTab, setActiveTab, showVideoModal, videoModal, sendPopup, setSendPopup , comments} = props || {};
-    const API_KEY = process.env.VITE_API_URL;
-    const [selectedTab, setSelectedTab] = useState<number>(1);
+    const { videoes, activeTab, setActiveTab, showVideoModal, videoModal, setSendPopup, comments , loading} =
+        props || {};
     const [reportPopup, setreportPopup] = useState(false);
     const [followBtnLoading, setfollowBtnLoading] = useState(false);
+    const [followimgbtnId, setFollowimgbtnId] = useState('');
     const [showCopyPopup, setshowCopyPopup] = useState(false);
-    const token = useAuthStore((state) => state.token);
-    const [followedAccounts, setFollowedAccounts] = useState<any>({});
-    const [followedUsersData, setFollowedUsersData] = useState<any>([]);
-    const [posts, setposts] = useState([]);
-    const auth = useAuthStore();
+    // @ts-ignore
+    const followers = useSelector((store) => store.reducers.followings);
+    const dispatch = useDispatch();
     const userActions: any = [
         { img: moreInHome, actionType: 'more' },
         { img: shareInHome, actionType: 'share', activeImage: activeShare },
@@ -40,51 +38,16 @@ function ForDesktop(props: any) {
         { img: like, actionType: 'like', activeImage: activeLike },
     ];
 
-    const ref = useRef<any>(null);
-    const isVisible = useOnScreen(ref);
-    const navigate: any = useNavigate()
-
-    const fetchFollowers = async () => {
-        try {
-            const response = await fetch(`${API_KEY}/profile/${auth._id}/followers`, {
-                method: 'GET',
-                headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
-            });
-
-            if (response.ok) {
-                const responseData = await response.json();
-                setFollowedUsersData(responseData.data.data);
-            }
-        } catch (error) {
-            alert('Somthing went wrong');
-            console.log(error);
-        }
-    };
+    const navigate: any = useNavigate();
 
     const follow_Unfollow_handler = async (id: any) => {
+        setFollowimgbtnId(id)
         setfollowBtnLoading(true);
         try {
-            const response = await fetch(`${API_KEY}/profile/follow/${id}/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            if (response.ok) {
-                // Update the followedAccounts state
-                setFollowedAccounts((prevFollowedAccounts: any) => ({
-                    ...prevFollowedAccounts,
-                    [id]: !prevFollowedAccounts[id], // Mark the account as followed
-                }));
-                fetchFollowers();
-            }
+            dispatch(followingsMethod(id)).then(() => setfollowBtnLoading(false));
         } catch (error) {
             alert('Somthing went wrong');
             console.log(error);
-        } finally {
-            setfollowBtnLoading(false);
         }
     };
     const copyHandler = (msg: string) => {
@@ -124,10 +87,10 @@ function ForDesktop(props: any) {
                     </div>
                 </div>
                 <div className={style.videoesParent}>
-                    {videoes?.length > 0 ? (
+                    {videoes?.length > 0 && !loading ? (
                         videoes.map((post: any, number: number) => {
                             return (
-                                <div className={style.videoParent}>
+                                <div key={number} className={style.videoParent}>
                                     <div className={style.videoHeader}>
                                         <div className={style.videoHeaderSec1}>
                                             <img
@@ -135,11 +98,13 @@ function ForDesktop(props: any) {
                                                     borderRadius: '50%',
                                                     width: '44px',
                                                     height: '44px',
-                                                    cursor:'pointer'
+                                                    cursor: 'pointer',
                                                 }}
                                                 src={post?.user?.avatar || defaultAvatar}
                                                 alt=""
-                                                onClick={() => navigate(`/profile/${post?.user?._id}`)}
+                                                onClick={() =>
+                                                    navigate(`/profile/${post?.user?._id}`)
+                                                }
                                             />
                                             <div>
                                                 <p className={style.name}>{post?.user?.name}</p>
@@ -150,7 +115,7 @@ function ForDesktop(props: any) {
                                         </div>
                                         <button
                                             className={
-                                                followedUsersData?.some(
+                                                followers?.data?.some(
                                                     (user: any) =>
                                                         user.followed_userID._id === post?.user?._id
                                                 )
@@ -159,14 +124,14 @@ function ForDesktop(props: any) {
                                             }
                                             onClick={() => follow_Unfollow_handler(post?.user?._id)}
                                         >
-                                            {followBtnLoading ? (
+                                            {followBtnLoading && followimgbtnId === post?.user?._id ? (
                                                 <CircularProgress
                                                     style={{ width: 20, height: 20 }}
                                                 />
-                                            ) : followedUsersData?.some(
-                                                (user: any) =>
-                                                    user.followed_userID._id === post?.user?._id
-                                            ) ? (
+                                            ) : followers?.data?.some(
+                                                  (user: any) =>
+                                                      user.followed_userID._id === post?.user?._id
+                                              ) ? (
                                                 'Following'
                                             ) : (
                                                 'Follow'
@@ -197,8 +162,8 @@ function ForDesktop(props: any) {
                                                     post?.reducedVideoUrl
                                                         ? post?.reducedVideoUrl
                                                         : post?.reducedVideoHlsUrl
-                                                            ? post?.reducedVideoHlsUrl
-                                                            : post?.originalUrl
+                                                        ? post?.reducedVideoHlsUrl
+                                                        : post?.originalUrl
                                                 }
                                                 controls={true}
                                             />
@@ -207,6 +172,7 @@ function ForDesktop(props: any) {
                                             {userActions.map((obj: any, i: number) => {
                                                 return (
                                                     <Action
+                                                        key={i}
                                                         copyHandler={copyHandler}
                                                         visibleReportPopup={() =>
                                                             setreportPopup(true)

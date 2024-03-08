@@ -1,12 +1,15 @@
+import { CircularProgress, useMediaQuery } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import defaultProfileIcon from '../../../assets/defaultProfileIcon.png';
+import { commentMethod, followingsMethod, videoLikehandle } from '../../../redux/AsyncFuncs';
+import { useAuthStore } from '../../../store/authStore';
 import Comment from './comment';
 import style from './videoModel.module.scss';
-import { useAuthStore } from '../../../store/authStore';
-import { CircularProgress, useMediaQuery } from '@mui/material';
+import { timeConverter } from '../../../utils';
 
 interface Props {
     onModalClose: any;
@@ -18,7 +21,15 @@ interface Props {
     commentsLength?: any;
 }
 
-function VideoModel({ onModalClose, info, report, block, gifts, sendPopupHandler, commentsLength }: Props) {
+function VideoModel({
+    onModalClose,
+    info,
+    report,
+    block,
+    gifts,
+    sendPopupHandler,
+    commentsLength,
+}: Props) {
     const navigate = useNavigate();
     //For Images Ref.
     const [like, setLike] = useState(false);
@@ -26,14 +37,14 @@ function VideoModel({ onModalClose, info, report, block, gifts, sendPopupHandler
     const [fvrt, setFvrt] = useState(false);
     const [nofvrt, setnoFvrt] = useState<number>(256);
     const [share, setShare] = useState(false);
-    const [profileData, setProfileData] = useState<any>(null);
     const token = useAuthStore((state) => state.token);
     const [more, setMore] = useState(false);
-    const [followedAccounts, setFollowedAccounts] = useState<any>({});
-    const [followedUsersData, setFollowedUsersData] = useState<any>([]);
     const [userComments, setUserComments] = useState<any[]>([]);
-    const auth = useAuthStore();
-
+    // @ts-ignore
+    const profileData = useSelector((store) => store?.reducers?.profile);
+    // @ts-ignore
+    const followings = useSelector((store) => store?.reducers?.followings);
+    const dispatch = useDispatch();
     const [followBtnLoading, setfollowBtnLoading] = useState(false);
 
     const API_KEY = process.env.VITE_API_URL;
@@ -44,171 +55,128 @@ function VideoModel({ onModalClose, info, report, block, gifts, sendPopupHandler
         id: '',
     });
     const [comment, setComment] = useState('');
-    const timeConverter = (time: any) => {
-        const timestamp = time;
-        const date = new Date(timestamp);
-        const year = date.getFullYear();
-        const month = date.getMonth() + 1;
-        const day = date.getDate();
-        let createdTime = `${day}-${month}-${year}`;
-        return createdTime;
-    };
     const isMobile = useMediaQuery('(max-width:700px)');
-
-    const getProfileData = () => {
-
-        fetch(`${API_KEY}/profile`, {
-            method: 'GET',
-            headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                setProfileData(data.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
 
     const likeHandler = async () => {
         try {
             if (like) {
                 setLikes(likes - 1);
+                setLike(false);
             } else {
                 setLikes(likes + 1);
+                setLike(true);
             }
-            const response = await fetch(`${API_KEY}/media-content/like/${info?.mediaId}/`, {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            dispatch(videoLikehandle(info?.mediaId));
         } catch (error) {
             console.log('error', error);
         }
     };
 
     useEffect(() => {
-        getProfileData()
         setUserComments(info?.comments);
     }, []);
 
     const commentHandler = async () => {
-        if (replySomeOne?.status) {
-            const payload = {
-                comment: comment,
-                commentId: replySomeOne.id,
-            };
-            try {
-                let response = await fetch(`${API_KEY}/media-content/comment/${info?.mediaId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`,
-                    },
-                    body: JSON.stringify(payload),
-                });
-                const finalRes = await response.json();
-                console.log(finalRes.data);
-                const filteredCommnets: any = userComments.filter((userComment: any) => userComment.id !== finalRes.data.id)
+        // if (replySomeOne?.status) {
+        //     const payload = {
+        //         comment: comment,
+        //         commentId: replySomeOne.id,
+        //     };
+        //     try {
+        //         let response = await fetch(`${API_KEY}/media-content/comment/${info?.mediaId}`, {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //                 Authorization: `Bearer ${token}`,
+        //             },
+        //             body: JSON.stringify(payload),
+        //         });
+        //         const finalRes = await response.json();
+        //         console.log(finalRes.data);
+        //         const filteredCommnets: any = userComments.filter(
+        //             (userComment: any) => userComment.id !== finalRes.data.id
+        //         );
 
-                if (finalRes?.data) {
-                    setUserComments([...filteredCommnets, finalRes?.data]);
+        //         if (finalRes?.data) {
+        //             setUserComments([...filteredCommnets, finalRes?.data]);
+        //         }
+        //
+        //     } catch (error) {
+        //         console.log(error);
+        //     }
+        // } else {
+        //     const payload = {
+        //         comment: comment,
+        //     };
+        //     try {
+        //         let response = await fetch(`${API_KEY}/media-content/comment/${info?.mediaId}`, {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //                 Authorization: `Bearer ${token}`,
+        //             },
+        //             body: JSON.stringify(payload),
+        //         });
+        //         const finalRes = await response.json();
+        //         console.log(finalRes.data);
+        //         if (finalRes?.data) {
+        //             setUserComments([...userComments, finalRes?.data]);
+        //         }
+        //     } catch (error) {
+        //         console.log(error);
+        //     }
+        // }
+        dispatch(commentMethod({ text: comment, info, replyId: replySomeOne?.id })).then(
+            (payload: any) => {
+                console.log(replySomeOne?.id);
+
+                if (replySomeOne?.status) {
+                    const filteredCommnets: any = userComments.filter(
+                        (userComment: any) => userComment.id !== payload.payload.res.id
+                    );
+
+                    setUserComments([...filteredCommnets, payload.payload.res]);
+                } else {
+                    setUserComments([...userComments, payload.payload.res]);
                 }
-                setReplySomeOne({
-                    status: false,
-                    userName: '',
-                    id: '',
-                })
-            } catch (error) {
-                console.log(error);
             }
-        } else {
-            const payload = {
-                comment: comment,
-            };
-            try {
-                let response = await fetch(`${API_KEY}/media-content/comment/${info?.mediaId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`,
-                    },
-                    body: JSON.stringify(payload),
-                });
-                const finalRes = await response.json();
-                console.log(finalRes.data);
-                if (finalRes?.data) {
-                    setUserComments([...userComments, finalRes?.data]);
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        setComment('')
+        );
+        setReplySomeOne({
+            status: false,
+            userName: '',
+            id: '',
+        });
+        setComment('');
     };
 
     useEffect(() => {
-        commentsLength(userComments.length, info.mediaId)
-    }, [userComments])
-
-    console.log(info);
-
-    const fetchFollowers = async () => {
-        try {
-            const response = await fetch(`${API_KEY}/profile/${auth._id}/followers`, {
-                method: 'GET',
-                headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
-            });
-
-            if (response.ok) {
-                const responseData = await response.json();
-                setFollowedUsersData(responseData.data.data);
-            }
-        } catch (error) {
-            alert('Somthing went wrong');
-            console.log(error);
+        if (commentsLength) {
+            commentsLength(userComments?.length, info?.mediaId);
         }
-    };
+    }, [userComments]);
 
     const follow_Unfollow_handler = async (id: any) => {
         setfollowBtnLoading(true);
         try {
-            const response = await fetch(`${API_KEY}/profile/follow/${id}/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            if (response.ok) {
-                // Update the followedAccounts state
-                setFollowedAccounts((prevFollowedAccounts: any) => ({
-                    ...prevFollowedAccounts,
-                    [id]: !prevFollowedAccounts[id], // Mark the account as followed
-                }));
-                fetchFollowers();
-            }
+            dispatch(followingsMethod(id)).then(() => setfollowBtnLoading(false));
         } catch (error) {
             alert('Somthing went wrong');
             console.log(error);
-        } finally {
-            setfollowBtnLoading(false);
         }
     };
 
     return (
-        <div className={style.div} onClick={() => {
-            if (more) {
-                setMore(false)
-            }
-            if (share) {
-                setShare(false)
-
-            }
-        }}>
+        <div
+            className={style.div}
+            onClick={() => {
+                if (more) {
+                    setMore(false);
+                }
+                if (share) {
+                    setShare(false);
+                }
+            }}
+        >
             <div className={style['video-sec']}>
                 <video
                     loop={true}
@@ -233,45 +201,64 @@ function VideoModel({ onModalClose, info, report, block, gifts, sendPopupHandler
                         alt=""
                     />
                     <div style={{ marginLeft: '16px' }}>
-                        <p className={style['name']} style={{ textOverflow: 'ellipsis', maxWidth: isMobile ? '100px' : '100%', whiteSpace: 'nowrap', overflow: 'hidden' }}>{info.user.name}</p>
+                        <p
+                            className={style['name']}
+                            style={{
+                                textOverflow: 'ellipsis',
+                                maxWidth: isMobile ? '100px' : '100%',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                            }}
+                        >
+                            {info.user.name}
+                        </p>
                         <div className="d-flex" style={{ flex: 1, justifyContent: 'flex-start' }}>
-                            <p style={{ textOverflow: 'ellipsis', maxWidth: isMobile ? '100px' : '100%', whiteSpace: 'nowrap', overflow: 'hidden' }} className={style['text2']}>{info.user.username}</p>
-                            {
-                                !isMobile &&
+                            <p
+                                style={{
+                                    textOverflow: 'ellipsis',
+                                    maxWidth: isMobile ? '100px' : '100%',
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                }}
+                                className={style['text2']}
+                            >
+                                {info.user.username}
+                            </p>
+                            {!isMobile && (
                                 <img
                                     className="mx-2"
                                     src="../../../../public/images/icons/Text.svg"
                                     alt=""
                                 />
-                            }
-                            {
-                                !isMobile &&
+                            )}
+                            {!isMobile && (
                                 <p className={style['text2']}>{timeConverter(info.createdTime)}</p>
-                            }
-
+                            )}
                         </div>
                     </div>
-                    <div className={style['frdsBtn']} >
-                        <button style={{ width: '60px !important' }} className={
-                            followedUsersData?.some(
-                                (user: any) =>
-                                    user.followed_userID._id === info?.user?._id
-                            )
-                                ? style.abc
-                                : style.btn
-                        }
-                            onClick={() => follow_Unfollow_handler(info?.user?._id)}>  {followBtnLoading ? (
-                                <CircularProgress
-                                    style={{ width: 20, height: 20 }}
-                                />
-                            ) : followedUsersData?.some(
-                                (user: any) =>
-                                    user.followed_userID._id === info?.user?._id
-                            ) ? (
+                    <div className={style['frdsBtn']}>
+                        <button
+                            style={{ width: '60px !important' }}
+                            className={
+                                followings?.data?.some(
+                                    (user: any) => user.followed_userID._id === info?.user?._id
+                                )
+                                    ? style.abc
+                                    : style.btn
+                            }
+                            onClick={() => follow_Unfollow_handler(info?.user?._id)}
+                        >
+                            {' '}
+                            {followBtnLoading ? (
+                                <CircularProgress style={{ width: 20, height: 20 }} />
+                            ) : followings?.data?.some(
+                                  (user: any) => user.followed_userID._id === info?.user?._id
+                              ) ? (
                                 'Friends'
                             ) : (
                                 'Follow'
-                            )}</button>
+                            )}
+                        </button>
                     </div>
                 </div>
                 <p style={{ marginBottom: 24 }} className={style['text3']}>
@@ -435,9 +422,14 @@ function VideoModel({ onModalClose, info, report, block, gifts, sendPopupHandler
                 <div className={style.gifts}>
                     <p className={style.receivedGifftsText}>Gifts received</p>
                     <div>
-
-                        <img src="../../../../public/images/icons/commentSec/CoinChestPNG.svg" alt="" />
-                        <img src="../../../../public/images/icons/commentSec/CrystalPNG.svg" alt="" />
+                        <img
+                            src="../../../../public/images/icons/commentSec/CoinChestPNG.svg"
+                            alt=""
+                        />
+                        <img
+                            src="../../../../public/images/icons/commentSec/CrystalPNG.svg"
+                            alt=""
+                        />
                         <img src="../../../../public/images//icons/commentSec/Gift2.svg" alt="" />
                         <img src="../../../../public/images/icons/commentSec/Mjolnir.svg" alt="" />
                         <img
@@ -449,7 +441,7 @@ function VideoModel({ onModalClose, info, report, block, gifts, sendPopupHandler
                     </div>
                 </div>
                 <div className={style.comments}>
-                    <p className={style.commentText1}>All comment ({userComments.length})</p>
+                    <p className={style.commentText1}>All comment ({userComments?.length})</p>
                     {userComments?.map((comments: any, i: number) => (
                         <Comment
                             key1={i}
@@ -486,7 +478,11 @@ function VideoModel({ onModalClose, info, report, block, gifts, sendPopupHandler
                     </div>
                 ) : null}
                 <div className={`${style.addComment} ${!replySomeOne ? style.mkshadow : null}`}>
-                    <img style={{ borderRadius: '50%' }} src={profileData?.avatar || defaultProfileIcon} alt="" />
+                    <img
+                        style={{ borderRadius: '50%' }}
+                        src={profileData?.avatar || defaultProfileIcon}
+                        alt=""
+                    />
                     <div>
                         <input
                             value={comment}

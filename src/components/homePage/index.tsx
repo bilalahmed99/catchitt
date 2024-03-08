@@ -11,7 +11,7 @@ import Forwardusers from '../../shared/popups/shareTo/Forwardusers';
 
 function HomePage() {
     const isMobile = useMediaQuery('(max-width:700px)');
-    const { loading, videoes, activeTab, setActiveTab } = useHome();
+    const { loading, videos, activeTab, setActiveTab } = useHome();
     const [videoModalInfo, setVideoModalInfo] = useState<any>({});
     const [reportPopup, setReportPopup] = useState(false);
     const [giftsPopup, setGiftsPopup] = useState(false);
@@ -19,16 +19,17 @@ function HomePage() {
     const [blockPopup, setBlockPopup] = useState(false);
     const [sendPopup, setSendPopup] = useState(false);
     const [videoComments, setvideoComments] = useState<any[]>([]);
-    console.log(videoes);
 
     const realTimehandler = (comments: number, mediaId: any) => {
-        const filteredData: any[] = videoComments.filter((data: any) => data.mediaId !== mediaId)
-        setvideoComments([...filteredData, {
-            mediaId,
-            comments
-        }])
-
-    }
+        const filteredData: any[] = videoComments.filter((data: any) => data.mediaId !== mediaId);
+        setvideoComments([
+            ...filteredData,
+            {
+                mediaId,
+                comments,
+            },
+        ]);
+    };
 
     return (
         <div>
@@ -36,7 +37,7 @@ function HomePage() {
                 <ForMobile
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
-                    videoes={videoes}
+                    videoes={videos}
                     loading={loading}
                     showVideoModal={(e: any) => {
                         setVideoModalInfo(e);
@@ -49,7 +50,7 @@ function HomePage() {
                 <ForDesktop
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
-                    videoes={videoes}
+                    videoes={videos}
                     loading={loading}
                     showVideoModal={(e: any) => {
                         setVideoModalInfo(e);
@@ -82,7 +83,11 @@ function HomePage() {
                 onReportClose={() => setReportPopup(false)}
                 info={videoModalInfo}
             />
-            <Gifts mediaId={videoModalInfo?.mediaId} openGifts={giftsPopup} onGiftsClose={() => setGiftsPopup(false)} />
+            <Gifts
+                mediaId={videoModalInfo?.mediaId}
+                openGifts={giftsPopup}
+                onGiftsClose={() => setGiftsPopup(false)}
+            />
             <Forwardusers onOpen={sendPopup} onClose={() => setSendPopup(false)} />
         </div>
     );
