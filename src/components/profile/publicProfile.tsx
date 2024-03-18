@@ -35,7 +35,7 @@ export const PublicProfile = (props: any) => {
     const [giftsPopup, setGiftsPopup] = useState(false);
     const [blockPopup, setBlockPopup] = useState(false);
     const API_KEY = process.env.VITE_API_URL;
-    const token = useAuthStore((state) => state.token);
+    const token = localStorage.getItem('token');
     const [videoModal, setVideoModal] = useState(false);
     const [copyPopup, setcopyPopup] = useState(false);
 

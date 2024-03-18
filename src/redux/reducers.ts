@@ -1,17 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { combineReducers } from "redux";
-import { commentMethod, fetchProfile, followingsMethod, getHomeVideos, getRandomUsers, videoLikehandle } from "./AsyncFuncs";
+import { commentMethod, followingsMethod, getHomeVideos, getRandomUsers, videoLikehandle } from "./AsyncFuncs";
+import loginSlice from './reducers/auth';
 
-const profile: any = createSlice({
-    name: "profile",
-    initialState: {},
-    reducers: {},
-    extraReducers: (builder: any) => {
-        builder.addCase(fetchProfile.fulfilled, (_state: any, action: any) => {
-            return action.payload
-        })
-    }
-});
 const followings: any = createSlice({
     name: "followings",
     initialState: {},
@@ -37,8 +28,6 @@ const homeVideos: any = createSlice({
         builder.addCase(videoLikehandle.fulfilled, (state: any, action: any) => {
             // @ts-ignore
             let filteredData = state.map((element: any) => {
-                console.log('element', action.payload.id === element.mediaId);
-
                 if (element.mediaId === action.payload.id) {
                     return { ...element, isLiked: !element.isLiked, likes: !element.isLiked ? element.likes + 1 : element.likes - 1 }
                 } else {
@@ -98,8 +87,8 @@ const suggestedAccounts: any = createSlice({
 export const { updateHomeVideos } = homeVideos.actions
 
 export default combineReducers({
-    profile: profile.reducer,
     followings: followings.reducer,
     homeVideos: homeVideos.reducer,
-    suggestedAccounts: suggestedAccounts.reducer
+    suggestedAccounts: suggestedAccounts.reducer,
+    profile:loginSlice
 });

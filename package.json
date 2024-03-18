@@ -56,7 +56,13 @@
     "socket.io-client": "^4.7.4",
     "vite-plugin-environment": "^1.1.3",
     "vite-plugin-svgr": "^3.2.0",
-    "zustand": "^4.3.8"
+    "zustand": "^4.3.8",
+    "framework7-react": "^8.3.0",
+    "url-join": "^5.0.0",
+    "formdata2json": "^1.0.8",
+    "react-use": "^17.4.0",
+    "skeleton-elements": "^4.0.1",
+    "framework7": "^8.3.0"
   },
   "devDependencies": {
     "@types/file-saver": "^2.0.5",

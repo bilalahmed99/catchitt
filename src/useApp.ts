@@ -1,16 +1,23 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProfile, followingsMethod, getRandomUsers } from "./redux/AsyncFuncs";
-import { useAuthStore } from "./store/authStore";
+import { followingsMethod, getRandomUsers } from "./redux/AsyncFuncs";
+import { updateProfile } from "./redux/reducers/auth";
+import { db } from "./utils/db";
 
 function useApp() {
     const dispatch = useDispatch();
-    const auth: any = useAuthStore((store: any) => store)
-    useEffect(() => {
-        dispatch(fetchProfile());
-        dispatch(followingsMethod());
-        dispatch(getRandomUsers());
-    }, [auth])
+    const token: any = localStorage.getItem('token')
+    const _id: any = localStorage.getItem('userId')
+    useMemo(() => {
+        if (token) {
+            db.profile.get({ _id }).then((result: any) => {
+                dispatch(updateProfile(result))
+                dispatch(followingsMethod());
+            })
+        } else {
+            dispatch(getRandomUsers());
+        }
+    }, [])
     console.log(useSelector((store: any) => store.reducers));
     return {}
 }
