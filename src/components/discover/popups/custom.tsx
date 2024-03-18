@@ -4,7 +4,7 @@ import { useAuthStore } from '../../../store/authStore';
 export default function CustomPopup({ onclose }: any) {
     const [value, setvalue] = useState<string>('');
     const API_KEY = process.env.VITE_API_URL;
-    const token = useAuthStore((state) => state.token);
+    const token = localStorage.getItem('token')
     const valueHandler = (val?: string) => {
         if (val) {
             setvalue(value.concat(val));

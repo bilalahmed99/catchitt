@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProfile, getHomeVideos } from '../../../redux/AsyncFuncs';
+import { getHomeVideos } from '../../../redux/AsyncFuncs';
 import { updateHomeVideos } from '../../../redux/reducers';
-import { useAuthStore } from '../../../store/authStore';
 
 function useHome() {
-    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+    const isLoggedIn = localStorage.getItem('token')
     const [loading, setLoading] = useState<boolean>(false);
     const [activeTab, setActiveTab] = useState<number>(2);
-    const auth: any = useAuthStore((store: any) => store)
+    const auth: any = useSelector((store: any) => store?.reducers?.profile)
     // @ts-ignore
     const videos = useSelector((store) => store.reducers.homeVideos)
     const dispatch = useDispatch()
@@ -20,7 +19,7 @@ function useHome() {
 
     useEffect(() => {
         getHomeVideoes()
-        dispatch(fetchProfile());
+        // dispatch(fetchProfile());
     }, []);
 
     useEffect(() => {

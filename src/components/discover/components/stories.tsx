@@ -1,30 +1,26 @@
 import { useEffect, useRef, useState } from 'react';
-import Slider from "react-slick";
-import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css";
-import { useAuthStore } from '../../../store/authStore';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
+import { get } from '../../../axios/axiosClient';
 import styles from './stories.module.scss';
 
-
 export default function Stories({ showStories }: any) {
-    const [stories, setStories] = useState([])
+    const [stories, setStories] = useState([]);
     const sliderRef: any = useRef(null);
     const API_KEY = process.env.VITE_API_URL;
-    const token = useAuthStore((state) => state.token);
+    const token = localStorage.getItem('token');
 
-    const [sliderIndex, setSliderIndex] = useState(0)
+    const [sliderIndex, setSliderIndex] = useState(0);
     useEffect(() => {
-        fetch(`${API_KEY}/media-content/stories`, {
-            method: 'GET',
-            headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
-        }).then((res) => res.json()).then((data) => {
-
-            setStories(data.data)
-        }).catch((err) => {
-            console.log('collectons error', err);
-        })
-
-    }, [])
+        get('/media-content/stories')
+            .then((data:any) => {
+                setStories(data?.data?.data);
+            })
+            .catch((err) => {
+                console.log('collectons error', err);
+            });
+    }, []);
 
     const nextSlide = () => {
         // Check if the slider reference exists
@@ -32,13 +28,11 @@ export default function Stories({ showStories }: any) {
             // Use the slickNext method to move to the next slide
             sliderRef.current.slickNext();
         }
-
     };
     const prevSlide = () => {
         if (sliderRef.current) {
-            sliderRef.current.slickPrev()
-        };
-
+            sliderRef.current.slickPrev();
+        }
     };
     const settings = {
         dots: false,
@@ -66,16 +60,14 @@ export default function Stories({ showStories }: any) {
                     : null
             } */}
 
-            <Slider className={styles.slider} ref={sliderRef}  {...settings}>
-                {
-                    stories.map((story: any, i: any) => {
-                        return (
-                            <div onClick={showStories} className={styles.story}>
-                                <img src={story?.stories[0].thumbnailUrl} alt="" />
-                            </div>
-                        )
-                    })
-                }
+            <Slider className={styles.slider} ref={sliderRef} {...settings}>
+                {stories.map((story: any, i: any) => {
+                    return (
+                        <div onClick={showStories} className={styles.story}>
+                            <img src={story?.stories[0].thumbnailUrl} alt="" />
+                        </div>
+                    );
+                })}
             </Slider>
         </>
     );

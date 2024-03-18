@@ -22,6 +22,8 @@ import { Tagged } from './svg-components/Tagged';
 import { VideoIcon } from './svg-components/VideoIcon';
 import { db } from '../../utils/db';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { get } from '../../axios/axiosClient';
+import { useUpdateEffect } from 'react-use';
 
 export const Profile = (props: any) => {
     const { selectedIndex, setIndex } = useAuthStore();
@@ -33,7 +35,8 @@ export const Profile = (props: any) => {
     const [likesModal, setLikesModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const API_KEY = process.env.VITE_API_URL;
-    const token = useAuthStore((state) => state.token);
+    const token = localStorage.getItem('token')
+    const userId = localStorage.getItem('userId')
     const [videoModal, setVideoModal] = useState(false);
     const [userVideos, setUserVideos] = useState([]);
     const [userlikedVideos, setUserlikedVideos] = useState([]);
@@ -91,7 +94,7 @@ export const Profile = (props: any) => {
     };
     useEffect(() => {
         // 63a04301a00ed2af91f17e1d user id contain videos
-        fetch(`${API_KEY}/profile/${authstore._id}/videos`, {
+        fetch(`${API_KEY}/profile/${userId}/videos`, {
             method: 'GET',
             headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
         })
@@ -163,7 +166,7 @@ export const Profile = (props: any) => {
             .catch((err) => {
                 console.log('collectons error', err);
             });
-    }, [profileModal]);
+    }, []);
     const onFollowModalActive = (tab: string | null) => {
         setFollowModal(tab);
     };

@@ -14,6 +14,7 @@ import VideoPanel from './components/videoPanel';
 import styles from './discover.module.scss';
 import Gifts from './popups/gifts';
 import { CircularProgress } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 export default function Discover() {
     const API_KEY = process.env.VITE_API_URL;
@@ -22,15 +23,22 @@ export default function Discover() {
     const [videoModal, setVideoModal] = useState(false);
     // @ts-ignore
     const [videoModalInfo, setVideoModalInfo] = useState({});
-    const token = useAuthStore((state) => state.token);
+    // const token = localStorage.getItem('token')
     const [reportPopup, setReportPopup] = useState(false);
     const [blockPopup, setBlockPopup] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
     const [giftPopup, setGiftPopup] = useState(false);
+    const token = useSelector((store: any) => store?.reducers?.profile?.token);
     const [storyPopup, setStoryPopup] = useState(false);
 
     const [randomAccs, setRandomAccs] = useState([]);
     const Navigate = useNavigate();
+    useEffect(() => {
+        if (!token) {
+            navigate('/auth');
+        }
+    }, [token]);
 
     const getRandomAccounts = (arr: any, count: number) => {
         const shuffled = arr.slice(); // Create a copy of the array to avoid modifying the original one
@@ -51,7 +59,6 @@ export default function Discover() {
         return shuffled.slice(0, count); // Return the first 'count' elements
     };
     useEffect(() => {
-        !token ? Navigate('/auth') : null;
         const apisIntegration = async () => {
             setIsLoading(true);
             try {

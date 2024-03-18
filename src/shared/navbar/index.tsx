@@ -8,10 +8,9 @@ import NavbarMunu from './components/Menu';
 import Search from './components/Search';
 
 function Navbar() {
-    const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-    const name = useAuthStore((state) => state.name);
+    const isLoggedIn: boolean = localStorage.getItem('token') ? true : false;
     // @ts-ignore
-    const profileData = useSelector((store) => store?.reducers?.profile);
+    const profile = useSelector((store) => store?.reducers?.profile);
     const navigate = useNavigate();
     const logout = useAuthStore((state) => state.logout);
     const isMobile = useMediaQuery('(max-width:700px)');
@@ -48,7 +47,7 @@ function Navbar() {
                                             cursor: 'pointer',
                                             borderRadius: '50%',
                                         }}
-                                        src={profileData?.avatar || defaultAvatar}
+                                        src={profile?.avatar || defaultAvatar}
                                         alt=""
                                     />
                                     {/* <div  style={{ position: 'relative', width:'100%' , height:'100%' , border:'1px solid red' }}> */}
@@ -59,7 +58,7 @@ function Navbar() {
                                     />
                                     {/* </div> */}
                                 </div>
-                                <p className={style.name}>{name}</p>
+                                <p className={style.name}>{profile.name}</p>
                             </div>
                         </div>
                     ) : (
@@ -83,7 +82,7 @@ function Navbar() {
                 <div style={{ position: 'relative' }}>
                     <img
                         style={{ width: '40px', height: '40px', borderRadius: '50%' }}
-                        src={profileData?.avatar || defaultAvatar}
+                        src={profile?.avatar || defaultAvatar}
                         onClick={() => navigate('/upload')}
                         alt=""
                     />

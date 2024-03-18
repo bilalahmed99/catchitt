@@ -1,20 +1,20 @@
+import { CircularProgress } from '@mui/material';
 import classNames from 'classnames';
 import i18next from 'i18next';
 import cookies from 'js-cookie';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../../assets/Logo.png';
 import appStoreBtn from '../../assets/appStoreBtn.png';
 import authSplashImg from '../../assets/authSplashImg.png';
 import playStoreBtn from '../../assets/playStoreBtn.png';
+import { arrow } from '../../icons';
+import { loginService, signupService } from '../../redux/reducers/auth';
 import { useAuthStore } from '../../store/authStore';
-import InputField from '../reusables/InputField';
 import styles from './authentication.module.scss';
 import Input from './components/Input';
-import { apple, arrow, fb, googleIcon, werfie, wn } from '../../icons';
-import { CircularProgress } from '@mui/material';
-import { db } from '../../utils/db';
 
 export interface AuthenticationProps {
     className?: string;
@@ -67,16 +67,10 @@ export const Authentication = (props: any) => {
         signUp: false,
     });
 
-    // const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-    const API_KEY = process.env.VITE_API_URL;
-    const signUpEndPoint = '/auth/sign-up';
-    const signInEndPoint = '/auth/sign-in';
     const [errorMessage, setErrorMessage] = useState('');
     const [form, setForm] = useState('signin');
     const [user, setUser] = useState(defaultUser);
     const [Loader, setLoader] = useState(false);
-
-    const { login } = useAuthStore();
 
     const onUserChange = <P extends keyof User>(prop: P, value: User[P]) => {
         setUser({ ...user, [prop]: value });
@@ -86,124 +80,39 @@ export const Authentication = (props: any) => {
         event.preventDefault();
         setForm(form === 'signin' ? 'signup' : 'signin');
     };
+    const dispatch: any = useDispatch();
 
     /** Handling Sign Up Scenario */
-
-    const handleSignUp = async (name: string, password: string, email: string) => {
-        setLoader(true);
-        try {
-            const response = await fetch(`${API_KEY}${signUpEndPoint}`, {
-                method: 'POST',
-                headers: { 'Content-type': 'application/json' },
-                body: JSON.stringify({ name, password, email }),
-            });
-
-            if (response.ok) {
-                const responseData = await response.json();
-                const {
-                    email,
-                    accountType,
-                    token,
-                    _id,
-                    balance,
-                    username,
-                    name,
-                } = responseData.data; // Extract token from data object
-                // const name = responseData.name; // Assuming the 'name' field is present in the response data
-                useAuthStore.setState({
-                    isLoggedIn: true,
-                    name: name !== '' ? name : '',
-                    username: username !== '' ? username : '',
-                    token: token,
-                    _id: _id,
-                    balance: balance,
-                });
-                login(email, accountType, token, _id, balance, username, name); // Call the login function from the Zustand store
-                // console.log(responseData);
-                navigate('/home');
-                // handleSignIn(email, password)
-            } else {
-                // Handle the error response from the server
-                const errorResponseData = await response.json();
-                const errorMessageFromServer = errorResponseData.message; // Assuming the error message is returned in a 'message' field
-                setErrorMessage(errorMessageFromServer);
-
-                console.log(response);
-            }
-        } catch (error) {
-            console.error(error);
-            setErrorMessage('An error occurred while signing up');
-        } finally {
-            setLoader(false);
-        }
-    };
-
     const handleSignUpSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        setLoader(true);
         if (user.password !== user.confirmPassword) {
-            setErrorMessage('password is not matching');
+            setErrorMessage('Password is not matching');
             return;
         } else {
-            e.preventDefault(); // Prevent the default form submission behavior
+            e.preventDefault();
             const { name, password, email } = user;
-            handleSignUp(name, password, email);
+            dispatch(signupService({ name, password, email })).then(() => {
+                setLoader(false);
+                navigate('/home');
+            });
         }
     };
 
     /** Handling Sign In Scenario */
-    const handleSignIn = async (password: string, email: string) => {
+    const handleSignInSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
         setLoader(true);
+        const { password, email } = user;
         try {
-            const response = await fetch(`${API_KEY}${signInEndPoint}`, {
-                method: 'POST',
-                headers: { 'Content-type': 'application/json' },
-                body: JSON.stringify({ password, email }),
-            });
-
-            if (response.ok) {
-                const responseData = await response.json();
-                const {
-                    email,
-                    accountType,
-                    token,
-                    _id,
-                    balance,
-                    username,
-                    name,
-                } = responseData.data; // Extract token value from data object
-                // const name = responseData.data; // Assuming the 'name' field is present in the response data
-                useAuthStore.setState({
-                    isLoggedIn: true,
-                    accountType: accountType,
-                    name: name,
-                    token: token,
-                    _id: _id,
-                    balance: balance,
-                    username: username,
-                });""
-                login(email, accountType, token, _id, balance, username, name); // Call the login function from the Zustand store
-                db.profile.add(responseData?.data)
+            dispatch(loginService({ password, email })).then(() => {
+                setLoader(false);
                 navigate('/home');
-            } else {
-                // Handle the error response from the server
-                const errorResponseData = await response.json();
-                const errorMessageFromServer = errorResponseData.message; // Assuming the error message is returned in a 'message' field
-                setErrorMessage(errorMessageFromServer);
-
-                console.log(response);
-            }
+            });
         } catch (error) {
             console.error(error);
             setErrorMessage('Invalid email or password');
-        } finally {
-            setLoader(false);
         }
-    };
-
-    const handleSignInSubmit = (e: React.FormEvent) => {
-        e.preventDefault(); // Prevent the default form submission behavior
-        const { password, email } = user;
-        handleSignIn(password, email);
     };
 
     return (

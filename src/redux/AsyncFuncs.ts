@@ -1,48 +1,19 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { get, post } from "../axios/axiosClient";
 const API_KEY = process.env.VITE_API_URL;
 const token: any = localStorage.getItem('token')
-const userId: any = localStorage.getItem('_id')
-
-
-export const fetchProfile: any = createAsyncThunk("get/profile/data", async () => {
-    try {
-        const res: any = await fetch(`${API_KEY}/profile`, {
-            method: 'GET',
-            headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
-        })
-        const resData: any = await res.json()
-        if (resData.status === 200) {
-            return resData?.data
-        } else {
-            return {
-                message: 'Something went wrong'
-            }
-        }
-
-    } catch (error: any) {
-        console.log(error);
-    }
-});
+const userId: any = localStorage.getItem('userId')
 
 export const followingsMethod: any = createAsyncThunk("get/profile/followings", async (id?
     : string) => {
     try {
         if (id) {
-            const res = await fetch(`${API_KEY}/profile/follow/${id}/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            await post(`/profile/follow/${id}/`)
         }
-        const response = await fetch(`${API_KEY}/profile/${userId}/followers`, {
-            method: 'GET',
-            headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
-        });
+        const response = await get(`/profile/${userId}/followers`);
 
-        if (response.ok) {
-            const responseData = await response.json();
+        if (response?.data?.data) {
+            const responseData = response?.data
             return responseData?.data
         } else {
             return {}
@@ -56,23 +27,19 @@ export const followingsMethod: any = createAsyncThunk("get/profile/followings", 
 export const getHomeVideos: any = createAsyncThunk("get/foryou/videos", async (tab: number) => {
     let link: string = ''
     if (tab === 1) {
-        link = `${API_KEY}/media-content/videos/feed/?page=1&followingsuggestions=1`
+        link = `/media-content/videos/feed/?page=1&followingsuggestions=1`
     } else if (tab === 2) {
         link = token && userId
-            ? `${API_KEY}/media-content/videos/feed?page=1&pageSize=5`
-            : `${API_KEY}/media-content/public/videos/feed?page=1&pageSize=5`;
+            ? `/media-content/videos/feed?page=1&pageSize=5`
+            : `/media-content/public/videos/feed?page=1&pageSize=5`;
     } else {
         console.log('Live Tab');
     }
     try {
         if (tab === 1 || tab === 2) {
-
-            const res: any = await fetch(link, {
-                method: 'GET',
-                headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
-            });
-            if (res.ok) {
-                const responseData = await res.json();
+            const res = await get(link)
+            if (res?.data?.data) {
+                const responseData = res?.data;
                 return responseData?.data
             } else {
                 return {}
@@ -85,14 +52,9 @@ export const getHomeVideos: any = createAsyncThunk("get/foryou/videos", async (t
 
 export const videoLikehandle: any = createAsyncThunk("get/like/video", async (id: string, searchScreenTab?: any) => {
     try {
-        const res = await fetch(`${API_KEY}/media-content/like/${id}`, {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        if (res.ok) {
+        const res = await post(`/media-content/like/${id}`)
+
+        if (res?.data) {
             if (searchScreenTab) {
                 return { id, tab: searchScreenTab }
             }
@@ -111,20 +73,11 @@ export const commentMethod: any = createAsyncThunk("get/comment/video", async ({
             commentId: replyId,
         };
         try {
-            let response = await fetch(`${API_KEY}/media-content/comment/${info.mediaId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify(payload),
-            });
-            const finalRes = await response.json();
-
+            const finalRes: any = await post(`/media-content/comment/${info.mediaId}`, { data: payload })
             if (replyId) {
-                return { res: finalRes?.data, info: info, replyId }
+                return { res: finalRes?.data?.data, info: info, replyId }
             } else {
-                return { res: finalRes?.data, info: info }
+                return { res: finalRes?.data?.data, info: info }
             }
 
         } catch (error) {
@@ -136,20 +89,12 @@ export const commentMethod: any = createAsyncThunk("get/comment/video", async ({
         };
 
         try {
-            let response = await fetch(`${API_KEY}/media-content/comment/${info.mediaId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify(payload),
-            });
-            const finalRes = await response.json();
-            if (finalRes?.data) {
+            const finalRes: any = await post(`/media-content/comment/${info.mediaId}`, { data: payload })
+            if (finalRes?.data?.data) {
                 if (replyId) {
-                    return { res: finalRes?.data, info: info, replyId }
+                    return { res: finalRes?.data?.data, info: info, replyId }
                 } else {
-                    return { res: finalRes?.data, info: info }
+                    return { res: finalRes?.data?.data, info: info }
                 }
             }
         } catch (error) {
