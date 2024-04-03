@@ -66,7 +66,7 @@ function Navbar() {
                                     />
                                     {/* </div> */}
                                 </div>
-                                <p className={style.name}>{profile?.name}</p>
+                                <p className={style.name}>{profile?.name?.split(" ")[0]}</p>
                             </div>
                         </div>
                     ) : (

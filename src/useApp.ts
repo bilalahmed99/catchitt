@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { followingsMethod, getRandomUsers } from "./redux/AsyncFuncs";
 import { updateProfile } from "./redux/reducers/auth";
 import { db } from "./utils/db";
+import { getVideoCategories } from "./redux/reducers/videoCategories";
 
 function useApp() {
     const dispatch = useDispatch();
@@ -13,6 +14,7 @@ function useApp() {
             db.profile.get({ _id }).then((result: any) => {
                 dispatch(updateProfile(result))
                 dispatch(followingsMethod());
+                dispatch(getVideoCategories());
             })
         } else {
             dispatch(getRandomUsers());

@@ -6,9 +6,10 @@ import { VideoToFrames, VideoToFramesMethod } from '../../../utils/videoToFrame'
 import axios from 'axios';
 import { updateUploadingStatus } from '../../../redux/reducers/upload';
 import { useNavigate } from 'react-router-dom';
+import { useUpdateEffect } from 'react-use';
 
 interface StateInterface {
-    category?: string;
+    category?: any;
     description?: string;
     videoId?: string;
     videoUrl?: string;
@@ -24,10 +25,12 @@ interface StateInterface {
 function useUpload() {
     const [selectedFile, setselectedFile] = useState(null);
     const [isPosing, setIsPosting] = useState(false);
-    const [selectedThumbnail, setSelectedThumbnail] = useState(null );
+    const [selectedThumbnail, setSelectedThumbnail] = useState(null);
     const [thumbnails, setThumbnails] = useState<any>([]);
+    const categories = useSelector((store: any) => store?.reducers?.videoCategories) || [];
+
     const [state, setState] = useState<StateInterface>({
-        category: '🎭 Entertainment',
+        category: {},
         description: 'Hello everyone, I’m back! #vlog #trending',
     });
     const [selectedVideoSrc, setSelectedVideoSrc] = useState('');
@@ -71,7 +74,6 @@ function useUpload() {
 
     const updateState = (inputName: any, inputValue: any) => {
         setState((prevState: any) => ({ ...prevState, [inputName]: inputValue }));
-        console.log('state', state);
     };
     useEffect(() => {
         const url = state?.thumbnailUrl || '';
@@ -81,7 +83,7 @@ function useUpload() {
                 const file = new File([blob], 'video-thumbnail', { type: 'image/png' });
                 setSelectedThumbnail(file as any);
             });
-    }, [state?.thumbnailUrl ]);
+    }, [state?.thumbnailUrl]);
     useMemo(() => {
         if (selectedFile) {
             setSelectedVideoSrc(
@@ -90,7 +92,7 @@ function useUpload() {
             videoCoverHandler();
         }
     }, [selectedFile]);
-
+  
     const SubmitHandler = async () => {
         setIsPosting(true);
         let getLinks: any = {};
@@ -108,7 +110,7 @@ function useUpload() {
         postPayload.append('videoId', getLinks?.data?.data?.videoId);
         postPayload.append('videoUrl', getLinks?.data?.data?.videoUrl?.split('?')[0]);
         postPayload.append('thumbnailUrl', getLinks?.data?.data?.thumbnailUrl?.split('?')[0]);
-        postPayload.append('category', state?.category || '');
+        postPayload.append('category', state?.category?._id || '');
         postPayload.append('description', state?.description || '');
         postPayload.append('isOnlyMe', `${state?.isOnlyMe || false}`);
         postPayload.append('allowDuet', `${state?.allowDuet || false}`);
@@ -178,6 +180,8 @@ function useUpload() {
             setIsPosting(false);
             // return;
         }
+        
+
 
         // Do put request for thumbnail file
         try {
@@ -212,6 +216,10 @@ function useUpload() {
         }
         setIsPosting(false);
     };
+
+    useUpdateEffect(() => {
+        updateState('category', categories?.[0]);
+    }, [categories]);
 
     return {
         selectedFile,

@@ -12,6 +12,7 @@ import Text from '../../../shared/components/Text';
 import CustomChip from '../../../shared/input/CustomChip';
 import { divide } from 'mathjs';
 import TagsInput from '../../../shared/input/TagsInput';
+import { useSelector } from 'react-redux';
 
 function FormRightSide(props: any) {
     const { thumbnails, updateState, state, SubmitHandler, isPosing } = props;
@@ -30,12 +31,16 @@ function FormRightSide(props: any) {
         setVideoThumbnails(thumbnails);
         setSelectedThumb(0);
     }, [thumbnails]);
+    const categories = useSelector((store: any) => store?.reducers?.videoCategories) || [];
 
-    const [postCategories, setPostCategories] = useState(uploadCategories);
+    const [postCategories, setPostCategories] = useState(categories);
 
     const dropDownH = (e: any) => {
-        const filteredCategories = uploadCategories.filter((item: string) => {
-            if (item.toLowerCase().includes(e.target.value.toLowerCase())) {
+        const filteredCategories = categories.filter((item: any) => {
+            console.log(item);
+            console.log(e.target.value);
+
+            if (item?.name?.toLowerCase().includes(e.target.value.toLowerCase())) {
                 return item;
             }
         });
@@ -104,7 +109,7 @@ function FormRightSide(props: any) {
                         </div>
                         <div className="relative flex flex-col">
                             <BasicInput
-                                value={state?.category || ''}
+                                value={state?.category?.name || ''}
                                 endAdornment={
                                     <img
                                         src="../../../../public/images/icons/uploadSEc/Arrow - Down 2.svg"
@@ -125,20 +130,25 @@ function FormRightSide(props: any) {
                                         width="100% !important"
                                     />
                                     <div
-                                        className="flex flex-col pt-[1rem] justify-start items-start"
+                                        className="flex max-h-[200px] overflow-y-scroll flex-col pt-[1rem] justify-start items-start"
                                         onClick={() => setdropDown(!dropDown)}
                                     >
-                                        {postCategories.map((category, i) => {
+                                        {postCategories.map((category: any, i: number) => {
                                             return (
                                                 <p
-                                                    className="h-[2.3rem] px-[0.63rem] w-[100%] flex items-center cursor-pointer text-custom-dark-222 text-[0.87rem] text-left font-normal hover:text-custom-primary hover:bg-custom-gray-300"
+                                                    className="h-[2.3rem] py-[1rem] gap-2 px-[0.63rem] w-[100%] flex items-center cursor-pointer text-custom-dark-222 text-[0.87rem] text-left font-normal hover:text-custom-primary hover:bg-custom-gray-300"
                                                     onClick={() => {
                                                         updateState('category', category);
-                                                        setPostCategories(uploadCategories);
+                                                        setPostCategories(categories);
                                                     }}
                                                     key={i}
                                                 >
-                                                    {category}
+                                                    <img
+                                                        className="max-w-[14px]  max-h-[14px]"
+                                                        src={category?.icon}
+                                                        alt=""
+                                                    />
+                                                    {category?.name}
                                                 </p>
                                             );
                                         })}

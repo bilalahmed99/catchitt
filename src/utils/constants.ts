@@ -13,3 +13,4 @@ export const uploadCategories = [
 ];
 
 export const UPLOAD_VIDEO_DETAILS = `${API_KEY}/media-content/directly-from-s3`;
+export const getVideoCategoriesEndPoind = '/media-content/categories';

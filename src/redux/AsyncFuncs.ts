@@ -1,48 +1,51 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { get, post } from "../axios/axiosClient";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { get, post } from '../axios/axiosClient';
 const API_KEY = process.env.VITE_API_URL;
-const token: any = localStorage.getItem('token')
-const userId: any = localStorage.getItem('userId')
+const token: any = localStorage.getItem('token');
+const userId: any = localStorage.getItem('userId');
 
-export const followingsMethod: any = createAsyncThunk("get/profile/followings", async (id?
-    : string) => {
-    try {
-        if (id) {
-            await post(`/profile/follow/${id}/`)
-        }
-        const response = await get(`/profile/${userId}/followers`);
+export const followingsMethod: any = createAsyncThunk(
+    'get/profile/followings',
+    async (id?: string) => {
+        try {
+            if (id) {
+                await post(`/profile/follow/${id}/`);
+            }
+            const response = await get(`/profile/${userId}/followers`);
 
-        if (response?.data?.data) {
-            const responseData = response?.data
-            return responseData?.data
-        } else {
-            return {}
+            if (response?.data?.data) {
+                const responseData = response?.data;
+                return responseData?.data;
+            } else {
+                return {};
+            }
+        } catch (error) {
+            alert('Somthing went wrong');
+            console.log(error);
         }
-    } catch (error) {
-        alert('Somthing went wrong');
-        console.log(error);
     }
-});
+);
 
-export const getHomeVideos: any = createAsyncThunk("get/foryou/videos", async (tab: number) => {
-    let link: string = ''
+export const getHomeVideos: any = createAsyncThunk('get/foryou/videos', async (tab: number) => {
+    let link: string = '';
     if (tab === 1) {
-        link = `/media-content/videos/feed/?page=1&followingsuggestions=1`
+        link = `/media-content/videos/feed/?page=1&followingsuggestions=1`;
     } else if (tab === 2) {
-        link = token && userId
-            ? `/media-content/videos/feed?page=1&pageSize=5`
-            : `/media-content/public/videos/feed?page=1&pageSize=5`;
+        link =
+            token && userId
+                ? `/media-content/videos/feed?page=1&pageSize=5`
+                : `/media-content/public/videos/feed?page=1&pageSize=5`;
     } else {
         console.log('Live Tab');
     }
     try {
         if (tab === 1 || tab === 2) {
-            const res = await get(link)
+            const res = await get(link);
             if (res?.data?.data) {
                 const responseData = res?.data;
-                return responseData?.data
+                return responseData?.data;
             } else {
-                return {}
+                return {};
             }
         }
     } catch (error) {
@@ -50,74 +53,79 @@ export const getHomeVideos: any = createAsyncThunk("get/foryou/videos", async (t
     }
 });
 
-export const videoLikehandle: any = createAsyncThunk("get/like/video", async (id: string, searchScreenTab?: any) => {
-    try {
-        const res = await post(`/media-content/like/${id}`)
+export const videoLikehandle: any = createAsyncThunk(
+    'get/like/video',
+    async (id: string, searchScreenTab?: any) => {
+        try {
+            const res = await post(`/media-content/like/${id}`);
 
-        if (res?.data) {
-            if (searchScreenTab) {
-                return { id, tab: searchScreenTab }
+            if (res?.data) {
+                if (searchScreenTab) {
+                    return { id, tab: searchScreenTab };
+                }
+            } else {
+                return false;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+);
+
+export const commentMethod: any = createAsyncThunk(
+    'get/comment/video',
+    async ({ text, info, replyId }: any) => {
+        if (replyId) {
+            const payload = {
+                comment: text,
+                commentId: replyId,
+            };
+            try {
+                const finalRes: any = await post(`/media-content/comment/${info.mediaId}`, {
+                    data: payload,
+                });
+                if (replyId) {
+                    return { res: finalRes?.data?.data, info: info, replyId };
+                } else {
+                    return { res: finalRes?.data?.data, info: info };
+                }
+            } catch (error) {
+                console.log(error);
             }
         } else {
-            return false
-        }
-    } catch (error) {
-        console.log(error);
-    }
-});
+            const payload = {
+                comment: text,
+            };
 
-export const commentMethod: any = createAsyncThunk("get/comment/video", async ({ text, info, replyId }: any) => {
-    if (replyId) {
-        const payload = {
-            comment: text,
-            commentId: replyId,
-        };
-        try {
-            const finalRes: any = await post(`/media-content/comment/${info.mediaId}`, { data: payload })
-            if (replyId) {
-                return { res: finalRes?.data?.data, info: info, replyId }
-            } else {
-                return { res: finalRes?.data?.data, info: info }
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
-    } else {
-        const payload = {
-            comment: text,
-        };
-
-        try {
-            const finalRes: any = await post(`/media-content/comment/${info.mediaId}`, { data: payload })
-            if (finalRes?.data?.data) {
-                if (replyId) {
-                    return { res: finalRes?.data?.data, info: info, replyId }
-                } else {
-                    return { res: finalRes?.data?.data, info: info }
+            try {
+                const finalRes: any = await post(`/media-content/comment/${info.mediaId}`, {
+                    data: payload,
+                });
+                if (finalRes?.data?.data) {
+                    if (replyId) {
+                        return { res: finalRes?.data?.data, info: info, replyId };
+                    } else {
+                        return { res: finalRes?.data?.data, info: info };
+                    }
                 }
+            } catch (error) {
+                console.log(error);
             }
-        } catch (error) {
-            console.log(error);
         }
     }
-});
+);
 
-
-export const getRandomUsers: any = createAsyncThunk("get/random/users", async () => {
+export const getRandomUsers: any = createAsyncThunk('get/random/users', async () => {
     try {
-        const response = await fetch(
-            `${API_KEY}/profile/public/suggested-users?page=1`,
-            {
-                method: 'GET',
-                headers: { 'Content-type': 'application/json' },
-            }
-        );
+        const response = await fetch(`${API_KEY}/profile/public/suggested-users?page=1`, {
+            method: 'GET',
+            headers: { 'Content-type': 'application/json' },
+        });
 
         if (response.ok) {
             const responseData = await response.json();
             // getRandomAccounts(responseData.data.data, 4)
-            return responseData.data.data
+            return responseData.data.data;
         } else {
             console.log(response);
         }
