@@ -9,6 +9,7 @@ import {
 } from './AsyncFuncs';
 import loginSlice from './reducers/auth';
 import isuploading from './reducers/upload';
+import videoCategories from './reducers/videoCategories';
 
 const followings: any = createSlice({
     name: 'followings',
@@ -103,4 +104,5 @@ export default combineReducers({
     suggestedAccounts: suggestedAccounts.reducer,
     profile: loginSlice,
     isuploading,
+    videoCategories,
 });

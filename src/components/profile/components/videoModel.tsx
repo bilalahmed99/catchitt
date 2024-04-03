@@ -10,6 +10,7 @@ import { useAuthStore } from '../../../store/authStore';
 import Comment from './comment';
 import style from './videoModel.module.scss';
 import { timeConverter } from '../../../utils';
+import CustomPlayer from '../../homePage/components/CustomPlayer';
 
 interface Props {
     onModalClose: any;
@@ -20,14 +21,7 @@ interface Props {
     sendPopupHandler?: any;
 }
 
-function VideoModel({
-    onModalClose,
-    info,
-    report,
-    block,
-    gifts,
-    sendPopupHandler,
-}: Props) {
+function VideoModel({ onModalClose, info, report, block, gifts, sendPopupHandler }: Props) {
     const navigate = useNavigate();
     //For Images Ref.
     const [like, setLike] = useState(false);
@@ -126,13 +120,15 @@ function VideoModel({
                 }
             }}
         >
-            <div className={style['video-sec']}>
+            <div className={`${style['video-sec']} video-container`}>
                 <video
                     loop={true}
                     controls={false}
                     autoPlay={true}
                     width="300px"
-                    src={info.reducedVideoUrl}
+                    src={
+                        info?.reducedVideoUrl.length > 0 ? info?.reducedVideoUrl : info?.originalUrl
+                    }
                 />
             </div>
             <div className={style['cotent-sec']} style={{ width: '100%' }}>

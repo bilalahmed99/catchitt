@@ -24,11 +24,11 @@ function UploadFile({ selectFilesHandler }: any) {
                         <p className="font-mediun text-custom-color-999 mt-[1rem]">
                             Support mp4, avi, webm, and mov video formats
                         </p>
-                        <p className="font-mediun text-custom-color-999">Up to 600 seconds</p>
-                        <p className="font-mediun text-custom-color-999">Less than 2 GB</p>
-                        <p className="font-mediun text-custom-color-999 mb-[1rem]">
+                        <p className="font-mediun text-custom-color-999">Up to 300 seconds</p>
+                        <p className="font-mediun text-custom-color-999">Less than 200 MB</p>
+                        {/* <p className="font-mediun text-custom-color-999 mb-[1rem]">
                             Less than 30 videos
-                        </p>
+                        </p> */}
                         <CustomButton
                             onClick={selectFilesHandler}
                             text="Select files"

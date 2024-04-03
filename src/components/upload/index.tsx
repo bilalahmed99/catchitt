@@ -38,6 +38,7 @@ function UploadPage() {
                 onChange={onChangeFileHandler}
                 type="file"
                 className="hidden"
+                accept='video/*'
             />
         </div>
     );
