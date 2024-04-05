@@ -37,18 +37,33 @@ const loginSlice: any = createSlice({
 
 export const { logoutUser, updateProfile } = loginSlice.actions;
 
-export const loginService = createAsyncThunk('auth/loginService', async (values: any) => {
-    if (!values) return;
-    try {
-        let res = await post('/auth/sign-in', {
-            type: 'application/json',
-            data: { isLoggedIn: true, ...values },
-        });
-        return res?.data;
-    } catch (error) {
-        return;
+ 
+
+export const loginService = createAsyncThunk(
+    'auth/loginService',
+    async (values: any, { rejectWithValue }) => {
+        try {
+            let res = await post('/auth/sign-in', {
+                type: 'application/json',
+                data: { isLoggedIn: true, ...values },
+            });
+
+            
+            if (res?.status === 200) {
+                return res?.data;
+            } else {
+                 
+                console.log("rejecting")
+                return rejectWithValue('Invalid status code');
+            }
+        } catch (error) {
+            console.log("rejecting in catch")
+            
+            return rejectWithValue(error?.message);
+        }
     }
-});
+);
+
 export const signupService = createAsyncThunk('auth/signupService', async (values: any) => {
     if (!values) return;
     try {

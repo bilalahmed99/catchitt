@@ -30,8 +30,11 @@ function Layout(props: any) {
     return (
         <div style={{ width: '100vw', height: '100vh', overflow: 'hidden'  }} onClick={globalClicker}>
             <Navbar />
+
+            
             {/* <TopBar /> */}
             <div style={{ display: 'flex', height: '100vh' , width:'100vw' , paddingTop:80 }}>
+             
                 {!showSidebar && !showShortSidebar ? (
                     <div
                         style={{
@@ -88,6 +91,7 @@ function Layout(props: any) {
                         </div>
                     </div>
                 )}
+                   
                 {showCopyPopup && (
                     <div
                         style={{

@@ -55,6 +55,7 @@ export const ForgotPassword = ({ className }: ForgotPasswordProps) => {
     const [response, setResponse] = useState(false);
     const [responseResult, setResponseResult] = useState('');
     const [form, setForm] = useState('');
+    const [otpMessage, setOtpMessage] = useState("We sent an OTP to your email.");
     const [otp, setOtp] = useState<any>(null);
     let myOtp = +otp;
     const onUserChange = <P extends keyof User>(prop: P, value: User[P]) => {
@@ -85,11 +86,54 @@ export const ForgotPassword = ({ className }: ForgotPasswordProps) => {
         }
     };
 
+    //**api call for resend api */
+    const handleResendOtp = async (email: string) => {
+
+        if(email == "") {
+            setErrorMessage('No Email');
+            return;
+        }
+         try {
+            const response = await fetch(`${API_KEY}${forgotPwdEndPoint}/generateOtp/${email}`, {
+                method: 'GET',
+                headers: { 'Content-type': 'application/json' },
+                // body: JSON.stringify({ email: email }),
+            });
+
+             
+
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log("resend otp response data");
+                console.log(responseData)
+                setOtpMessage(responseData.message);
+                setOtp("");
+                setForm('verifyOTP')
+            } else {
+                setErrorMessage('Invalid email');
+                console.log(response);
+            }
+        } catch (error) {
+            console.error(error);
+            setErrorMessage('Invalid email');
+        }
+    }
+
     const handleForgotPasswordSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const { email } = user;
         handleForgotPassword(email);
     };
+
+
+    
+     const handleRecendOtpSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        const { email } = user;
+        setErrorMessage("");
+        handleResendOtp(email);
+    };
+
 
     const renderResponse = () => {
         return (
@@ -119,21 +163,25 @@ export const ForgotPassword = ({ className }: ForgotPasswordProps) => {
         try {
             const response = await fetch(`${API_KEY}/auth/verifyOtp`, {
                 method: 'PATCH',
-                headers: { 'Content-type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*', // This line won't have an effect here, as it's the server that needs to set this header
+                },
                 body: JSON.stringify({ email: email, otp: myOtp }),
             });
 
+
+           
             if (response.ok) {
                 const responseData = await response.json();
-                console.log(responseData);
+                
                 setResponse(true);
             } else {
                 // Handle the error response from the server
                 const errorResponseData = await response.json();
-                const errorMessageFromServer = errorResponseData.message; // Assuming the error message is returned in a 'message' field
-                setErrorMessage(errorMessageFromServer);
-
-                console.log(response);
+                 // Assuming the error message is returned in a 'message' field
+                setErrorMessage(errorResponseData.message);
+ 
             }
         } catch (error) {
             console.error(error);
@@ -189,7 +237,21 @@ export const ForgotPassword = ({ className }: ForgotPasswordProps) => {
                                 Verify your email
                             </h4>
                             <p>
-                                We sent an OTP to your email.
+                                {otpMessage}
+                                <div style={{ marginTop: '20px' }}>
+                                {errorMessage ? (
+                                    <h4
+                                        style={{
+                                            fontWeight: '700',
+                                            fontSize: '16px',
+                                            color: 'red',
+                                            marginBottom: '20px',
+                                        }}
+                                    >
+                                        {errorMessage}
+                                    </h4>
+                                ) : null}
+                            </div>
                             </p>
                             <OtpInput
                                 value={otp}
@@ -210,7 +272,7 @@ export const ForgotPassword = ({ className }: ForgotPasswordProps) => {
                                     Verify code
                                 </button>
                             </div>
-                            <div> Resend code </div>
+                            <div onClick={handleRecendOtpSubmit} className={styles.resendCodeBtn}> Resend code </div>
                         </div>
                     ) : (
                         <form className={styles.authInputFields}>
