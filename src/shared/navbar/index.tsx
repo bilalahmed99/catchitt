@@ -23,6 +23,7 @@ function Navbar() {
     const dispatch = useDispatch();
     const logoutAccount = () => {
         dispatch(logoutUser());
+        
     };
 
     return (

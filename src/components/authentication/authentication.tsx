@@ -15,6 +15,7 @@ import { loginService, signupService } from '../../redux/reducers/auth';
 import { useAuthStore } from '../../store/authStore';
 import styles from './authentication.module.scss';
 import Input from './components/Input';
+import { i } from 'mathjs';
 
 export interface AuthenticationProps {
     className?: string;
@@ -98,21 +99,29 @@ export const Authentication = (props: any) => {
             });
         }
     };
+ 
 
-    /** Handling Sign In Scenario */
     const handleSignInSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setLoader(true);
         const { password, email } = user;
-        try {
-            dispatch(loginService({ password, email })).then(() => {
+        dispatch(loginService({ password, email }))
+            .then((res) => {
+
+                if(res?.error){
+                     setErrorMessage('Invalid email or password');
+                     setLoader(false);
+                }else if(res?.payload?.status == 200){
+                    setLoader(false); 
+                    navigate('/home');
+                }
+
+            })
+            .catch(error => {
+                console.error(error);
+                setErrorMessage('Invalid email or password');
                 setLoader(false);
-                navigate('/home');
             });
-        } catch (error) {
-            console.error(error);
-            setErrorMessage('Invalid email or password');
-        }
     };
 
     return (
