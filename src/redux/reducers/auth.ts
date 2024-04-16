@@ -37,8 +37,6 @@ const loginSlice: any = createSlice({
 
 export const { logoutUser, updateProfile } = loginSlice.actions;
 
- 
-
 export const loginService = createAsyncThunk(
     'auth/loginService',
     async (values: any, { rejectWithValue }) => {
@@ -48,17 +46,15 @@ export const loginService = createAsyncThunk(
                 data: { isLoggedIn: true, ...values },
             });
 
-            
             if (res?.status === 200) {
                 return res?.data;
             } else {
-                 
-                console.log("rejecting")
+                console.log('rejecting');
                 return rejectWithValue('Invalid status code');
             }
-        } catch (error) {
-            console.log("rejecting in catch")
-            
+        } catch (error: any) {
+            console.log('rejecting in catch');
+
             return rejectWithValue(error?.message);
         }
     }
