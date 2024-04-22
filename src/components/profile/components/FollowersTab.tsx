@@ -7,19 +7,19 @@ export default function FollowersTab() {
     const followers = useSelector((state: any) => {
         console.log('state');
         console.log(state);
-        return state.reducers?.profileSlice?.followers});
+        return state.reducers?.profileSlice?.followers;
+    });
     const dispatch = useDispatch();
 
     React.useEffect(() => {
         dispatch(loadFollowers());
     }, [dispatch]);
- 
 
     return (
         <>
             <div className={styles.div}>
                 {followers?.map((follower: any) => (
-                    <User key={follower._id} />
+                    <User key={follower._id} user={undefined} />
                 ))}
             </div>
         </>

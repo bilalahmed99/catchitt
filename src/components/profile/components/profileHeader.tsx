@@ -18,7 +18,7 @@ interface Props {
     onFollowModalActive: (value: string) => void;
     profileData: any;
     showStory: any;
-    copyHandler:any;
+    copyHandler: any;
 }
 
 const ProfileHeader: FunctionComponent<Props> = ({
@@ -27,14 +27,16 @@ const ProfileHeader: FunctionComponent<Props> = ({
     setLikesModal,
     profileData,
     showStory,
-    copyHandler
+    copyHandler,
 }) => {
     const API_KEY = process.env.VITE_API_URL;
     const [stories, setStories] = useState([]);
     const token = useAuthStore((state) => state.token);
     const auth = useAuthStore((state) => state._id);
 
-     const localProfile = JSON.parse(localStorage.getItem('profile'));
+    const localProfile = localStorage.getItem('profile')
+        ? JSON.parse(localStorage.getItem('profile')!)
+        : null;
     useEffect(() => {
         fetch(`${API_KEY}/media-content/stories`, {
             method: 'GET',
@@ -84,7 +86,7 @@ const ProfileHeader: FunctionComponent<Props> = ({
                 >
                     <ShareIcon />
                     Share
-                    <COPY_AND_SEND_MENU copyHandler={copyHandler}/>
+                    <COPY_AND_SEND_MENU copyHandler={copyHandler} />
                 </button>
             </div>
             <div className={styles.pfContent}>
