@@ -4,14 +4,24 @@ import FollowingTab from './FollowingTab';
 import FollowersTab from './FollowersTab';
 import SuggestedTab from './SuggestedTab';
 import MessageTab from './MessageTab';
+import { useSelector } from 'react-redux';
 
 interface Tab {
     name: string;
     content: JSX.Element;
 }
 
-const FollowModal: React.FC = () => {
+const FollowModal: React.FC = ({onClose}:any) => {
 
+    const name = useSelector(state=> {
+ 
+        return state?.reducers?.profile?.name;
+    })
+
+
+    const totalFollwers = useSelector(state=>  state?.reducers?.profile?.followers )
+    const totalFollwing = useSelector(state=>  state?.reducers?.followings?.total )
+    const totalFriends = useSelector(state=>  state?.reducers?.friends?.total )
 
 
     const tabs: Tab[] = [
@@ -19,7 +29,7 @@ const FollowModal: React.FC = () => {
             name: 'Following',
             content: (
                 <>
-                    <FollowingTab />
+                    <FollowingTab onClose={onClose}/>
                 </>
             ),
         },
@@ -27,7 +37,7 @@ const FollowModal: React.FC = () => {
             name: 'Followers',
             content: (
                 <>
-                    <FollowersTab />
+                    <FollowersTab onClose={onClose}/>
                 </>
             ),
         },
@@ -35,7 +45,7 @@ const FollowModal: React.FC = () => {
             name: 'Friends',
             content: (
                 <>
-                    <MessageTab />
+                    <MessageTab/>
                 </>
             ),
         },
@@ -43,7 +53,7 @@ const FollowModal: React.FC = () => {
             name: 'Suggested',
             content: (
                 <>
-                    <SuggestedTab />
+                    <SuggestedTab onClose={onClose}/>
                 </>
             ),
         },
@@ -58,7 +68,7 @@ const FollowModal: React.FC = () => {
     return (
         <>
             <div className={styles.div}>
-                <div className={styles['div-2']}>Radwa Aly</div>
+                <div className={styles['div-2']}>{name} </div>
                 <div className={styles['div-3']}>
                     {tabs.map((tab, index) => (
                         <div
@@ -70,7 +80,7 @@ const FollowModal: React.FC = () => {
                         >
                             <div className={styles['div-5']}>
                                 {tab.name}{' '}
-                                {index === 0 ? '45' : index === 1 ? '55' : index === 2 ? '8' : ''}
+                                {index === 0 ? totalFollwing : index === 1 ? totalFollwers : index === 2 ? totalFriends: ''}
                             </div>
                             <div className={styles['div-6']} />
                         </div>

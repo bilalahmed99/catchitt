@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import styles from './editProfile.module.scss';
 import { useAuthStore } from '../../../store/authStore';
 import { defaultAvatar } from '../../../icons';
-
+import SelectProfileImgPopup from './select-profile-img';
+ 
 interface Props {
     onCancel: () => void;
     onSave: () => void;
@@ -26,6 +27,9 @@ export default function EditProfile({ onCancel, onSave }: Props) {
     const [profileData, setProfileData] = useState<any>(null);
     const [country, setCountry] = useState('default');
     const [loading, setLoading] = useState(false);
+    const [newProfileImg, setNewProfileImg] = useState("");
+    const [selectImagePopup, setSelectImagePopup] = useState(false);
+    const [imgBase64, setImgBase64] = useState(avatar || defaultAvatar);
     const token = useAuthStore((state) => state.token);
 
     const handleSubmit = () => {
@@ -65,6 +69,21 @@ export default function EditProfile({ onCancel, onSave }: Props) {
 
         onSave();
     };
+
+    const chooseNewProfileImg = () => {
+        setSelectImagePopup(true);
+    }
+
+    const onProfileImageCancel = () => {
+         setSelectImagePopup(false);
+    }
+    
+    const onProfileImageSelect = (img) => {
+         console.log("img selected edit profile");
+         console.log(img)
+         setImgBase64(img)
+         setSelectImagePopup(false);
+    }
 
     useEffect(() => {
         setLoading(true);
@@ -117,19 +136,22 @@ export default function EditProfile({ onCancel, onSave }: Props) {
         }
     };
     return (
+        <>
         <form onSubmit={handleSubmit}>
             {loading && <CircularProgress />}
             {!loading && (
                 <div className={styles.div}>
+                    
                     <div className={styles['div-2']}>Edit Profile</div>
                     <div className={styles.profileBox}>
+                        
                         <Avatar
                             alt="Remy Sharp"
-                            src={avatar || defaultAvatar}
+                            src={imgBase64}
                             // src="https://thumbs.dreamstime.com/b/pink-dahlia-flower-details-macro-photo-border-frame-wide-banner-background-message-wedding-background-pink-dahlia-flower-117406512.jpg"
                             className={styles.img}
                         />
-                        <div className={styles.editIcon}>
+                        <div  onClick={chooseNewProfileImg}  className={styles.editIcon}>
                             <EditProfileIcon />
                         </div>
                     </div>
@@ -258,5 +280,8 @@ export default function EditProfile({ onCancel, onSave }: Props) {
                 </div>
             )}
         </form>
+         {selectImagePopup ? <SelectProfileImgPopup onCancel={onProfileImageCancel} open={selectImagePopup} onSelect={onProfileImageSelect} /> : ""}
+ 
+        </>
     );
 }

@@ -5,6 +5,7 @@ import {
     followingsMethod,
     getHomeVideos,
     getRandomUsers,
+    getFriends,
     videoLikehandle,
     videoSavehandle,
     loadFollowers,
@@ -108,6 +109,7 @@ const homeVideos: any = createSlice({
 type profileInitialState = {
     followers: any[];
     following: any[];
+    friends: any[];
     likes: any[];
 }
 
@@ -116,6 +118,7 @@ const profileSlice = createSlice({
     initialState: {
         followers: [],
         following: [],
+        friends: [],
         likes: [],
     } as profileInitialState,
     reducers: {},
@@ -129,6 +132,11 @@ const profileSlice = createSlice({
             console.log("following data")
             console.log(action.payload)
             state.following = action.payload;
+        });
+        builder.addCase(getFriends.fulfilled, (state : profileInitialState, action:any) => {
+            console.log("friends data")
+            console.log(action.payload)
+            state.friends = action.payload;
         });
     },
 });

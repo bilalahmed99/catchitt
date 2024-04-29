@@ -11,6 +11,8 @@ import LikesModal from './LikesModal';
 import { Avatar } from '@mui/material';
 import { useAuthStore } from '../../../store/authStore';
 import COPY_AND_SEND_MENU from '../../../shared/Menu/copyAndSend';
+import { useSelector } from 'react-redux';
+import CoverImagePopup from './cover-img-popup';
 
 interface Props {
     setProfileModal: (value: boolean) => void;
@@ -34,9 +36,39 @@ const ProfileHeader: FunctionComponent<Props> = ({
     const token = useAuthStore((state) => state.token);
     const auth = useAuthStore((state) => state._id);
 
-    const localProfile = localStorage.getItem('profile')
-        ? JSON.parse(localStorage.getItem('profile')!)
-        : null;
+    const [selectImagePopup, setSelectImagePopup] = useState(false);
+    const [imgBase64, setImgBase64] = useState(profileData?.cover);
+    let localProfile = null;
+
+    try {
+        const profileFromStorage = localStorage.getItem('profile');
+        if (profileFromStorage) {
+            localProfile = JSON.parse(profileFromStorage);
+        }
+    } catch (error) {
+        console.error('Error parsing JSON from localStorage:', error.message);
+    }
+
+
+     const chooseNewCoverImg = () => {
+        setSelectImagePopup(true);
+    }
+
+    const onCoverImageCancel = () => {
+         setSelectImagePopup(false);
+    }
+    
+    const onCoverImageSelect = (img) => {
+         console.log("img selected edit profile");
+         console.log(img)
+         setImgBase64(img)
+         setSelectImagePopup(false);
+    }
+
+
+
+
+
     useEffect(() => {
         fetch(`${API_KEY}/media-content/stories`, {
             method: 'GET',
@@ -52,15 +84,23 @@ const ProfileHeader: FunctionComponent<Props> = ({
             });
     }, []);
     console.log('profileData', profileData);
+ 
+
+    const totalFollwers = useSelector(state=>  state?.reducers?.profile?.followers )
+    const totalFollwing = useSelector(state=>  state?.reducers?.followings?.total )
 
     return (
+
+        <>
+        {selectImagePopup ? <CoverImagePopup onCancel={onCoverImageCancel} open={selectImagePopup} onSelect={onCoverImageSelect} /> : ""}
+ 
         <div className={styles.profileHeader}>
             <div className={styles.banner}>
-                <div className={styles.banerIcon}>
+                <div onClick={chooseNewCoverImg} className={styles.banerIcon}>
                     <EditIcon />
                 </div>
-                {profileData?.cover && (
-                    <img className={styles.bannerImg} src={profileData?.cover} alt="Banner Img" />
+                {imgBase64 != "" && (
+                    <img className={styles.bannerImg} src={imgBase64} alt="Banner Img" />
                 )}
             </div>
             <div className={styles.bottomContainer}>
@@ -99,7 +139,7 @@ const ProfileHeader: FunctionComponent<Props> = ({
                         onClick={() => onFollowModalActive('followers')}
                         className={styles.statContainer}
                     >
-                        <p className={styles.boldText}>{localProfile?.followers}</p>
+                        <p className={styles.boldText}>{totalFollwers}</p>
                         <p className={styles.text}>Followers</p>
                     </div>
                     <div onClick={() => setLikesModal(true)} className={styles.statContainer}>
@@ -110,7 +150,7 @@ const ProfileHeader: FunctionComponent<Props> = ({
                         onClick={() => onFollowModalActive('following')}
                         className={styles.statContainer}
                     >
-                        <p className={styles.boldText}>{localProfile?.following}</p>
+                        <p className={styles.boldText}>{totalFollwing}</p>
                         <p className={styles.text}>Following</p>
                     </div>
                 </div>
@@ -142,6 +182,7 @@ const ProfileHeader: FunctionComponent<Props> = ({
                 </div>
             </div>
         </div>
+        </>
     );
 };
 

@@ -156,6 +156,35 @@ export const getRandomUsers: any = createAsyncThunk('get/random/users', async ()
     }
 });
 
+
+
+export const getFriends: any = createAsyncThunk('get/friends', async () => {
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
+    if(token){
+        try {
+            const response = await fetch(`${API_KEY}/profile/${userId}/friends?page=1&pagesize=10`, {
+                method: 'GET',
+                headers: { 
+                    'Content-type': 'application/json',
+                    'Authorization': `Bearer ${token}`},
+                
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                // getRandomAccounts(responseData.data.data, 4)
+                return responseData.data.data;
+            } else {
+                console.log(response);
+            }
+        } catch (error) {
+            // console.error(error);
+            console.error();
+        }
+    }
+});
+
 export const loadFollowers: any = createAsyncThunk('get/profileSlice/followers', async () => {
     // get id from localstorage
     const userId = localStorage.getItem('userId');

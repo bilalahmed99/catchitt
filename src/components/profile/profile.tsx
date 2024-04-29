@@ -1,6 +1,6 @@
 import { ClickAwayListener, Modal } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../../shared/layout';
 import { useAuthStore } from '../../store/authStore';
@@ -24,6 +24,8 @@ import { db } from '../../utils/db';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { get } from '../../axios/axiosClient';
 import { useUpdateEffect } from 'react-use';
+import UnfollowPopup from './components/unfollow-popup';
+import { getFriends, getRandomUsers } from '../../redux/AsyncFuncs';
 
 export const Profile = (props: any) => {
     const { selectedIndex, setIndex } = useAuthStore();
@@ -35,8 +37,8 @@ export const Profile = (props: any) => {
     const [likesModal, setLikesModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const API_KEY = process.env.VITE_API_URL;
-    const token = localStorage.getItem('token')
-    const userId = localStorage.getItem('userId')
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
     const [videoModal, setVideoModal] = useState(false);
     const [userVideos, setUserVideos] = useState([]);
     const [userlikedVideos, setUserlikedVideos] = useState([]);
@@ -47,12 +49,13 @@ export const Profile = (props: any) => {
     const [giftsPopup, setGiftsPopup] = useState(false);
     const [blockPopup, setBlockPopup] = useState(false);
     const [copyPopup, setcopyPopup] = useState(false);
-    // @ts-ignore
-    const profileData = useSelector((store) => store?.reducers?.profile)
-    const profile = useLiveQuery(() => db.profile.toArray())?.[0]
-    console.log('profile' , profile); 
-   
 
+    // @ts-ignore
+    const profileData = useSelector((store) => store?.reducers?.profile);
+    const profile = useLiveQuery(() => db.profile.toArray())?.[0];
+    console.log('profile', profile);
+
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const tabs = [
         {
@@ -86,6 +89,7 @@ export const Profile = (props: any) => {
             key: 6,
         },
     ];
+
     const onCancel = () => {
         setProfileModal(false);
     };
@@ -148,7 +152,7 @@ export const Profile = (props: any) => {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log("collections")
+                console.log('collections');
                 setbookmarkVideos(data.data.data);
                 setLoading(false);
             })
@@ -163,17 +167,25 @@ export const Profile = (props: any) => {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log('collectons', data); 
+                console.log('collectons', data);
                 setbookmarkVideos(data.data.data);
-                console.log("bookmarked videos")
-                console.log(data.data.data)
+                console.log('bookmarked videos');
+                console.log(data.data.data);
             })
             .catch((err) => {
                 console.log('collectons error', err);
             });
+
+        dispatch(getRandomUsers());
+        dispatch(getFriends());
     }, []);
     const onFollowModalActive = (tab: string | null) => {
         setFollowModal(tab);
+    };
+
+    const closeFollowModal = () => {
+        console.log("close the model")
+        setFollowModal(null);
     };
     const onVideoModal = (video: any) => {
         setVideoModal(!videoModal);
@@ -193,7 +205,7 @@ export const Profile = (props: any) => {
             navigate('/auth');
         }
     });
-    
+
     return (
         <Layout showCopyPopup={copyPopup}>
             <div className={styles.container}>
@@ -204,13 +216,16 @@ export const Profile = (props: any) => {
                         </div>
                     </ClickAwayListener>
                 </Modal>
-                <Modal open={!!followModal} className={styles.likesModal}>
-                    <ClickAwayListener onClickAway={() => setFollowModal(null)}>
-                        <div className={styles.likesModalContainer}>
-                            <FollowModal />
-                        </div>
-                    </ClickAwayListener>
-                </Modal>
+                {followModal ? (
+                    <Modal open={!!followModal} className={styles.likesModal}>
+                        <ClickAwayListener onClickAway={() => setFollowModal(null)}>
+                            <div className={styles.likesModalContainer}>
+                                <FollowModal onClose={closeFollowModal} />
+                            </div>
+                        </ClickAwayListener>
+                    </Modal>
+                ): ""
+                }
                 <Modal open={profileModal} className={styles.modal}>
                     <ClickAwayListener onClickAway={onCancel}>
                         <div className={styles.modalContainer}>
@@ -310,3 +325,4 @@ export const Profile = (props: any) => {
         </Layout>
     );
 };
+ 

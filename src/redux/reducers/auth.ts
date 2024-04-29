@@ -15,12 +15,8 @@ const loginSlice: any = createSlice({
             return action.payload;
         },
 
-         updateProfileType: (_state, action) => {
-            console.log("updating profile type")
-            console.log("state")
-            console.log(_state)
-              console.log("type")
-            console.log(action.type)
+        updateProfileType: (_state, action) => {
+             
             localStorage.setItem('accountType',action.payload.type);
             // _state.accountType = action.type;
             return _state;
@@ -41,14 +37,24 @@ const loginSlice: any = createSlice({
             
             return action?.payload?.data;
         });
+
+        builder.addCase(loginService.rejected, (_state: any, action: any) => {
+            // Handle login service rejection (error) here
+            console.error('Login rejected:', action.error.message);
+            // Optionally, you can return an error state or handle the error in some other way.
+            return _state; // Return the previous state or any error handling state
+        });
         builder.addCase(signupService.fulfilled, (_state: any, action: any) => {
-            localStorage.setItem('userId', action?.payload?.data?._id || '');
-            localStorage.setItem('token', action?.payload?.data?.token || '');
-            localStorage.setItem('profile', action?.payload?.data || '');
-            db.profile.add(action?.payload?.data);
+            // localStorage.setItem('userId', action?.payload?.data?._id || '');
+            // localStorage.setItem('token', action?.payload?.data?.token || '');
+            // localStorage.setItem('profile', action?.payload?.data || '');
+            // db.profile.add(action?.payload?.data);
             useAuthStore.setState(action?.payload?.data);
+            
             return action?.payload?.data;
         });
+
+         
     },
 });
 
@@ -62,16 +68,16 @@ export const loginService = createAsyncThunk(
                 type: 'application/json',
                 data: { isLoggedIn: true, ...values },
             });
-
+ 
+               
             if (res?.status === 200) {
                 return res?.data;
             } else {
-                console.log('rejecting');
+                
                 return rejectWithValue('Invalid status code');
             }
         } catch (error: any) {
-            console.log('rejecting in catch');
-
+           
             return rejectWithValue(error?.message);
         }
     }

@@ -72,6 +72,7 @@ export const Authentication = (props: any) => {
     const [form, setForm] = useState('signin');
     const [user, setUser] = useState(defaultUser);
     const [Loader, setLoader] = useState(false);
+    const [verificationLink, setVerificationLink] = useState(false);
 
     const onUserChange = <P extends keyof User>(prop: P, value: User[P]) => {
         setUser({ ...user, [prop]: value });
@@ -95,11 +96,23 @@ export const Authentication = (props: any) => {
             const { name, password, email } = user;
             dispatch(signupService({ name, password, email })).then(() => {
                 setLoader(false);
-                navigate('/home');
+                // navigate('/home'); 
+                localStorage.setItem('isSignupOtp',"true");
+                 navigate(`/otp-verification/${email}`)
             });
         }
     };
  
+   const VerificationLinkClick = () => {
+        const linkStyle = {
+            color: '#5448b2',
+            cursor: 'pointer', // Add pointer cursor on hover
+        };
+
+        return (
+            <p onClick={ ()=>navigate(`/request-verification-otp`)} style={linkStyle}>Verify Email</p>
+        );
+    };
 
     const handleSignInSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -108,9 +121,13 @@ export const Authentication = (props: any) => {
         dispatch(loginService({ password, email }))
             .then((res:any) => {
 
+                console.log("response of login")
+                console.log(res)
                 if(res?.error){
-                     setErrorMessage('Invalid email or password');
-                     setLoader(false);
+                    //  setErrorMessage(res?.message);
+                    setErrorMessage('Invalid Email or Password');
+                    setVerificationLink(true)
+                    setLoader(false);
                 }else if(res?.payload?.status == 200){
                     console.log("data after successfull login")
                     console.log(res?.payload?.data)
@@ -121,7 +138,8 @@ export const Authentication = (props: any) => {
             })
             .catch((error:any) => {
                 console.error(error);
-                setErrorMessage('Invalid email or password');
+                setErrorMessage('Invalid Email or Password');
+                setVerificationLink(true)
                 setLoader(false);
             });
     };
@@ -165,11 +183,17 @@ export const Authentication = (props: any) => {
                                             fontSize: '16px',
                                             color: 'red',
                                             marginBottom: '20px',
+                                            lineHeight:"2rem"
                                         }}
                                     >
                                         {errorMessage}
+                                        {verificationLink? (
+                                            <VerificationLinkClick />
+                                        ) : null}
+                                         
                                     </h4>
                                 ) : null}
+                               
                             </div>
                             <div
                                 className={styles.inputsDiv}
@@ -250,6 +274,7 @@ export const Authentication = (props: any) => {
                             </div>
                         </form>
                     ) : /** Sign in Flow */
+                     
                     form === 'signin' ? (
                         <form className={styles.authInputFields}>
                             <h3 className={styles.creatTitle} style={{ marginTop: '10%' }}>
@@ -266,6 +291,7 @@ export const Authentication = (props: any) => {
                                         }}
                                     >
                                         {errorMessage}
+                                        {verificationLink ? (<VerificationLinkClick/>):null}
                                     </h4>
                                 ) : null}
                             </div>

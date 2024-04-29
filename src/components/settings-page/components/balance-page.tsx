@@ -15,6 +15,10 @@ import { TopBar } from "../../top-bar/top-bar";
 import coin from '../svg-components/coin.svg';
 import whiteRightArrow from '../svg-components/whiteRightArrow.svg';
 import styles from './balance-page.module.scss';
+import CoinsPrice from "./coins-price";
+import CoinsCartModal from "./coins-cart-modal";
+import PaymentMethodModal from "./payment-method-modal";
+import PaymentSuccessModal from "./payment-success-modal";
 
 export interface BalancePageProps {
     className?: string;
@@ -25,10 +29,25 @@ const BalancePage = ({ className }: BalancePageProps) => {
     const API_KEY = process.env.VITE_API_URL;
     const { login, balance } = useAuthStore();
 
+     
+    const [coinsData, setCoinsData] = useState([
+            { coinsAmount: 65, coinsPrice: 3.69, selected : false},
+            { coinsAmount: 72, coinsPrice: 4.15, selected : true },
+            { coinsAmount: 56, coinsPrice: 3.22, selected : false },
+            { coinsAmount: 80, coinsPrice: 4.50, selected : false },
+            { coinsAmount: 45, coinsPrice: 2.80, selected : false },
+            { coinsAmount: 90, coinsPrice: 5.20, selected : false },
+            { coinsAmount: 68, coinsPrice: 3.95, selected : false },
+            { coinsAmount: 52, coinsPrice: 3.00, selected : false },
+            { coinsAmount: 75, coinsPrice: 4.35, selected : false },
+            { coinsAmount: 62, coinsPrice: 3.60, selected : false },
+            { coinsAmount: 85, coinsPrice: 4.90, selected : false }
+    ]);
     const [response, setResponse] = useState(false);
     const [responseResult, setResponseResult] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [loadingAnimation, setLoadingAnimation] = useState(false);
+    const [selectedCoinsAmount, setSelectedCoinsAmount] = useState({ coinsAmount: 56, coinsPrice: 3.22});
 
     const [revenueData, setRevenueData] = useState<any>()
     const [diamondsData, setDiamondsData] = useState<any>()
@@ -39,12 +58,69 @@ const BalancePage = ({ className }: BalancePageProps) => {
     const navigate = useNavigate();
 
     const [openCalculatorModal, setOpenCalculatorModal] = useState(false)
+    const [openCartModal, setOpenCartModal] = useState(false)
+    const [openPaymentModal, setOpenPaymentModal] = useState(false)
+    const [openPaymentSuccessModal, setPaymentSuccessModal] = useState(false)
+
     const handleOpenCalculatorModal = () => {
         setOpenCalculatorModal(true)
     }
     const handleCloseCalculatorModal = () => {
         setOpenCalculatorModal(false)
     }
+
+    const handleCloseCartModal = () => {
+        console.log("cart close click")
+        setOpenCartModal(false)
+    }
+    const rechargeClick = () => {
+        console.log("recharge click");
+        setOpenCartModal(true);
+    }
+
+    const onAmountSelection = (index:number, coinsAmount: number, coinsPrice: number, selected: boolean) => {
+        console.log("selected ", index)
+        setCoinsData(coinsData.map((coin, i) => {
+            if (i === index) {
+                coin.selected = true
+            }else{
+                coin.selected = false
+            }
+            return coin;
+        }));
+        
+        setSelectedCoinsAmount({ coinsAmount: coinsAmount, coinsPrice: coinsPrice});
+    }
+
+
+
+    const handleClosePaymentModal = () => {
+         
+        setOpenPaymentModal(false)
+    }
+    const handleOpenPaymentModal = () => {
+         handleCloseCartModal();
+         
+        setOpenPaymentModal(true);
+    }
+    const handleOpenPaymentSuccessModal = () => {
+          
+        setPaymentSuccessModal(true);
+    }
+    const handleClosePaymentSuccessModal = () => {
+         
+        setPaymentSuccessModal(false);
+    }
+
+    const handleMethodSelection = (method:string) => {
+        console.log(method)
+        handleOpenPaymentSuccessModal();
+        setOpenPaymentModal(false);
+    }
+
+
+
+
 
     const [openFaqsModal, setOpenFaqsModal] = useState(false)
     const handleOpenFaqsModal = () => {
@@ -143,62 +219,24 @@ const BalancePage = ({ className }: BalancePageProps) => {
                                                 <img src={dangerIcon} alt='' />
                                             </div>
                                             <Box sx={pricesBox}>
-                                                <div className={styles.price}>
-                                                    <div className={styles.coinsAmount}>
-                                                        <img src={coin} alt='' style={{ width: '16px', height: '16px', marginRight: '5px' }} />
-                                                        65</div>
-                                                    <div className={styles.coinsPrice}>QAR 3.69</div>
-                                                </div>
-                                                <div className={styles.price}>
-                                                    <div className={styles.coinsAmount}>
-                                                        <img src={coin} alt='' style={{ width: '16px', height: '16px', marginRight: '5px' }} />
-                                                        130</div>
-                                                    <div className={styles.coinsPrice}>QAR 7.29</div>
-                                                </div>
-                                                <div className={styles.price}>
-                                                    <div className={styles.coinsAmount}>
-                                                        <img src={coin} alt='' style={{ width: '16px', height: '16px', marginRight: '5px' }} />
-                                                        330</div>
-                                                    <div className={styles.coinsPrice}>QAR 17.99</div>
-                                                </div>
-                                                <div className={styles.price}>
-                                                    <div className={styles.coinsAmount}>
-                                                        <img src={coin} alt='' style={{ width: '16px', height: '16px', marginRight: '5px' }} />
-                                                        400</div>
-                                                    <div className={styles.coinsPrice}>QAR 20.99</div>
-                                                </div>
-                                                <div className={styles.price}>
-                                                    <div className={styles.coinsAmount}>
-                                                        <img src={coin} alt='' style={{ width: '16px', height: '16px', marginRight: '5px' }} />
-                                                        525</div>
-                                                    <div className={styles.coinsPrice}>QAR 29.29</div>
-                                                </div>
-                                                <div className={styles.price}>
-                                                    <div className={styles.coinsAmount}>
-                                                        <img src={coin} alt='' style={{ width: '16px', height: '16px', marginRight: '5px' }} />
-                                                        660</div>
-                                                    <div className={styles.coinsPrice}>QAR 36.99</div>
-                                                </div>
-                                                <div className={styles.price}>
-                                                    <div className={styles.coinsAmount}>
-                                                        <img src={coin} alt='' style={{ width: '16px', height: '16px', marginRight: '5px' }} />
-                                                        800</div>
-                                                    <div className={styles.coinsPrice}>QAR 44.99</div>
-                                                </div>
-                                                <div className={styles.price}>
-                                                    <div className={styles.coinsAmount}>
-                                                        <img src={coin} alt='' style={{ width: '16px', height: '16px', marginRight: '5px' }} />
-                                                        1321</div>
-                                                    <div className={styles.coinsPrice}>QAR 74.29</div>
-                                                </div>
-                                                <div className={styles.price} onClick={handleOpenCalculatorModal}>
+                                                 {coinsData.map((item, index) => (
+                                                    <CoinsPrice 
+                                                        key={index} 
+                                                        index={index} 
+                                                        onAmountSelection={onAmountSelection} 
+                                                        coinsAmount={item.coinsAmount} 
+                                                        coinsPrice={item.coinsPrice}  
+                                                        selected={item.selected}
+                                                    />
+                                                ))}
+                                                 <div className={styles.price} onClick={handleOpenCalculatorModal}>
                                                     <div className={styles.coinsAmount} >
                                                         Custom</div>
                                                     <div className={styles.coinsPriceCustom}>Larger amounts<br></br> supported</div>
                                                 </div>
                                             </Box>
                                             <div className={styles.giftsBottomDiv} style={{ marginBottom: '32px' }}>
-                                                <button className={styles.rechargeBtn}>
+                                                <button onClick={rechargeClick} className={styles.rechargeBtn}>
                                                     <p>Recharge</p>
                                                 </button>
                                             </div>
@@ -230,11 +268,11 @@ const BalancePage = ({ className }: BalancePageProps) => {
                                                                     <p className={styles.giftCoinsAmountText}>QAR 0</p>
                                                                 </div>
                                                             </div>
-                                                            <div style={{ display: 'flex', gap: '16px' }}>
+                                                            <div style={{ display: 'flex', gap: '16px', flexDirection:'column' }}>
                                                                 <IconButton onClick={handleOpenFaqsModal}>
                                                                     <img src={questionBlackIcon} alt='' />
                                                                 </IconButton>
-                                                                <button className={styles.rechargeBtn}>
+                                                                <button onClick={rechargeClick} className={styles.rechargeBtnFullWidth}>
                                                                     <p>Recharge</p>
                                                                 </button>
                                                             </div>
@@ -242,6 +280,18 @@ const BalancePage = ({ className }: BalancePageProps) => {
                                                     </Modal>
                                                 </div>
                                             )}
+
+                                              {openCartModal && (
+                                                <CoinsCartModal openCartModal={openCartModal} onCloseCartModal={handleCloseCartModal} next={handleOpenPaymentModal} />
+                                              )}
+
+                                              {openPaymentModal && (
+                                                <PaymentMethodModal openPaymentModal={openPaymentModal} onClosePaymentModal={handleClosePaymentModal} next={handleMethodSelection} />
+                                              )}
+
+                                              {openPaymentSuccessModal && (
+                                                <PaymentSuccessModal openPaymentSuccessModal={openPaymentSuccessModal} onClosePaymentSuccessModal={handleClosePaymentSuccessModal} />
+                                              )}
                                             {openFaqsModal && (
                                                 <div>
                                                     <Modal
