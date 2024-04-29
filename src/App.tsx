@@ -13,6 +13,8 @@ import ChatsSec from './components/chats';
 import { AllVideos } from './components/discover/components/allVideosPage';
 import Discover from './components/discover/discover';
 import { ForgotPassword } from './components/forgot-password/forgot-password';
+import { RequestOtp } from './components/forgot-password/request-otp';
+ 
 import HomePage from './components/homePage';
 import Event from './components/homePage/components/event';
 import { PrivacySecurityPage } from './components/privacy-security-page/privacy-security-page';
@@ -82,6 +84,7 @@ function App() {
                                 }
                             />
                             <Route path="/forgot-password" element={<ForgotPassword />} />
+                            <Route path="/request-verification-otp" element={<RequestOtp />} />
                             <Route path="/otp-verification/:email" element={<OtpVerification />} />
                             <Route path="/retrieve/*" element={<SetNewPassword />} />
                             <Route path="/view/video/:onePost" element={<HomePage />} />

@@ -1,5 +1,13 @@
+import { useSelector } from 'react-redux';
 import styles from './messageTab.module.scss';
 function MessageTab() {
+
+
+    const friends = useSelector(state => state?.reducers?.friends);
+    console.log("friends")
+    console.log(friends)
+    // const dispatch = useDispatch();
+
     return (
         <div className={styles.div}>
             <div className={styles['div-18']}>

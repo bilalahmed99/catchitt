@@ -3,6 +3,8 @@ const translationsEn = {
     "email.input": "Email",
     "password.input": "Password",
     "forgotpassword.link": "Forgot Password?",
+    "requestotp.title": "Request New Otp",
+    "requestotp.instruction": "Enter Your email to get an otp",
     "login.text": "Login",
     "or.text": "OR",
     "notregistered.text": "Not registered?",

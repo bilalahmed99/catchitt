@@ -1,0 +1,62 @@
+.rechargeModalHeader {
+    display        : flex;
+    align-items    : center;
+    justify-content: flex-end;
+    margin-bottom  : 32px;
+}
+
+.rechargeModalHeader p {
+    margin    : 0;
+    color     : var(--default-body, #222);
+    text-align: center;
+
+    /* H1/Semibold120 */
+    font-family: Poppins;
+    font-size  : 20px;
+    font-style : normal;
+    font-weight: 600;
+    line-height: 120%;
+    /* 24px */
+}
+
+.btnFullWidth {
+    display        : flex;
+    width          : 100%;
+    height         : 48px;
+    padding        : 0px 16px;
+    justify-content: center;
+    align-items    : center;
+    border-radius  : 6px;
+
+    color     : white;
+    background: var(--foundation-primary-primary-500, #5448B2);
+}
+
+.paymentInstructions {
+    display       : flex;
+    flex-direction: column;
+    align-items   : center;
+    gap           : 8px;
+
+    .title {
+        margin    : 0;
+        color     : var(--default-body, #222);
+        text-align: center;
+
+        /* H1/Semibold120 */
+        font-family: Poppins;
+        font-size  : 20px;
+        font-style : normal;
+        font-weight: 600;
+        line-height: 120%;
+
+    }
+}
+
+.paymentMethods {
+    display       : flex;
+    flex-direction: column;
+    gap           : 10px;
+
+
+}

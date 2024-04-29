@@ -3,21 +3,20 @@ import i18next from 'i18next';
 import cookies from 'js-cookie';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import OtpInput from 'react-otp-input';
+ 
 import Logo from '../../assets/Logo.png';
 import authSplashImg from '../../assets/authSplashImg.png';
 import InputField from '../reusables/InputField';
-import { SetNewPassword } from '../set-newPassword/set-newPassword';
+ 
 import styles from './forgot-password.module.scss';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { db } from '../../utils/db';
+import { useNavigate } from 'react-router-dom';
+
 export interface ForgotPasswordProps {
     className?: string;
 }
 
 interface User {
-    email: string | undefined;
+    email: string;
     otp: any;
 }
 
@@ -45,62 +44,42 @@ const languages: Languages[] = [
     },
 ];
 
-export const OtpVerification = ({ className }: ForgotPasswordProps) => {
-
-    const navigate = useNavigate();
+export const RequestOtp = ({ className }: ForgotPasswordProps) => {
     const currentLanguageCode = cookies.get('i18next') || 'en';
     const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
     const { t, i18n } = useTranslation();
-
+    const navigate = useNavigate();
     const API_KEY = process.env.VITE_API_URL;
     const forgotPwdEndPoint = '/auth';
     const [errorMessage, setErrorMessage] = useState('');
     const [user, setUser] = useState(defaultUser);
     const [response, setResponse] = useState(false);
-    const [isSignupOtp, setIsSignupOtp] = useState(false);
-    
-    
+    const [responseResult, setResponseResult] = useState('');
+    const [form, setForm] = useState('');
     const [otpMessage, setOtpMessage] = useState("We sent an OTP to your email.");
     const [otp, setOtp] = useState<any>(null);
     let myOtp = +otp;
-  
-    const [isMail, setIsMail] = useState(true);
+    const onUserChange = <P extends keyof User>(prop: P, value: User[P]) => {
+        setUser({ ...user, [prop]: value });
+    };
 
-
-    const profileData = useSelector((state: any) => state?.reducers?.profile);
-
-    console.log("Profile inside useSelector:", profileData);
-
-   const { email } = useParams();
-
-    // if(email != ""){
-    //     setUser({email, otp: ""});
-    // }
-    //**api call for resend api */
-
-   
-    const handleResendOtp:any = async (email: string) => {
-
-        if(email == "") {
-            setErrorMessage('No Email');
-            return;
-        }
-         try {
-            const response = await fetch(`${API_KEY}${forgotPwdEndPoint}/generateOtp/${email}`, {
-                method: 'GET',
+    /** Handling Forgot Password Scenario */
+    const handleForgotPassword = async (email: string) => {
+        try {
+            const response = await fetch(`${API_KEY}${forgotPwdEndPoint}/password/forgot`, {
+                method: 'POST',
                 headers: { 'Content-type': 'application/json' },
-                // body: JSON.stringify({ email: email }),
+                body: JSON.stringify({ email: email }),
             });
-
-             
 
             if (response.ok) {
                 const responseData = await response.json();
-                console.log("resend otp response data");
-                console.log(responseData)
-                setOtpMessage(responseData.message);
-                setOtp("");
+                console.log(responseData);
+                setResponseResult(responseData.message);
+              
+                navigate(`/otp-verification/${email}`)
                 
+                // setForm('verifyOTP')
             } else {
                 setErrorMessage('Invalid email');
                 console.log(response);
@@ -109,96 +88,35 @@ export const OtpVerification = ({ className }: ForgotPasswordProps) => {
             console.error(error);
             setErrorMessage('Invalid email');
         }
-    }
+    };
 
-    
-
-    
-     const handleRecendOtpSubmit = (e: React.FormEvent) => {
+  
+    const handleForgotPasswordSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // const { email } = user;
-        setErrorMessage("");
-        handleResendOtp(email);
+        const { email } = user;
+        handleForgotPassword(email);
+    };
+
+ 
+
+    const renderResponse = () => {
+        return (
+            <div
+                style={{
+                    fontWeight: '700',
+                    fontSize: '16px',
+                    color: 'green',
+                    marginBottom: '20px',
+                }}
+            >
+                {responseResult}
+            </div>
+        );
     };
 
 
-   
-  
-    const handleVerifySubmit = (e: React.FormEvent) => {
-        e.preventDefault(); // Prevent the default form submission behavior
-
-        // const { email } = user;
-        handleVerify(email, otp);
-    }
-
-    const handleVerify = async (email: string | undefined, otp: number) => {
-
-        try {
-            const response = await fetch(`${API_KEY}/auth/verifyOtp`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*', // This line won't have an effect here, as it's the server that needs to set this header
-                },
-                body: JSON.stringify({ email: email, otp: myOtp }),
-            });
-
-
-            
-            let isSignup = localStorage.getItem('isSignupOtp');
-            if(isSignup && isSignup == "true"){
-                setIsSignupOtp(true);
-
-            }
-             
-            console.log("profileData after otp verification")
-            console.log(profileData)
-
-            
-           if (response.ok) {
-                
-                 if(isSignupOtp){
-               
-                    localStorage.setItem('userId', profileData?._id || '');
-                    localStorage.setItem('token', profileData?.token || '');
-                    localStorage.setItem('profile',profileData || '');
-                    db.profile.add(profileData);
-                    localStorage.getItem('isSignupOtp');
-                    if( localStorage.getItem('isSignupOtp')){
-                        localStorage.removeItem('isSignupOtp')
-
-                    }
-                    navigate('/home'); 
-                }else{
-
-                    const responseData = await response.json();
-                    setResponse(true);
-                }
-            } else {
-                // Handle the error response from the server
-                const errorResponseData = await response.json();
-                 // Assuming the error message is returned in a 'message' field
-                setErrorMessage(errorResponseData.message);
  
-            }
-        } catch (error) {
-            console.error(error);
-            setErrorMessage('Invalid email or password');
-        }
-    }
-
-
-
-
-    if (response) {
-        let theOtp = otp;
-        user.otp = theOtp
-        return (
-            <SetNewPassword email={email} otp={user.otp} />
-        )
-    }
-
-
+  
     return (
         <div className={classNames(styles.container, className)}>
             <div className={styles.AuthSplashImg}>
@@ -231,15 +149,13 @@ export const OtpVerification = ({ className }: ForgotPasswordProps) => {
                         justifyContent: 'space-between'
                     }}
                 >
-                    
-
-                        <div className={styles.otpForm}>
-                            <h4>
-                                Verify your email
-                            </h4>
-                            <p>
-                                {otpMessage}
-                                <div style={{ marginTop: '20px' }}>
+                     
+                        <form className={styles.authInputFields}>
+                            <h3 className={styles.creatTitle} style={{ marginTop: '10%' }}>
+                                Request Otp
+                            </h3>
+                            <p>Enter Your email to get an otp</p>
+                            <div style={{ marginTop: '20px' }}>
                                 {errorMessage ? (
                                     <h4
                                         style={{
@@ -253,29 +169,30 @@ export const OtpVerification = ({ className }: ForgotPasswordProps) => {
                                     </h4>
                                 ) : null}
                             </div>
-                            </p>
-                            <OtpInput
-                                value={otp}
-                                onChange={setOtp}
-                                numInputs={6}
-                                renderSeparator={<span></span>}
-                                inputStyle={otp === '' ? styles.otpInput : styles.otpInputNotEmpty}
-                                containerStyle={styles.otpContainer}
-                                renderInput={(props) => <input {...props} />}
-                                inputType={"tel"}
-                                skipDefaultStyles={true}
-                            />
+                            <div className={styles.inputsDiv}>
+                                <InputField
+                                    type="email"
+                                    placeholder={t('email.input')}
+                                    className="formInputFields"
+                                    value={user.email}
+                                    onChange={(e: { target: { value: string } }) => {
+                                        onUserChange('email', e.target.value);
+                                    }}
+                                />
+                            </div>
+
                             <div className={styles.signupSubmitDiv}>
                                 <button
                                     className={styles.signupSubmitBtn}
-                                    onClick={handleVerifySubmit}
+                                    onClick={handleForgotPasswordSubmit}
                                 >
-                                    Verify code
+                                    {t('emailmeinstructions.btn')}
                                 </button>
+                                {response ? renderResponse() : ''}
                             </div>
-                            <div onClick={handleRecendOtpSubmit} className={styles.resendCodeBtn}> Resend code </div>
-                        </div>
-                
+                        </form>
+                     
+
                 </div>
                 <div className={styles.afterTheFormDiv}>
                     <div className={classNames(styles.footerLightBg)}>
