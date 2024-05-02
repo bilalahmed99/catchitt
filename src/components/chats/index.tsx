@@ -75,7 +75,7 @@ function ChatsSec() {
         selectedData,
         onUsersInputChangeHandler,
         showToast,
-        sendMessageReply,
+        handleScroll,
     } = hook();
 
     return (
@@ -93,7 +93,7 @@ function ChatsSec() {
             <div className={style.parent}>
                 <UserChats
                     onUsersInputChangeHandler={onUsersInputChangeHandler}
-                    id={activeUser.userId}
+                    id={activeUser?.userId}
                     OnChatClick={chatSwitchH}
                     data={users}
                 />
@@ -104,7 +104,7 @@ function ChatsSec() {
                             safeMsg={markTheMsgSafe}
                             name={activeUser?.userName}
                             moreOptionH={() => {
-                                if (activeUser.isGroup) {
+                                if (activeUser?.isGroup) {
                                     setGroupOptions(!groupOptions);
                                     setshowShortSidebar(!showShortSidebar);
                                     if (showShortSidebar) {
@@ -146,6 +146,7 @@ function ChatsSec() {
                                 activeChat={activeChat}
                                 copyH={copyH}
                                 showToast={showToast}
+                                handleScroll={handleScroll}
                             />
                         )}
                     </div>
@@ -159,19 +160,31 @@ function ChatsSec() {
                             <img onClick={() => setreplysms(false)} src={closeSvg} alt="" />
                         </div>
                     )}
-                    <DoMsg
-                        onSubmit={submitH}
-                        onChange={(e: any) => setMsg(e.target.value)}
-                        msg={msg}
-                    />
+                    {/* <p>{activeUser?.}</p> */}
+                    {activeUser?.isBlocked ? (
+                        <p className="p-8">
+                            You can't send message to {activeUser?.userName} as you've blocked this
+                            user
+                        </p>
+                    ) : (
+                        <DoMsg
+                            onSubmit={submitH}
+                            onChange={(e: any) => setMsg(e.target.value)}
+                            msg={msg}
+                        />
+                    )}
                     {!groupOptions && moreOptions && (
                         <DropDown
                             activeUser={activeUser}
                             pinUserH={userPinH}
                             blockH={() => {
-                                setdangetBtnText('Block');
+                                setdangetBtnText(
+                                    `   ${activeUser?.isBlocked ? 'UnBlock' : 'Block'}`
+                                );
                                 setDengerText(
-                                    `Are you sure you want to block ${activeUser?.userName}?`
+                                    `Are you sure you want to ${
+                                        activeUser?.isBlocked ? 'UnBlock' : 'Block'
+                                    } ${activeUser?.userName}?`
                                 );
                                 setblockPopup(true);
                             }}

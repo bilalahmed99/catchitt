@@ -33,7 +33,9 @@ function DropDown(props: any) {
                 </div>
             </div>
             <div onClick={blockH} className={style.dropdownRow}>
-                <p className={style.warningMenuItem}>Block</p>
+                <p className={style.warningMenuItem}>
+                    {activeUser?.isBlocked ? 'UnBlock' : 'Block'}
+                </p>
                 <div style={{ visibility: 'hidden' }} className={style.starredMessagesRow}>
                     <p>A</p>
                     <img className={style.arrowRight} src={arrow} alt="arrow right" />
