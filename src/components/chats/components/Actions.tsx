@@ -28,11 +28,13 @@ function Actions(props: any) {
         activeChat,
         copyH,
         showToast,
+        handleScroll
     } = props || {};
+
     return (
-        <div ref={autoScrolElem} className={style.msgsContainer}>
+        <div ref={autoScrolElem} className={style.msgsContainer} onScroll={handleScroll}>
             {activeChat?.userId &&
-                activeChat?.chats.map((item: any, index: number) => {
+                activeChat?.chats?.map((item: any, index: number) => {
                     return (
                         <div
                             key={index}
@@ -119,7 +121,7 @@ function Actions(props: any) {
                                             >
                                                 <div>
                                                     <p className={style.primaryText}>
-                                                        {activeUser.userName}
+                                                        {activeUser?.userName}
                                                     </p>
                                                     <p className={style.prevmsg}>
                                                         {item?.replysms}

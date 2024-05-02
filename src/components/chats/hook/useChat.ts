@@ -47,12 +47,12 @@ function useChat() {
     const SERVER_URL = 'https://stagingback.seezitt.com';
     const location = useLocation();
     const valueReceived = location.state?.value;
-
+    const [page, setPage] = useState(1);
     const autoScrolElem: any = useRef(null);
-
+    const [blockToggle, setBlockToggle] = useState(false);
     const longPressH = (item: any) => {
         const tempArr: any[] = [];
-        activeChat.chats.forEach((msg: any) => {
+        activeChat?.chats.forEach((msg: any) => {
             if (msg.id === item.id) {
                 tempArr.push({ ...item, emojis: !item.emojis });
             } else {
@@ -61,6 +61,28 @@ function useChat() {
         });
         setactiveChat({ ...activeChat, chats: tempArr });
     };
+    // Function to load more messages
+    const loadMoreMessages = () => {
+        console.log("AAAAA");
+        setPage((prevPage) => prevPage + 1);
+    };
+
+    // Function to handle scrolling to the bottom of the message list
+    const handleScroll = (event) => {
+        const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
+        if (scrollTop + clientHeight === scrollHeight) {
+            // User has scrolled to the bottom
+            loadMoreMessages();
+        }
+    };
+
+    useEffect(() => {
+        loadChatMessages(sender, receiver, conversationId);
+    }, [conversationId, page]);
+
+    useEffect(() => {
+        loadChats();
+    }, [blockToggle]);
 
     useEffect(() => {
         loadChats();
@@ -87,9 +109,11 @@ function useChat() {
             });
             const res = await response.json();
             const tempArr: any[] = [];
+
             res?.data?.data?.forEach(
                 (
                     chats: {
+                        isBlocked: boolean;
                         lastModifiedTime: string | number | Date;
                         lastMessage: {
                             createdTime: string | number | Date;
@@ -108,6 +132,7 @@ function useChat() {
                     let lastMessage = chats?.lastMessage?.message;
                     let isPinned = chats?.isPinned;
                     let unReadMsgsCount = chats?.unReadMsgsCount;
+                    let isBlocked = chats?.isBlocked;
                     console.log('Last Message : ', lastMessage);
                     // Convert milliseconds to date
                     const date = new Date(chats?.lastMessage?.createdTime);
@@ -125,6 +150,7 @@ function useChat() {
                         senderId: chats?.users[0]?._id,
                         receiverId: chats?.users[1]?._id,
                         conversationId: chats?._id,
+                        isBlocked,
                     });
                     // });
 
@@ -137,6 +163,86 @@ function useChat() {
                     }
                 }
             );
+            console.log('Response Chats : ', tempArr);
+        } catch (error) {
+            console.log('error trendinghashtags', error);
+        }
+    };
+
+    const searchChats = async (query: string) => {
+        try {
+            const response = await fetch(
+                `${API_KEY}/chat/search/conversations?page=1&pageSize=10&searchQuery=${query}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            const res = await response.json();
+            const tempArr: any[] = [];
+            console.log('Res : ', res?.data?.data?.length);
+            if (res?.data?.data?.length > 0) {
+                res?.data?.data?.forEach(
+                    (
+                        chats: {
+                            lastModifiedTime: string | number | Date;
+                            lastMessage: {
+                                createdTime: string | number | Date;
+                                message: any;
+                            };
+                            isPinned: any;
+                            unReadMsgsCount: any;
+                            users: {
+                                name: any;
+                                _id: any;
+                            }[];
+                            _id: any;
+                        },
+                        index: number
+                    ) => {
+                        let lastMessage = chats?.lastMessage?.message;
+                        let isPinned = chats?.isPinned;
+                        let unReadMsgsCount = chats?.unReadMsgsCount;
+                        console.log('Last Message : ', lastMessage);
+                        // Convert milliseconds to date
+                        const date = new Date(chats?.lastMessage?.createdTime);
+
+                        // Format the date using moment.js
+                        const conversationTimeStamp = moment(date).format('h:mm A');
+                        // chats?.users?.forEach((user) => {
+                        tempArr.push({
+                            userId: chats?.users[1]?._id,
+                            userName: chats?.users[1]?.name,
+                            lastMsg: lastMessage,
+                            ispined: isPinned,
+                            lastSeen: conversationTimeStamp,
+                            unReadMsgs: unReadMsgsCount,
+                            senderId: chats?.users[0]?._id,
+                            receiverId: chats?.users[1]?._id,
+                            conversationId: chats?._id,
+                        });
+                        // });
+
+                        setUsers(tempArr);
+                        if (index == 0) {
+                            setSender(chats?.users[0]?._id);
+                            setReceiver(chats?.users[1]?._id);
+                            setConversationId(chats?._id);
+                            loadChatMessages(
+                                chats?.users[0]?._id,
+                                chats?.users[1]?._id,
+                                chats?._id
+                            );
+                        }
+                    }
+                );
+            } else {
+                setUsers([]);
+                setactiveChat({});
+            }
             console.log('Response Chats : ', tempArr);
         } catch (error) {
             console.log('error trendinghashtags', error);
@@ -201,7 +307,7 @@ function useChat() {
 
     const insertKeyH = (key: any, value: boolean) => {
         const tempArr: any[] = [];
-        activeChat.chats.forEach((usermsg: any) => {
+        activeChat?.chats.forEach((usermsg: any) => {
             tempArr.push({ ...usermsg, [key]: value });
         });
         setactiveChat({ ...activeChat, chats: tempArr });
@@ -209,7 +315,7 @@ function useChat() {
 
     const valuesH = (item: any, keyName: any) => {
         const tempArr: any[] = [];
-        activeChat.chats.forEach((msg: any) => {
+        activeChat?.chats.forEach((msg: any) => {
             if (msg.id === item.id) {
                 tempArr.push({ ...item, [keyName]: !item[keyName] });
             } else {
@@ -220,7 +326,7 @@ function useChat() {
     };
     const valuesH2 = (item: any, keyName: any, value: any) => {
         const tempArr: any[] = [];
-        activeChat.chats.forEach((msg: any) => {
+        activeChat?.chats.forEach((msg: any) => {
             if (msg.id === item.id) {
                 tempArr.push({ ...item, [keyName]: value, dropdown: false });
                 setMessageAsStared(msg.id, conversationId);
@@ -250,7 +356,7 @@ function useChat() {
 
     const deleteH = async (item: any) => {
         const tempArr: any[] = [];
-        activeChat.chats.forEach((msg: any) => {
+        activeChat?.chats.forEach((msg: any) => {
             if (msg.id !== item.id) {
                 tempArr.push(msg);
             }
@@ -282,7 +388,7 @@ function useChat() {
         insertKeyH('showEmogis', false);
         insertKeyH('emojis', false);
         const tempArr: any[] = [];
-        activeChat.chats.forEach((msg: any) => {
+        activeChat?.chats.forEach((msg: any) => {
             tempArr.push({ ...msg, dropdown: false, emojis: false });
         });
         setactiveChat({ ...activeChat, chats: tempArr });
@@ -316,7 +422,7 @@ function useChat() {
                 setactiveChat({
                     ...activeChat,
                     chats: [
-                        ...activeChat.chats,
+                        ...activeChat?.chats,
                         {
                             msg: msg,
                             time: formattedTime,
@@ -328,15 +434,15 @@ function useChat() {
                     ],
                 });
 
-                // console.log('Message IF: ', sms);
-                // sendMessageReply()
-                // (socketRef.current as any).emit('send-msg', JSON.stringify(messageData));
+                messageData['repliedMessageId'] = smsId;
+                // sendMessageReply();
+                (socketRef.current as any).emit('send-msg', JSON.stringify(messageData));
                 setMsg('');
             } else {
                 setactiveChat({
                     ...activeChat,
                     chats: [
-                        ...activeChat.chats,
+                        ...activeChat?.chats,
                         {
                             msg: msg,
                             time: formattedTime,
@@ -350,7 +456,7 @@ function useChat() {
                 (socketRef.current as any).emit('send-msg', JSON.stringify(messageData));
                 setMsg('');
             }
-            console.log('Current socket : ', socketRef.current);
+            // console.log('Current socket : ', socketRef.current);
             setMsg('');
         }
 
@@ -362,7 +468,7 @@ function useChat() {
     const multipleUnstarHandlr = () => {
         let filteredArr = selectedData.map((item: any) => item.id);
         const tempArr: any[] = [];
-        activeChat.chats.forEach((msg: any) => {
+        activeChat?.chats.forEach((msg: any) => {
             if (filteredArr.includes(msg.id)) {
                 tempArr.push({ ...msg, stared: false });
             } else {
@@ -373,7 +479,7 @@ function useChat() {
         setselectedData([]);
     };
     const chatSwitchH = (e: any) => {
-        console.log('Click on chat : ', e);
+        // console.log('Click on chat : ', e);
         users?.forEach((user) => {
             if (user?.userId === e) {
                 setSender(user?.senderId);
@@ -397,7 +503,7 @@ function useChat() {
     ) => {
         try {
             const response = await fetch(
-                `${API_KEY}/chat/messages/${conversationId}?page=1&pageSize=20`,
+                `${API_KEY}/chat/messages/${conversationId}?page=${page}&pageSize=10`,
                 {
                     method: 'GET',
                     headers: {
@@ -407,13 +513,17 @@ function useChat() {
                 }
             );
             const res = await response.json();
-            res?.data?.data.forEach((element: any) => {
+            res?.data?.data.forEach((element: any, index: number, array: any[]) => {
                 console.log('Chat Messages : ', element);
                 // Convert milliseconds to date
                 const date = new Date(element?.createdTime);
 
                 // Format the date using moment.js
                 const messageTimeStamp = moment(date).format('h:mm A');
+
+                const isLastIndex = index === array.length - 1;
+
+                if (isLastIndex) markMessageAsSeen(element?._id);
 
                 setactiveChat((currentChat: any) => ({
                     ...currentChat,
@@ -428,6 +538,9 @@ function useChat() {
                             isrecevied: element?.receiverId?._id == receiverId ? false : true,
                             stared: element?.isStarred,
                             isRead: element?.isRead,
+                            replysms: element?.repliedMessage
+                                ? element?.repliedMessage?.message
+                                : false,
                         },
                     ],
                 }));
@@ -447,9 +560,9 @@ function useChat() {
     }, [users]);
 
     useEffect(() => {
-        if (chats.find((chat) => chat.userId === activeUser.userId)) {
+        if (chats.find((chat) => chat.userId === activeUser?.userId)) {
             chats.forEach((chat) => {
-                if (chat.userId === activeUser.userId) {
+                if (chat.userId === activeUser?.userId) {
                     setactiveChat(chat);
                 }
             });
@@ -458,15 +571,15 @@ function useChat() {
             if (activeChat) {
                 setchats([...chats, activeChat]);
                 setactiveChat({
-                    userId: activeUser.userId,
-                    userName: activeUser.userName,
+                    userId: activeUser?.userId,
+                    userName: activeUser?.userName,
                     chats: [],
                 });
             } else {
                 setchats([...chats, activeChat]);
                 setactiveChat({
-                    userId: activeUser.userId,
-                    userName: activeUser.userName,
+                    userId: activeUser?.userId,
+                    userName: activeUser?.userName,
                     chats: [],
                 });
             }
@@ -478,35 +591,44 @@ function useChat() {
         setstaredMsgs([]);
     }, [activeUser]);
 
-    const sendMessageReply = async () => {
-        try {
-            const response = await fetch(`${API_KEY}/chat/messages`, {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({
-                    from: sender,
-                    to: receiver,
-                    message: msg,
-                    conversationId: conversationId,
-                    type: 'Text',
-                    repliedMessageId: smsId,
-                }),
-            });
-            const res = await response.json();
-            console.log('Message Replied : ', res);
-        } catch (error) {
-            console.log('error replying to message', error);
-        }
-        console.log('ACtive user : ', activeUser);
-    };
+    // const sendMessageReply = async () => {
+    //     let body = {
+    //         from: sender,
+    //         to: receiver,
+    //         message: msg,
+    //         conversationId: conversationId,
+    //         type: 'Text',
+    //         repliedMessageId: smsId,
+    //     };
+
+    //     console.log(body);
+    //     try {
+    //         const response = await fetch(`${API_KEY}/chat/messages`, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-type': 'application/json',
+    //                 Authorization: `Bearer ${token}`,
+    //             },
+    //             body: JSON.stringify({
+    //                 from: sender,
+    //                 to: receiver,
+    //                 message: msg,
+    //                 conversationId: conversationId,
+    //                 type: 'Text',
+    //                 repliedMessageId: smsId,
+    //             }),
+    //         });
+    //         const res = await response.json();
+    //         console.log('Message Replied : ', res);
+    //     } catch (error) {
+    //         console.log('error replying to message', error);
+    //     }
+    // };
 
     const userPinH = async (id?: any) => {
-        // if (chats.find((chat) => chat.userId === activeUser.userId)) {
+        // if (chats.find((chat) => chat.userId === activeUser?.userId)) {
         //     chats.forEach((chat) => {
-        //         if (chat.userId === activeUser.userId) {
+        //         if (chat.userId === activeUser?.userId) {
         //             setactiveChat(chat);
         //         }
         //     });
@@ -515,15 +637,15 @@ function useChat() {
         //     if (activeChat) {
         //         setchats([...chats, activeChat]);
         //         setactiveChat({
-        //             userId: activeUser.userId,
-        //             userName: activeUser.userName,
+        //             userId: activeUser?.userId,
+        //             userName: activeUser?.userName,
         //             chats: [],
         //         });
         //     } else {
         //         setchats([...chats, activeChat]);
         //         setactiveChat({
-        //             userId: activeUser.userId,
-        //             userName: activeUser.userName,
+        //             userId: activeUser?.userId,
+        //             userName: activeUser?.userName,
         //             chats: [],
         //         });
         //     }
@@ -533,7 +655,7 @@ function useChat() {
         const filteredArr: any[] = [];
         setActiveUser({
             ...activeUser,
-            ispined: !activeUser.ispined,
+            ispined: !activeUser?.ispined,
         });
         users?.forEach((user) => {
             if (user?.userId === activeUser?.userId) {
@@ -579,7 +701,7 @@ function useChat() {
             });
         }
         const tempArr: any[] = [];
-        activeChat.chats.forEach((item: any) => {
+        activeChat?.chats.forEach((item: any) => {
             tempArr.push({ ...item, dropdown: false });
         });
         setactiveChat({ ...activeChat, chats: tempArr });
@@ -634,9 +756,9 @@ function useChat() {
                 chats.push(userChat);
             }
         });
-        if (staredMsgs.find((chat) => chat.userId === activeChat.userId)) {
+        if (staredMsgs.find((chat) => chat.userId === activeChat?.userId)) {
             staredMsgs.forEach((userChat2) => {
-                if (userChat2.userId === activeChat.userId) {
+                if (userChat2.userId === activeChat?.userId) {
                     tempArr.push({ ...activeChat, chats: chats });
                 } else {
                     tempArr.push(userChat2);
@@ -671,7 +793,7 @@ function useChat() {
         } else {
             setstaredMsgs([]);
         }
-    }, [activeChat.userId, activeUser.userId]);
+    }, [activeChat?.userId, activeUser?.userId]);
 
     const onBlock = async () => {
         const tempchat: any = [];
@@ -695,6 +817,7 @@ function useChat() {
                 },
             });
             const res = await response.json();
+            setBlockToggle(!blockToggle);
             console.log('User Blocked : ', res);
         } catch (error) {
             console.log('error blocking user', error);
@@ -737,15 +860,19 @@ function useChat() {
     };
 
     const onUsersInputChangeHandler = (e: any) => {
-        if (e.length > 0) {
-            const filteredUsers: any[] = DEMI_USERS?.filter((user: any) =>
-                user?.userName?.toLowerCase().includes(e.toLowerCase())
-            );
+        // if (e.length > 0) {
+        //     const filteredUsers: any[] = tempArr?.filter((user: any) =>
+        //         user?.userName?.toLowerCase().includes(e.toLowerCase())
+        //     );
 
-            setUsers(filteredUsers);
-        } else {
-            setUsers(DEMI_USERS);
-        }
+        //     setUsers(filteredUsers);
+        // } else {
+        //     setUsers(tempArr);
+        // }
+        console.log('ssss : ', e);
+        setUsers([]);
+        setactiveChat({});
+        searchChats(e);
     };
 
     return {
@@ -817,7 +944,7 @@ function useChat() {
         socketRef,
         sender,
         receiver,
-        sendMessageReply,
+        handleScroll,
     };
 }
 
