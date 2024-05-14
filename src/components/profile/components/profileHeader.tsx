@@ -15,6 +15,10 @@ import { useSelector } from 'react-redux';
 import CoverImagePopup from './cover-img-popup';
 import { getProfileData, loadFollowers } from '../../../redux/AsyncFuncs';
 import { useDispatch } from 'react-redux';
+import AddIcon from '../svg-components/AddIcon';
+import CreateStoryPopup from './createStoryPopup';
+import { useNavigate } from "react-router-dom";
+
 interface Props {
     setProfileModal: (value: boolean) => void;
     setLikesModal: (value: boolean) => void;
@@ -37,12 +41,14 @@ const ProfileHeader: FunctionComponent<Props> = ({
     const API_KEY = process.env.VITE_API_URL;
     const [stories, setStories] = useState([1,2,3,4,5,6,7,8,9,10]);
      
+      const navigate = useNavigate();
 
     // const token = useAuthStore((state) => state.token);
     const auth = useAuthStore((state) => state._id);
     const token = localStorage.getItem('token') ? localStorage.getItem('token') : '';
 
     const [selectImagePopup, setSelectImagePopup] = useState(false);
+    const [addStoryPopup, setAddStoryPopup] = useState<boolean>(false);
 
     let localProfile = null;
     const dispatch = useDispatch();
@@ -127,6 +133,10 @@ const ProfileHeader: FunctionComponent<Props> = ({
         }
     };
 
+    const addStory = () => {
+        setAddStoryPopup(true);
+        console.log("add story")
+    };
     useEffect(() => {
         fetch(`${API_KEY}/media-content/stories/feed`, {
             method: 'GET',
@@ -165,6 +175,18 @@ const ProfileHeader: FunctionComponent<Props> = ({
             ) : (
                 ''
             )}
+            {addStoryPopup ? (
+                <CreateStoryPopup
+                    onCancel={() => setAddStoryPopup(false)}
+                    open={addStoryPopup}
+                    onSelect={() => {
+                        setAddStoryPopup(false)
+                          navigate("/create-story");
+                    }}
+                />
+            ) : (
+                ''
+            )}
 
             <div className={styles.profileHeader}>
                 <div className={styles.banner}>
@@ -180,14 +202,15 @@ const ProfileHeader: FunctionComponent<Props> = ({
                     )}
                 </div>
                 <div className={styles.bottomContainer}>
-                    <div
+                    <div style={{ display: 'flex', flexDirection:'column', alignItems: 'center' }}>
+                        <div
                         onClick={() => {
-                            if (stories?.length > 0) {
-                                showStory();
-                            }
-                        }}
-                        className={stories?.length > 0 ? styles.avatarBox2 : styles.avatarBox}
-                    >
+                                if (stories?.length > 0) {
+                                    showStory();
+                                }
+                            }}
+                            className={stories?.length > 0 ? styles.avatarBox2 : styles.avatarBox}
+                        >
                         
 
                         <Avatar
@@ -195,8 +218,12 @@ const ProfileHeader: FunctionComponent<Props> = ({
                             src={profileImg ? profileImg : Avatar}
                             alt={profileData?.name}
                         />
-                         
+                        </div>
+                        <span className={styles.addStoryIcon} onClick={addStory}>
+                             <AddIcon />
+                        </span>
                     </div>
+                   
                     <button
                         style={{
                             position: 'relative',
