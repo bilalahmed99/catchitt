@@ -35,7 +35,8 @@ import UploadPage from './components/upload';
 import { useAuthStore } from './store/authStore';
 import useApp from './useApp';
 import { OtpVerification } from './components/forgot-password/otp-verification';
-
+import CreateStoryPage from './components/stories';
+ 
 // Functional component to handle the initial route navigation
 const InitialRouteHandler = () => {
     const navigate = useNavigate();
@@ -124,6 +125,7 @@ function App() {
                             <Route path="/discover" element={<Discover />} />
                             <Route path="/videos/:id" element={<AllVideos />} />
                             <Route path="/upload" element={<UploadPage />} />
+                            <Route path="/create-story" element={<CreateStoryPage />} />
                             <Route path="/live" element={<Event />} />
                         </Routes>
                     </Router>
