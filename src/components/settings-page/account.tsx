@@ -32,6 +32,7 @@ import addMore from './svg-components/add-more.svg';
 import changePassIcon from './svg-components/changePassIcon.svg';
 import checkSubmitted from './svg-components/check-submitted.svg';
 import myReports from './svg-components/my-reports.svg';
+import contactUS from './svg-components/contact-us-icon.svg';
 import redRightArrow from './svg-components/redRightArrow.svg';
 import whiteRightArrow from './svg-components/whiteRightArrow.svg';
 
@@ -402,12 +403,13 @@ const Account = ({ className, openModal }: AccountProps) => {
     };
 
     const myReportsHandler = () => {
-        // const infoEmail = 'info@ogoul.com';
-        // window.location.href = `mailto:${infoEmail}`;
-        // setOpenFaqsModal(false)
-        // setOpenReportsModal(true);
         setIndex(6);
         navigate('/myreports');
+    };
+
+    const contactUsHandler = () => {
+        setIndex(6);
+        navigate('/contactus');
     };
 
     /** Handling Forgot Password Scenario */
@@ -805,6 +807,15 @@ const Account = ({ className, openModal }: AccountProps) => {
                                     <div className={styles.settingName} onClick={myReportsHandler}>
                                         <img src={myReports} alt="" />
                                         <p>My Reports</p>
+                                    </div>
+                                    <img src={whiteRightArrow} alt="" />
+                                </div>
+                            </div>
+                            <div className={styles.suggestedContent}>
+                                <div className={styles.accountCards}>
+                                    <div className={styles.settingName} onClick={contactUsHandler}>
+                                        <img src={contactUS} alt="" />
+                                        <p>Contact Us</p>
                                     </div>
                                     <img src={whiteRightArrow} alt="" />
                                 </div>

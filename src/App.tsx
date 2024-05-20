@@ -39,6 +39,7 @@ import CreateStoryPage from './components/stories';
 import MyReports from './components/my-reports';
 import GoLive from './components/go-live';
 import Analytics from './components/analytics';
+import ContactUs from './components/contact-us';
 
 // Functional component to handle the initial route navigation
 const InitialRouteHandler = () => {
@@ -132,6 +133,7 @@ function App() {
                             <Route path="/golive" element={<GoLive />} />
                             <Route path="/myreports" element={<MyReports />} />
                             <Route path="/analytics" element={<Analytics />} />
+                            <Route path="/contactus" element={<ContactUs />} />
                         </Routes>
                     </Router>
                 </VideoProvider>
