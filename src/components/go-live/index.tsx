@@ -2,12 +2,13 @@ import Navbar from '../../shared/navbar';
 import { camera, seezittLogo, cameraThumbnail, chevronToggle } from '../../icons';
 import { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
+import protooClient from 'protoo-client';
 
 function GoLive() {
     const [isRotated, setIsRotated] = useState(false);
     const socketRef = useRef();
     const token = localStorage.getItem('token');
-    const SERVER_URL = `http://staginglive1.seezitt.com/?token=${token}`;
+    const SERVER_URL = `https://staginglive1.seezitt.com/?token=${token}`;
     const handleToggleRotation = () => {
         setIsRotated(!isRotated);
     };
@@ -23,16 +24,48 @@ function GoLive() {
         };
     });
 
-    function startSocket() {
-        console.log("Here");
-        if ((socketRef.current as any) && (socketRef.current as any).connected) {
-            console.log('Socket already connected.');
-            console.log("Here Inside");
-            return;
-        }
-        (socketRef.current as any) = io(SERVER_URL, {
-            transports: ['websocket'],
+    useEffect(() => {
+        // Connect to the WebSocket server
+        const socket = io('wss://staginglive1.seezitt.com');
+
+        // Handle connection events
+        socket.on('connect', () => {
+            console.log('Connected to WebSocket server');
+
+            // Authenticate with token
+            const token = 'your_token_here';
+            socket.emit('authenticate', { token });
         });
+
+        socket.on('disconnect', () => {
+            console.log('Disconnected from WebSocket server');
+        });
+
+        // Handle incoming stream data
+        socket.on('stream_data', (data) => {
+            console.log('Received stream data:', data);
+            // Process the stream data as needed
+        });
+
+        return () => {
+            // Disconnect from WebSocket server when component unmounts
+            socket.disconnect();
+        };
+    }, []);
+
+    function startSocket() {
+        // console.log("Here");
+        // if ((socketRef.current as any) && (socketRef.current as any).connected) {
+        //     console.log('Socket already connected.');
+        //     console.log("Here Inside");
+        //     return;
+        // }
+        // (socketRef.current as any) = io(SERVER_URL, {
+        //     transports: ['websocket'],
+        // });
+        const transport = new protooClient.WebSocketTransport(SERVER_URL);
+
+        console.log('Transport : ', transport);
     }
 
     const handlePermissionRequest = async () => {
