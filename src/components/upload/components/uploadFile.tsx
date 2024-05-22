@@ -12,7 +12,7 @@ function UploadFile({ selectFilesHandler }: any) {
     };
 
     const proceedToGoLivePage = () => {
-        navigate('/golive');
+        // navigate('/golive');
     };
 
     return (
