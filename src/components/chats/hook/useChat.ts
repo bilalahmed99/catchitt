@@ -15,7 +15,7 @@ function useChat() {
     const [markTheMsgSafe, setMarkTheMsgSafe] = useState<boolean>(false);
     const [groupOptions, setGroupOptions] = useState<boolean>(false);
     const [smsRef, setSmsRef] = useState<string>('');
-    const [smsId, setSmsId] = useState('');
+    const [smsId, setSmsId] = useState<any>('');
     const [dangetBtnText, setdangetBtnText] = useState<string>('');
     const [noOfDeleteSMS, setnoOfDeleteSMS] = useState<number>(0);
     const [copyModal, setCopyModal] = useState(false);
