@@ -232,7 +232,7 @@ const Account = ({ className, openModal }: AccountProps) => {
 
     const [image, setImage] = useState<string | ArrayBuffer | null>(null); // useState(null);
 
-    const handleImageChange = (event:any ) => {
+    const handleImageChange = (event: { target: { files: any[] } }) => {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
@@ -530,7 +530,7 @@ const Account = ({ className, openModal }: AccountProps) => {
         handleProfileFetch();
     }, [accountType]);
 
-    const handleClickInside = (event) => {
+    const handleClickInside = (event: { stopPropagation: () => void }) => {
         event.stopPropagation(); // Prevents the click event from bubbling up to the outer div
     };
 

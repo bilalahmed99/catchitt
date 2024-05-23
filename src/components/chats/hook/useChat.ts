@@ -295,13 +295,13 @@ function useChat() {
         });
     }
 
-    const reactToMessage = (messageId: any, reaction: any) => {
-        (socketRef.current as any).emit('react-msg', { from: sender, messageId, react: reaction });
-    };
+    // const reactToMessage = (messageId: any, reaction: any) => {
+    //     (socketRef.current as any).emit('react-msg', { from: sender, messageId, react: reaction });
+    // };
 
-    const removeReaction = (messageId: any) => {
-        (socketRef.current as any).emit('remove-react', { from: sender, messageId });
-    };
+    // const removeReaction = (messageId: any) => {
+    //     (socketRef.current as any).emit('remove-react', { from: sender, messageId });
+    // };
 
     const markMessageAsSeen = (userId: any, conversationId: any) => {
         (socketRef.current as any).emit('mark-conversation-as-seen', { userId, conversationId });
