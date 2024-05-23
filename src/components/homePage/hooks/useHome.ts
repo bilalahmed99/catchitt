@@ -4,46 +4,66 @@ import { getHomeVideos } from '../../../redux/AsyncFuncs';
 import { updateHomeVideos } from '../../../redux/reducers';
 
 function useHome() {
-    const isLoggedIn = localStorage.getItem('token')
+    const isLoggedIn = localStorage.getItem('token');
     const [loading, setLoading] = useState<boolean>(false);
     const [activeTab, setActiveTab] = useState<number>(2);
-    const auth: any = useSelector((store: any) => store?.reducers?.profile)
+    const [isFollowing, setIsFollowing] = useState(false);
+    const auth: any = useSelector((store: any) => store?.reducers?.profile);
     // @ts-ignore
-    const videos = useSelector((store) => store.reducers.homeVideos)
-    const dispatch = useDispatch()
+    const videos = useSelector((store) => store.reducers.homeVideos);
+    const dispatch = useDispatch();
+    const API_KEY = process.env.VITE_API_URL;
+    const token = localStorage.getItem('token');
 
     const getHomeVideoes = async () => {
         setLoading(true);
-        dispatch(getHomeVideos(activeTab)).then(() => setLoading(false))
+        dispatch(getHomeVideos(activeTab)).then(() => setLoading(false));
     };
 
     useEffect(() => {
-        getHomeVideoes()
-        // dispatch(fetchProfile());
+        getHomeVideoes();
+        getFollowingList();
     }, []);
+
+    const getFollowingList = async () => {
+        try {
+            const response: any = await fetch(`${API_KEY}/profile/${auth?._id}/followers/`, {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const { data }: any = await response.json();
+            if (data?.data?.length > 0) setIsFollowing(true);
+        } catch (error) {
+            console.log('error', error);
+        }
+    };
 
     useEffect(() => {
         if (!isLoggedIn && activeTab === 1) {
-            dispatch(updateHomeVideos([]))
+            dispatch(updateHomeVideos([]));
         } else {
             if (!loading && isLoggedIn) {
                 setLoading(true);
-                dispatch(getHomeVideos(activeTab)).then(() => setLoading(false))
+                dispatch(getHomeVideos(activeTab)).then(() => setLoading(false));
             }
         }
     }, [activeTab]);
 
     useEffect(() => {
         if (activeTab === 1) {
-            dispatch(updateHomeVideos([]))
+            dispatch(updateHomeVideos([]));
         }
-    }, [auth])
+    }, [auth]);
 
     return {
         loading,
         activeTab,
         setActiveTab,
-        videos
+        videos,
+        isFollowing
     };
 }
 

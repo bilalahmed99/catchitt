@@ -4,7 +4,7 @@ export default function useOnScreen(ref: any) {
     const [intersectingVideo, setIntersectingVideo] = useState<any>(null);
 
     useEffect(() => {
-        const observer:any = new IntersectionObserver(([entry]) => {
+        const observer: any = new IntersectionObserver(([entry]) => {
             if (entry?.isIntersecting) {
                 setIntersectingVideo(entry?.target);
             } else {

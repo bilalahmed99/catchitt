@@ -20,8 +20,6 @@ import Action from './components/Action';
 import CustomPlayer from './components/CustomPlayer';
 import style from './index.module.scss';
 import FollowUserCard from '../../shared/cards/followCard';
-import { ToastContainer } from 'react-toastify';
-// import { Toast } from 'react-toastify/dist/components';
 
 function ForDesktop(props: any) {
     const { videoes, activeTab, setActiveTab, showVideoModal, videoModal, setSendPopup, loading } =
@@ -42,11 +40,12 @@ function ForDesktop(props: any) {
         { img: moreInHome, actionType: 'more' },
         { img: shareInHome, actionType: 'share', activeImage: activeShare },
         { img: fvrt, actionType: 'fvrt', activeImage: activeFvrt },
-        { img: commentInHome, actionType: 'comment' },
+        { img: commentInHome, actionType: 'comment', activeImage: commentInHome },
         { img: like, actionType: 'like', activeImage: activeLike },
     ];
 
     const navigate: any = useNavigate();
+    const isFollowing = false;
 
     const follow_Unfollow_handler = async (id: any) => {
         setFollowimgbtnId(id);
@@ -73,6 +72,7 @@ function ForDesktop(props: any) {
         } else {
             settoastOfUploading(false);
         }
+        console.log('ISFOLLOWING : ', suggestedUsers);
     }, [isuploading]);
     return (
         <Layout
@@ -103,10 +103,28 @@ function ForDesktop(props: any) {
                     </div>
                 </div>
                 <div className={style.videoesParent}>
-                    {videoes?.length > 0 && !loading ? (
-                        videoes.map((post: any, number: number) => {
+                    {loading ? (
+                        <div
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <CircularProgress />
+                        </div>
+                    ) : !isFollowing && activeTab === 1 ? (
+                        <div className={style.suggestedUsersContainer}>
+                            {suggestedUsers.map((suggestedUser: any, key: number) => {
+                                return <FollowUserCard key={key} user={suggestedUser} />;
+                            })}
+                        </div>
+                    ) : (
+                        videoes?.length > 0 &&
+                        videoes?.map((post: any, number: number) => {
                             return (
-                                 
                                 <div key={number} className={style.videoParent}>
                                     <div className={style.videoHeader}>
                                         <div className={style.videoHeaderSec1}>
@@ -191,7 +209,6 @@ function ForDesktop(props: any) {
                                         </div>
                                         <div className={style.actions}>
                                             {userActions.map((obj: any, i: number) => {
-                                                
                                                 return (
                                                     <Action
                                                         key={i}
@@ -203,7 +220,6 @@ function ForDesktop(props: any) {
                                                         popupHandler={() => setSendPopup(true)}
                                                         showVideoModal={showVideoModal}
                                                         post={post}
-
                                                     />
                                                 );
                                             })}
@@ -212,30 +228,17 @@ function ForDesktop(props: any) {
                                 </div>
                             );
                         })
-                    ) : videoes?.length === 0 && !loading && activeTab === 1 ? (
-                        <div className={style.suggestedUsersContainer}>
-                            {suggestedUsers.map((suggestedUser: any, key: number) => {
-                                return <FollowUserCard key={key} user={suggestedUser} />;
-                            })}
-                        </div>
-                    ) : (
-                        <div
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <CircularProgress />
-                        </div>
                     )}
                 </div>
                 {toastOfUploading && (
                     <div className="w-[393px] h-[62px] rounded-[8px] bg-custom-gray-100 absolute right-[2rem] bottom-[2rem] z-[2] flex justify-between items-center px-[1rem]">
                         <p className="text-custom-dark-222 font-medium">Uploading 1 of 1</p>
-                        <p className="text-custom-primary font-medium cursor-pointer" onClick={()=>settoastOfUploading(false)}>Cancel</p>
+                        <p
+                            className="text-custom-primary font-medium cursor-pointer"
+                            onClick={() => settoastOfUploading(false)}
+                        >
+                            Cancel
+                        </p>
                     </div>
                 )}
             </div>

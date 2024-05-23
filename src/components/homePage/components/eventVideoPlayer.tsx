@@ -1,5 +1,5 @@
-import CustomPlayer from './CustomPlayer';
 import style from '../styles/event.module.scss';
+import CustomPlayer from './CustomPlayer';
 
 function EventVideoPlayer() {
     return (

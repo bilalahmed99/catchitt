@@ -15,51 +15,35 @@ const loginSlice: any = createSlice({
         updateProfile: (_state, action) => {
             return action.payload;
         },
-
         updateProfileType: (_state, action) => {
-             
-            localStorage.setItem('accountType',action.payload.type);
-            // _state.accologinServiceuntType = action.type;
+            localStorage.setItem('accountType', action.payload.type);
             return _state;
         },
         updateAvatar: (_state: any, action: any) => {
             console.log('updating the avatar');
             _state.avatar = action?.payload;
-            // _state.accologinServiceuntType = action.type;
             return _state;
         },
-
-        
     },
-
 
     extraReducers: (builder: any) => {
         builder.addCase(loginService.fulfilled, (_state: any, action: any) => {
-             
             localStorage.setItem('userId', action?.payload?.data?._id || '');
             localStorage.setItem('token', action?.payload?.data?.token || '');
             localStorage.setItem('profile', JSON.stringify(action?.payload?.data) || '');
-            db.profile.add(action?.payload?.data); 
+            db.profile.add(action?.payload?.data);
             useAuthStore.setState(action?.payload?.data);
-             
+
             return action?.payload?.data;
         });
 
-
         builder.addCase(getProfileData.fulfilled, (_state: any, action: any) => {
-             
-             
-              _state.avatar = action?.payload?.avatar;
-              _state.cover = action?.payload?.cover;
-              _state.name = action?.payload?.name;
-              _state.likesNum = action?.payload?.likesNum;
-            // return _state.cover = action.pay;
-            // return action?.payload?.data;
+            _state.avatar = action?.payload?.avatar;
+            _state.cover = action?.payload?.cover;
+            _state.name = action?.payload?.name;
+            _state.likesNum = action?.payload?.likesNum;
             return _state;
         });
-
-
-       
 
         builder.addCase(loginService.rejected, (_state: any, action: any) => {
             // Handle login service rejection (error) here
@@ -68,16 +52,9 @@ const loginSlice: any = createSlice({
             return _state; // Return the previous state or any error handling state
         });
         builder.addCase(signupService.fulfilled, (_state: any, action: any) => {
-            // localStorage.setItem('userId', action?.payload?.data?._id || '');
-            // localStorage.setItem('token', action?.payload?.data?.token || '');
-            // localStorage.setItem('profile', action?.payload?.data || '');
-            // db.profile.add(action?.payload?.data);
             useAuthStore.setState(action?.payload?.data);
-            
             return action?.payload?.data;
         });
-
-         
     },
 });
 
@@ -91,16 +68,14 @@ export const loginService = createAsyncThunk(
                 type: 'application/json',
                 data: { isLoggedIn: true, ...values },
             });
- 
-               
+
             if (res?.status === 200) {
+                console.log('Response :', res?.data);
                 return res?.data;
             } else {
-                
                 return rejectWithValue('Invalid status code');
             }
         } catch (error: any) {
-           
             return rejectWithValue(error?.message);
         }
     }

@@ -146,6 +146,7 @@ export const getRandomUsers: any = createAsyncThunk('get/random/users', async ()
             headers: { 'Content-type': 'application/json' },
         });
 
+        console.log('Random Users Response : ', response);
         if (response.ok) {
             const responseData = await response.json();
             return responseData.data.data;

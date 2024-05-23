@@ -5,9 +5,7 @@ import AllGiftsPopup from './allGiftsPopup';
 import RechargePopup from './rechargePopup';
 import FAQS from './FAQS';
 import CustomPopup from './custom';
-import { useAuthStore } from '../../../store/authStore';
-import { useSelector } from 'react-redux';
-import { useUpdateEffect } from 'react-use';
+
 export default function Gifts({ openGifts, onGiftsClose, mediaId }: any) {
     const [showImg, setShowImg] = useState<any>({ status: false, img: '' });
     const [rechargePopup, setRechargePopup] = useState(false);

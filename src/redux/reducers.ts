@@ -3,18 +3,17 @@ import { combineReducers } from 'redux';
 import {
     commentMethod,
     followingsMethod,
+    getFriends,
     getHomeVideos,
     getRandomUsers,
-    getFriends,
+    loadFollowers,
+    loadFollowing,
     videoLikehandle,
     videoSavehandle,
-    loadFollowers,
-    loadFollowing
 } from './AsyncFuncs';
 import loginSlice from './reducers/auth';
 import isuploading from './reducers/upload';
 import videoCategories from './reducers/videoCategories';
-import { isArray } from 'lodash';
 
 const followings: any = createSlice({
     name: 'followings',
@@ -26,29 +25,22 @@ const followings: any = createSlice({
         });
     },
 });
- 
-
 
 const followers: any = createSlice({
     name: 'followings',
     initialState: {
-        total : 0,
-        data: []
+        total: 0,
+        data: [],
     },
     reducers: {},
     extraReducers: (builder: any) => {
-        builder.addCase(loadFollowers.fulfilled, (state : any, action:any) => {
-            console.log("followers data in followers slice")
-            console.log(action.payload)
+        builder.addCase(loadFollowers.fulfilled, (state: any, action: any) => {
             state.data = action.payload;
             state.total = action.payload?.length;
             return state;
         });
     },
 });
- 
-
- 
 
 const homeVideos: any = createSlice({
     name: 'homeVideos',
@@ -57,8 +49,6 @@ const homeVideos: any = createSlice({
         updateHomeVideos: (_state, action: any) => {
             return action.payload;
         },
-
-       
     },
     extraReducers: (builder: any) => {
         builder.addCase(getHomeVideos.fulfilled, (_state: any, action: any) => {
@@ -86,7 +76,6 @@ const homeVideos: any = createSlice({
                     return {
                         ...element,
                         isSaved: !element.isSaved,
-                        
                     };
                 } else {
                     return element;
@@ -130,13 +119,13 @@ const homeVideos: any = createSlice({
         });
     },
 });
- 
+
 type profileInitialState = {
     followers: any[];
     following: any[];
     friends: any[];
     likes: any[];
-}
+};
 
 const profileSlice = createSlice({
     name: 'profileSlice',
@@ -148,20 +137,14 @@ const profileSlice = createSlice({
     } as profileInitialState,
     reducers: {},
     extraReducers: (builder: any) => {
-      
-        builder.addCase(loadFollowing.fulfilled, (state : profileInitialState, action:any) => {
-            console.log("following data")
-            console.log(action.payload)
+        builder.addCase(loadFollowing.fulfilled, (state: profileInitialState, action: any) => {
             state.following = action.payload;
         });
-        builder.addCase(getFriends.fulfilled, (state : profileInitialState, action:any) => {
-            console.log("friends data")
-            console.log(action.payload)
+        builder.addCase(getFriends.fulfilled, (state: profileInitialState, action: any) => {
             state.friends = action.payload;
         });
     },
 });
-
 
 const suggestedAccounts: any = createSlice({
     name: 'suggestedAccounts',

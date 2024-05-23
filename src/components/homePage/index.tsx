@@ -11,25 +11,13 @@ import useHome from './hooks/useHome';
 
 function HomePage() {
     const isMobile = useMediaQuery('(max-width:700px)');
-    const { loading, videos, activeTab, setActiveTab } = useHome();
+    const { loading, videos, activeTab, setActiveTab, isFollowing } = useHome();
     const [videoModalInfo, setVideoModalInfo] = useState<any>({});
     const [giftsPopup, setGiftsPopup] = useState(false);
     const [reportPopup, setReportPopup] = useState(false);
     const [videoModal, setVideoModal] = useState(false);
     const [blockPopup, setBlockPopup] = useState(false);
     const [sendPopup, setSendPopup] = useState(false);
-    const API_KEY = process.env.VITE_API_URL;
-//     const socket = io(API_KEY || '');
-
-//     useEffect(() => {
-//         socket.on('connect', () => {
-//             console.log('Socket Connected!');
-//        });
-//     //    socket.on('receive-msg', (data: any) => {
-//     //           console.log('Received:', data);
-//     //      }
-//     //      );
-// },[])
     return (
         <div>
             {isMobile ? (
@@ -54,6 +42,7 @@ function HomePage() {
                         setVideoModalInfo(e);
                         setVideoModal(true);
                     }}
+                    isFollowing={isFollowing}
                     videoModal={videoModal}
                     sendPopup={sendPopup}
                     setSendPopup={setSendPopup}
