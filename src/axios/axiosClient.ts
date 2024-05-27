@@ -47,11 +47,12 @@ const request = async (url: any, params: any = null, auth = null) => {
 		: url;
 
 	if (options.data) {
-		if (options.type === "application/json")
+		if (options.type === "application/json"){
 			options.data = JSON.stringify(options.data);
-		// @ts-ignore
-		else if (!options.data instanceof FormData)
+			// @ts-ignore
+		}else if(options.data instanceof FormData){
 			jsonToFormData(options.data);
+		}
 	}
 
 	const token: any = localStorage.getItem('token')
