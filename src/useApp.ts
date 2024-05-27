@@ -15,6 +15,7 @@ function useApp() {
                 dispatch(updateProfile(result));
                 dispatch(followingsMethod());
                 dispatch(getVideoCategories());
+                dispatch(getRandomUsers());
             });
         } else {
             dispatch(getRandomUsers());

@@ -1,9 +1,8 @@
 import { ClickAwayListener, Modal } from '@mui/material';
 import { memo, useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../../shared/layout';
-import { useAuthStore } from '../../store/authStore';
 import Gifts from '../discover/popups/gifts';
 import FollowModal from './components/FollowModal';
 import LikesModal from './components/LikesModal';
@@ -14,23 +13,17 @@ import PopupForReport from './popups/PopupForReport';
 import PopupForBlock from './popups/popupForBlock';
 import PopupForVideoPlayer from './popups/popupForVideoPlayer';
 
+import { getFriends, getProfileData, getRandomUsers } from '../../redux/AsyncFuncs';
+import publicProfileStories from './popups/publicProfileStories';
 import styles from './profile.module.scss';
 import { Bookmark } from './svg-components/Bookmark';
 import { Liked } from './svg-components/Liked';
 import { Private } from './svg-components/Private';
 import { Tagged } from './svg-components/Tagged';
 import { VideoIcon } from './svg-components/VideoIcon';
-import { db } from '../../utils/db';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { get } from '../../axios/axiosClient';
-import { useUpdateEffect } from 'react-use';
-import UnfollowPopup from './components/unfollow-popup';
-import { getFriends, getProfileData, getRandomUsers } from '../../redux/AsyncFuncs';
-import publicProfileStories from './popups/publicProfileStories';
+import { ToastContainer } from 'react-toastify';
 
 export const Profile = (props: any) => {
-    const { selectedIndex, setIndex } = useAuthStore();
-    const authstore = useAuthStore();
     const [activeTab, setActiveTab] = useState('Videos');
     const [profileModal, setProfileModal] = useState(false);
     const [storyPopup, setStoryPopup] = useState(false);
@@ -52,10 +45,6 @@ export const Profile = (props: any) => {
     const [copyPopup, setcopyPopup] = useState(false);
 
     // @ts-ignore
-    let profileData = useSelector((store) => store?.reducers?.profile);
-    const profile = useLiveQuery(() => db.profile.toArray())?.[0];
-    console.log('profile', profile);
-
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const tabs = [
@@ -94,9 +83,11 @@ export const Profile = (props: any) => {
     const onCancel = () => {
         setProfileModal(false);
     };
+
     const onSave = () => {
         setProfileModal(false);
     };
+
     useEffect(() => {
         const fetchData = async () => {
             // 63a04301a00ed2af91f17e1d user id contain videos
@@ -177,19 +168,19 @@ export const Profile = (props: any) => {
             dispatch(getRandomUsers());
             dispatch(getFriends());
             const data = await dispatch(getProfileData());
-            profileData = data;
         }; //fetchload
 
         fetchData();
     }, []);
+
     const onFollowModalActive = (tab: string | null) => {
         setFollowModal(tab);
     };
 
     const closeFollowModal = () => {
-        console.log('close the model');
         setFollowModal(null);
     };
+
     const onVideoModal = (video: any) => {
         setVideoModal(!videoModal);
         setVideoModalInfo(video);
@@ -243,7 +234,6 @@ export const Profile = (props: any) => {
                 </Modal>
                 <div className={styles.middleSectionDiv}>
                     <ProfileHeader
-                        profileData={profileData}
                         onFollowModalActive={onFollowModalActive}
                         setProfileModal={setProfileModal}
                         setLikesModal={setLikesModal}
@@ -328,6 +318,9 @@ export const Profile = (props: any) => {
                     onclose={() => setStoryPopup(false)}
                     openReport={() => setReportPopup(true)}
                 />
+            </div>
+            <div>
+                <ToastContainer />
             </div>
         </Layout>
     );

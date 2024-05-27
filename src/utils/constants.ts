@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+
 export const API_KEY = process.env.VITE_API_URL;
 
 export const uploadCategories = [
@@ -14,3 +16,10 @@ export const uploadCategories = [
 
 export const UPLOAD_VIDEO_DETAILS = `${API_KEY}/media-content/directly-from-s3`;
 export const getVideoCategoriesEndPoind = '/media-content/categories';
+
+export const showToast = (toastMessage: string) => {
+    toast.success(`🎉${toastMessage}`, {
+        position: 'bottom-right', // Set the position (top-right, top-center, top-left, bottom-right, bottom-center, bottom-left)
+        autoClose: 2000, // Set the auto-close duration in milliseconds (e.g., 2000ms = 2 seconds)
+    });
+};

@@ -2,11 +2,10 @@ import { useMediaQuery } from '@mui/material';
 import PopupForReport from '../../components/profile/popups/PopupForReport';
 import { SideNavBar } from '../../components/side-nav-bar/side-nav-bar';
 import { SuggestedActivity } from '../../components/suggested-activity/suggested-activity';
-import { TopBar } from '../../components/top-bar/top-bar';
-import BlockPopup from '../popups/BlockPopup';
-import style from './style.module.scss';
 import { commentTab, forthTab, homeTab, settingsTab, thirdTab } from '../../icons';
 import Navbar from '../navbar';
+import BlockPopup from '../popups/BlockPopup';
+import style from './style.module.scss';
 
 function Layout(props: any) {
     const {
@@ -23,18 +22,19 @@ function Layout(props: any) {
         onBlock,
         showCopyPopup,
         paddingBottomProp,
-        popups
+        popups,
     } = props || {};
     const showSidebar = useMediaQuery('(max-width:1000px)');
 
     return (
-        <div style={{ width: '100vw', height: '100vh', overflow: 'hidden'  }} onClick={globalClicker}>
+        <div
+            style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}
+            onClick={globalClicker}
+        >
             <Navbar />
 
-            
             {/* <TopBar /> */}
-            <div style={{ display: 'flex', height: '100vh' , width:'100vw' , paddingTop:80 }}>
-             
+            <div style={{ display: 'flex', height: '100vh', width: '100vw', paddingTop: 80 }}>
                 {!showSidebar && !showShortSidebar ? (
                     <div
                         style={{
@@ -91,14 +91,14 @@ function Layout(props: any) {
                         </div>
                     </div>
                 )}
-                   
+
                 {showCopyPopup && (
                     <div
                         style={{
                             position: 'fixed',
                             width: '100vw',
                             height: '100vh',
-                            zIndex:4
+                            zIndex: 4,
                         }}
                     >
                         <div
@@ -136,7 +136,7 @@ function Layout(props: any) {
                     style={{
                         overflow: 'scroll',
                         height: 'auto',
-                        paddingBottom:paddingBottomProp?0: 40,
+                        paddingBottom: paddingBottomProp ? 0 : 40,
                         display: 'block',
                         flex: 1,
                     }}

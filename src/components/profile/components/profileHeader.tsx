@@ -15,12 +15,13 @@ import link from '../svg-components/link-icon.png';
 import CoverImagePopup from './cover-img-popup';
 import CreateStoryPopup from './createStoryPopup';
 import styles from './profileHeader.module.scss';
+import { toast } from 'react-toastify';
+import { showToast } from '../../../utils/constants';
 
 interface Props {
     setProfileModal: (value: boolean) => void;
     setLikesModal: (value: boolean) => void;
     onFollowModalActive: (value: string) => void;
-    profileData: any;
     showStory: any;
     copyHandler: any;
     onProfileEdit: any;
@@ -30,24 +31,17 @@ const ProfileHeader: FunctionComponent<Props> = ({
     setProfileModal,
     onFollowModalActive,
     setLikesModal,
-    profileData,
     showStory,
     copyHandler,
     onProfileEdit,
 }) => {
     const API_KEY = process.env.VITE_API_URL;
     const [stories, setStories] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-    const [websiteLink, setWebsiteLink] = useState<string>('');
-    const [bio, setBio] = useState<string>('');
+    const [profileData, setProfileData] = useState<any>('');
     const navigate = useNavigate();
-
-    // const token = useAuthStore((state) => state.token);
-    const auth = useAuthStore((state) => state._id);
     const token = localStorage.getItem('token') ? localStorage.getItem('token') : '';
-
     const [selectImagePopup, setSelectImagePopup] = useState(false);
     const [addStoryPopup, setAddStoryPopup] = useState<boolean>(false);
-
     let localProfile = null;
     const dispatch = useDispatch();
     const profileImg = useSelector((state: any) => state?.reducers?.profile?.avatar);
@@ -148,9 +142,8 @@ const ProfileHeader: FunctionComponent<Props> = ({
 
             if (response.ok) {
                 const { data } = await response.json();
-                console.log('DATA UPDATED', data);
-                setWebsiteLink(data?.website);
-                setBio(data?.bio);
+                console.log('PROFILE DATA : ', data);
+                setProfileData(data);
             } else {
                 console.log(response);
             }
@@ -168,7 +161,6 @@ const ProfileHeader: FunctionComponent<Props> = ({
             .then((res) => res.json())
             .then((data) => {
                 setStories(data.data[0].stories);
-                console.log('stories', stories);
             })
             .catch((err) => {
                 console.log('collectons error', err);
@@ -176,17 +168,8 @@ const ProfileHeader: FunctionComponent<Props> = ({
     }, []);
 
     useEffect(() => {
-        console.log('OnProfile Edit : ');
         loadProfile();
     }, [onProfileEdit]);
-
-    const totalFollowers = useSelector((state: any) => {
-        console.log('state in total followers in profile header');
-        console.log(state);
-        return state.reducers?.followers.total;
-    });
-    const totalFollwing = useSelector((state: any) => state?.reducers?.followings?.total);
-    const totalLikes = useSelector((state: any) => state?.reducers?.profile?.likesNum);
 
     return (
         <>
@@ -267,14 +250,14 @@ const ProfileHeader: FunctionComponent<Props> = ({
                             onClick={() => onFollowModalActive('following')}
                             className={styles.statContainer}
                         >
-                            <p className={styles.boldText}>{profileData?.following ?? 0}</p>
+                            <p className={styles.boldText}>{profileData?.followingNumber ?? 0}</p>
                             <p className={styles.text}>Following</p>
                         </div>
                         <div
                             onClick={() => onFollowModalActive('followers')}
                             className={styles.statContainer}
                         >
-                            <p className={styles.boldText}>{profileData?.followers ?? 0}</p>
+                            <p className={styles.boldText}>{profileData?.followersNumber ?? 0}</p>
                             <p className={styles.text}>Followers</p>
                         </div>
                         <div onClick={() => setLikesModal(true)} className={styles.statContainer}>
@@ -283,14 +266,21 @@ const ProfileHeader: FunctionComponent<Props> = ({
                         </div>
                     </div>
                     <div className={styles.links}>
-                        <div className={styles.linkContainer}>
+                        <div
+                            onClick={() => {
+                                navigator.clipboard.writeText(profileData?.website).then(() => {
+                                    showToast('Website Link Copied.');
+                                });
+                            }}
+                            className={styles.linkContainer}
+                        >
                             <img
                                 src={link}
                                 className="object-contain"
                                 width={16.67}
                                 height={16.67}
                             />
-                            <p className={styles.link}>{websiteLink}</p>
+                            <p className={styles.link}>{profileData?.website || ''}</p>
                         </div>
                         /
                         <a className={styles.linkContainer} href={`mailto:${profileData?.email}`}>
@@ -298,7 +288,7 @@ const ProfileHeader: FunctionComponent<Props> = ({
                             <p className={styles.link}>{profileData?.email}</p>
                         </a>
                     </div>
-                    <p className={styles.about}>{bio}</p>
+                    <p className={styles.about}>{profileData?.bio || ''}</p>
                     <div className={styles.actions}>
                         <button onClick={() => setProfileModal(true)} className={styles.button}>
                             <EditButtonIcon />

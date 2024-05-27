@@ -1,14 +1,12 @@
 import { useMediaQuery } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { memo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createIcon, defaultAvatar, logo } from '../../icons';
-import { useAuthStore } from '../../store/authStore';
+import { logoutUser } from '../../redux/reducers/auth';
 import style from './Navbar.module.scss';
 import NavbarMunu from './components/Menu';
 import Search from './components/Search';
-import { useDispatch } from 'react-redux';
-import { memo } from 'react';
-import { logoutUser } from '../../redux/reducers/auth';
 
 function Navbar() {
     const isLoggedIn: boolean = localStorage.getItem('token') ? true : false;
@@ -22,13 +20,12 @@ function Navbar() {
 
     const dispatch = useDispatch();
     const logoutAccount = () => {
-        dispatch(logoutUser());
-        
+        dispatch(logoutUser({ navigate }));
     };
 
     return (
         <div className={style.parent}>
-            <div className={style.sec1}>
+            <div onClick={()=> navigate('/')} className={style.sec1}>
                 <img src={logo} alt="" />
             </div>
             {!isMobile ? (
@@ -67,7 +64,7 @@ function Navbar() {
                                     />
                                     {/* </div> */}
                                 </div>
-                                <p className={style.name}>{profile?.name?.split(" ")[0]}</p>
+                                <p className={style.name}>{profile?.name?.split(' ')[0]}</p>
                             </div>
                         </div>
                     ) : (

@@ -17,7 +17,7 @@ function useHome() {
 
     const getHomeVideoes = async () => {
         setLoading(true);
-        dispatch(getHomeVideos(activeTab)).then(() => setLoading(false));
+        dispatch(getHomeVideos({tab : activeTab, token})).then(() => setLoading(false));
     };
 
     useEffect(() => {
@@ -44,10 +44,11 @@ function useHome() {
     useEffect(() => {
         if (!isLoggedIn && activeTab === 1) {
             dispatch(updateHomeVideos([]));
+        } else if (!isLoggedIn && activeTab === 2) {
+            getHomeVideoes();
         } else {
             if (!loading && isLoggedIn) {
-                setLoading(true);
-                dispatch(getHomeVideos(activeTab)).then(() => setLoading(false));
+                getHomeVideoes();
             }
         }
     }, [activeTab]);
@@ -63,7 +64,7 @@ function useHome() {
         activeTab,
         setActiveTab,
         videos,
-        isFollowing
+        isFollowing,
     };
 }
 

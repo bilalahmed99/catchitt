@@ -2,7 +2,6 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { get, post } from '../axios/axiosClient';
 
 const API_KEY = process.env.VITE_API_URL;
-const token: any = localStorage.getItem('token');
 const userId: any = localStorage.getItem('userId');
 
 export const followingsMethod: any = createAsyncThunk(
@@ -31,32 +30,35 @@ export const followingsMethod: any = createAsyncThunk(
     }
 );
 
-export const getHomeVideos: any = createAsyncThunk('get/foryou/videos', async (tab: number) => {
-    let link: string = '';
-    if (tab === 1) {
-        link = `/media-content/videos/feed/?page=1&followingsuggestions=1`;
-    } else if (tab === 2) {
-        link =
-            token && userId
-                ? `/media-content/videos/feed?page=1&pageSize=5`
-                : `/media-content/public/videos/feed/upgraded?page=1&pageSize=5`;
-    } else {
-        console.log('Live Tab');
-    }
-    try {
-        if (tab === 1 || tab === 2) {
-            const res = await get(link);
-            if (res?.data?.data) {
-                const responseData = res?.data;
-                return responseData?.data;
-            } else {
-                return {};
-            }
+export const getHomeVideos: any = createAsyncThunk(
+    'get/foryou/videos',
+    async ({ tab, token }: { tab: number; token: string }) => {
+        let link: string = '';
+        if (tab === 1) {
+            link = `/media-content/videos/feed/?page=1&followingsuggestions=1`;
+        } else if (tab === 2) {
+            link =
+                token && userId
+                    ? `/media-content/videos/feed?page=1&pageSize=5`
+                    : `/media-content/public/videos/feed/upgraded?page=1&pageSize=5`;
+        } else {
+            console.log('Live Tab');
         }
-    } catch (error) {
-        console.log(error);
+        try {
+            if (tab === 1 || tab === 2) {
+                const res = await get(link);
+                if (res?.data?.data) {
+                    const responseData = res?.data;
+                    return responseData?.data;
+                } else {
+                    return {};
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
-});
+);
 
 export const videoLikehandle: any = createAsyncThunk(
     'get/like/video',

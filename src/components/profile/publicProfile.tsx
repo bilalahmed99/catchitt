@@ -6,19 +6,17 @@ import { useAuthStore } from '../../store/authStore';
 import Gifts from '../discover/popups/gifts';
 import FollowModal from './components/FollowModal';
 import LikesModal from './components/LikesModal';
-import EditProfile from './components/editProfile';
 import { PrivatePosts } from './components/privatePosts';
 import PublicProfileHeader from './components/publicProfileHeader';
 import VideoesMaping from './components/videoesMaping';
 import PopupForReport from './popups/PopupForReport';
 import PopupForBlock from './popups/popupForBlock';
 import PopupForVideoPlayer from './popups/popupForVideoPlayer';
-import StoriesOnPublicProfile from './popups/storiesOnPublicProfile';
+import publicProfileStories from './popups/publicProfileStories';
 import styles from './profile.module.scss';
 import { Liked } from './svg-components/Liked';
 import { Tagged } from './svg-components/Tagged';
 import { VideoIcon } from './svg-components/VideoIcon';
-import publicProfileStories from './popups/publicProfileStories';
 
 export const PublicProfile = (props: any) => {
     const { selectedIndex, setIndex } = useAuthStore();
@@ -49,19 +47,25 @@ export const PublicProfile = (props: any) => {
             try {
                 const profileResponse = await fetch(`${API_KEY}/profile/${params.id}`, {
                     method: 'GET',
-                    headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+                    headers: {
+                        'Content-type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
                 const profileData = await profileResponse.json();
                 setProfileData(profileData.data);
                 setLoading(false);
-                console.log("profileee dataaa for public profile")
-                console.log(profileData)
+                console.log('profileee dataaa for public profile');
+                console.log(profileData);
 
                 const { _id } = profileData?.data;
 
                 const videosResponse = await fetch(`${API_KEY}/profile/${_id}/videos`, {
                     method: 'GET',
-                    headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+                    headers: {
+                        'Content-type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
                 const videosData = await videosResponse.json();
                 setVideosData(videosData?.data?.data);
@@ -73,7 +77,6 @@ export const PublicProfile = (props: any) => {
 
         fetchData();
     }, [params?.id]);
-
 
     const tabs = [
         {
@@ -92,15 +95,11 @@ export const PublicProfile = (props: any) => {
             key: 6,
         },
     ];
-    const onCancel = () => {
-        setProfileModal(false);
-    };
-    const onSave = () => {
-        setProfileModal(false);
-    };
+
     const onFollowModalActive = (tab: string | null) => {
         setFollowModal(tab);
     };
+
     const onVideoModal = (video: any) => {
         setVideoModal(!videoModal);
         setVideoModalInfo(video);
@@ -132,9 +131,13 @@ export const PublicProfile = (props: any) => {
                 <Modal open={!!followModal} className={styles.likesModal}>
                     <ClickAwayListener onClickAway={() => setFollowModal(null)}>
                         <div className={styles.likesModalContainer}>
-                            <FollowModal isPublic={true} onClose={function (): void {
-                                setFollowModal(null);
-                            } } userId={profileData?._id} />
+                            <FollowModal
+                                isPublic={true}
+                                onClose={function (): void {
+                                    setFollowModal(null);
+                                }}
+                                userId={profileData?._id}
+                            />
                         </div>
                     </ClickAwayListener>
                 </Modal>
@@ -187,7 +190,7 @@ export const PublicProfile = (props: any) => {
                         {activeTab !== 'Videos' ? <PrivatePosts /> : null}
                     </div>
                 </div>
-                 <MemoizedStoriesOnPublicProfile
+                <MemoizedStoriesOnPublicProfile
                     story={storyPopup}
                     onclose={() => setStoryPopup(false)}
                     openReport={() => setReportPopup(true)}

@@ -9,7 +9,7 @@
   width: 100%;
   top: 0%;
   left: 0%;
-  z-index:5;
+  z-index: 5;
 }
 
 .sec1 {
@@ -17,7 +17,9 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
+  cursor: pointer;
 }
+
 .sec1 img {
   width: 90px;
   height: 36px;

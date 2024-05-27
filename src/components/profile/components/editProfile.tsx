@@ -2,12 +2,13 @@ import { Avatar, CircularProgress } from '@mui/material';
 import EditProfileIcon from '../svg-components/EditProfileIcon';
 import { useEffect, useState } from 'react';
 import styles from './editProfile.module.scss';
-import { useAuthStore } from '../../../store/authStore';
 import { defaultAvatar } from '../../../icons';
 import SelectProfileImgPopup from './select-profile-img';
 import { useSelector } from 'react-redux';
 import { getProfileData } from '../../../redux/AsyncFuncs';
 import { useDispatch } from 'react-redux';
+import { showToast } from '../../../utils/constants';
+
 interface Props {
     onCancel: () => void;
     onSave: () => void;
@@ -27,10 +28,12 @@ export default function EditProfile({ onCancel, onSave }: Props) {
     const API_KEY = process.env.VITE_API_URL;
     const [year, setYear] = useState('');
     const [profileData, setProfileData] = useState<any>(null);
+    const [mediaCategories, setMediaCategories] = useState([]);
     const [country, setCountry] = useState('default');
     const [loading, setLoading] = useState(false);
     const [newProfileImg, setNewProfileImg] = useState('');
     const [selectImagePopup, setSelectImagePopup] = useState(false);
+    const [userSelectedCategory, setUserSelectedCategory] = useState('');
 
     const [fileObj, setFileObj] = useState<any>(null);
     // const token = useAuthStore((state) => state.token);
@@ -40,37 +43,39 @@ export default function EditProfile({ onCancel, onSave }: Props) {
     const profileImg = useSelector((state: any) => state?.reducers?.profile?.avatar);
     const [imgBase64, setImgBase64] = useState(profileImg || defaultAvatar);
 
-    const handleSubmit = () => {
-        
+    const handleSubmit = (e: any) => {
+        e.preventDefault();
         try {
-            const formData = new FormData();
+            let updatedProfileData: any = {
+                name,
+                bio,
+                birthday: `${month}-${day}-${year}`,
+                country,
+                contactEmail: email,
+                website,
+                businessCategory: category,
+            };
 
-            // Append other fields to the FormData object
-            formData.append('name', name);
-            formData.append('bio', bio);
-            formData.append('website', website);
-            formData.append('country', country);
-            formData.append('birthday', `${month}-${day}-${year}`);
+            // const formData = new FormData();
 
-            // Append avatar file to the FormData object if available
-            if (fileObj != null) {
-                formData.append('avatar', fileObj);
-            }
-
-            console.log('FormData:');
-            for (let pair of formData.entries()) {
-                console.log(pair[0] + ', ' + pair[1]);
-            }
+            // // Append other fields to the FormData object
+            // formData.append('name', name);
+            // formData.append('bio', bio);
+            // formData.append('birthday', `${month}-${day}-${year}`);
+            // formData.append('country', country);
+            // formData.append('website', website);
+            // formData.append('businessCategory', category);
 
             // Send the PATCH request with FormData
-            fetch(`${API_KEY}/profile`, {
+            fetch(`${API_KEY}/profile/`, {
                 method: 'PATCH',
                 headers: { Authorization: `Bearer ${token}` },
-                body: formData,
+                body: JSON.stringify(updatedProfileData),
             })
                 .then((res) => res.json())
                 .then((res) => {
                     dispatch(getProfileData());
+                    showToast('Profile Updated Successfully!');
                 })
                 .catch((err) => {
                     console.log(err);
@@ -78,20 +83,6 @@ export default function EditProfile({ onCancel, onSave }: Props) {
         } catch (error) {
             console.log(error);
         }
-        console.log('Form submitted with values:', {
-            username,
-            name,
-            bio,
-            phoneNumber,
-            email,
-            website,
-            category,
-            day,
-            month,
-            year,
-            country,
-        });
-
         onSave();
     };
 
@@ -122,17 +113,20 @@ export default function EditProfile({ onCancel, onSave }: Props) {
             })
                 .then((res) => res.json())
                 .then((data) => {
-                    setProfileData(data.data);
-                    setUsername(data?.data?.username);
-                    setName(data?.data?.name);
-                    setBio(data?.data?.bio);
-                    setEmail(data?.data?.email);
-                    setWebsite(data?.data?.website);
-                    setAvatar(data?.data?.avatar);
-                    setCountry(data?.data?.country);
-                    setYear(data?.data?.dateOfBirth?.slice(0, 4));
-                    setMonth(data?.data?.dateOfBirth?.slice(5, 7));
-                    setDay(data?.data?.dateOfBirth?.slice(8, 10));
+                    let response = data?.data;
+                    setProfileData(response);
+                    setUsername(response?.username);
+                    setName(response?.name);
+                    setBio(response?.bio);
+                    setEmail(response?.email);
+                    setWebsite(response?.website);
+                    setAvatar(response?.avatar);
+                    setCountry(response?.country);
+                    setYear(response?.dateOfBirth?.slice(0, 4));
+                    setMonth(response?.dateOfBirth?.slice(5, 7));
+                    setDay(response?.dateOfBirth?.slice(8, 10));
+                    setMediaCategories(response?.mediaCategories);
+                    setUserSelectedCategory(response?.businessCategory);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -143,8 +137,6 @@ export default function EditProfile({ onCancel, onSave }: Props) {
             setLoading(false);
         }
     }, []);
-    console.log('base 64 of edit');
-    console.log(imgBase64);
 
     const onResetField = (name: string) => {
         switch (name) {
@@ -256,8 +248,10 @@ export default function EditProfile({ onCancel, onSave }: Props) {
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
                         >
-                            <option value={'default'}> -- Select an option -- </option>
-                            <option className={styles['div-16']}>Science and Technology</option>
+                            <option value={'default'}>{userSelectedCategory}</option>
+                            {mediaCategories.map((category, index) => (
+                                <option className={styles['div-16']}>{category}</option>
+                            ))}
                         </select>
                         <div className={styles['div-17']}>Birth Date</div>
                         <div className={styles['div-18']}>
@@ -314,13 +308,13 @@ export default function EditProfile({ onCancel, onSave }: Props) {
                             onChange={(e) => setCountry(e.target.value)}
                         >
                             <option value={'default'}> -- Select an option -- </option>
-                            <option className={styles['div-26']}>Qatar</option>
+                            <option className={styles['div-26']}>{country}</option>
                         </select>
                         <div className={styles['div-27']}>
                             <div onClick={onCancel} className={styles['div-28']}>
                                 Cancel
                             </div>
-                            <button type="submit" className='bg-[#5448B2] text-white'>
+                            <button type="submit" className="bg-[#5448B2] text-white">
                                 Save
                             </button>
                         </div>
