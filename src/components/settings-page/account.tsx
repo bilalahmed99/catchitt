@@ -138,6 +138,7 @@ const Account = ({ className, openModal }: AccountProps) => {
     const [notAcceptable, setNotAcceptable] = useState(false);
     const [openReportsModal, setOpenReportsModal] = useState(false);
     const [openReportSubmittedModal, setOpenReportSubmittedModal] = useState(false);
+    const [reportMessage, setReportMessage] = useState('');
     const navigate = useNavigate();
 
     // console.log("auth on account page")
@@ -230,17 +231,30 @@ const Account = ({ className, openModal }: AccountProps) => {
         handleSignIn(password, email);
     };
 
-    const [image, setImage] = useState<any>(null); // useState(null);
+    const [images, setImages] = useState<any>([]); // useState(null);
 
     const handleImageChange = (event: { target: { files: any[] } }) => {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = () => {
-                setImage(reader.result);
+                setImages((prevImages: any) => [...prevImages, reader.result]);
             };
             reader.readAsDataURL(file);
         }
+    };
+
+    const handleClickMore = () => {
+        document.getElementById('fileInput').click();
+    };
+
+    const submitReportHandler = () => {
+        setOpenReportsModal(false);
+        setOpenReportSubmittedModal(true);
+        images.forEach((element: any) => {
+            console.log('Images : ', element);
+        });
+        console.log('Report Message : ', reportMessage);
     };
 
     const handleSignIn = async (password: string, email: string | null) => {
@@ -1376,7 +1390,9 @@ const Account = ({ className, openModal }: AccountProps) => {
                             <textarea
                                 className="w-[478px] h-[214px] border border-gray-300 rounded-lg p-3 placeholder-gray-400 text-gray-800 mb-4 resize-none"
                                 placeholder="Please provide as much detail as possible"
-                            ></textarea>
+                                value={reportMessage}
+                                onChange={(e) => setReportMessage(e.target.value)}
+                            />
                             <h2 className="font-medium text-lg text-[#222222] mb-4">
                                 Upload supporting media
                             </h2>
@@ -1384,22 +1400,51 @@ const Account = ({ className, openModal }: AccountProps) => {
                                 <img src={upload} height={18.5} width={19.04} alt="" />
                                 <p>upload photo (0/4)</p>
                             </div> */}
-                            {image ? (
+                            {images?.length > 0 ? (
                                 <div className="p-2 border border-[#D1D1D1] rounded-md mb-6 flex flex-row items-center gap-2">
-                                    <img
+                                    {/* <img
                                         src={image}
                                         alt="Uploaded"
                                         className="rounded-sm h-[6.375rem] w-[6.25rem]"
-                                    />
-                                    <div className="h-[6.375rem] w-[6.25rem] items-center flex justify-center bg-[#DFDFDF] rounded">
-                                        <img
-                                            className="object-contain"
-                                            src={addMore}
-                                            alt="addmore"
-                                            height={28.67}
-                                            width={28.67}
-                                        />
-                                    </div>
+                                    /> */}
+                                    {images.map(
+                                        (
+                                            image: string | undefined,
+                                            index: React.Key | null | undefined
+                                        ) => (
+                                            <div
+                                                key={index}
+                                                className="p-2 border border-[#D1D1D1] rounded-md flex flex-col items-center"
+                                            >
+                                                <img
+                                                    src={image}
+                                                    alt="Uploaded"
+                                                    className="rounded-sm h-[6.375rem] w-[6.25rem]"
+                                                />
+                                            </div>
+                                        )
+                                    )}
+                                    {images.length < 4 && (
+                                        <div
+                                            onClick={handleClickMore}
+                                            className="h-[6.375rem] w-[6.25rem] items-center flex justify-center bg-[#DFDFDF] rounded cursor-pointer"
+                                        >
+                                            <img
+                                                className="object-contain"
+                                                src={addMore}
+                                                alt="addmore"
+                                                height={28.67}
+                                                width={28.67}
+                                            />
+                                            <input
+                                                id="fileInput"
+                                                type="file"
+                                                accept="image/*"
+                                                className="hidden"
+                                                onChange={handleImageChange}
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                             ) : (
                                 <label className="flex flex-row items-center rounded-md gap-2 border-[1.5px] px-3.5 py-2 mb-4 cursor-pointer">
@@ -1408,17 +1453,14 @@ const Account = ({ className, openModal }: AccountProps) => {
                                         type="file"
                                         accept="image/*"
                                         className="hidden"
-                                      
+                                        onChange={handleImageChange}
                                     />
                                     <img src={upload} height={18.5} width={19.04} alt="" />
                                     <p>Upload photo (0/4)</p>
                                 </label>
                             )}
                             <button
-                                onClick={() => {
-                                    setOpenReportsModal(false);
-                                    setOpenReportSubmittedModal(true);
-                                }}
+                                onClick={submitReportHandler}
                                 className="bg-[#EEEDF7] text-white font-semibold px-4 rounded-md w-full"
                             >
                                 <p className="text-[#5448B2]">Submit</p>
