@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify';
+import { qrCode } from '../icons';
 
 export const API_KEY = process.env.VITE_API_URL;
 
@@ -22,4 +23,44 @@ export const showToast = (toastMessage: string) => {
         position: 'bottom-right', // Set the position (top-right, top-center, top-left, bottom-right, bottom-center, bottom-left)
         autoClose: 2000, // Set the auto-close duration in milliseconds (e.g., 2000ms = 2 seconds)
     });
+};
+
+export const LOGIN_OPTIONS = [
+    {
+        styles: '',
+        name: 'Use QR Code',
+        image: qrCode,
+    },
+    {
+        styles: 'mt-3',
+        name: 'Use phone / email / username',
+        image: qrCode,
+    },
+    {
+        styles: 'mt-3',
+        name: 'Continue with Facebook',
+        image: qrCode,
+    },
+    {
+        styles: 'mt-3',
+        name: 'Continue with Google',
+        image: qrCode,
+    },
+    {
+        styles: 'mt-3',
+        name: 'Continue with Twitter',
+        image: qrCode,
+    },
+    {
+        styles: 'mt-3',
+        name: 'Continue with Apple',
+        image: qrCode,
+    },
+];
+
+export const APP_TEXTS = {
+    FEEDBACK: 'Feedback and help',
+    LOGIN_SUBTEXT: 'Manage your account, check notifications, comment on videos, and more.',
+    NO_ACCOUNT: "Don't have an account?",
+    SIGN_UP: "Sign up",
 };

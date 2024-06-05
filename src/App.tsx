@@ -40,6 +40,7 @@ import MyReports from './components/my-reports';
 // import GoLive from './components/go-live';
 import Analytics from './components/analytics';
 import ContactUs from './components/contact-us';
+import Login from './components/login';
 
 // Functional component to handle the initial route navigation
 const InitialRouteHandler = () => {
@@ -87,6 +88,10 @@ function App() {
                                         language={appLanguage}
                                     />
                                 }
+                            />
+                            <Route
+                                path="/login"
+                                element={<Login setLanguage={setLanguage} language={appLanguage} />}
                             />
                             <Route path="/forgot-password" element={<ForgotPassword />} />
                             <Route path="/request-verification-otp" element={<RequestOtp />} />
