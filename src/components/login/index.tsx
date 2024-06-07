@@ -1,10 +1,10 @@
+import { useNavigate } from 'react-router-dom';
+import { logoAuth } from '../../icons';
 import { APP_TEXTS, LOGIN_OPTIONS } from '../../utils/constants';
 import ItemLogin from '../item-login';
 import './login.scss';
-import { useNavigate } from 'react-router-dom';
 
 const Login = (props: any) => {
-
     const navigate = useNavigate();
 
     const loginItemClickHandler = (name: string) => {
@@ -40,15 +40,16 @@ const Login = (props: any) => {
     return (
         <div className="h-screen">
             <div className="flex flex-row justify-between items-center p-3">
-                <h3 className="font-bold text-4xl">Seezitt</h3>
+                <img className="object-contain h-12 w-24" src={logoAuth} />
+
                 <div className="flex flex-row justify-center items-center gap-3">
                     <p>?</p>
                     <p className="hover:underline cursor-pointer">{APP_TEXTS.FEEDBACK}</p>
                 </div>
             </div>
-            <div className="w-[22.688rem] mx-auto mt-14">
+            <div className="w-[22.688rem] mx-auto mt-12">
                 <div className="overflow-auto item-login-container">
-                    <h2 className="font-bold text-4xl">Log in to Seezitt</h2>
+                    <h2 className="font-bold text-3xl">Log in to Seezitt</h2>
                     <p className="font-normal text-sm text-subtext mt-6 mb-3 ">
                         {APP_TEXTS.LOGIN_SUBTEXT}
                     </p>
@@ -86,7 +87,7 @@ const Login = (props: any) => {
                         </span>
                     </h3>
                 </div>
-                <div className="bg-black flex flex-row justify-between items-center py-8 px-32 language-label">
+                <div className="bg-black flex flex-row justify-between items-center py-6 px-32 language-label">
                     <div className="border border-custom-2 pl-2 rounded-sm w-[10rem] cursor-pointer">
                         <p className="text-white text-left p-2 font-normal text-sm country-label">
                             English

@@ -45,3 +45,24 @@
         height: 7rem; /* Adjust the height for screens up to 1300px */
     }
 }
+
+/* Chrome, Safari, Edge, Opera */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.chevron {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .chevron.rotate {
+    transform: rotate(180deg);
+  }
+  

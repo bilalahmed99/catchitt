@@ -1,5 +1,12 @@
 import { toast } from 'react-toastify';
-import { qrCode } from '../icons';
+import {
+    qrCodeAuth,
+    emailOrPhone,
+    facebookAuth,
+    googleAuth,
+    twitterAuth,
+    appleAuth,
+} from '../icons';
 
 export const API_KEY = process.env.VITE_API_URL;
 
@@ -29,32 +36,32 @@ export const LOGIN_OPTIONS = [
     {
         styles: '',
         name: 'Use QR Code',
-        image: qrCode,
+        image: qrCodeAuth,
     },
     {
         styles: 'mt-3',
         name: 'Use phone / email / username',
-        image: qrCode,
+        image: emailOrPhone,
     },
     {
         styles: 'mt-3',
         name: 'Continue with Facebook',
-        image: qrCode,
+        image: facebookAuth,
     },
     {
         styles: 'mt-3',
         name: 'Continue with Google',
-        image: qrCode,
+        image: googleAuth,
     },
     {
         styles: 'mt-3',
         name: 'Continue with Twitter',
-        image: qrCode,
+        image: twitterAuth,
     },
     {
         styles: 'mt-3',
         name: 'Continue with Apple',
-        image: qrCode,
+        image: appleAuth,
     },
 ];
 
@@ -62,5 +69,5 @@ export const APP_TEXTS = {
     FEEDBACK: 'Feedback and help',
     LOGIN_SUBTEXT: 'Manage your account, check notifications, comment on videos, and more.',
     NO_ACCOUNT: "Don't have an account?",
-    SIGN_UP: "Sign up",
+    SIGN_UP: 'Sign up',
 };
