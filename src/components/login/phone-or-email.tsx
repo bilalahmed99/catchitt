@@ -1,8 +1,9 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { back, chevronDown, logoAuth } from '../../icons';
+import { back, checkCountryCode, chevronDown, logoAuth, search } from '../../icons';
 import { APP_TEXTS } from '../../utils/constants';
+import Footer from './footer';
 
 const PhoneOrEmail = (props: any) => {
     const [loginWithPhone, setLoginWithPhone] = useState<boolean>(false);
@@ -12,9 +13,25 @@ const PhoneOrEmail = (props: any) => {
     const [code, setCode] = useState<any>(null);
     const [loginWithPassword, setLoginWithPassword] = useState<boolean>(false);
     const [countryModelOpened, setCountryModelOpened] = useState(false);
+    const [countryCodes, setCountryCodes] = useState([
+        { countryCode: 'Afghanistan +93', value: 'AF +93' },
+        { countryCode: 'Afghanistan +93', value: 'AF +93' },
+        { countryCode: 'Afghanistan +93', value: 'AF +93' },
+        { countryCode: 'Afghanistan +93', value: 'AF +93' },
+        { countryCode: 'Afghanistan +93', value: 'AF +93' },
+        { countryCode: 'Afghanistan +93', value: 'AF +93' },
+        { countryCode: 'Afghanistan +93', value: 'AF +93' },
+        { countryCode: 'Afghanistan +93', value: 'AF +93' },
+        { countryCode: 'Afghanistan +93', value: 'AF +93' },
+        { countryCode: 'Afghanistan +93', value: 'AF +93' },
+        { countryCode: 'Pakistan +92', value: 'PK +92' },
+    ]);
+    const [selectedCountryIndex, setSelectedCountryIndex] = useState(0);
 
     // Input Values
     const [phoneNumber, setPhoneNumber] = useState<any>(null);
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [countryCode, setCountryCode] = useState<string>();
 
     const toggleLoginMethod = () => {
         setLoginWithPhone(!loginWithPhone);
@@ -55,12 +72,39 @@ const PhoneOrEmail = (props: any) => {
         setCountryModelOpened(!countryModelOpened);
     };
 
+    const modelClickHandler = (e: { stopPropagation: () => void }) => {
+        e.stopPropagation();
+    };
+
+    // Filter country codes based on search query
+    const filteredCountryCodes = countryCodes.filter((countryItem) =>
+        countryItem.countryCode.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(event.target.value);
+    };
+
+    const countryItemClickHandler = (
+        countryItem: { countryCode: string; value: string },
+        index: number
+    ) => {
+        // setSearchQuery(countryItem?.countryCode);
+        setSelectedCountryIndex(index);
+        setCountryCode(countryItem?.value);
+        countryCodeModelHandler();
+    };
+
     const goBackHandler = () => {
         navigate(-1);
     };
 
+    useEffect(() => {
+        setCountryCode(countryCodes[0].value);
+    }, []);
+
     return (
-        <div className="h-screen">
+        <div onClick={countryCodeModelHandler} className="h-screen">
             <div className="flex flex-row justify-between items-center p-3">
                 <img className="object-contain h-12 w-24" src={logoAuth} />
                 <div className="flex flex-row justify-center items-center gap-2">
@@ -71,7 +115,7 @@ const PhoneOrEmail = (props: any) => {
                 </div>
             </div>
             <div className="w-[22.688rem] mx-auto mt-14 h-auto">
-                <div className="overflow-auto">
+                <div className="overflow-visible">
                     <h2 className="font-bold text-3xl">Log in</h2>
                     <div className="flex flex-row justify-between items-center mt-3.5">
                         <p className="font-medium text-[0.938rem]">
@@ -89,9 +133,9 @@ const PhoneOrEmail = (props: any) => {
                             <div className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-2 rounded-md p-2.5">
                                 <div
                                     onClick={countryCodeModelHandler}
-                                    className="flex flex-row items-center gap-2 flex-1 cursor-pointer"
+                                    className="flex flex-row items-center gap-2 flex-1 cursor-pointer relative"
                                 >
-                                    <p>AL +335</p>
+                                    <p>{countryCode}</p>
                                     <img
                                         className={`object-contain h-2.5 w-2.5 chevron ${
                                             countryModelOpened ? 'rotate' : ''
@@ -99,6 +143,56 @@ const PhoneOrEmail = (props: any) => {
                                         src={chevronDown}
                                     />
                                     <p className="text-gray-400 "> | </p>
+                                    {countryModelOpened && (
+                                        <div
+                                            onClick={modelClickHandler}
+                                            className="absolute h-80 w-80 bg-white top-11 -left-2.5 rounded-md shadow-md cursor-default z-10"
+                                        >
+                                            <div className="flex flex-row items-center p-2 gap-2">
+                                                <img
+                                                    className="object-contain h-3 w-3 m-2"
+                                                    src={search}
+                                                />
+                                                <input
+                                                    type="text"
+                                                    placeholder="Search"
+                                                    className="w-full text-sm font-normal caret-red-500"
+                                                    value={searchQuery}
+                                                    onChange={handleSearchChange}
+                                                />
+                                            </div>
+                                            <div className="w-full h-[1px] bg-gray-300" />
+                                            <div className="overflow-y-auto max-h-[17.188rem]">
+                                                {filteredCountryCodes.map((countryItem, index) => (
+                                                    <div
+                                                        onClick={() =>
+                                                            countryItemClickHandler(
+                                                                countryItem,
+                                                                index
+                                                            )
+                                                        }
+                                                        key={index}
+                                                        className={`flex flex-row justify-between items-center p-2.5 cursor-pointer mb-2 rounded-b-md ${
+                                                            selectedCountryIndex === index
+                                                                ? 'bg-gray-50'
+                                                                : ''
+                                                        }`}
+                                                    >
+                                                        <p className="font-normal text-black text-left text-xs hover:bg-gray-50">
+                                                            {countryItem?.countryCode}
+                                                        </p>
+                                                        {selectedCountryIndex === index && (
+                                                            <img
+                                                                className="h-4 w-4 object-contain"
+                                                                alt="check-mark"
+                                                                src={checkCountryCode}
+                                                            />
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                                 <input
                                     className="w-2/3 bg-gray-100"
@@ -240,8 +334,8 @@ const PhoneOrEmail = (props: any) => {
                     </div>
                 </div>
             </div>
-            <div className="absolute w-full bottom-0">
-                <div className="border-t border-custom-1 text-center p-4">
+            <div className="absolute w-full bottom-0 z-20">
+                <div className="border-t border-custom-1 text-center p-4 bg-white">
                     <h3 className="font-normal text-[0.938rem] flex flex-row items-center justify-center gap-1">
                         {APP_TEXTS.NO_ACCOUNT}{' '}
                         <span className="text-danger-1 font-semibold hover:underline cursor-pointer">
@@ -249,12 +343,7 @@ const PhoneOrEmail = (props: any) => {
                         </span>
                     </h3>
                 </div>
-                <div className="bg-black flex flex-row justify-between items-center py-6 px-32">
-                    <div className="border border-custom-2 pl-2 rounded-sm w-[10rem] cursor-pointer">
-                        <p className="text-white text-left p-2 font-normal text-sm">English</p>
-                    </div>
-                    <p className="font-normal text-sm text-white">© 2024 Seezitt</p>
-                </div>
+                <Footer />
             </div>
         </div>
     );

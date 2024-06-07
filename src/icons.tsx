@@ -84,6 +84,7 @@ import appleAuth from './components/login/svg-components/apple-auth.svg';
 import logoAuth from './components/login/svg-components/logo-auth.svg';
 import chevronUp from './assets/chevron-up.png';
 import chevronDown from './assets/chevron-down.png';
+import checkCountryCode from './assets/check-country-code.png';
 
 export {
     duet,
@@ -172,4 +173,5 @@ export {
     logoAuth,
     chevronUp,
     chevronDown,
+    checkCountryCode
 };
