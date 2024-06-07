@@ -4,34 +4,24 @@ import { useNavigate } from 'react-router-dom';
 import { back, checkCountryCode, chevronDown, logoAuth, search } from '../../icons';
 import { APP_TEXTS } from '../../utils/constants';
 import Footer from './footer';
+import Header from './header';
 
 const PhoneOrEmail = (props: any) => {
-    const [loginWithPhone, setLoginWithPhone] = useState<boolean>(false);
+    const [loginWithPhone, setLoginWithPhone] = useState<boolean>(true);
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const navigate = useNavigate();
     const [error, setError] = useState<string>('');
     const [code, setCode] = useState<any>(null);
     const [loginWithPassword, setLoginWithPassword] = useState<boolean>(false);
     const [countryModelOpened, setCountryModelOpened] = useState(false);
-    const [countryCodes, setCountryCodes] = useState([
-        { countryCode: 'Afghanistan +93', value: 'AF +93' },
-        { countryCode: 'Afghanistan +93', value: 'AF +93' },
-        { countryCode: 'Afghanistan +93', value: 'AF +93' },
-        { countryCode: 'Afghanistan +93', value: 'AF +93' },
-        { countryCode: 'Afghanistan +93', value: 'AF +93' },
-        { countryCode: 'Afghanistan +93', value: 'AF +93' },
-        { countryCode: 'Afghanistan +93', value: 'AF +93' },
-        { countryCode: 'Afghanistan +93', value: 'AF +93' },
-        { countryCode: 'Afghanistan +93', value: 'AF +93' },
-        { countryCode: 'Afghanistan +93', value: 'AF +93' },
-        { countryCode: 'Pakistan +92', value: 'PK +92' },
-    ]);
+    const [countryCodes, setCountryCodes] = useState([]);
     const [selectedCountryIndex, setSelectedCountryIndex] = useState(0);
+    const API_KEY = process.env.VITE_API_URL;
 
     // Input Values
     const [phoneNumber, setPhoneNumber] = useState<any>(null);
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [countryCode, setCountryCode] = useState<string>();
+    const [countryCode, setCountryCode] = useState<string>('');
 
     const toggleLoginMethod = () => {
         setLoginWithPhone(!loginWithPhone);
@@ -77,8 +67,8 @@ const PhoneOrEmail = (props: any) => {
     };
 
     // Filter country codes based on search query
-    const filteredCountryCodes = countryCodes.filter((countryItem) =>
-        countryItem.countryCode.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredCountryCodes = countryCodes?.filter((countryItem) =>
+        countryItem?.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,12 +76,11 @@ const PhoneOrEmail = (props: any) => {
     };
 
     const countryItemClickHandler = (
-        countryItem: { countryCode: string; value: string },
+        countryItem: { name: string; code: string },
         index: number
     ) => {
-        // setSearchQuery(countryItem?.countryCode);
         setSelectedCountryIndex(index);
-        setCountryCode(countryItem?.value);
+        setCountryCode(countryItem?.code);
         countryCodeModelHandler();
     };
 
@@ -101,25 +90,33 @@ const PhoneOrEmail = (props: any) => {
         }
     };
 
+    const fetchCountriesList = async () => {
+        try {
+            const response: any = await fetch(`${API_KEY}/util/countries`, {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+            });
+            const { data }: any = await response.json();
+            setCountryCode(data?.countries[0]?.code);
+            setCountryCodes(data?.countries);
+        } catch (error) {
+            console.log('error fetching country codes : ', error);
+        }
+    };
+
     const goBackHandler = () => {
         navigate(-1);
     };
 
     useEffect(() => {
-        setCountryCode(countryCodes[0].value);
+        fetchCountriesList();
     }, []);
 
     return (
         <div onClick={menuClickHandler} className="h-screen">
-            <div className="flex flex-row justify-between items-center p-3">
-                <img className="object-contain h-12 w-24" src={logoAuth} />
-                <div className="flex flex-row justify-center items-center gap-2">
-                    <p className="border-[2px] rounded-full w-5 h-5 text-xs text-gray-400 font-semibold border-gray-400 text-center cursor-pointer">
-                        ?
-                    </p>
-                    <p className="hover:underline cursor-pointer">{APP_TEXTS.FEEDBACK}</p>
-                </div>
-            </div>
+            <Header />
             <div className="w-[22.688rem] mx-auto mt-14 h-auto">
                 <div className="overflow-visible">
                     <h2 className="font-bold text-3xl">Log in</h2>
@@ -193,7 +190,7 @@ const PhoneOrEmail = (props: any) => {
                                                         }`}
                                                     >
                                                         <p className="font-normal text-black text-left text-xs hover:bg-gray-50">
-                                                            {countryItem?.countryCode}
+                                                            {countryItem?.name}
                                                         </p>
                                                         {selectedCountryIndex === index && (
                                                             <img

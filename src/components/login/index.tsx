@@ -4,6 +4,7 @@ import { APP_TEXTS, LOGIN_OPTIONS } from '../../utils/constants';
 import ItemLogin from '../item-login';
 import './login.scss';
 import Footer from './footer';
+import Header from './header';
 
 const Login = (props: any) => {
     const navigate = useNavigate();
@@ -40,14 +41,7 @@ const Login = (props: any) => {
     };
     return (
         <div className="h-screen">
-            <div className="flex flex-row justify-between items-center p-3">
-                <img className="object-contain h-12 w-24" src={logoAuth} />
-
-                <div className="flex flex-row justify-center items-center gap-3">
-                    <p>?</p>
-                    <p className="hover:underline cursor-pointer">{APP_TEXTS.FEEDBACK}</p>
-                </div>
-            </div>
+            <Header />
             <div className="w-[22.688rem] mx-auto mt-12">
                 <div className="overflow-auto item-login-container">
                     <h2 className="font-bold text-3xl">Log in to Seezitt</h2>
