@@ -15,7 +15,7 @@ const PhoneOrEmail = (props: any) => {
     const [loginWithPassword, setLoginWithPassword] = useState<boolean>(false);
     const [countryModelOpened, setCountryModelOpened] = useState(false);
     const [countryCodes, setCountryCodes] = useState([]);
-    const [selectedCountryIndex, setSelectedCountryIndex] = useState(0);
+    const [selectedCountryIndex, setSelectedCountryIndex] = useState(-1);
     const API_KEY = process.env.VITE_API_URL;
 
     // Input Values
@@ -161,7 +161,7 @@ const PhoneOrEmail = (props: any) => {
                                                 <input
                                                     type="text"
                                                     placeholder="Search"
-                                                    className="w-full text-sm font-normal caret-red-500"
+                                                    className="w-full text-sm font-normal caret-red-500 bg-white"
                                                     value={searchQuery}
                                                     onChange={handleSearchChange}
                                                 />
