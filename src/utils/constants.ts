@@ -32,42 +32,66 @@ export const showToast = (toastMessage: string) => {
     });
 };
 
-export const LOGIN_OPTIONS = [
-    {
-        styles: '',
-        name: 'Use QR Code',
-        image: qrCodeAuth,
-    },
-    {
-        styles: 'mt-3',
-        name: 'Use phone / email / username',
-        image: emailOrPhone,
-    },
-    {
-        styles: 'mt-3',
-        name: 'Continue with Facebook',
-        image: facebookAuth,
-    },
-    {
-        styles: 'mt-3',
-        name: 'Continue with Google',
-        image: googleAuth,
-    },
-    {
-        styles: 'mt-3',
-        name: 'Continue with Twitter',
-        image: twitterAuth,
-    },
-    {
-        styles: 'mt-3',
-        name: 'Continue with Apple',
-        image: appleAuth,
-    },
-];
-
 export const APP_TEXTS = {
     FEEDBACK: 'Feedback and help',
     LOGIN_SUBTEXT: 'Manage your account, check notifications, comment on videos, and more.',
     NO_ACCOUNT: "Don't have an account?",
     SIGN_UP: 'Sign up',
+    NO_RESULT_FOUND: 'No result found',
+    SEND_CODE: 'Send code',
+    LOGIN_WITH_CODE: 'Log in with code',
+    FORGOT_PASSWORD: 'Forgot password?',
+    LOGIN: 'Log in',
+    QR_CODE: 'Use QR Code',
+    EMAIL_OR_PHONE: 'Use phone / email / username',
+    FACEBOOK: 'Continue with Facebook',
+    GOOGLE: 'Continue with Google',
+    TWITTER: 'Continue with Twitter',
+    APPLE: 'Continue with Apple',
+};
+
+export const LOGIN_OPTIONS = [
+    {
+        styles: '',
+        name: APP_TEXTS.QR_CODE,
+        image: qrCodeAuth,
+    },
+    {
+        styles: 'mt-3',
+        name: APP_TEXTS.EMAIL_OR_PHONE,
+        image: emailOrPhone,
+    },
+    {
+        styles: 'mt-3',
+        name: APP_TEXTS.FACEBOOK,
+        image: facebookAuth,
+    },
+    {
+        styles: 'mt-3',
+        name: APP_TEXTS.GOOGLE,
+        image: googleAuth,
+    },
+    {
+        styles: 'mt-3',
+        name: APP_TEXTS.TWITTER,
+        image: twitterAuth,
+    },
+    {
+        styles: 'mt-3',
+        name: APP_TEXTS.APPLE,
+        image: appleAuth,
+    },
+];
+
+
+export const END_POINTS = {
+    COUNTRY_LIST: 'util/countries',
+};
+
+export const METHOD = {
+    GET: 'GET',
+    PUT: 'PUT',
+    POST: 'POST',
+    PATCH: 'PATCH',
+    DELETE: 'DELETE',
 };

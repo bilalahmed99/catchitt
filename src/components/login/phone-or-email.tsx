@@ -1,8 +1,8 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { back, checkCountryCode, chevronDown, logoAuth, search } from '../../icons';
-import { APP_TEXTS } from '../../utils/constants';
+import { back, checkCountryCode, chevronDown, search } from '../../icons';
+import { APP_TEXTS, END_POINTS, METHOD } from '../../utils/constants';
 import Footer from './footer';
 import Header from './header';
 
@@ -22,9 +22,15 @@ const PhoneOrEmail = (props: any) => {
     const [phoneNumber, setPhoneNumber] = useState<any>(null);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [countryCode, setCountryCode] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
 
     const toggleLoginMethod = () => {
         setLoginWithPhone(!loginWithPhone);
+    };
+
+    const loginHandler = () => {
+        console.log('Login Successfull!');
     };
 
     const togglePassword = () => {
@@ -67,7 +73,7 @@ const PhoneOrEmail = (props: any) => {
     };
 
     // Filter country codes based on search query
-    const filteredCountryCodes = countryCodes?.filter((countryItem) =>
+    const filteredCountryCodes = countryCodes?.filter((countryItem: any) =>
         countryItem?.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
@@ -92,17 +98,21 @@ const PhoneOrEmail = (props: any) => {
 
     const fetchCountriesList = async () => {
         try {
-            const response: any = await fetch(`${API_KEY}/util/countries`, {
-                method: 'GET',
+            const response: any = await fetch(`${API_KEY}/${END_POINTS.COUNTRY_LIST}`, {
+                method: METHOD.GET,
                 headers: {
                     'Content-type': 'application/json',
                 },
             });
             const { data }: any = await response.json();
+
+            // Set first country as initial country code
             setCountryCode(data?.countries[0]?.code);
+
+            // Setting all values to countryCodes state
             setCountryCodes(data?.countries);
         } catch (error) {
-            console.log('error fetching country codes : ', error);
+            console.log('🚀 ~ fetchCountriesList ~ error:', error);
         }
     };
 
@@ -133,7 +143,7 @@ const PhoneOrEmail = (props: any) => {
                     </div>
                     {loginWithPhone ? (
                         <>
-                            <div className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-2 rounded-md p-2.5">
+                            <div className="flex flex-row items-center border border-gray-500 bg-login-btn mt-2 rounded-md p-2.5">
                                 <div
                                     onClick={countryCodeModelHandler}
                                     className="flex flex-row items-center gap-2 flex-1 cursor-pointer relative"
@@ -174,36 +184,38 @@ const PhoneOrEmail = (props: any) => {
                                                         : 'max-h-[17.188rem]'
                                                 } `}
                                             >
-                                                {filteredCountryCodes.map((countryItem, index) => (
-                                                    <div
-                                                        onClick={() =>
-                                                            countryItemClickHandler(
-                                                                countryItem,
-                                                                index
-                                                            )
-                                                        }
-                                                        key={index}
-                                                        className={`flex flex-row justify-between items-center p-2.5 cursor-pointer mb-2 rounded-b-md ${
-                                                            selectedCountryIndex === index
-                                                                ? 'bg-gray-50'
-                                                                : ''
-                                                        }`}
-                                                    >
-                                                        <p className="font-normal text-black text-left text-xs hover:bg-gray-50">
-                                                            {countryItem?.name}
-                                                        </p>
-                                                        {selectedCountryIndex === index && (
-                                                            <img
-                                                                className="h-4 w-4 object-contain"
-                                                                alt="check-mark"
-                                                                src={checkCountryCode}
-                                                            />
-                                                        )}
-                                                    </div>
-                                                ))}
+                                                {filteredCountryCodes.map(
+                                                    (countryItem: any, index: number) => (
+                                                        <div
+                                                            onClick={() =>
+                                                                countryItemClickHandler(
+                                                                    countryItem,
+                                                                    index
+                                                                )
+                                                            }
+                                                            key={index}
+                                                            className={`flex flex-row justify-between items-center p-2.5 cursor-pointer mb-2 rounded-b-md ${
+                                                                selectedCountryIndex === index
+                                                                    ? 'bg-gray-50'
+                                                                    : ''
+                                                            }`}
+                                                        >
+                                                            <p className="font-normal text-black text-left text-xs hover:bg-gray-50">
+                                                                {countryItem?.name}
+                                                            </p>
+                                                            {selectedCountryIndex === index && (
+                                                                <img
+                                                                    className="h-4 w-4 object-contain"
+                                                                    alt="check-mark"
+                                                                    src={checkCountryCode}
+                                                                />
+                                                            )}
+                                                        </div>
+                                                    )
+                                                )}
                                                 {filteredCountryCodes.length === 0 && (
                                                     <p className="font-normal text-gray-400 text-xs hover:bg-gray-50 my-2">
-                                                        No result found
+                                                        {APP_TEXTS.NO_RESULT_FOUND}
                                                     </p>
                                                 )}
                                             </div>
@@ -211,7 +223,7 @@ const PhoneOrEmail = (props: any) => {
                                     )}
                                 </div>
                                 <input
-                                    className="w-2/3 bg-gray-100"
+                                    className="w-2/3 bg-login-btn"
                                     type="tel"
                                     placeholder="Phone number"
                                     value={phoneNumber}
@@ -220,9 +232,9 @@ const PhoneOrEmail = (props: any) => {
                             </div>
                             {!loginWithPassword ? (
                                 <>
-                                    <div className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-2 rounded-md py-2.5 px-3">
+                                    <div className="flex flex-row items-center border border-gray-500 bg-login-btn mt-2 rounded-md py-2.5 px-3">
                                         <input
-                                            className="w-2/3 bg-gray-100"
+                                            className="w-2/3 bg-login-btn"
                                             type="number"
                                             maxLength={6}
                                             placeholder="Enter 6-digit code"
@@ -237,7 +249,7 @@ const PhoneOrEmail = (props: any) => {
                                             }`}
                                         >
                                             <p className="text-gray-400 "> | </p>
-                                            <p>Send code</p>
+                                            <p>{APP_TEXTS.SEND_CODE}</p>
                                         </div>
                                     </div>
                                     {error && (
@@ -248,11 +260,13 @@ const PhoneOrEmail = (props: any) => {
                                 </>
                             ) : (
                                 <>
-                                    <div className="flex flex-row justify-between items-center border border-gray-500 bg-gray-100 mt-2 rounded-md py-2.5 px-3">
+                                    <div className="flex flex-row justify-between items-center border border-gray-500 bg-login-btn mt-2 rounded-md py-2.5 px-3">
                                         <input
-                                            className="w-2/3 bg-gray-100"
+                                            className="w-2/3 bg-login-btn"
                                             type={showPassword ? 'text' : 'password'}
                                             placeholder="Password"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
                                         />
                                         {!showPassword ? (
                                             <Visibility
@@ -271,18 +285,22 @@ const PhoneOrEmail = (props: any) => {
                         </>
                     ) : (
                         <>
-                            <div className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-2 rounded-md p-2.5">
+                            <div className="flex flex-row items-center border border-gray-500 bg-login-btn mt-2 rounded-md p-2.5">
                                 <input
-                                    className="w-2/3 bg-gray-100"
+                                    className="w-2/3 bg-login-btn"
                                     type="text"
                                     placeholder="Email or username"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
                             </div>
-                            <div className="flex flex-row justify-between items-center border border-gray-500 bg-gray-100 mt-2 rounded-md py-2.5 px-3">
+                            <div className="flex flex-row justify-between items-center border border-gray-500 bg-login-btn mt-2 rounded-md py-2.5 px-3">
                                 <input
-                                    className="w-2/3 bg-gray-100"
+                                    className="w-2/3 bg-login-btn"
                                     type={showPassword ? 'text' : 'password'}
                                     placeholder="Password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                                 {!showPassword ? (
                                     <Visibility
@@ -298,7 +316,6 @@ const PhoneOrEmail = (props: any) => {
                             </div>
                         </>
                     )}
-
                     <p
                         onClick={loginOrForgetPasswordHandler}
                         className={`font-medium text-left text-xs text-gray-600 mt-2.5 ${
@@ -315,7 +332,7 @@ const PhoneOrEmail = (props: any) => {
                                     onClick={forgetPasswordHandler}
                                     className="font-medium text-left text-xs text-gray-600 mt-2.5 hover:underline cursor-pointer"
                                 >
-                                    Forgot password?
+                                    {APP_TEXTS.FORGOT_PASSWORD}
                                 </p>
                                 <p className="font-medium text-left text-xs text-gray-300 mt-2.5 hover:underline cursor-pointer">
                                     |
@@ -324,7 +341,7 @@ const PhoneOrEmail = (props: any) => {
                                     onClick={loginWithPasswordToggler}
                                     className="font-medium text-left text-xs text-gray-600 mt-2.5 hover:underline cursor-pointer"
                                 >
-                                    Log in with code
+                                    {APP_TEXTS.LOGIN_WITH_CODE}
                                 </p>
                             </div>
                         ) : (
@@ -332,13 +349,16 @@ const PhoneOrEmail = (props: any) => {
                                 onClick={forgetPasswordHandler}
                                 className="font-medium text-left text-xs text-gray-600 mt-2.5 hover:underline cursor-pointer"
                             >
-                                Forgot password?
+                                {APP_TEXTS.FORGOT_PASSWORD}
                             </p>
                         )}
                     </p>
-                    <div className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-4 rounded-md py-2.5 px-3 cursor-pointer">
+                    <div
+                        onClick={loginHandler}
+                        className={`flex flex-row items-center bg-login-btn mt-4 rounded-md py-2.5 px-3 cursor-pointer`}
+                    >
                         <div className="flex flex-row justify-center items-center gap-2 flex-1">
-                            <p>Log in</p>
+                            <p>{APP_TEXTS.LOGIN}</p>
                         </div>
                     </div>
                     <div

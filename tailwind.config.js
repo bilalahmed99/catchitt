@@ -18,6 +18,7 @@ export default {
                 subtext: '#a2a3a5df',
                 'danger-1': '#f75c59',
                 policy: '#7b7d82fe',
+                'login-btn': '#f1f1f2',
             },
             borderColor: {
                 liveSelected: '#5448B2',

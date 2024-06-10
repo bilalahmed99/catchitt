@@ -1,37 +1,35 @@
 import { useNavigate } from 'react-router-dom';
-import { logoAuth } from '../../icons';
 import { APP_TEXTS, LOGIN_OPTIONS } from '../../utils/constants';
 import ItemLogin from '../item-login';
-import './login.scss';
 import Footer from './footer';
 import Header from './header';
+import './login.scss';
 
 const Login = (props: any) => {
     const navigate = useNavigate();
 
     const loginItemClickHandler = (name: string) => {
         switch (name) {
-            case 'Use QR Code':
+            case APP_TEXTS.QR_CODE:
                 // Handle QR code login
                 console.log('QR Code login');
                 break;
-            case 'Use phone / email / username':
+            case APP_TEXTS.EMAIL_OR_PHONE:
                 // Handle phone / email / username login
                 navigate('/login/phone-or-email');
                 break;
-            case 'Continue with Facebook':
-                // Handle Facebook login
+            case APP_TEXTS.FACEBOOK:
                 console.log('Facebook login');
                 break;
-            case 'Continue with Google':
+            case APP_TEXTS.GOOGLE:
                 // Handle Google login
                 console.log('Google login');
                 break;
-            case 'Continue with Twitter':
+            case APP_TEXTS.TWITTER:
                 // Handle Twitter login
                 console.log('Twitter login');
                 break;
-            case 'Continue with Apple':
+            case APP_TEXTS.APPLE:
                 // Handle Apple login
                 console.log('Apple login');
                 break;
