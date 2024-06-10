@@ -14,7 +14,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 const PhoneOrEmail = (props: any) => {
     const navigate = useNavigate();
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
-
+    const API_KEY = process.env.VITE_API_URL;
     const [month, setMonth] = useState('');
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -45,158 +45,96 @@ const PhoneOrEmail = (props: any) => {
                             id=""
                         /> */}
                         <div className='flex flex-row p-0.5'>
-                        <FormControl fullWidth className='p-0.5'>
-                        <InputLabel id="demo-simple-select-label">Month</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={month}
-                            label="Month"
-                            onChange={handleChange}
-                        >
-                            <MenuItem value={1}>January</MenuItem>
-                            <MenuItem value={2}>Febuary</MenuItem>
-                            <MenuItem value={3}>March</MenuItem>
-                            <MenuItem value={4}>April</MenuItem>
-                            <MenuItem value={5}>May</MenuItem>
-                            <MenuItem value={6}>June</MenuItem>
-                            <MenuItem value={7}>July</MenuItem>
-                            <MenuItem value={8}>August</MenuItem>
-                            <MenuItem value={9}>September</MenuItem>
-                            <MenuItem value={10}>October</MenuItem>
-                            <MenuItem value={11}>November</MenuItem>
-                            <MenuItem value={12}>December</MenuItem>
-                          
-                        </Select>
-                        </FormControl>
-
-                        <FormControl fullWidth className='p-0.5'>
-                        <InputLabel id="demo-simple-select-label">Date</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={month}
-                            label="Month"
-                            onChange={handleChange}
-                        >
-                            <MenuItem value={1}>1</MenuItem>
-                            <MenuItem value={2}>2</MenuItem>
-                            <MenuItem value={3}>3</MenuItem>
-                            <MenuItem value={4}>4</MenuItem>
-                            <MenuItem value={5}>5</MenuItem>
-                            <MenuItem value={6}>6</MenuItem>
-                            <MenuItem value={7}>7</MenuItem>
-                            <MenuItem value={8}>8</MenuItem>
-                            <MenuItem value={9}>9</MenuItem>
-                            <MenuItem value={10}>10</MenuItem>
-                            <MenuItem value={11}>11</MenuItem>
-                            <MenuItem value={12}>12</MenuItem>
-                            <MenuItem value={13}>13</MenuItem>
-                            <MenuItem value={14}>14</MenuItem>
-                            <MenuItem value={15}>15</MenuItem>
-                            <MenuItem value={16}>16</MenuItem>
-                            <MenuItem value={17}>17</MenuItem>
-                            <MenuItem value={18}>18</MenuItem>
-                            <MenuItem value={19}>19</MenuItem>
-                            <MenuItem value={20}>20</MenuItem>
-                            <MenuItem value={21}>21</MenuItem>
-                            <MenuItem value={22}>22</MenuItem>
-                            <MenuItem value={23}>23</MenuItem>
-                            <MenuItem value={24}>24</MenuItem>
-                            <MenuItem value={25}>25</MenuItem>
-                            <MenuItem value={26}>26</MenuItem>
-                            <MenuItem value={27}>27</MenuItem>
-                            <MenuItem value={28}>28</MenuItem>
-                            <MenuItem value={29}>29</MenuItem>
-                            <MenuItem value={30}>30</MenuItem>
+                            <FormControl fullWidth className='p-1'>
+                            <InputLabel id="demo-simple-select-label">Month</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={month}
+                                label="Month"
+                                onChange={handleChange}
+                            >
+                                <MenuItem value={1}>January</MenuItem>
+                                <MenuItem value={2}>Febuary</MenuItem>
+                                <MenuItem value={3}>March</MenuItem>
+                                <MenuItem value={4}>April</MenuItem>
+                                <MenuItem value={5}>May</MenuItem>
+                                <MenuItem value={6}>June</MenuItem>
+                                <MenuItem value={7}>July</MenuItem>
+                                <MenuItem value={8}>August</MenuItem>
+                                <MenuItem value={9}>September</MenuItem>
+                                <MenuItem value={10}>October</MenuItem>
+                                <MenuItem value={11}>November</MenuItem>
+                                <MenuItem value={12}>December</MenuItem>
                             
-                          
-                        </Select>
-                        </FormControl>
+                            </Select>
+                            </FormControl>
 
-                        <FormControl fullWidth >
-                        <InputLabel id="demo-simple-select-label">Year</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={month}
-                            label="Month"
-                            onChange={handleChange}
-                        >
-                           {(function (rows, i, len) {
-                                while (++i <= len) {
-                                rows.push(<MenuItem value={i}>{i}</MenuItem>)
-                                }
-                                return rows;
-                            })([], 1900, 2024)}
-                            {/* <MenuItem value={2024}>2024</MenuItem>
-                            <MenuItem value={2023}>2023</MenuItem>
-                            <MenuItem value={2022}>2022</MenuItem>
-                            <MenuItem value={2021}>2021</MenuItem>
-                            <MenuItem value={2020}>2020</MenuItem>
-                            <MenuItem value={2019}>2019</MenuItem>
-                            <MenuItem value={2018}>2018</MenuItem>
-                            <MenuItem value={2017}>2017</MenuItem>
-                            <MenuItem value={2016}>2016</MenuItem>
-                            <MenuItem value={2019}>2024</MenuItem>
-                            <MenuItem value={2024}>2024</MenuItem>
-                            <MenuItem value={2024}>2024</MenuItem>
-                            <MenuItem value={2024}>2024</MenuItem>
-                            <MenuItem value={2024}>2024</MenuItem>
-                            <MenuItem value={2024}>2024</MenuItem>
-                            <MenuItem value={2024}>2024</MenuItem>
-                            <MenuItem value={2024}>2024</MenuItem>
-                            <MenuItem value={2024}>2024</MenuItem>
-                            <MenuItem value={2024}>2024</MenuItem>
-                            <MenuItem value={2024}>2024</MenuItem>
-                            <MenuItem value={2024}>2024</MenuItem>
-                            <MenuItem value={2024}>2024</MenuItem>
-                            <MenuItem value={2024}>2024</MenuItem>
-                            <MenuItem value={2024}>2024</MenuItem>
-                            <MenuItem value={2024}>2024</MenuItem>
-                            <MenuItem value={2024}>2024</MenuItem>
-                            <MenuItem value={2024}>2024</MenuItem> */}
-                           
-                          
-                        </Select>
-                        </FormControl>
-                        {/* <select className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-2 rounded-md p-2.5" >
-                            <option>Month</option>
-                            <option>January</option>
-                            <option></option>
-                            <option></option>
-                            <option>April</option>
-                            <option>May</option>
-                            <option>June</option>
-                            <option>July</option>
-                            <option>August</option>
-                        </select>
+                            <FormControl fullWidth className='p-1'>
+                            <InputLabel id="demo-simple-select-label">Date</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={month}
+                                label="Month"
+                                onChange={handleChange}
+                            >
+                                <MenuItem value={1}>1</MenuItem>
+                                <MenuItem value={2}>2</MenuItem>
+                                <MenuItem value={3}>3</MenuItem>
+                                <MenuItem value={4}>4</MenuItem>
+                                <MenuItem value={5}>5</MenuItem>
+                                <MenuItem value={6}>6</MenuItem>
+                                <MenuItem value={7}>7</MenuItem>
+                                <MenuItem value={8}>8</MenuItem>
+                                <MenuItem value={9}>9</MenuItem>
+                                <MenuItem value={10}>10</MenuItem>
+                                <MenuItem value={11}>11</MenuItem>
+                                <MenuItem value={12}>12</MenuItem>
+                                <MenuItem value={13}>13</MenuItem>
+                                <MenuItem value={14}>14</MenuItem>
+                                <MenuItem value={15}>15</MenuItem>
+                                <MenuItem value={16}>16</MenuItem>
+                                <MenuItem value={17}>17</MenuItem>
+                                <MenuItem value={18}>18</MenuItem>
+                                <MenuItem value={19}>19</MenuItem>
+                                <MenuItem value={20}>20</MenuItem>
+                                <MenuItem value={21}>21</MenuItem>
+                                <MenuItem value={22}>22</MenuItem>
+                                <MenuItem value={23}>23</MenuItem>
+                                <MenuItem value={24}>24</MenuItem>
+                                <MenuItem value={25}>25</MenuItem>
+                                <MenuItem value={26}>26</MenuItem>
+                                <MenuItem value={27}>27</MenuItem>
+                                <MenuItem value={28}>28</MenuItem>
+                                <MenuItem value={29}>29</MenuItem>
+                                <MenuItem value={30}>30</MenuItem>
+                                
+                            
+                            </Select>
+                            </FormControl>
 
-                        <select className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-2 rounded-md p-2.5" >
-                            <option>Month</option>
-                            <option>January</option>
-                            <option>Febuary</option>
-                            <option>March</option>
-                            <option>April</option>
-                            <option>May</option>
-                            <option>June</option>
-                            <option>July</option>
-                            <option>August</option>
-                        </select>
-
-                        <select className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-2 rounded-md p-2.5" >
-                            <option>Month</option>
-                            <option>January</option>
-                            <option>Febuary</option>
-                            <option>March</option>
-                            <option>April</option>
-                            <option>May</option>
-                            <option>June</option>
-                            <option>July</option>
-                            <option>August</option>
-                        </select> */}
+                            <FormControl fullWidth className='p-1'>
+                            <InputLabel id="demo-simple-select-label">Year</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={month}
+                                label="Month"
+                                onChange={handleChange}
+                            >
+                            {(function (rows, i, len) {
+                                    while (--i >= len) {
+                                    rows.push(<MenuItem value={i}>{i}</MenuItem>)
+                                    }
+                                    return rows;
+                                })([], 2025, 1900)}
+                              
+                            </Select>
+                            </FormControl>
+                            
                         </div>
-                    {/* </div> */}
+                        
 
                     <div>
                         <div className="flex flex-row justify-between items-center mt-3.5">
@@ -242,12 +180,12 @@ const PhoneOrEmail = (props: any) => {
                     </div>
                     <div className="font-medium text-left text-xs text-gray-600 mt-2.5">
                     {/* <FormGroup> */}
-                        <FormControlLabel
+                        {/* <FormControlLabel
                             control={
                             <Checkbox  name="gilad" style={{ padding:'0px', width: '30%'}}/>
                             }
                             label="Get trending content, newsletters, promotions, recommendations, and account updates sent to your email"
-                        />
+                        /> */}
                     {/* </FormGroup> */}
                     
                     </div>

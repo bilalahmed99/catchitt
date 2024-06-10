@@ -73,6 +73,9 @@ import camera from './assets/camera.svg';
 import seezittLogo from './assets/seezitt-logo.svg';
 import cameraThumbnail from './assets/camera-thumbnail.svg';
 import chevronToggle from './assets/chevron-toggle.svg';
+import chevronUp from './assets/chevron-up.png';
+import chevronDown from './assets/chevron-down.png';
+import checkCountryCode from './assets/check-country-code.png';
 
 export {
     duet,
@@ -149,5 +152,8 @@ export {
     camera,
     seezittLogo,
     cameraThumbnail,
-    chevronToggle
+    chevronToggle,
+    chevronUp,
+    chevronDown,
+    checkCountryCode,
 };
