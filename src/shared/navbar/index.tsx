@@ -7,6 +7,7 @@ import { logoutUser } from '../../redux/reducers/auth';
 import style from './Navbar.module.scss';
 import NavbarMunu from './components/Menu';
 import Search from './components/Search';
+import { openLoginPopup } from '../../redux/reducers';
 
 function Navbar() {
     const isLoggedIn: boolean = localStorage.getItem('token') ? true : false;
@@ -25,7 +26,7 @@ function Navbar() {
 
     return (
         <div className={style.parent}>
-            <div onClick={()=> navigate('/')} className={style.sec1}>
+            <div onClick={() => navigate('/')} className={style.sec1}>
                 <img src={logo} alt="" />
             </div>
             {!isMobile ? (
@@ -78,7 +79,7 @@ function Navbar() {
                                 fontWeight: 600,
                                 fontSize: 14,
                             }}
-                            onClick={() => navigate('/auth')}
+                            onClick={() => dispatch(openLoginPopup())}
                         >
                             Login
                         </button>
