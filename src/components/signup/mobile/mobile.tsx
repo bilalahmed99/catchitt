@@ -24,9 +24,28 @@ const Mobile = (props: any) => {
     const [countryCode, setCountryCode] = useState<string>('');
     const [isoCode, setIsoCode] = useState<string>('');
     const [month, setMonth] = useState('');
-    const handleChange = (event: SelectChangeEvent) => {
+    const [date, setDate] = useState('');
+    const [year, setYear] = useState('');
+
+    const handleMonthChange = (event: SelectChangeEvent) => {
         setMonth(event.target.value as string);
-      };
+        buttonClickHandler();
+    };
+
+    const handleDateChange = (event: SelectChangeEvent) => {
+        setDate(event.target.value as string);
+        buttonClickHandler();
+    };
+
+    const handleYearChange = (event: SelectChangeEvent) => {
+        setYear(event.target.value as string);
+        buttonClickHandler();
+    };
+
+    const handleMobileNumberChange = (event: SelectChangeEvent) => {
+        setPhoneNumber(event.target.value as string);
+        buttonClickHandler();
+    };
 
     const navigate = useNavigate();
 
@@ -63,6 +82,18 @@ const Mobile = (props: any) => {
         if (countryModelOpened) {
             countryCodeModelHandler();
         }
+    };
+
+    const buttonClickHandler = () => {
+        if (date && month && year && countryCode && phoneNumber) {
+            console.log("enter");
+        }else{
+            console.log("no enter");
+        }
+    };
+
+    const nextClickHandler = () => {
+       
     };
 
     // const fetchCountriesList = async () => {
@@ -121,10 +152,11 @@ const Mobile = (props: any) => {
                 </div>
             </div>
             <div className="w-[22.688rem] mx-auto mt-14 h-auto">
-                <div className="overflow-auto">
+                <div className="overflow-visible">
                     <h2 className="font-bold text-3xl">Sign up</h2>
                     <div className="flex flex-row justify-between items-center mt-3.5">
-                        <p className="font-medium text-[0.938rem]">When’s your birthday?</p>
+                        <p className="font-medium text-[0.938rem] p-0.5">When’s your birthday? </p>
+                        
                     </div>
                     {/* <div className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-2 rounded-md p-2.5"> */}
                         {/* <input
@@ -134,15 +166,16 @@ const Mobile = (props: any) => {
                             name=""
                             id=""
                         /> */}
-                        <div className='flex flex-row p-0.5'>
-                            <FormControl fullWidth className='p-1'>
+                        
+                        <div className='flex flex-row'>
+                            <FormControl fullWidth className='dobselectbox p-1'>
                             <InputLabel id="demo-simple-select-label">Month</InputLabel>
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 value={month}
                                 label="Month"
-                                onChange={handleChange}
+                                onChange={handleMonthChange}
                             >
                                 <MenuItem value={1}>January</MenuItem>
                                 <MenuItem value={2}>Febuary</MenuItem>
@@ -165,9 +198,9 @@ const Mobile = (props: any) => {
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
-                                value={month}
+                                value={date}
                                 label="Month"
-                                onChange={handleChange}
+                                onChange={handleDateChange}
                             >
                                 <MenuItem value={1}>1</MenuItem>
                                 <MenuItem value={2}>2</MenuItem>
@@ -209,9 +242,9 @@ const Mobile = (props: any) => {
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
-                                value={month}
+                                value={year}
                                 label="Month"
-                                onChange={handleChange}
+                                onChange={handleYearChange}
                             >
                             {(function (rows, i, len) {
                                     while (--i >= len) {
@@ -395,6 +428,8 @@ const Mobile = (props: any) => {
                                 placeholder="Phone number"
                                 name=""
                                 id=""
+                                value={phoneNumber}
+                                onChange={handleMobileNumberChange}
                             />
                     </div>
 
@@ -404,11 +439,14 @@ const Mobile = (props: any) => {
 
                    
                    
-                    <div className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-4 rounded-md py-2.5 px-3 cursor-pointer">
+                    <div className="flex flex-row items-center border border-gray-500 bg-red-500 mt-4 rounded-md py-2.5 px-3 cursor-pointer"
+                    onClick={nextClickHandler}
+                    >
                         <div className="flex flex-row justify-center items-center gap-2 flex-1">
                             <p className='font-bold text-1xl text-gray-400'>NEXT</p>
                         </div>
                     </div>
+                    
                     {/* To be contiubed..... */}
                     {/* <div className='flex flex-row'></div>
                     <p>Go </p> */}
