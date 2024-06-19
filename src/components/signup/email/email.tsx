@@ -1,4 +1,4 @@
-import { SIGNUP_APP_TEXTS } from '../../../utils/constants';
+import { APP_TEXTS, SIGNUP_APP_TEXTS, END_POINTS, METHOD } from '../../../utils/constants';
 import { useNavigate } from 'react-router-dom';
 import './email.module.scss';
 import Checkbox from '@mui/material/Checkbox';
@@ -18,7 +18,22 @@ import {  checkCountryCode, chevronDown, search } from '../../../icons';
 const PhoneOrEmail = (props: any) => {
     const navigate = useNavigate();
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+    // const API_KEY = process.env.VITE_API_URL;
+    // const [month, setMonth] = useState('');
+    // const [date, setDate] = useState('');
+    // const [year, setYear] = useState('');
+    const [nextCheck, setNextCheck] = useState(false);
+    const [emailOrPhoneCheck, setemailOrPhoneCheck] = useState(false);
+    const [countryModelOpened, setCountryModelOpened] = useState(false);
+    const [countryCodes, setCountryCodes] = useState([]);
+    const [selectedCountryIndex, setSelectedCountryIndex] = useState(0);
     const API_KEY = process.env.VITE_API_URL;
+
+    // Input Values
+    const [phoneNumber, setPhoneNumber] = useState<any>(null);
+    const [searchQuery, setSearchQuery] = useState<string>('');
+    const [countryCode, setCountryCode] = useState<string>('');
+    const [isoCode, setIsoCode] = useState<string>('');
     const [month, setMonth] = useState('');
     const [date, setDate] = useState('');
     const [year, setYear] = useState('');
@@ -41,20 +56,12 @@ const PhoneOrEmail = (props: any) => {
   }
 
   const handleSignupWithPhoneClick = () => {
-    navigate('/signup/phone-or-email/phone');
+    setemailOrPhoneCheck(true);
   }
 
-
-  const [countryModelOpened, setCountryModelOpened] = useState(false);
-  const [countryCodes, setCountryCodes] = useState([]);
-  const [selectedCountryIndex, setSelectedCountryIndex] = useState(0);
-//   const API_KEY = process.env.VITE_API_URL;
-
-  // Input Values
-  const [phoneNumber, setPhoneNumber] = useState<any>(null);
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [countryCode, setCountryCode] = useState<string>('');
-  const [isoCode, setIsoCode] = useState<string>('');
+  const handleSignupWithEmailClick = () => {
+    setemailOrPhoneCheck(false);
+  }
 
 
   const handleMobileNumberChange = (event: SelectChangeEvent) => {
@@ -64,6 +71,28 @@ const PhoneOrEmail = (props: any) => {
 
 
 
+  const fetchCountriesList = async () => {
+    try {
+        const response: any = await fetch(`${API_KEY}/${END_POINTS.COUNTRY_LIST}`, {
+            method: METHOD.GET,
+            headers: {
+                'Content-type': 'application/json',
+            },
+        });
+        const { data }: any = await response.json();
+
+        // Set first country as initial country code
+        setCountryCode(data?.countries[0]?.code);
+
+        // Set first isoCode as initial country iso code
+        setIsoCode(data?.countries[0]?.iso);
+
+        // Setting all values to countryCodes state
+        setCountryCodes(data?.countries);
+    } catch (error) {
+        console.log('🚀 ~ fetchCountriesList ~ error:', error);
+    }
+};
 
   const countryCodeModelHandler = () => {
     setCountryModelOpened(!countryModelOpened);
@@ -111,10 +140,16 @@ const nextClickHandler = () => {
 };
 
 
+
+useEffect(() => {
+    fetchCountriesList();
+}, []);
+
     return (
         <div className="h-screen">
             <Header />
             <div className="w-[22.688rem] mx-auto mt-14 h-auto">
+            { nextCheck == false ? (
                 <div className="overflow-auto">
                     <h2 className="font-bold text-3xl">Sign up</h2>
                     <div className="flex flex-row justify-between items-center mt-3.5">
@@ -213,45 +248,33 @@ const nextClickHandler = () => {
                         
 
                         <div>
-                            <div className="flex flex-row justify-between items-center mt-3.5">
-                                <p className="font-medium text-[0.938rem]">Email</p>
-                                <p className="font-medium text-xs text-gray-600" onClick={handleSignupWithPhoneClick}>
-                                    Sign up with phone
+                            { emailOrPhoneCheck == false ?
+                                (
+                                <><div className="flex flex-row justify-between items-center mt-3.5">
+                                    <p className="font-medium text-[0.938rem]">Email</p>
+                                    <p className="font-medium text-xs text-gray-600" onClick={handleSignupWithPhoneClick}>
+                                        Sign up with phone
+                                    </p>
+                                </div>
+                                <div className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-2 rounded-md p-2.5">
+                                    <input
+                                        className="w-2/3 bg-gray-100"
+                                        type="email"
+                                        placeholder="Email address"
+                                        name=""
+                                        id=""
+                                    />
+                                </div></>):(<>
+                                    <div className="flex flex-row justify-between items-center mt-3.5">
+                                <p className="font-medium text-[0.938rem]">Phone</p>
+                                <p className="font-medium text-xs text-gray-600" onClick={handleSignupWithEmailClick}>
+                                    Sign up with Email
                                 </p>
                             </div>
-                            <div className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-2 rounded-md p-2.5">
-                                <input
-                                    className="w-2/3 bg-gray-100"
-                                    type="email"
-                                    placeholder="Email address"
-                                    name=""
-                                    id=""
-                                />
-                            </div>
-
-                            <div className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-2 rounded-md p-2.5">
-                                <input
-                                    className="w-2/3 bg-gray-100"
-                                    type="password"
-                                    placeholder="Password"
-                                    name=""
-                                    id=""
-                                />
-                            </div>
-                        </div>
-
-                    <div>
-                        <div className="flex flex-row justify-between items-center mt-3.5">
-                            <p className="font-medium text-[0.938rem]">Phone</p>
-                            <p className="font-medium text-xs text-gray-600">
-                                Sign up with Email
-                            </p>
-                        </div>
-                        <div className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-2 rounded-md p-2.5">
-                            
-                            <div
+                            <div className="flex flex-row items-center border border-gray-500 bg-login-btn mt-2 rounded-md p-2.5">
+                                <div
                                     onClick={countryCodeModelHandler}
-                                    className="flex flex-row border-r-2 items-center gap-1 flex-auto cursor-pointer relative"
+                                    className="flex flex-row items-center gap-2 flex-1 cursor-pointer relative"
                                 >
                                     <p>{isoCode + ' ' + countryCode}</p>
                                     <img
@@ -260,7 +283,7 @@ const nextClickHandler = () => {
                                         }`}
                                         src={chevronDown}
                                     />
-                                    {/* <p className="text-gray-400 "> | </p> */}
+                                    <p className="text-gray-400 "> | </p>
                                     {countryModelOpened && (
                                         <div
                                             onClick={modelClickHandler}
@@ -329,18 +352,33 @@ const nextClickHandler = () => {
                                         </div>
                                     )}
                                 </div>
-                            <input
-                                className=" gap-1 w-2/3 bg-gray-100"
-                                type="phone"
-                                placeholder="Phone number"
-                                name=""
-                                id=""
-                                value={phoneNumber}
-                                onChange={handleMobileNumberChange}
-                            />
+                                <input
+                                    className="w-2/3 bg-login-btn"
+                                    type="tel"
+                                    placeholder="Phone number"
+                                    value={phoneNumber}
+                                    onChange={(e) => setPhoneNumber(e.target.value)}
+                                />
+                            </div>
+                                </>)
+                            }
+                           
+                                <div className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-2 rounded-md p-2.5">
+                                    <input
+                                        className="w-2/3 bg-gray-100"
+                                        type="password"
+                                        placeholder="Password"
+                                        name=""
+                                        id=""
+                                    />
+                                </div>
+                            
+                            
+                        </div>
+                        <div>
+                            
                     </div>
-                    </div>
-
+                    { emailOrPhoneCheck == false ?(
                     <div className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-2 rounded-md py-2.5 px-3">
                         <input
                             className="w-2/3 bg-gray-100"
@@ -354,26 +392,55 @@ const nextClickHandler = () => {
                             <p>Send code</p>
                         </div>
                     </div>
+                    ):null}
                     <div className="font-medium text-left text-xs text-gray-600 mt-2.5">
-                    {/* <FormGroup> */}
-                        {/* <FormControlLabel
-                            control={
-                            <Checkbox  name="gilad" style={{ padding:'0px', width: '30%'}}/>
-                            }
-                            label="Get trending content, newsletters, promotions, recommendations, and account updates sent to your email"
-                        /> */}
-                    {/* </FormGroup> */}
-                    
+                   
                     </div>
                     <div className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-4 rounded-md py-2.5 px-3 cursor-pointer">
                         <div className="flex flex-row justify-center items-center gap-2 flex-1">
                             <p className='font-bold text-1xl text-gray-400'>NEXT</p>
                         </div>
                     </div>
-                    {/* To be contiubed..... */}
-                    {/* <div className='flex flex-row'></div>
-                    <p>Go </p> */}
+                
                 </div>
+            ):( 
+                <div className="overflow-auto">
+                    <h2 className="font-bold text-3xl">Sign up</h2>
+                    <div className="flex flex-row justify-between items-center mt-3.5">
+                        <p className="font-medium text-[0.938rem]">Password</p>
+                                    
+                        </div>
+                        <div className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-2 rounded-md p-2.5">
+                            <input
+                                className="w-2/3 bg-gray-100"
+                                type="password"
+                                placeholder="Password"
+                                name=""
+                                id=""
+                            />
+                        </div>
+                        <div className="flex flex-row justify-between items-center mt-3.5">
+                        <p className="font-medium text-[0.938rem]">Name</p>
+                                    
+                        </div>
+                        <div className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-2 rounded-md p-2.5">
+                            <input
+                                className="w-2/3 bg-gray-100"
+                                type="text"
+                                placeholder="Name"
+                                name=""
+                                id=""
+                            />
+                        </div>
+
+                        <div className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-4 rounded-md py-2.5 px-3 cursor-pointer">
+                        <div className="flex flex-row justify-center items-center gap-2 flex-1">
+                            <p className='font-bold text-1xl text-gray-400'>Sign up</p>
+                        </div>
+                    </div>
+                </div>
+                )}
+
             </div>
             <div className="absolute w-full bottom-0">
                 <div className="border-t border-custom-1 text-center p-4">
