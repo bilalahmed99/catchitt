@@ -1,26 +1,24 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { back, checkCountryCode, chevronDown, search } from '../../icons';
+import { useLocation } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import { checkCountryCode, chevronDown, search } from '../../icons';
 import {
     APP_TEXTS,
     END_POINTS,
     METHOD,
     STATUS_CODE,
-    showToast,
     showToastError,
     showToastSuccess,
 } from '../../utils/constants';
 import Footer from './footer';
 import Header from './header';
-import { ToastContainer } from 'react-toastify';
 
 const ForgetPassword = (props: any) => {
     const location = useLocation();
     const { showEmail } = location.state || {}; // Default to an empty object if state is undefined
     const [resetWithPhone, setResetWithPhone] = useState<boolean>(!showEmail);
     const [showPassword, setShowPassword] = useState<boolean>(false);
-    const navigate = useNavigate();
     const [error, setError] = useState<string>('');
     const [code, setCode] = useState<any>(null);
     const [countryModelOpened, setCountryModelOpened] = useState<boolean>(false);
