@@ -103,7 +103,7 @@ const modelClickHandler = (e: { stopPropagation: () => void }) => {
 };
 
 // Filter country codes based on search query
-const filteredCountryCodes = countryCodes?.filter((countryItem) =>
+const filteredCountryCodes = countryCodes?.filter((countryItem: any) =>
     countryItem?.name.toLowerCase().includes(searchQuery.toLowerCase())
 );
 
@@ -117,7 +117,7 @@ const countryItemClickHandler = (
 ) => {
     setSelectedCountryIndex(index);
     setCountryCode(countryItem?.code);
-    setIsoCode(countryItem?.iso);
+    // setIsoCode(countryItem?.iso);
     countryCodeModelHandler();
 };
 
@@ -139,7 +139,18 @@ const nextClickHandler = () => {
    
 };
 
-
+function generateMenuItems() {
+    const rows = [];
+    let i = 2025; // Start with 2025
+    const len = 1900; // End at 1900
+  
+    while (i >= len) {
+      rows.push(<MenuItem key={i} value={i}>{i}</MenuItem>);
+      i--; // Decrement i in each iteration
+    }
+  
+    return rows;
+  }
 
 useEffect(() => {
     fetchCountriesList();
@@ -234,12 +245,7 @@ useEffect(() => {
                                 label="Month"
                                 onChange={handleYearChange}
                             >
-                            {(function (rows, i, len) {
-                                    while (--i >= len) {
-                                    rows.push(<MenuItem value={i}>{i}</MenuItem>)
-                                    }
-                                    return rows;
-                                })([], 2025, 1900)}
+                            {generateMenuItems()}
                               
                             </Select>
                             </FormControl>
@@ -301,7 +307,7 @@ useEffect(() => {
                                                     placeholder="Search"
                                                     className="w-full text-sm font-normal caret-red-500 bg-white"
                                                     value={searchQuery}
-                                                    onChange={handleSearchChange}
+                                                    // onChange={handleSearchChange}
                                                 />
                                             </div>
                                             <div className="w-full h-[1px] bg-gray-300" />
@@ -343,11 +349,11 @@ useEffect(() => {
                                                         </div>
                                                     )
                                                 )}
-                                                {filteredCountryCodes.length === 0 && (
+                                                {/* {filteredCountryCodes.length === 0 && (
                                                     <p className="font-normal text-gray-400 text-xs hover:bg-gray-50 my-2">
                                                         {APP_TEXTS.NO_RESULT_FOUND}
                                                     </p>
-                                                )}
+                                                )} */}
                                             </div>
                                         </div>
                                     )}

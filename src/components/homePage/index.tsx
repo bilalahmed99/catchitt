@@ -392,7 +392,18 @@ function HomePage() {
         // console.log(dob);
     };
 
-    
+    function generateMenuItems() {
+        const rows = [];
+        let i = 2025; // Start with 2025
+        const len = 1900; // End at 1900
+      
+        while (i >= len) {
+          rows.push(<MenuItem key={i} value={i}>{i}</MenuItem>);
+          i--; // Decrement i in each iteration
+        }
+      
+        return rows;
+      }
 
     return (
         <div>
@@ -870,13 +881,13 @@ function HomePage() {
                                                             label="Month"
                                                             onChange={handleYearChange}
                                                         >
-                                                        {(function (rows, i, len) {
+                                                        {/* {(function (rows, i, len) {
                                                                 while (--i >= len) {
-                                                                rows.push(<MenuItem value={i}>{i}</MenuItem>)
+                                                                 rows.push(<MenuItem key={i} value={i}>{i}</MenuItem>)
                                                                 }
                                                                 return rows;
-                                                            })([], 2025, 1900)}
-                                                        
+                                                            })([], 2025, 1900)} */}
+                                                        {generateMenuItems()}
                                                         </Select>
                                                         </FormControl>
                                                         

@@ -149,7 +149,7 @@ function App() {
                             <Route path="/contactus" element={<ContactUs />} />
                             <Route path="/signup" element={<Signup />} />
                             <Route path="/signup/phone-or-email/email" element={<SignupEmail />} />
-                            <Route path="/signup/phone-or-email/phone" element={<SignupPhone />} />
+                            {/* <Route path="/signup/phone-or-email/phone" element={<SignupPhone />} /> */}
                         </Routes>
                     </Router>
                 </VideoProvider>
