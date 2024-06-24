@@ -81,7 +81,7 @@ function ForDesktop(props: any) {
             closeReportPopup={() => setreportPopup(false)}
             paddingBottomProp={true}
         >
-            <div className={`relative  ${style.parent}`}>
+            <div className={`relative  ${style.parent} ${style.darkTheme}`}>
                 <div className={style.tabs}>
                     <div
                         onClick={() => setActiveTab(1)}

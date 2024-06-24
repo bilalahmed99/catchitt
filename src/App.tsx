@@ -48,6 +48,7 @@ import Login from './components/login';
 import PhoneOrEmail from './components/login/phone-or-email';
 import ForgetPassword from './components/login/forget-password';
 
+
 // Functional component to handle the initial route navigation
 const InitialRouteHandler = () => {
     const navigate = useNavigate();
@@ -78,9 +79,82 @@ function App() {
         setAppLanguage(language);
         window.localStorage.setItem('lang', language);
     };
+    // window.localStorage.setItem('theme', "light");
+    var themeColor = window.localStorage.getItem('theme');
+
+    if(themeColor == "dark"){
+        const divElements = document.querySelectorAll('div');
+        const aElements = document.querySelectorAll('a');
+        const pElements = document.querySelectorAll('p');
+        const h1Elements = document.querySelectorAll('h1');
+        const h2Elements = document.querySelectorAll('h2');
+        const h3Elements = document.querySelectorAll('h3');
+        const h4Elements = document.querySelectorAll('h4');
+        const h5Elements = document.querySelectorAll('h5');
+        divElements.forEach((div: HTMLElement) => {
+          div.style.background = 'black';
+          div.style.color = 'white';
+        });
+        aElements.forEach((a: HTMLElement) => {
+            a.style.color = 'white';
+            
+          });
+          pElements.forEach((p: HTMLElement) => {
+            p.style.color = 'white';
+          });
+    }
+
+    useEffect(() => {
+
+        if(themeColor == "dark"){
+            // const divElements = document.querySelectorAll('div');
+            // const aElements = document.querySelectorAll('a');
+            // const pElements = document.querySelectorAll('p');
+            // const h1Elements = document.querySelectorAll('h1');
+            // const h2Elements = document.querySelectorAll('h2');
+            // const h3Elements = document.querySelectorAll('h3');
+            // const h4Elements = document.querySelectorAll('h4');
+            // const h5Elements = document.querySelectorAll('h5');
+            // divElements.forEach((div: HTMLElement) => {
+            //   div.style.background = 'black';
+            //   div.style.color = 'white';
+            // });
+            // aElements.forEach((a: HTMLElement) => {
+            //     a.style.color = 'white';
+                
+            //   });
+            //   pElements.forEach((p: HTMLElement) => {
+            //     p.style.color = 'white';
+            //   });
+        }else{
+        //     const divElements = document.querySelectorAll('div');
+        //     const aElements = document.querySelectorAll('a');
+        //     const pElements = document.querySelectorAll('p');
+        //     const h1Elements = document.querySelectorAll('h1');
+        //     const h2Elements = document.querySelectorAll('h2');
+        //     const h3Elements = document.querySelectorAll('h3');
+        //     const h4Elements = document.querySelectorAll('h4');
+        //     const h5Elements = document.querySelectorAll('h5');
+        //     divElements.forEach((div: HTMLElement) => {
+        //       div.style.background = 'none';
+        //       div.style.color = 'black';
+        //     });
+        //     aElements.forEach((a: HTMLElement) => {
+        //         a.style.color = 'black';
+                
+        //       });
+        //       pElements.forEach((p: HTMLElement) => {
+        //         p.style.color = 'black';
+        //       });
+        }
+        
+
+    }, []);
 
     return (
+
         <IntlProvider locale={appLanguage} messages={messages[appLanguage]}>
+         
             <div className={styles.App}>
                 <VideoProvider>
                     <Router>

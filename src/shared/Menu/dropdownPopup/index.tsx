@@ -9,14 +9,22 @@ const MenuDropdownPopup = ({
     menuItemClickHandler,
 }: any) => {
     const dispatch = useDispatch();
-    const [checked, setChecked] = useState(false);
+    const [checked, setChecked] = useState(true);
+    
 
     const handleToggle = () => {
         // e.stopPropagation();
+        console.log("checked 1",checked);
         setChecked(!checked);
-        // console.log("checked",checked);
+        console.log("checked",checked);
         // console.log("value",e.target.value);
         // localStorage.setItem('items', JSON.stringify(items));
+        if(checked){
+            window.localStorage.setItem('theme', "dark");
+        }else{
+            window.localStorage.setItem('theme', "light");
+        }
+        
     };
     return (
         <div

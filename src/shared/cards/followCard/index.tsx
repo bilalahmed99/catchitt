@@ -5,7 +5,7 @@ import style from './index.module.scss';
 function FollowUserCard({ user }: any) {
     const navigate = useNavigate();
     return (
-        <div className={style.parent}>
+        <div className={`${style.parent} ${style.darkTheme}`}>
             <img
                 onClick={() => navigate(`/profile/${user?.id}`)}
                 style={{ cursor: 'pointer' }}

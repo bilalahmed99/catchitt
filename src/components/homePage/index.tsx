@@ -436,12 +436,12 @@ function HomePage() {
                 />
             )}
             {isLoginPopup && (
-                <div className="w-full z-50 h-full bg-black/50 fixed top-0">
+                <div className={`w-full z-50 h-full bg-black/50 fixed top-0 `} >
 
-                    <div className="w-[30.688rem] mx-auto mt-3 bg-white py-4 rounded-lg relative h-[95%]">
+                    <div className={`w-[30.688rem] mx-auto mt-3 bg-white py-4 rounded-lg relative h-[95%] ${style.darkTheme}`}>
                         <div
                             onClick={closeLoginPopupHandler}
-                            className="bg-gray-100/50 rounded-full h-10 w-10 flex flex-row justify-center items-center absolute right-5 p-1 cursor-pointer"
+                            className="bg-gray-100/50 rounded-full h-10 w-10 flex flex-row justify-center items-center absolute right-5 p-1 cursor-pointer darkTheme"
                         >
                             <img className="h-4 w-4 object-contain" src={closeIcon} />
                         </div>
