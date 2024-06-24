@@ -65,6 +65,7 @@ function HomePage() {
     const [errorMessage, setErrorMessage] = useState('');
     const [passwordBorderColor, setPasswordBorderColor] = useState('');
     const [loadingOtp, setLoadingOtp] = useState<boolean>(false);
+    const [loadingLogin, setLoadingLogin] = useState<boolean>(false);
 
     const loginItemClickHandler = (name: string) => {
         switch (name) {
@@ -101,7 +102,7 @@ function HomePage() {
         setLoginWithPhone(!loginWithPhone);
     };
 
-    const loginHandler = async () => {
+    const simpleLoginHandler = async () => {
         setIsLoading(true);
         dispatch(loginService({ password, email }))
             .then((res: any) => {
@@ -110,7 +111,7 @@ function HomePage() {
                     setPasswordBorderColor('border-red-400');
                     setErrorMessage(res?.payload || res?.error?.message);
                     setIsLoading(false);
-                } else if (res?.payload?.status == 200) {
+                } else if (res?.payload?.status == STATUS_CODE.OK) {
                     console.log('data after successfull login', res?.payload?.data);
                     setIsLoading(false);
                     closeLoginPopupHandler();
@@ -120,6 +121,63 @@ function HomePage() {
             .catch((error: any) => {
                 setIsError(true);
                 setIsLoading(false);
+            });
+    };
+
+    const loginHandler = async () => {
+        let reqJon: any = {
+            password,
+            otp: code,
+        };
+
+        if (email?.length > 0) {
+            reqJon['email'] = email;
+        } else {
+            reqJon['phoneNumber'] = phoneNumber;
+        }
+        if (
+            (phoneNumber?.length > 0 || email.length > 0) &&
+            code?.length > 0 &&
+            password?.length > 0
+        ) {
+            try {
+                const response: any = await fetch(`${API_KEY}/${END_POINTS.SET_NEW_PASSWORD}`, {
+                    method: METHOD.PATCH,
+                    headers: {
+                        'Content-type': 'application/json',
+                    },
+                    body: JSON.stringify(reqJon),
+                });
+                const data: any = await response.json();
+
+                handleSignInSubmit();
+
+                // Here i've to confirm from team that i should rather call dispatch(loginService({ password, email })
+                // OR i should manipulate the state using response of same API
+            } catch (error) {
+                console.log('🚀 ~ fetchCountriesList ~ error:', error);
+            }
+        }
+    };
+
+    const handleSignInSubmit = () => {
+        setLoadingLogin(true);
+        dispatch(loginService({ password, email }))
+            .then((res: any) => {
+                if (res?.error) {
+                    showToastError(res?.message || 'Error Logging in');
+                    setLoadingLogin(false);
+                    return;
+                }
+
+                if (res?.payload?.status == STATUS_CODE.OK) {
+                    setLoadingLogin(false);
+                    closeLoginPopupHandler();
+                    navigate('/home');
+                }
+            })
+            .catch(() => {
+                setLoadingLogin(false);
             });
     };
 
@@ -329,9 +387,11 @@ function HomePage() {
                                 <>
                                     <div className="flex flex-row justify-between items-center mt-3.5">
                                         <p className="font-medium text-[0.938rem]">
-                                            {loginWithPhone
+                                            {loginWithPhone && !isForgotPasswordScenario
                                                 ? 'Phone'
-                                                : isForgotPasswordScenario
+                                                : isForgotPasswordScenario && loginWithPhone
+                                                ? 'Enter phone number'
+                                                : isForgotPasswordScenario && !loginWithPhone
                                                 ? 'Enter email address'
                                                 : 'Email or username'}
                                         </p>
@@ -339,10 +399,12 @@ function HomePage() {
                                             onClick={toggleLoginMethod}
                                             className="font-medium text-xs text-gray-600 cursor-pointer hover:underline"
                                         >
-                                            {loginWithPhone
+                                            {loginWithPhone && !isForgotPasswordScenario
                                                 ? 'Log in with email or username'
-                                                : isForgotPasswordScenario
+                                                : isForgotPasswordScenario && !loginWithPhone
                                                 ? 'Reset with phone number'
+                                                : isForgotPasswordScenario && loginWithPhone
+                                                ? 'Reset with email'
                                                 : 'Log in with phone'}
                                         </p>
                                     </div>
@@ -633,34 +695,61 @@ function HomePage() {
                                                 {errorMessage}
                                             </p>
                                         )}
-                                        <p
-                                            onClick={forgetPasswordHandler}
-                                            className="font-medium text-left text-xs text-gray-600 mt-2.5 hover:underline cursor-pointer"
-                                        >
-                                            {APP_TEXTS.FORGOT_PASSWORD}
-                                        </p>
+                                        {!isForgotPasswordScenario && (
+                                            <p
+                                                onClick={forgetPasswordHandler}
+                                                className="font-medium text-left text-xs text-gray-600 mt-2.5 hover:underline cursor-pointer"
+                                            >
+                                                {APP_TEXTS.FORGOT_PASSWORD}
+                                            </p>
+                                        )}
                                         {/* // )} */}
                                     </p>
-                                    <div
-                                        onClick={loginHandler}
-                                        className={`flex flex-row items-center bg-login-btn mt-4 rounded-md py-2.5 px-3 cursor-pointer`}
-                                    >
-                                        <div className="flex flex-row justify-center items-center gap-2 flex-1">
-                                            <p>
-                                                {isLoading ? (
-                                                    <CircularProgress
-                                                        style={{
-                                                            width: 18,
-                                                            height: 18,
-                                                            color: 'red',
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    APP_TEXTS.LOGIN
-                                                )}
-                                            </p>
+                                    {isForgotPasswordScenario ? (
+                                        <div
+                                            onClick={loginHandler}
+                                            className={`flex flex-row items-center ${
+                                                (phoneNumber?.length > 0 || email.length > 0) &&
+                                                code?.length > 0 &&
+                                                password?.length > 0
+                                                    ? 'bg-red-500'
+                                                    : 'bg-login-btn'
+                                            } mt-4 rounded-md py-2.5 px-3 cursor-pointer h-11`}
+                                        >
+                                            <div
+                                                className={`${
+                                                    (phoneNumber?.length > 0 || email.length > 0) &&
+                                                    code?.length > 0 &&
+                                                    password?.length > 0
+                                                        ? 'text-white'
+                                                        : 'text-black'
+                                                } flex flex-row justify-center items-center gap-2 flex-1`}
+                                            >
+                                                <p>{loadingLogin ? <Loader /> : APP_TEXTS.LOGIN}</p>
+                                            </div>
                                         </div>
-                                    </div>
+                                    ) : (
+                                        <div
+                                            onClick={simpleLoginHandler}
+                                            className={`flex flex-row items-center bg-login-btn mt-4 rounded-md py-2.5 px-3 cursor-pointer`}
+                                        >
+                                            <div className="flex flex-row justify-center items-center gap-2 flex-1">
+                                                <p>
+                                                    {isLoading ? (
+                                                        <CircularProgress
+                                                            style={{
+                                                                width: 18,
+                                                                height: 18,
+                                                                color: 'red',
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        APP_TEXTS.LOGIN
+                                                    )}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    )}
                                     <div
                                         onClick={goBackHandler}
                                         className="flex flex-row justify-center items-center gap-2 mt-4 cursor-pointer"
