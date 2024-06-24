@@ -8,7 +8,15 @@ import PopupForVideoPlayer from '../profile/popups/popupForVideoPlayer';
 import ForDesktop from './ForDesktop';
 import ForMobile from './ForMobile';
 import useHome from './hooks/useHome';
-import { APP_TEXTS, END_POINTS, LOGIN_OPTIONS, METHOD } from '../../utils/constants';
+import {
+    APP_TEXTS,
+    END_POINTS,
+    LOGIN_OPTIONS,
+    METHOD,
+    STATUS_CODE,
+    showToastError,
+    showToastSuccess,
+} from '../../utils/constants';
 import ItemLogin from '../item-login';
 import { closeIcon } from '../../icons';
 import { useSelector } from 'react-redux';
@@ -18,6 +26,8 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { loginService } from '../../redux/reducers/auth';
 import { useNavigate } from 'react-router-dom';
 import { back, checkCountryCode, chevronDown, search } from '../../icons';
+import Loader from '../loader';
+import { ToastContainer } from 'react-toastify';
 
 function HomePage() {
     const isMobile = useMediaQuery('(max-width:700px)');
@@ -31,11 +41,12 @@ function HomePage() {
     const [loginWithPhone, setLoginWithPhone] = useState<boolean>(false);
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [isMainLoginOption, setIsMainLoginOption] = useState(true);
+    const [isForgotPasswordScenario, setIsForgotPasswordScenario] = useState(false);
     const isLoginPopup = useSelector((store: any) => store?.reducers?.popupSlice?.isLoginPopup);
     const navigate = useNavigate();
     const dispatch = useDispatch<any>();
-    // const [error, setError] = useState<string>('');
-    // const [code, setCode] = useState<any>(null);
+    const [error, setError] = useState<string>('');
+    const [code, setCode] = useState<any>(null);
     const [loginWithPassword, setLoginWithPassword] = useState<boolean>(false);
     const [countryModelOpened, setCountryModelOpened] = useState<boolean>(false);
     const [countryCodes, setCountryCodes] = useState([]);
@@ -53,6 +64,7 @@ function HomePage() {
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [passwordBorderColor, setPasswordBorderColor] = useState('');
+    const [loadingOtp, setLoadingOtp] = useState<boolean>(false);
 
     const loginItemClickHandler = (name: string) => {
         switch (name) {
@@ -115,16 +127,16 @@ function HomePage() {
         setShowPassword(!showPassword);
     };
 
-    // const handleChange = (event: { target: { value: any } }) => {
-    //     const inputValue = event.target.value;
+    const handleChange = (event: { target: { value: any } }) => {
+        const inputValue = event.target.value;
 
-    //     if (/^\d{0,6}$/.test(inputValue)) {
-    //         setCode(inputValue);
-    //         setError('');
-    //     } else {
-    //         setError('Enter 6-digit code');
-    //     }
-    // };
+        if (/^\d{0,6}$/.test(inputValue)) {
+            setCode(inputValue);
+            setError('');
+        } else {
+            setError('Enter 6-digit code');
+        }
+    };
 
     const loginOrForgetPasswordHandler = () => {
         if (loginWithPhone && !loginWithPassword) {
@@ -141,6 +153,7 @@ function HomePage() {
 
     const forgetPasswordHandler = () => {
         console.log('Forget password');
+        setIsForgotPasswordScenario(true);
         // navigate('/login/forget-password', { state: { showEmail: !loginWithPhone } });
     };
 
@@ -169,6 +182,38 @@ function HomePage() {
         setCountryCode(countryItem?.code);
         setIsoCode(countryItem?.iso);
         countryCodeModelHandler();
+    };
+
+    const sendOTP = async () => {
+        if (phoneNumber?.length > 0 || email.length > 0) {
+            var reqJon: any = {};
+            if (email?.length > 0) {
+                reqJon['email'] = email;
+            } else {
+                reqJon['phoneNumber'] = phoneNumber;
+            }
+            setLoadingOtp(true);
+            try {
+                const response: any = await fetch(`${API_KEY}/${END_POINTS.FORGOT_PASSWORD}`, {
+                    method: METHOD.POST,
+                    headers: {
+                        'Content-type': 'application/json',
+                    },
+                    body: JSON.stringify(reqJon),
+                });
+                const data: any = await response.json();
+                setLoadingOtp(false);
+
+                if (data?.status === STATUS_CODE.OK) {
+                    showToastSuccess(data?.message);
+                } else {
+                    showToastError(data?.message);
+                }
+            } catch (error) {
+                setLoadingOtp(false);
+                console.log('🚀 ~ fetchCountriesList ~ error:', error);
+            }
+        }
     };
 
     const menuClickHandler = () => {
@@ -207,13 +252,17 @@ function HomePage() {
     };
 
     const goBackHandler = () => {
-        setIsMainLoginOption(true);
+        if (isForgotPasswordScenario) {
+            setIsForgotPasswordScenario(false);
+        } else {
+            setIsMainLoginOption(true);
+        }
     };
 
-    const closeLoginPopupHandler =()=>{
+    const closeLoginPopupHandler = () => {
         dispatch(closeLoginPopup());
         setIsMainLoginOption(true);
-    }
+    };
 
     useEffect(() => {
         fetchCountriesList();
@@ -260,7 +309,11 @@ function HomePage() {
                         </div>
                         <div className="overflow-auto w-[21.888rem] mx-auto ">
                             <h2 className="font-bold text-3xl mt-5 mb-4">
-                                {isMainLoginOption ? 'Log in to Seezitt' : 'Log in'}
+                                {isMainLoginOption
+                                    ? 'Log in to Seezitt'
+                                    : isForgotPasswordScenario
+                                    ? 'Reset Password'
+                                    : 'Log in'}
                             </h2>
                             {isMainLoginOption ? (
                                 LOGIN_OPTIONS?.map((option, index) => (
@@ -276,7 +329,11 @@ function HomePage() {
                                 <>
                                     <div className="flex flex-row justify-between items-center mt-3.5">
                                         <p className="font-medium text-[0.938rem]">
-                                            {loginWithPhone ? 'Phone' : 'Email or username'}
+                                            {loginWithPhone
+                                                ? 'Phone'
+                                                : isForgotPasswordScenario
+                                                ? 'Enter email address'
+                                                : 'Email or username'}
                                         </p>
                                         <p
                                             onClick={toggleLoginMethod}
@@ -284,6 +341,8 @@ function HomePage() {
                                         >
                                             {loginWithPhone
                                                 ? 'Log in with email or username'
+                                                : isForgotPasswordScenario
+                                                ? 'Reset with phone number'
                                                 : 'Log in with phone'}
                                         </p>
                                     </div>
@@ -389,36 +448,47 @@ function HomePage() {
                                                     onChange={(e) => setPhoneNumber(e.target.value)}
                                                 />
                                             </div>
-                                            {/* {!loginWithPassword ? (
-                                <>
-                                    <div className="flex flex-row items-center border border-gray-500 bg-login-btn mt-2 rounded-md py-2.5 px-3">
-                                        <input
-                                            className="w-2/3 bg-login-btn"
-                                            type="number"
-                                            maxLength={6}
-                                            placeholder="Enter 6-digit code"
-                                            value={code}
-                                            onChange={handleChange}
-                                        />
-                                        <div
-                                            className={`flex flex-row justify-center items-center gap-2 flex-1 ${
-                                                phoneNumber?.length > 0
-                                                    ? 'cursor-pointer'
-                                                    : 'cursor-not-allowed'
-                                            }`}
-                                        >
-                                            <p className="text-gray-400 "> | </p>
-                                            <p>{APP_TEXTS.SEND_CODE}</p>
-                                        </div>
-                                    </div>
-                                    {error && (
-                                        <p className="text-red-500 font-normal text-xs text-left mt-2">
-                                            {error}
-                                        </p>
-                                    )}
-                                </>
-                            ) : (
-                                <> */}
+                                            {isForgotPasswordScenario && (
+                                                <>
+                                                    <div className="flex flex-row items-center border border-gray-500 bg-login-btn mt-2 rounded-md py-2.5 px-3">
+                                                        <input
+                                                            className="w-2/3 bg-login-btn"
+                                                            type="number"
+                                                            maxLength={6}
+                                                            placeholder="Enter 6-digit code"
+                                                            value={code}
+                                                            onChange={handleChange}
+                                                        />
+                                                        <div
+                                                            className={`flex flex-row justify-center items-center gap-2 flex-1 ${
+                                                                phoneNumber?.length > 0 ||
+                                                                email.length > 0
+                                                                    ? 'cursor-pointer'
+                                                                    : 'cursor-not-allowed'
+                                                            }`}
+                                                        >
+                                                            <p className="text-gray-400 "> | </p>
+                                                            <p
+                                                                onClick={sendOTP}
+                                                                className={`text-sm ${
+                                                                    phoneNumber?.length > 0 ||
+                                                                    email.length > 0
+                                                                        ? 'text-black'
+                                                                        : 'text-gray-400'
+                                                                }`}
+                                                            >
+                                                                {APP_TEXTS.SEND_CODE}
+                                                            </p>
+                                                            {loadingOtp && <Loader />}
+                                                        </div>
+                                                    </div>
+                                                    {error && (
+                                                        <p className="text-red-500 font-normal text-xs text-left mt-2">
+                                                            {error}
+                                                        </p>
+                                                    )}
+                                                </>
+                                            )}
                                             <div className="flex flex-row justify-between items-center border border-gray-500 bg-login-btn mt-2 rounded-md py-2.5 px-3">
                                                 <input
                                                     className="w-2/3 bg-login-btn"
@@ -448,11 +518,56 @@ function HomePage() {
                                                 <input
                                                     className="w-2/3 bg-login-btn"
                                                     type="text"
-                                                    placeholder="Email or username"
+                                                    placeholder={`${
+                                                        isForgotPasswordScenario
+                                                            ? 'Email address'
+                                                            : 'Email or username'
+                                                    }`}
                                                     value={email}
                                                     onChange={(e) => setEmail(e.target.value)}
                                                 />
                                             </div>
+                                            {isForgotPasswordScenario && (
+                                                <>
+                                                    <div className="flex flex-row items-center border border-gray-500 bg-login-btn mt-2 rounded-md py-2.5 px-3">
+                                                        <input
+                                                            className="w-2/3 bg-login-btn"
+                                                            type="number"
+                                                            maxLength={6}
+                                                            placeholder="Enter 6-digit code"
+                                                            value={code}
+                                                            onChange={handleChange}
+                                                        />
+                                                        <div
+                                                            className={`flex flex-row justify-center items-center gap-2 flex-1 ${
+                                                                phoneNumber?.length > 0 ||
+                                                                email.length > 0
+                                                                    ? 'cursor-pointer'
+                                                                    : 'cursor-not-allowed'
+                                                            }`}
+                                                        >
+                                                            <p className="text-gray-400 "> | </p>
+                                                            <p
+                                                                onClick={sendOTP}
+                                                                className={`text-sm ${
+                                                                    phoneNumber?.length > 0 ||
+                                                                    email.length > 0
+                                                                        ? 'text-black'
+                                                                        : 'text-gray-400'
+                                                                }`}
+                                                            >
+                                                                {APP_TEXTS.SEND_CODE}
+                                                            </p>
+                                                            {loadingOtp && <Loader />}
+                                                        </div>
+                                                    </div>
+                                                    {error && (
+                                                        <p className="text-red-500 font-normal text-xs text-left mt-2">
+                                                            {error}
+                                                        </p>
+                                                    )}
+                                                </>
+                                            )}
                                             <div
                                                 className={`flex flex-row justify-between items-center border-[1px] ${passwordBorderColor} bg-login-btn mt-2 rounded-md py-2.5 px-3`}
                                             >
@@ -612,6 +727,7 @@ function HomePage() {
                 onGiftsClose={() => setGiftsPopup(false)}
             />
             <Forwardusers onOpen={sendPopup} onClose={() => setSendPopup(false)} />
+            <ToastContainer />
         </div>
     );
 }
