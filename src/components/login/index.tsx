@@ -4,7 +4,8 @@ import ItemLogin from '../item-login';
 import Footer from './footer';
 import Header from './header';
 import './login.scss';
-import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
+import FacebookLogin from 'react-facebook-login';
 
 const Login = (props: any) => {
     const navigate = useNavigate();
@@ -24,7 +25,7 @@ const Login = (props: any) => {
                 break;
             case APP_TEXTS.GOOGLE:
                 loginWithGoogleHandler();
-                console.log('Google login');
+                console.log('Google loginsss');
                 break;
             case APP_TEXTS.TWITTER:
                 // Handle Twitter login
@@ -40,8 +41,20 @@ const Login = (props: any) => {
     };
 
     const loginWithGoogleHandler = useGoogleLogin({
-        onSuccess: (tokenResponse) => console.log(tokenResponse),
+        onSuccess: (tokenResponse) => {
+            console.log('Google Auth : ', tokenResponse);
+        },
+        onError: (error) => {
+            console.log('Error : ', error);
+        },
+        onNonOAuthError(nonOAuthError) {
+            console.log('No Auth : ', nonOAuthError);
+        },
     });
+
+    const responseFacebook = (response) => {
+        console.log(response);
+    };
 
     return (
         <div className="h-screen">
@@ -61,6 +74,12 @@ const Login = (props: any) => {
                             styles={option.styles}
                         />
                     ))}
+                    <FacebookLogin
+                        appId="1088597931155576"
+                        autoLoad={true}
+                        fields="name,email,picture"
+                        callback={responseFacebook}
+                    />
                 </div>
                 <div className="mt-3.5">
                     <p className="font-normal text-[0.688rem] text-policy">

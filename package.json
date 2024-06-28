@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host",
+    "dev": "HTTPS=true vite --host",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
@@ -34,6 +34,7 @@
     "formdata2json": "^1.0.8",
     "framework7": "^8.3.0",
     "framework7-react": "^8.3.0",
+    "https": "^1.0.0",
     "i18next": "^23.5.1",
     "i18next-browser-languagedetector": "^7.1.0",
     "i18next-http-backend": "^2.2.2",
@@ -44,6 +45,7 @@
     "protoo-client": "^4.0.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-facebook-login": "^4.1.1",
     "react-hls-player": "^3.0.7",
     "react-i18next": "^12.3.1",
     "react-intersection-observer": "^9.8.1",
