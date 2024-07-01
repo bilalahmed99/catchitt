@@ -19,6 +19,7 @@ import CoinsPrice from "./coins-price";
 import CoinsCartModal from "./coins-cart-modal";
 import PaymentMethodModal from "./payment-method-modal";
 import PaymentSuccessModal from "./payment-success-modal";
+import Layout from '../../../shared/layout';
 
 export interface BalancePageProps {
     className?: string;
@@ -168,19 +169,20 @@ const BalancePage = ({ className }: BalancePageProps) => {
 
     return (
         <>
-            <div className={styles.root}>
+            <Layout>
+            {/* <div className={styles.root}>
                 <div className={styles.topBarDiv}>
                     <TopBar />
-                </div>
-                <div className={styles.container}>
-                    <div className={styles.leftSide}>
+                </div> */}
+                {/* <div className={styles.container}> */}
+                    {/* <div className={styles.leftSide}>
                         <div className={styles.sideNavDiv}>
                             <SideNavBar selectedIndex={selectedIndex} settingsDropdownState={true} />
                         </div>
                         <div className={styles.suggestedActivityDiv}>
                             <SuggestedActivity showActivity={true} showSuggestedContent={true} />
                         </div>
-                    </div>
+                    </div> */}
                     <div className={styles.middleSectionDiv}>
                         <div className={styles.settingsWrapper}> 
                             <div className={styles.pageHeader} style={{display: 'flex',   justifyContent: 'sapce-between'}}>
@@ -344,8 +346,9 @@ const BalancePage = ({ className }: BalancePageProps) => {
                             <FaqContainer />
                         </div>
                     </div>
-                </div>
-            </div >
+                {/* </div> */}
+            {/* </div > */}
+            </Layout>
         </>
     )
 }

@@ -12,7 +12,8 @@ const MenuDropdownPopup = ({
     // const dispatch = useDispatch();
     const [checked, setChecked] = useState(false);
     const [darkThemeWhite, setdarkThemeWhite] = useState('');
-    
+    const [darkTheme, setdarkTheme] = useState('');
+    const [themeColor, setThemeColor] = useState('');
 
     const handleToggle = (e: any) => {
         // e.stopPropagation();
@@ -48,9 +49,13 @@ const MenuDropdownPopup = ({
         if(themeColor == "dark"){ 
             setChecked(true);
             setdarkThemeWhite(style.darkThemeWhite);
+            setdarkTheme(style.darkTheme);
+            setThemeColor(themeColor);
         }else{
             setChecked(false);
             setdarkThemeWhite('');
+            setdarkTheme('');
+            setThemeColor('');
         } 
     },[]);
 
@@ -64,16 +69,16 @@ const MenuDropdownPopup = ({
             <div className={`h-1 w-1 rounded-full bg-black ${darkThemeWhite} `} />
             <div className={`h-1 w-1 rounded-full bg-black relative ${darkThemeWhite} `}>
                 <div
-                    className={`absolute mt-2 w-56 bg-white shadow-md rounded-md top-2 -right-4 ${menuPopupStatus}`}
+                    className={themeColor == "dark" ? `absolute mt-2 w-56 ${darkTheme} shadow-md rounded-md top-2 -right-4 ${menuPopupStatus}`: `absolute mt-2 w-56 bg-white shadow-md rounded-md top-2 -right-4 ${menuPopupStatus}`}
                 >
                     <div className="relative -z-10">
-                        <div className="absolute -top-1 shadow-inner left-[91%] transform -translate-x-1/2 w-3 h-3 bg-white rotate-45"></div>
+                        <div className={themeColor == "dark" ? `absolute -top-1 shadow-inner left-[91%] transform -translate-x-1/2 w-3 h-3 ${darkTheme} rotate-45`:`absolute -top-1 shadow-inner left-[91%] transform -translate-x-1/2 w-3 h-3 bg-white  rotate-45`}></div>
                     </div>
                     <ul className="">
                         {MENU_POPUP_OPTIONS?.map((menuItem, index) => (
                             <div
                                 onClick={() => menuItemClickHandler(menuItem)}
-                                className={`flex flex-row items-center justify-between hover:bg-gray-100 py-2 ${
+                                className={`flex flex-row items-center justify-between ${themeColor == "dark" ? 'hover:gray': 'hover:bg-gray-100'} py-2 ${
                                     index === 0 ? 'rounded-t-md' : ''
                                 } ${
                                     index === MENU_POPUP_OPTIONS?.length - 1 ? 'rounded-b-md' : ''
@@ -84,7 +89,7 @@ const MenuDropdownPopup = ({
                                     <li>
                                         <a
                                             href="#"
-                                            className="block px-2 py-2 text-gray-800 text-sm font-bold"
+                                            className={themeColor == "dark" ?  `block px-2 py-2 ${style.white} text-sm font-bold`: `block px-2 py-2 text-gray-800 text-sm font-bold`}
                                         >
                                             {menuItem?.menuOption}
                                         </a>
