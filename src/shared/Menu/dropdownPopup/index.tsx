@@ -1,56 +1,103 @@
-import React from 'react';
+import React,{ useEffect,useState } from 'react';
 import { MENU_POPUP_OPTIONS } from '../../../utils/constants';
 import './switch.scss';
 import { useDispatch } from 'react-redux';
+import style from './index.module.scss';
 
 const MenuDropdownPopup = ({
     menuPopupStatusToggler,
     menuPopupStatus,
     menuItemClickHandler,
 }: any) => {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
+    const [checked, setChecked] = useState(false);
+    const [darkThemeWhite, setdarkThemeWhite] = useState('');
+    const [darkTheme, setdarkTheme] = useState('');
+    const [themeColor, setThemeColor] = useState('');
 
-    const handleToggle = (e: { stopPropagation: () => void }) => {
-        e.stopPropagation();
+    const handleToggle = (e: any) => {
+        // e.stopPropagation();
+        // console.log("target",e.target.checked);
+        // console.log("checked 1",prevState);
+        // // if(e.target.checked ==true){
+        // //     setChecked(true);
+        // // }else{
+        // //     setChecked(false);
+        // // }
+        // setChecked(checked => !checked)
+        // // setChecked(e.target.checked);
+        setChecked((prevState) => !prevState)
+
+        console.log("checked",checked);
+        console.log("value",e.target.value);
+        console.log("checked",checked);
+        // localStorage.setItem('items', JSON.stringify(items));
+        if(e.target.checked == true){
+            window.localStorage.setItem('theme', "dark");
+            window.location.reload();
+        }else{
+            window.localStorage.setItem('theme', "light");
+            window.location.reload();
+        }
+        
     };
+
+
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+
+        if(themeColor == "dark"){ 
+            setChecked(true);
+            setdarkThemeWhite(style.darkThemeWhite);
+            setdarkTheme(style.darkTheme);
+            setThemeColor(themeColor);
+        }else{
+            setChecked(false);
+            setdarkThemeWhite('');
+            setdarkTheme('');
+            setThemeColor('');
+        } 
+    },[]);
+
+   
     return (
         <div
             onClick={menuPopupStatusToggler}
             className="flex flex-col justify-center items-center gap-1 p-2 cursor-pointer -m-4"
         >
-            <div className="h-1 w-1 rounded-full bg-black" />
-            <div className="h-1 w-1 rounded-full bg-black" />
-            <div className="h-1 w-1 rounded-full bg-black relative">
+            <div className={`h-1 w-1 rounded-full bg-black ${darkThemeWhite} `} />
+            <div className={`h-1 w-1 rounded-full bg-black ${darkThemeWhite} `} />
+            <div className={`h-1 w-1 rounded-full bg-black relative ${darkThemeWhite} `}>
                 <div
-                    className={`absolute mt-2 w-56 bg-white shadow-md rounded-md top-2 -right-4 ${menuPopupStatus}`}
+                    className={themeColor == "dark" ? `absolute mt-2 w-56 ${darkTheme} shadow-md rounded-md top-2 -right-4 ${menuPopupStatus}`: `absolute mt-2 w-56 bg-white shadow-md rounded-md top-2 -right-4 ${menuPopupStatus}`}
                 >
                     <div className="relative -z-10">
-                        <div className="absolute -top-1 shadow-inner left-[91%] transform -translate-x-1/2 w-3 h-3 bg-white rotate-45"></div>
+                        <div className={themeColor == "dark" ? `absolute -top-1 shadow-inner left-[91%] transform -translate-x-1/2 w-3 h-3 ${darkTheme} rotate-45`:`absolute -top-1 shadow-inner left-[91%] transform -translate-x-1/2 w-3 h-3 bg-white  rotate-45`}></div>
                     </div>
                     <ul className="">
                         {MENU_POPUP_OPTIONS?.map((menuItem, index) => (
                             <div
                                 onClick={() => menuItemClickHandler(menuItem)}
-                                className={`flex flex-row items-center justify-between hover:bg-gray-100 py-2 ${
+                                className={`flex flex-row items-center justify-between ${themeColor == "dark" ? 'hover:gray': 'hover:bg-gray-100'} py-2 ${
                                     index === 0 ? 'rounded-t-md' : ''
                                 } ${
                                     index === MENU_POPUP_OPTIONS?.length - 1 ? 'rounded-b-md' : ''
                                 }`}
                             >
                                 <div className="flex flex-row items-center gap-2 px-3">
-                                    <img className="h-2 w-2 object-contain" alt="menuOption" />
+                                    {/* <img className="h-2 w-2 object-contain" alt="menuOption" /> */}
                                     <li>
                                         <a
                                             href="#"
-                                            className="block px-2 py-2 text-gray-800 text-sm font-bold"
+                                            className={themeColor == "dark" ?  `block px-2 py-2 ${style.white} text-sm font-bold`: `block px-2 py-2 text-gray-800 text-sm font-bold`}
                                         >
                                             {menuItem?.menuOption}
                                         </a>
                                     </li>
                                 </div>
                                 {index === MENU_POPUP_OPTIONS?.length - 1 && (
-                                    <label onClick={handleToggle} className="switchToggler mr-2">
-                                        <input type="checkbox" />
+                                    <label  className="switchToggler mr-2">
+                                        <input type="checkbox" onClick={handleToggle} checked={checked} />
                                         <span className="sliderForSwitch switchRound"></span>
                                     </label>
                                 )}

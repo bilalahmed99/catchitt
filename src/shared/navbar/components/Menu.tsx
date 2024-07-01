@@ -9,9 +9,14 @@ import style from './menu.module.scss';
 import { useAuthStore } from '../../../store/authStore';
 import { useSelector } from 'react-redux';
 const options = ['View profile', 'Get Coins', 'Settings', 'Switch Account', 'Logout'];
+import { useEffect, useState } from 'react';
 
 export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any) {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [darkTheme, setdarkTheme] = useState('');
+    const [darkThemeblack, setdarkThemeblack] = useState('');
+    const [themeColor, setThemeColor] = useState('');
+
     const open = Boolean(anchorEl);
     const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -72,6 +77,20 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
         const resData: any = await res.json();
         window.open(resData?.data?.url)
             };
+
+            useEffect(() => {
+                var themeColor = window.localStorage.getItem('theme');
+        
+                if(themeColor == "dark"){ 
+                    // setdarkThemeWhite(style.darkThemeWhite);
+                    setdarkTheme(style.darkTheme);
+                    setThemeColor(themeColor);
+                }else{
+                    // setdarkThemeWhite('');
+                    setdarkTheme('');
+                    setThemeColor('');
+                } 
+            },[]);
 
     return (
         <div

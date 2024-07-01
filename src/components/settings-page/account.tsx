@@ -139,6 +139,23 @@ const Account = ({ className, openModal }: AccountProps) => {
     const [openReportsModal, setOpenReportsModal] = useState(false);
     const [openReportSubmittedModal, setOpenReportSubmittedModal] = useState(false);
     const [reportMessage, setReportMessage] = useState('');
+
+
+    const [lightdarkTheme, setlightdarkTheme] = useState('');
+    const [themeColor, setThemeColor] = useState('');
+
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+
+        if(themeColor == "dark"){ 
+            setlightdarkTheme(styles.lightdarkTheme);
+            setThemeColor(themeColor);
+        } else{
+            setThemeColor("light");
+        }
+       
+    });
+
     const navigate = useNavigate();
 
     // console.log("auth on account page")
@@ -244,9 +261,9 @@ const Account = ({ className, openModal }: AccountProps) => {
         }
     };
 
-    const handleClickMore = () => {
-        document.getElementById('fileInput').click();
-    };
+    // const handleClickMore = () => {
+    //     document.getElementById('fileInput').click();
+    // };
 
     const submitReportHandler = () => {
         setOpenReportsModal(false);
@@ -885,7 +902,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                             aria-labelledby="modal-modal-title"
                             aria-describedby="modal-modal-description"
                         >
-                            <Box sx={mainModalstyle} style={{ width: '433px' }}>
+                            <Box sx={ themeColor == "dark" ? mainModalDarkstyle: mainModalstyle}  style={{ width: '433px' }}>
                                 <div style={{ marginBottom: '24px' }}>
                                     <div
                                         style={{
@@ -951,7 +968,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                             aria-labelledby="modal-modal-title"
                             aria-describedby="modal-modal-description"
                         >
-                            <Box sx={mainModalstyle}>
+                            <Box sx={ themeColor == "dark" ? mainModalDarkstyle: mainModalstyle} >
                                 <div style={{ marginBottom: '24px' }}>
                                     <Typography
                                         id="modal-modal-title"
@@ -1226,7 +1243,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                         aria-labelledby="modal-modal-title"
                         aria-describedby="modal-modal-description"
                     >
-                        <Box sx={contentPrefModalStyle}>
+                        <Box sx={ themeColor == "dark" ? contentPrefDarkModalStyle: contentPrefModalStyle} >
                             <div className={styles.contentPrefHeader}>
                                 <h4 className={styles.contentPrefModalHeader}>
                                     Content Preference
@@ -1236,7 +1253,9 @@ const Account = ({ className, openModal }: AccountProps) => {
                                 </p>
                                 <p className={styles.greyText}>You can choose from 1 to 5 topics</p>
                             </div>
-                            <div className={styles.cards}>
+                            <div className={ themeColor == "dark" ?  `${styles.whiteCards} ` : `${styles.cards}` }   
+                            //{styles.cards}
+                            >
                                 <FormGroup
                                     sx={{
                                         width: '100%',
@@ -1244,6 +1263,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                         flexDirection: 'row',
                                         justifyContent: 'space-between',
                                         alignItems: 'center',
+                                        color:"white",
                                     }}
                                 >
                                     {categoriesData.map((category: any) => {
@@ -1300,7 +1320,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                         aria-labelledby="modal-modal-title"
                         aria-describedby="modal-modal-description"
                     >
-                        <Box sx={contentPrefModalStyle}>
+                        <Box sx={ themeColor == "dark" ? contentPrefDarkModalStyle: contentPrefModalStyle}>
                             <DeleteReasonPopup
                                 onSubmit={() => setOpenDeleteAccountMainModal(false)} // Pass the onClose function
                                 // handleOpen={handleOpenConfirmation}
@@ -1319,7 +1339,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                         aria-labelledby="modal-modal-title"
                         aria-describedby="modal-modal-description"
                     >
-                        <Box sx={contentPrefModalStyle}>
+                        <Box sx={ themeColor == "dark" ? contentPrefDarkModalStyle: contentPrefModalStyle}>
                             <SwitchToPersonalPopup
                                 // onSubmit={() => setOpenDeleteAccountMainModal(false)} // Pass the onClose function
                                 // handleOpen={handleOpenConfirmation}
@@ -1338,7 +1358,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                         aria-labelledby="modal-modal-title"
                         aria-describedby="modal-modal-description"
                     >
-                        <Box sx={contentPrefModalStyle}>
+                        <Box sx={ themeColor == "dark" ? contentPrefDarkModalStyle: contentPrefModalStyle}>
                             <SwitchToBusinessPopup
                                 // onSubmit={() => setOpenDeleteAccountMainModal(false)} // Pass the onClose function
                                 // handleOpen={handleOpenConfirmation}
@@ -1357,7 +1377,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                         aria-labelledby="modal-modal-title"
                         aria-describedby="modal-modal-description"
                     >
-                        <Box sx={contentPrefModalStyle}>
+                        <Box sx={ themeColor == "dark" ? contentPrefDarkModalStyle: contentPrefModalStyle}>
                             <ShareProfilePopup handleClose={handleCloseSwitchToBusinessModal} />
                         </Box>
                     </Modal>
@@ -1379,7 +1399,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                     >
                         <div
                             onClick={handleClickInside}
-                            className="bg-white rounded-lg p-6 w-[32.875rem] h-[33.875rem] flex flex-col"
+                            className={ themeColor == "dark" ? `${lightdarkTheme} rounded-lg p-6 w-[32.875rem] h-[33.875rem] flex flex-col`: `bg-white rounded-lg p-6 w-[32.875rem] h-[33.875rem] flex flex-col` }
                         >
                             <h2 className="font-medium text-xl text-[#222222] mb-2 text-center">
                                 Report a problem
@@ -1426,7 +1446,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                     )}
                                     {images.length < 4 && (
                                         <div
-                                            onClick={handleClickMore}
+                                            // onClick={handleClickMore}
                                             className="h-[6.375rem] w-[6.25rem] items-center flex justify-center bg-[#DFDFDF] rounded cursor-pointer"
                                         >
                                             <img
@@ -1441,7 +1461,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                                 type="file"
                                                 accept="image/*"
                                                 className="hidden"
-                                                onChange={handleImageChange}
+                                                // onChange={handleImageChange}
                                             />
                                         </div>
                                     )}
@@ -1453,7 +1473,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                         type="file"
                                         accept="image/*"
                                         className="hidden"
-                                        onChange={handleImageChange}
+                                        // onChange={handleImageChange}
                                     />
                                     <img src={upload} height={18.5} width={19.04} alt="" />
                                     <p>Upload photo (0/4)</p>
@@ -1526,6 +1546,24 @@ var mainModalstyle = {
     height: 'auto',
     minHeight: 259,
     bgcolor: 'background.paper',
+    // border: '2px solid #000',
+    borderRadius: '8px',
+    boxShadow: 0,
+    display: 'inline-flex',
+    padding: '24px 23px',
+    flexDirection: 'column',
+    alignItems: 'center',
+};
+
+var mainModalDarkstyle = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    maxWidth: 524,
+    height: 'auto',
+    minHeight: 259,
+    bgcolor: 'rgb(18, 18, 18)',
     // border: '2px solid #000',
     borderRadius: '8px',
     boxShadow: 0,
@@ -1618,6 +1656,26 @@ var contentPrefModalStyle = {
     height: 'auto',
     maxHeight: 815,
     bgcolor: 'background.paper',
+    borderRadius: '8px',
+    boxShadow: 0,
+    display: 'inline-flex',
+    padding: '24px',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '0px',
+    overflowY: 'auto',
+    overflowX: 'hidden',
+};
+
+var contentPrefDarkModalStyle = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    maxWidth: 526,
+    height: 'auto',
+    maxHeight: 815,
+    bgcolor: 'rgb(18, 18, 18)',
     borderRadius: '8px',
     boxShadow: 0,
     display: 'inline-flex',

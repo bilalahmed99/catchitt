@@ -4,8 +4,8 @@ import { Route, BrowserRouter as Router, Routes, useNavigate } from 'react-route
 import messages from '../src/languages-intl';
 import styles from './App.module.scss';
 import CommunityPage from './components/about-pages/community-guidelines';
-import PrivacyPage from './components/about-pages/privacy-policy';
-import { TermsPage } from './components/about-pages/terms-conditions';
+import PrivacyPage from './components/about-pages/privacy-policy-page';
+import TermsPage from './components/about-pages/terms-conditions-page';
 import { ActivityPage } from './components/activity-page/activity-page';
 // import ComingSoon from './components/coming-soon/coming-soon';
 import ChatsSec from './components/chats';
@@ -43,6 +43,10 @@ import Analytics from './components/analytics';
 import ContactUs from './components/contact-us';
 import ItemLogin from './components/item-login';
 import Loader from './components/loader';
+import Signup from './components/signup';
+import SignupEmail from './components/signup/email/email';
+import SignupPhone from './components/signup/mobile/mobile';
+
 import Login from './components/login';
 import ForgetPassword from './components/login/forget-password';
 import PhoneOrEmail from './components/login/phone-or-email';
@@ -58,6 +62,7 @@ import {
     showToastSuccess,
 } from './utils/constants';
 import { back, checkCountryCode, chevronDown, search, closeIcon } from './icons';
+
 
 // Functional component to handle the initial route navigation
 const InitialRouteHandler = () => {
@@ -89,6 +94,77 @@ function App() {
         setAppLanguage(language);
         window.localStorage.setItem('lang', language);
     };
+    // window.localStorage.setItem('theme', "light");
+    // var themeColor = window.localStorage.getItem('theme');
+
+    // if(themeColor == "dark"){
+    //     const divElements = document.querySelectorAll('div');
+    //     const aElements = document.querySelectorAll('a');
+    //     const pElements = document.querySelectorAll('p');
+    //     const h1Elements = document.querySelectorAll('h1');
+    //     const h2Elements = document.querySelectorAll('h2');
+    //     const h3Elements = document.querySelectorAll('h3');
+    //     const h4Elements = document.querySelectorAll('h4');
+    //     const h5Elements = document.querySelectorAll('h5');
+    //     divElements.forEach((div: HTMLElement) => {
+    //       div.style.background = 'black';
+    //       div.style.color = 'white';
+    //     });
+    //     aElements.forEach((a: HTMLElement) => {
+    //         a.style.color = 'white';
+            
+    //       });
+    //       pElements.forEach((p: HTMLElement) => {
+    //         p.style.color = 'white';
+    //       });
+    // }
+
+    // useEffect(() => {
+
+    //     if(themeColor == "dark"){
+    //         // const divElements = document.querySelectorAll('div');
+    //         // const aElements = document.querySelectorAll('a');
+    //         // const pElements = document.querySelectorAll('p');
+    //         // const h1Elements = document.querySelectorAll('h1');
+    //         // const h2Elements = document.querySelectorAll('h2');
+    //         // const h3Elements = document.querySelectorAll('h3');
+    //         // const h4Elements = document.querySelectorAll('h4');
+    //         // const h5Elements = document.querySelectorAll('h5');
+    //         // divElements.forEach((div: HTMLElement) => {
+    //         //   div.style.background = 'black';
+    //         //   div.style.color = 'white';
+    //         // });
+    //         // aElements.forEach((a: HTMLElement) => {
+    //         //     a.style.color = 'white';
+                
+    //         //   });
+    //         //   pElements.forEach((p: HTMLElement) => {
+    //         //     p.style.color = 'white';
+    //         //   });
+    //     }else{
+    //     //     const divElements = document.querySelectorAll('div');
+    //     //     const aElements = document.querySelectorAll('a');
+    //     //     const pElements = document.querySelectorAll('p');
+    //     //     const h1Elements = document.querySelectorAll('h1');
+    //     //     const h2Elements = document.querySelectorAll('h2');
+    //     //     const h3Elements = document.querySelectorAll('h3');
+    //     //     const h4Elements = document.querySelectorAll('h4');
+    //     //     const h5Elements = document.querySelectorAll('h5');
+    //     //     divElements.forEach((div: HTMLElement) => {
+    //     //       div.style.background = 'none';
+    //     //       div.style.color = 'black';
+    //     //     });
+    //     //     aElements.forEach((a: HTMLElement) => {
+    //     //         a.style.color = 'black';
+                
+    //     //       });
+    //     //       pElements.forEach((p: HTMLElement) => {
+    //     //         p.style.color = 'black';
+    //     //       });
+    //     }
+        
+
+    // }, []);
 
     const [loginWithPhone, setLoginWithPhone] = useState<boolean>(false);
     const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -372,7 +448,9 @@ function App() {
     }, []);
 
     return (
+
         <IntlProvider locale={appLanguage} messages={messages[appLanguage]}>
+         
             <div className={styles.App}>
                 <VideoProvider>
                     <Router>
@@ -439,6 +517,9 @@ function App() {
                             <Route path="/myreports" element={<MyReports />} />
                             <Route path="/analytics" element={<Analytics />} />
                             <Route path="/contactus" element={<ContactUs />} />
+                            <Route path="/signup" element={<Signup />} />
+                            <Route path="/signup/phone-or-email/email" element={<SignupEmail />} />
+                            {/* <Route path="/signup/phone-or-email/phone" element={<SignupPhone />} /> */}
                         </Routes>
 
                         {isLoginPopup && (

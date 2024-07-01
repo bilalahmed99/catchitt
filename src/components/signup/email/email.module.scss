@@ -1,0 +1,25 @@
+.checkboxIcon {
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  border-radius: unset;
+  border: 1px solid rgb(254, 44, 85);
+  margin-inline-end: 8px;
+  display: inline-block;
+  background: rgb(254, 44, 85);
+  transition: all 0.1s ease 0s;
+  padding: 3px 0px;
+  text-align: center;
+  box-sizing: border-box;
+  outline: none;
+  width: 22px;
+  height: 22px;
+}
+
+
+.dobselectbox{
+  background: rgba(22, 24, 35, 0.06);
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+}

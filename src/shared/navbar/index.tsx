@@ -1,8 +1,9 @@
+
 import { useMediaQuery } from '@mui/material';
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { createIcon, defaultAvatar, logo } from '../../icons';
+import { createIcon, defaultAvatar, logo, logoAuth } from '../../icons';
 import { logoutUser } from '../../redux/reducers/auth';
 import style from './Navbar.module.scss';
 import NavbarMunu from './components/Menu';
@@ -20,6 +21,7 @@ function Navbar() {
         navigate(`/searchPage/${searchValue}/All`);
     };
     const [menuPopupStatus, setMenuPopupStatus] = useState('hidden');
+    const [darkTheme, setdarkTheme] = useState('');
     const dispatch = useDispatch();
     const logoutAccount = () => {
         dispatch(logoutUser({ navigate }));
@@ -37,10 +39,19 @@ function Navbar() {
     const menuItemClickHandler = (menuItem: { menuOption: string; imageUrl: string }) => {
         console.log('<Menu Item> : ', menuItem?.menuOption);
     };
+
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+
+        if(themeColor == "dark"){ 
+            setdarkTheme(style.darkTheme);
+        } 
+    });
+
     return (
-        <div className={style.parent}>
+        <div className={` ${style.parent}  ${darkTheme}`}>
             <div onClick={() => navigate('/')} className={style.sec1}>
-                <img src={logo} alt="" />
+                <img src={logoAuth} alt="" />
             </div>
             {!isMobile ? (
                 <div className={style.sec2}>
@@ -79,7 +90,13 @@ function Navbar() {
                                     {/* </div> */}
                                 </div>
                                 <p className={style.name}>{profile?.name?.split(' ')[0]}</p>
+                                
                             </div>
+                            <MenuDropdownPopup
+                                        menuPopupStatusToggler={menuPopupStatusToggler}
+                                        menuPopupStatus={menuPopupStatus}
+                                        menuItemClickHandler={menuItemClickHandler}
+                                />
                         </div>
                     ) : (
                         <>
@@ -118,6 +135,7 @@ function Navbar() {
                         Onlogout={() => logoutAccount()}
                         onSettings={() => navigate('/settings/account')}
                     />
+                    
                 </div>
             )}
         </div>

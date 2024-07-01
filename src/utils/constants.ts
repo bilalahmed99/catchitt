@@ -1,5 +1,8 @@
 import { toast } from 'react-toastify';
 import {
+    fb, 
+    googleIcon, 
+    defaultAvatar,
     qrCodeAuth,
     emailOrPhone,
     facebookAuth,
@@ -46,6 +49,32 @@ export const showToastError = (toastMessage: string) => {
     });
 };
 
+
+
+export const SIGNUP_OPTIONS = [
+    {
+        styles: '',
+        name: 'Use Phone or Email',
+        image: defaultAvatar,
+    },
+    {
+        styles: 'mt-3',
+        name: 'Continue with Facebook',
+        image: fb,
+    },
+    {
+        styles: 'mt-3',
+        name: 'Continue with Google',
+        image: googleIcon,
+    }
+];
+
+export const SIGNUP_APP_TEXTS = {
+    FEEDBACK: 'Feedback and help',
+    SINGUP_SUBTEXT: 'Create a profile, follow other accounts, make your own videos, and more.',
+    ALREADY_ACCOUNT: "Already have an account?",
+    LOGIN: "Log in",
+};
 export const APP_TEXTS = {
     FEEDBACK: 'Feedback and help',
     LOGIN_SUBTEXT: 'Manage your account, check notifications, comment on videos, and more.',
@@ -116,8 +145,8 @@ export const STATUS_CODE = {
 };
 
 export const MENU_POPUP_OPTIONS = [
-    { menuOption: 'English', imageUrl: '' },
+    // { menuOption: 'English', imageUrl: '' },
     { menuOption: 'Feedback and help', imageUrl: '' },
-    { menuOption: 'Keyboard shortcuts', imageUrl: '' },
+    // { menuOption: 'Keyboard shortcuts', imageUrl: '' },
     { menuOption: 'Dark mode', imageUrl: '' },
 ];
