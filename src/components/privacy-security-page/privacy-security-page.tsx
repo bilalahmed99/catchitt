@@ -1,7 +1,16 @@
-import { Box, FormControlLabel, FormGroup, IconButton, Modal, Switch, SwitchProps, styled } from '@mui/material';
+import {
+    Box,
+    FormControlLabel,
+    FormGroup,
+    IconButton,
+    Modal,
+    Switch,
+    SwitchProps,
+    styled,
+} from '@mui/material';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import defaultProfileICon from '../../assets/defaultProfileIcon.png';
 import { useAuthStore } from '../../store/authStore';
 import { LeftArrow } from '../push-notifications-page/svg-components/LeftArrow';
@@ -10,23 +19,25 @@ import { SuggestedActivity } from '../suggested-activity/suggested-activity';
 import { TopBar } from '../top-bar/top-bar';
 import styles from './privacy-security-page.module.scss';
 
-export interface PrivacySecurityPageProps { className?: string }
+export interface PrivacySecurityPageProps {
+    className?: string;
+}
 
 interface PrivacySettings {
-    shareMedia: boolean,
-    downloadMedia: boolean,
-    viewFollowing: boolean,
-    viewFollowers: boolean,
-    viewLikedVideos: boolean,
-    messages: boolean,
-    activityStatus: boolean,
-    viewProfileVisits: boolean
+    shareMedia: boolean;
+    downloadMedia: boolean;
+    viewFollowing: boolean;
+    viewFollowers: boolean;
+    viewLikedVideos: boolean;
+    messages: boolean;
+    activityStatus: boolean;
+    viewProfileVisits: boolean;
 }
 
 interface BlockedUser {
-    _id: string,
-    avatar: string,
-    name: string,
+    _id: string;
+    avatar: string;
+    name: string;
 }
 
 export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => {
@@ -43,25 +54,25 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
         viewLikedVideos: true,
         messages: true,
         activityStatus: true,
-        viewProfileVisits: true
+        viewProfileVisits: true,
     });
     const API_KEY = process.env.VITE_API_URL;
     const navigate = useNavigate();
 
     const handleGoBack = () => {
         navigate('/settings/account'); // Navigate back to the previous page
-        setSettingsDropdown(true)
+        setSettingsDropdown(true);
     };
 
-    if (!isLoggedIn) {
-        return <Navigate to="/auth" />;
-    }
+    // if (!isLoggedIn) {
+    //     return <Navigate to="/auth" />;
+    // }
 
     useEffect(() => {
-        setIndex(5)
-        setSettingsDropdown(true)
-        handleFetchPrivacySettings()
-    }, [])
+        setIndex(5);
+        setSettingsDropdown(true);
+        handleFetchPrivacySettings();
+    }, []);
 
     const handleFetchPrivacySettings = async () => {
         try {
@@ -76,9 +87,9 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
                 console.log(responseData.data);
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
 
     const handleFetchBlockedAccounts = async () => {
         try {
@@ -93,9 +104,9 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
                 console.log(responseData.data);
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
 
     const handleBlockAccount = async (id: string) => {
         try {
@@ -104,13 +115,13 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
                 headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
             });
             if (response.ok) {
-                console.log(`Account blocked`)
-                handleFetchBlockedAccounts()
+                console.log(`Account blocked`);
+                handleFetchBlockedAccounts();
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
 
     useEffect(() => {
         if (privacySettingsData) {
@@ -122,7 +133,7 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
                 viewLikedVideos: privacySettingsData.viewLikedVideos,
                 messages: privacySettingsData.messages,
                 activityStatus: privacySettingsData.activityStatus,
-                viewProfileVisits: privacySettingsData.viewProfileVisits
+                viewProfileVisits: privacySettingsData.viewProfileVisits,
             });
         }
     }, [privacySettingsData]);
@@ -138,7 +149,8 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
         fetch(`${API_KEY}/profile/privacy-settings`, {
             method: 'PATCH',
             headers: {
-                'Content-Type': 'application/json', Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(updatedSettings),
         })
@@ -158,16 +170,16 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
     };
 
     const handleOpenBlockedModal = () => {
-        setOpenBlockedListModal(true)
+        setOpenBlockedListModal(true);
         // setProfileDataCopy(profileData)
-    }
+    };
     const handleCloseBlockedModal = () => {
-        setOpenBlockedListModal(false)
-    }
+        setOpenBlockedListModal(false);
+    };
 
     useEffect(() => {
-        handleFetchBlockedAccounts()
-    }, [openBlockedListModal,])
+        handleFetchBlockedAccounts();
+    }, [openBlockedListModal]);
 
     return (
         <div className={classNames(styles.root, className)}>
@@ -184,9 +196,19 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
                     </div>
                 </div>
                 <div className={styles.middleSectionDiv}>
-                    <div className={styles.pageHeader} style={{display: 'flex',   justifyContent: 'sapce-between'}}>
-                        <IconButton sx={{ width: 'fit-content !important',margin: '0px', padding: '0px', alignSelf: 'center' }}
-                            onClick={handleGoBack}>
+                    <div
+                        className={styles.pageHeader}
+                        style={{ display: 'flex', justifyContent: 'sapce-between' }}
+                    >
+                        <IconButton
+                            sx={{
+                                width: 'fit-content !important',
+                                margin: '0px',
+                                padding: '0px',
+                                alignSelf: 'center',
+                            }}
+                            onClick={handleGoBack}
+                        >
                             <LeftArrow />
                         </IconButton>
                         <h4>Privacy and Security</h4>
@@ -196,27 +218,40 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
                         <div className={styles.cards}>
                             <FormGroup
                                 sx={{
-                                    width: '100%', display: 'flex',
-                                    flexDirection: 'row', justifyContent: 'space-between',
-                                    alignItems: 'center'
-                                }}>
+                                    width: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                }}
+                            >
                                 <div className={styles.cardNoBorder}>
                                     <p>Show Activity status</p>
                                     <FormControlLabel
                                         label={undefined}
                                         labelPlacement="start"
-                                        control={<IOSSwitch sx={{ m: 1 }} checked={settings?.activityStatus || false}
-                                            onChange={(e: any) => handleSwitchChange(e, 'activityStatus')}
-                                        />}
+                                        control={
+                                            <IOSSwitch
+                                                sx={{ m: 1 }}
+                                                checked={settings?.activityStatus || false}
+                                                onChange={(e: any) =>
+                                                    handleSwitchChange(e, 'activityStatus')
+                                                }
+                                            />
+                                        }
                                     />
                                 </div>
                                 <div style={{ width: '475px' }}>
-                                    <p style={{
-                                        fontSize: '14px', fontFamily: 'Poppins', textAlign: 'left',
-                                        color: '#6B6B6B'
-                                    }}>
-                                        Allow accounts you follow and anyone you message
-                                        to see when you were last active or are currently active.
+                                    <p
+                                        style={{
+                                            fontSize: '14px',
+                                            fontFamily: 'Poppins',
+                                            textAlign: 'left',
+                                            color: '#6B6B6B',
+                                        }}
+                                    >
+                                        Allow accounts you follow and anyone you message to see when
+                                        you were last active or are currently active.
                                     </p>
                                 </div>
                             </FormGroup>
@@ -227,18 +262,27 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
                         <div className={styles.cards}>
                             <FormGroup
                                 sx={{
-                                    width: '100%', display: 'flex',
-                                    flexDirection: 'row', justifyContent: 'space-between',
-                                    alignItems: 'center'
-                                }}>
+                                    width: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                }}
+                            >
                                 <div className={styles.card}>
                                     <p>Share my videos</p>
                                     <FormControlLabel
                                         label={undefined}
                                         labelPlacement="start"
-                                        control={<IOSSwitch sx={{ m: 1 }} checked={settings?.shareMedia || false}
-                                            onChange={(e: any) => handleSwitchChange(e, 'shareMedia')}
-                                        />}
+                                        control={
+                                            <IOSSwitch
+                                                sx={{ m: 1 }}
+                                                checked={settings?.shareMedia || false}
+                                                onChange={(e: any) =>
+                                                    handleSwitchChange(e, 'shareMedia')
+                                                }
+                                            />
+                                        }
                                     />
                                 </div>
                                 <div className={styles.card}>
@@ -246,9 +290,15 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
                                     <FormControlLabel
                                         label={undefined}
                                         labelPlacement="start"
-                                        control={<IOSSwitch sx={{ m: 1 }} checked={settings?.downloadMedia || false}
-                                            onChange={(e: any) => handleSwitchChange(e, 'downloadMedia')}
-                                        />}
+                                        control={
+                                            <IOSSwitch
+                                                sx={{ m: 1 }}
+                                                checked={settings?.downloadMedia || false}
+                                                onChange={(e: any) =>
+                                                    handleSwitchChange(e, 'downloadMedia')
+                                                }
+                                            />
+                                        }
                                     />
                                 </div>
                                 <div className={styles.card}>
@@ -256,9 +306,15 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
                                     <FormControlLabel
                                         label={undefined}
                                         labelPlacement="start"
-                                        control={<IOSSwitch sx={{ m: 1 }} checked={settings?.viewFollowing || false}
-                                            onChange={(e: any) => handleSwitchChange(e, 'viewFollowing')}
-                                        />}
+                                        control={
+                                            <IOSSwitch
+                                                sx={{ m: 1 }}
+                                                checked={settings?.viewFollowing || false}
+                                                onChange={(e: any) =>
+                                                    handleSwitchChange(e, 'viewFollowing')
+                                                }
+                                            />
+                                        }
                                     />
                                 </div>
                                 <div className={styles.card}>
@@ -266,9 +322,15 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
                                     <FormControlLabel
                                         label={undefined}
                                         labelPlacement="start"
-                                        control={<IOSSwitch sx={{ m: 1 }} checked={settings?.viewFollowers || false}
-                                            onChange={(e: any) => handleSwitchChange(e, 'viewFollowers')}
-                                        />}
+                                        control={
+                                            <IOSSwitch
+                                                sx={{ m: 1 }}
+                                                checked={settings?.viewFollowers || false}
+                                                onChange={(e: any) =>
+                                                    handleSwitchChange(e, 'viewFollowers')
+                                                }
+                                            />
+                                        }
                                     />
                                 </div>
                                 <div className={styles.card}>
@@ -276,22 +338,37 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
                                     <FormControlLabel
                                         label={undefined}
                                         labelPlacement="start"
-                                        control={<IOSSwitch sx={{ m: 1 }} checked={settings?.viewLikedVideos || false}
-                                            onChange={(e: any) => handleSwitchChange(e, 'viewLikedVideos')}
-                                        />}
+                                        control={
+                                            <IOSSwitch
+                                                sx={{ m: 1 }}
+                                                checked={settings?.viewLikedVideos || false}
+                                                onChange={(e: any) =>
+                                                    handleSwitchChange(e, 'viewLikedVideos')
+                                                }
+                                            />
+                                        }
                                     />
                                 </div>
                             </FormGroup>
                         </div>
-                        <div className={styles.accountCards}
-                            onClick={handleOpenBlockedModal}>
+                        <div className={styles.accountCards} onClick={handleOpenBlockedModal}>
                             <div className={styles.settingName}>
-                                <p>
-                                    Blocked accounts
-                                </p>
+                                <p>Blocked accounts</p>
                             </div>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.5 5L15.5 12L8.5 19" stroke="#222222" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M8.5 5L15.5 12L8.5 19"
+                                    stroke="#222222"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
                             </svg>
                         </div>
                     </div>
@@ -312,14 +389,18 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
                                     </div>
                                     <Box
                                         sx={{
-                                            width: '100%', display: 'flex',
-                                            flexDirection: 'row', justifyContent: 'space-between',
-                                            alignItems: 'center'
+                                            width: '100%',
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
                                         }}
                                     >
                                         {blockedAccountsData.length === 0 ? (
                                             <div style={{ textAlign: 'center', width: '100%' }}>
-                                                <h4 style={{ fontSize: '18px', color: '#A9A9A9' }}>No blocked accounts yet</h4>
+                                                <h4 style={{ fontSize: '18px', color: '#A9A9A9' }}>
+                                                    No blocked accounts yet
+                                                </h4>
                                             </div>
                                         ) : (
                                             <div style={{ width: '100%' }}>
@@ -327,26 +408,54 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
                                                     <div className={styles.cards} key={account._id}>
                                                         <Box
                                                             sx={{
-                                                                width: '100%', display: 'flex',
-                                                                flexDirection: 'row', justifyContent: 'space-between',
-                                                                alignItems: 'center'
+                                                                width: '100%',
+                                                                display: 'flex',
+                                                                flexDirection: 'row',
+                                                                justifyContent: 'space-between',
+                                                                alignItems: 'center',
                                                             }}
                                                         >
                                                             <div className={styles.card}>
-                                                                <div style={{ display: 'flex', gap: '16px' }}>
+                                                                <div
+                                                                    style={{
+                                                                        display: 'flex',
+                                                                        gap: '16px',
+                                                                    }}
+                                                                >
                                                                     <img
-                                                                        src={account?.avatar === '' ? defaultProfileICon : account.avatar}
+                                                                        src={
+                                                                            account?.avatar === ''
+                                                                                ? defaultProfileICon
+                                                                                : account.avatar
+                                                                        }
                                                                         alt={''}
-                                                                        className={styles.profileImg}
+                                                                        className={
+                                                                            styles.profileImg
+                                                                        }
                                                                     />
                                                                     <p>{account?.name}</p>
                                                                 </div>
                                                                 <button
                                                                     className={styles.unblockBtn}
-                                                                    onClick={() => { handleBlockAccount(account._id) }}
+                                                                    onClick={() => {
+                                                                        handleBlockAccount(
+                                                                            account._id
+                                                                        );
+                                                                    }}
                                                                 >
-                                                                    <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                        <path d="M11.3753 4.39573L11.4957 4.27537L11.3612 4.1711C10.433 3.45186 9.27103 3.01632 8.00262 3.01632C4.97309 3.01632 2.51928 5.47017 2.51928 8.49967C2.51928 9.76809 2.95478 10.9301 3.67402 11.8582L3.77829 11.9928L3.89866 11.8724L11.3753 4.39573ZM4.62987 12.6036L4.5095 12.724L4.64405 12.8282C5.5722 13.5475 6.73418 13.983 8.00259 13.983C11.0321 13.983 13.4859 11.5292 13.4859 8.49967C13.4859 7.23129 13.0504 6.06931 12.3312 5.14114L12.2269 5.00658L12.1065 5.12695L4.62987 12.6036ZM1.48594 8.49967C1.48594 4.8992 4.40212 1.98301 8.00259 1.98301C11.6031 1.98301 14.5193 4.89917 14.5193 8.49967C14.5193 12.1002 11.6031 15.0163 8.00259 15.0163C4.40212 15.0163 1.48594 12.1002 1.48594 8.49967Z" fill="#5448B2" stroke="white" stroke-width="0.3" />
+                                                                    <svg
+                                                                        width="16"
+                                                                        height="17"
+                                                                        viewBox="0 0 16 17"
+                                                                        fill="none"
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                    >
+                                                                        <path
+                                                                            d="M11.3753 4.39573L11.4957 4.27537L11.3612 4.1711C10.433 3.45186 9.27103 3.01632 8.00262 3.01632C4.97309 3.01632 2.51928 5.47017 2.51928 8.49967C2.51928 9.76809 2.95478 10.9301 3.67402 11.8582L3.77829 11.9928L3.89866 11.8724L11.3753 4.39573ZM4.62987 12.6036L4.5095 12.724L4.64405 12.8282C5.5722 13.5475 6.73418 13.983 8.00259 13.983C11.0321 13.983 13.4859 11.5292 13.4859 8.49967C13.4859 7.23129 13.0504 6.06931 12.3312 5.14114L12.2269 5.00658L12.1065 5.12695L4.62987 12.6036ZM1.48594 8.49967C1.48594 4.8992 4.40212 1.98301 8.00259 1.98301C11.6031 1.98301 14.5193 4.89917 14.5193 8.49967C14.5193 12.1002 11.6031 15.0163 8.00259 15.0163C4.40212 15.0163 1.48594 12.1002 1.48594 8.49967Z"
+                                                                            fill="#5448B2"
+                                                                            stroke="white"
+                                                                            stroke-width="0.3"
+                                                                        />
                                                                     </svg>
                                                                     Unblock
                                                                 </button>
@@ -366,8 +475,6 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
         </div>
     );
 };
-
-
 
 const IOSSwitch = styled((props: SwitchProps) => (
     <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -397,9 +504,7 @@ const IOSSwitch = styled((props: SwitchProps) => (
         },
         '&.Mui-disabled .MuiSwitch-thumb': {
             color:
-                theme.palette.mode === 'light'
-                    ? theme.palette.grey[100]
-                    : theme.palette.grey[600],
+                theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[600],
         },
         '&.Mui-disabled + .MuiSwitch-track': {
             opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
@@ -419,7 +524,6 @@ const IOSSwitch = styled((props: SwitchProps) => (
         }),
     },
 }));
-
 
 var mainModalstyle = {
     position: 'absolute' as 'absolute',
@@ -449,5 +553,5 @@ var mainModalBtnstyle = {
     alignItems: 'center',
     borderRadius: '6px',
     background: 'var(--foundation-primary-primary-500, #5448B2)',
-    textTransform: 'none'
+    textTransform: 'none',
 };

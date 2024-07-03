@@ -8,14 +8,15 @@ import PopupForReport from '../profile/popups/PopupForReport';
 import PopupForBlock from '../profile/popups/popupForBlock';
 import PopupForVideoPlayer from '../profile/popups/popupForVideoPlayer';
 import StoriesOnPublicProfile from '../profile/popups/storiesOnPublicProfile';
- 
+
 import SuggestedFollower from './components/suggestedFollower';
 import VideoPanel from './components/videoPanel';
 import styles from './discover.module.scss';
 import Gifts from './popups/gifts';
 import { CircularProgress } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import DiscoverStories from './components/discoverStories';
+import { openLoginPopup } from '../../redux/reducers';
 
 export default function Discover() {
     const API_KEY = process.env.VITE_API_URL;
@@ -24,20 +25,20 @@ export default function Discover() {
     const [videoModal, setVideoModal] = useState(false);
     // @ts-ignore
     const [videoModalInfo, setVideoModalInfo] = useState({});
-    // const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token');
     const [reportPopup, setReportPopup] = useState(false);
     const [blockPopup, setBlockPopup] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [giftPopup, setGiftPopup] = useState(false);
-    const token = useSelector((store: any) => store?.reducers?.profile?.token);
+    // const token = useSelector((store: any) => store?.reducers?.profile?.token);
     const [storyPopup, setStoryPopup] = useState(false);
 
     const [randomAccs, setRandomAccs] = useState([]);
     const Navigate = useNavigate();
     useEffect(() => {
         if (!token) {
-            navigate('/auth');
+            // dispatch(openLoginPopup());
         }
     }, [token]);
 
@@ -59,6 +60,7 @@ export default function Discover() {
 
         return shuffled.slice(0, count); // Return the first 'count' elements
     };
+
     useEffect(() => {
         const apisIntegration = async () => {
             setIsLoading(true);
@@ -89,6 +91,7 @@ export default function Discover() {
             } catch (error) {
                 console.log('error trendinghashtags', error);
             }
+
             try {
                 const response = await fetch(`${API_KEY}/profile/public/suggested-users?page=1`, {
                     method: 'GET',
@@ -168,7 +171,6 @@ export default function Discover() {
                         {/* Slider Configration for Stories */}
                         <div className={styles.sliderp}>
                             <div className={styles.slider}>
-                                 
                                 <DiscoverStories showStories={() => setStoryPopup(true)} />
                             </div>
                         </div>
@@ -233,33 +235,41 @@ export default function Discover() {
                             </div>
                         </div>
 
-                        {!hashtagVideos ? "" :hashtagVideos.map((obj: any, i) => {
-                            return (
-                                <div style={{ marginTop: 41 }} key={i} className={styles.postsp}>
-                                    <div className="d-flex justify-content-between">
-                                        <p className={styles.trendingText}>{obj?.name}</p>
-                                        <p
-                                            className={styles.seeAll}
-                                            onClick={() => sendDataByQ(obj.name)}
-                                        >
-                                            See All
-                                        </p>
-                                    </div>
-                                    <div className={styles.posts}>
-                                        {obj?.relatedVideos
-                                            .slice(0, videosToShow)
-                                            .map((video: any, i: any) => {
-                                                return (
-                                                    <VideoPanel
-                                                        videomodal={() => openvideomodal(video)}
-                                                        video={video}
-                                                    />
-                                                );
-                                            })}
-                                    </div>
-                                </div>
-                            );
-                        })}
+                        {!hashtagVideos
+                            ? ''
+                            : hashtagVideos.map((obj: any, i) => {
+                                  return (
+                                      <div
+                                          style={{ marginTop: 41 }}
+                                          key={i}
+                                          className={styles.postsp}
+                                      >
+                                          <div className="d-flex justify-content-between">
+                                              <p className={styles.trendingText}>{obj?.name}</p>
+                                              <p
+                                                  className={styles.seeAll}
+                                                  onClick={() => sendDataByQ(obj.name)}
+                                              >
+                                                  See All
+                                              </p>
+                                          </div>
+                                          <div className={styles.posts}>
+                                              {obj?.relatedVideos
+                                                  .slice(0, videosToShow)
+                                                  .map((video: any, i: any) => {
+                                                      return (
+                                                          <VideoPanel
+                                                              videomodal={() =>
+                                                                  openvideomodal(video)
+                                                              }
+                                                              video={video}
+                                                          />
+                                                      );
+                                                  })}
+                                          </div>
+                                      </div>
+                                  );
+                              })}
                     </div>
                 )}
                 {/* </div> */}

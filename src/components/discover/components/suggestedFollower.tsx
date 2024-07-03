@@ -4,12 +4,16 @@ import defaultProfileIcon from '../../../assets/defaultProfileIcon.png';
 import { useAuthStore } from '../../../store/authStore';
 import styles from './suggestedFollower.module.scss';
 import { get } from '../../../axios/axiosClient';
+import { openLoginPopup } from '../../../redux/reducers';
+import { useDispatch } from 'react-redux';
 
 export default function SuggestedFollower({ randonUser }: any) {
+    const API_KEY = process.env.VITE_API_URL;
     const [followedUsersData, setFollowedUsersData] = useState<any>([]);
     const [followedAccounts, setFollowedAccounts] = useState<any>({}); // Initialize as an empty object
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userId');
+    const dispatch = useDispatch();
 
     // Use Function For Get the User Followers
     const handleFetchFollowedUsers = async () => {
@@ -33,14 +37,18 @@ export default function SuggestedFollower({ randonUser }: any) {
                 console.log(error);
             }
         } else {
-            navigate('/auth');
+            console.log('Suggested Follower');
+            // navigate('/auth');
         }
     };
 
-    const API_KEY = process.env.VITE_API_URL;
 
     const navigate = useNavigate();
     const handleFollowClick = async (accountId: string) => {
+        if (!token) {
+            dispatch(openLoginPopup());
+            return;
+        }
         try {
             const response = await fetch(`${API_KEY}/profile/follow/${accountId}/`, {
                 method: 'POST',

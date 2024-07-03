@@ -62,6 +62,7 @@ import {
     showToastSuccess,
 } from './utils/constants';
 import { back, checkCountryCode, chevronDown, search, closeIcon } from './icons';
+import ProtectedRoute from './components/protected-routed/ProtectedRoute';
 
 
 // Functional component to handle the initial route navigation
@@ -482,7 +483,7 @@ function App() {
                             <Route path="/comingsoon" element={<ChatsSec />} />
                             <Route path="/profile" element={<Profile />} />
                             <Route path="/profile/:id" element={<PublicProfile />} />
-                            <Route path="/settings/account" element={<Account />} />
+                            <Route path="/settings/account" element={<ProtectedRoute element={Account} />} />
                             <Route
                                 path="/settings/account/activity"
                                 element={<PushNotificationsPage />}

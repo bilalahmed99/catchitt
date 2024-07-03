@@ -113,11 +113,6 @@ export const PublicProfile = (props: any) => {
         }
     }, [copyPopup]);
 
-    useEffect(() => {
-        if (!token) {
-            navigate('/auth');
-        }
-    });
     return (
         <Layout showCopyPopup={copyPopup}>
             <div className={styles.container}>
