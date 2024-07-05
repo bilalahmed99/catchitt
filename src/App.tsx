@@ -223,17 +223,19 @@ function App() {
         switch (name) {
             case 'Use Phone or Email':
                 setIsMainSignupOption(!isMainSignupOption);
-                // navigate('/signup/phone-or-email/email');
                 break;
             case 'Continue with Facebook':
                
                 break;
             case 'Continue with Google':
+                loginWithGoogleHandler();
                 break;
             default:
                 console.log('Default case');
         }
     };
+
+    
 
     const loginItemClickHandler = (name: string) => {
         switch (name) {
