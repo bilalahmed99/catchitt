@@ -8,6 +8,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import FacebookLogin from 'react-facebook-login';
 import { useDispatch } from 'react-redux';
 import { loginWithGoogleService } from '../../redux/reducers/auth';
+import AppleSigninButtonCustom from '../applesigninbutton/AppleSignInButton';
 
 const Login = (props: any) => {
     const navigate = useNavigate();
@@ -99,6 +100,7 @@ const Login = (props: any) => {
                         fields="name,email,picture"
                         callback={responseFacebook}
                     />
+                    <AppleSigninButtonCustom />
                 </div>
                 <div className="mt-3.5">
                     <p className="font-normal text-[0.688rem] text-policy">
