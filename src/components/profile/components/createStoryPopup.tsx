@@ -1,4 +1,5 @@
 // CreateStoryPopup.tsx
+import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { Modal } from '@mui/material';
 import React from 'react';
@@ -11,6 +12,16 @@ interface CreateStoryPopupProps {
 }
 
 const CreateStoryPopup: React.FC<CreateStoryPopupProps> = ({ open, onCancel, onSelect }) => {
+    const [darkTheme, setdarkTheme] = useState(false);
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+
+        if(themeColor == "dark"){ 
+            setdarkTheme(true);
+        }else{
+            setdarkTheme(false);
+        }
+    });
     return (
         <div>
             <Modal
@@ -19,7 +30,7 @@ const CreateStoryPopup: React.FC<CreateStoryPopupProps> = ({ open, onCancel, onS
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box sx={popupStyle}>
+                <Box sx={darkTheme ? popupDarkStyle : popupStyle}>
                     <div
                         style={{
                             display: 'flex',
@@ -60,6 +71,26 @@ const popupStyle = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
+}
+
+const popupDarkStyle = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    bgcolor: 'background.paper',
+    
+    borderRadius: '8px',
+    width: '459px',
+    height: '282px',
+    // maxWidth: '600px',
+    // maxHeight: '549px',
+    padding: '16px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    background: 'rgb(18, 18, 18)',
+    color: 'white',
 }
 
 

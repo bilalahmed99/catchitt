@@ -3,7 +3,7 @@ import { useMediaQuery } from '@mui/material';
 import { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { createIcon, defaultAvatar, logo, logoAuth } from '../../icons';
+import { createIcon, defaultAvatar, logo, logoAuth, logoAuthWhite } from '../../icons';
 import { logoutUser } from '../../redux/reducers/auth';
 import style from './Navbar.module.scss';
 import NavbarMunu from './components/Menu';
@@ -22,6 +22,7 @@ function Navbar() {
     };
     const [menuPopupStatus, setMenuPopupStatus] = useState('hidden');
     const [darkTheme, setdarkTheme] = useState('');
+    const [logo, setLogo] = useState(logoAuth);
     const dispatch = useDispatch();
     const logoutAccount = () => {
         dispatch(logoutUser({ navigate }));
@@ -45,13 +46,16 @@ function Navbar() {
 
         if(themeColor == "dark"){ 
             setdarkTheme(style.darkTheme);
+            setLogo(logoAuthWhite);
+        }else{
+            setLogo(logoAuth);
         } 
     });
 
     return (
         <div className={` ${style.parent}  ${darkTheme}`}>
             <div onClick={() => navigate('/')} className={style.sec1}>
-                <img src={logoAuth} alt="" />
+                <img src={logo} alt="" />
             </div>
             {!isMobile ? (
                 <div className={style.sec2}>

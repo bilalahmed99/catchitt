@@ -1,0 +1,30 @@
+
+.darkTheme {
+    background-color: rgb(18, 18, 18) !important;
+    color:white !important;
+    // border: #fff 1px solid;
+  }
+
+  .lightdarkTheme {
+    background-color: rgb(18, 18, 18) !important;
+    color:white !important;
+    // border: #fff 1px solid;
+  }
+  
+  div.darkTheme{
+    background-color: black !important;
+    color:white !important;
+    // border: #fff 1px solid;
+  }
+  
+  .darkTheme input {
+    color:white !important;
+  }
+  
+  div.darkTheme > p > h1, h2, h3, h4  {
+    color:white !important;
+  }
+  
+  div.darkTheme p{
+    color:white !important;
+  }

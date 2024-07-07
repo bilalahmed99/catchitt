@@ -1,17 +1,28 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { uploadPrimaryIcon } from '../../../icons';
 import CustomButton from '../../../shared/buttons/CustomButton';
+import style from '../style.module.scss';
  
 function UploadStory({ selectFilesHandler }: any) {
 
+    const [darkTheme, setdarkTheme] = useState('');
 
     const inputElementRef =  useRef<any>(null);
         const upload = () => {
         inputElementRef?.current?.click();
     };
+    
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+
+        if(themeColor == "dark"){ 
+            setdarkTheme(style.lightdarkTheme);
+        }
+    });
+
     return (
-        <div className="w-[100%]  h-[100vh]  flex justify-center items-center pt-[5rem]">
-            <div className="min-w-[30%] h-[95%] bg-custom-light xl:w-[31.5rem] rounded-[0.5rem] p-[1.5rem]">
+        <div className={`w-[100%]  h-[100vh]  flex justify-center items-center pt-[5rem]`}>
+            <div className={`min-w-[30%] h-[95%] bg-custom-light xl:w-[31.5rem] rounded-[0.5rem] p-[1.5rem] ${darkTheme}`}>
                 <div
                     style={{ border: '1px dashed #BABABA' }}
                     className="rounded-[0.5rem] px-[1rem] py-[4rem] h-[100%] flex justify-center  items-center"

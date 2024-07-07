@@ -114,11 +114,11 @@ export const LOGIN_OPTIONS = [
         name: APP_TEXTS.GOOGLE,
         image: googleAuth,
     },
-    {
-        styles: 'mt-3',
-        name: APP_TEXTS.TWITTER,
-        image: twitterAuth,
-    },
+    // {
+    //     styles: 'mt-3',
+    //     name: APP_TEXTS.TWITTER,
+    //     image: twitterAuth,
+    // },
     {
         styles: 'mt-3',
         name: APP_TEXTS.APPLE,

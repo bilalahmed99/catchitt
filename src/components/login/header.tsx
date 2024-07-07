@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { logoAuth } from '../../icons';
+import { logoAuth, logoAuthWhite } from '../../icons';
 import { APP_TEXTS } from '../../utils/constants';
 
 const Header = () => {

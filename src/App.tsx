@@ -336,8 +336,14 @@ function App() {
     };
 
     const simpleLoginHandler = async () => {
+        let loginObj; 
+        if(loginWithPhone){
+            loginObj = { password, phoneNumber: countryCode + phoneNumber  }
+        }else{
+            loginObj = { password, email }
+        }
         setIsLoading(true);
-        dispatch(loginService({ password, email }))
+        dispatch(loginService(loginObj))
             .then((res: any) => {
                 if (res?.error) {
                     setIsError(true);
@@ -393,13 +399,45 @@ function App() {
         }
     };
 
+
+    const useGeoService = async () => {
+        try {
+            // Get the IP address
+            const ipResponse = await fetch('https://api.ipify.org?format=json');
+            const ipData = await ipResponse.json();
+            const ipAddress = ipData.ip;
+
+            // Get geolocation data based on the IP address
+            const geoResponse = await fetch(`https://ipapi.co/${ipAddress}/json/`);
+            const geoData = await geoResponse.json();
+
+            // Set first country as initial country code
+            setCountryCode(geoData?.country_calling_code);
+
+            // Set first isoCode as initial country iso code
+            setIsoCode(geoData?.country_code);
+        } catch (error) {
+            console.log('🚀 ~ fetchGeoData ~ error:', error);
+        }
+    };
+
+
     const signupHandler = async () => {
         let dob= year+"-"+month+"-"+date;
         setDateOfBirth(dob);
         console.log("signup", password, email, dateOfBirth, name);
+
+        let signupObj; 
+        if(loginWithPhone){
+            signupObj = { password, phoneNumber: countryCode + phoneNumber, dateOfBirth, name  }
+        }else{
+            signupObj = { password, email, dateOfBirth, name }
+        }
+
+        
         // return false;
         setIsLoading(true);
-        dispatch(signupService({ password, email, dateOfBirth, name }))
+        dispatch(signupService(signupObj))
             .then((res: any) => {
                 console.log("res",res);
                 if (res?.payload?.status == 400) {
@@ -606,12 +644,17 @@ function App() {
 
     useEffect(() => {
         fetchCountriesList();
+        useGeoService();
     }, []);
 
 
     const handleLoginClick = () => {
         setIsLoginSection(false);
       }
+
+    const handleLoginpopupClick = () => {
+    setIsLoginSection(true);
+    }
 
     const handleSignupClick = () => {
         setIsLoginSection(false);
@@ -755,7 +798,7 @@ function App() {
 
                         {isLoginPopup && (
                             <div className="w-full z-50 h-full bg-black/50 fixed top-0 flex justify-center items-center">
-                                <div className={`w-[30.688rem] mx-auto mt-3 bg-white py-4 rounded-lg relative h-[37.125rem]  ${lightDarkTheme} `}>
+                                <div className={`w-[30.688rem] mx-auto mt-3 bg-white py-4 rounded-lg relative h-[42.125rem]  ${lightDarkTheme} `}>
                                     <div
                                         onClick={closeLoginPopupHandler}
                                         className="bg-gray-100/50 rounded-full h-10 w-10 flex flex-row justify-center items-center absolute right-5 p-1 cursor-pointer"
@@ -816,7 +859,7 @@ function App() {
                                                                 <div className="flex flex-row items-center border border-gray-500 bg-login-btn mt-2 rounded-md p-2.5">
                                                                     <div
                                                                         onClick={countryCodeModelHandler}
-                                                                        className="flex flex-row items-center gap-2 flex-1 cursor-pointer relative"
+                                                                        className="flex flex-row items-center gap-2 flex-1 cursor-pointer relative text-black"
                                                                     >
                                                                         <p>{isoCode + ' ' + countryCode}</p>
                                                                         <img
@@ -885,7 +928,7 @@ function App() {
                                                                                                         : ''
                                                                                                 }`}
                                                                                             >
-                                                                                                <p className={`font-normal ${textColor} text-left text-xs hover:bg-gray-50`}>
+                                                                                                <p className={`font-normal text-black text-left text-xs hover:bg-gray-50`}>
                                                                                                     {countryItem?.name +
                                                                                                         ' ' +
                                                                                                         countryItem?.code}
@@ -971,7 +1014,7 @@ function App() {
                                                                         )}
                                                                     </>
                                                                 )}
-                                                                <div className="flex flex-row justify-between items-center border border-gray-500 bg-login-btn mt-2 rounded-md py-2.5 px-3">
+                                                                <div className="flex flex-row justify-between items-center border border-gray-500 bg-login-btn mt-2 rounded-md py-2.5 px-3 text-black">
                                                                     <input
                                                                         className="w-2/3 bg-login-btn"
                                                                         type={
@@ -1214,8 +1257,8 @@ function App() {
                                     ):(
                                         <>
                                             <div className="overflow-auto w-[21.888rem] mx-auto ">
-                                                <h2 className="font-bold text-3xl mt-5 mb-4">
-                                                    {isMainSignupOption ? 'Signup to Seezitt' : 'Signup'}
+                                                <h2 className={`font-bold text-3xl mt-5 mb-4 ${textColor}`}>
+                                                    Signup to Seezitt
                                                 </h2>
                                                     {signupNext == false ? (
                                                         <>
@@ -1351,7 +1394,7 @@ function App() {
                                                                         <div className="flex flex-row items-center border border-gray-500 bg-login-btn mt-2 rounded-md p-2.5">
                                                                             <div
                                                                                 onClick={countryCodeModelHandler}
-                                                                                className="flex flex-row items-center gap-2 flex-1 cursor-pointer relative"
+                                                                                className="flex flex-row items-center gap-2 flex-1 cursor-pointer relative text-black"
                                                                             >
                                                                                 <p>{isoCode + ' ' + countryCode}</p>
                                                                                 <img
@@ -1412,7 +1455,7 @@ function App() {
                                                                                                                 : ''
                                                                                                         }`}
                                                                                                     >
-                                                                                                        <p className={`font-normal ${textColor} text-left text-xs hover:bg-gray-50`}>
+                                                                                                        <p className={`font-normal text-black text-left text-xs hover:bg-gray-50`}>
                                                                                                             {countryItem?.name +
                                                                                                                 ' ' +
                                                                                                                 countryItem?.code}
@@ -1479,7 +1522,7 @@ function App() {
                                                                             />
                                                                             <div className="flex flex-row justify-center items-center gap-2 flex-1">
                                                                                 <p className={`text-gray-400 ${style.black_text}`}> | </p>
-                                                                                <p onClick={sendOTPCode} className={`${style.black_text}`}>{otpbuttonText}</p>
+                                                                                <p onClick={sendOTPCode} className={`text-black`}>{otpbuttonText}</p>
                                                                             </div>
                                                                         </div>
                                                                         {otpError ? (<p className="font-light text-left text-xs text-red-700 mt-2.5">
@@ -1511,7 +1554,7 @@ function App() {
                                                                     </div>
                                                                 </div>
                                                                 <div
-                                                                    onClick={goBackHandler}
+                                                                    onClick={handleLoginpopupClick}
                                                                     className="flex flex-row justify-center items-center gap-2 mt-4 cursor-pointer"
                                                                 >
                                                                     <img src={back} className="h-2.5 w-2.5 object-contain" />
@@ -1527,7 +1570,7 @@ function App() {
                                                                         Password
                                                                 </p>
                                                             </div>
-                                                            <div className="flex flex-row justify-between items-center border border-gray-500 bg-login-btn mt-2 rounded-md py-2.5 px-3">
+                                                            <div className="flex flex-row justify-between items-center border border-gray-500 bg-login-btn mt-2 rounded-md py-2.5 px-3 text-black">
                                                                 
                                                                 <input
                                                                     className="w-2/3 bg-login-btn"
@@ -1620,9 +1663,9 @@ function App() {
                                             )}
                                             <div className="mt-3 bottom-0 relative">
                                                 <div className="border-t-[0.3px] border-gray-200 text-center pt-3.5">
-                                                    <h3 className="font-normal text-[0.938rem] flex flex-row items-center justify-center gap-1">
+                                                    <h3 className={`font-normal text-[0.938rem] flex flex-row items-center justify-center gap-1 ${textColor} `}>
                                                         {SIGNUP_APP_TEXTS.ALREADY_ACCOUNT}{' '}
-                                                        <span className="text-danger-1 font-semibold hover:underline cursor-pointer" onClick={handleLoginClick}>
+                                                        <span className="text-danger-1 font-semibold hover:underline cursor-pointer" onClick={handleLoginpopupClick}>
                                                             {SIGNUP_APP_TEXTS.LOGIN}
                                                         </span>
                                                     </h3>
