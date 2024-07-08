@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { openLoginPopup } from '../../redux/reducers';
 
-const ProtectedRoute = ({ element: Element }) => {
+const ProtectedRoute = ({ element: Element  }: {element: any}) => {
     const token = localStorage.getItem('token');
     const dispatch = useDispatch();
     const navigate = useNavigate();

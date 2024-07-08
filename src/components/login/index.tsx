@@ -89,7 +89,7 @@ const Login = (props: any) => {
                     <p className="font-normal text-sm text-subtext mt-6 mb-3 ">
                         {APP_TEXTS.LOGIN_SUBTEXT}
                     </p>
-                    {/* {LOGIN_OPTIONS.map((option, index) => (
+                    {LOGIN_OPTIONS.map((option, index) => (
                         <ItemLogin
                             loginItemClickHandler={loginItemClickHandler}
                             key={index}
@@ -97,7 +97,7 @@ const Login = (props: any) => {
                             image={option.image}
                             styles={option.styles}
                         />
-                    ))} */}
+                    ))}
 
                     {/* <FacebookLogin
                         appId="281129028310496"

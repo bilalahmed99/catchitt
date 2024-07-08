@@ -43,9 +43,7 @@ root.render(
         <Suspense fallback={loadingMarkup}>
             <PersistGate loading={null} persistor={persistor}>
                 <GoogleOAuthProvider
-                    clientId="523656475565-ju45seka7c5dta4sm99ua3gu64dundht.apps.googleusercontent.com"
-                    clientSecret="abcDEfGhIJKlmnoPQRstuVWxyZ"
-                    redirectUri="http://localhost:3000"
+                    clientId={`523656475565-ju45seka7c5dta4sm99ua3gu64dundht.apps.googleusercontent.com`}
                 >
                     <App />
                 </GoogleOAuthProvider>
