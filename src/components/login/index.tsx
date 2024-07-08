@@ -5,10 +5,10 @@ import Footer from './footer';
 import Header from './header';
 import './login.scss';
 import { useGoogleLogin } from '@react-oauth/google';
-import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+// import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { useDispatch } from 'react-redux';
 import { loginWithGoogleService } from '../../redux/reducers/auth';
-import AppleSigninButtonCustom from '../applesigninbutton/AppleSignInButton';
+// import AppleSigninButtonCustom from '../applesigninbutton/AppleSignInButton';
 import {
     fb, 
 } from '../../icons';
@@ -99,7 +99,7 @@ const Login = (props: any) => {
                         />
                     ))} */}
 
-                    <FacebookLogin
+                    {/* <FacebookLogin
                         appId="281129028310496"
                         autoLoad={true}
                         fields="name,email,picture"
@@ -112,7 +112,7 @@ const Login = (props: any) => {
                             <p className="mx-auto text-[0.938rem]">Continue with Facebook</p>
                         </div>
                         )}
-                    />
+                    /> */}
 
                     {/* <FacebookLogin
                         appId="281129028310496"
@@ -120,7 +120,7 @@ const Login = (props: any) => {
                         fields="name,email,picture"
                         callback={responseFacebook}
                     /> */}
-                    <AppleSigninButtonCustom />
+                    {/* <AppleSigninButtonCustom /> */}
                 </div>
                 <div className="mt-3.5">
                     <p className="font-normal text-[0.688rem] text-policy">
