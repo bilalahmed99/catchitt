@@ -5,10 +5,14 @@ import Footer from './footer';
 import Header from './header';
 import './login.scss';
 import { useGoogleLogin } from '@react-oauth/google';
-import FacebookLogin from 'react-facebook-login';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { useDispatch } from 'react-redux';
 import { loginWithGoogleService } from '../../redux/reducers/auth';
 import AppleSigninButtonCustom from '../applesigninbutton/AppleSignInButton';
+import {
+    fb, 
+} from '../../icons';
+
 
 const Login = (props: any) => {
     const navigate = useNavigate();
@@ -85,7 +89,7 @@ const Login = (props: any) => {
                     <p className="font-normal text-sm text-subtext mt-6 mb-3 ">
                         {APP_TEXTS.LOGIN_SUBTEXT}
                     </p>
-                    {LOGIN_OPTIONS.map((option, index) => (
+                    {/* {LOGIN_OPTIONS.map((option, index) => (
                         <ItemLogin
                             loginItemClickHandler={loginItemClickHandler}
                             key={index}
@@ -93,13 +97,29 @@ const Login = (props: any) => {
                             image={option.image}
                             styles={option.styles}
                         />
-                    ))}
+                    ))} */}
+
                     <FacebookLogin
                         appId="281129028310496"
                         autoLoad={true}
                         fields="name,email,picture"
                         callback={responseFacebook}
+                        render={(renderProps: {onClick: () => void}) => (
+                        <div
+                            className={`rounded-[0.5rem] font-medium text-base flex flex-row items-center border border-loginItem h-11 px-3 cursor-pointer hover:bg-slate-100 `}
+                        >
+                            <img className="object-contain h-5 w-5" src={fb} />
+                            <p className="mx-auto text-[0.938rem]">Continue with Facebook</p>
+                        </div>
+                        )}
                     />
+
+                    {/* <FacebookLogin
+                        appId="281129028310496"
+                        autoLoad={true}
+                        fields="name,email,picture"
+                        callback={responseFacebook}
+                    /> */}
                     <AppleSigninButtonCustom />
                 </div>
                 <div className="mt-3.5">
