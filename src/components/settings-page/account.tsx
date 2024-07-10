@@ -10,15 +10,15 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import analytics from '../../assets/analytics.svg';
+import analyticsBlack from '../../assets/analytics.svg';
 import atForgotPwd from '../../assets/atForgotPwd.png';
 import check from '../../assets/check.png';
-import contentIcon from '../../assets/contentIcon.svg';
-import notificationBell from '../../assets/notificationBellIcon.svg';
-import privacyPolicyIcon from '../../assets/privacyPolicyIcon.svg';
-import reportProblem from '../../assets/reportProblemIcon.svg';
+import contentIconBlack from '../../assets/contentIcon.svg';
+import notificationBellBlack from '../../assets/notificationBellIcon.svg';
+import privacyPolicyIconBlack from '../../assets/privacyPolicyIcon.svg';
+import reportProblemBlack from '../../assets/reportProblemIcon.svg';
 import seezittLogoIcon from '../../assets/seezittLogoIcon.svg';
-import termsConfitionsIcon from '../../assets/termsConditionsIcon.svg';
+import termsConfitionsIconBlack from '../../assets/termsConditionsIcon.svg';
 import Layout from '../../shared/layout';
 import { useAuthStore } from '../../store/authStore';
 import InputField from '../reusables/InputField';
@@ -29,12 +29,23 @@ import { SwitchToBusinessPopup } from './components/switchToBusinessPopup';
 import { SwitchToPersonalPopup } from './components/switchToPersonalPopup';
 import upload from './svg-components/Upload.svg';
 import addMore from './svg-components/add-more.svg';
-import changePassIcon from './svg-components/changePassIcon.svg';
+import changePassIconblack from './svg-components/changePassIcon.svg';
 import checkSubmitted from './svg-components/check-submitted.svg';
-import myReports from './svg-components/my-reports.svg';
-import contactUS from './svg-components/contact-us-icon.svg';
+import myReportsBlack from './svg-components/my-reports.svg';
+import contactUSBlack from './svg-components/contact-us-icon.svg';
 import redRightArrow from './svg-components/redRightArrow.svg';
 import whiteRightArrow from './svg-components/whiteRightArrow.svg';
+import { 
+    changePassIconWhite,
+    contactUsIconWhite,
+    contentIconWhite,
+    myReportWhite,
+    notificationBellIconWhite,
+    privacyPolicyIconWhite,
+    reportProblemIconWhite,
+    termsConditionsIconWhite,
+    analyticsWhite
+     } from '../../icons';
 
 export interface AccountProps {
     className?: string;
@@ -143,6 +154,15 @@ const Account = ({ className, openModal }: AccountProps) => {
 
     const [lightdarkTheme, setlightdarkTheme] = useState('');
     const [themeColor, setThemeColor] = useState('');
+    const [changePassIcon, setChangePassIcon] = useState(changePassIconblack);
+    const [contactUS, setContactUS] = useState(contactUSBlack);
+    const [privacyPolicyIcon, setPrivacyPolicyIcon] = useState(privacyPolicyIconBlack);
+    const [termsConfitionsIcon, setTermsConfitionsIcon] = useState(termsConfitionsIconBlack);
+    const [reportProblem, setReportProblem] = useState(reportProblemBlack);
+    const [myReports, setMyReports] = useState(myReportsBlack);
+    const [contentIcon, setContentIcon] = useState(contentIconBlack);
+    const [notificationBell, setNotificationBell] = useState(notificationBellBlack);
+    const [analytics, setAnalytics] = useState(analyticsBlack);
 
     useEffect(() => {
         var themeColor = window.localStorage.getItem('theme');
@@ -150,8 +170,27 @@ const Account = ({ className, openModal }: AccountProps) => {
         if(themeColor == "dark"){ 
             setlightdarkTheme(styles.lightdarkTheme);
             setThemeColor(themeColor);
+            setChangePassIcon(changePassIconWhite);
+            setContactUS(contactUsIconWhite);
+            setPrivacyPolicyIcon(privacyPolicyIconWhite);
+            setTermsConfitionsIcon(termsConditionsIconWhite);
+            setReportProblem(reportProblemIconWhite);
+            setMyReports(myReportWhite);
+            setContentIcon(contentIconWhite);
+            setNotificationBell(notificationBellIconWhite);
+            setAnalytics(analyticsWhite);
+
         } else{
             setThemeColor("light");
+            setChangePassIcon(changePassIconblack);
+            setContactUS(contactUSBlack);
+            setPrivacyPolicyIcon(privacyPolicyIconBlack);
+            setTermsConfitionsIcon(termsConfitionsIconBlack);
+            setReportProblem(reportProblemBlack);
+            setMyReports(myReportsBlack);
+            setContentIcon(contentIconBlack);
+            setNotificationBell(notificationBellBlack);
+            setAnalytics(analyticsBlack);
         }
        
     });

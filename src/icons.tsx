@@ -87,15 +87,15 @@ import logoAuthWhite from './components/login/svg-components/logo-auth-white.svg
 import chevronUp from './assets/chevron-up.png';
 import chevronDown from './assets/chevron-down.png';
 import checkCountryCode from './assets/check-country-code.png';
-import analyticsWhite from '../assets/analytics-white.svg';
-import changePassIconWhite from '../assets/changePassIcon-white.svg';
-import contactUsIconWhite from '../assets/contact-us-icon-white.svg';
-import contentIconWhite from '../assets/contentIcon-white.svg';
-import myReportWhite from '../assets/my-reports-white.svg';
-import notificationBellIconWhite from '../assets/notificationBellIcon-white.svg';
-import privacyPolicyIconWhite from '../assets/privacyPolicyIcon-white.svg';
-import reportProblemIconWhite from '../assets/reportProblemIcon-white.svg';
-import termsConditionsIconWhite from '../assets/termsConditionsIcon-white.svg';
+import analyticsWhite from './assets/analytics-white.svg';
+import changePassIconWhite from './assets/changePassIcon-white.svg';
+import contactUsIconWhite from './assets/contact-us-icon-white.svg';
+import contentIconWhite from './assets/contentIcon-white.svg';
+import myReportWhite from './assets/my-reports-white.svg';
+import notificationBellIconWhite from './assets/notificationBellIcon-white.svg';
+import privacyPolicyIconWhite from './assets/privacyPolicyIcon-white.svg';
+import reportProblemIconWhite from './assets/reportProblemIcon-white.svg';
+import termsConditionsIconWhite from './assets/termsConditionsIcon-white.svg';
 
 export {
     duet,
