@@ -163,6 +163,9 @@ const Account = ({ className, openModal }: AccountProps) => {
     const [contentIcon, setContentIcon] = useState(contentIconBlack);
     const [notificationBell, setNotificationBell] = useState(notificationBellBlack);
     const [analytics, setAnalytics] = useState(analyticsBlack);
+    const [privacyColor, setprivacyColor] = useState("#222222");
+    const [balanceColor, setBalanceColor] = useState("#222222");
+    const [otherBalanceColor, setOtherBalanceColor] = useState("#130F26");
 
     useEffect(() => {
         var themeColor = window.localStorage.getItem('theme');
@@ -179,6 +182,9 @@ const Account = ({ className, openModal }: AccountProps) => {
             setContentIcon(contentIconWhite);
             setNotificationBell(notificationBellIconWhite);
             setAnalytics(analyticsWhite);
+            setprivacyColor("#fff");
+            setBalanceColor("#fff");
+            setOtherBalanceColor("#fff");
 
         } else{
             setThemeColor("light");
@@ -191,6 +197,9 @@ const Account = ({ className, openModal }: AccountProps) => {
             setContentIcon(contentIconBlack);
             setNotificationBell(notificationBellBlack);
             setAnalytics(analyticsBlack);
+            setprivacyColor("#222222");
+            setBalanceColor("#222222");
+            setOtherBalanceColor("#130F26");
         }
        
     });
@@ -677,14 +686,14 @@ const Account = ({ className, openModal }: AccountProps) => {
                                                 fill-rule="evenodd"
                                                 clip-rule="evenodd"
                                                 d="M11.9846 21.606C11.9846 21.606 19.6566 19.283 19.6566 12.879C19.6566 6.474 19.9346 5.974 19.3196 5.358C18.7036 4.742 12.9906 2.75 11.9846 2.75C10.9786 2.75 5.26557 4.742 4.65057 5.358C4.03457 5.974 4.31257 6.474 4.31257 12.879C4.31257 19.283 11.9846 21.606 11.9846 21.606Z"
-                                                stroke="#222222"
+                                                stroke={privacyColor}
                                                 stroke-width="1.5"
                                                 stroke-linecap="round"
                                                 stroke-linejoin="round"
                                             />
                                             <path
                                                 d="M9.38281 11.8741L11.2748 13.7691L15.1728 9.86914"
-                                                stroke="#222222"
+                                                stroke={privacyColor}
                                                 stroke-width="1.5"
                                                 stroke-linecap="round"
                                                 stroke-linejoin="round"
@@ -708,14 +717,14 @@ const Account = ({ className, openModal }: AccountProps) => {
                                         >
                                             <path
                                                 d="M21.6389 14.3962H17.5906C16.1042 14.3953 14.8993 13.1914 14.8984 11.7049C14.8984 10.2185 16.1042 9.01458 17.5906 9.01367H21.6389"
-                                                stroke="#222222"
+                                                stroke={balanceColor}
                                                 stroke-width="1.5"
                                                 stroke-linecap="round"
                                                 stroke-linejoin="round"
                                             />
                                             <path
                                                 d="M18.049 11.6432H17.7373"
-                                                stroke="#222222"
+                                                stroke={balanceColor}
                                                 stroke-width="1.5"
                                                 stroke-linecap="round"
                                                 stroke-linejoin="round"
@@ -724,7 +733,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                                 fill-rule="evenodd"
                                                 clip-rule="evenodd"
                                                 d="M7.74766 3H16.3911C19.2892 3 21.6388 5.34951 21.6388 8.24766V15.4247C21.6388 18.3229 19.2892 20.6724 16.3911 20.6724H7.74766C4.84951 20.6724 2.5 18.3229 2.5 15.4247V8.24766C2.5 5.34951 4.84951 3 7.74766 3Z"
-                                                stroke="#130F26"
+                                                stroke={otherBalanceColor}
                                                 stroke-width="1.5"
                                                 stroke-linecap="round"
                                                 stroke-linejoin="round"
