@@ -79,7 +79,7 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                             width="24"
                             height="24"
                             viewBox="0 0 24 24"
-                            fill="none"
+                            fill={`${pathname.includes('/home') ? styles.selectedStroke : ''}`}
                             className={classNames(
                                 `${pathname.includes('/home') ? styles.selectedStroke : ''}`
                             )}
@@ -241,7 +241,7 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                             setSettingsDropdown(false)
                         }}
                     >
-                        <svg id="svg-section" width="24" data-e2e="" height="32" viewBox="0 0 48 48" fill={ pathname.includes('/profile') ? "white":"#5448B2"} xmlns="http://www.w3.org/2000/svg"
+                        <svg id="svg-section" width="24" data-e2e="" height="32" viewBox="0 0 48 48" fill={ pathname.includes('/profile') ? styles.selectedStroke : ''} xmlns="http://www.w3.org/2000/svg"
                         className={classNames(
                             `${pathname.includes('/profile') ? styles.selectedStroke : ''}`
                         )}

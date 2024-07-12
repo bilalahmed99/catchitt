@@ -40,7 +40,7 @@
 }
 
 .navLink {
-  color: #5448b2;
+  color: #fff; //#5448b2;
   display: flex;
   width: 100%;
   padding: 16px 0px 16px 16px;
@@ -67,13 +67,17 @@
   border-radius: 6px;
   text-decoration: none;
 }
+//  old theme
+// .selectedStroke path {
+//   stroke: #ffffff !important;
+// }
 
 .selectedStroke path {
-  stroke: #ffffff !important;
+  stroke: rgb(255, 59, 92) !important;
 }
 
 .selectedStroke circle {
-  stroke: #ffffff !important;
+  stroke: rgb(255, 59, 92) !important;
 }
 
 #svg-section svg {
