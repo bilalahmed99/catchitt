@@ -59,9 +59,28 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
         }
     }, [])
 
+    const [darkTheme, setdarkTheme] = useState('');
+    const [darkThemeblack, setdarkThemeblack] = useState('');
+    const [textColor, setTextColor] = useState('black');
+    const [textColorClass, setTextColorClass] = useState(styles.textBlackColor);
+
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+
+        if(themeColor == "dark"){ 
+            setdarkTheme(styles.darkTheme);
+            setdarkThemeblack(styles.darkThemeblack);
+            setTextColor("white");
+            setTextColorClass(styles.textWhiteColor);
+        }else{
+            // setdarkTheme(style.lightTheme);
+            setTextColor("black");
+            setTextColorClass(styles.textBlackColor);
+        }
+    });
 
     return (
-        <div className={classNames(styles.root, className)}>
+        <div className={` ${classNames(styles.root, className)} ${darkTheme}`}>
             <div className={isDropdownOpen === true ? styles.cardDivOpened : styles.cardDiv}>
                 <Link to="/home" reloadDocument={false} style={{ textDecoration: 'none' }}>
                     <div
@@ -79,14 +98,14 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                             width="24"
                             height="24"
                             viewBox="0 0 24 24"
-                            fill={`${pathname.includes('/home') ? styles.selectedStroke : ''}`}
+                            fill={`${pathname.includes('/home') ? 'rgb(255, 59, 92)': 'none'}`}
                             className={classNames(
                                 `${pathname.includes('/home') ? styles.selectedStroke : ''}`
                             )}
                         >
                             <path
                                 d="M9.15722 20.7714V17.7047C9.1572 16.9246 9.79312 16.2908 10.581 16.2856H13.4671C14.2587 16.2856 14.9005 16.9209 14.9005 17.7047V17.7047V20.7809C14.9003 21.4432 15.4343 21.9845 16.103 22H18.0271C19.9451 22 21.5 20.4607 21.5 18.5618V18.5618V9.83784C21.4898 9.09083 21.1355 8.38935 20.538 7.93303L13.9577 2.6853C12.8049 1.77157 11.1662 1.77157 10.0134 2.6853L3.46203 7.94256C2.86226 8.39702 2.50739 9.09967 2.5 9.84736V18.5618C2.5 20.4607 4.05488 22 5.97291 22H7.89696C8.58235 22 9.13797 21.4499 9.13797 20.7714V20.7714"
-                                stroke="#5448B2"
+                                stroke={`${pathname.includes('/home') ? 'rgb(255, 59, 92)': textColor}`}
                                 strokeWidth="1.5"
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
@@ -175,14 +194,14 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                             viewBox="0 0 24 24"
                             fill="none"
                             className={classNames(
-                                `${pathname.includes('/discover') ? styles.selectedStroke : ''}`
+                                `${pathname.includes('/discover') ? 'rgb(255, 59, 92)': textColor}`
                             )}
                         >
                             <path
                                 fillRule="evenodd"
                                 clipRule="evenodd"
                                 d="M8.27051 14.9519L9.86319 9.8627L14.9524 8.27002L13.3598 13.3593L8.27051 14.9519Z"
-                                stroke="#5448B2"
+                                stroke={`${pathname.includes('/discover') ? 'rgb(255, 59, 92)': textColor}`}
                                 strokeWidth="1.5"
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
@@ -191,13 +210,13 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                                 cx="11.611"
                                 cy="11.611"
                                 r="9.61098"
-                                stroke="#5448B2"
+                                stroke={`${pathname.includes('/discover') ? 'rgb(255, 59, 92)': textColor}`}
                                 strokeWidth="1.5"
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                             />
                         </svg>
-                        <p className={styles.linkWord}>Explore</p>
+                        <p className={`${styles.linkWord} ${textColor}`}>Explore</p>
                     </div>
                 </Link>
 
@@ -212,7 +231,7 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                             setSettingsDropdown(false)
                         }}
                     >
-                        <svg id="svg-section" width="24" data-e2e="" height="32" viewBox="0 0 48 48" fill={ pathname.includes('/suggested-accounts') ? "white":"#5448B2"} xmlns="http://www.w3.org/2000/svg"
+                        <svg id="svg-section" width="24" data-e2e="" height="32" viewBox="0 0 48 48" fill={ pathname.includes('/suggested-accounts') ? 'rgb(255, 59, 92)': textColor} xmlns="http://www.w3.org/2000/svg"
                         className={classNames(
                             `${pathname.includes('/suggested-accounts') ? styles.selectedStroke : ''}`
                         )}
@@ -241,14 +260,14 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                             setSettingsDropdown(false)
                         }}
                     >
-                        <svg id="svg-section" width="24" data-e2e="" height="32" viewBox="0 0 48 48" fill={ pathname.includes('/profile') ? styles.selectedStroke : ''} xmlns="http://www.w3.org/2000/svg"
+                        <svg id="svg-section" width="24" data-e2e="" height="32" viewBox="0 0 48 48" fill={ pathname.includes('/profile') ?  'rgb(255, 59, 92)': textColor} xmlns="http://www.w3.org/2000/svg"
                         className={classNames(
                             `${pathname.includes('/profile') ? styles.selectedStroke : ''}`
                         )}
                         >
                             <path fill-rule="evenodd" clip-rule="evenodd" d="M24.0003 7C20.1343 7 17.0003 10.134 17.0003 14C17.0003 17.866 20.1343 21 24.0003 21C27.8663 21 31.0003 17.866 31.0003 14C31.0003 10.134 27.8663 7 24.0003 7ZM13.0003 14C13.0003 7.92487 17.9252 3 24.0003 3C30.0755 3 35.0003 7.92487 35.0003 14C35.0003 20.0751 30.0755 25 24.0003 25C17.9252 25 13.0003 20.0751 13.0003 14ZM24.0003 33C18.0615 33 13.0493 36.9841 11.4972 42.4262C11.3457 42.9573 10.8217 43.3088 10.2804 43.1989L8.32038 42.8011C7.77914 42.6912 7.4266 42.1618 7.5683 41.628C9.49821 34.358 16.1215 29 24.0003 29C31.8792 29 38.5025 34.358 40.4324 41.628C40.5741 42.1618 40.2215 42.6912 39.6803 42.8011L37.7203 43.1989C37.179 43.3088 36.6549 42.9573 36.5035 42.4262C34.9514 36.9841 29.9391 33 24.0003 33Z"></path>
                         </svg>
-                        <p className={styles.linkWord}>Following</p>
+                        <p className={styles.linkWord}>Profile</p>
                     </div>
                 </Link>
 

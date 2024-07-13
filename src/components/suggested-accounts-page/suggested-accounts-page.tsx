@@ -202,7 +202,7 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
             <div className={styles.container}>
                 {!isLoggedIn ? (
                     <div className={styles.middleSectionDiv}>
-                        <div className={styles.viewSwitchersDiv}>
+                        {/* <div className={styles.viewSwitchersDiv}>
                             <ViewSwitchers
                                 selectedIndex={selectedTab}
                                 onTabChange={async (selectedTab) => {
@@ -214,13 +214,14 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
                                     }
                                 }}
                             />
-                        </div>
+                        </div> */}
                         <div className={styles.gridContainer}>
                             {accountsData.map((account, i) => (
                                 <SuggestedAccount key={i} account={account} />
                             ))}
                         </div>
                     </div>
+                    // <></>
                 ) : (
                     <div
                         className={styles.middleSectionDiv}

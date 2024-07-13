@@ -127,14 +127,14 @@ h6 {
 
 .followingBtn {
   border-radius: 6px;
-  background-color: #5448b2;
+  background-color: rgb(255, 59, 92);;
   width: 108px;
   display: flex;
   height: 32px;
   padding: 0px 12px;
   justify-content: center;
   align-items: center;
-  border-color: #5448b2;
+  border-color: rgb(255, 59, 92);;
   color: #ffffff;
   /* Small/Semibold */
   font-family: Poppins;
@@ -148,10 +148,10 @@ h6 {
 .followBtn {
   width: 157px;
   border-radius: 4px;
-  border: 1px solid var(--foundation-primary-primary-500, #5448B2);
+  border: 1px solid var(--foundation-primary-primary-500, rgb(255, 59, 92));
   background: var(--default-white, #FFF);
 
-  color: var(--foundation-primary-primary-500, #5448B2);
+  color: var(--foundation-primary-primary-500, rgb(255, 59, 92));
 
   /* Extra Small/Semibold */
   font-family: Poppins;
