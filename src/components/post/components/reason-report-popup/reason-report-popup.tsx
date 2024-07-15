@@ -103,42 +103,42 @@ export const ReasonReportPopup = ({
                                         <FormControlLabel value="MISLEADING_INFO" control={<Radio
                                             sx={{
                                                 '&.Mui-checked': {
-                                                    color: '#5448B2'
+                                                    color: 'rgb(255, 59, 92)'
                                                 }
                                             }}
                                         />} label="Misleading Information" />
                                         <FormControlLabel value="FRAUDS_SCAM" control={<Radio
                                             sx={{
                                                 '&.Mui-checked': {
-                                                    color: '#5448B2'
+                                                    color: 'rgb(255, 59, 92)'
                                                 }
                                             }}
                                         />} label="Frauds and scams" />
                                         <FormControlLabel value="HATE_SPEECH" control={<Radio
                                             sx={{
                                                 '&.Mui-checked': {
-                                                    color: '#5448B2'
+                                                    color: 'rgb(255, 59, 92)'
                                                 }
                                             }}
                                         />} label="Hate Speech" />
                                         <FormControlLabel value="HARASSMENT_BULLYING" control={<Radio
                                             sx={{
                                                 '&.Mui-checked': {
-                                                    color: '#5448B2'
+                                                    color: 'rgb(255, 59, 92)'
                                                 }
                                             }}
                                         />} label="Harassment or bullying" />
                                         <FormControlLabel value="VIOLENCE" control={<Radio
                                             sx={{
                                                 '&.Mui-checked': {
-                                                    color: '#5448B2'
+                                                    color: 'rgb(255, 59, 92)'
                                                 }
                                             }}
                                         />} label="Violence" />
                                         <FormControlLabel value="ANIMAL_CRUELTY" control={<Radio
                                             sx={{
                                                 '&.Mui-checked': {
-                                                    color: '#5448B2'
+                                                    color: 'rgb(255, 59, 92)'
                                                 }
                                             }}
                                         />} label="Animal cruelty" />

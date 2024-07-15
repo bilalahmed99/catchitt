@@ -363,7 +363,7 @@ export const Profile = (props: any) => {
                             <div
                                 onClick={() => setActiveTab(item.title)}
                                 style={{
-                                    borderColor: activeTab === item.title ? '#5448B2' : '#DFDFDF',
+                                    borderColor: activeTab === item.title ? 'rgb(255, 59, 92)' : '#DFDFDF',
                                 }}
                                 className={styles.tab}
                                 key={item.key}
