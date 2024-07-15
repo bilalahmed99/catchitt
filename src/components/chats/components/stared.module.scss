@@ -122,7 +122,7 @@
     .userstarMsg {
       display: flex;
       padding: 0.75rem 1rem;
-      background: var(--Foundation-Neutral-neutral-100, #5448b2);
+      background: var(--Foundation-Neutral-neutral-100, rgb(255, 59, 92));
       align-items: flex-start;
       gap: 0.625rem;
       min-width: 4rem;
@@ -151,7 +151,7 @@
   .tempparent {
     margin-left: 2rem;
     border-radius: 10px 10px 0px 10px;
-    background: var(--Foundation-Primary-primary-500, #5448b2);
+    background: var(--Foundation-Primary-primary-500, rgb(255, 59, 92));
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -173,7 +173,7 @@
   }
 
   .primaryText {
-    color: var(--Foundation-Primary-primary-500, #5448b2);
+    color: var(--Foundation-Primary-primary-500, rgb(255, 59, 92));
     text-align: left;
     font-family: Poppins;
     font-size: 16px;
@@ -204,7 +204,7 @@
     word-break: break-all;
   }
   .done {
-    color: var(--Foundation-Primary-primary-500, #5448b2);
+    color: var(--Foundation-Primary-primary-500, rgb(255, 59, 92));
     font-family: Poppins;
     font-size: 1rem;
     font-style: normal;

@@ -90,7 +90,7 @@ function Forwardusers(props: any) {
                                             style={{
                                                 width: 20,
                                                 height: 20,
-                                                background: '#5448B2',
+                                                background: 'rgb(255, 59, 92)',
                                                 borderRadius: 4,
                                                 cursor: 'pointer',
                                                 margin: '1rem',

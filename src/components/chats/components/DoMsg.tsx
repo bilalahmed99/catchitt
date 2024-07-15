@@ -10,7 +10,7 @@ const DoMsg = ({ onSubmit, onChange, msg }: any) => {
                     placeholder="Write a message..."
                     value={msg}
                 />
-                <p style={{ color: msg.length > 0 ? '#5448b2' : '#a9a9a9' }} onClick={onSubmit}>
+                <p style={{ color: msg.length > 0 ? 'rgb(255, 59, 92)' : '#a9a9a9' }} onClick={onSubmit}>
                     Send
                 </p>
             </form>

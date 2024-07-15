@@ -41,7 +41,7 @@
   cursor: pointer;
 }
 .plusemogi {
-  color: #5448b2;
+  color: rgb(255, 59, 92);
   text-align: center;
   font-family: Poppins;
   font-size: 20px;
@@ -130,7 +130,7 @@
   }
   .sendedMsg {
     color: #fff;
-    background: #5448b2;
+    background: rgb(255, 59, 92);
     font-family: Poppins;
     font-size: 16px;
     font-style: normal;
@@ -165,7 +165,7 @@
 }
 .tempparent {
   border-radius: 10px 10px 0px 10px;
-  background: var(--Foundation-Primary-primary-500, #5448b2);
+  background: var(--Foundation-Primary-primary-500, rgb(255, 59, 92));
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -187,7 +187,7 @@
 }
 
 .primaryText {
-  color: var(--Foundation-Primary-primary-500, #5448b2);
+  color: var(--Foundation-Primary-primary-500, rgb(255, 59, 92));
   text-align: left;
   font-family: Poppins;
   font-size: 16px;

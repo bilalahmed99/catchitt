@@ -48,8 +48,8 @@
   justify-content: center;
   align-items: center;
   border-radius: 0.375rem;
-  border: 1px solid var(--Foundation-Primary-primary-500, #5448b2);
-  background: var(--Foundation-Primary-primary-500, #5448b2);
+  border: 1px solid var(--Foundation-Primary-primary-500, rgb(255, 59, 92));
+  background: var(--Foundation-Primary-primary-500, rgb(255, 59, 92));
   color: var(--Default-white, #fff);
   font-family: Poppins;
   font-size: 0.875rem;
@@ -66,9 +66,9 @@
   justify-content: center;
   align-items: center;
   border-radius: 0.375rem;
-  border: 1px solid var(--Foundation-Primary-primary-500, #5448b2);
+  border: 1px solid var(--Foundation-Primary-primary-500, rgb(255, 59, 92));
   background: var(--Foundation-Primary-primary-500, #fff);
-  color: var(--Default-white, #5448b2);
+  color: var(--Default-white, rgb(255, 59, 92));
   font-family: Poppins;
   font-size: 0.875rem;
   font-style: normal;
