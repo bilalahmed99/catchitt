@@ -127,7 +127,7 @@ h6 {
   width        : 100% !important;
   height       : 48px !important;
   border-radius: 6px !important;
-  border       : 1px solid var(--foundation-primary-primary-500, #5448B2) !important;
+  border       : 1px solid var(--foundation-primary-primary-500, rgb(255, 59, 92)) !important;
   background   : var(--default-white, #FFF) !important;
   font-family  : Poppins !important;
   font-size    : 16px !important;
@@ -139,18 +139,18 @@ h6 {
 .continueBtn {
   @extend .btn;
   background: #ffffff !important;
-  color     : #5448B2 !important;
+  color     : rgb(255, 59, 92) !important;
 }
 
 .submitBtn {
   @extend .btn;
   background: #ffffff !important;
-  color     : #5448B2 !important;
+  color     : rgb(255, 59, 92) !important;
 }
 
 .doneBtn {
   @extend .btn;
-  background: #5448B2 !important;
+  background: rgb(255, 59, 92) !important;
   color     : #fff !important;
 }
 
@@ -158,8 +158,8 @@ h6 {
   width        : 117px;
   height       : 40px;
   border-radius: 6px;
-  border       : 1px solid var(--foundation-primary-primary-500, #5448b2);
-  background   : var(--default-white, #5448b2);
+  border       : 1px solid var(--foundation-primary-primary-500, rgb(255, 59, 92));
+  background   : var(--default-white, rgb(255, 59, 92));
   color        : var(--default-white, #fff);
   /* Small/Semibold */
   font-family  : Poppins;
@@ -180,7 +180,7 @@ h6 {
   justify-content : center;
   align-items     : center;
   border-color    : #eeedf7;
-  color           : #5448b2;
+  color           : rgb(255, 59, 92);
   /* Small/Semibold */
   font-family     : Poppins;
   font-size       : 14px;
@@ -432,7 +432,7 @@ h6 {
 }
 
 .blueText {
-  color      : var(--foundation-primary-primary-500, #5448b2);
+  color      : var(--foundation-primary-primary-500, rgb(255, 59, 92));
   text-align : center;
   /* Base/Regular */
   font-family: Poppins;
@@ -499,7 +499,7 @@ h6 {
 .loader {
   width              : 48px;
   height             : 48px;
-  border             : 5px solid #5448b2;
+  border             : 5px solid rgb(255, 59, 92);
   border-bottom-color: #ff3d00;
   border-radius      : 50%;
   display            : inline-block;

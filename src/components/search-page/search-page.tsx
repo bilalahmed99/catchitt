@@ -713,7 +713,7 @@ export const SearchPage = () => {
                                         sx={{
                                             width: 'fit-content',
                                             '&.Mui-checked': {
-                                                color: '#5448B2',
+                                                color: 'rgb(255, 59, 92)',
                                                 justifyContent: 'flex-start',
                                                 alignItems: 'flex-start',
                                             },
@@ -751,7 +751,7 @@ export const SearchPage = () => {
                                             }));
                                         }}
                                         sx={{
-                                            '&.Mui-checked': { color: '#5448B2' },
+                                            '&.Mui-checked': { color: 'rgb(255, 59, 92)' },
                                             justifyContent: 'flex-start',
                                             width: 'fit-content',
                                         }}
@@ -787,7 +787,7 @@ export const SearchPage = () => {
                                             }
                                         }}
                                         sx={{
-                                            '&.Mui-checked': { color: '#5448B2' },
+                                            '&.Mui-checked': { color: 'rgb(255, 59, 92)' },
                                         }}
                                     />
                                 }
@@ -816,7 +816,7 @@ export const SearchPage = () => {
                                             }));
                                         }}
                                         sx={{
-                                            '&.Mui-checked': { color: '#5448B2' },
+                                            '&.Mui-checked': { color: 'rgb(255, 59, 92)' },
                                         }}
                                     />
                                 }
@@ -845,7 +845,7 @@ export const SearchPage = () => {
                                             }));
                                         }}
                                         sx={{
-                                            '&.Mui-checked': { color: '#5448B2' },
+                                            '&.Mui-checked': { color: 'rgb(255, 59, 92)' },
                                         }}
                                     />
                                 }
@@ -909,7 +909,7 @@ export const SearchPage = () => {
                                             setUsersFilter((prev) => ({ ...prev, limit: 0 }))
                                         }
                                         sx={{
-                                            '&.Mui-checked': { color: '#5448B2' },
+                                            '&.Mui-checked': { color: 'rgb(255, 59, 92)' },
                                             justifyContent: 'flex-start',
                                             alignItems: 'flex-start',
                                         }}
@@ -937,7 +937,7 @@ export const SearchPage = () => {
                                             setUsersFilter((prev) => ({ ...prev, limit: 1000 }))
                                         }
                                         sx={{
-                                            '&.Mui-checked': { color: '#5448B2' },
+                                            '&.Mui-checked': { color: 'rgb(255, 59, 92)' },
                                         }}
                                     />
                                 }
@@ -963,7 +963,7 @@ export const SearchPage = () => {
                                             setUsersFilter((prev) => ({ ...prev, limit: 10000 }))
                                         }
                                         sx={{
-                                            '&.Mui-checked': { color: '#5448B2' },
+                                            '&.Mui-checked': { color: 'rgb(255, 59, 92)' },
                                         }}
                                     />
                                 }
@@ -989,7 +989,7 @@ export const SearchPage = () => {
                                             setUsersFilter((prev) => ({ ...prev, limit: 100000 }))
                                         }
                                         sx={{
-                                            '&.Mui-checked': { color: '#5448B2' },
+                                            '&.Mui-checked': { color: 'rgb(255, 59, 92)' },
                                         }}
                                     />
                                 }
@@ -1015,7 +1015,7 @@ export const SearchPage = () => {
                                             setUsersFilter((prev) => ({ ...prev, limit: 1000000 }))
                                         }
                                         sx={{
-                                            '&.Mui-checked': { color: '#5448B2' },
+                                            '&.Mui-checked': { color: 'rgb(255, 59, 92)' },
                                         }}
                                     />
                                 }
@@ -1051,7 +1051,7 @@ export const SearchPage = () => {
                                             }));
                                         }}
                                         sx={{
-                                            '&.Mui-checked': { color: '#5448B2' },
+                                            '&.Mui-checked': { color: 'rgb(255, 59, 92)' },
                                         }}
                                     />
                                 }
@@ -1081,7 +1081,7 @@ export const SearchPage = () => {
                                             // setSelectedVerifiedUsers(!selectedVerifiedUsers);
                                         }}
                                         sx={{
-                                            '&.Mui-checked': { color: '#5448B2' },
+                                            '&.Mui-checked': { color: 'rgb(255, 59, 92)' },
                                         }}
                                     />
                                 }
@@ -1110,7 +1110,7 @@ export const SearchPage = () => {
                                             }));
                                         }}
                                         sx={{
-                                            '&.Mui-checked': { color: '#5448B2' },
+                                            '&.Mui-checked': { color: 'rgb(255, 59, 92)' },
                                         }}
                                     />
                                 }
@@ -1170,7 +1170,7 @@ export const SearchPage = () => {
                                             setSoundsFilter((prev) => ({ ...prev, filter: 'all' }))
                                         }
                                         sx={{
-                                            '&.Mui-checked': { color: '#5448B2' },
+                                            '&.Mui-checked': { color: 'rgb(255, 59, 92)' },
                                         }}
                                     />
                                 }
@@ -1199,7 +1199,7 @@ export const SearchPage = () => {
                                             }))
                                         }
                                         sx={{
-                                            '&.Mui-checked': { color: '#5448B2' },
+                                            '&.Mui-checked': { color: 'rgb(255, 59, 92)' },
                                         }}
                                     />
                                 }
@@ -1228,7 +1228,7 @@ export const SearchPage = () => {
                                             }))
                                         }
                                         sx={{
-                                            '&.Mui-checked': { color: '#5448B2' },
+                                            '&.Mui-checked': { color: 'rgb(255, 59, 92)' },
                                         }}
                                     />
                                 }
@@ -1262,7 +1262,7 @@ export const SearchPage = () => {
                                             }));
                                         }}
                                         sx={{
-                                            '&.Mui-checked': { color: '#5448B2' },
+                                            '&.Mui-checked': { color: 'rgb(255, 59, 92)' },
                                         }}
                                     />
                                 }
@@ -1288,7 +1288,7 @@ export const SearchPage = () => {
                                             setSoundsFilter((prev) => ({ ...prev, sort: 'used' }));
                                         }}
                                         sx={{
-                                            '&.Mui-checked': { color: '#5448B2' },
+                                            '&.Mui-checked': { color: 'rgb(255, 59, 92)' },
                                         }}
                                     />
                                 }
@@ -1317,7 +1317,7 @@ export const SearchPage = () => {
                                             }));
                                         }}
                                         sx={{
-                                            '&.Mui-checked': { color: '#5448B2' },
+                                            '&.Mui-checked': { color: 'rgb(255, 59, 92)' },
                                         }}
                                     />
                                 }
