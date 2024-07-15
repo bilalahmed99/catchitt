@@ -90,7 +90,7 @@ export default function SuggestedFollower({ randonUser }: any) {
                 <button onClick={() => handleFollowClick(randonUser._id)}>Following</button>
             ) : (
                 <button
-                    style={{ background: '#5448b2', color: '#FFF' }}
+                    style={{ background: 'rgb(255, 59, 92)', color: '#FFF' }}
                     onClick={() => handleFollowClick(randonUser._id)}
                 >
                     Follow

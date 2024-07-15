@@ -33,7 +33,7 @@
     align-items: center;
     color: var(--default-white, #FFF);
     border-radius: 6px;
-    background: var(--foundation-primary-primary-500, #5448B2);
+    background: var(--foundation-primary-primary-500, rgb(255, 59, 92));
     font-family: 'Poppins';
     font-size: 16px;
     font-style: normal;
@@ -67,7 +67,7 @@
     border-radius:5px 5px 0px 0px;
     cursor: pointer;
     color: #FFF;
-    background: var(--foundation-primary-primary-500, #5448B2);
+    background: var(--foundation-primary-primary-500, rgb(255, 59, 92));
 
 }
 
@@ -92,7 +92,7 @@
 .Qdiv>div:nth-child(1):hover>p {
     color: #FFF;
     border-radius: 5px ;
-    background: var(--foundation-primary-primary-500, #5448B2);
+    background: var(--foundation-primary-primary-500, rgb(255, 59, 92));
 }
 
 .whiteColor {

@@ -110,7 +110,7 @@
 }
 
 .seeAll {
-    color: var(--foundation-primary-primary-500, #5448B2);
+    color: var(--foundation-primary-primary-500, rgb(255, 59, 92));
     font-family: 'Poppins';
     font-size: 16px;
     font-style: normal;
@@ -189,7 +189,7 @@
 }
 
 .invite p {
-    color: var(--foundation-primary-primary-500, #5448B2);
+    color: var(--foundation-primary-primary-500, rgb(255, 59, 92));
     text-align: center;
     font-family: Poppins;
     font-size: 13px;
@@ -217,7 +217,7 @@
     align-items: center;
     gap: 8px;
     border-radius: 4px;
-    background: var(--foundation-primary-primary-500, #5448B2);
+    background: var(--foundation-primary-primary-500, rgb(255, 59, 92));
     margin-top: 8px;
 }
 
