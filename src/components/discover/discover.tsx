@@ -1,5 +1,5 @@
 import { CircularProgress } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 import Layout from '../../shared/layout';
@@ -24,6 +24,8 @@ export default function Discover() {
     const [isLoading, setIsLoading] = useState(false);
     const [giftPopup, setGiftPopup] = useState(false);
     const [storyPopup, setStoryPopup] = useState(false);
+    const [videosToShow, setVideosToShow] = useState(10);
+    const [selectedCategory, setSelectedCategory] = useState(0);
 
     useEffect(() => {
         const apisIntegration = async () => {
@@ -50,35 +52,32 @@ export default function Discover() {
         apisIntegration();
     }, []);
 
-    const [videosToShow, setVideosToShow] = useState(10);
-
-    const handleScroll = () => {
+    const handleScroll = useCallback(() => {
         const scrollPosition = window.innerHeight + document.documentElement.scrollTop;
         const totalHeight = document.documentElement.offsetHeight;
 
-        // Adjust the threshold as needed
         if (scrollPosition >= totalHeight) {
-            // When the user reaches the bottom, load more videos
             setHashtagVideosToShow((prev) => [
                 ...prev,
                 ...hashtagVideos.slice(videosToShow, videosToShow + 10),
             ]);
             setVideosToShow((prev) => prev + 10);
         }
-    };
+    }, [hashtagVideos, videosToShow]);
 
     useEffect(() => {
-        // Add a scroll event listener when the component mounts
         window.addEventListener('scroll', handleScroll);
-
-        // Remove the event listener when the component unmounts
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [handleScroll, hashtagVideos, videosToShow]);
+    }, [handleScroll]);
 
-    const openvideomodal = (video: any) => {
+    const openVideoModal = (video: any) => {
         setVideoModalInfo(video);
         setVideoModal(true);
     };
+
+    const categoryHandler =(index:number)=>{
+        setSelectedCategory(index);
+    }
 
     return (
         <Layout>
@@ -101,8 +100,9 @@ export default function Discover() {
                         <div className="flex flex-row mt-8 gap-4 overflow-auto">
                             {DISCOVER_CATEGORIES?.map((category, index) => (
                                 <button
+                                onClick={() =>categoryHandler(index)}
                                     className={`flex items-center px-3 h-[2.625rem] ${
-                                        index === 1
+                                        selectedCategory === index 
                                             ? 'text-white bg-black'
                                             : 'text-[#222] bg-unselected-category'
                                     }  rounded-lg cursor-pointer text-base border-none whitespace-nowrap w-auto`}
@@ -114,16 +114,14 @@ export default function Discover() {
                         </div>
                         <div className="grid grid-flow-row grid-cols-4 gap-2.5 mr-4">
                             {hashtagVideosToShow &&
-                                hashtagVideosToShow.map((video: any, i) => {
-                                    return (
-                                        <div key={i}>
-                                            <VideoPanel
-                                                videomodal={() => openvideomodal(video)}
-                                                video={video}
-                                            />
-                                        </div>
-                                    );
-                                })}
+                                hashtagVideosToShow.map((video: any, i) => (
+                                    <div key={i}>
+                                        <VideoPanel
+                                            videomodal={() => openVideoModal(video)}
+                                            video={video}
+                                        />
+                                    </div>
+                                ))}
                         </div>
                     </>
                 )}
