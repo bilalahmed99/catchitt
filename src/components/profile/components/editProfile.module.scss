@@ -569,13 +569,13 @@
 }
 
 .div-28 {
-  color: var(--foundation-primary-primary-500, #5448b2);
+  color: var(--foundation-primary-primary-500, rgb(255, 59, 92));
   white-space: nowrap;
   justify-content: center;
   align-items: center;
   border-radius: 6px;
   text-align: center;
-  border: 1px solid var(--foundation-primary-primary-500, #5448b2);
+  border: 1px solid var(--foundation-primary-primary-500, rgb(255, 59, 92));
   flex-grow: 1;
   cursor: pointer;
   padding: 12px 20px;
@@ -596,8 +596,8 @@
   align-items: center;
   text-align: center;
   border-radius: 6px;
-  border: 1px solid var(--foundation-primary-primary-500, #5448b2);
-  background-color: var(--foundation-primary-primary-500, #5448b2);
+  border: 1px solid var(--foundation-primary-primary-500, rgb(255, 59, 92));
+  background-color: var(--foundation-primary-primary-500, rgb(255, 59, 92));
   flex-grow: 1;
   padding: 12px 20px;
   font: 600 14px/17px Poppins, -apple-system, Roboto, Helvetica, sans-serif;

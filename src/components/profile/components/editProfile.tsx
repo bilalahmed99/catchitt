@@ -406,7 +406,7 @@ export default function EditProfile({ onCancel, onSave }: Props) {
                             <div onClick={onCancel} className={styles['div-28']}>
                                 Cancel
                             </div>
-                            <button type="submit" className="bg-[#5448B2] text-white">
+                            <button type="submit" className="bg-[rgb(255, 59, 92)] text-white">
                                 Save
                             </button>
                         </div>
