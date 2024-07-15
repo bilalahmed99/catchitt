@@ -443,7 +443,7 @@ const ComingSoon: React.FC = (className: ComingSoonProps) => {
                                             placeholder="Write a message..."
                                         />
                                         <p
-                                            style={{ color: message.length >= 1 ? '#5448b2' : '' }}
+                                            style={{ color: message.length >= 1 ? 'rgb(255, 59, 92)' : '' }}
                                             onClick={sendMessageHandler}
                                             children="Send"
                                         />
@@ -496,7 +496,7 @@ export default ComingSoon;
                                                         display: 'flex',
                                                         width: '217px',
                                                         height: 41,
-                                                        color: '#5448B2',
+                                                        color: 'rgb(255, 59, 92)',
                                                         textAlign: 'center',
                                                         fontFamily: 'Poppins',
                                                         fontSize: 20,
@@ -517,7 +517,7 @@ export default ComingSoon;
                                                     <span style={{ cursor: 'pointer' , position:'relative', zIndex:5 }}> 👍 </span>
                                                     <span
                                                         style={{ cursor: 'pointer' , position:'relative', zIndex:5 }}
-                                                        color="#5448B2"
+                                                        color="rgb(255, 59, 92)"
                                                     >
                                                         {' '}
                                                         +

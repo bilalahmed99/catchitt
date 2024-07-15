@@ -59,7 +59,7 @@
         line-height: 120%;
         flex-shrink: 0;
         border-radius: 0.375rem;
-        background: var(--Foundation-Primary-primary-500, #5448b2);
+        background: var(--Foundation-Primary-primary-500, rgb(255, 59, 92));
       }
 
       .sec2 > div:nth-child(2) {
@@ -67,7 +67,7 @@
         height: 2.5rem;
         flex-shrink: 0;
         border-radius: 0.25rem;
-        border: 1px solid var(--Foundation-Primary-primary-500, #5448b2);
+        border: 1px solid var(--Foundation-Primary-primary-500, rgb(255, 59, 92));
         display: flex;
         justify-content: center;
         align-items: center;

@@ -91,7 +91,7 @@ const ContactUs = () => {
                             placeholder="Your message"
                         ></textarea>
                         <button
-                            className="bg-[#5448B2] rounded-md px-4 h-12 text-white font-semibold text-base w-full mt-4"
+                            className="bg-[rgb(255, 59, 92)] rounded-md px-4 h-12 text-white font-semibold text-base w-full mt-4"
                             onClick={() => console.log('Submitted')}
                         >
                             Send message
