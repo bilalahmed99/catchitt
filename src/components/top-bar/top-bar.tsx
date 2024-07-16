@@ -118,7 +118,7 @@ export const TopBar = ({ className, searchBar }: TopBarProps) => {
                 <Media query={{ maxWidth: 1200 }}>
                     <div>
                         <Button
-                            sx={{ color: '#5448B2' }}
+                            sx={{ color: 'rgb(255, 59, 92)' }}
                             id="basic-button"
                             aria-controls={openBrgr ? 'basic-menu' : undefined}
                             aria-haspopup="true"
