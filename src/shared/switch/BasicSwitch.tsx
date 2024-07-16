@@ -15,7 +15,7 @@ function BasicSwitch({ ...resProps }: any) {
             top: '10px !important',
         },
         '& .MuiSwitch-track.checked': {
-            backgroundColor: '#5448B2 ',
+            backgroundColor: 'rgb(255, 59, 92) ',
         },
         '& .MuiSwitch-track': {
             backgroundColor: '#DFDFDF ',

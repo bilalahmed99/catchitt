@@ -106,7 +106,7 @@ function Navbar() {
                         <>
                             <button
                                 style={{
-                                    background: '#5448B2',
+                                    background: 'rgb(255, 59, 92)',
                                     color: '#FFF',
                                     padding: '0px 18px',
                                     borderRadius: 6,
