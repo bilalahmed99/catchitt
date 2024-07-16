@@ -33,7 +33,7 @@ const PaymentSuccessModal = ({ openPaymentSuccessModal, onClosePaymentSuccessMod
 
                         <div className={styles.paymentInstructions}>
                             <p className={styles.title}>Payment Successful</p>
-                            <p style={{color:'#5448B2'}}>Your balance is 902 Cesium</p>
+                            <p style={{color:'rgb(255, 59, 92)'}}>Your balance is 902 Cesium</p>
                              
                         </div>
 
