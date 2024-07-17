@@ -75,17 +75,18 @@ export default function MORE_MENU_HOME({ visibleReportPopup, url }: any) {
 
     return (
         <div
-            style={{
-                position: 'absolute',
-                right: 0,
-                // top: '100%',
-                // zIndex: 200,
-                width: '100%',
-                height: '100%',
-                background: 'transparent',
-                // marginRight:20,
-                // display:'flex'
-            }}
+            // style={{
+            //     position: 'absolute',
+            //     right: 0,
+            //     // top: '100%',
+            //     // zIndex: 200,
+            //     width: '100%',
+            //     height: '100%',
+            //     background: 'transparent !important',
+            //     // marginRight:20,
+            //     // display:'flex'
+            // }}
+            className={style.actionMoreStyle}
         >
             <List component="nav" aria-label="Device settings" sx={{ bgcolor: 'background.paper' }}>
                 <ListItemButton
@@ -95,7 +96,7 @@ export default function MORE_MENU_HOME({ visibleReportPopup, url }: any) {
                     //   aria-label="when device is locked"
                     aria-expanded={open ? 'true' : undefined}
                     onClick={handleClickListItem}
-                    style={{ background: 'transparent' }}
+                    style={{ background: 'transparent !important' }}
                 ></ListItemButton>
             </List>
             <StyledMenu
@@ -120,7 +121,8 @@ export default function MORE_MENU_HOME({ visibleReportPopup, url }: any) {
                         <a download={true} style={{
                             width: '100%', height: '100%',position: 'absolute',
                             top: 0,
-                            left: 0
+                            left: 0,
+                            background: 'transparent !important'
                         }} href={url}></a>
                         <p className={`${style.p} ${style.fp} ${style.black_500}`}>Save video</p>
                     </div>
