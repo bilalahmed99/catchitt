@@ -78,3 +78,17 @@ div.darkTheme p{
 div.darkTheme input{
   color:black !important;
 }
+
+.DivUpload {
+  min-width: 110px;
+  padding: 0px 16px;
+  height: 36px;
+  border: 1px solid rgb(255, 59, 92);
+  border-radius: 2px;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  // background: rgb(255, 255, 255);
+}
