@@ -74,18 +74,21 @@ export default function COPY_AND_SEND_MENU_HOME({ copyHandler, popupHandler, bot
     return (
         <div
             style={{
-                position: 'absolute',
-                right: 0,
-                // top: '100%',
-                // zIndex: 200,
-                width: '100%',
-                height: '100%',
-                background: 'transparent',
+                // position: 'absolute',
+                // background: 'transparent',
+                // right: 0,
+                // // top: '100%',
+                // // zIndex: 200,
+                // width: '100%',
+                // height: '100%',
+                
                 // marginRight:20,
                 // display:'flex'
+                background: 'transparent !important'
             }}
+            className={style.actionShareStyle}
         >
-            <List component="nav" aria-label="Device settings" sx={{ bgcolor: 'background.paper' }}>
+            <List component="nav" aria-label="Device settings" sx={{ bgcolor: 'background.paper' }} >
                 <ListItemButton
                     id="lock-button"
                     aria-haspopup="listbox"
@@ -93,7 +96,8 @@ export default function COPY_AND_SEND_MENU_HOME({ copyHandler, popupHandler, bot
                     //   aria-label="when device is locked"
                     aria-expanded={open ? 'true' : undefined}
                     onClick={handleClickListItem}
-                    style={{ background: 'transparent' }}
+                    className={style.navImpClass}
+                    // style={{ background: 'transparent' }}
                 ></ListItemButton>
             </List>
             <StyledMenu
