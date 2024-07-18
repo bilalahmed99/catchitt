@@ -308,11 +308,27 @@ useEffect(() => {
                                                             <img loading="lazy" alt="sherjangkhan5" src={post?.user?.avatar || defaultAvatar} className="css-1zpj2q-ImgAvatar e1e9er4e1" /></span>
                                                     </div>
                                                 </a>
-                                                <button className={style.AvatarFollowButton} data-e2e="feed-follow">
+
+                                                <button className={style.AvatarFollowButton} data-e2e="feed-follow" onClick={() => follow_Unfollow_handler(post?.user?._id)}>
                                                     <span className={style.ColorButtonContent}>
-                                                        <svg fill="white" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em">
-                                                            <path d="M26 7a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v15H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h15v15a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V26h15a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H26V7Z"></path>
-                                                        </svg>
+                                                    {followBtnLoading &&
+                                                        followimgbtnId === post?.user?._id ? (
+                                                            <CircularProgress
+                                                                style={{ width: 3, height: 3 }}
+                                                            />
+                                                        ) : followers?.data?.some(
+                                                            (user: any) =>
+                                                                user.followed_userID._id === post?.user?._id
+                                                        ) ? (
+                                                            <svg fill="white" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em">
+                                                                <path d="m19.71 36.03 19.73-30.5a1 1 0 0 1 1.39-.3l2.35 1.53c.46.3.6.92.3 1.38L22.01 41.3a2.4 2.4 0 0 1-3.83.28L4.85 26.33a1 1 0 0 1 .1-1.4l2.1-1.85a1 1 0 0 1 1.42.1L19.7 36.02Z"></path>
+                                                            </svg>
+                                                        ) : (
+                                                            <svg fill="white" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em">
+                                                                <path d="M26 7a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v15H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h15v15a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V26h15a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H26V7Z"></path>
+                                                            </svg>
+                                                        )}
+                                                        
                                                     </span>
                                                 </button>
                                             </div>
