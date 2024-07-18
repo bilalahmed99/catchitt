@@ -181,7 +181,9 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
                                 className={styles.avatarImgCircle}
                             />
                         )}
+                        <p>
                         <h4 className={styles.userNameText}>{account.name}</h4>
+                        </p>
                     </div>
                     <div className={styles.followBtnDiv}>
                         <button
