@@ -5,6 +5,7 @@ import { useAuthStore } from '../../store/authStore';
 import styles from './side-nav-bar.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { openLoginPopup } from '../../redux/reducers';
+import {isUserLoggedIn} from '../../utils/common';
 
 export interface SideNavBarProps {
     className?: string;
@@ -289,8 +290,14 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                 </span>
 
                 <div className={styles.sidebarLoginBox}>
-                    <p className={styles.sidebarTextStyle}>Log in to follow creators, like videos, and view comments.</p>
-                    <button type="button"  onClick={() => dispatch(openLoginPopup())} className={styles.sidebarLogin}>Log in</button>
+                 { isUserLoggedIn() ? (
+                     <p className={styles.sidebarTextStyle} ><b style={{fontWeight: '900'}}>Following accounts</b><br/> Accounts you follow will appear here</p>
+                    ):(
+                       <>
+                        <p className={styles.sidebarTextStyle}>Log in to follow creators, like videos, and view comments.</p>
+                        <button type="button"  onClick={() => dispatch(openLoginPopup())} className={styles.sidebarLogin}>Log in</button>
+                       </>
+                 )}
                 </div>
 
                 <div className={styles.divFooterContainer}>

@@ -116,17 +116,20 @@
 
 // //new theme 
 .sidebarTextStyle {
-  color: rgb(122 124 133 / 50%) !important; 
+  color: rgb(214 207 207 / 50%) !important; 
   font-family:  Arial, Tahoma, PingFangSC, sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 21px;
   text-align: left;
+  font-weight: 100;
 }
 
 .sidebarLoginBox{
     position: relative;
     padding: 20px 8px 24px;
     margin: 0px;
+    border-top: rgb(214 207 207 / 50%) 1px solid;
+    border-bottom: rgb(214 207 207 / 50%)  1px solid;
 }
 
 .sidebarLogin {
@@ -189,7 +192,7 @@ div.darkTheme > p > h1, h2, h3, h4  {
 }
 
 div.darkTheme p{
-  color:white !important;
+  color:white ;
 }
 
 div.darkTheme .selected p{
@@ -211,7 +214,7 @@ div.darkThemeblack div{
 }
 
 div.darkThemeblack p{
-  color: white !important;
+  color: white;
 }
 
 .textWhiteColor{
@@ -226,7 +229,7 @@ div.darkThemeblack p{
 .sideBarLinks{
     font-size: 15px;
     line-height: 22px;
-    margin-top: 5px;
+    margin-top: 10px;
     cursor: pointer;
     color: rgba(255, 255, 255, 0.5) !important;
     font-family: Poppins;
