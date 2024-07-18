@@ -34,6 +34,7 @@ function ForDesktop(props: any) {
       console.log(props,"props");
     const { videoes,activeTab, setActiveTab, showVideoModal, videoModal, setSendPopup } =
         props || {};
+        
     const [reportPopup, setreportPopup] = useState(false);
     const [followBtnLoading, setfollowBtnLoading] = useState(false);
     const [toastOfUploading, settoastOfUploading] = useState(false);
@@ -62,7 +63,7 @@ function ForDesktop(props: any) {
     const [hasMore, setHasMore] = useState<boolean>(true);
     const [scrollY, setScrollY] = useState(0);
     const scrollableDivRef = useRef<HTMLDivElement>(null);
-
+    const APP_URL = process.env.VITE_API_URL;
 
     const navigate: any = useNavigate();
 
@@ -107,7 +108,7 @@ function ForDesktop(props: any) {
         const fetchVideos = async () => {
         //   setLoading(true);
           try {
-            const response = await fetch(`https://prodapi.seezitt.com/media-content/public/videos/feed/upgraded?page=${page}&pageSize=5`);
+            const response = await fetch(APP_URL+`/media-content/public/videos/feed/upgraded?page=${page}&pageSize=5`);
             const responseData = await response.json();
             const newVideos = Array.isArray(responseData.data) ? responseData.data as Video[] : [];
             // const newVideos = useSelector((store:any) => store.reducers.homeVideos);
