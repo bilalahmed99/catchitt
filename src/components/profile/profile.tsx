@@ -63,6 +63,7 @@ export const Profile = (props: any) => {
     const [hasMoreBookmarkVideos, setHasMoreBookmarkVideos] = useState(true);
 
     const [initialCalled, setInitialCalled] = useState<boolean>(false);
+    const mainDivRef = useRef(null);
 
     // @ts-ignore
     const dispatch = useDispatch();
@@ -367,14 +368,11 @@ export const Profile = (props: any) => {
         }
     });
 
-    const mainDivRef = useRef(null);
-
     const handleScroll = useCallback(() => {
         if (mainDivRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = mainDivRef.current;
             if (scrollTop + clientHeight >= scrollHeight - 0.5) {
                 // Adding a small buffer
-                console.log('SCROLL BUFFER >>>>>>>');
                 if (initialCalled) {
                     fetchData();
                 }
@@ -417,7 +415,6 @@ export const Profile = (props: any) => {
     };
 
     useUpdateEffect(() => {
-        console.log('USE BUFFER >>>>>>>');
         fetchData();
     }, [activeTab]);
 
