@@ -161,14 +161,13 @@ export const Profile = (props: any) => {
 
     const fetchData = async () => {
         // 63a04301a00ed2af91f17e1d user id contain videos
-        await fetch(`${API_KEY}/profile/${userId}/videos`, {
+        await fetch(`${API_KEY}/profile/${userId}/videos?page=1&pageSize=10`, {
             method: 'GET',
             headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
         })
             .then((res) => res.json())
             .then((data) => {
                 setUserVideos(data.data.data);
-
                 setLoading(false);
             })
             .catch((err) => {
@@ -176,14 +175,13 @@ export const Profile = (props: any) => {
                 setLoading(false);
             });
 
-        fetch(`${API_KEY}/profile/${userId}/liked-videos`, {
+        fetch(`${API_KEY}/profile/${userId}/liked-videos?page=1&pageSize=10`, {
             method: 'GET',
             headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
         })
             .then((res) => res.json())
             .then((data: any) => {
                 setUserlikedVideos(data.data.data);
-
                 setLoading(false);
             })
             .catch((err) => {
@@ -191,15 +189,13 @@ export const Profile = (props: any) => {
                 setLoading(false);
             });
 
-        fetch(`${API_KEY}/profile/tagged-videos`, {
+        fetch(`${API_KEY}/profile/tagged-videos?page=1&pageSize=10`, {
             method: 'GET',
             headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
         })
             .then((res) => res.json())
             .then((data) => {
                 setUsertaggedVideos(data.data.data);
-                console.log(data.data.data);
-
                 setLoading(false);
             })
             .catch((err) => {
@@ -214,7 +210,6 @@ export const Profile = (props: any) => {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log('collections');
                 setbookmarkVideos(data.data.data);
                 setLoading(false);
             })
@@ -223,26 +218,12 @@ export const Profile = (props: any) => {
                 setLoading(false);
             });
 
-        fetch(`${API_KEY}/profile/collection`, {
-            method: 'GET',
-            headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                setbookmarkVideos(data.data.data);
-            })
-            .catch((err) => {
-                console.log('collectons error', err);
-            });
-
         await fetch(`${API_KEY}/profile/visitors`, {
             method: 'GET',
             headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log('PRofile views data : ', data);
-
                 makeProfileViews(data?.data);
                 setLoading(false);
             })
@@ -305,14 +286,13 @@ export const Profile = (props: any) => {
     });
 
     const MemoizedStoriesOnPublicProfile = memo(publicProfileStories);
-   
 
     useEffect(() => {
         var themeColor = window.localStorage.getItem('theme');
 
-        if(themeColor == "dark"){ 
+        if (themeColor == 'dark') {
             setdarkTheme(style.darkTheme);
-        } 
+        }
     });
 
     return (
@@ -351,7 +331,6 @@ export const Profile = (props: any) => {
                         setProfileModal={setProfileModal}
                         setLikesModal={setLikesModal}
                         showStory={() => {
-                            console.log('sett story popup caling ');
                             setStoryPopup(true);
                         }}
                         onProfileEdit={onSave}
