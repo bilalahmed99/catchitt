@@ -12,7 +12,9 @@ function Action({ obj, visibleReportPopup, popupHandler, copyHandler, showVideoM
     const actionClickHandler = async () => {
         try {
             if (obj.actionType === 'like') {
+                // console.log("post",post)
                 dispatch(videoLikehandle(post.mediaId));
+                // dispatch(likeHandler);
             }
             if (obj?.actionType === 'comment') {
                 showVideoModal(post);
@@ -48,6 +50,23 @@ function Action({ obj, visibleReportPopup, popupHandler, copyHandler, showVideoM
                 return post.isSaved;
             default:
                 return false;
+        }
+    };
+
+    const [like, setLike] = useState(false);
+    const [likes, setLikes] = useState(0);
+    const likeHandler = async () => {
+        try {
+            if (like) {
+                setLikes(1);
+                setLike(false);
+            } else {
+                setLikes(0);
+                setLike(true);
+            }
+            dispatch(videoLikehandle(post.mediaId));
+        } catch (error) {
+            console.log('error', error);
         }
     };
 
@@ -89,7 +108,7 @@ function Action({ obj, visibleReportPopup, popupHandler, copyHandler, showVideoM
                 )}
             </div>
             {obj?.actionType === 'like' ? (
-                <p className={style.actionC}>{post.likes || 0}</p>
+                <p className={style.actionC}>{post.likes+likes || 0}</p>
             ) : obj?.actionType === 'comment' ? (
                 <p className={style.actionC}>{post?.comments?.length || 0}</p>
             ) : obj?.actionType === 'share' ? (
