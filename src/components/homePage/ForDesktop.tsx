@@ -14,13 +14,14 @@ import {
     music,
     shareInHome,
 } from '../../icons';
-import { followingsMethod } from '../../redux/AsyncFuncs';
+import { followingsMethod, getHomeVideos, addMoreVideos } from '../../redux/AsyncFuncs';
 import Layout from '../../shared/layout';
 import Action from './components/Action';
 import CustomPlayer from './components/CustomPlayer';
 import style from './index.module.scss';
 import FollowUserCard from '../../shared/cards/followCard';
 import { ToastContainer } from 'react-toastify';
+import { updateHomeVideos } from '../../redux/reducers';
 // import { Toast } from 'react-toastify/dist/components';
 
 function ForDesktop(props: any) {
@@ -31,7 +32,7 @@ function ForDesktop(props: any) {
         // Add more fields as per your API response
       }
       console.log(props,"props");
-    const { activeTab, setActiveTab, showVideoModal, videoModal, setSendPopup } =
+    const { videoes,activeTab, setActiveTab, showVideoModal, videoModal, setSendPopup } =
         props || {};
     const [reportPopup, setreportPopup] = useState(false);
     const [followBtnLoading, setfollowBtnLoading] = useState(false);
@@ -109,11 +110,20 @@ function ForDesktop(props: any) {
             const response = await fetch(`https://prodapi.seezitt.com/media-content/public/videos/feed/upgraded?page=${page}&pageSize=5`);
             const responseData = await response.json();
             const newVideos = Array.isArray(responseData.data) ? responseData.data as Video[] : [];
-            setVideos(prevVideos => [...prevVideos, ...newVideos]);
-            setHasMore(newVideos.length > 0);
+            // const newVideos = useSelector((store:any) => store.reducers.homeVideos);
+        //     // const API_KEY = process.env.VITE_API_URL;
+            // dispatch(addMoreVideos(newVideos));
+        //     // dispatch(getHomeVideos({tab : 2, token})).then(() => setLoading(false));
+        //     // setVideos(prevVideos => [...prevVideos, ...newVideos]);
+            const token = localStorage.getItem('token');
+            dispatch(addMoreVideos({tab : activeTab, token, page: page}))
+            // setHasMore(newVideos.length > 0);
           } catch (error) {
             console.error('Error fetching videos:', error);
           }
+            const token = localStorage.getItem('token');
+            // dispatch(getHomeVideos({tab : activeTab, token})).then(() => setLoading(false));
+            
           setLoadingVideo(false);
         };
     
@@ -178,8 +188,8 @@ useEffect(() => {
                     </div> 
                 </div> */}
                 <div className={style.videoesParent}  ref={scrollableDivRef}>
-                    {videos?.length > 0 && !loading && activeTab !== 3 ? (
-                        videos.map((post: any, number: number) => {
+                    {videoes?.length > 0 && !loading && activeTab !== 3 ? (
+                        videoes.map((post: any, number: number) => {
                             return (
                                 <div key={number} className={style.videoParent} >
                                     {/* <div className={style.videoHeader}>
@@ -313,7 +323,7 @@ useEffect(() => {
                                 </div>
                             );
                         })
-                    ) : videos?.length === 0 && !loading && activeTab === 1 ? (
+                    ) : videoes?.length === 0 && !loading && activeTab === 1 ? (
                         <div className={style.suggestedUsersContainer}>
                             {suggestedUsers.map((suggestedUser: any, key: number) => {
                                 return <FollowUserCard key={key} user={suggestedUser} darkTheme={darkTheme} />;

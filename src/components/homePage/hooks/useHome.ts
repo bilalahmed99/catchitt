@@ -17,7 +17,7 @@ function useHome() {
 
     const getHomeVideoes = async () => {
         setLoading(true);
-        dispatch(getHomeVideos({tab : activeTab, token})).then(() => setLoading(false));
+        dispatch(getHomeVideos({tab : activeTab, token, page: 1})).then(() => setLoading(false));
     };
 
     useEffect(() => {

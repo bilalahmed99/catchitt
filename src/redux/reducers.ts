@@ -10,6 +10,7 @@ import {
     loadFollowing,
     videoLikehandle,
     videoSavehandle,
+    addMoreVideos,
 } from './AsyncFuncs';
 import loginSlice from './reducers/auth';
 import isuploading from './reducers/upload';
@@ -65,6 +66,9 @@ const homeVideos: any = createSlice({
         updateHomeVideos: (_state, action: any) => {
             return action.payload;
         },
+        // addMoreVideos: (_state:any, action: any) => {
+        //     return {..._state.videos, ...action.payload};
+        // },
     },
     extraReducers: (builder: any) => {
         builder.addCase(getHomeVideos.fulfilled, (_state: any, action: any) => {
@@ -132,6 +136,12 @@ const homeVideos: any = createSlice({
                 });
                 return filteredData;
             }
+        });
+        builder.addCase(addMoreVideos.fulfilled, (state: any, action: any) => {
+            // @ts-ignore
+            console.log("state / payload", state, action.payload);
+            let filteredData =  [...state, ...action.payload]
+            return filteredData;
         });
     },
 });

@@ -32,14 +32,14 @@ export const followingsMethod: any = createAsyncThunk(
 
 export const getHomeVideos: any = createAsyncThunk(
     'get/foryou/videos',
-    async ({ tab, token }: { tab: number; token: string }) => {
+    async ({ tab, token, page=1 }: { tab: number; token: string, page: number }) => {
         let link: string = '';
         if (tab === 1) {
             link = `/media-content/videos/feed/?page=1&followingsuggestions=1`;
         } else if (tab === 2) {
             link =
                 token && userId
-                    ? `/media-content/videos/feed?page=1&pageSize=5`
+                    ? `/media-content/videos/feed?page=${page}&pageSize=5`
                     : `/media-content/public/videos/feed/upgraded?page=1&pageSize=5`;
         } else {
             console.log('Live Tab');
@@ -137,6 +137,37 @@ export const commentMethod: any = createAsyncThunk(
             } catch (error) {
                 console.log(error);
             }
+        }
+    }
+);
+
+
+export const addMoreVideos: any = createAsyncThunk(
+    'get/foryou/add-more-videos',
+    async ({ tab, token, page=2 }: { tab: number; token: string, page: number }) => {
+        let link: string = '';
+        if (tab === 1) {
+            link = `/media-content/videos/feed/?page=1&followingsuggestions=1`;
+        } else if (tab === 2) {
+            link =
+                token && userId
+                    ? `/media-content/videos/feed?page=${page}&pageSize=5`
+                    : `/media-content/public/videos/feed/upgraded?page=${page}&pageSize=5`;
+        } else {
+            console.log('Live Tab');
+        }
+        try {
+            if (tab === 1 || tab === 2) {
+                const res = await get(link);
+                if (res?.data?.data) {
+                    const responseData = res?.data;
+                    return responseData?.data;
+                } else {
+                    return {};
+                }
+            }
+        } catch (error) {
+            console.log(error);
         }
     }
 );
