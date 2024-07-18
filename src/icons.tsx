@@ -96,6 +96,8 @@ import notificationBellIconWhite from './assets/notificationBellIcon-white.svg';
 import privacyPolicyIconWhite from './assets/privacyPolicyIcon-white.svg';
 import reportProblemIconWhite from './assets/reportProblemIcon-white.svg';
 import termsConditionsIconWhite from './assets/termsConditionsIcon-white.svg';
+import closeSquare from './assets/closeSquare.svg';
+
 
 export {
     duet,
@@ -196,4 +198,5 @@ export {
     privacyPolicyIconWhite,
     reportProblemIconWhite,
     termsConditionsIconWhite,
+    closeSquare,
 };

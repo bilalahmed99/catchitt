@@ -11,6 +11,7 @@ import Comment from './comment';
 import style from './videoModel.module.scss';
 import { timeConverter } from '../../../utils';
 import CustomPlayer from '../../homePage/components/CustomPlayer';
+import {closeSquare} from '../../../icons'
 
 interface Props {
     onModalClose: any;
@@ -137,7 +138,7 @@ function VideoModel({ onModalClose, info, report, block, gifts, sendPopupHandler
                 <img
                     onClick={onModalClose}
                     className={style['close-btn-img']}
-                    src="../../../../public/images/icons/Close Square.svg"
+                    src={closeSquare}
                     alt=""
                 />
                 <div className={style['info-sec']} style={{ width: '100%' }}>
