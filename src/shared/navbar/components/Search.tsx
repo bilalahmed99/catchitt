@@ -28,11 +28,12 @@ function Search({
                 flex: 1,
                 height: 40,
                 background: '#F8F8F8',
-                borderRadius: showClose ? 0 : 4,
+                borderRadius: '92px',//showClose ? 0 : 4,
                 display: 'flex',
                 alignItems: 'center',
                 gap: 8,
                 padding: '0px 16px',
+                width:'516px',
                 visibility: pathname.includes('/searchPage/') ? 'hidden' : 'visible',
             }}
         >
