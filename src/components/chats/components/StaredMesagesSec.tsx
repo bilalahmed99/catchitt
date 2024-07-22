@@ -6,12 +6,11 @@ import {
     forwardMsg,
     rightArrow,
     starMsg,
-    tagMsg,
     unStarMsg,
 } from '../../../icons';
 import Search from '../../../shared/navbar/components/Search';
 import style from './stared.module.scss';
-import { boolean } from 'mathjs';
+
 function StaredMesagesSec({
     staredMsgs: staredMsgsList,
     onBack,
@@ -32,7 +31,6 @@ function StaredMesagesSec({
         const isNotReceivedChat: any[] = [];
         staredMsgsList?.forEach((element: any) => {
             element.chats.forEach((chat: any) => {
-                console.log();
                 if (chat?.isrecevied) {
                     isReceivedChat.push(chat);
                 } else {
@@ -69,7 +67,6 @@ function StaredMesagesSec({
         const isNotReceivedChat: any[] = [];
         staredMsgsList?.forEach((element: any) => {
             element.chats.forEach((chat: any) => {
-                console.log();
                 if (chat?.isrecevied) {
                     isReceivedChat.push(chat);
                 } else {
@@ -154,7 +151,8 @@ function StaredMesagesSec({
                                                                         style={{
                                                                             width: 20,
                                                                             height: 20,
-                                                                            background: 'rgb(255, 59, 92)',
+                                                                            background:
+                                                                                'rgb(255, 59, 92)',
                                                                             borderRadius: 4,
                                                                             cursor: 'pointer',
                                                                             marginRight: '0.5rem',
@@ -213,7 +211,8 @@ function StaredMesagesSec({
                                                                         style={{
                                                                             width: 20,
                                                                             height: 20,
-                                                                            background: 'rgb(255, 59, 92)',
+                                                                            background:
+                                                                                'rgb(255, 59, 92)',
                                                                             borderRadius: 4,
                                                                             cursor: 'pointer',
                                                                             marginRight: '0.5rem',

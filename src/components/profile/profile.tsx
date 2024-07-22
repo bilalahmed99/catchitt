@@ -467,14 +467,14 @@ export const Profile = (props: any) => {
                         {tabs.map((item) => (
                             <div
                                 onClick={() => tabChangeHandler(item?.title)}
-                                style={{
-                                    borderColor:
-                                        activeTab === item.title ? 'rgb(255, 59, 92)' : '#DFDFDF',
-                                }}
-                                className={styles.tab}
+                                className={`${styles.tab} ${
+                                    activeTab === item.title
+                                        ? 'border-liveSelected'
+                                        : 'border-inactive'
+                                } text-center flex justify-center items-center pb-1`}
                                 key={item.key}
                             >
-                                {item.icon}
+                                <div className="mb-2">{item.icon}</div>
                             </div>
                         ))}
                     </div>

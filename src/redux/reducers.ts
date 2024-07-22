@@ -15,6 +15,7 @@ import {
 import loginSlice from './reducers/auth';
 import isuploading from './reducers/upload';
 import videoCategories from './reducers/videoCategories';
+import geoSlice from './reducers/geoServices';
 
 const followings: any = createSlice({
     name: 'followings',
@@ -196,4 +197,5 @@ export default combineReducers({
     isuploading,
     videoCategories,
     popupSlice: popupSlice.reducer,
+    geo: geoSlice,
 });

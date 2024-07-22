@@ -64,7 +64,6 @@ function useChat() {
     };
     // Function to load more messages
     const loadMoreMessages = () => {
-        console.log('AAAAA');
         setPage((prevPage) => prevPage + 1);
     };
 
@@ -134,7 +133,6 @@ function useChat() {
                     let isPinned = chats?.isPinned;
                     let unReadMsgsCount = chats?.unReadMsgsCount;
                     let isBlocked = chats?.isBlocked;
-                    console.log('Last Message : ', lastMessage);
                     // Convert milliseconds to date
                     const date = new Date(chats?.lastMessage?.createdTime);
 
@@ -168,7 +166,6 @@ function useChat() {
                     }
                 }
             );
-            console.log('Response Chats : ', tempArr);
         } catch (error) {
             console.log('error trendinghashtags', error);
         }
@@ -188,7 +185,6 @@ function useChat() {
             );
             const res = await response.json();
             const tempArr: any[] = [];
-            console.log('Res : ', res?.data?.data?.length);
             if (res?.data?.data?.length > 0) {
                 res?.data?.data?.forEach(
                     (
@@ -211,7 +207,6 @@ function useChat() {
                         let lastMessage = chats?.lastMessage?.message;
                         let isPinned = chats?.isPinned;
                         let unReadMsgsCount = chats?.unReadMsgsCount;
-                        console.log('Last Message : ', lastMessage);
                         // Convert milliseconds to date
                         const date = new Date(chats?.lastMessage?.createdTime);
 
@@ -248,7 +243,6 @@ function useChat() {
                 setUsers([]);
                 setactiveChat({});
             }
-            console.log('Response Chats : ', tempArr);
         } catch (error) {
             console.log('error trendinghashtags', error);
         }
@@ -354,7 +348,6 @@ function useChat() {
                 body: JSON.stringify({ messageId, conversationId }),
             });
             const res = await response.json();
-            console.log('Message Marked as stared : ', res);
         } catch (error) {
             console.log('error trendinghashtags', error);
         }
@@ -381,7 +374,6 @@ function useChat() {
                 }
             );
             const res = await response.json();
-            console.log('Message deleted : ', res);
         } catch (error) {
             console.log('Error deleting message', error);
         }
@@ -410,7 +402,6 @@ function useChat() {
         if (e) {
             e.preventDefault();
         }
-        console.log('I am here');
         e.stopPropagation();
         const messageData = {
             to: receiver,
@@ -459,7 +450,6 @@ function useChat() {
                         },
                     ],
                 });
-                console.log('Message ELSE : ', messageData);
                 (socketRef.current as any).emit('send-msg', JSON.stringify(messageData));
                 setMsg('');
             }
@@ -486,7 +476,6 @@ function useChat() {
         setselectedData([]);
     };
     const chatSwitchH = (e: any) => {
-        // console.log('Click on chat : ', e);
         users?.forEach((user) => {
             if (user?.userId === e) {
                 setSender(user?.senderId);
@@ -498,9 +487,6 @@ function useChat() {
             }
         });
 
-        // console.log("Conversation ID: ",conversationId);
-        // console.log("Sender ID: ",sender);
-        // console.log("Receiver ID: ",receiver);
         setstaredMsgs([]);
     };
 
@@ -522,7 +508,6 @@ function useChat() {
             );
             const res = await response.json();
             res?.data?.data.forEach((element: any, index: number, array: any[]) => {
-                console.log('Chat Messages : ', element);
                 // Convert milliseconds to date
                 const date = new Date(element?.createdTime);
 
@@ -572,7 +557,6 @@ function useChat() {
             );
             const res = await response.json();
             res?.data?.data.forEach((element: any, index: number, array: any[]) => {
-                console.log('Chat Messages : ', element);
                 // Convert milliseconds to date
                 const date = new Date(element?.createdTime);
 
@@ -743,7 +727,6 @@ function useChat() {
                 },
             });
             const res = await response.json();
-            console.log('Chat PINNED : ', res);
         } catch (error) {
             console.log('error trendinghashtags', error);
         }
@@ -873,7 +856,6 @@ function useChat() {
             });
             const res = await response.json();
             setBlockToggle(!blockToggle);
-            console.log('User Blocked : ', res);
         } catch (error) {
             console.log('error blocking user', error);
         }
@@ -924,14 +906,12 @@ function useChat() {
         // } else {
         //     setUsers(tempArr);
         // }
-        console.log('ssss : ', e);
         setUsers([]);
         setactiveChat({});
         searchChats(e);
     };
 
     const searchMessagesHandler = (e: any) => {
-        console.log('Messages : ', typeof e);
         if (e.length >= 3) {
             searchChatMessages(e, receiver, conversationId);
         }

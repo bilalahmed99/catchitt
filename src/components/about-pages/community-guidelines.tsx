@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
-
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
-
 import IconButton from '@mui/material/IconButton/IconButton';
 import Layout from '../../shared/layout';
 import { LeftArrow } from '../push-notifications-page/svg-components/LeftArrow';
@@ -13,8 +11,7 @@ export interface CommunityPageProps {
 }
 
 export const CommunityPage = ({ className }: CommunityPageProps) => {
-    const { selectedIndex, setIndex, isLoggedIn, setSettingsDropdown } = useAuthStore();
-    const token = localStorage.getItem('token');
+    const { setIndex, setSettingsDropdown } = useAuthStore();
     const navigate = useNavigate();
 
     const handleGoBack = () => {

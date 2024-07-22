@@ -3,7 +3,7 @@ import UploadFile from './components/uploadFile';
 import UploadForm from './components/uploadForm';
 import useUpload from './hooks';
 import style from './index.module.scss';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 function UploadPage() {
     const {
@@ -24,9 +24,9 @@ function UploadPage() {
     useEffect(() => {
         var themeColor = window.localStorage.getItem('theme');
 
-        if(themeColor == "dark"){ 
+        if (themeColor == 'dark') {
             setdarkTheme(style.darkTheme);
-        }else{
+        } else {
         }
     });
 
@@ -51,7 +51,7 @@ function UploadPage() {
                 onChange={onChangeFileHandler}
                 type="file"
                 className="hidden"
-                accept='video/*'
+                accept="video/*"
             />
         </div>
     );

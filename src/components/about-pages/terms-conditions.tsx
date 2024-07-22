@@ -1,14 +1,12 @@
-import { useEffect } from 'react';
-
+import IconButton from '@mui/material/IconButton/IconButton';
 import classNames from 'classnames';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
+import { LeftArrow } from '../push-notifications-page/svg-components/LeftArrow';
 import { SideNavBar } from '../side-nav-bar/side-nav-bar';
 import { SuggestedActivity } from '../suggested-activity/suggested-activity';
 import { TopBar } from '../top-bar/top-bar';
-
-import IconButton from '@mui/material/IconButton/IconButton';
-import { LeftArrow } from '../push-notifications-page/svg-components/LeftArrow';
 import styles from './styles.module.scss';
 
 export interface TermsPageProps {
@@ -16,8 +14,7 @@ export interface TermsPageProps {
 }
 
 export const TermsPage = ({ className }: TermsPageProps) => {
-    const { selectedIndex, setIndex, isLoggedIn, setSettingsDropdown } = useAuthStore();
-    const token = localStorage.getItem('token');
+    const { selectedIndex, setIndex, setSettingsDropdown } = useAuthStore();
     const navigate = useNavigate();
 
     const handleGoBack = () => {

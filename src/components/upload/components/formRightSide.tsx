@@ -22,8 +22,6 @@ function FormRightSide(props: any) {
     const [postLocationsPopup, setPostLocationsPopup] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState('');
     const [taggedUsers, setTaggedUser] = useState<any[]>([]);
-    // const [leaveSitePopup, setLeaveSitePopup] = useState(false);
-    // const [cancelPostPopup, setCancelPostPopup] = useState(false);
 
     useMemo(() => {
         setVideoThumbnails(thumbnails);
@@ -35,9 +33,6 @@ function FormRightSide(props: any) {
 
     const dropDownH = (e: any) => {
         const filteredCategories = categories.filter((item: any) => {
-            console.log(item);
-            console.log(e.target.value);
-
             if (item?.name?.toLowerCase().includes(e.target.value.toLowerCase())) {
                 return item;
             }

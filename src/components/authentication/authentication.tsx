@@ -120,16 +120,12 @@ export const Authentication = (props: any) => {
         const { password, email } = user;
         dispatch(loginService({ password, email }))
             .then((res: any) => {
-                console.log('response of login');
-                console.log(res);
                 if (res?.error) {
                     //  setErrorMessage(res?.message);
                     setErrorMessage('Invalid Email or Password');
                     setVerificationLink(true);
                     setLoader(false);
                 } else if (res?.payload?.status == 200) {
-                    console.log('data after successfull login');
-                    console.log(res?.payload?.data);
                     setLoader(false);
                     navigate('/home');
                 }

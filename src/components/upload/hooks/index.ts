@@ -128,7 +128,6 @@ function useUpload() {
                 },
                 body: postPayload,
             });
-            console.log('Video Successfully Posted');
         } catch (error) {
             console.error('Something Went Wrong', error);
             setIsPosting(false);

@@ -26,6 +26,7 @@ export default {
                 loginItem: '#BABABA',
                 'custom-1': '#a7a9acfe',
                 'custom-2': '#a2a3a5df',
+                inactive: '#DFDFDF',
             },
         },
         screens: {

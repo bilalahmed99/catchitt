@@ -1,7 +1,7 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { CircularProgress } from '@mui/material';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { back, checkCountryCode, chevronDown, search } from '../../icons';
 import { loginService } from '../../redux/reducers/auth';
@@ -33,6 +33,9 @@ const PhoneOrEmail = (props: any) => {
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [passwordBorderColor, setPasswordBorderColor] = useState('');
+    const { country_calling_code, country_code } = useSelector(
+        (state: any) => state?.reducers?.geo
+    );
 
     const toggleLoginMethod = () => {
         setLoginWithPhone(!loginWithPhone);
@@ -42,7 +45,7 @@ const PhoneOrEmail = (props: any) => {
         let payload;
         if (loginWithPhone) {
             payload = {
-                phoneNumber : countryCode + phoneNumber,
+                phoneNumber: countryCode + phoneNumber,
                 password,
             };
         } else {
@@ -163,30 +166,17 @@ const PhoneOrEmail = (props: any) => {
         navigate(-1);
     };
 
-    const useGeoService = async () => {
-        try {
-            // Get the IP address
-            const ipResponse = await fetch('https://api.ipify.org?format=json');
-            const ipData = await ipResponse.json();
-            const ipAddress = ipData.ip;
+    const setGeoParameters = async () => {
+        // Set first country as initial country code
+        setCountryCode(country_calling_code);
 
-            // Get geolocation data based on the IP address
-            const geoResponse = await fetch(`https://ipapi.co/${ipAddress}/json/`);
-            const geoData = await geoResponse.json();
-
-            // Set first country as initial country code
-            setCountryCode(geoData?.country_calling_code);
-
-            // Set first isoCode as initial country iso code
-            setIsoCode(geoData?.country_code);
-        } catch (error) {
-            console.log('🚀 ~ fetchGeoData ~ error:', error);
-        }
+        // Set first isoCode as initial country iso code
+        setIsoCode(country_code);
     };
 
     useEffect(() => {
-        useGeoService();
         fetchCountriesList();
+        setGeoParameters();
     }, []);
 
     return (
