@@ -45,7 +45,7 @@ export default function Discover() {
                 setIsLoading(false);
                 setHashtagVideos(allVideos?.slice(10));
                 setHashtagVideosToShow(allVideos?.slice(0, 10));
-                setMuteStates(Array(allVideos?.length).fill(true)); // Initialize mute states
+                // setMuteStates(Array(allVideos?.length).fill(true)); // Initialize mute states
                 console.log('🚀 ~ apisIntegration ~ res:', data?.data);
             } catch (error) {
                 setIsLoading(false);
@@ -64,7 +64,7 @@ export default function Discover() {
                 const newVideosToShow = hashtagVideos.slice(videosToShow, videosToShow + 10);
                 setHashtagVideosToShow((prev) => [...prev, ...newVideosToShow]);
                 setVideosToShow((prev) => prev + 10);
-                setMuteStates((prevMuteStates) => [...prevMuteStates, ...Array(newVideosToShow.length).fill(true)]);
+                // setMuteStates((prevMuteStates) => [...prevMuteStates, ...Array(newVideosToShow.length).fill(true)]);
             }
         }
     }, [videosToShow, hashtagVideos]);
@@ -72,8 +72,8 @@ export default function Discover() {
     useEffect(() => {
         const mainDiv = mainDivRef.current;
         if (mainDiv) {
-            mainDiv.addEventListener('scroll', handleScroll);
-            return () => mainDiv.removeEventListener('scroll', handleScroll);
+            // mainDiv.addEventListener('scroll', handleScroll);
+            // return () => mainDiv.removeEventListener('scroll', handleScroll);
         }
     }, [handleScroll]);
 
@@ -120,12 +120,12 @@ export default function Discover() {
                             ))}
                         </div>
                         <div>
-                            <VideoPanel
+                            {/* <VideoPanel
                                 openVideoModal={openVideoModal}
                                 videos={hashtagVideosToShow}
                                 muteStates={muteStates} // Pass mute states
-                                setMuteStates={setMuteStates} // Pass setter for mute states
-                            />
+                                // setMuteStates={setMuteStates} // Pass setter for mute states
+                            /> */}
                         </div>
                     </>
                 )}

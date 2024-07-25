@@ -122,19 +122,19 @@ export const AllVideos = ({ className }: SuggestedAccountsPageProps) => {
                                                     </p>
                                                 </div>
                                                 <div className={styles.posts}>
-                                                    {obj?.relatedVideos.map(
+                                                    {/* {obj?.relatedVideos.map(
                                                         (video: any, i: any) => {
-                                                            return (
-                                                                <VideoPanel
-                                                                    index={2}
-                                                                    videomodal={() =>
-                                                                        openvideomodal(video)
-                                                                    }
-                                                                    video={video}
-                                                                />
-                                                            );
+                                                            // return (
+                                                            //     <VideoPanel
+                                                            //         index={2}
+                                                            //         videomodal={() =>
+                                                            //             openvideomodal(video)
+                                                            //         }
+                                                            //         video={video}
+                                                            //     />
+                                                            // );
                                                         }
-                                                    )}
+                                                    )} */}
                                                 </div>
                                             </div>
                                         ) : null}
@@ -163,15 +163,15 @@ export const AllVideos = ({ className }: SuggestedAccountsPageProps) => {
                                     <p className={styles.trendingText}></p>
                                 </div>
                                 <div className={styles.posts}>
-                                    {trendingvideos.map((video: any, i: any) => {
-                                        return (
-                                            <VideoPanel
-                                                index={2}
-                                                videomodal={() => openvideomodal(video)}
-                                                video={video}
-                                            />
-                                        );
-                                    })}
+                                    {/* {trendingvideos.map((video: any, i: any) => {
+                                        // return (
+                                        //     <VideoPanel
+                                        //         index={2}
+                                        //         videomodal={() => openvideomodal(video)}
+                                        //         video={video}
+                                        //     />
+                                        // );
+                                    })} */}
                                 </div>
                             </div>
                         )}

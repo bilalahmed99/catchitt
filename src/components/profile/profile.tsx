@@ -195,7 +195,7 @@ export const Profile = (props: any) => {
                 )
                     .then((res) => res.json())
                     .then((data) => {
-                        setUserVideos((prev) => [...prev, ...data.data.data]);
+                        // setUserVideos((prev) => [...prev, ...data.data.data]);
                         setHasMoreVideos(data.data.total > pageSize * videosPage);
                         setVideosPage((prev) => prev + 1);
                     })
@@ -218,7 +218,7 @@ export const Profile = (props: any) => {
                 )
                     .then((res) => res.json())
                     .then((data) => {
-                        setUserLikedVideos((prev) => [...prev, ...data.data.data]);
+                        // setUserLikedVideos((prev) => [...prev, ...data.data.data]);
                         setHasMoreLikedVideos(data.data.total > pageSize * likedVideosPage);
                         setLikedVideosPage((prev) => prev + 1);
                     })
@@ -241,7 +241,7 @@ export const Profile = (props: any) => {
                 )
                     .then((res) => res.json())
                     .then((data) => {
-                        setUserTaggedVideos((prev) => [...prev, ...data.data.data]);
+                        // setUserTaggedVideos((prev) => [...prev, ...data.data.data]);
                         setHasMoreTaggedVideos(data.data.total > pageSize * taggedVideosPage);
                         setTaggedVideosPage((prev) => prev + 1);
                     })
@@ -264,7 +264,7 @@ export const Profile = (props: any) => {
                 )
                     .then((res) => res.json())
                     .then((data) => {
-                        setBookmarkVideos((prev) => [...prev, ...data.data.data]);
+                        // setBookmarkVideos((prev) => [...prev, ...data.data.data]);
                         setHasMoreBookmarkVideos(data.data.total > pageSize * bookmarkVideosPage);
                         setBookmarkVideosPage((prev) => prev + 1);
                     })
@@ -393,8 +393,8 @@ export const Profile = (props: any) => {
     useEffect(() => {
         const mainDiv = mainDivRef.current;
         if (mainDiv) {
-            mainDiv.addEventListener('scroll', handleScroll);
-            return () => mainDiv.removeEventListener('scroll', handleScroll);
+            // mainDiv.addEventListener('scroll', handleScroll);
+            // return () => mainDiv.removeEventListener('scroll', handleScroll);
         }
     }, [
         handleScroll,

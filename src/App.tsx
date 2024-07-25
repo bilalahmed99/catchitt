@@ -762,7 +762,8 @@ function App() {
                             /> */}
                             <Route
                                 path="/auth"
-                                element={<Login setLanguage={setLanguage} language={appLanguage} />}
+                                element={<Login />}
+                                // element={<Login setLanguage={setLanguage} language={appLanguage} />}
                             />
                             <Route path="/login/phone-or-email" element={<PhoneOrEmail />} />
                             <Route path="/login/forget-password" element={<ForgetPassword />} />
