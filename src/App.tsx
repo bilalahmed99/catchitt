@@ -45,13 +45,16 @@ import ItemLogin from './components/item-login';
 import Loader from './components/loader';
 import Signup from './components/signup';
 import SignupEmail from './components/signup/email/email';
-import SignupPhone from './components/signup/mobile/mobile';
-
 import Login from './components/login';
 import ForgetPassword from './components/login/forget-password';
 import PhoneOrEmail from './components/login/phone-or-email';
 import { closeLoginPopup } from './redux/reducers';
-import { loginService, loginWithGoogleService, loginWithFBService, signupService } from './redux/reducers/auth';
+import {
+    loginService,
+    loginWithGoogleService,
+    loginWithFBService,
+    signupService,
+} from './redux/reducers/auth';
 import {
     APP_TEXTS,
     END_POINTS,
@@ -61,10 +64,9 @@ import {
     showToastError,
     showToastSuccess,
     SIGNUP_APP_TEXTS,
-    SIGNUP_OPTIONS
+    SIGNUP_OPTIONS,
 } from './utils/constants';
 import { back, checkCountryCode, chevronDown, search, closeIcon, fb } from './icons';
-import ProtectedRoute from './components/protected-routed/ProtectedRoute';
 import { useGoogleLogin } from '@react-oauth/google';
 import { validateEmail } from '../src/utils/common';
 import SignupHandler from '../src/components/signup/signupHandler';
@@ -75,6 +77,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import style from './components/homePage/index.module.scss';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+import { setGeoData } from './redux/reducers/geoServices';
 
 // Functional component to handle the initial route navigation
 const InitialRouteHandler = () => {
@@ -184,6 +187,9 @@ function App() {
     const [isLoginSection, setIsLoginSection] = useState(true);
     const [isForgotPasswordScenario, setIsForgotPasswordScenario] = useState(false);
     const isLoginPopup = useSelector((store: any) => store?.reducers?.popupSlice?.isLoginPopup);
+    const { country_name } = useSelector(
+        (state: any) => state?.reducers?.geo
+    );
     const dispatch = useDispatch<any>();
     const [error, setError] = useState<string>('');
     const [code, setCode] = useState<any>(null);
@@ -212,7 +218,7 @@ function App() {
     const [name, setName] = useState<any>(null);
     const [dateOfBirth, setDateOfBirth] = useState<any>(null);
     const [emailIdError, setEmailIdError] = useState<boolean>(false);
-    const [otpbuttonText, setOtpbuttonText] = useState<string>("Send code");
+    const [otpbuttonText, setOtpbuttonText] = useState<string>('Send code');
     const [otpCode, setOtpCode] = useState<string>('');
     const [otpError, setOtpError] = useState<boolean>(false);
     const [darkTheme, setdarkTheme] = useState('');
@@ -226,7 +232,6 @@ function App() {
                 setIsMainSignupOption(!isMainSignupOption);
                 break;
             case 'Continue with Facebook':
-               
                 break;
             case 'Continue with Google':
                 loginWithGoogleHandler();
@@ -235,8 +240,6 @@ function App() {
                 console.log('Default case');
         }
     };
-
-    
 
     const loginItemClickHandler = (name: string) => {
         switch (name) {
@@ -307,41 +310,39 @@ function App() {
     };
 
     const signupNextScreen = async () => {
-
-        if(email && validateEmail(email)){
+        if (email && validateEmail(email)) {
             setEmailIdError(false);
-        }else{
+        } else {
             setEmailIdError(true);
         }
         try {
             const response: any = await fetch(`${API_KEY}/auth/verifyOtp`, {
-                method: "PATCH",
+                method: 'PATCH',
                 headers: {
                     'Content-type': 'application/json',
                 },
-                body: JSON.stringify({ email:email, otp: Number(otpCode) }),
+                body: JSON.stringify({ email: email, otp: Number(otpCode) }),
             });
             const { data }: any = await response.json();
-            if(response.code == 200){
-                setOtpError(false)
+            if (response.code == 200) {
+                setOtpError(false);
                 setSignupNext(true);
-            }else{
-                setOtpError(true)
+            } else {
+                setOtpError(true);
             }
-            
+
             console.log('otp response', response);
         } catch (error) {
             console.log('send otp error:', error);
         }
- 
     };
 
     const simpleLoginHandler = async () => {
-        let loginObj; 
-        if(loginWithPhone){
-            loginObj = { password, phoneNumber: countryCode + phoneNumber  }
-        }else{
-            loginObj = { password, email }
+        let loginObj;
+        if (loginWithPhone) {
+            loginObj = { password, phoneNumber: countryCode + phoneNumber };
+        } else {
+            loginObj = { password, email };
         }
         setIsLoading(true);
         dispatch(loginService(loginObj))
@@ -400,7 +401,6 @@ function App() {
         }
     };
 
-
     const useGeoService = async () => {
         try {
             // Get the IP address
@@ -410,46 +410,52 @@ function App() {
 
             // Get geolocation data based on the IP address
             const geoResponse = await fetch(`https://ipapi.co/${ipAddress}/json/`);
-            const geoData = await geoResponse.json();
+            const { country_calling_code, country_code, country_name } = await geoResponse.json();
 
-            // Set first country as initial country code
-            setCountryCode(geoData?.country_calling_code);
+            // Set country calling code based on location
+            setCountryCode(country_calling_code);
 
-            // Set first isoCode as initial country iso code
-            setIsoCode(geoData?.country_code);
+            // Set isoCode based on location
+            setIsoCode(country_code);
+
+            dispatch(
+                setGeoData({
+                    country_name,
+                    country_calling_code,
+                    country_code,
+                })
+            );
         } catch (error) {
             console.log('🚀 ~ fetchGeoData ~ error:', error);
         }
     };
 
-
     const signupHandler = async () => {
-        let dob= year+"-"+month+"-"+date;
+        let dob = year + '-' + month + '-' + date;
         setDateOfBirth(dob);
-        console.log("signup", password, email, dateOfBirth, name);
+        console.log('signup', password, email, dateOfBirth, name);
 
-        let signupObj; 
-        if(loginWithPhone){
-            signupObj = { password, phoneNumber: countryCode + phoneNumber, dateOfBirth, name  }
-        }else{
-            signupObj = { password, email, dateOfBirth, name }
+        let signupObj;
+        if (loginWithPhone) {
+            signupObj = { password, phoneNumber: countryCode + phoneNumber, dateOfBirth, name };
+        } else {
+            signupObj = { password, email, dateOfBirth, name };
         }
 
-        
         // return false;
         setIsLoading(true);
         dispatch(signupService(signupObj))
             .then((res: any) => {
-                console.log("res",res);
+                console.log('res', res);
                 if (res?.payload?.status == 400) {
-                    console.log("res 1",res);
+                    console.log('res 1', res);
                     setIsError(true);
                     // setPasswordBorderColor('border-red-400');
                     // setErrorMessage(res?.payload || res?.payload?.message);
-                    setErrorMessage(res?.payload?.message)
+                    setErrorMessage(res?.payload?.message);
                     setIsLoading(false);
                 } else if (res?.payload?.status == 200) {
-                    console.log("res 2",res);
+                    console.log('res 2', res);
                     console.log('data after successfull login', res?.payload?.data);
                     setIsLoading(false);
                     closeLoginPopupHandler();
@@ -457,7 +463,7 @@ function App() {
                 }
             })
             .catch((error: any) => {
-                console.log("error",error);
+                console.log('error', error);
                 setIsError(true);
                 setIsLoading(false);
             });
@@ -513,7 +519,6 @@ function App() {
     };
 
     const forgetPasswordHandler = () => {
-        console.log('Forget password');
         setIsForgotPasswordScenario(true);
         // navigate('/login/forget-password', { state: { showEmail: !loginWithPhone } });
     };
@@ -587,12 +592,6 @@ function App() {
             });
             const { data }: any = await response.json();
 
-            // Set first country as initial country code
-            setCountryCode(data?.countries[0]?.code);
-
-            // Set first isoCode as initial country iso code
-            setIsoCode(data?.countries[0]?.iso);
-
             // Setting all values to countryCodes state
             setCountryCodes(data?.countries);
         } catch (error) {
@@ -601,23 +600,23 @@ function App() {
     };
 
     const sendOTPCode = async () => {
-        if(email && validateEmail(email)){
+        if (email && validateEmail(email)) {
             setEmailIdError(false);
-        }else{
+        } else {
             setEmailIdError(true);
         }
         try {
             const response: any = await fetch(`${API_KEY}/auth/request-verify-email`, {
-                method: "POST",
+                method: 'POST',
                 headers: {
                     'Content-type': 'application/json',
                 },
-                body: JSON.stringify({ email:email }),
+                body: JSON.stringify({ email: email }),
             });
             const { data }: any = await response.json();
-            
-            setOtpbuttonText("Resend")
-            
+
+            setOtpbuttonText('Resend');
+
             console.log('otp verify response', data);
         } catch (error) {
             console.log('send otp error:', error);
@@ -648,33 +647,30 @@ function App() {
         useGeoService();
     }, []);
 
-
     const handleLoginClick = () => {
         setIsLoginSection(false);
-      }
+    };
 
     const handleSignUpMainScreen = () => {
-        setIsMainSignupOption(true)
-    }
+        setIsMainSignupOption(true);
+    };
 
     const handleLoginpopupClick = () => {
-    setIsLoginSection(true);
-    }
+        setIsLoginSection(true);
+    };
 
     const handleSignupClick = () => {
         setIsLoginSection(false);
-    }
+    };
 
     const goBackSignupHandler = () => {
         setIsMainLoginOption(true);
-        setSignupNext(false)
+        setSignupNext(false);
     };
-
 
     const [month, setMonth] = useState('');
     const [date, setDate] = useState('');
     const [year, setYear] = useState('');
-
 
     const handleMonthChange = (event: SelectChangeEvent) => {
         setMonth(event.target.value as string);
@@ -701,24 +697,28 @@ function App() {
         const rows = [];
         let i = 2025; // Start with 2025
         const len = 1900; // End at 1900
-      
-        while (i >= len) {
-          rows.push(<MenuItem key={i} value={i}>{i}</MenuItem>);
-          i--; // Decrement i in each iteration
-        }
-      
-        return rows;
-      }
 
-      useEffect(() => {
+        while (i >= len) {
+            rows.push(
+                <MenuItem key={i} value={i}>
+                    {i}
+                </MenuItem>
+            );
+            i--; // Decrement i in each iteration
+        }
+
+        return rows;
+    }
+
+    useEffect(() => {
         var themeColor = window.localStorage.getItem('theme');
 
-        if(themeColor == "dark"){ 
+        if (themeColor == 'dark') {
             setdarkTheme(style.darkTheme);
             setlightDarkTheme(style.lightdarkTheme);
             setDarkWhiteTheme('');
             setTextColor('text-white');
-        } else{
+        } else {
             setDarkWhiteTheme('hover:bg-slate-100');
             setTextColor('text-black');
         }
@@ -777,10 +777,7 @@ function App() {
                             <Route path="/comingsoon" element={<ChatsSec />} />
                             <Route path="/profile" element={<Profile />} />
                             <Route path="/profile/:id" element={<PublicProfile />} />
-                            <Route
-                                path="/settings/account"
-                                 element={<Account />}
-                            />
+                            <Route path="/settings/account" element={<Account />} />
                             <Route
                                 path="/settings/account/activity"
                                 element={<PushNotificationsPage />}
@@ -822,17 +819,21 @@ function App() {
 
                         {isLoginPopup && (
                             <div className="w-full z-50 h-full bg-black/50 fixed top-0 flex justify-center items-center">
-                                <div className={`w-[30.688rem] mx-auto mt-3 bg-white py-4 rounded-lg relative h-[42.125rem]  ${lightDarkTheme} `}>
+                                <div
+                                    className={`w-[30.688rem] mx-auto mt-3 bg-white py-4 rounded-lg relative h-[42.125rem]  ${lightDarkTheme} `}
+                                >
                                     <div
                                         onClick={closeLoginPopupHandler}
                                         className="bg-gray-100/50 rounded-full h-10 w-10 flex flex-row justify-center items-center absolute right-5 p-1 cursor-pointer"
                                     >
                                         <img className="h-4 w-4 object-contain" src={closeIcon} />
                                     </div>
-                                    { isLoginSection ? (
+                                    {isLoginSection ? (
                                         <>
                                             <div className="overflow-auto w-[21.888rem] mx-auto ">
-                                                <h2 className={`font-bold text-3xl mt-5 mb-4 ${textColor}`}>
+                                                <h2
+                                                    className={`font-bold text-3xl mt-5 mb-4 ${textColor}`}
+                                                >
                                                     {isMainLoginOption
                                                         ? 'Log in to Seezitt'
                                                         : isForgotPasswordScenario
@@ -841,46 +842,56 @@ function App() {
                                                 </h2>
                                                 {isMainLoginOption ? (
                                                     <>
-                                                    {(LOGIN_OPTIONS?.map((option, index) => (
-                                                        <ItemLogin
-                                                            loginItemClickHandler={loginItemClickHandler}
-                                                            key={index}
-                                                            name={option.name}
-                                                            image={option.image}
-                                                            styles={option.styles}
-                                                        />
-
-                                                        
-                                                    )))}
-                                                    <div className='mt-3'>
-                                                        <FacebookLogin
-                                                            appId="281129028310496"
-                                                            autoLoad={false}
-                                                            fields="name,email,picture"
-                                                            callback={responseFacebook}
-                                                            render={(renderProps: {onClick: () => void}) => (
-                                                            <div onClick={renderProps.onClick}
-                                                                className={`rounded-[0.5rem] font-medium text-base flex flex-row items-center border border-loginItem h-11 px-3 cursor-pointer hover:bg-slate-100 `}
-                                                            >
-                                                                <img className="object-contain h-5 w-5" src={fb} />
-                                                                <p className="mx-auto text-[0.938rem]">Continue with Facebook</p>
-                                                            </div>
-                                                            )}
-                                                        />
-                                                    </div>
-                                                </>
-                                                   
+                                                        {LOGIN_OPTIONS?.map((option, index) => (
+                                                            <ItemLogin
+                                                                loginItemClickHandler={
+                                                                    loginItemClickHandler
+                                                                }
+                                                                key={index}
+                                                                name={option.name}
+                                                                image={option.image}
+                                                                styles={option.styles}
+                                                            />
+                                                        ))}
+                                                        <div className="mt-3">
+                                                            <FacebookLogin
+                                                                appId="281129028310496"
+                                                                autoLoad={false}
+                                                                fields="name,email,picture"
+                                                                callback={responseFacebook}
+                                                                render={(renderProps: {
+                                                                    onClick: () => void;
+                                                                }) => (
+                                                                    <div
+                                                                        onClick={
+                                                                            renderProps.onClick
+                                                                        }
+                                                                        className={`rounded-[0.5rem] font-medium text-base flex flex-row items-center border border-loginItem h-11 px-3 cursor-pointer hover:bg-slate-100 `}
+                                                                    >
+                                                                        <img
+                                                                            className="object-contain h-5 w-5"
+                                                                            src={fb}
+                                                                        />
+                                                                        <p className="mx-auto text-[0.938rem]">
+                                                                            Continue with Facebook
+                                                                        </p>
+                                                                    </div>
+                                                                )}
+                                                            />
+                                                        </div>
+                                                    </>
                                                 ) : (
                                                     <>
                                                         <div className="flex flex-row justify-between items-center mt-3.5">
                                                             <p className="font-medium text-[0.938rem]">
-                                                                {loginWithPhone && !isForgotPasswordScenario
+                                                                {loginWithPhone &&
+                                                                !isForgotPasswordScenario
                                                                     ? 'Phone'
                                                                     : isForgotPasswordScenario &&
-                                                                    loginWithPhone
+                                                                      loginWithPhone
                                                                     ? 'Enter phone number'
                                                                     : isForgotPasswordScenario &&
-                                                                    !loginWithPhone
+                                                                      !loginWithPhone
                                                                     ? 'Enter email address'
                                                                     : 'Email or username'}
                                                             </p>
@@ -888,13 +899,14 @@ function App() {
                                                                 onClick={toggleLoginMethod}
                                                                 className="font-medium text-xs text-gray-600 cursor-pointer hover:underline"
                                                             >
-                                                                {loginWithPhone && !isForgotPasswordScenario
+                                                                {loginWithPhone &&
+                                                                !isForgotPasswordScenario
                                                                     ? 'Log in with email or username'
                                                                     : isForgotPasswordScenario &&
-                                                                    !loginWithPhone
+                                                                      !loginWithPhone
                                                                     ? 'Reset with phone number'
                                                                     : isForgotPasswordScenario &&
-                                                                    loginWithPhone
+                                                                      loginWithPhone
                                                                     ? 'Reset with email'
                                                                     : 'Log in with phone'}
                                                             </p>
@@ -903,10 +915,16 @@ function App() {
                                                             <>
                                                                 <div className="flex flex-row items-center border border-gray-500 bg-login-btn mt-2 rounded-md p-2.5">
                                                                     <div
-                                                                        onClick={countryCodeModelHandler}
+                                                                        onClick={
+                                                                            countryCodeModelHandler
+                                                                        }
                                                                         className="flex flex-row items-center gap-2 flex-1 cursor-pointer relative text-black"
                                                                     >
-                                                                        <p>{isoCode + ' ' + countryCode}</p>
+                                                                        <p>
+                                                                            {isoCode +
+                                                                                ' ' +
+                                                                                countryCode}
+                                                                        </p>
                                                                         <img
                                                                             className={`object-contain h-2.5 w-2.5 chevron ${
                                                                                 countryModelOpened
@@ -921,7 +939,9 @@ function App() {
                                                                         </p>
                                                                         {countryModelOpened && (
                                                                             <div
-                                                                                onClick={modelClickHandler}
+                                                                                onClick={
+                                                                                    modelClickHandler
+                                                                                }
                                                                                 className={`absolute ${
                                                                                     filteredCountryCodes.length ===
                                                                                     0
@@ -938,7 +958,9 @@ function App() {
                                                                                         type="text"
                                                                                         placeholder="Search"
                                                                                         className="w-full text-sm font-normal caret-red-500 bg-white"
-                                                                                        value={searchQuery}
+                                                                                        value={
+                                                                                            searchQuery
+                                                                                        }
                                                                                         onChange={
                                                                                             handleSearchChange
                                                                                         }
@@ -965,7 +987,9 @@ function App() {
                                                                                                         index
                                                                                                     )
                                                                                                 }
-                                                                                                key={index}
+                                                                                                key={
+                                                                                                    index
+                                                                                                }
                                                                                                 className={`flex flex-row justify-between items-center p-2.5 cursor-pointer mb-2 rounded-b-md ${
                                                                                                     selectedCountryIndex ===
                                                                                                     index
@@ -973,7 +997,9 @@ function App() {
                                                                                                         : ''
                                                                                                 }`}
                                                                                             >
-                                                                                                <p className={`font-normal text-black text-left text-xs hover:bg-gray-50`}>
+                                                                                                <p
+                                                                                                    className={`font-normal text-black text-left text-xs hover:bg-gray-50`}
+                                                                                                >
                                                                                                     {countryItem?.name +
                                                                                                         ' ' +
                                                                                                         countryItem?.code}
@@ -1009,7 +1035,9 @@ function App() {
                                                                         placeholder="Phone number"
                                                                         value={phoneNumber}
                                                                         onChange={(e) =>
-                                                                            setPhoneNumber(e.target.value)
+                                                                            setPhoneNumber(
+                                                                                e.target.value
+                                                                            )
                                                                         }
                                                                     />
                                                                 </div>
@@ -1022,7 +1050,9 @@ function App() {
                                                                                 maxLength={6}
                                                                                 placeholder="Enter 6-digit code"
                                                                                 value={code}
-                                                                                onChange={handleChange}
+                                                                                onChange={
+                                                                                    handleChange
+                                                                                }
                                                                             />
                                                                             <div
                                                                                 className={`flex flex-row justify-center items-center gap-2 flex-1 ${
@@ -1038,18 +1068,25 @@ function App() {
                                                                                     |{' '}
                                                                                 </p>
                                                                                 <p
-                                                                                    onClick={sendOTP}
+                                                                                    onClick={
+                                                                                        sendOTP
+                                                                                    }
                                                                                     className={`text-sm ${
                                                                                         phoneNumber?.length >
                                                                                             0 ||
-                                                                                        email.length > 0
+                                                                                        email.length >
+                                                                                            0
                                                                                             ? textColor
                                                                                             : 'text-gray-400'
                                                                                     }`}
                                                                                 >
-                                                                                    {APP_TEXTS.SEND_CODE}
+                                                                                    {
+                                                                                        APP_TEXTS.SEND_CODE
+                                                                                    }
                                                                                 </p>
-                                                                                {loadingOtp && <Loader />}
+                                                                                {loadingOtp && (
+                                                                                    <Loader />
+                                                                                )}
                                                                             </div>
                                                                         </div>
                                                                         {error && (
@@ -1070,17 +1107,23 @@ function App() {
                                                                         placeholder="Password"
                                                                         value={password}
                                                                         onChange={(e) =>
-                                                                            setPassword(e.target.value)
+                                                                            setPassword(
+                                                                                e.target.value
+                                                                            )
                                                                         }
                                                                     />
                                                                     {!showPassword ? (
                                                                         <Visibility
-                                                                            style={{ cursor: 'pointer' }}
+                                                                            style={{
+                                                                                cursor: 'pointer',
+                                                                            }}
                                                                             onClick={togglePassword}
                                                                         />
                                                                     ) : (
                                                                         <VisibilityOff
-                                                                            style={{ cursor: 'pointer' }}
+                                                                            style={{
+                                                                                cursor: 'pointer',
+                                                                            }}
                                                                             onClick={togglePassword}
                                                                         />
                                                                     )}
@@ -1112,7 +1155,9 @@ function App() {
                                                                                 maxLength={6}
                                                                                 placeholder="Enter 6-digit code"
                                                                                 value={code}
-                                                                                onChange={handleChange}
+                                                                                onChange={
+                                                                                    handleChange
+                                                                                }
                                                                             />
                                                                             <div
                                                                                 className={`flex flex-row justify-center items-center gap-2 flex-1 ${
@@ -1128,18 +1173,25 @@ function App() {
                                                                                     |{' '}
                                                                                 </p>
                                                                                 <p
-                                                                                    onClick={sendOTP}
+                                                                                    onClick={
+                                                                                        sendOTP
+                                                                                    }
                                                                                     className={`text-sm ${
                                                                                         phoneNumber?.length >
                                                                                             0 ||
-                                                                                        email.length > 0
+                                                                                        email.length >
+                                                                                            0
                                                                                             ? textColor
                                                                                             : 'text-gray-400'
                                                                                     }`}
                                                                                 >
-                                                                                    {APP_TEXTS.SEND_CODE}
+                                                                                    {
+                                                                                        APP_TEXTS.SEND_CODE
+                                                                                    }
                                                                                 </p>
-                                                                                {loadingOtp && <Loader />}
+                                                                                {loadingOtp && (
+                                                                                    <Loader />
+                                                                                )}
                                                                             </div>
                                                                         </div>
                                                                         {error && (
@@ -1162,17 +1214,23 @@ function App() {
                                                                         placeholder="Password"
                                                                         value={password}
                                                                         onChange={(e) =>
-                                                                            passwordOperationsHandler(e)
+                                                                            passwordOperationsHandler(
+                                                                                e
+                                                                            )
                                                                         }
                                                                     />
                                                                     {!showPassword ? (
                                                                         <Visibility
-                                                                            style={{ cursor: 'pointer' }}
+                                                                            style={{
+                                                                                cursor: 'pointer',
+                                                                            }}
                                                                             onClick={togglePassword}
                                                                         />
                                                                     ) : (
                                                                         <VisibilityOff
-                                                                            style={{ cursor: 'pointer' }}
+                                                                            style={{
+                                                                                cursor: 'pointer',
+                                                                            }}
                                                                             onClick={togglePassword}
                                                                         />
                                                                     )}
@@ -1240,7 +1298,9 @@ function App() {
                                                                 onClick={simpleLoginHandler}
                                                                 className={`flex flex-row items-center bg-login-btn mt-4 rounded-md py-2.5 px-3 cursor-pointer  ${style.NextBtn}`}
                                                             >
-                                                                <div className={`flex flex-row justify-center items-center gap-2 flex-1`}>
+                                                                <div
+                                                                    className={`flex flex-row justify-center items-center gap-2 flex-1`}
+                                                                >
                                                                     <p>
                                                                         {isLoading ? (
                                                                             <CircularProgress
@@ -1265,7 +1325,9 @@ function App() {
                                                                 src={back}
                                                                 className="h-2.5 w-2.5 object-contain"
                                                             />
-                                                            <p className="font-medium text-xs">Go Back</p>
+                                                            <p className="font-medium text-xs">
+                                                                Go Back
+                                                            </p>
                                                         </div>
                                                     </>
                                                 )}
@@ -1274,15 +1336,21 @@ function App() {
                                                 <div className="mt-14  w-[21.888rem] mx-auto">
                                                     <p className="font-normal text-[0.688rem] text-policy">
                                                         By continuing with an account located in{' '}
-                                                        <span className={` ${textColor} cursor-pointer`}>
-                                                            Pakistan
+                                                        <span
+                                                            className={` ${textColor} cursor-pointer`}
+                                                        >
+                                                            {country_name}
                                                         </span>
                                                         , you agree to our{' '}
-                                                        <span className={` ${textColor} cursor-pointer hover:underline`}>
+                                                        <span
+                                                            className={` ${textColor} cursor-pointer hover:underline`}
+                                                        >
                                                             Terms of Service
                                                         </span>{' '}
                                                         and acknowledge that you have read our{' '}
-                                                        <span className={` ${textColor}  cursor-pointer hover:underline`}>
+                                                        <span
+                                                            className={` ${textColor}  cursor-pointer hover:underline`}
+                                                        >
                                                             Privacy Policy.
                                                         </span>
                                                     </p>
@@ -1290,158 +1358,332 @@ function App() {
                                             )}
                                             <div className="mt-3 absolute bottom-0 w-full py-4">
                                                 <div className="border-t-[0.3px] border-gray-200 text-center pt-3.5">
-                                                    <h3 className={`font-normal text-[0.938rem] flex flex-row items-center justify-center gap-1 ${textColor}`}>
+                                                    <h3
+                                                        className={`font-normal text-[0.938rem] flex flex-row items-center justify-center gap-1 ${textColor}`}
+                                                    >
                                                         {APP_TEXTS.NO_ACCOUNT}{' '}
-                                                        <span className="text-danger-1 font-semibold hover:underline cursor-pointer" onClick={handleSignupClick}>
+                                                        <span
+                                                            className="text-danger-1 font-semibold hover:underline cursor-pointer"
+                                                            onClick={handleSignupClick}
+                                                        >
                                                             {APP_TEXTS.SIGN_UP}
                                                         </span>
                                                     </h3>
                                                 </div>
                                             </div>
-                                            </>
-                                    ):(
+                                        </>
+                                    ) : (
                                         <>
                                             <div className="overflow-auto w-[21.888rem] mx-auto ">
-                                                <h2 className={`font-bold text-3xl mt-5 mb-4 ${textColor}`}>
+                                                <h2
+                                                    className={`font-bold text-3xl mt-5 mb-4 ${textColor}`}
+                                                >
                                                     Signup to Seezitt
                                                 </h2>
-                                                    {signupNext == false ? (
-                                                        <>
+                                                {signupNext == false ? (
+                                                    <>
                                                         {isMainSignupOption ? (
                                                             <>
-                                                            {(SIGNUP_OPTIONS?.map((option, index) => (
-                                                                <SignupHandler
-                                                                    singupItemClickHandler={signupItemClickHandler}
-                                                                    key={index}
-                                                                    name={option.name}
-                                                                    image={option.image}
-                                                                    styles={option.styles}
-                                                                    darkWhiteTheme={darkWhiteTheme}
-                                                                />
-                                                            )))}
-                                                            <div className='mt-3'>
-                                                                <FacebookLogin
-                                                                    appId="281129028310496"
-                                                                    autoLoad={false}
-                                                                    fields="name,email,picture"
-                                                                    callback={responseFacebook}
-                                                                    render={(renderProps: {onClick: () => void}) => (
-                                                                    <div onClick={renderProps.onClick}
-                                                                        className={`rounded-[0.5rem] font-medium text-base flex flex-row items-center border border-loginItem h-11 px-3 cursor-pointer hover:bg-slate-100 `}
-                                                                    >
-                                                                        <img className="object-contain h-5 w-5" src={fb} />
-                                                                        <p className="mx-auto text-[0.938rem]">Continue with Facebook</p>
-                                                                    </div>
-                                                            )}
-                                                                />
-                                                            </div>
-                                                        </>
+                                                                {SIGNUP_OPTIONS?.map(
+                                                                    (option, index) => (
+                                                                        <SignupHandler
+                                                                            singupItemClickHandler={
+                                                                                signupItemClickHandler
+                                                                            }
+                                                                            key={index}
+                                                                            name={option.name}
+                                                                            image={option.image}
+                                                                            styles={option.styles}
+                                                                            darkWhiteTheme={
+                                                                                darkWhiteTheme
+                                                                            }
+                                                                        />
+                                                                    )
+                                                                )}
+                                                                <div className="mt-3">
+                                                                    <FacebookLogin
+                                                                        appId="281129028310496"
+                                                                        autoLoad={false}
+                                                                        fields="name,email,picture"
+                                                                        callback={responseFacebook}
+                                                                        render={(renderProps: {
+                                                                            onClick: () => void;
+                                                                        }) => (
+                                                                            <div
+                                                                                onClick={
+                                                                                    renderProps.onClick
+                                                                                }
+                                                                                className={`rounded-[0.5rem] font-medium text-base flex flex-row items-center border border-loginItem h-11 px-3 cursor-pointer hover:bg-slate-100 `}
+                                                                            >
+                                                                                <img
+                                                                                    className="object-contain h-5 w-5"
+                                                                                    src={fb}
+                                                                                />
+                                                                                <p className="mx-auto text-[0.938rem]">
+                                                                                    Continue with
+                                                                                    Facebook
+                                                                                </p>
+                                                                            </div>
+                                                                        )}
+                                                                    />
+                                                                </div>
+                                                            </>
                                                         ) : (
-                                                                <>
+                                                            <>
                                                                 <div className="flex flex-row justify-between items-center mt-3.5">
                                                                     <p className="font-medium text-[0.938rem]">
                                                                         When’s your birthday?
                                                                     </p>
                                                                 </div>
                                                                 <div className=" justify-between items-center mt-3.5">
-                                                                    <div className='flex flex-row'>
-                                                                        <FormControl fullWidth className='dobselectbox p-1'>
-                                                                        <InputLabel id="demo-simple-select-label">Month</InputLabel>
-                                                                        <Select
-                                                                            labelId="demo-simple-select-label"
-                                                                            id="demo-simple-select"
-                                                                            className='bg-login-btn'
-                                                                            value={month}
-                                                                            label="Month"
-                                                                            onChange={handleMonthChange}
+                                                                    <div className="flex flex-row">
+                                                                        <FormControl
+                                                                            fullWidth
+                                                                            className="dobselectbox p-1"
                                                                         >
-                                                                            <MenuItem value={1}>January</MenuItem>
-                                                                            <MenuItem value={2}>Febuary</MenuItem>
-                                                                            <MenuItem value={3}>March</MenuItem>
-                                                                            <MenuItem value={4}>April</MenuItem>
-                                                                            <MenuItem value={5}>May</MenuItem>
-                                                                            <MenuItem value={6}>June</MenuItem>
-                                                                            <MenuItem value={7}>July</MenuItem>
-                                                                            <MenuItem value={8}>August</MenuItem>
-                                                                            <MenuItem value={9}>September</MenuItem>
-                                                                            <MenuItem value={10}>October</MenuItem>
-                                                                            <MenuItem value={11}>November</MenuItem>
-                                                                            <MenuItem value={12}>December</MenuItem>
-                                                                        
-                                                                        </Select>
+                                                                            <InputLabel id="demo-simple-select-label">
+                                                                                Month
+                                                                            </InputLabel>
+                                                                            <Select
+                                                                                labelId="demo-simple-select-label"
+                                                                                id="demo-simple-select"
+                                                                                className="bg-login-btn"
+                                                                                value={month}
+                                                                                label="Month"
+                                                                                onChange={
+                                                                                    handleMonthChange
+                                                                                }
+                                                                            >
+                                                                                <MenuItem value={1}>
+                                                                                    January
+                                                                                </MenuItem>
+                                                                                <MenuItem value={2}>
+                                                                                    Febuary
+                                                                                </MenuItem>
+                                                                                <MenuItem value={3}>
+                                                                                    March
+                                                                                </MenuItem>
+                                                                                <MenuItem value={4}>
+                                                                                    April
+                                                                                </MenuItem>
+                                                                                <MenuItem value={5}>
+                                                                                    May
+                                                                                </MenuItem>
+                                                                                <MenuItem value={6}>
+                                                                                    June
+                                                                                </MenuItem>
+                                                                                <MenuItem value={7}>
+                                                                                    July
+                                                                                </MenuItem>
+                                                                                <MenuItem value={8}>
+                                                                                    August
+                                                                                </MenuItem>
+                                                                                <MenuItem value={9}>
+                                                                                    September
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={10}
+                                                                                >
+                                                                                    October
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={11}
+                                                                                >
+                                                                                    November
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={12}
+                                                                                >
+                                                                                    December
+                                                                                </MenuItem>
+                                                                            </Select>
                                                                         </FormControl>
 
-                                                                        <FormControl fullWidth className='p-1'>
-                                                                        <InputLabel id="demo-simple-select-label">Date</InputLabel>
-                                                                        <Select
-                                                                            labelId="demo-simple-select-label"
-                                                                            className='bg-login-btn'
-                                                                            id="demo-simple-select"
-                                                                            value={date}
-                                                                            label="Month"
-                                                                            onChange={handleDateChange}
+                                                                        <FormControl
+                                                                            fullWidth
+                                                                            className="p-1"
                                                                         >
-                                                                            <MenuItem value={1}>1</MenuItem>
-                                                                            <MenuItem value={2}>2</MenuItem>
-                                                                            <MenuItem value={3}>3</MenuItem>
-                                                                            <MenuItem value={4}>4</MenuItem>
-                                                                            <MenuItem value={5}>5</MenuItem>
-                                                                            <MenuItem value={6}>6</MenuItem>
-                                                                            <MenuItem value={7}>7</MenuItem>
-                                                                            <MenuItem value={8}>8</MenuItem>
-                                                                            <MenuItem value={9}>9</MenuItem>
-                                                                            <MenuItem value={10}>10</MenuItem>
-                                                                            <MenuItem value={11}>11</MenuItem>
-                                                                            <MenuItem value={12}>12</MenuItem>
-                                                                            <MenuItem value={13}>13</MenuItem>
-                                                                            <MenuItem value={14}>14</MenuItem>
-                                                                            <MenuItem value={15}>15</MenuItem>
-                                                                            <MenuItem value={16}>16</MenuItem>
-                                                                            <MenuItem value={17}>17</MenuItem>
-                                                                            <MenuItem value={18}>18</MenuItem>
-                                                                            <MenuItem value={19}>19</MenuItem>
-                                                                            <MenuItem value={20}>20</MenuItem>
-                                                                            <MenuItem value={21}>21</MenuItem>
-                                                                            <MenuItem value={22}>22</MenuItem>
-                                                                            <MenuItem value={23}>23</MenuItem>
-                                                                            <MenuItem value={24}>24</MenuItem>
-                                                                            <MenuItem value={25}>25</MenuItem>
-                                                                            <MenuItem value={26}>26</MenuItem>
-                                                                            <MenuItem value={27}>27</MenuItem>
-                                                                            <MenuItem value={28}>28</MenuItem>
-                                                                            <MenuItem value={29}>29</MenuItem>
-                                                                            <MenuItem value={30}>30</MenuItem>
-                                                                            
-                                                                        
-                                                                        </Select>
+                                                                            <InputLabel id="demo-simple-select-label">
+                                                                                Date
+                                                                            </InputLabel>
+                                                                            <Select
+                                                                                labelId="demo-simple-select-label"
+                                                                                className="bg-login-btn"
+                                                                                id="demo-simple-select"
+                                                                                value={date}
+                                                                                label="Month"
+                                                                                onChange={
+                                                                                    handleDateChange
+                                                                                }
+                                                                            >
+                                                                                <MenuItem value={1}>
+                                                                                    1
+                                                                                </MenuItem>
+                                                                                <MenuItem value={2}>
+                                                                                    2
+                                                                                </MenuItem>
+                                                                                <MenuItem value={3}>
+                                                                                    3
+                                                                                </MenuItem>
+                                                                                <MenuItem value={4}>
+                                                                                    4
+                                                                                </MenuItem>
+                                                                                <MenuItem value={5}>
+                                                                                    5
+                                                                                </MenuItem>
+                                                                                <MenuItem value={6}>
+                                                                                    6
+                                                                                </MenuItem>
+                                                                                <MenuItem value={7}>
+                                                                                    7
+                                                                                </MenuItem>
+                                                                                <MenuItem value={8}>
+                                                                                    8
+                                                                                </MenuItem>
+                                                                                <MenuItem value={9}>
+                                                                                    9
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={10}
+                                                                                >
+                                                                                    10
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={11}
+                                                                                >
+                                                                                    11
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={12}
+                                                                                >
+                                                                                    12
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={13}
+                                                                                >
+                                                                                    13
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={14}
+                                                                                >
+                                                                                    14
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={15}
+                                                                                >
+                                                                                    15
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={16}
+                                                                                >
+                                                                                    16
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={17}
+                                                                                >
+                                                                                    17
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={18}
+                                                                                >
+                                                                                    18
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={19}
+                                                                                >
+                                                                                    19
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={20}
+                                                                                >
+                                                                                    20
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={21}
+                                                                                >
+                                                                                    21
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={22}
+                                                                                >
+                                                                                    22
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={23}
+                                                                                >
+                                                                                    23
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={24}
+                                                                                >
+                                                                                    24
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={25}
+                                                                                >
+                                                                                    25
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={26}
+                                                                                >
+                                                                                    26
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={27}
+                                                                                >
+                                                                                    27
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={28}
+                                                                                >
+                                                                                    28
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={29}
+                                                                                >
+                                                                                    29
+                                                                                </MenuItem>
+                                                                                <MenuItem
+                                                                                    value={30}
+                                                                                >
+                                                                                    30
+                                                                                </MenuItem>
+                                                                            </Select>
                                                                         </FormControl>
 
-                                                                        <FormControl fullWidth className='p-1'>
-                                                                        <InputLabel id="demo-simple-select-label">Year</InputLabel>
-                                                                        <Select
-                                                                            labelId="demo-simple-select-label"
-                                                                            id="demo-simple-select"
-                                                                            className='bg-login-btn'
-                                                                            value={year}
-                                                                            label="Month"
-                                                                            onChange={handleYearChange}
+                                                                        <FormControl
+                                                                            fullWidth
+                                                                            className="p-1"
                                                                         >
-                                                                        {/* {(function (rows, i, len) {
+                                                                            <InputLabel id="demo-simple-select-label">
+                                                                                Year
+                                                                            </InputLabel>
+                                                                            <Select
+                                                                                labelId="demo-simple-select-label"
+                                                                                id="demo-simple-select"
+                                                                                className="bg-login-btn"
+                                                                                value={year}
+                                                                                label="Month"
+                                                                                onChange={
+                                                                                    handleYearChange
+                                                                                }
+                                                                            >
+                                                                                {/* {(function (rows, i, len) {
                                                                                 while (--i >= len) {
                                                                                 rows.push(<MenuItem key={i} value={i}>{i}</MenuItem>)
                                                                                 }
                                                                                 return rows;
                                                                             })([], 2025, 1900)} */}
-                                                                        {generateMenuItems()}
-                                                                        </Select>
+                                                                                {generateMenuItems()}
+                                                                            </Select>
                                                                         </FormControl>
-                                                                        
                                                                     </div>
-
                                                                 </div>
                                                                 <div className="flex flex-row justify-between items-center mt-3.5">
                                                                     <p className="font-medium text-[0.938rem]">
-                                                                        {signupWithPhone ? 'Phone' : 'Email'}
+                                                                        {signupWithPhone
+                                                                            ? 'Phone'
+                                                                            : 'Email'}
                                                                     </p>
                                                                     <p
                                                                         onClick={toggleSignupMethod}
@@ -1456,22 +1698,38 @@ function App() {
                                                                     <>
                                                                         <div className="flex flex-row items-center border border-gray-500 bg-login-btn mt-2 rounded-md p-2.5">
                                                                             <div
-                                                                                onClick={countryCodeModelHandler}
+                                                                                onClick={
+                                                                                    countryCodeModelHandler
+                                                                                }
                                                                                 className="flex flex-row items-center gap-2 flex-1 cursor-pointer relative text-black"
                                                                             >
-                                                                                <p>{isoCode + ' ' + countryCode}</p>
+                                                                                <p>
+                                                                                    {isoCode +
+                                                                                        ' ' +
+                                                                                        countryCode}
+                                                                                </p>
                                                                                 <img
                                                                                     className={`object-contain h-2.5 w-2.5 chevron ${
-                                                                                        countryModelOpened ? 'rotate' : ''
+                                                                                        countryModelOpened
+                                                                                            ? 'rotate'
+                                                                                            : ''
                                                                                     }`}
-                                                                                    src={chevronDown}
+                                                                                    src={
+                                                                                        chevronDown
+                                                                                    }
                                                                                 />
-                                                                                <p className="text-gray-400 "> | </p>
+                                                                                <p className="text-gray-400 ">
+                                                                                    {' '}
+                                                                                    |{' '}
+                                                                                </p>
                                                                                 {countryModelOpened && (
                                                                                     <div
-                                                                                        onClick={modelClickHandler}
+                                                                                        onClick={
+                                                                                            modelClickHandler
+                                                                                        }
                                                                                         className={`absolute ${
-                                                                                            filteredCountryCodes.length === 0
+                                                                                            filteredCountryCodes.length ===
+                                                                                            0
                                                                                                 ? 'h-fit'
                                                                                                 : 'h-80'
                                                                                         }  w-80 bg-white top-11 -left-2.5 rounded-md shadow-md cursor-default z-10`}
@@ -1479,14 +1737,20 @@ function App() {
                                                                                         <div className="flex flex-row items-center p-2 gap-2">
                                                                                             <img
                                                                                                 className="object-contain h-3 w-3 m-2"
-                                                                                                src={search}
+                                                                                                src={
+                                                                                                    search
+                                                                                                }
                                                                                             />
                                                                                             <input
                                                                                                 type="text"
                                                                                                 placeholder="Search"
                                                                                                 className="w-full text-sm font-normal caret-red-500 bg-white"
-                                                                                                value={searchQuery}
-                                                                                                onChange={handleSearchChange}
+                                                                                                value={
+                                                                                                    searchQuery
+                                                                                                }
+                                                                                                onChange={
+                                                                                                    handleSearchChange
+                                                                                                }
                                                                                             />
                                                                                         </div>
                                                                                         <div className="w-full h-[1px] bg-gray-300" />
@@ -1510,7 +1774,9 @@ function App() {
                                                                                                                 index
                                                                                                             )
                                                                                                         }
-                                                                                                        key={index}
+                                                                                                        key={
+                                                                                                            index
+                                                                                                        }
                                                                                                         className={`flex flex-row justify-between items-center p-2.5 cursor-pointer mb-2 rounded-b-md ${
                                                                                                             selectedCountryIndex ===
                                                                                                             index
@@ -1518,7 +1784,9 @@ function App() {
                                                                                                                 : ''
                                                                                                         }`}
                                                                                                     >
-                                                                                                        <p className={`font-normal text-black text-left text-xs hover:bg-gray-50`}>
+                                                                                                        <p
+                                                                                                            className={`font-normal text-black text-left text-xs hover:bg-gray-50`}
+                                                                                                        >
                                                                                                             {countryItem?.name +
                                                                                                                 ' ' +
                                                                                                                 countryItem?.code}
@@ -1539,7 +1807,9 @@ function App() {
                                                                                             {filteredCountryCodes.length ===
                                                                                                 0 && (
                                                                                                 <p className="font-normal text-gray-400 text-xs hover:bg-gray-50 my-2">
-                                                                                                    {APP_TEXTS.NO_RESULT_FOUND}
+                                                                                                    {
+                                                                                                        APP_TEXTS.NO_RESULT_FOUND
+                                                                                                    }
                                                                                                 </p>
                                                                                             )}
                                                                                         </div>
@@ -1551,12 +1821,14 @@ function App() {
                                                                                 type="tel"
                                                                                 placeholder="Phone number"
                                                                                 value={phoneNumber}
-                                                                                onChange={(e) => setPhoneNumber(e.target.value)}
+                                                                                onChange={(e) =>
+                                                                                    setPhoneNumber(
+                                                                                        e.target
+                                                                                            .value
+                                                                                    )
+                                                                                }
                                                                             />
                                                                         </div>
-                                                                    
-                                                                        
-                                                                    
                                                                     </>
                                                                 ) : (
                                                                     <>
@@ -1566,13 +1838,21 @@ function App() {
                                                                                 type="text"
                                                                                 placeholder="Email"
                                                                                 value={email}
-                                                                                onChange={(e) => setEmail(e.target.value)}
+                                                                                onChange={(e) =>
+                                                                                    setEmail(
+                                                                                        e.target
+                                                                                            .value
+                                                                                    )
+                                                                                }
                                                                             />
                                                                         </div>
-                                                                        { emailIdError ?  
-                                                                            (<p className="font-light text-left text-xs text-red-700 mt-2.5" >
-                                                                                {"Please enter email id"}
-                                                                            </p>):null}
+                                                                        {emailIdError ? (
+                                                                            <p className="font-light text-left text-xs text-red-700 mt-2.5">
+                                                                                {
+                                                                                    'Please enter email id'
+                                                                                }
+                                                                            </p>
+                                                                        ) : null}
 
                                                                         <div className="flex flex-row items-center border border-gray-500 bg-gray-100 mt-2 rounded-md py-2.5 px-3">
                                                                             <input
@@ -1581,23 +1861,42 @@ function App() {
                                                                                 placeholder="Enter 6-digit code"
                                                                                 name="code"
                                                                                 value={otpCode}
-                                                                                onChange={(e) => setOtpCode(e.target.value)}
+                                                                                onChange={(e) =>
+                                                                                    setOtpCode(
+                                                                                        e.target
+                                                                                            .value
+                                                                                    )
+                                                                                }
                                                                             />
                                                                             <div className="flex flex-row justify-center items-center gap-2 flex-1">
-                                                                                <p className={`text-gray-400 ${style.black_text}`}> | </p>
-                                                                                <p onClick={sendOTPCode} className={`text-black`}>{otpbuttonText}</p>
+                                                                                <p
+                                                                                    className={`text-gray-400 ${style.black_text}`}
+                                                                                >
+                                                                                    {' '}
+                                                                                    |{' '}
+                                                                                </p>
+                                                                                <p
+                                                                                    onClick={
+                                                                                        sendOTPCode
+                                                                                    }
+                                                                                    className={`text-black`}
+                                                                                >
+                                                                                    {otpbuttonText}
+                                                                                </p>
                                                                             </div>
                                                                         </div>
-                                                                        {otpError ? (<p className="font-light text-left text-xs text-red-700 mt-2.5">
-                                                                                {"Please enter valid otp"}
-                                                                            </p>):null}
-                                                                    
+                                                                        {otpError ? (
+                                                                            <p className="font-light text-left text-xs text-red-700 mt-2.5">
+                                                                                {
+                                                                                    'Please enter valid otp'
+                                                                                }
+                                                                            </p>
+                                                                        ) : null}
                                                                     </>
                                                                 )}
-                                                            
+
                                                                 <div
                                                                     onClick={signupNextScreen}
-                                                                
                                                                     className={`flex flex-row items-center bg-login-btn mt-4 rounded-md py-2.5 px-3 cursor-pointer ${style.NextBtn}`}
                                                                 >
                                                                     <div className="flex flex-row justify-center items-center gap-2 flex-1">
@@ -1611,7 +1910,7 @@ function App() {
                                                                                     }}
                                                                                 />
                                                                             ) : (
-                                                                            'Next'
+                                                                                'Next'
                                                                             )}
                                                                         </p>
                                                                     </div>
@@ -1620,105 +1919,128 @@ function App() {
                                                                     onClick={handleSignUpMainScreen}
                                                                     className="flex flex-row justify-center items-center gap-2 mt-4 cursor-pointer"
                                                                 >
-                                                                    <img src={back} className="h-2.5 w-2.5 object-contain" />
-                                                                    <p className="font-medium text-xs">Go Back</p>
+                                                                    <img
+                                                                        src={back}
+                                                                        className="h-2.5 w-2.5 object-contain"
+                                                                    />
+                                                                    <p className="font-medium text-xs">
+                                                                        Go Back
+                                                                    </p>
                                                                 </div>
                                                             </>
+                                                        )}
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <div className="flex flex-row justify-between items-center mt-3.5">
+                                                            <p className="font-medium text-[0.938rem]">
+                                                                Password
+                                                            </p>
+                                                        </div>
+                                                        <div className="flex flex-row justify-between items-center border border-gray-500 bg-login-btn mt-2 rounded-md py-2.5 px-3 text-black">
+                                                            <input
+                                                                className="w-2/3 bg-login-btn"
+                                                                type={
+                                                                    showPassword
+                                                                        ? 'text'
+                                                                        : 'password'
+                                                                }
+                                                                placeholder="Password"
+                                                                value={password}
+                                                                onChange={(e) =>
+                                                                    setPassword(e.target.value)
+                                                                }
+                                                            />
+                                                            {!showPassword ? (
+                                                                <Visibility
+                                                                    style={{ cursor: 'pointer' }}
+                                                                    onClick={togglePassword}
+                                                                />
+                                                            ) : (
+                                                                <VisibilityOff
+                                                                    style={{ cursor: 'pointer' }}
+                                                                    onClick={togglePassword}
+                                                                />
                                                             )}
-                                                        </>
-                                                    ):(
-                                                        <>
-                                                            <div className="flex flex-row justify-between items-center mt-3.5">
-                                                                <p className="font-medium text-[0.938rem]">
-                                                                        Password
+                                                        </div>
+
+                                                        <div className="flex flex-row justify-between items-center mt-3.5">
+                                                            <p className="font-medium text-[0.938rem]">
+                                                                Name
+                                                            </p>
+                                                        </div>
+                                                        <div className="flex flex-row justify-between items-center border border-gray-500 bg-login-btn mt-2 rounded-md py-2.5 px-3">
+                                                            <input
+                                                                className="w-2/3 bg-login-btn"
+                                                                type="text"
+                                                                placeholder="Name"
+                                                                value={name}
+                                                                onChange={(e) =>
+                                                                    setName(e.target.value)
+                                                                }
+                                                            />
+                                                        </div>
+
+                                                        <div
+                                                            onClick={signupHandler}
+                                                            className={`flex flex-row items-center bg-login-btn mt-4 rounded-md py-2.5 px-3 cursor-pointer ${style.NextBtn}`}
+                                                        >
+                                                            <div className="flex flex-row justify-center items-center gap-2 flex-1">
+                                                                <p>
+                                                                    {isLoading ? (
+                                                                        <CircularProgress
+                                                                            style={{
+                                                                                width: 18,
+                                                                                height: 18,
+                                                                                color: 'red',
+                                                                            }}
+                                                                        />
+                                                                    ) : (
+                                                                        'Signup'
+                                                                    )}
                                                                 </p>
                                                             </div>
-                                                            <div className="flex flex-row justify-between items-center border border-gray-500 bg-login-btn mt-2 rounded-md py-2.5 px-3 text-black">
-                                                                
-                                                                <input
-                                                                    className="w-2/3 bg-login-btn"
-                                                                    type={showPassword ? 'text' : 'password'}
-                                                                    placeholder="Password"
-                                                                    value={password}
-                                                                    onChange={(e) => setPassword(e.target.value)}
-                                                                />
-                                                                {!showPassword ? (
-                                                                    <Visibility
-                                                                        style={{ cursor: 'pointer' }}
-                                                                        onClick={togglePassword}
-                                                                    />
-                                                                ) : (
-                                                                    <VisibilityOff
-                                                                        style={{ cursor: 'pointer' }}
-                                                                        onClick={togglePassword}
-                                                                    />
-                                                                )}
-                                                            </div>
-
-                                                            <div className="flex flex-row justify-between items-center mt-3.5">
-                                                                <p className="font-medium text-[0.938rem]">
-                                                                        Name
-                                                                </p>
-                                                            </div>
-                                                            <div className="flex flex-row justify-between items-center border border-gray-500 bg-login-btn mt-2 rounded-md py-2.5 px-3">
-                                                                
-                                                                <input
-                                                                    className="w-2/3 bg-login-btn"
-                                                                    type='text'
-                                                                    placeholder="Name"
-                                                                    value={name}
-                                                                    onChange={(e) => setName(e.target.value)}
-                                                                />
-                                                            
-                                                            </div>
-
-                                                            <div
-                                                                    onClick={signupHandler}
-                                                                    className={`flex flex-row items-center bg-login-btn mt-4 rounded-md py-2.5 px-3 cursor-pointer ${style.NextBtn}`}
-                                                                >
-                                                                    <div className="flex flex-row justify-center items-center gap-2 flex-1">
-                                                                        <p>
-                                                                            {isLoading ? (
-                                                                                <CircularProgress
-                                                                                    style={{
-                                                                                        width: 18,
-                                                                                        height: 18,
-                                                                                        color: 'red',
-                                                                                    }}
-                                                                                />
-                                                                            ) : (
-                                                                            'Signup'
-                                                                            )}
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            { isError ? ( <p className="font-light text-left text-xs text-red-700 mt-2.5">
+                                                        </div>
+                                                        {isError ? (
+                                                            <p className="font-light text-left text-xs text-red-700 mt-2.5">
                                                                 {errorMessage}
-                                                            </p>):null} 
+                                                            </p>
+                                                        ) : null}
 
-                                                            <div
-                                                                    onClick={goBackSignupHandler}
-                                                                    className="flex flex-row justify-center items-center gap-2 mt-4 cursor-pointer"
-                                                                >
-                                                                    <img src={back} className="h-2.5 w-2.5 object-contain" />
-                                                                    <p className="font-medium text-xs">Go Back</p>
-                                                                </div>
-                                                            
-                                                        </>
-                                                    )}
-
+                                                        <div
+                                                            onClick={goBackSignupHandler}
+                                                            className="flex flex-row justify-center items-center gap-2 mt-4 cursor-pointer"
+                                                        >
+                                                            <img
+                                                                src={back}
+                                                                className="h-2.5 w-2.5 object-contain"
+                                                            />
+                                                            <p className="font-medium text-xs">
+                                                                Go Back
+                                                            </p>
+                                                        </div>
+                                                    </>
+                                                )}
                                             </div>
                                             {isMainLoginOption && (
                                                 <div className="mt-14  w-[21.888rem] mx-auto">
                                                     <p className="font-normal text-[0.688rem] text-policy">
                                                         By continuing with an account located in{' '}
-                                                        <span className={`${textColor} cursor-pointer`}>Pakistan</span>, you
-                                                        agree to our{' '}
-                                                        <span className={` ${textColor} cursor-pointer hover:underline`}>
+                                                        <span
+                                                            className={`${textColor} cursor-pointer`}
+                                                        >
+                                                            {country_name}
+                                                        </span>
+                                                        , you agree to our{' '}
+                                                        <span
+                                                            className={` ${textColor} cursor-pointer hover:underline`}
+                                                        >
                                                             Terms of Service
                                                         </span>{' '}
                                                         and acknowledge that you have read our{' '}
-                                                        <span className={` ${textColor} cursor-pointer hover:underline`}>
+                                                        <span
+                                                            className={` ${textColor} cursor-pointer hover:underline`}
+                                                        >
                                                             Privacy Policy.
                                                         </span>
                                                     </p>
@@ -1726,9 +2048,14 @@ function App() {
                                             )}
                                             <div className="mt-3 bottom-0 relative">
                                                 <div className="border-t-[0.3px] border-gray-200 text-center pt-3.5">
-                                                    <h3 className={`font-normal text-[0.938rem] flex flex-row items-center justify-center gap-1 ${textColor} `}>
+                                                    <h3
+                                                        className={`font-normal text-[0.938rem] flex flex-row items-center justify-center gap-1 ${textColor} `}
+                                                    >
                                                         {SIGNUP_APP_TEXTS.ALREADY_ACCOUNT}{' '}
-                                                        <span className="text-danger-1 font-semibold hover:underline cursor-pointer" onClick={handleLoginpopupClick}>
+                                                        <span
+                                                            className="text-danger-1 font-semibold hover:underline cursor-pointer"
+                                                            onClick={handleLoginpopupClick}
+                                                        >
                                                             {SIGNUP_APP_TEXTS.LOGIN}
                                                         </span>
                                                     </h3>
@@ -1736,7 +2063,7 @@ function App() {
                                             </div>
                                         </>
                                     )}
-                                </div>      
+                                </div>
                             </div>
                         )}
                     </Router>

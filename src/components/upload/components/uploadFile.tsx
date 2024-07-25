@@ -1,12 +1,10 @@
 import { useState,useEffect } from 'react';
 import { goLive, uploadPrimaryIcon } from '../../../icons';
 import CustomButton from '../../../shared/buttons/CustomButton';
-import { useNavigate } from 'react-router-dom';
 import style from '../index.module.scss';
 
 function UploadFile({ selectFilesHandler }: any) {
     const [currentOptions, setCurrentOptions] = useState(0);
-    const navigate = useNavigate();
 
     const toggleCurrentOptions = (option: number) => {
         setCurrentOptions(option);

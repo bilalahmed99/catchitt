@@ -19,7 +19,6 @@ import { Tagged } from './svg-components/Tagged';
 import { VideoIcon } from './svg-components/VideoIcon';
 
 export const PublicProfile = (props: any) => {
-    const { selectedIndex, setIndex } = useAuthStore();
     const [storyPopup, setStoryPopup] = useState(false);
     const params = useParams();
     const [activeTab, setActiveTab] = useState('Videos');
@@ -38,8 +37,6 @@ export const PublicProfile = (props: any) => {
     const [videoModal, setVideoModal] = useState(false);
     const [copyPopup, setcopyPopup] = useState(false);
 
-    const navigate = useNavigate();
-
     const MemoizedStoriesOnPublicProfile = memo(publicProfileStories);
 
     useEffect(() => {
@@ -55,8 +52,6 @@ export const PublicProfile = (props: any) => {
                 const profileData = await profileResponse.json();
                 setProfileData(profileData.data);
                 setLoading(false);
-                console.log('profileee dataaa for public profile');
-                console.log(profileData);
 
                 const { _id } = profileData?.data;
 
@@ -168,7 +163,8 @@ export const PublicProfile = (props: any) => {
                             <div
                                 onClick={() => setActiveTab(item.title)}
                                 style={{
-                                    borderColor: activeTab === item.title ? 'rgb(255, 59, 92)' : '#DFDFDF',
+                                    borderColor:
+                                        activeTab === item.title ? 'rgb(255, 59, 92)' : '#DFDFDF',
                                 }}
                                 className={styles.tab}
                                 key={item.key}

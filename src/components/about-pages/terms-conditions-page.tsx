@@ -1,10 +1,8 @@
-import { useEffect } from 'react';
-
-import { Navigate, useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../store/authStore';
-
 import IconButton from '@mui/material/IconButton/IconButton';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Layout from '../../shared/layout';
+import { useAuthStore } from '../../store/authStore';
 import { LeftArrow } from '../push-notifications-page/svg-components/LeftArrow';
 import styles from './styles.module.scss';
 
@@ -13,8 +11,7 @@ export interface TermsAndConditionsPageProps {
 }
 
 export const TermsAndConditionsPage = ({ className }: TermsAndConditionsPageProps) => {
-    const { selectedIndex, setIndex, isLoggedIn, setSettingsDropdown } = useAuthStore();
-    const token = localStorage.getItem('token');
+    const { setIndex, setSettingsDropdown } = useAuthStore();
     const navigate = useNavigate();
 
     const handleGoBack = () => {

@@ -5,7 +5,6 @@ import whiteRightArrow from './svg-components/whiteRightArrow.svg';
 const Analytics = () => {
     const [currentTab, setCurrentTab] = useState(0);
     const API_KEY = process.env.VITE_API_URL;
-    const activityEndPoint = '/notification';
     const token = localStorage.getItem('token');
     const [startDate, setStartDate] = useState('02-1-2024');
     const [endDate, setEndDate] = useState('03-18-2024');
@@ -34,7 +33,7 @@ const Analytics = () => {
             );
             const res = await response.json();
             const data = res?.data;
-            
+
             setVideoViews(data?.videoViews);
             setProfileViews(data?.profileViews);
             setLikes(data?.likes);

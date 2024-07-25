@@ -1,22 +1,19 @@
+import { useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
 import { APP_TEXTS, LOGIN_OPTIONS } from '../../utils/constants';
 import ItemLogin from '../item-login';
 import Footer from './footer';
 import Header from './header';
 import './login.scss';
-import { useGoogleLogin } from '@react-oauth/google';
 // import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginWithGoogleService } from '../../redux/reducers/auth';
 // import AppleSigninButtonCustom from '../applesigninbutton/AppleSignInButton';
-import {
-    fb, 
-} from '../../icons';
 
-
-const Login = (props: any) => {
+const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch<any>();
+    const { country_name } = useSelector((state: any) => state?.reducers?.geo);
 
     const loginItemClickHandler = (name: string) => {
         switch (name) {
@@ -33,7 +30,6 @@ const Login = (props: any) => {
                 break;
             case APP_TEXTS.GOOGLE:
                 loginWithGoogleHandler();
-                console.log('Google loginsss');
                 break;
             case APP_TEXTS.TWITTER:
                 // Handle Twitter login
@@ -50,7 +46,6 @@ const Login = (props: any) => {
 
     const loginWithGoogleHandler = useGoogleLogin({
         onSuccess: (tokenResponse) => {
-            console.log('Google Auth : ', tokenResponse);
             loginWithGoogleAccessToken(tokenResponse?.access_token);
         },
         onError: (error) => {
@@ -67,7 +62,6 @@ const Login = (props: any) => {
                 if (res?.error) {
                     console.log('Response error : ', res?.error);
                 } else if (res?.payload?.status == 200) {
-                    console.log('data after successfull login', res?.payload?.data);
                     navigate('/home');
                 }
             })
@@ -125,8 +119,8 @@ const Login = (props: any) => {
                 <div className="mt-3.5">
                     <p className="font-normal text-[0.688rem] text-policy">
                         By continuing with an account located in{' '}
-                        <span className="text-black cursor-pointer">Pakistan</span>, you agree to
-                        our{' '}
+                        <span className="text-black cursor-pointer">{country_name}</span>, you agree
+                        to our{' '}
                         <span className="text-black cursor-pointer hover:underline">
                             Terms of Service
                         </span>{' '}

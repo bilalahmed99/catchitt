@@ -2,9 +2,7 @@ import { differenceInDays, differenceInHours, differenceInMinutes } from 'date-f
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import profileIcon from '../../assets/defaultProfileIcon.png';
-import { useAuthStore } from '../../store/authStore';
 import styles from './activity-page.module.scss';
-
 import { IconButton } from '@mui/material';
 import Layout from '../../shared/layout';
 import { LeftArrow } from './svg-components/LeftArrow';
@@ -117,7 +115,6 @@ export const ActivityPage = ({ className }: ActivityPageProps) => {
     const elapsedTimeStrings = activityData.map((activity) => {
         const activityDate = new Date(activity.createdTime);
         const now = new Date();
-
         const daysDifference = differenceInDays(now, activityDate);
         const hoursDifference = differenceInHours(now, activityDate);
         const minutesDifference = differenceInMinutes(now, activityDate);
@@ -141,7 +138,6 @@ export const ActivityPage = ({ className }: ActivityPageProps) => {
             },
         });
         if (response.ok) {
-            console.log(`user: ${userId} is followed`);
             handleFetchFollowedUsers(globalUserId);
         }
         setFollowLoading(false); // Set loading state back to false after API call
