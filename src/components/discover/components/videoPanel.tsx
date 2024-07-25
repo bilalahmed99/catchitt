@@ -14,7 +14,7 @@ export default function VideoesMaping({ videos, openVideoModal, muteStates, setM
 
     const unmuteHandler = (event: React.MouseEvent<HTMLImageElement, MouseEvent>, index: number) => {
         event.stopPropagation();
-        setMuteStates((prevMuteStates) => {
+        setMuteStates((prevMuteStates: any) => {
             const newMuteStates = [...prevMuteStates];
             newMuteStates[index] = !newMuteStates[index];
             return newMuteStates;
