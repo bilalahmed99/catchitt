@@ -1,5 +1,6 @@
 import { useMediaQuery } from '@mui/material';
 import PopupForReport from '../../components/profile/popups/PopupForReport';
+import PopupForGetApp from '../components/PopupForGetApp';
 import { SideNavBar } from '../../components/side-nav-bar/side-nav-bar';
 import { SuggestedActivity } from '../../components/suggested-activity/suggested-activity';
 import { commentTab, forthTab, homeTab, settingsTab, thirdTab } from '../../icons';
@@ -29,6 +30,7 @@ function Layout(props: any) {
     const showSidebar = useMediaQuery('(max-width:1000px)');
     const [darkTheme, setdarkTheme] = useState('');
     const [darkThemeblack, setdarkThemeblack] = useState('');
+    const [appPopup, setAppPopup] = useState(false);
 
     useEffect(() => {
         var themeColor = window.localStorage.getItem('theme');
@@ -52,6 +54,15 @@ function Layout(props: any) {
     //     } 
     //     }); 
     //     }, [])
+
+
+    const showAppPopup = () => {
+        setAppPopup(true);
+    }
+
+    const closeAppPopup = () => {
+        setAppPopup(false);
+    }
 
     return (
         <div
@@ -179,9 +190,9 @@ function Layout(props: any) {
                 >
                     {children}
                 </div>
-                {/* <div className={style.GetAppDivBottomContainer} >
+                <div className={style.GetAppDivBottomContainer} >
                     <div  className={style.GetAppDivPromotionContainer} >
-                        <button  className={style.GetAppButtonGetAppText} >Get app</button>
+                        <button  className={style.GetAppButtonGetAppText}  onClick={() => showAppPopup() }>Get app</button>
                         <div  className={style.GetAppDivExpandContainer} >
                             <div  className={style.GetAppDivXMarkWrapper} >
                                 <svg width="20" data-e2e="" height="20" viewBox="0 0 48 48" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M21.1718 23.9999L10.2931 13.1212C9.90261 12.7307 9.90261 12.0975 10.2931 11.707L11.7074 10.2928C12.0979 9.90228 12.731 9.90228 13.1216 10.2928L24.0002 21.1715L34.8789 10.2928C35.2694 9.90228 35.9026 9.90228 36.2931 10.2928L37.7073 11.707C38.0979 12.0975 38.0979 12.7307 37.7073 13.1212L26.8287 23.9999L37.7073 34.8786C38.0979 35.2691 38.0979 35.9023 37.7073 36.2928L36.2931 37.707C35.9026 38.0975 35.2694 38.0975 34.8789 37.707L24.0002 26.8283L13.1216 37.707C12.731 38.0975 12.0979 38.0975 11.7074 37.707L10.2931 36.2928C9.90261 35.9023 9.90261 35.2691 10.2931 34.8786L21.1718 23.9999Z"></path></svg>
@@ -194,9 +205,15 @@ function Layout(props: any) {
                             </div>
                         </div>
                     </div>
-                </div> */}
+                </div>
                 
             </div>
+
+            <PopupForGetApp
+                openAppPopup={appPopup}
+                closeAppPopup={closeAppPopup}
+            />
+
             <PopupForReport
                 openReport={showReportPopup}
                 onReportClose={closeReportPopup}
