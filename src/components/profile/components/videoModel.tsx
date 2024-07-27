@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import defaultProfileIcon from '../../../assets/defaultProfileIcon.png';
-import { closeSquare, deleteVideoIcon } from '../../../icons';
+import { closeSquare, deleteVideoIcon, editIcon } from '../../../icons';
 import {
     commentMethod,
     followingsMethod,
@@ -24,6 +24,7 @@ interface Props {
     gifts: any;
     sendPopupHandler?: any;
     deleteVideo: any;
+    editVideoHandler: any;
 }
 
 function VideoModel({
@@ -34,6 +35,7 @@ function VideoModel({
     gifts,
     sendPopupHandler,
     deleteVideo,
+    editVideoHandler
 }: Props) {
     const navigate = useNavigate();
     //For Images Ref.
@@ -51,8 +53,6 @@ function VideoModel({
     const followings = useSelector((store) => store?.reducers?.followings);
     const dispatch = useDispatch();
     const [followBtnLoading, setfollowBtnLoading] = useState(false);
-
-    const API_KEY = process.env.VITE_API_URL;
 
     const [replySomeOne, setReplySomeOne] = useState<any>({
         status: false,
@@ -78,7 +78,6 @@ function VideoModel({
     };
 
     useEffect(() => {
-        console.log('INFO >>>', info);
         setUserComments(info?.comments);
     }, []);
 
@@ -364,6 +363,10 @@ function VideoModel({
                         {/* DropDown for more btn */}
                         {more ? (
                             <div className={style['dropdown']}>
+                                <div onClick={editVideoHandler}>
+                                    <img src={editIcon} alt="" />
+                                    <p className={`${style['text5']} text-black`}>Edit</p>
+                                </div>
                                 <div onClick={report}>
                                     <img
                                         src="../../../../public/images/icons/Group (3).svg"

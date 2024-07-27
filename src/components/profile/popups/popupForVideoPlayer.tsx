@@ -10,7 +10,8 @@ export default function PopupForVideoPlayer({
     onBlockPopup,
     gifts,
     sendPopupHandler,
-    deleteVideoPopup
+    deleteVideoPopup,
+    editVideoHandler,
 }: any) {
     return (
         <div className={style.parent}>
@@ -25,6 +26,7 @@ export default function PopupForVideoPlayer({
                             onModalClose={onclose}
                             sendPopupHandler={sendPopupHandler}
                             deleteVideo={deleteVideoPopup}
+                            editVideoHandler={editVideoHandler}
                         />
                     </div>
                 </ClickAwayListener>

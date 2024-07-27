@@ -395,8 +395,8 @@ export const Profile = (props: any) => {
     useEffect(() => {
         const mainDiv = mainDivRef.current;
         if (mainDiv) {
-            // mainDiv.addEventListener('scroll', handleScroll);
-            // return () => mainDiv.removeEventListener('scroll', handleScroll);
+            mainDiv.addEventListener('scroll', handleScroll);
+            return () => mainDiv.removeEventListener('scroll', handleScroll);
         }
     }, [
         handleScroll,
@@ -469,11 +469,6 @@ export const Profile = (props: any) => {
                         {tabs.map((item) => (
                             <div
                                 onClick={() => tabChangeHandler(item?.title)}
-                                // style={{
-                                //     borderColor:
-                                //         activeTab === item.title ? 'rgb(255, 59, 92)' : '#DFDFDF',
-                                // }}
-                                // className={styles.tab}
                                 className={`${styles.tab} ${
                                     activeTab === item.title
                                         ? 'border-liveSelected'
@@ -523,6 +518,9 @@ export const Profile = (props: any) => {
                     onBlockPopup={() => setBlockPopup(true)}
                     onReportPopup={() => setReportPopup(true)}
                     deleteVideoPopup={() => setDeleteVideoPopup(true)}
+                    editVideoHandler={() =>
+                        navigate('/upload', { state: { isEditMode: true, info: videoModalInfo } })
+                    }
                     videoModal={videoModal}
                     onclose={() => setVideoModal(false)}
                     info={videoModalInfo}

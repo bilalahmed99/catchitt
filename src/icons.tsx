@@ -102,13 +102,13 @@ import likeBlack from './assets/likeBlack.svg';
 import shareBlack from './assets/shareBlack.svg';
 import moreBlack from './assets/moreBlack.svg';
 import savedBlack from './assets/savedBlack.svg';
-
 import embedShare from './assets/embed.svg';
 import whatsappShare from './assets/whatsapp-share.svg';
 import twitterShare from './assets/twitter-share.svg';
 import facebookShare from './assets/facebook-share.svg';
 import linkedInShare from './assets/linkedin-share.svg';
 import deleteVideoIcon from './assets/delete-video.svg';
+import editIcon from './assets/edit-icon.svg';
 
 export {
     duet,
@@ -221,4 +221,5 @@ export {
     facebookShare,
     linkedInShare,
     deleteVideoIcon,
+    editIcon
 };
