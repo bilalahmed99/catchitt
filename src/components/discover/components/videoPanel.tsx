@@ -9,12 +9,12 @@ interface Type {
     setMuteStates: React.Dispatch<React.SetStateAction<boolean[]>>;
 }
 
-export default function VideoesMaping({ videos, openVideoModal, muteStates, setMuteStates }: Type) {
+export default function VideoesMaping({ videos, openVideoModal, muteStates, setMuteStates }: any) {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
     const unmuteHandler = (event: React.MouseEvent<HTMLImageElement, MouseEvent>, index: number) => {
         event.stopPropagation();
-        setMuteStates((prevMuteStates) => {
+        setMuteStates((prevMuteStates: any) => {
             const newMuteStates = [...prevMuteStates];
             newMuteStates[index] = !newMuteStates[index];
             return newMuteStates;

@@ -27,43 +27,45 @@ import ViewsModal from './components/ViewsModal';
 import viewerAvatarPlaceholder from './svg-components/placeholderAvatar.png';
 import style from './profile.module.scss';
 import { useUpdateEffect } from 'react-use';
+import PopupForDeleteVideo from './popups/popupForDeleteVideo';
 
 export const Profile = (props: any) => {
     const [activeTab, setActiveTab] = useState('Videos');
     const [profileModal, setProfileModal] = useState(false);
     const [storyPopup, setStoryPopup] = useState(false);
     const [followModal, setFollowModal] = useState<null | string>(null);
-    const [likesModal, setLikesModal] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [likesModal, setLikesModal] = useState<any>(false);
+    const [loading, setLoading] = useState<any>(false);
     const API_KEY = process.env.VITE_API_URL;
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userId');
     const [videoModal, setVideoModal] = useState(false);
     const [userVideos, setUserVideos] = useState<any>([]);
-    const [userlikedVideos, setUserLikedVideos] = useState([]);
-    const [usertaggedVideos, setUserTaggedVideos] = useState([]);
-    const [bookmarkVideos, setBookmarkVideos] = useState([]);
-    const [videoModalInfo, setVideoModalInfo] = useState({});
+    const [userlikedVideos, setUserLikedVideos] = useState<any>([]);
+    const [usertaggedVideos, setUserTaggedVideos] = useState<any>([]);
+    const [bookmarkVideos, setBookmarkVideos] = useState<any>([]);
+    const [videoModalInfo, setVideoModalInfo] = useState<any>({});
     const [reportPopup, setReportPopup] = useState(false);
     const [giftsPopup, setGiftsPopup] = useState(false);
     const [blockPopup, setBlockPopup] = useState(false);
+    const [deleteVideoPopup, setDeleteVideoPopup] = useState(false);
     const [copyPopup, setcopyPopup] = useState(false);
     const [viewsModal, setViewsModal] = useState(false);
     const [profileViewsContent, setProfileViewsContent] = useState<any>([]);
-    const [darkTheme, setdarkTheme] = useState('');
+    const [darkTheme, setdarkTheme] = useState<any>('');
 
-    const [videosPage, setVideosPage] = useState(1);
-    const [likedVideosPage, setLikedVideosPage] = useState(1);
-    const [taggedVideosPage, setTaggedVideosPage] = useState(1);
-    const [bookmarkVideosPage, setBookmarkVideosPage] = useState(1);
+    const [videosPage, setVideosPage] = useState<any>(1);
+    const [likedVideosPage, setLikedVideosPage] = useState<any>(1);
+    const [taggedVideosPage, setTaggedVideosPage] = useState<any>(1);
+    const [bookmarkVideosPage, setBookmarkVideosPage] = useState<any>(1);
 
-    const [hasMoreVideos, setHasMoreVideos] = useState(true);
-    const [hasMoreLikedVideos, setHasMoreLikedVideos] = useState(true);
-    const [hasMoreTaggedVideos, setHasMoreTaggedVideos] = useState(true);
-    const [hasMoreBookmarkVideos, setHasMoreBookmarkVideos] = useState(true);
+    const [hasMoreVideos, setHasMoreVideos] = useState<any>(true);
+    const [hasMoreLikedVideos, setHasMoreLikedVideos] = useState<any>(true);
+    const [hasMoreTaggedVideos, setHasMoreTaggedVideos] = useState<any>(true);
+    const [hasMoreBookmarkVideos, setHasMoreBookmarkVideos] = useState<any>(true);
 
     const [initialCalled, setInitialCalled] = useState<boolean>(false);
-    const mainDivRef = useRef(null);
+    const mainDivRef = useRef<any>(null);
 
     // @ts-ignore
     const dispatch = useDispatch();
@@ -195,9 +197,9 @@ export const Profile = (props: any) => {
                 )
                     .then((res) => res.json())
                     .then((data) => {
-                        // setUserVideos((prev) => [...prev, ...data.data.data]);
+                        setUserVideos((prev: any) => [...prev, ...data.data.data]);
                         setHasMoreVideos(data.data.total > pageSize * videosPage);
-                        setVideosPage((prev) => prev + 1);
+                        setVideosPage((prev: number) => prev + 1);
                     })
                     .catch((err) => console.log(err))
             );
@@ -218,9 +220,9 @@ export const Profile = (props: any) => {
                 )
                     .then((res) => res.json())
                     .then((data) => {
-                        // setUserLikedVideos((prev) => [...prev, ...data.data.data]);
+                        setUserLikedVideos((prev: any) => [...prev, ...data.data.data]);
                         setHasMoreLikedVideos(data.data.total > pageSize * likedVideosPage);
-                        setLikedVideosPage((prev) => prev + 1);
+                        setLikedVideosPage((prev: number) => prev + 1);
                     })
                     .catch((err) => console.log(err))
             );
@@ -241,9 +243,9 @@ export const Profile = (props: any) => {
                 )
                     .then((res) => res.json())
                     .then((data) => {
-                        // setUserTaggedVideos((prev) => [...prev, ...data.data.data]);
+                        setUserTaggedVideos((prev: any) => [...prev, ...data.data.data]);
                         setHasMoreTaggedVideos(data.data.total > pageSize * taggedVideosPage);
-                        setTaggedVideosPage((prev) => prev + 1);
+                        setTaggedVideosPage((prev: number) => prev + 1);
                     })
                     .catch((err) => console.log(err))
             );
@@ -264,9 +266,9 @@ export const Profile = (props: any) => {
                 )
                     .then((res) => res.json())
                     .then((data) => {
-                        // setBookmarkVideos((prev) => [...prev, ...data.data.data]);
+                        setBookmarkVideos((prev: any) => [...prev, ...data.data.data]);
                         setHasMoreBookmarkVideos(data.data.total > pageSize * bookmarkVideosPage);
-                        setBookmarkVideosPage((prev) => prev + 1);
+                        setBookmarkVideosPage((prev: number) => prev + 1);
                     })
                     .catch((err) => console.log(err))
             );
@@ -520,6 +522,7 @@ export const Profile = (props: any) => {
                     gifts={() => setGiftsPopup(true)}
                     onBlockPopup={() => setBlockPopup(true)}
                     onReportPopup={() => setReportPopup(true)}
+                    deleteVideoPopup={() => setDeleteVideoPopup(true)}
                     videoModal={videoModal}
                     onclose={() => setVideoModal(false)}
                     info={videoModalInfo}
@@ -532,7 +535,13 @@ export const Profile = (props: any) => {
                 <PopupForBlock
                     openBlock={blockPopup}
                     onBlockClose={() => setBlockPopup(false)}
-                    onReportClose={() => setReportPopup(false)}
+                    info={videoModalInfo}
+                    // @ts-ignore
+                    userId={{ id: videoModalInfo?.user?._id, name: videoModalInfo?.user?.name }}
+                />
+                <PopupForDeleteVideo
+                    openBlock={deleteVideoPopup}
+                    onBlockClose={() => setDeleteVideoPopup(false)}
                     info={videoModalInfo}
                     // @ts-ignore
                     userId={{ id: videoModalInfo?.user?._id, name: videoModalInfo?.user?.name }}
