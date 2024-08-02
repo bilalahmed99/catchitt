@@ -39,6 +39,12 @@ export default function COPY_AND_SEND_MENU_HOME({
         setAnchorEl(null);
     };
 
+    function extractVideoId(url: string) {
+        const regex = /videos\/(.*?)\/reduced/;
+        const match = url.match(regex);
+        return match ? match[1] : null;
+    }
+
     const StyledMenu = styled((props: MenuProps) => (
         <Menu
             elevation={0}
@@ -86,23 +92,27 @@ export default function COPY_AND_SEND_MENU_HOME({
     }));
 
     const shareToWhatsApp = () => {
-        window.open(`https://api.whatsapp.com/send?text=${videoTitle} - ${videoUrl}`, '_blank');
+        let url = `https://stagingweb.seezitt.com/video/${extractVideoId(videoUrl)}`;
+        window.open(`https://api.whatsapp.com/send?text=${videoTitle} - ${url}`, '_blank');
     };
 
     const shareToFacebook = () => {
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${videoUrl}`, '_blank');
+        let url = `https://stagingweb.seezitt.com/video/${extractVideoId(videoUrl)}`;
+
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
     };
 
     const shareToTwitter = () => {
-        window.open(
-            `https://twitter.com/intent/tweet?url=${videoUrl}&text=${videoTitle}`,
-            '_blank'
-        );
+        let url = `https://stagingweb.seezitt.com/video/${extractVideoId(videoUrl)}`;
+
+        window.open(`https://twitter.com/intent/tweet?url=${url}&text=${videoTitle}`, '_blank');
     };
 
     const shareToLinkedIn = () => {
+        let url = `https://stagingweb.seezitt.com/video/${extractVideoId(videoUrl)}`;
+
         window.open(
-            `https://www.linkedin.com/shareArticle?url=${videoUrl}&title=${videoTitle}`,
+            `https://www.linkedin.com/shareArticle?url=${url}&title=${videoTitle}`,
             '_blank'
         );
     };

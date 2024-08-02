@@ -78,6 +78,7 @@ import FormControl from '@mui/material/FormControl';
 import style from './components/homePage/index.module.scss';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { setGeoData } from './redux/reducers/geoServices';
+import VideoPage from './components/shared-video';
 
 // Functional component to handle the initial route navigation
 const InitialRouteHandler = () => {
@@ -807,6 +808,7 @@ function App() {
                             <Route path="/SearchPage/:query/:tab" element={<SearchPage />} />
                             <Route path="/discover" element={<Discover />} />
                             <Route path="/videos/:id" element={<AllVideos />} />
+                            <Route path="/video/:videoId" element={<VideoPage />} />
                             <Route path="/upload" element={<UploadPage />} />
                             <Route path="/create-story" element={<CreateStoryPage />} />
                             {/* <Route path="/golive" element={<GoLive />} /> */}
