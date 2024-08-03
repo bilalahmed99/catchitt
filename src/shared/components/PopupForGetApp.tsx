@@ -1,8 +1,19 @@
 import { ClickAwayListener, Modal } from '@mui/material'
 import style from './getApp.module.scss'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 export default function PopupForGetApp({ openAppPopup, closeAppPopup, info }: any) {
     const [popupH, setPopupH] = useState<any>()
+    const [darkTheme, setdarkTheme] = useState('');
+    const [lightDarkTheme, setlightDarkTheme] = useState('');
+
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+
+        if (themeColor == 'dark') {
+            setdarkTheme(style.darkTheme);
+            setlightDarkTheme(style.lightdarkTheme);
+        }
+    });
 
     return (
       
@@ -10,7 +21,7 @@ export default function PopupForGetApp({ openAppPopup, closeAppPopup, info }: an
             <ClickAwayListener onClickAway={() => {
                     closeAppPopup()
                 }}>
-                <div onClick={(e) => e.stopPropagation()} className={style.parent}>
+                <div onClick={(e) => e.stopPropagation()} className={`${style.parent}  ${lightDarkTheme}`}>
                     <p className={style.text}>{"Get the Seezitt app"}</p>
                     <hr/>
                     <div>

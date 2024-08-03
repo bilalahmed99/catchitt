@@ -66,3 +66,16 @@
     border: 1px solid rgb(255, 59, 92);
   }
   
+  .darkTheme {
+    background: black !important;
+    color:white !important;
+  }
+  
+  .lightdarkTheme {
+    background: rgb(18, 18, 18) !important;
+    color:white !important;
+  }
+
+  div.lightdarkTheme p{
+    color:white !important;
+  }
