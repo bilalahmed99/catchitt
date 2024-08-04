@@ -17,7 +17,7 @@ function UploadPage() {
         updateState,
         state,
         SubmitHandler,
-        isPosting,
+        isPosing,
     } = useUpload();
 
     const [darkTheme, setdarkTheme] = useState('');
@@ -46,7 +46,7 @@ function UploadPage() {
                     updateState={updateState}
                     state={state}
                     SubmitHandler={SubmitHandler}
-                    isPosing={isPosting}
+                    isPosing={isPosing}
                     videoInfo={info}
                 />
             )}
