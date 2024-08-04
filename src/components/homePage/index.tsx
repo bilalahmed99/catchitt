@@ -332,7 +332,6 @@ function HomePage() {
 
             setOtpbuttonText('Resend');
 
-            console.log('otp verify response', data);
         } catch (error) {
             console.log('send otp error:', error);
         }
