@@ -1466,7 +1466,7 @@ export const SearchPage = () => {
                                             : styles.searchTab
                                     }
                                 >
-                                    All
+                                    Top
                                 </Tab>
                                 <Tab
                                     onClick={() => handleTabChange('Videos')}
@@ -1488,7 +1488,7 @@ export const SearchPage = () => {
                                 >
                                     Users
                                 </Tab>
-                                <Tab
+                                {/* <Tab
                                     onClick={() => handleTabChange('Sounds')}
                                     className={
                                         selectedTab === 'Sounds'
@@ -1507,7 +1507,7 @@ export const SearchPage = () => {
                                     }
                                 >
                                     Hashtags
-                                </Tab>
+                                </Tab> */}
                             </div>
                             <div className={styles.container}>
                                 {isLoading ? <CircularProgress /> : renderSearchResults}
