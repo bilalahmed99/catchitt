@@ -118,6 +118,15 @@ export const PushNotificationsPage = ({ className }: PushNotificationsPageProps)
             });
     };
 
+    const [darkTheme, setdarkTheme] = useState('');
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+        if (themeColor == 'dark') {
+            setdarkTheme(styles.darkTheme);
+
+        }
+    });
+
     return (
         // <div className={classNames(styles.root, className)}>
         <Layout>
@@ -133,7 +142,7 @@ export const PushNotificationsPage = ({ className }: PushNotificationsPageProps)
                         <SuggestedActivity showActivity={true} showSuggestedContent={true} />
                     </div>
                 </div> */}
-                <div className={styles.middleSectionDiv}>
+                <div className={` ${styles.middleSectionDiv} ${darkTheme}`}>
                     <div className={styles.pageHeader}>
                         <IconButton
                             sx={{ margin: '0px', padding: '0px', alignSelf: 'center' , display:'flex' , gap:'1rem' }}

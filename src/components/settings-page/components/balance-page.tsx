@@ -167,6 +167,15 @@ const BalancePage = ({ className }: BalancePageProps) => {
         handleFetchRevenueData()
     }, [])
 
+    const [darkTheme, setdarkTheme] = useState('');
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+        if (themeColor == 'dark') {
+            setdarkTheme(styles.darkTheme);
+
+        }
+    });
+
     return (
         <>
             <Layout>
@@ -183,7 +192,7 @@ const BalancePage = ({ className }: BalancePageProps) => {
                             <SuggestedActivity showActivity={true} showSuggestedContent={true} />
                         </div>
                     </div> */}
-                    <div className={styles.middleSectionDiv}>
+                    <div className={` ${styles.middleSectionDiv} ${darkTheme} `}>
                         <div className={styles.settingsWrapper}> 
                             <div className={styles.pageHeader} style={{display: 'flex',   justifyContent: 'sapce-between'}}>
                                 <IconButton sx={{ width: 'fit-content !important', margin: '0px', padding: '0px', alignSelf: 'center' }}

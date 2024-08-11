@@ -3,6 +3,7 @@ import arrowBack from './svg-components/arrow-back.svg';
 import giraffe from './svg-components/giraffe.svg';
 import womenAvatar from './svg-components/women-avatar-reports.svg';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
 
 const MyReports = () => {
     const API_KEY = process.env.VITE_API_URL;
@@ -33,6 +34,16 @@ const MyReports = () => {
     // getMyReports();
     // }, []);
 
+    const [darkTheme, setdarkTheme] = useState('');
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+        if (themeColor == 'dark') {
+            setdarkTheme("#222");
+        }else{
+            setdarkTheme("white");
+        }
+    });
+
     return (
         <Layout>
             <div className="p-2 flex flex-col mt-6 ml-32 items-start">
@@ -43,7 +54,7 @@ const MyReports = () => {
                     <img src={arrowBack} height={7} width={14} />
                     <h4 className="font-semibold text-xl text-[#222222]">My Reports</h4>
                 </div>
-                <div className="w-[37.563rem] h-[5.875rem] gap-3 rounded-lg px-3 py-4.5 flex flex-row items-center bg-white mt-4">
+                <div style={{background:darkTheme }} className="w-[37.563rem] h-[5.875rem] gap-3 rounded-lg px-3 py-4.5 flex flex-row items-center mt-4">
                     <img src={giraffe} height={62} width={62} className="rounded" />
                     <div className="flex flex-col items-start justify-between">
                         <p className="font-medium text-base text-[#222222]">JaneDoe's video</p>
@@ -52,7 +63,7 @@ const MyReports = () => {
                         </p>
                     </div>
                 </div>
-                <div className="w-[37.563rem] h-[5.875rem] gap-3 rounded-lg px-3 py-4.5 flex flex-row items-center bg-white mt-3">
+                <div style={{background:darkTheme }} className="w-[37.563rem] h-[5.875rem] gap-3 rounded-lg px-3 py-4.5 flex flex-row items-center mt-3">
                     <img src={womenAvatar} height={62} width={62} className="rounded" />
                     <div className="flex flex-col items-start justify-between">
                         <p className="font-medium text-base text-[#222222]">JaneDoe's video</p>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import IconButton from '@mui/material/IconButton/IconButton';
@@ -25,10 +25,19 @@ export const CommunityPage = ({ className }: CommunityPageProps) => {
         setSettingsDropdown(true);
     }, []);
 
+    const [darkTheme, setdarkTheme] = useState('');
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+        if (themeColor == 'dark') {
+            setdarkTheme(styles.darkTheme);
+
+        }
+    });
+
     return (
         <Layout>
             <div className={styles.container}>
-                <div className={styles.middleSectionDiv}>
+                <div className={` ${styles.middleSectionDiv} ${darkTheme} `}>
                     <div className={styles.pageHeader}>
                         <IconButton
                             sx={{ margin: '0px', padding: '0px', alignSelf: 'center' }}
@@ -38,7 +47,7 @@ export const CommunityPage = ({ className }: CommunityPageProps) => {
                         </IconButton>
                         <h4>Community guidelines</h4>
                     </div>
-                    <div className={styles.suggestedContent}>
+                    <div className={` ${styles.suggestedContent} `}>
                         <div className={styles.cards}>
                             <div>
                                 <div className={styles.header} style={{ marginBottom: '8px' }}>

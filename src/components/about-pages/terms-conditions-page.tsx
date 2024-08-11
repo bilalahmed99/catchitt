@@ -1,5 +1,5 @@
 import IconButton from '@mui/material/IconButton/IconButton';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../../shared/layout';
 import { useAuthStore } from '../../store/authStore';
@@ -25,10 +25,19 @@ export const TermsAndConditionsPage = ({ className }: TermsAndConditionsPageProp
         setSettingsDropdown(true);
     }, []);
 
+    const [darkTheme, setdarkTheme] = useState('');
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+        if (themeColor == 'dark') {
+            setdarkTheme(styles.darkTheme);
+
+        }
+    });
+
     return (
         <Layout>
             <div className={styles.container}>
-                <div className={styles.middleSectionDiv}>
+                <div className={` ${styles.middleSectionDiv}  ${darkTheme} `}>
                     <div className={styles.pageHeader}>
                         <IconButton
                             sx={{ margin: '0px', padding: '0px', alignSelf: 'center' }}

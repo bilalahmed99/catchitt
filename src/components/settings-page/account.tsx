@@ -613,6 +613,16 @@ const Account = ({ className, openModal }: AccountProps) => {
         event.stopPropagation(); // Prevents the click event from bubbling up to the outer div
     };
 
+    const [darkTheme, setdarkTheme] = useState('');
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+        if (themeColor == 'dark') {
+            setdarkTheme(styles.darkTheme);
+
+        }
+    });
+
+
     return (
         <>
             {/* <div className={styles.root}> */}
@@ -629,7 +639,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                             <SuggestedActivity showActivity={true} showSuggestedContent={true} />
                         </div>
                     </div> */}
-                    <div className={styles.middleSectionDiv}>
+                    <div className={` ${styles.middleSectionDiv} ${darkTheme} `}>
                         <div className={styles.settingsWrapper}>
                             <div className={styles.pageHeader}>
                                 <h4>Account</h4>
