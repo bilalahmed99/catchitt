@@ -1,6 +1,7 @@
 import { ClickAwayListener, Modal } from '@mui/material'
 import style from './getApp.module.scss'
 import { useState, useEffect } from 'react'
+import {seezitt_qr} from '../../icons'
 export default function PopupForGetApp({ openAppPopup, closeAppPopup, info }: any) {
     const [popupH, setPopupH] = useState<any>()
     const [darkTheme, setdarkTheme] = useState('');
@@ -26,7 +27,7 @@ export default function PopupForGetApp({ openAppPopup, closeAppPopup, info }: an
                     <hr/>
                     <div>
                      <center>
-                        <img style={{width: "50%"}} src="https://sf16-website-login.neutral.ttwstatic.com/obj/tiktok_web_login_static/tiktok/webapp/main/webapp-desktop/c287bca871661e22ee8a.png" />
+                        <img style={{width: "50%"}} src={seezitt_qr} />
                     </center>
                     </div>
                 </div>

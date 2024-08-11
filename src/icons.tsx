@@ -109,6 +109,7 @@ import facebookShare from './assets/facebook-share.svg';
 import linkedInShare from './assets/linkedin-share.svg';
 import deleteVideoIcon from './assets/delete-video.svg';
 import editIcon from './assets/edit-icon.svg';
+import seezitt_qr from './assets/seezitt_qr.png';
 
 export {
     duet,
@@ -221,5 +222,6 @@ export {
     facebookShare,
     linkedInShare,
     deleteVideoIcon,
-    editIcon
+    editIcon,
+    seezitt_qr
 };
