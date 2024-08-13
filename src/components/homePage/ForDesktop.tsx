@@ -462,7 +462,7 @@ function ForDesktop(props: any) {
                 </div>
                 {toastOfUploading && (
                     <div className="w-[393px] h-[62px] rounded-[8px] bg-custom-gray-100 absolute right-[2rem] bottom-[2rem] z-[2] flex justify-between items-center px-[1rem]">
-                        <p className="text-custom-dark-222 font-medium">Uploading 1 of 1</p>
+                        <p className="text-custom-dark-222 font-medium"> We are uploading your video. Please wait..{/*Uploading 1 of 1 */}</p>
                         <p
                             className="text-custom-primary font-medium cursor-pointer"
                             onClick={() => settoastOfUploading(false)}

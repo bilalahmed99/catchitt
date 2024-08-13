@@ -16,6 +16,8 @@ import { RequestOtp } from './components/forgot-password/request-otp';
 
 import { OtpVerification } from './components/forgot-password/otp-verification';
 import HomePage from './components/homePage';
+import FriendVideos from './components/homePage/FriendVideos';
+import FollowingVideos from './components/homePage/FollowingVideos';
 import MyReports from './components/my-reports';
 import { PrivacySecurityPage } from './components/privacy-security-page/privacy-security-page';
 import { Profile } from './components/profile/profile';
@@ -771,7 +773,8 @@ function App() {
                             <Route path="/view/video/:onePost" element={<HomePage />} />
                             <Route path="/home" element={<HomePage />} />
                             <Route path="/suggested-accounts" element={<SuggestedAccountsPage />} />
-                            <Route path="/friends" element={<SuggestedAccountsPage />} />
+                            <Route path="/following" element={<FollowingVideos />} />
+                            <Route path="/friends" element={<FriendVideos />} />
                             <Route path="/notifications" element={<ActivityPage />} />
                             <Route path="/comingsoon" element={<ChatsSec />} />
                             <Route path="/profile" element={<Profile />} />
