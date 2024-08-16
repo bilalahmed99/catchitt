@@ -190,6 +190,7 @@ function App() {
     const [isLoginSection, setIsLoginSection] = useState(true);
     const [isForgotPasswordScenario, setIsForgotPasswordScenario] = useState(false);
     const isLoginPopup = useSelector((store: any) => store?.reducers?.popupSlice?.isLoginPopup);
+    const isLogoutPopup = useSelector((store: any) => store?.reducers?.popupLogoutSlice?.isLogoutPopup);
     const { country_name } = useSelector(
         (state: any) => state?.reducers?.geo
     );
@@ -2066,6 +2067,42 @@ function App() {
                                             </div>
                                         </>
                                     )}
+                                </div>
+                            </div>
+                        )}
+
+                        {isLogoutPopup && (
+                            <div className="w-full z-50 h-full bg-black/50 fixed top-0 flex justify-center items-center">
+                                <div
+                                    className={`w-[30.688rem] mx-auto mt-3 bg-white py-4 rounded-lg relative h-[20.125rem]  ${lightDarkTheme} `}
+                                >
+                                    <div
+                                        onClick={closeLoginPopupHandler}
+                                        className="bg-gray-100/50 rounded-full h-10 w-10 flex flex-row justify-center items-center absolute right-5 p-1 cursor-pointer"
+                                    >
+                                        <img className="h-4 w-4 object-contain" src={closeIcon} />
+                                    </div>
+                                    <>
+                                    <div
+                                                            className={`flex flex-row items-center bg-login-btn mt-4 rounded-md py-2.5 px-3 cursor-pointer ${style.NextBtn}`}
+                                                        >
+                                                            <div className="flex flex-row justify-center items-center gap-2 flex-1">
+                                                                <p>
+                                                                    {isLoading ? (
+                                                                        <CircularProgress
+                                                                            style={{
+                                                                                width: 18,
+                                                                                height: 18,
+                                                                                color: 'red',
+                                                                            }}
+                                                                        />
+                                                                    ) : (
+                                                                        'Logout'
+                                                                    )}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                    </>
                                 </div>
                             </div>
                         )}
