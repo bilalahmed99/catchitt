@@ -85,7 +85,7 @@ const MenuDropdownPopup = ({
                                     {/* <img className="h-2 w-2 object-contain" alt="menuOption" /> */}
                                     <li>
                                         <a
-                                            href="#"
+                                            href="https://help.seezitt.com" target="blank"
                                             className={themeColor == "dark" ?  `block px-2 py-2 ${style.white} text-sm font-bold`: `block px-2 py-2 text-gray-800 text-sm font-bold`}
                                         >
                                             {menuItem?.menuOption}

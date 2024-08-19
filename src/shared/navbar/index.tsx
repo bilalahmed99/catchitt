@@ -104,11 +104,11 @@ function Navbar() {
                                 <p className={style.name}>{profile?.name?.split(' ')[0]}</p>
                                 
                             </div>
-                            <MenuDropdownPopup
+                            {/* <MenuDropdownPopup
                                         menuPopupStatusToggler={menuPopupStatusToggler}
                                         menuPopupStatus={menuPopupStatus}
                                         menuItemClickHandler={menuItemClickHandler}
-                                />
+                                /> */}
                         </div>
                     ) : (
                         <>
