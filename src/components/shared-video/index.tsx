@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import Layout from '../../shared/layout';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import styles from './video-page.module.scss';
 import musicIcon from './svg-components/music-icon.svg';
 import atTheRateOf from './svg-components/at-the-rate-of.svg';
@@ -29,6 +29,12 @@ const VideoPage = () => {
     const [likedComments, setLikedComments] = useState<{ [key: string]: boolean }>({});
     const [commentsArray, setCommentsArray] = useState<any>([]);
     const [reportPopup, setReportPopup] = useState(false);
+    const API_KEY = process.env.VITE_API_URL;
+    const token = localStorage.getItem('token');
+    const [name, setName] = useState('');
+    const [userName, setUserName] = useState('');
+    const [isFollowed, setIsFollowed] = useState(false);
+    const [videoUrl, setVideoUrl] = useState('');
 
     // hooks for comment replies
     const [isCommentReplyTooltipVisible, setCommentReplyIsTooltipVisible] = useState(false);
@@ -103,6 +109,28 @@ const VideoPage = () => {
         }));
     };
 
+    const fetchMediaById = async () => {
+        try {
+            const fetchMediaResponse = await fetch(`${API_KEY}/media-content/videos/${videoId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const {data} = await fetchMediaResponse.json();
+            console.log('🚀 ~ fetchMediaById ~ fetchedMediaData:', data);
+
+            setVideoUrl(data?.reducedVideoUrl);
+        } catch (error) {
+            console.log('🚀 ~ fetchMediaById ~ error:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchMediaById();
+    }, []);
+
     return (
         <Layout isScrollActive={false} paddingBottomProp={true}>
             <div className="flex flex-row h-full overflow-y-auto justify-between pt-4 pl-8">
@@ -115,7 +143,7 @@ const VideoPage = () => {
                         width="300px"
                         preload="auto"
                         playsInline
-                        src={`https://d1qomu2i6h2trq.cloudfront.net/output/videos/${videoId}/reduced/${videoId}-reduced.mp4`}
+                        src={videoUrl}
                     />
                     <div className="p-3.5 bg-[#16182308] rounded-b-xl">
                         <div className="flex flex-row items-center gap-2">
