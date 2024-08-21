@@ -249,17 +249,18 @@ export const SuggestedActivity = memo(
             <div className={classNames(styles.root, className)}>
                 {pathname !== '/suggested-accounts'
                     ? showSuggestedContent && (
-                          <div className={styles.suggestedAccountsDiv}>
-                              <div className={styles.suggestedHeader}>
-                                  <h4 className={styles.headerTitle}>Suggested Accounts</h4>
-                                  <p
-                                      onClick={() => navigate('/suggested-accounts')}
-                                      className={styles.linkText}
-                                      style={{ cursor: 'pointer' }}
-                                  >
-                                      See All
-                                  </p>
-                              </div>
+                        //   <div className={styles.suggestedAccountsDiv}>
+
+                            //   <div className={styles.suggestedHeader}>
+                            //       <h4 className={styles.headerTitle}>Suggested Accounts</h4>
+                            //       {/* <p
+                            //           onClick={() => navigate('/suggested-accounts')}
+                            //           className={styles.linkText}
+                            //           style={{ cursor: 'pointer' }}
+                            //       >
+                            //           See All
+                            //       </p> */}
+                            //   </div>
 
                               <div className={styles.suggestedContent}>
                                   {randomAccs.map((account: Account) => (
@@ -288,18 +289,18 @@ export const SuggestedActivity = memo(
                                                       style={{
                                                           color: '#222',
                                                           fontFamily: ' Poppins',
-                                                          fontSize: '14px',
+                                                          fontSize: '16px',
                                                           fontStyle: 'normal',
-                                                          fontWeight: 600,
+                                                          fontWeight: 500,
                                                           lineHeight: '120%',
                                                           textAlign: 'left',
                                                           whiteSpace: 'nowrap',
                                                           textOverflow: 'ellipsis',
                                                           overflow: 'hidden',
-                                                          maxWidth: '170px',
+                                                          maxWidth: '160px',
                                                       }}
-                                                      // className={styles.nameText}
-                                                  >{`@${account.name}`}</p>
+                                                     
+                                                  >{`${account.name} asdz`}</p>
                                                   <h4
                                                       style={{
                                                           color: '#A9A9A9',
@@ -310,12 +311,12 @@ export const SuggestedActivity = memo(
                                                           fontWeight: 400,
                                                           lineHeight: '120%',
                                                       }}
-                                                      // className={styles.nameText}
+                                                   
                                                   >{`${account.name}`}</h4>
                                               </div>
                                           </div>
                                           {/* </Link> */}
-                                          <div className="svgStyle">
+                                          {/* <div className="svgStyle">
                                               <button
                                                   className={styles.svgButton}
                                                   onClick={(event) =>
@@ -328,11 +329,11 @@ export const SuggestedActivity = memo(
                                                       <Follow />
                                                   )}
                                               </button>
-                                          </div>
+                                          </div> */}
                                       </div>
                                   ))}
-                              </div>
-                          </div>
+                              {/* </div> */}
+                           </div>
                       )
                     : null}
 

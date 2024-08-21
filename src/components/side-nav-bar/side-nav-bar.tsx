@@ -8,6 +8,7 @@ import { openLoginPopup } from '../../redux/reducers';
 import {isUserLoggedIn} from '../../utils/common';
 import { logoutUser } from '../../redux/reducers/auth';
 import { openLogoutPopup } from '../../redux/reducers';
+import { SuggestedActivity } from '../../components/suggested-activity/suggested-activity';
 
 export interface SideNavBarProps {
     className?: string;
@@ -347,7 +348,12 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
 
                 <div className={styles.sidebarLoginBox}>
                  { isUserLoggedIn() ? (
-                     <p className={styles.sidebarTextStyle} ><b style={{fontWeight: '900'}}>Following accounts</b><br/> Accounts you follow will appear here</p>
+                    <>
+                        <p className={styles.sidebarTextStyle} ><b style={{fontWeight: '900'}}>Suggested for you</b>
+                        {/* <br/> Accounts you follow will appear here */}
+                        </p>
+                        <SuggestedActivity showActivity={true} showSuggestedContent={true} />
+                    </>
                     ):(
                        <>
                         <p className={styles.sidebarTextStyle}>Log in to follow creators, like videos, and view comments.</p>
