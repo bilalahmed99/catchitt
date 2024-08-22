@@ -19,6 +19,12 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
     const [darkTheme, setdarkTheme] = useState('');
     const [darkThemeblack, setdarkThemeblack] = useState('');
     const [themeColor, setThemeColor] = useState('');
+    const [allSection, setAllSection] = useState(true);
+    const [likeSection, setLikeSection] = useState(false);
+    const [commentSection, setCommentSection] = useState(false);
+    const [tagSection, setTagSection] = useState(false);
+    const [followerSection, setFollowerSection] = useState(false);
+    const [activeClass, setActiveClass] = useState(style.active);
 
     const open = Boolean(anchorEl);
     const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
@@ -72,25 +78,69 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
     const API_KEY = process.env.VITE_API_URL;
     const token = useSelector((state: any) => state?.reducers?.profile?.token);
 
-    const handleGetCoins = async () => {
-        const res: any = await fetch(`${API_KEY}/payment/web/coins/45`, {
+    const handleGetNotifications = async () => {
+        console.log("notifcation data");
+        const res: any = await fetch(`${API_KEY}/notification`, {
             method: 'GET',
             headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
         });
         const resData: any = await res.json();
-        window.open(resData?.data?.url)
+        console.log("notifcation data",resData);
     };
+
+    const handleAllSection = async () => {
+        setAllSection(true);
+        setLikeSection(false);
+        setCommentSection(false);
+        setTagSection(false);
+        setFollowerSection(false);
+    }
+
+    const handleLike = async () => {
+        setLikeSection(true);
+        setAllSection(false);
+        setCommentSection(false);
+        setTagSection(false);
+        setFollowerSection(false);
+    }
+
+    const handleComment = async () => {
+        setCommentSection(true);
+        setAllSection(false);
+        setLikeSection(false);
+        setTagSection(false);
+        setFollowerSection(false);
+    }
+
+    const handleTag = async () => {
+        setTagSection(true);
+        setAllSection(false);
+        setLikeSection(false);
+        setCommentSection(false);
+        setFollowerSection(false);
+    }
+
+    const handlefollower = async () => {
+        setFollowerSection(true);
+        setAllSection(false);
+        setLikeSection(false);
+        setCommentSection(false);
+        setTagSection(false);
+    }
+
     useEffect(() => {
         var themeColor = window.localStorage.getItem('theme');
-
+        handleGetNotifications();
         if (themeColor == "dark") {
             // setdarkThemeWhite(style.darkThemeWhite);
+            setActiveClass(style.activeBlack);
             setdarkTheme(style.darkTheme);
             setThemeColor(themeColor);
         } else {
             // setdarkThemeWhite('');
             setdarkTheme('');
             setThemeColor('');
+            setActiveClass(style.active);
         }
     }, []);
 
@@ -134,34 +184,60 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                 <div className={`${style.notificationsContainer}`}>
                     <h2 className={`${style.inboxTitle}`}>Notifications</h2>
                     <div className={`${style.inboxTabs}`}>
-                        <button className={`${style.buttontab}`}>All activity</button>
-                        <button className={`${style.buttontab}`}>Likes</button>
-                        <button className={`${style.buttontab}`}>Comments</button>
-                        <button className={`${style.buttontab}`}>Mentions and tags</button>
-                        <button className={`${style.buttontab} ${style.active}`}>Followers</button>
+                        <button className={`${style.buttontab} ${allSection? activeClass:''} `} onClick={handleAllSection}>All activity</button>
+                        <button className={`${style.buttontab} ${likeSection? activeClass:''} `} onClick={handleLike}>Likes</button>
+                        <button className={`${style.buttontab} ${commentSection? activeClass:''} `} onClick={handleComment}>Comments</button>
+                        <button className={`${style.buttontab} ${tagSection? activeClass:''} `} onClick={handleTag}>Mentions and tags</button>
+                        <button className={`${style.buttontab} ${followerSection? activeClass:''}`} onClick={handlefollower}>Followers</button>
                     </div>
+
                     <div className={`${style.inboxList}`}>
-                        <div className={`${style.inboxNoLikes}`}>
-                            <div className={`${style.inboxNoLikesInner}`}>
-                                <FavoriteBorder style={{ fontSize: 60 }}/>
-                                <p className={`${style.inboxBoldText}`}>Likes on your videos</p>
-                                <p>When someone likes one of your videos, you'll see it here</p>
-                            </div>
-                        </div>   
-                        <div className={`${style.inboxNoComments}`}>
-                            <div className={`${style.inboxNoCommentsInner}`}>
-                                <ChatBubbleOutlineSharp style={{ fontSize: 60 }}/>
-                                <p className={`${style.inboxBoldText}`}>Comments on your videos</p>
-                                <p>When someone likes one of your comments, you'll see it here</p>
-                            </div>
-                        </div>   
-                        <div className={`${style.inboxNoMentions}`}>
-                            <div className={`${style.inboxNoMentionsInner}`}>
-                                <AlternateEmail style={{ fontSize: 60 }}/>
-                                <p className={`${style.inboxBoldText}`}>Mentions of you</p>
-                                <p>When someone mentions you, you'll see it here</p>
-                            </div>
-                        </div>   
+                            {likeSection ?
+                            (
+                                <div className={`${style.inboxNoLikes}`}>
+                                    <div className={`${style.inboxNoLikesInner}`}>
+                                        <FavoriteBorder style={{ fontSize: 60 }}/>
+                                        <p className={`${style.inboxBoldText}`}>Likes on your videos</p>
+                                        <p>When someone likes one of your videos, you'll see it here</p>
+                                    </div>
+                                </div>):
+                                (<><div></div></>)
+                            }   
+
+                            {commentSection ?
+                            (<div className={`${style.inboxNoComments}`}>
+                                    <div className={`${style.inboxNoCommentsInner}`}>
+                                        <ChatBubbleOutlineSharp style={{ fontSize: 60 }}/>
+                                        <p className={`${style.inboxBoldText}`}>Comments on your videos</p>
+                                        <p>When someone likes one of your comments, you'll see it here</p>
+                                    </div>
+                                </div>):
+                                (<><div></div></>)
+                            }     
+                                
+                            {tagSection ?
+                            (<div className={`${style.inboxNoMentions}`}>
+                                    <div className={`${style.inboxNoMentionsInner}`}>
+                                        <AlternateEmail style={{ fontSize: 60 }}/>
+                                        <p className={`${style.inboxBoldText}`}>Mentions of you</p>
+                                        <p>When someone mentions you, you'll see it here</p>
+                                    </div>
+                                </div>
+                                ):
+                                (<><div></div></>)
+                            }  
+
+                            {followerSection ?
+                            (<div className={`${style.inboxNoMentions}`}>
+                                    <div className={`${style.inboxNoMentionsInner}`}>
+                                        <AlternateEmail style={{ fontSize: 60 }}/>
+                                        <p className={`${style.inboxBoldText}`}>Follow of you</p>
+                                        <p>When someone follows you, you'll see it here</p>
+                                    </div>
+                                </div>
+                                ):
+                                (<><div></div></>)
+                            }   
                     </div>
                     <div className={`${style.inboxList}`}>
                         <p className={`${style.inboxListDuration}`}>Today</p>
