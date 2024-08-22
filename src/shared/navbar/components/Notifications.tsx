@@ -10,6 +10,7 @@ import { goldCoin, logoutSvg, settingsDark, switchAcount, viewProfile } from '..
 import style from './notifications.module.scss';
 import { useAuthStore } from '../../../store/authStore';
 import { useSelector } from 'react-redux';
+import { FavoriteBorder,AlternateEmail, ChatBubbleOutlineSharp } from '@mui/icons-material';
 const options = ['View profile', 'Get Coins', 'Settings', 'Switch Account', 'Logout'];
 import { useEffect, useState } from 'react';
 
@@ -140,6 +141,29 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                         <button className={`${style.buttontab} ${style.active}`}>Followers</button>
                     </div>
                     <div className={`${style.inboxList}`}>
+                        <div className={`${style.inboxNoLikes}`}>
+                            <div className={`${style.inboxNoLikesInner}`}>
+                                <ChatBubbleOutlineSharp style={{ fontSize: 60 }}/>
+                                <p className={`${style.inboxBoldText}`}>Likes on your videos</p>
+                                <p>When someone likes one of your videos, you'll see it here</p>
+                            </div>
+                        </div>   
+                        <div className={`${style.inboxNoComments}`}>
+                            <div className={`${style.inboxNoCommentsInner}`}>
+                                <FavoriteBorder style={{ fontSize: 60 }}/>
+                                <p className={`${style.inboxBoldText}`}>Comments on your videos</p>
+                                <p>When someone likes one of your comments, you'll see it here</p>
+                            </div>
+                        </div>   
+                        <div className={`${style.inboxNoMentions}`}>
+                            <div className={`${style.inboxNoMentionsInner}`}>
+                                <AlternateEmail style={{ fontSize: 60 }}/>
+                                <p className={`${style.inboxBoldText}`}>Mentions of you</p>
+                                <p>When someone mentions you, you'll see it here</p>
+                            </div>
+                        </div>   
+                    </div>
+                    <div className={`${style.inboxList}`}>
                         <p>Today</p>
                         <div className={`${style.notificationList}`}>
                             <div className={`${style.inboxListItem}`}>
@@ -148,8 +172,8 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                         <img src={defaultProfileIcon} alt="Profile image" />
                                     </div>
                                     <div className={`${style.gridLine}`}>
-                                        <p className={`${style.notificationUsername}`}>Omarranjha</p>
-                                        <p className="notificationContent">Follows you. 4h ago</p>
+                                        <p className={`${style.notificationUsername} ${style.notificationFollow}`}>Omarranjha</p>
+                                        <p className={`${style.notificationContent} ${style.notificationFollow}`}>Follows you. 4h ago</p>
                                     </div>
                                 </div>
                                 <button className={`${style.inboxFollow}`}>Follow back</button>
@@ -164,8 +188,8 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                         <img src={defaultProfileIcon} alt="Profile image" />
                                     </div>
                                     <div className={`${style.gridLine}`}>
-                                        <div className={`${style.notificationUsername}`}>Omarranjha</div>
-                                        <div className="notificationContent">Follows you. 4h ago</div>
+                                        <p className={`${style.notificationUsername} ${style.notificationFollow}`}>Omarranjha</p>
+                                        <p className={`${style.notificationContent} ${style.notificationFollow}`}>Follows you. 4h ago</p>
                                     </div>
                                 </div>
                                 <button className={`${style.inboxFriends}`}><svg width="1em" data-e2e="" height="1em" viewBox="0 0 48 48" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M43.4143 16.5858L31.1214 4.29289C30.7309 3.90237 30.0977 3.90237 29.7072 4.29289L28.2929 5.70711C27.9024 6.09763 27.9024 6.7308 28.293 7.12132L37.1716 16H5.00006C4.44777 16 4.00006 16.4477 4.00006 17V19C4.00006 19.5523 4.44777 20 5.00006 20H42.0001C42.809 20 43.5383 19.5127 43.8478 18.7654C44.1574 18.018 43.9863 17.1578 43.4143 16.5858Z"></path><path d="M4.58584 31.4142L16.8787 43.7071C17.2693 44.0976 17.9024 44.0976 18.293 43.7071L19.7072 42.2929C20.0977 41.9024 20.0977 41.2692 19.7072 40.8787L10.8285 32L43.0001 32C43.5523 32 44.0001 31.5523 44.0001 31V29C44.0001 28.4477 43.5523 28 43.0001 28L6.00006 28C5.19113 28 4.46186 28.4873 4.1523 29.2346C3.84274 29.982 4.01385 30.8422 4.58584 31.4142Z"></path></svg> Friends</button>
@@ -179,8 +203,8 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                         <img src={defaultProfileIcon} alt="Profile image" />
                                     </div>
                                     <div className={`${style.gridLine}`}>
-                                        <div className={`${style.notificationUsername}`}>Omarranjha</div>
-                                        <div className="notificationContent">mentioned you in a video 5-1</div>
+                                        <p className={`${style.notificationUsername}`}>Omarranjha</p>
+                                        <p className={`${style.notificationContent}`}>Follows you. 4h ago</p>
                                     </div>
                                 </div>
                                 <div className={`${style.mentionAvatar}`}>
@@ -196,9 +220,9 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                         <img src={defaultProfileIcon} alt="Profile image" />
                                     </div>
                                     <div className={`${style.gridLine}`}>
-                                        <div className={`${style.notificationUsername}`}>Omarranjha</div>
-                                        <div className="notificationContent">replied to your comment: 5-1</div>
-                                        <div className={`${style.notificationReply}`}><span style={{ marginLeft: '10px' }}>Sudais Ranjha:</span> ❤️❤️❤️</div>
+                                        <p className={`${style.notificationUsername}`}>Omarranjha</p>
+                                        <p className={`${style.notificationContent}`}>Follows you. 4h ago</p>
+                                        <div className={`${style.notificationReply}`}><p className={`${style.notificationReplyUser}`}>Sudais Ranjha: <span>❤️❤️❤️</span></p></div>
                                     </div>
                                 </div>
                                 <div className={`${style.mentionAvatar}`}>
@@ -214,8 +238,8 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                         <img src={defaultProfileIcon} alt="Profile image" />
                                     </div>
                                     <div className={`${style.gridLine}`}>
-                                        <div className={`${style.notificationUsername}`}>Omarranjha</div>
-                                        <div className="notificationContent">liked your video: 5-1</div>
+                                        <p className={`${style.notificationUsername}`}>Omarranjha</p>
+                                        <p className={`${style.notificationContent}`}>liked your video: 5-1</p>
                                     </div>
                                 </div>
                                 <div className={`${style.mentionAvatar}`}>
@@ -230,9 +254,26 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                         <img src={defaultProfileIcon} alt="Profile image" />
                                     </div>
                                     <div className={`${style.gridLine}`}>
-                                        <div className={`${style.notificationUsername}`}>Long Name With All Details & Comments</div>
-                                        <div className="notificationContent">liked your comment: 5-1</div>
-                                        <div className={`${style.notificationReply}`}><span style={{ marginLeft: '10px' }}>Sudais Ranjha:</span> ❤️❤️❤️</div>
+                                        <p className={`${style.notificationUsername}`}>Long Name With All Details & Comments</p>
+                                        <p className={`${style.notificationReplyUser}`}>liked your comment: 5-1</p>
+                                        <div className={`${style.notificationReply}`}><p className={`${style.notificationReplyUser}`}>Sudais Ranjha: <span>❤️❤️❤️</span></p></div>
+                                    </div>
+                                </div>
+                                <div className={`${style.mentionAvatar}`}>
+                                    <img src={thumbnail} alt="Profile image" />
+                                </div>
+                            </div>
+                        </div>
+                        <div className={`${style.notificationList}`}>
+                            <div className={`${style.inboxListItem}`}>
+                                <div className={`${style.inboxListInner}`}>
+                                    <div className={`${style.avatar}`}>
+                                        <img src={defaultProfileIcon} alt="Profile image" />
+                                    </div>
+                                    <div className={`${style.gridLine}`}>
+                                        <p className={`${style.notificationUsername}`}>Sudais Ranjha</p>
+                                        <p className={`${style.notificationReplyUser}`}>Replied to your comment: ❤️❤️❤️ 5-1</p>
+                                        <div className={`${style.notificationReply}`}><p className={`${style.notificationReplyUser}`}>Sudais Ranjha: <span>❤️❤️❤️</span></p></div>
                                     </div>
                                 </div>
                                 <div className={`${style.mentionAvatar}`}>

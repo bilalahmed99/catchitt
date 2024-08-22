@@ -95,10 +95,30 @@
 .notificationReply {
   border-left: 1px solid #1a1a1a;
   margin-top: 5px;
+  width: 230px;
 }
-.notificationUsername{
+.notificationUsername,.notificationContent{
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  width: 230px;
+}
+.notificationContent.notificationFollow,
+.notificationUsername.notificationFollow{
   width: 170px;
+}
+.notificationReplyUser{
+  margin-left: 10px;
+  width: 220px;
+}
+.inboxNoLikes,.inboxNoComments,.inboxNoMentions {
+  min-height: 20rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.inboxBoldText{
+  font-size: 22px;
+  font-weight: bold;
 }
