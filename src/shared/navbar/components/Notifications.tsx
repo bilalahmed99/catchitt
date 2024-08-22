@@ -143,14 +143,14 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                     <div className={`${style.inboxList}`}>
                         <div className={`${style.inboxNoLikes}`}>
                             <div className={`${style.inboxNoLikesInner}`}>
-                                <ChatBubbleOutlineSharp style={{ fontSize: 60 }}/>
+                                <FavoriteBorder style={{ fontSize: 60 }}/>
                                 <p className={`${style.inboxBoldText}`}>Likes on your videos</p>
                                 <p>When someone likes one of your videos, you'll see it here</p>
                             </div>
                         </div>   
                         <div className={`${style.inboxNoComments}`}>
                             <div className={`${style.inboxNoCommentsInner}`}>
-                                <FavoriteBorder style={{ fontSize: 60 }}/>
+                                <ChatBubbleOutlineSharp style={{ fontSize: 60 }}/>
                                 <p className={`${style.inboxBoldText}`}>Comments on your videos</p>
                                 <p>When someone likes one of your comments, you'll see it here</p>
                             </div>
