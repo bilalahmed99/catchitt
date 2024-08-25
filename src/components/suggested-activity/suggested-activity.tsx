@@ -313,7 +313,7 @@ export const SuggestedActivity = memo(
                                                       }}
                                                      
                                                   >{`${account.name} asdz`}</p>
-                                                  <h4
+                                                  <h6
                                                       style={{
                                                           color: textColor,
                                                           textAlign: 'left',
@@ -324,7 +324,7 @@ export const SuggestedActivity = memo(
                                                           lineHeight: '120%',
                                                       }}
                                                    
-                                                  >{`${account.name}`}</h4>
+                                                  >{`${account.name}`}</h6>
                                               </div>
                                           </div>
                                           {/* </Link> */}
