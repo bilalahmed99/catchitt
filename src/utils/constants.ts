@@ -150,86 +150,21 @@ export const MENU_POPUP_OPTIONS = [
 ];
 
 export const DISCOVER_CATEGORIES = [
-    {
-        id: 1,
-        category: 'Singing & Dancing',
-    },
-    {
-        id: 2,
-        category: 'Comedy',
-    },
-    {
-        id: 3,
-        category: 'Sports',
-    },
-    {
-        id: 4,
-        category: 'Anime & Comics',
-    },
-    {
-        id: 5,
-        category: 'Relationship',
-    },
-    {
-        id: 6,
-        category: 'Shows',
-    },
-    {
-        id: 7,
-        category: 'Lipsync',
-    },
-    {
-        id: 8,
-        category: 'Daily Life',
-    },
-    {
-        id: 9,
-        category: 'Beauty Care',
-    },
-    {
-        id: 10,
-        category: 'Games',
-    },
-    {
-        id: 11,
-        category: 'Society',
-    },
-    {
-        id: 12,
-        category: 'Outfit',
-    },
-    {
-        id: 13,
-        category: 'Cars',
-    },
-    {
-        id: 14,
-        category: 'Food',
-    },
-    {
-        id: 15,
-        category: 'Animals',
-    },
-    {
-        id: 16,
-        category: 'Family',
-    },
-    {
-        id: 17,
-        category: 'Drama',
-    },
-    {
-        id: 18,
-        category: 'Fitness & Health',
-    },
-    {
-        id: 19,
-        category: 'Education',
-    },
-    {
-        id: 20,
-        category: 'Technology',
-    },
+    { name: 'Comedy', id: '638fd3c43552a4628ad08d05' },
+    { name: 'Nonprofits and Activism', id: '638fd3c43552a4628ad08d0c' },
+    { name: 'Science and Technology', id: '638fd3c43552a4628ad08cfe' },
+    { name: 'Film and Animation', id: '638fd3c43552a4628ad08d07' },
+    { name: 'How to and Style', id: '638fd3c43552a4628ad08d03' },
+    { name: 'Autos and Vehicles', id: '638fd3c43552a4628ad08d08' },
+    { name: 'Education', id: '638fd3c43552a4628ad08d00' },
+    { name: 'Travel and Events', id: '638fd3c43552a4628ad08cff' },
+    { name: 'News and Politics', id: '638fd3c43552a4628ad08d02' },
+    { name: 'Entertainment', id: '638fd3c43552a4628ad08d04' },
+    { name: 'Gaming', id: '638fd3c43552a4628ad08d09' },
+    { name: 'Pets and Animals', id: '638fd3c43552a4628ad08d06' },
+    { name: 'Sports', id: '638fd3c43552a4628ad08d0b' },
+    { name: 'People and Blogs', id: '638fd3c43552a4628ad08d01' },
+    { name: 'Music', id: '638fd3c43552a4628ad08d0a' },
 ];
 
 export const COMMENTS = [
@@ -320,4 +255,3 @@ export const COMMENTS = [
         ],
     },
 ];
-

@@ -16,21 +16,26 @@ import { useUpdateEffect } from 'react-use';
 export default function Discover() {
     const API_KEY = process.env.VITE_API_URL;
     const [exploredVideos, setExploredVideos] = useState<any>([]);
-    const [videoModal, setVideoModal] = useState<any>(false);
-    const [videoModalInfo, setVideoModalInfo] = useState<any>({});
+    const [videoModal, setVideoModal] = useState(false);
+    const [videoModalInfo, setVideoModalInfo] = useState({});
     const token = localStorage.getItem('token');
-    const [reportPopup, setReportPopup] = useState<any>(false);
-    const [blockPopup, setBlockPopup] = useState<any>(false);
-    const [isLoading, setIsLoading] = useState<any>(false);
-    const [isPaginating, setIsPaginating] = useState<any>(false);
-    const [giftPopup, setGiftPopup] = useState<any>(false);
-    const [storyPopup, setStoryPopup] = useState<any>(false);
-    const [selectedCategory, setSelectedCategory] = useState<any>('');
+    const [reportPopup, setReportPopup] = useState(false);
+    const [blockPopup, setBlockPopup] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isPaginating, setIsPaginating] = useState(false);
+    const [giftPopup, setGiftPopup] = useState(false);
+    const [storyPopup, setStoryPopup] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState('');
     const mainDivRef = useRef<any>(null);
     const [muteStates, setMuteStates] = useState<any>([]);
-    const [pageNumber, setPageNumber] = useState<number>(1);
+    const [pageNumber, setPageNumber] = useState(1);
 
-    const getExplorePageData = async () => {
+    // theme
+    const [darkTheme, setdarkTheme] = useState('');
+    const [darkThemeblack, setdarkThemeblack] = useState('');
+    const [textColor, setTextColor] = useState('black');
+
+    const getExplorePageData = useCallback(async () => {
         setIsPaginating(true);
         try {
             const response = await fetch(
@@ -44,26 +49,24 @@ export default function Discover() {
                 }
             );
             const { data } = await response.json();
-            setIsPaginating(false);
-            if (data) {
-                // Append the entire record to the existing data
+            if (Array.isArray(data)) {
                 setExploredVideos((prev: any) => [...prev, ...data]);
                 setMuteStates((prevMuteStates: any) => [
                     ...prevMuteStates,
-                    ...Array(data?.length).fill(true),
+                    ...Array(data.length).fill(true),
                 ]);
             }
         } catch (error) {
+            console.error('Error fetching trending videos:', error);
+        } finally {
             setIsPaginating(false);
-            console.log('Error fetching trending videos : ', error);
         }
-    };
+    }, [API_KEY, selectedCategory, pageNumber, token]);
 
     const handleScroll = useCallback(() => {
         if (mainDivRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = mainDivRef.current;
             if (scrollTop + clientHeight >= scrollHeight - 0.5) {
-                // Adding a small buffer
                 setPageNumber((prevPageNumber) => prevPageNumber + 1);
             }
         }
@@ -76,6 +79,8 @@ export default function Discover() {
 
     const categoryHandler = (category: string) => {
         setSelectedCategory(category);
+        setPageNumber(1);
+        setExploredVideos([]);
     };
 
     useEffect(() => {
@@ -87,42 +92,42 @@ export default function Discover() {
     }, [handleScroll]);
 
     useEffect(() => {
-        const fetchData = async () => {
-            setIsLoading(true);
-            await getExplorePageData();
-            setIsLoading(false);
-        };
-
-        fetchData();
-    }, []);
-
-    const refreshWithNewCategory = async () => {
-        setExploredVideos('');
+        setIsLoading(true);
         getExplorePageData();
-    };
+        getExplorePageData();
+        setIsLoading(false);
+    }, [getExplorePageData]);
 
     useUpdateEffect(() => {
+        getExplorePageData();
         getExplorePageData();
     }, [pageNumber]);
 
     useUpdateEffect(() => {
-        refreshWithNewCategory();
+        setPageNumber(1);
+        setExploredVideos([]);
+        getExplorePageData();
     }, [selectedCategory]);
+
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+
+        if (themeColor == 'dark') {
+            setdarkTheme(styles.darkTheme);
+            setTextColor('white');
+        } else {
+            setTextColor('black');
+        }
+    });
 
     return (
         <Layout>
-            <div ref={mainDivRef} className={`${styles.root} h-screen overflow-y-auto`}>
+            <div
+                ref={mainDivRef}
+                className={`${styles.root} h-screen overflow-y-auto ${darkTheme}`}
+            >
                 {isLoading ? (
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            margin: '1rem',
-                            width: '100%',
-                            height: '90vh',
-                        }}
-                    >
+                    <div className="flex justify-center items-center w-full h-screen">
                         <CircularProgress />
                     </div>
                 ) : (
@@ -131,34 +136,43 @@ export default function Discover() {
                             <div className="flex flex-row mt-8 gap-4 overflow-auto">
                                 {DISCOVER_CATEGORIES?.map((category, index) => (
                                     <p
-                                        onClick={() => categoryHandler(category.category)}
+                                        onClick={() => categoryHandler(category.name)}
                                         className={`flex items-center px-3 h-[2.625rem] ${
-                                            selectedCategory === category.category
-                                                ? 'text-white bg-black'
-                                                : 'text-[#222] bg-unselected-category'
-                                        }  rounded-lg cursor-pointer text-base border-none whitespace-nowrap w-auto`}
+                                            selectedCategory === category.name
+                                                ? `${
+                                                      darkTheme
+                                                          ? `${styles.selectedCategory}`
+                                                          : 'text-white bg-black'
+                                                  }`
+                                                : `${
+                                                      darkTheme
+                                                          ? 'text-white bg-[#FFFFFF14]'
+                                                          : 'text-[#222] bg-unselected-category shadow-sm mb-1'
+                                                  }`
+                                        } rounded-lg cursor-pointer text-base border-none whitespace-nowrap w-auto`}
                                         key={index}
                                     >
-                                        {category?.category}
+                                        {category.name}
                                     </p>
                                 ))}
                             </div>
-                            <VideoPanel
-                                openVideoModal={openVideoModal}
-                                videos={exploredVideos}
-                                muteStates={muteStates} // Pass mute states
-                                setMuteStates={setMuteStates} // Pass setter for mute states
-                            />
+                            {exploredVideos.length > 0 ? (
+                                <VideoPanel
+                                    openVideoModal={openVideoModal}
+                                    videos={exploredVideos}
+                                    muteStates={muteStates}
+                                    setMuteStates={setMuteStates}
+                                />
+                            ) : !isLoading && !isPaginating ? (
+                                <div className="flex justify-center items-center mt-8 h-[70vh]">
+                                    <p className="text-2xl font-bold">
+                                        No videos available in this category.
+                                    </p>
+                                </div>
+                            ) : null}
                         </div>
                         {isPaginating && (
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    padding: '1rem',
-                                }}
-                            >
+                            <div className="flex justify-center items-center p-4">
                                 <CircularProgress />
                             </div>
                         )}
@@ -187,13 +201,11 @@ export default function Discover() {
                     userId={{ id: videoModalInfo?.user?._id, name: videoModalInfo?.user?.name }}
                 />
                 <Gifts openGifts={giftPopup} onGiftsClose={() => setGiftPopup(false)} />
-                <div>
-                    <StoriesOnPublicProfile
-                        story={storyPopup}
-                        onclose={() => setStoryPopup(false)}
-                        openReport={() => setReportPopup(true)}
-                    />
-                </div>
+                <StoriesOnPublicProfile
+                    story={storyPopup}
+                    onclose={() => setStoryPopup(false)}
+                    openReport={() => setReportPopup(true)}
+                />
             </div>
         </Layout>
     );
