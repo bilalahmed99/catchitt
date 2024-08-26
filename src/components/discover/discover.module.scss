@@ -68,8 +68,6 @@
     position: relative;
 }
 
-
-
 .slider {
     // border:2px solid red;
     width: 100%;
@@ -89,20 +87,19 @@
 .slider * {
     margin-left: 0% !important;
     margin-right: 0% !important;
-
 }
 
-.story>img {
+.story > img {
     width: 67px;
     height: 67px;
     border-radius: 50%;
-    border: 1px solid #641A92;
+    border: 1px solid #641a92;
     padding: 2px;
 }
 
 .trendingText {
     color: #000;
-    font-family: 'Poppins';
+    font-family: "Poppins";
     font-size: 18px;
     font-style: normal;
     font-weight: 600;
@@ -111,7 +108,7 @@
 
 .seeAll {
     color: var(--foundation-primary-primary-500, rgb(255, 59, 92));
-    font-family: 'Poppins';
+    font-family: "Poppins";
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
@@ -132,13 +129,13 @@
     position: relative;
 }
 
-.suggestedHashTag>img {
+.suggestedHashTag > img {
     width: 100%;
 }
 
 .joinH {
     color: var(--default-body, #222);
-    font-family: 'Poppins';
+    font-family: "Poppins";
     font-size: 15px;
     font-style: normal;
     font-weight: 700;
@@ -150,8 +147,8 @@
 }
 
 .motherday {
-    color: var(--foundation-warning-warning-700, #9E0909);
-    font-family: 'Poppins';
+    color: var(--foundation-warning-warning-700, #9e0909);
+    font-family: "Poppins";
     font-size: 25px;
     font-style: normal;
     font-weight: 700;
@@ -178,11 +175,11 @@
     margin-bottom: 48px;
 }
 
-.invite>img {
+.invite > img {
     width: 100%;
 }
 
-.invite>div {
+.invite > div {
     position: absolute;
     top: 30%;
     right: 20%;
@@ -206,8 +203,8 @@
 .invite button {
     width: 135px;
     height: 40px;
-    color: var(--default-white, #FFF);
-    font-family: 'Poppins';
+    color: var(--default-white, #fff);
+    font-family: "Poppins";
     font-size: 12px;
     font-style: normal;
     font-weight: 600;
@@ -228,4 +225,35 @@
     align-items: center;
     margin: auto;
     background-color: #fff;
+}
+
+div.darkTheme {
+    background: black !important;
+    color: white !important;
+}
+
+div.darkTheme > p > h1,
+h2,
+h3,
+h4 {
+    color: white !important;
+}
+
+.selectedCategory {
+    color: black !important;
+    background-color: #FFFFFF!important;
+}
+
+div.darkTheme p {
+    color: white !important;
+    background-color: #FFFFFF14!important;
+}
+
+div.darkTheme span {
+    color: white !important;
+}
+
+div.darkTheme input {
+    background: rgb(255, 255, 255) !important;
+    color: black !important;
 }
