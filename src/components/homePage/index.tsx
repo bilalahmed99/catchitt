@@ -37,6 +37,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import style from './index.module.scss';
+import ReactDOMServer from 'react-dom/server';
+import VideoBlockquote from './VideoBlockquote';
 
 function HomePage() {
     const isMobile = useMediaQuery('(max-width:700px)');
@@ -89,10 +91,36 @@ function HomePage() {
     const [isEmbedModalOpen, setIsEmbedModalOpen] = useState(false);
     const [videoUrl, setVideoUrl] = useState<string>('');
     const [mediaId, setMediaId] = useState<string>('');
+    const [videoOwner, setVideoOwner] = useState('');
+    const [description, setDescription] = useState('');
+    const [videoTags, setVideoTags] = useState('');
+    const [musicTitle, setMusicTitle] = useState('');
+    const [musicLink, setMusicLink] = useState('');
 
-    const embedCode = `
-<blockquote class="seezitt-embed" cite="https://stagingweb.seezitt.com/video/${mediaId}" data-video-id="${mediaId}" style="max-width: 605px;min-width: 325px;" > <section> <a target="_blank" title="@sharjeelriaz489" href="https://stagingweb.seezitt.com/@sharjeelriaz489?refer=embed">@sharjeelriaz489</a> 14 Auguest coming soon very video 😂😂😂plzzz tik tok team viral my video plzzz <a title="support" target="_blank" href="https://stagingweb.seezitt.com/tag/support?refer=embed">#support</a> <a title="fypシ゚viral" target="_blank" href="https://stagingweb.seezitt.com/tag/fyp%E3%82%B7%E3%82%9Aviral?refer=embed">#fypシ゚viral</a> <a title="fypシ゚viral🖤tiktok" target="_blank" href="https://stagingweb.seezitt.com/tag/fyp%E3%82%B7%E3%82%9Aviral%F0%9F%96%A4tiktok?refer=embed">#fypシ゚viral🖤tiktok</a> ##<a title="foryou" target="_blank" href="https://stagingweb.seezitt.com/tag/foryou?refer=embed">#foryou</a> <a title="viral" target="_blank" href="https://stagingweb.seezitt.com/tag/viral?refer=embed">#viral</a> <a title="fypシ゚viral" target="_blank" href="https://stagingweb.seezitt.com/tag/fyp%E3%82%B7%E3%82%9Aviral?refer=embed">#fypシ゚viral</a> <a title="fypシ゚viral" target="_blank" href="https://stagingweb.seezitt.com/tag/fyp%E3%82%B7%E3%82%9Aviral?refer=embed">#fypシ゚viral</a> <a title="fypシ゚viral🖤tiktok☆♡🦋myvideo🤗foryou✨♥️" target="_blank" href="https://stagingweb.seezitt.com/tag/fyp%E3%82%B7%E3%82%9Aviral%F0%9F%96%A4tiktok%E2%98%86%E2%99%A1%F0%9F%A6%8Bmyvideo%F0%9F%A4%97foryou%E2%9C%A8%E2%99%A5%EF%B8%8F?refer=embed">#fypシ゚viral🖤tiktok☆♡🦋myvideo🤗foryou✨♥️</a> <a target="_blank" title="♬ original sound - 👑(SHÃRJÊÊL RIÃZ)👑" href="https://stagingweb.seezitt.com/music/original-sound-7398885360903965441?refer=embed">♬ original sound - 👑(SHÃRJÊÊL RIÃZ)👑</a> </section> </blockquote> <script async src="https://stagingweb.seezitt.com/embed.js"></script>
-  `;
+    const videoData = {
+        videoId: mediaId,
+        username: videoOwner,
+        caption:
+            description ||
+            '14 August coming soon very video 😂😂😂plzzz seezitt team viral my video plzzz',
+        tags: ['support', 'fypシ゚viral', 'foryou', 'viral'],
+        musicTitle: musicTitle || 'original sound - 👑(SHÃRJÊÊL RIÃZ)👑',
+        musicLink:
+            musicLink ||
+            'https://stagingback.seezitt.com//music/original-sound-7398885360903965441?refer=embed',
+    };
+
+    // Convert the VideoBlockquote component to HTML string
+    const embedCode = ReactDOMServer.renderToStaticMarkup(
+        <VideoBlockquote
+            videoId={videoData.videoId}
+            username={videoData.username}
+            caption={videoData.caption}
+            tags={videoData.tags}
+            musicTitle={videoData.musicTitle}
+            musicLink={videoData.musicLink}
+        />
+    );
 
     const signupItemClickHandler = (name: string) => {
         switch (name) {
@@ -169,7 +197,6 @@ function HomePage() {
             } else {
                 setOtpError(true);
             }
-
         } catch (error) {
             console.log('send otp error:', error);
         }
@@ -331,7 +358,6 @@ function HomePage() {
             const { data }: any = await response.json();
 
             setOtpbuttonText('Resend');
-
         } catch (error) {
             console.log('send otp error:', error);
         }
@@ -417,9 +443,16 @@ function HomePage() {
         });
     };
 
-    const generateEmbedCodeHandler = (videoUrl: string, mediaId: string) => {
+    const generateEmbedCodeHandler = (
+        videoUrl: string,
+        mediaId: string,
+        videoOwner: string,
+        videoDescription: string
+    ) => {
         setVideoUrl(videoUrl);
         setMediaId(mediaId);
+        setVideoOwner(videoOwner);
+        setDescription(videoDescription);
         setIsEmbedModalOpen(true);
     };
 
@@ -512,19 +545,18 @@ function HomePage() {
                                     value={embedCode}
                                 />
                                 <div>
-
-                                <button
-                                    className="w-full px-4 py-2 bg-blue-500 text-white rounded-md"
-                                    onClick={copyEmbedCodeHandler}
-                                >
-                                    Copy Embed Code
-                                </button>
-                                <button
-                                    className="mt-4 w-full px-4 py-2 bg-gray-300 text-black rounded-md"
-                                    onClick={() => setIsEmbedModalOpen(false)}
-                                >
-                                    Close
-                                </button>
+                                    <button
+                                        className="w-full px-4 py-2 bg-blue-500 text-white rounded-md"
+                                        onClick={copyEmbedCodeHandler}
+                                    >
+                                        Copy Embed Code
+                                    </button>
+                                    <button
+                                        className="mt-4 w-full px-4 py-2 bg-gray-300 text-black rounded-md"
+                                        onClick={() => setIsEmbedModalOpen(false)}
+                                    >
+                                        Close
+                                    </button>
                                 </div>
                             </div>
                         </div>
