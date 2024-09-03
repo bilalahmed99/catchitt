@@ -1,23 +1,31 @@
-import { useParams } from 'react-router-dom';
-import Layout from '../../shared/layout';
-import { ChangeEvent, useEffect, useState } from 'react';
-import styles from './video-page.module.scss';
-import musicIcon from './svg-components/music-icon.svg';
-import atTheRateOf from './svg-components/at-the-rate-of.svg';
-import commentIcon from './svg-components/comment-icon.svg';
-import horizontalElipsisMenuIcon from './svg-components/horizontal-elipsis-icon.svg';
-import reportFlagIcon from './svg-components/report-flag-icon.svg';
-import emptyHeartIcon from './svg-components/empty-heart-icon.svg';
-import redHeartIcon from './svg-components/red-heart-icon.svg';
-import chevronDownIcon from './svg-components/chevron-down-icon.svg';
-import chevronTopIcon from './svg-components/chevron-top-icon.svg';
-import { COMMENTS, showToastSuccess } from '../../utils/constants';
-import PopupForReport from '../profile/popups/PopupForReport';
-import moment from 'moment';
 import { CircularProgress } from '@mui/material';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import likesIcon from '../../../public/images/icons/Heart2.svg';
 import { cross } from '../../icons';
+import Layout from '../../shared/layout';
+import { showToastSuccess } from '../../utils/constants';
+import PopupForReport from '../profile/popups/PopupForReport';
+import atTheRateOf from './svg-components/at-the-rate-of.svg';
+import chevronDownIcon from './svg-components/chevron-down-icon.svg';
+import chevronTopIcon from './svg-components/chevron-top-icon.svg';
+import commentEmoji from './svg-components/comment-emoji.svg';
+import emptyHeartIcon from './svg-components/empty-heart-icon.svg';
+import horizontalElipsisMenuIcon from './svg-components/horizontal-elipsis-icon.svg';
+import musicIcon from './svg-components/music-icon.svg';
+import redHeartIcon from './svg-components/red-heart-icon.svg';
+import reportFlagIcon from './svg-components/report-flag-icon.svg';
+import whiteHeartIcon from './svg-components/white-filled-heart-icon.svg';
+import commentIcon from './svg-components/comment-icon.svg';
+import saveIcon from './svg-components/save-icon.svg';
+import savedIcon from './svg-components/saved-icon.svg';
+import shareIcon from './svg-components/share-icon.svg';
+import chevronUpIconVideo from './svg-components/chevron-up-icon-video.svg';
+import chevronDownIconVideo from './svg-components/chevron-down-icon-video.svg';
+import styles from './video-page.module.scss';
+import { useUpdateEffect } from 'react-use';
 
 const VideoPage = () => {
     // hooks
@@ -29,11 +37,9 @@ const VideoPage = () => {
     const [isTooltipVisible, setIsTooltipVisible] = useState(false);
     const [isReportElipsisVisible, setIsReportElipsisVisible] = useState(false);
     const [toggleImage, setToggleImage] = useState(false);
-    const [isEmptyHeart, setIsEmptyHeart] = useState(true);
     const [currentCommentIndex, setCurrentCommentIndex] = useState(-1);
     const [currentCommentReplyIndex, setCurrentCommentReplyIndex] = useState(-1);
     const [likedComments, setLikedComments] = useState<{ [key: string]: boolean }>({});
-    const [commentsArray, setCommentsArray] = useState<any>([]);
     const [reportPopup, setReportPopup] = useState(false);
     const API_KEY = process.env.VITE_API_URL;
     const token = localStorage.getItem('token');
@@ -42,6 +48,7 @@ const VideoPage = () => {
     const [userName, setUserName] = useState('');
     const [userAvatar, setUserAvatar] = useState('');
     const [videoLikes, setVideoLikes] = useState(0);
+    const [videoSaves, setVideoSaves] = useState(0);
     const [videoShares, setVideoShares] = useState(0);
     const [videoViews, setVideoViews] = useState(0);
     const [videoDescription, setVideoDescription] = useState('');
@@ -53,10 +60,13 @@ const VideoPage = () => {
     const [commenterName, setCommenterName] = useState('');
     const [commenterAvatar, setCommenterAvatar] = useState('');
     const [isReplyToCommentClicked, setIsReplyToCommentClicked] = useState(false);
+    const [isSaved, setIsSaved] = useState(false);
+    const [isLiked, setIsLiked] = useState(false);
 
     const [isFollowed, setUserIsFollowed] = useState(false);
     const [videoUrl, setVideoUrl] = useState('');
     const [followToggleLoading, setFollowToggleLoading] = useState(false);
+    const [switchVideoIndex, setSwitchVideoIndex] = useState(-1);
 
     // hooks for comment replies
     const [isCommentReplyTooltipVisible, setCommentReplyIsTooltipVisible] = useState(false);
@@ -92,20 +102,23 @@ const VideoPage = () => {
             await addCommentResponse.json();
             fetchMediaById(selectedVideoId);
         } catch (error) {
-            console.log('🚀 ~ addCommentHandler ~ error:', error);
+            console.log('🚀 ~ commentLikeToggler ~ error:', error);
         }
     };
 
     const addCommentHandler = async () => {
         try {
-            const addCommentResponse = await fetch(`${API_KEY}/media-content/comment/${selectedVideoId ?? videoId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({ comment }),
-            });
+            const addCommentResponse = await fetch(
+                `${API_KEY}/media-content/comment/${selectedVideoId ?? videoId}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ comment }),
+                }
+            );
             await addCommentResponse.json();
             setComment('');
             showToastSuccess('Comment posted');
@@ -118,14 +131,17 @@ const VideoPage = () => {
     const replyToCommentHandler = async (commentId: number) => {
         setIsReplyToCommentClicked(true);
         try {
-            const addCommentResponse = await fetch(`${API_KEY}/media-content/comment/${selectedVideoId ?? videoId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({ comment: commentReply, commentId }),
-            });
+            const addCommentResponse = await fetch(
+                `${API_KEY}/media-content/comment/${selectedVideoId ?? videoId}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({ comment: commentReply, commentId }),
+                }
+            );
             await addCommentResponse.json();
             setCommentReply('');
             showToastSuccess('Comment reply posted');
@@ -194,6 +210,8 @@ const VideoPage = () => {
             setVideoDescription(data?.description);
             setVideoComments(data?.comments);
             setVideoUrl(data?.reducedVideoUrl);
+            setIsSaved(data?.isSaved);
+            setIsLiked(data?.isLiked);
         } catch (error) {
             console.log('🚀 ~ fetchMediaById ~ error:', error);
         }
@@ -233,7 +251,7 @@ const VideoPage = () => {
             );
             const { data } = await response.json();
             setIsLoading(false);
-            if (data) {
+            if (data && Array.isArray(data)) {
                 // Append the entire record to the existing data
                 setYouMayLikeVideos((prev: any) => [...prev, ...data]);
                 setMuteStates((prevMuteStates: any) => [
@@ -271,30 +289,132 @@ const VideoPage = () => {
         }
     };
 
+    const loadPreviousVideoHandler = () => {
+        if (switchVideoIndex > 0) {
+            setSwitchVideoIndex((prev) => prev - 1);
+        }
+
+        if (switchVideoIndex === 0) {
+            setSwitchVideoIndex((prev) => prev - 1);
+        }
+    };
+
+    const loadNextVideoHandler = () => {
+        if (switchVideoIndex < youMayLikeVideos?.length - 1) {
+            setSwitchVideoIndex((prev) => prev + 1);
+        }
+    };
+
+    const loadVideosOnArrowClicks = () => {
+        setSelectedVideoId(youMayLikeVideos[switchVideoIndex]?.mediaId);
+        fetchMediaById(youMayLikeVideos[switchVideoIndex]?.mediaId);
+    };
+
+    const likeVideoToggler = async () => {
+        setIsLiked(!isLiked);
+        try {
+            const likeUnlikeVideo = await fetch(
+                `${API_KEY}/media-content/like/${selectedVideoId ?? videoId}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            await likeUnlikeVideo.json();
+            fetchMediaById(selectedVideoId);
+        } catch (error) {
+            console.log('🚀 ~ likeVideoToggler ~ error:', error);
+        }
+    };
+
     useEffect(() => {
         loadUserProfile();
         fetchMediaById();
         getExplorePageData();
     }, []);
 
+    useUpdateEffect(() => {
+        loadVideosOnArrowClicks();
+    }, [switchVideoIndex]);
+
+    useUpdateEffect(() => {
+        if (isLiked) {
+            setVideoLikes((prevLikes) => prevLikes + 1);
+        }
+
+        if (!isLiked && videoLikes > 0) {
+            setVideoLikes((prevLikes) => prevLikes - 1);
+        }
+    }, [isLiked]);
+
     return (
         <Layout isScrollActive={false} paddingBottomProp={true}>
             <div className="flex flex-row h-full overflow-y-auto justify-between pt-4 pl-8">
                 <div className="w-full">
-                    <video
-                        className="h-[31.875rem] w-full object-contain rounded-t-md bg-[#161823] cursor-pointer"
-                        loop={true}
-                        controls={true}
-                        autoPlay={true}
-                        width="300px"
-                        preload="auto"
-                        playsInline
-                        src={videoUrl}
-                    />
+                    <div className="relative">
+                        <video
+                            className="h-[31.875rem] w-full object-contain rounded-t-md bg-[#161823] cursor-pointer"
+                            loop={true}
+                            controls={true}
+                            autoPlay={true}
+                            width="300px"
+                            preload="auto"
+                            playsInline
+                            src={videoUrl}
+                        />
+                        <div className="absolute flex flex-col justify-between items-center gap-2.5 bottom-20 right-8 w-10 text-white">
+                            {/* Video next and previous */}
+                            <div className="text-center flex flex-col justify-between items-center gap-3 mb-2 shadow rounded-full bg-[#5755556a] px-2 py-1">
+                                <img
+                                    onClick={loadPreviousVideoHandler}
+                                    className="h-6 w-6 object-contain cursor-pointer"
+                                    src={chevronUpIconVideo}
+                                />
+                                <img
+                                    onClick={loadNextVideoHandler}
+                                    className="h-6 w-6 object-contain cursor-pointer"
+                                    src={chevronDownIconVideo}
+                                />
+                            </div>
+                            <div className="text-center">
+                                <img
+                                    onClick={likeVideoToggler}
+                                    className="h-7 w-7 object-contain cursor-pointer transform transition-transform duration-300 hover:scale-125 hover:rotate-12"
+                                    src={isLiked ? redHeartIcon : whiteHeartIcon}
+                                />
+                                <p className="font-bold text-sm mt-1.5 text-white">{videoLikes}</p>
+                            </div>
+                            <div className="text-center">
+                                <img
+                                    className="h-7 w-7 object-contain cursor-pointer transform transition-transform duration-300 hover:scale-125 hover:rotate-12"
+                                    src={commentIcon}
+                                />
+                                <p className="font-bold text-sm mt-1.5 text-white">
+                                    {videoComments?.length}
+                                </p>
+                            </div>
+                            <div className="text-center">
+                                <img
+                                    className="h-7 w-7 object-contain cursor-pointer transform transition-transform duration-300 hover:scale-125 hover:rotate-12"
+                                    src={!isSaved ? savedIcon : saveIcon}
+                                />
+                                <p className="font-bold text-sm mt-1.5 text-white">{videoShares}</p>
+                            </div>
+                            <div className="text-center">
+                                <img
+                                    className="h-7 w-7 object-contain cursor-pointer transform transition-transform duration-300 hover:scale-125 hover:rotate-12"
+                                    src={shareIcon}
+                                />
+                                <p className="font-bold text-sm mt-1.5 text-white">{videoShares}</p>
+                            </div>
+                        </div>
+                    </div>
                     <div className="p-3.5 bg-[#16182308] rounded-b-xl">
                         <div className="flex flex-row items-center gap-2">
                             {/* avatar */}
-
                             {userAvatar && userAvatar != '' ? (
                                 <img
                                     className={`w-12 h-12 object-cover rounded-full cursor-pointer`}
@@ -306,7 +426,7 @@ const VideoPage = () => {
                                     className={`w-12 h-12 object-cover rounded-full bg-gray-800 flex justify-center items-center`}
                                 >
                                     <p className="text-lg text-white font-medium">
-                                        {userName.charAt(0).toUpperCase()}
+                                        {userName?.charAt(0).toUpperCase()}
                                     </p>
                                 </div>
                             )}
@@ -420,7 +540,7 @@ const VideoPage = () => {
                                         <div className="rounded-lg cursor-pointer hover:bg-[#1618230f] p-[0.313rem] my-[0.438rem] mx-[0.188rem]">
                                             <img
                                                 className={`w-5 h-5 object-contain rounded-full`}
-                                                src={commentIcon}
+                                                src={commentEmoji}
                                                 alt="comment-icon"
                                             />
                                         </div>
@@ -534,7 +654,7 @@ const VideoPage = () => {
                                                             <div className="rounded-lg cursor-pointer hover:bg-[#1618230f] p-[0.313rem] my-[0.438rem] mx-[0.188rem]">
                                                                 <img
                                                                     className={`w-5 h-5 object-contain rounded-full`}
-                                                                    src={commentIcon}
+                                                                    src={commentEmoji}
                                                                     alt="comment-icon"
                                                                 />
                                                             </div>
