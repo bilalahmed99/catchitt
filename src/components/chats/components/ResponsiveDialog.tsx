@@ -39,6 +39,7 @@ export default function ResponsiveDialog() {
           style: {
             width: '700px',
             maxWidth: '90%',
+            borderRadius:'10px'
           },
         }}
       >
