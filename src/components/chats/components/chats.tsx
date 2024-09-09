@@ -22,7 +22,10 @@ function UserChats({ data, OnChatClick, id, onUsersInputChangeHandler }: any) {
     <div className={style.chats}>
       <div className={style.chatHeader}>
         <p className={style.headingText}>Messages</p>
-        <ResponsiveDialog open={openSettingsDialog} onClose={handleCloseSettingsDialog} />
+        <ResponsiveDialog 
+        // open={openSettingsDialog} 
+        // onClose={handleCloseSettingsDialog} 
+        />
       </div>
       {/* <div className={style.chatSearch}>
         <Search onInputChangeHandler={onUsersInputChangeHandler} placeholder={'Search'} />

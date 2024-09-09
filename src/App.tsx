@@ -37,7 +37,7 @@ import { SuggestedAccountsPage } from './components/suggested-accounts-page/sugg
 import UploadPage from './components/upload';
 import { useAuthStore } from './store/authStore';
 import useApp from './useApp';
-// import GoLive from './components/go-live';
+import GoLive from './components/go-live';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { CircularProgress } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -787,7 +787,7 @@ function App() {
                             <Route path="/following" element={<FollowingPage />} />
                             <Route path="/friends" element={<FriendPage />} />
                             <Route path="/notifications" element={<ActivityPage />} />
-                            <Route path="/comingsoon" element={<ChatsSec />} />
+                            <Route path="/chat" element={<ChatsSec />} />
                             <Route path="/profile" element={<Profile />} />
                             <Route path="/profile/:id" element={<PublicProfile />} />
                             <Route path="/settings/account" element={<Account />} />
@@ -822,7 +822,7 @@ function App() {
                             <Route path="/:username/video/:videoId" element={<VideoPage />} />
                             <Route path="/upload" element={<UploadPage />} />
                             <Route path="/create-story" element={<CreateStoryPage />} />
-                            {/* <Route path="/golive" element={<GoLive />} /> */}
+                            <Route path="/golive" element={<GoLive />} />
                             <Route path="/myreports" element={<MyReports />} />
                             <Route path="/analytics" element={<Analytics />} />
                             <Route path="/contactus" element={<ContactUs />} />
