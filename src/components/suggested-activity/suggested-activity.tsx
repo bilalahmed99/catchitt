@@ -344,6 +344,13 @@ export const SuggestedActivity = memo(
                                           </div> */}
                                       </div>
                                   ))}
+                                   <p
+                                      onClick={() => navigate('/suggested-accounts')}
+                                      className={styles.linkText}
+                                      style={{ cursor: 'pointer' }}
+                                  >
+                                      See more
+                                  </p>
                               {/* </div> */}
                            </div>
                       )
