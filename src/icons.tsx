@@ -113,6 +113,10 @@ import seezitt_qr from './assets/seezitt_qr.png';
 import google_play_Store from './assets/google_play_store.png';
 import apple_play_store from './assets/apple_play_store.png';
 import thumbnail from './assets/thumbnail.png'
+import play from './assets/play.svg';
+import pause from './assets/pause.svg';
+import volumeMute from './assets/volume-mute.svg';
+import volumeUnmute from './assets/volume-unmute.svg';
 
 export {
     duet,
@@ -230,4 +234,8 @@ export {
     google_play_Store,
     apple_play_store,
     thumbnail,
+    play,
+    pause,
+    volumeMute,
+    volumeUnmute,
 };

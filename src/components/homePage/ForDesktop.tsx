@@ -76,6 +76,13 @@ function ForDesktop(props: any) {
     const scrollableDivRef = useRef<HTMLDivElement>(null);
     const currentVideo = useRef<HTMLDivElement>(null);
     const APP_URL = process.env.VITE_API_URL;
+    const [isMuted, setIsMuted] = useState(false);
+    const [focusedIndex, setFocusedIndex] = useState(0);
+    const itemsRef = useRef<(HTMLLIElement | null)[]>([]);
+  
+    const toggleMute = () => {
+      setIsMuted(prevMuted => !prevMuted);
+    };
 
     const navigate: any = useNavigate();
 
@@ -152,7 +159,7 @@ function ForDesktop(props: any) {
     const handleScroll = () => {
         if (scrollableDivRef.current) {
             const { scrollTop, clientHeight, scrollHeight } = scrollableDivRef.current;
-
+            console.log("scroll position: ", scrollHeight, scrollTop, clientHeight);
             if (scrollTop + clientHeight >= scrollHeight) {
                 setPage((prevPage) => prevPage + 1);
                 setLoadingVideo(true);
@@ -171,6 +178,30 @@ function ForDesktop(props: any) {
             }
         };
     }, []);
+
+    // useEffect(() => {
+    //     const observer = new IntersectionObserver((videoes) => {
+    //         videoes.forEach((entry) => {
+    //         if (entry.isIntersecting) {
+    //           const index = itemsRef.current.indexOf(entry.target as HTMLLIElement);
+    //           console.log("video index", index);
+    //           setFocusedIndex(index);
+    //         }
+    //       });
+    //     }, {
+    //       threshold: 0.5
+    //     });
+    
+    //     itemsRef.current.forEach((item) => {
+    //       if (item) observer.observe(item);
+    //     });
+    
+    //     return () => {
+    //       itemsRef.current.forEach((item) => {
+    //         if (item) observer.unobserve(item);
+    //       });
+    //     };
+    //   }, []);
 
     return (
         <Layout
@@ -204,7 +235,14 @@ function ForDesktop(props: any) {
                     {videoes?.length > 0 && !loading && activeTab !== 3 ? (
                         videoes.map((post: any, number: number) => {
                             return (
-                                <div key={number} className={style.videoParent}>
+                                <div key={number} className={style.videoParent}
+                                    // ref={(el: HTMLLIElement | null) => itemsRef.current[number] = el} 
+                                   
+                                    // style={{
+                                        // backgroundColor: focusedIndex === number ? 'blue' : 'red',
+                                    // }}
+                                    >
+                                         
                                     {/* <div className={style.videoHeader}>
                                         <div className={style.videoHeaderSec1}>
                                             <img
@@ -262,7 +300,7 @@ function ForDesktop(props: any) {
                                             </div>
                                         )}
                                     </div> */}
-                                    <div className={style.mediaContainer}>
+                                    <div className={style.mediaContainer} >
                                         <div
                                             style={{
                                                 // width: '100%',
@@ -276,6 +314,8 @@ function ForDesktop(props: any) {
                                             className={style.mainContainer}
                                         >
                                             <CustomPlayer
+                                                isMuted={isMuted} 
+                                                onMuteToggle={toggleMute}
                                                 videoModal={videoModal}
                                                 src={
                                                     post?.reducedVideoUrl
