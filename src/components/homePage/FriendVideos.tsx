@@ -75,6 +75,11 @@ function FriendVideos(props: any) {
     const [scrollY, setScrollY] = useState(0);
     const scrollableDivRef = useRef<HTMLDivElement>(null);
     const APP_URL = process.env.VITE_API_URL;
+    const [isMuted, setIsMuted] = useState(false);
+
+    const toggleMute = () => {
+        setIsMuted(prevMuted => !prevMuted);
+    };
 
     const navigate: any = useNavigate();
 
@@ -275,6 +280,8 @@ function FriendVideos(props: any) {
                                             className={style.mainContainer}
                                         >
                                             <CustomPlayer
+                                                isMuted={isMuted} 
+                                                onMuteToggle={toggleMute}
                                                 videoModal={videoModal}
                                                 src={
                                                     post?.reducedVideoUrl

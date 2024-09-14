@@ -157,13 +157,12 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, controls }
                                 </div>
                                 <div className={style.progressBar}>
                                     <div className={style.progressBarDetail}>
-                                        <div aria-label="Video progress" aria-valuenow="0.520776937685724" className={style.devSeekBar} 
+                                        <div className={style.devSeekBar} 
                                         // style={{
                                         //     width: `${progress}%`,
                                         //     height: '100%',
                                         //     backgroundColor: '#fff',
                                         //   }}
-                                    
                                         >
                                         </div>
                                         <div className={style.DivSeekBarCircle} ></div>
