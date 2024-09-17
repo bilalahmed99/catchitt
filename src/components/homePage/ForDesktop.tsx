@@ -77,12 +77,17 @@ function ForDesktop(props: any) {
     const currentVideo = useRef<HTMLDivElement>(null);
     const APP_URL = process.env.VITE_API_URL;
     const [isMuted, setIsMuted] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(true);
     const [focusedIndex, setFocusedIndex] = useState(0);
     const itemsRef = useRef<(HTMLLIElement | null)[]>([]);
   
     const toggleMute = () => {
       setIsMuted(prevMuted => !prevMuted);
     };
+
+    const togglePlaying = () => {
+        setIsPlaying(prevPlaying => !prevPlaying);
+      };
 
     const navigate: any = useNavigate();
 
@@ -317,6 +322,8 @@ function ForDesktop(props: any) {
                                             <CustomPlayer
                                                 isMuted={isMuted} 
                                                 onMuteToggle={toggleMute}
+                                                isPlaying={isPlaying}
+                                                togglePlayPause={togglePlaying}
                                                 videoModal={videoModal}
                                                 src={
                                                     post?.reducedVideoUrl
