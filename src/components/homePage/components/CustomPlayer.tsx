@@ -9,7 +9,7 @@ import {
     volumeUnmute,
 } from '../../../icons';
 
-function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, controls }: any) {
+function CustomPlayer({ isMuted, onMuteToggle,  isPlaying, togglePlayPause, src, videoModal, post, controls }: any) {
     const [duration, setDuration] = useState<number>();
     const [playingTime, setPlayingTime] = useState<number>();
     const { ref, inView, entry } = useInView({
@@ -19,7 +19,7 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, controls }
     var video = document.createElement('video');
     let videoRef: any = useRef();
     const seekbarRef = useRef<any>(null);
-    const [isPlaying, setIsPlaying] = useState(true);
+    // const [isPlaying, setIsPlaying] = useState(true);
     const [currentTime, setCurrentTime] = useState(0);
     const [muted, setMuted] = useState(false);
     const [playbackRate, setPlaybackRate] = useState(1.0);
@@ -34,7 +34,7 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, controls }
     video.load(); // Start loading the video metadata
 
     useEffect(() => {
-        if (inView && !videoModal) {
+        if (inView && !videoModal && isPlaying) {
             videoRef?.current?.play();
         } else {
             videoRef?.current?.pause();
@@ -48,15 +48,25 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, controls }
         }
       }, [isMuted]);
 
-    const togglePlayPause = () => {
-        const video = videoRef.current;
-        if (isPlaying) {
-            video.pause();
-        } else {
-            video.play();
+    useEffect(() => {
+        if (videoRef.current) {
+            if(isPlaying){
+                videoRef?.current?.play();
+            }else{
+                videoRef?.current?.pause();
+            }
         }
-        setIsPlaying(!isPlaying);
-    };
+    }, [isPlaying]);
+
+    // const togglePlayPause = () => {
+    //     const video = videoRef.current;
+    //     if (isPlaying) {
+    //         video.pause();
+    //     } else {
+    //         video.play();
+    //     }
+    //     setIsPlaying(!isPlaying);
+    // };
     
     const handleMuteAndUnmute = () => {
         onMuteToggle();
