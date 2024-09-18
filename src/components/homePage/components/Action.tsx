@@ -20,7 +20,7 @@ function Action({
     const [isActive, setIsActive] = useState(false);
     const dispatch = useDispatch();
 
-    console.log('POST : ', post);
+    // console.log('POST : ', post);
 
     const actionClickHandler = async () => {
         try {

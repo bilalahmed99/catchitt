@@ -23,7 +23,7 @@ export default function Gifts({ openGifts, onGiftsClose, mediaId }: any) {
     };
 
     useEffect(() => {
-        getGifts();
+        // getGifts();
     }, []);
 
     const getGifts = async () => {

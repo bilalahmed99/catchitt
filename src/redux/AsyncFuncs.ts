@@ -36,7 +36,8 @@ export const getHomeVideos: any = createAsyncThunk(
             link =
                 token && userId
                     ? //`/media-content/videos/feed?page=${page}&pageSize=5`
-                    `/media-content/public/videos/feed/upgraded?page=${page}&pageSize=10`
+                    // `/media-content/public/videos/feed/upgraded?page=${page}&pageSize=10`
+                    `/media-content/videos/feed?page=${page}&pageSize=10`
                     : `/media-content/public/videos/feed/upgraded?page=1&pageSize=10`;
         } else {
             console.log('Live Tab');
@@ -149,7 +150,8 @@ export const addMoreVideos: any = createAsyncThunk(
             link =
                 token && userId
                     ? //`/media-content/videos/feed?page=${page}&pageSize=5`
-                    `/media-content/public/videos/feed/upgraded?page=${page}&pageSize=10`
+                    // `/media-content/public/videos/feed/upgraded?page=${page}&pageSize=10`
+                    `/media-content/videos/feed?page=${page}&pageSize=10`
                     : `/media-content/public/videos/feed/upgraded?page=${page}&pageSize=10`;
         } else {
             console.log('Live Tab');

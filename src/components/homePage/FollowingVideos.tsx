@@ -129,13 +129,13 @@ function FollowingVideos(props: any) {
         const fetchVideos = async () => {
             //   setLoading(true);
             try {
-                const response = await fetch(
-                    APP_URL + `/media-content/public/videos/feed/upgraded?page=${page}&pageSize=5`
-                );
-                const responseData = await response.json();
-                const newVideos = Array.isArray(responseData.data)
-                    ? (responseData.data as Video[])
-                    : [];
+                // const response = await fetch(
+                //     APP_URL + `/media-content/public/videos/feed/upgraded?page=${page}&pageSize=5`
+                // );
+                // const responseData = await response.json();
+                // const newVideos = Array.isArray(responseData.data)
+                //     ? (responseData.data as Video[])
+                //     : [];
                 // const newVideos = useSelector((store:any) => store.reducers.homeVideos);
                 // const API_KEY = process.env.VITE_API_URL;
                 // dispatch(addMoreVideos(newVideos));

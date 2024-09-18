@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React,{ useEffect, useRef, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import style from './customPlayer.module.scss';
 import {
@@ -9,7 +9,7 @@ import {
     volumeUnmute,
 } from '../../../icons';
 
-function CustomPlayer({ isMuted, onMuteToggle,  isPlaying, togglePlayPause, src, videoModal, post, controls }: any) {
+function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, controls, number }: any) {
     const [duration, setDuration] = useState<number>();
     const [playingTime, setPlayingTime] = useState<number>();
     const { ref, inView, entry } = useInView({
@@ -19,7 +19,7 @@ function CustomPlayer({ isMuted, onMuteToggle,  isPlaying, togglePlayPause, src,
     var video = document.createElement('video');
     let videoRef: any = useRef();
     const seekbarRef = useRef<any>(null);
-    // const [isPlaying, setIsPlaying] = useState(true);
+    const [isPlaying, setIsPlaying] = useState(true);
     const [currentTime, setCurrentTime] = useState(0);
     const [muted, setMuted] = useState(false);
     const [playbackRate, setPlaybackRate] = useState(1.0);
@@ -48,30 +48,40 @@ function CustomPlayer({ isMuted, onMuteToggle,  isPlaying, togglePlayPause, src,
         }
       }, [isMuted]);
 
-    useEffect(() => {
-        if (videoRef.current) {
-            if(isPlaying){
-                videoRef?.current?.play();
-            }else{
-                videoRef?.current?.pause();
-            }
-        }
-    }, [isPlaying]);
-
-    // const togglePlayPause = () => {
-    //     const video = videoRef.current;
-    //     if (isPlaying) {
-    //         video.pause();
-    //     } else {
-    //         video.play();
+    // useEffect(() => {
+    //     if (videoRef.current) {
+    //         if(isPlaying){
+    //             videoRef?.current?.play();
+    //         }else{
+    //             videoRef?.current?.pause();
+    //         }
     //     }
-    //     setIsPlaying(!isPlaying);
-    // };
+    // }, [isPlaying]);
+
+    const togglePlayPause = () => {
+        const video = videoRef.current;
+        if (isPlaying) {
+            video.pause();
+        } else {
+            video.play();
+        }
+        setIsPlaying(!isPlaying);
+    };
     
     const handleMuteAndUnmute = () => {
         onMuteToggle();
     };
 
+
+    const handleWaiting = () => {
+        console.log('Loading...');
+        // setIsLoading(true);
+    };
+
+    const handleCanPlay = () => {
+        console.log('Video is ready to play.');
+        // setIsLoading(false);
+      };
 
     // useEffect(() => {
     //     // const video = videoRef.current;
@@ -117,14 +127,14 @@ function CustomPlayer({ isMuted, onMuteToggle,  isPlaying, togglePlayPause, src,
                     loop={true}
                     autoPlay={videoModal ? false : inView}
                     controls={false} //{controls}
-                    style={{  height: '85vh',
-                         position: 'relative', zIndex: 1 }}
+                    style={{  height: '85vh', position: 'relative', zIndex: 1, }}
                     src={src}
                     ref={videoRef}
                     className={style.video}
-                    preload='auto'
+                    preload={number==0? 'auto':'metadata'}
                     playsInline
                 />
+               
             </div>
 
             <div className={style.DivMediaCardBottom}>
@@ -209,4 +219,4 @@ function CustomPlayer({ isMuted, onMuteToggle,  isPlaying, togglePlayPause, src,
     );
 }
 
-export default CustomPlayer;
+export default React.memo(CustomPlayer);

@@ -169,6 +169,11 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
             setThemeColor('');
             setActiveClass(style.active);
         }
+
+        return () => {
+            setNotification([]);
+        };
+
     }, []);
 
     return (
