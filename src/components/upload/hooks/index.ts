@@ -159,7 +159,7 @@ function useUpload() {
                     body: selectedFile,
                     redirect: 'follow',
                 };
-
+                console.log("video uploading", requestOptions, getLinks?.data?.data?.videoUrl);
                 fetch(getLinks?.data?.data?.videoUrl, requestOptions as any)
                     .then(() => {
                         dispatch(
@@ -198,7 +198,7 @@ function useUpload() {
                     body: file,
                     redirect: 'follow',
                 };
-
+                console.log("video uploading", requestOptions, getLinks?.data?.data?.thumbnailUrl);
                 fetch(getLinks?.data?.data?.thumbnailUrl, requestOptions as any)
                     .then(() => {})
                     .catch((error) => {
