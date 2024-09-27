@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import { FavoriteBorder,AlternateEmail, ChatBubbleOutlineSharp } from '@mui/icons-material';
 const options = ['View profile', 'Get Coins', 'Settings', 'Switch Account', 'Logout'];
 import { useEffect, useState } from 'react';
+import { get, post } from '../../../axios/axiosClient';
 
 export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any) {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -133,6 +134,28 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
         setCommentSection(false);
         setTagSection(false);
     }
+    
+    const handleFollowBack = async (userId:any) => {
+      
+        try {
+            const res = await post(`/profile/follow/${userId}`);
+            if (res?.data) {
+                // const response = await fetch(
+                //     API_KEY + `/notification`, {
+                //         method: 'GET',
+                //         headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+                //     }
+                // );
+                // const responseData = await response.json();
+                let conversationId = '';
+                const res = await post(`/chat/request/accept/${conversationId}`);
+                if (res?.data) {
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     useEffect(() => {
         var themeColor = window.localStorage.getItem('theme');
@@ -338,7 +361,7 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                                     <p className={`${style.notificationContent}`}>Follows you.</p>
                                                 </div>
                                             </div>
-                                                <button className={`${style.inboxFollow}`}>Follow back</button>
+                                                <button className={`${style.inboxFollow}`} onClick={() => {handleFollowBack(noti?.triggeredUser?._id) }}>Follow back</button>
                                             </div>
                                             </div>
                                         // </>
