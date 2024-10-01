@@ -31,7 +31,7 @@ function useChat() {
     const [activeUser, setActiveUser] = useState<any>({});
     const [activeChat, setactiveChat] = useState<any>({});
     const socketRef = useRef();
-    const [users, setUsers] = useState<any[]>(DEMI_USERS);
+    const [users, setUsers] = useState<any[]>([]); // removed dummy user
     const [sender, setSender] = useState('');
     const [receiver, setReceiver] = useState('');
     const [chats, setchats] = useState<any[]>([
@@ -697,6 +697,7 @@ function useChat() {
             ispined: !activeUser?.ispined,
         });
         users?.forEach((user) => {
+            console.log("active users",user)
             if (user?.userId === activeUser?.userId) {
                 tempArr.push({
                     ...activeUser,
