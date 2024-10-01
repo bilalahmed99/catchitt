@@ -6,6 +6,7 @@ function ChatHeader(props: any) {
     const {
         moreOptionH,
         name,
+        profilePic,
         isGroup,
         safeMsg,
         onReportClick,
@@ -28,16 +29,17 @@ function ChatHeader(props: any) {
                             alt=""
                         />
                     ) : (
-                        <img className={style.avatar} src={avatar} alt="" />
+                        // <img className={style.avatar} src={profilePic} alt="" />
+                        null
                     )}
                     <div style={{display:'flex',flexDirection:'column'}}>
                         <p className={style.name}>{name}</p>
-                        <p className={style.userMention}>@najeebullahkhan</p>
+                        {/* <p className={style.userMention}>{name}</p> */}
                     </div>
                 </div>
                 <img onClick={moreOptionH} style={{ cursor: 'pointer' }} src={more} alt="" />
             </div>
-            {!safeMsg && (
+            {/* {!safeMsg && (
                 <div className={style.chatWarner}>
                     <div className={style.content}>
                         <p className={style.name}>Mark this message safe?</p>
@@ -53,7 +55,7 @@ function ChatHeader(props: any) {
                         </button>
                     </div>
                 </div>
-            )}
+            )} */}
             {searchMessage && (
                 <div className="flex flex-row items-center justify-between">
                     <Search
