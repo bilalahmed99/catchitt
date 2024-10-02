@@ -17,7 +17,7 @@ function UserChats({ data, OnChatClick, id, onUsersInputChangeHandler }: any) {
   const handleCloseSettingsDialog = () => {
     setOpenSettingsDialog(false);
   };
-
+  console.log("data response", data);
   return (
     <div className={style.chats}>
       <div className={style.chatHeader}>

@@ -9,6 +9,7 @@ import {
     starMsg,
     tagMsg,
     unStarMsg,
+    defaultAvatar,
 } from '../../../icons';
 import style from './Actions.module.scss';
 import LongPressButton from './LongPressEvent';
@@ -45,7 +46,7 @@ function Actions(props: any) {
                             }}
                         >
                             {item.isrecevied && (
-                                <img src={avatar} className={style.avatar} alt="" />
+                                <img src={activeChat?.userImage!=""? activeChat?.userImage:defaultAvatar} className={style.avatar} alt="" />
                             )}
 
                             <div className={style.msg}>
@@ -153,7 +154,9 @@ function Actions(props: any) {
                                     </LongPressButton>
                                 </div>
                                 <div className={style.subContent}>
-                                    {item.stared && <><span>❤️</span> <img src={avatar} className={style.avatarLike} alt="" /></>}
+                                    {item.stared && <><span>❤️</span> 
+                                    {/* <img src={avatar} className={style.avatarLike} alt="" /> */}
+                                    </>}
                                     <p>{item.time}</p>
                                     {!item?.isrecevied && item?.isRead && (
                                         <img src={seenMsgSvg} alt="" />
@@ -168,13 +171,13 @@ function Actions(props: any) {
                                         }}
                                         className={style.actionsOnLongP}
                                     >
-                                        <img
+                                        {/* <img
                                             src={emoji}
                                             alt=""
                                             onClick={() => {
                                                 valuesH(item, 'showEmogis');
                                             }}
-                                        />
+                                        /> */}
                                         {/* <img
                                             onClick={() => {
                                                 setSmsRef(item?.msg);
@@ -191,7 +194,7 @@ function Actions(props: any) {
                                             src={moreInMsg}
                                             alt=""
                                         />
-                                        {item.showEmogis && (
+                                        {/* {item.showEmogis && (
                                             <div
                                                 className={`${style.showEmogis} ${
                                                     !item?.isrecevied
@@ -260,7 +263,7 @@ function Actions(props: any) {
                                                     +
                                                 </p>
                                             </div>
-                                        )}
+                                        )} */}
                                     </div>
                                 )}
                             </div>

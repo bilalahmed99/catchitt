@@ -9,7 +9,7 @@ import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
 import OutlinedFlagIcon from '@mui/icons-material/OutlinedFlag';
 import BlockOutlinedIcon from '@mui/icons-material/BlockOutlined';
 import Divider from '@mui/material/Divider';
-import { avatar, groupDefaultIcon, pinChat } from '../../../icons';
+import { avatar, groupDefaultIcon, pinChat,defaultAvatar } from '../../../icons';
 import style from './chat.module.scss';
 
 const options = [
@@ -23,8 +23,8 @@ const options = [
 const ITEM_HEIGHT = 60;
 
 
-function UserChat(props: any) {
-        const { userName, lastMsg, ispined, lastSeen, unReadMsgs, OnChatClick, userId, id, isGroup } = props || {};
+    function UserChat(props: any) {
+        const { userName, lastMsg, ispined, lastSeen, unReadMsgs, OnChatClick, userId, id, isGroup, userImage } = props || {};
 
         const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
         const open = Boolean(anchorEl);
@@ -33,7 +33,7 @@ function UserChat(props: any) {
         };
         const handleClose = () => {
             setAnchorEl(null);
-        };
+        };   
     return (
         <div
             className={style.chat}
@@ -48,7 +48,7 @@ function UserChat(props: any) {
                             alt=""
                         />
                     ) : (
-                        <img src={avatar} alt="" />
+                        <img src={userImage!=""? userImage:defaultAvatar} alt="" />
                     )}
                     <div>
                         <p className={style.nameText}>{userName}</p>

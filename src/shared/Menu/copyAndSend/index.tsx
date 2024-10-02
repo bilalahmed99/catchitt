@@ -21,6 +21,7 @@ export default function COPY_AND_SEND_MENU({ copyHandler, BASE_URL_FRONTEND, pro
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [selectedIndex, setSelectedIndex] = React.useState(1);
+    const loggedUserId = localStorage.getItem('userId');
     const open = Boolean(anchorEl);
     const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -81,23 +82,23 @@ export default function COPY_AND_SEND_MENU({ copyHandler, BASE_URL_FRONTEND, pro
     }));
 
     const shareToWhatsApp = () => {
-        window.open(`https://api.whatsapp.com/send?text=/${BASE_URL_FRONTEND}/profile/${profileData.id}`, '_blank');
+        window.open(`https://api.whatsapp.com/send?text=/${BASE_URL_FRONTEND}/profile/${loggedUserId}`, '_blank');
     };
 
     const shareToFacebook = () => {
-        window.open(`https://www.facebook.com/share/share.php?u=${BASE_URL_FRONTEND}/profile/${profileData.id}`, '_blank');
+        window.open(`https://www.facebook.com/share/share.php?u=${BASE_URL_FRONTEND}/profile/${loggedUserId}`, '_blank');
     };
 
     const shareToTwitter = () => {
         window.open(
-            `https://twitter.com/intent/tweet?url=${BASE_URL_FRONTEND}/profile/${profileData.id}`,
+            `https://twitter.com/intent/tweet?url=${BASE_URL_FRONTEND}/profile/${loggedUserId}`,
             '_blank'
         );
     };
 
     const shareToLinkedIn = () => {
         window.open(
-            `https://www.linkedin.com/shareArticle?url=${BASE_URL_FRONTEND}/profile/${profileData.id}`,
+            `https://www.linkedin.com/shareArticle?url=${BASE_URL_FRONTEND}/profile/${loggedUserId}`,
             '_blank'
         );
     };
