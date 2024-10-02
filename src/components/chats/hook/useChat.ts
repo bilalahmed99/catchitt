@@ -45,7 +45,8 @@ function useChat() {
     const [messages, setMessages] = useState([]);
     const [isConnected, setIsConnected] = useState(false);
     const token = localStorage.getItem('token');
-    const SERVER_URL = 'https://stagingback.seezitt.com';
+    const loggedUserId = localStorage.getItem('userId');
+    const SERVER_URL = 'https://prodapi.seezitt.com';
     const location = useLocation();
     const valueReceived = location.state?.value;
     const [page, setPage] = useState(1);
@@ -124,6 +125,7 @@ function useChat() {
                         users: {
                             name: any;
                             _id: any;
+                            avatar: any;
                         }[];
                         _id: any;
                     },
@@ -144,8 +146,9 @@ function useChat() {
 
                     if (isLastIndex) markMessageAsSeen(chats?.users[0]?._id, chats?._id);
                     tempArr.push({
-                        userId: chats?.users[1]?._id,
-                        userName: chats?.users[1]?.name,
+                        userId: loggedUserId == chats?.users[1]?._id ? chats?.users[0]?._id: chats?.users[1]?._id,
+                        userName: loggedUserId == chats?.users[1]?._id ? chats?.users[0]?.name: chats?.users[1]?.name, //chats?.users[1]?.name,
+                        userImage: loggedUserId == chats?.users[1]?._id ? chats?.users[0]?.avatar: chats?.users[1]?.avatar,
                         lastMsg: lastMessage,
                         ispined: isPinned,
                         lastSeen: conversationTimeStamp,
@@ -199,6 +202,7 @@ function useChat() {
                             users: {
                                 name: any;
                                 _id: any;
+                                avatar: any;
                             }[];
                             _id: any;
                         },
@@ -214,8 +218,11 @@ function useChat() {
                         const conversationTimeStamp = moment(date).format('h:mm A');
                         // chats?.users?.forEach((user) => {
                         tempArr.push({
-                            userId: chats?.users[1]?._id,
-                            userName: chats?.users[1]?.name,
+                            userId: loggedUserId == chats?.users[1]?._id ? chats?.users[0]?._id: chats?.users[1]?._id,
+                            userName: loggedUserId == chats?.users[1]?._id ? chats?.users[0]?.name: chats?.users[1]?.name,
+                            userImage: loggedUserId == chats?.users[1]?._id ? chats?.users[0]?.avatar: chats?.users[1]?.avatar,
+                            // userId: chats?.users[1]?._id,
+                            // userName: chats?.users[1]?.name,
                             lastMsg: lastMessage,
                             ispined: isPinned,
                             lastSeen: conversationTimeStamp,
@@ -434,6 +441,7 @@ function useChat() {
 
                 messageData['repliedMessageId'] = smsId;
                 // sendMessageReply();
+                console.log('messageData', messageData);
                 (socketRef.current as any).emit('send-msg', JSON.stringify(messageData));
                 setMsg('');
             } else {
@@ -450,6 +458,7 @@ function useChat() {
                         },
                     ],
                 });
+                console.log('messageData', messageData);
                 (socketRef.current as any).emit('send-msg', JSON.stringify(messageData));
                 setMsg('');
             }
@@ -524,7 +533,7 @@ function useChat() {
                             emojis: false,
                             dropdown: false,
                             id: element?._id,
-                            isrecevied: element?.receiverId?._id == receiverId ? false : true,
+                            isrecevied: element?.receiverId?._id == loggedUserId ? false : true,
                             stared: element?.isStarred,
                             isRead: element?.isRead,
                             replysms: element?.repliedMessage
@@ -573,7 +582,7 @@ function useChat() {
                             emojis: false,
                             dropdown: false,
                             id: element?._id,
-                            isrecevied: element?.receiverId?._id == receiverId ? false : true,
+                            isrecevied: element?.receiverId?._id == loggedUserId ? false : true,
                             stared: element?.isStarred,
                             isRead: element?.isRead,
                             replysms: element?.repliedMessage
@@ -611,6 +620,7 @@ function useChat() {
                 setactiveChat({
                     userId: activeUser?.userId,
                     userName: activeUser?.userName,
+                    userImage: activeUser?.userImage,
                     chats: [],
                 });
             } else {
@@ -618,6 +628,7 @@ function useChat() {
                 setactiveChat({
                     userId: activeUser?.userId,
                     userName: activeUser?.userName,
+                    userImage: activeUser?.userImage,
                     chats: [],
                 });
             }

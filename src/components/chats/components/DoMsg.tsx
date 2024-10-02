@@ -6,17 +6,24 @@ const DoMsg = ({ onSubmit, onChange, msg }: any) => {
     return (
         <div className={style.doMsgContainer}>
             <form onSubmit={onSubmit}  style={{ padding:'0px',background:'#fff',}}>
-                    <InputEmoji 
+                    {/* <InputEmoji 
                     onChange={onChange}
-                    //  type="text"
+                    // type="text"
                     placeholder="Write a message..."
                     value={msg} shouldReturn={false} shouldConvertEmojiToImage={false}                        //  style={ { width:'-webkit-fill-available',
                         //         Padding:'0px' }
                         //  }
-                    />
+                    /> */}
                 {/* <p style={{ color: msg.length > 0 ? 'rgb(255, 59, 92)' : '#a9a9a9' }} onClick={onSubmit}>
                     Send
                 </p> */}
+                <input
+                    onChange={onChange}
+                    type="text"
+                    placeholder="Write a message..."
+                    value={msg}                   
+                    style={{ width:'-webkit-fill-available',padding:'0px' }}
+                    />
                 <SendIcon className={style.sendIcon} onClick={onSubmit}  style={{ fontSize: '23px', }}/>
             </form>
             <div>
