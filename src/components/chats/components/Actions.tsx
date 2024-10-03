@@ -31,7 +31,8 @@ function Actions(props: any) {
         showToast,
         handleScroll
     } = props || {};
-
+    console.log('activeChat',activeChat);
+    
     return (
         <div ref={autoScrolElem} className={style.msgsContainer} onScroll={handleScroll}>
             {activeChat?.userId &&

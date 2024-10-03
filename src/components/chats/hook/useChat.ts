@@ -267,7 +267,8 @@ function useChat() {
         (socketRef.current as any).on('connect', () => {
             setIsConnected(true);
             console.log('Connected to socket server.');
-            (socketRef.current as any).emit('add-user', sender);
+            let addUserObject = {userId:sender, accessToken:token };
+            (socketRef.current as any).emit('add-user', addUserObject);
         });
 
         (socketRef.current as any).on('disconnect', () => {
@@ -411,15 +412,15 @@ function useChat() {
         }
         e.stopPropagation();
         const messageData = {
-            to: receiver,
+            to: loggedUserId != receiver ? receiver: sender,
             message: msg,
-            from: sender,
+            from: loggedUserId == sender ? sender: sender,
             type: 'Text',
-            repliedMessageId: 0,
+            accessToken:token,
         };
         // Get current time
         const currentTime = moment();
-
+        console.log(messageData)
         // Format the current time using moment.js
         const formattedTime = currentTime.format('h:mm A');
         if (msg.length !== 0) {
@@ -439,7 +440,7 @@ function useChat() {
                     ],
                 });
 
-                messageData['repliedMessageId'] = smsId;
+                // messageData['repliedMessageId'] = smsId;
                 // sendMessageReply();
                 console.log('messageData', messageData);
                 (socketRef.current as any).emit('send-msg', JSON.stringify(messageData));
