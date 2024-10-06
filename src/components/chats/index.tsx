@@ -238,25 +238,6 @@ function ChatsSec() {
                         />
                     </div>
                 )}
-                {/* {copyModal && (
-                    <div
-                        style={{
-                            width: 300,
-                            height: 60,
-                            background: '#FFFAE6',
-                            borderRadius: 10,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            position: 'fixed',
-                            bottom: 110,
-                            right: 40,
-                            zIndex: 5,
-                        }}
-                    >
-                        <p className={style.blackText_16}>🎉 Copied successfully</p>
-                    </div>
-                )} */}
 
                 {staredmodal && (
                     <StaredMesagesSec

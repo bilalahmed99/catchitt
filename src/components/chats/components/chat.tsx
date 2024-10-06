@@ -11,6 +11,7 @@ import BlockOutlinedIcon from '@mui/icons-material/BlockOutlined';
 import Divider from '@mui/material/Divider';
 import { avatar, groupDefaultIcon, pinChat,defaultAvatar } from '../../../icons';
 import style from './chat.module.scss';
+import hook from '../hook/useChat';
 
 const options = [
   { text: 'Mute', icon: <NotificationsOffOutlinedIcon /> },
@@ -24,8 +25,69 @@ const ITEM_HEIGHT = 60;
 
 
     function UserChat(props: any) {
-        const { userName, lastMsg, ispined, lastSeen, unReadMsgs, OnChatClick, userId, id, isGroup, userImage } = props || {};
-
+        const { userName, lastMsg, ispined, lastSeen, unReadMsgs, OnChatClick, userId, id, isGroup, userImage} = props || {};
+        const {
+            moreOptions,
+            setMoreOptions,
+            reportPopup,
+            setreportPopup,
+            blockPopup,
+            setblockPopup,
+            groupOptions,
+            setGroupOptions,
+            markTheMsgSafe,
+            setMarkTheMsgSafe,
+            smsRef,
+            setSmsRef,
+            smsId,
+            setSmsId,
+            replySms,
+            setreplysms,
+            showShortSidebar,
+            setshowShortSidebar,
+            msg,
+            setMsg,
+            activeChat,
+            activeUser,
+            users,
+            autoScrolElem,
+            longPressH,
+            insertKeyH,
+            valuesH,
+            valuesH2,
+            deleteH,
+            globalClickH,
+            submitH,
+            chatSwitchH,
+            userPinH,
+            copyModal,
+            copyH,
+            editGroupNameModal,
+            setEditGroupNameModal,
+            onSaveChanges,
+            addMembersPopup,
+            setAddMembersPopup,
+            staredMsgs,
+            staredmodal,
+            setstaredmodal,
+            showSearchMessage,
+            searchMessage,
+            DangerText,
+            setDengerText,
+            dangetBtnText,
+            setdangetBtnText,
+            onBlock,
+            onChangeH,
+            deleteHandler,
+            multipleUnstarHandlr,
+            forwardModal,
+            setforwardModal,
+            selectedData,
+            onUsersInputChangeHandler,
+            searchMessagesHandler,
+            showToast,
+            handleScroll,
+        } = hook();
         const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
         const open = Boolean(anchorEl);
         const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -33,6 +95,21 @@ const ITEM_HEIGHT = 60;
         };
         const handleClose = () => {
             setAnchorEl(null);
+        }; 
+        const handleAction = (text:string) => {
+            if(text == "Report"){
+                console.log("Report");
+                // blockH(reportH)
+                setreportPopup(true);
+            }else if(text == "Block"){
+                onBlock();
+              
+            }else if(text == "Pin to top"){
+                console.log("Pin to top")
+                userPinH(userId)
+            }else if(text == "Mute"){
+                console.log("Mute")
+            }
         };   
     return (
         <div
@@ -92,7 +169,7 @@ const ITEM_HEIGHT = 60;
                         <div key={option.text}>
                             <MenuItem onClick={handleClose}>
                                 {option.icon}
-                                <span style={{ marginLeft: '8px',fontWeight:'bold' }}>{option.text}</span>
+                                <span style={{ marginLeft: '8px',fontWeight:'bold' }} onClick={() => handleAction(option.text)}>{option.text}</span>
                             </MenuItem>
                             {index < options.length - 1 && <Divider />}
                         </div>
