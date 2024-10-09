@@ -7,7 +7,10 @@ import DialogActions from '@mui/material/DialogActions';
 import CloseIcon from '@mui/icons-material/Close';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Typography from '@mui/material/Typography';
-import ResponsiveSelect from './ResponsiveSelect'
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -20,6 +23,9 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 export default function ResponsiveDialog() {
   const [open, setOpen] = React.useState(false);
+  const API_KEY = process.env.VITE_API_URL;
+  const [PrivacyValue, setPrivacyValue] = React.useState('Friends');
+  const token = localStorage.getItem('token');
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -27,6 +33,27 @@ export default function ResponsiveDialog() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log((event.target as HTMLInputElement).value)
+    setPrivacyValue((event.target as HTMLInputElement).value);
+  };
+  
+  const handleUserChatSetting = async() => {
+    try {
+        const response = await fetch(`${API_KEY}/profile/privacy-settings`, {
+            method: 'PATCH',
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ allowMessagesFrom: PrivacyValue }),
+        });
+        const res = await response.json();
+    } catch (error) {
+        console.log('error blocking user', error);
+    }
+};
 
   return (
     <React.Fragment>
@@ -60,17 +87,35 @@ export default function ResponsiveDialog() {
             />
         </div>
         <DialogContent dividers style={{padding:'24px'}}>
-          <Typography gutterBottom style={{fontSize:'16px',fontWeight:'bold'}}>
-                Who can send you direct messages
-          </Typography>
-          <Typography gutterBottom style={{fontSize:'12px'}}>
-                With any option, you can receive messages from users that you’ve sent messages to. Friends are your followers that you follow back.
-          </Typography>
-          <ResponsiveSelect/>
+            <Typography gutterBottom style={{fontSize:'16px',fontWeight:'bold'}}>
+                  Who can send you direct messages
+            </Typography>
+            <Typography gutterBottom style={{fontSize:'12px'}}>
+                  With any option, you can receive messages from users that you’ve sent messages to. Friends are your followers that you follow back.
+            </Typography>
+            <FormControl>
+              <RadioGroup
+                aria-labelledby="demo-controlled-radio-buttons"
+                value={PrivacyValue}
+                onChange={handleChange}
+                style={{marginTop:'15px',}}
+              >
+                <FormControlLabel
+                  value="Friends"
+                  control={<Radio style={{ color: PrivacyValue === 'Friends' ? 'rgb(255, 59, 92)' : '' }} />}
+                  label="Friends"
+                />
+                <FormControlLabel
+                  value="No one"
+                  control={<Radio style={{ color: PrivacyValue === 'No one' ? 'rgb(255, 59, 92)' : '' }} />}
+                  label={<div style={{ width: 'max-content' }}>No one</div>}
+                />
+              </RadioGroup>
+            </FormControl>
         </DialogContent>
         <DialogActions style={{ maxWidth: 'fit-content', marginLeft: 'auto',padding:'24px'}}>
           <button style={{color: 'rgb(22, 24, 35)', borderColor: 'rgba(22, 24, 35, 0.12)', minWidth: '165px',}} onClick={handleClose}>Cancel</button>
-          <button style={{color:'#fff',backgroundColor:'rgb(255, 59, 92)',minWidth: '165px'}} onClick={handleClose} autoFocus>Save</button>
+          <button style={{color:'#fff',backgroundColor:'rgb(255, 59, 92)',minWidth: '165px'}} onClick={handleUserChatSetting} autoFocus>Save</button>
         </DialogActions>
       </BootstrapDialog>
     </React.Fragment>
