@@ -28,6 +28,7 @@ function useChat() {
     const [showShortSidebar, setshowShortSidebar] = useState<boolean>(false);
     const [DangerText, setDengerText] = useState<string>('');
     const [msg, setMsg] = useState<string>('');
+    const [msgType, setMsgType] = useState<string>('');
     const [activeUser, setActiveUser] = useState<any>({});
     const [activeChat, setactiveChat] = useState<any>({});
     const socketRef = useRef();
@@ -407,6 +408,7 @@ function useChat() {
     };
 
     const submitH = (e: any) => {
+        console.log("htting", msg, msgType);
         if (e) {
             e.preventDefault();
         }
@@ -445,6 +447,7 @@ function useChat() {
                 console.log('messageData', messageData);
                 (socketRef.current as any).emit('send-msg', JSON.stringify(messageData));
                 setMsg('');
+                setMsgType('');
             } else {
                 setactiveChat({
                     ...activeChat,
@@ -462,9 +465,11 @@ function useChat() {
                 console.log('messageData', messageData);
                 (socketRef.current as any).emit('send-msg', JSON.stringify(messageData));
                 setMsg('');
+                setMsgType('');
             }
             // console.log('Current socket : ', socketRef.current);
             setMsg('');
+            setMsgType('');
         }
 
         setSmsRef('');
@@ -1006,6 +1011,8 @@ function useChat() {
         sender,
         receiver,
         handleScroll,
+        msgType,
+        setMsgType,
     };
 }
 
