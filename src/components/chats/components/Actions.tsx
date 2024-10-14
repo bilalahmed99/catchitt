@@ -31,7 +31,8 @@ function Actions(props: any) {
         showToast,
         handleScroll
     } = props || {};
-    // console.log('activeChat',activeChat);
+    const loggedInUserId = localStorage.getItem('userId');
+    console.log('activeChat',activeChat);
     
     return (
         <div ref={autoScrolElem} className={style.msgsContainer} onScroll={handleScroll}>
@@ -42,11 +43,11 @@ function Actions(props: any) {
                             key={index}
                             className={style.msgContainer}
                             style={{
-                                margin: item.isrecevied ? '0px 48% 0px 0%' : '0px 0% 0px 48%',
-                                flexDirection: item.isrecevied ? 'row' : 'row-reverse',
+                                margin: item.receiverId == loggedInUserId ? '0px 48% 0px 0%' : '0px 0% 0px 48%',
+                                flexDirection: item.receiverId == loggedInUserId ? 'row' : 'row-reverse',
                             }}
                         >
-                            {item.isrecevied && (
+                            {item.receiverId == loggedInUserId && (
                                 <img src={activeChat?.userImage!=""? activeChat?.userImage:defaultAvatar} className={style.avatar} alt="" />
                             )}
 
@@ -54,8 +55,8 @@ function Actions(props: any) {
                                 {item.emojis && item.dropdown && (
                                     <div
                                         style={{
-                                            left: item?.isrecevied ? 'auto' : '-145px',
-                                            right: item?.isrecevied ? '-145px' : 'auto',
+                                            left: item.receiverId == loggedInUserId ? 'auto' : '-145px',
+                                            right: item.receiverId == loggedInUserId ? '-145px' : 'auto',
                                             display:'flex'
                                         }}
                                         className={style.dropd}
@@ -146,7 +147,7 @@ function Actions(props: any) {
                                             <p
                                                 onClick={(e) => e.stopPropagation()}
                                                 className={`${
-                                                    item.isrecevied
+                                                    item.receiverId == loggedInUserId
                                                         ? style.receivedMsg
                                                         : style.sendedMsg
                                                 }`}
@@ -156,6 +157,16 @@ function Actions(props: any) {
                                             
                                             {item?.type == 'Image' &&
                                                 <img src={item.msg} />
+                                            }
+                                            
+                                            {item?.type == 'Video' &&
+                                               <video
+                                               disablePictureInPicture
+                                               controlsList="nodownload noplaybackrate"
+                                               controls={true} 
+                                               style={{ height: "60%", width: "60%" }}
+                                               src={item.msg}
+                                             />
                                             }
                                             </>
                                         )}
@@ -174,8 +185,8 @@ function Actions(props: any) {
                                     <div
                                         onClick={(e) => e.stopPropagation()}
                                         style={{
-                                            left: !item?.isrecevied ? '-75px' : 'auto',
-                                            right: item?.isrecevied ? '-75px' : 'auto',
+                                            left: item.receiverId != loggedInUserId ? '-75px' : 'auto',
+                                            right: item.receiverId == loggedInUserId ? '-75px' : 'auto',
                                         }}
                                         className={style.actionsOnLongP}
                                     >

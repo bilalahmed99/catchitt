@@ -17,7 +17,7 @@ const DoMsg = ({ onSubmit, msg, setMessage, setMessageType }: any) => {
     // const inputRef = useRef(null);
 
     const uploadfile = async(e:any) => {
-        
+        setFilePreview(""); 
         const file = e.target.files[0];
         let fileType = getExtension(file.name);
         if (file == undefined) {
@@ -39,7 +39,7 @@ const DoMsg = ({ onSubmit, msg, setMessage, setMessageType }: any) => {
 
         let formData = new FormData();
         formData.append("file", file);
-    
+        setOpenUploadPic(true);
         const config = {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -58,6 +58,9 @@ const DoMsg = ({ onSubmit, msg, setMessage, setMessageType }: any) => {
             setUploadProgress(0);
             console.log(responce, "responseresp");
             let msgUrl = responce.data.data;
+            if (file_type(fileType) == "Video"){
+              setFilePreview(msgUrl);
+            }
             // let msgUrlType = e.target.type;
             return msgUrl;
             // setMessage(msgUrl); 
@@ -83,11 +86,15 @@ const DoMsg = ({ onSubmit, msg, setMessage, setMessageType }: any) => {
           console.log("responseresp",  msg,"responseresp new", messageURL)
           console.log("end resp")
           // onSubmit(e);
-          setOpenUploadPic(true);
+          
       };
 
       // const openUploadPic = () => { setOpenUploadPic(true); }
-      const closeUploadPic = () => { setOpenUploadPic(false); }
+      const closeUploadPic = () => { 
+        setMessage("");
+        setFilePreview(""); 
+        setOpenUploadPic(false);
+       }
     
     return (
         <div className={style.doMsgContainer}>
@@ -114,7 +121,7 @@ const DoMsg = ({ onSubmit, msg, setMessage, setMessageType }: any) => {
             </form>
             <div>
                 <div className={style.actions}>
-                <input type="file" onChange={(e)=>{uploadfile(e) }} className={style.filetype} />
+                <input type="file" onChange={(e)=>{uploadfile(e) }} className={style.filetype} accept="image/*, video/*" />
                 {/* <input type='hidden' value={upload} onInput={onSubmit}/> */}
                     <img src={paperClip} alt="" />
                 </div>
@@ -128,7 +135,19 @@ const DoMsg = ({ onSubmit, msg, setMessage, setMessageType }: any) => {
                     <h6>Upload File Preview</h6>
                     <div>
                     {uploadedFile == "Image" && <img src={filePreview}  alt="Preview"
-                    style={{ height: "150px", width: "350px" }} /> }
+                    style={{ height: "50%", width: "50%", objectFit: "cover", alignSelf: "center" }} /> }
+                    
+                    {uploadedFile == "Video" && 
+                    // <img src={filePreview}  alt="Preview"
+                    // style={{ height: "50%", width: "50%", objectFit: "cover", alignSelf: "center" }} />
+                    <video
+                      disablePictureInPicture
+                      controlsList="nodownload noplaybackrate"
+                      controls={true} 
+                      style={{ height: "60%", width: "60%", objectFit: "cover", alignSelf: "center" }}
+                      src={filePreview}
+                    /> }
+                    
                     {uploadProgress > 0 && (
                       <div className="progress-bar-container text-center">
                         <CircularProgress

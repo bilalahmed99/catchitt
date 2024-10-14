@@ -128,6 +128,7 @@ function useChat() {
                             _id: any;
                             avatar: any;
                         }[];
+                        receiverId: any;
                         _id: any;
                     },
                     index: number
@@ -205,6 +206,7 @@ function useChat() {
                                 _id: any;
                                 avatar: any;
                             }[];
+                            receiverId: any;
                             _id: any;
                         },
                         index: number
@@ -432,7 +434,10 @@ function useChat() {
                     chats: [
                         ...activeChat?.chats,
                         {
+                            to: loggedUserId != receiver ? receiver: sender,
+                            from: loggedUserId == sender ? sender: sender,
                             msg: msg,
+                            type: msgType,
                             time: formattedTime,
                             emojis: false,
                             dropdown: false,
@@ -454,6 +459,9 @@ function useChat() {
                     chats: [
                         ...activeChat?.chats,
                         {
+                            to: loggedUserId != receiver ? receiver: sender,
+                            from: loggedUserId == sender ? sender: sender,
+                            type: msgType,
                             msg: msg,
                             time: formattedTime,
                             emojis: false,
@@ -540,6 +548,7 @@ function useChat() {
                             dropdown: false,
                             id: element?._id,
                             isrecevied: element?.receiverId?._id == loggedUserId ? false : true,
+                            receiverId: element?.receiverId?._id,
                             stared: element?.isStarred,
                             isRead: element?.isRead,
                             type: element?.type,
