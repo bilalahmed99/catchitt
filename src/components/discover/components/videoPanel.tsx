@@ -38,7 +38,7 @@ export default function VideoesMaping({ videos, openVideoModal, muteStates, setM
                             muted={muteStates[i]}
                             loop
                             autoPlay={true}
-                            preload="auto"
+                            preload="metadata"
                             playsInline
                         />
                         <img
