@@ -40,22 +40,23 @@ export default function VideoesMaping({ videos, openVideoModal, muteStates, setM
                             autoPlay={true}
                             preload="metadata"
                             playsInline
+                            controls={true}
                         />
                         <img
                             className={`w-full h-full object-cover ${hoveredIndex === i ? 'hidden' : 'block'}`}
                             src={item?.thumbnailUrl}
                             alt=""
                         />
-                        <div className="flex gap-2 absolute left-[0.75rem] bottom-[0.813rem]">
+                        {/* <div className="flex gap-2 absolute left-[0.75rem] bottom-[0.813rem]">
                             <img src="../../../../public/images/icons/views.svg" alt="" />
                             <p className="text-[0.875rem] font-semibold leading-[120%]">{item.views}</p>
-                        </div>
-                        <img
+                        </div> */}
+                        {/* <img
                             onClick={(e) => unmuteHandler(e, i)}
                             className="object-contain h-6 w-6 absolute bottom-3 right-3"
                             src={muteStates[i] ? muteIcon : unmuteIcon}
                             alt=""
-                        />
+                        /> */}
                     </div>
                 ))}
         </div>
