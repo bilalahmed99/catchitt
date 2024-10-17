@@ -28,6 +28,7 @@ function useChat() {
     const [showShortSidebar, setshowShortSidebar] = useState<boolean>(false);
     const [DangerText, setDengerText] = useState<string>('');
     const [msg, setMsg] = useState<string>('');
+    const [msgType, setMsgType] = useState<string>('');
     const [activeUser, setActiveUser] = useState<any>({});
     const [activeChat, setactiveChat] = useState<any>({});
     const socketRef = useRef();
@@ -127,6 +128,7 @@ function useChat() {
                             _id: any;
                             avatar: any;
                         }[];
+                        receiverId: any;
                         _id: any;
                     },
                     index: number
@@ -204,6 +206,7 @@ function useChat() {
                                 _id: any;
                                 avatar: any;
                             }[];
+                            receiverId: any;
                             _id: any;
                         },
                         index: number
@@ -266,7 +269,7 @@ function useChat() {
 
         (socketRef.current as any).on('connect', () => {
             setIsConnected(true);
-            console.log('Connected to socket server.');
+            console.log('Connected to socket server.', (socketRef.current as any));
             let addUserObject = {userId:sender, accessToken:token };
             (socketRef.current as any).emit('add-user', addUserObject);
         });
@@ -407,6 +410,7 @@ function useChat() {
     };
 
     const submitH = (e: any) => {
+        console.log("htting", msg, msgType);
         if (e) {
             e.preventDefault();
         }
@@ -415,7 +419,7 @@ function useChat() {
             to: loggedUserId != receiver ? receiver: sender,
             message: msg,
             from: loggedUserId == sender ? sender: sender,
-            type: 'Text',
+            type: msgType,
             accessToken:token,
         };
         // Get current time
@@ -430,7 +434,10 @@ function useChat() {
                     chats: [
                         ...activeChat?.chats,
                         {
+                            to: loggedUserId != receiver ? receiver: sender,
+                            from: loggedUserId == sender ? sender: sender,
                             msg: msg,
+                            type: msgType,
                             time: formattedTime,
                             emojis: false,
                             dropdown: false,
@@ -445,12 +452,16 @@ function useChat() {
                 console.log('messageData', messageData);
                 (socketRef.current as any).emit('send-msg', JSON.stringify(messageData));
                 setMsg('');
+                setMsgType('');
             } else {
                 setactiveChat({
                     ...activeChat,
                     chats: [
                         ...activeChat?.chats,
                         {
+                            to: loggedUserId != receiver ? receiver: sender,
+                            from: loggedUserId == sender ? sender: sender,
+                            type: msgType,
                             msg: msg,
                             time: formattedTime,
                             emojis: false,
@@ -462,9 +473,11 @@ function useChat() {
                 console.log('messageData', messageData);
                 (socketRef.current as any).emit('send-msg', JSON.stringify(messageData));
                 setMsg('');
+                setMsgType('');
             }
             // console.log('Current socket : ', socketRef.current);
             setMsg('');
+            setMsgType('');
         }
 
         setSmsRef('');
@@ -535,8 +548,10 @@ function useChat() {
                             dropdown: false,
                             id: element?._id,
                             isrecevied: element?.receiverId?._id == loggedUserId ? false : true,
+                            receiverId: element?.receiverId?._id,
                             stared: element?.isStarred,
                             isRead: element?.isRead,
+                            type: element?.type,
                             replysms: element?.repliedMessage
                                 ? element?.repliedMessage?.message
                                 : false,
@@ -586,6 +601,7 @@ function useChat() {
                             isrecevied: element?.receiverId?._id == loggedUserId ? false : true,
                             stared: element?.isStarred,
                             isRead: element?.isRead,
+                            type: element?.type,
                             replysms: element?.repliedMessage
                                 ? element?.repliedMessage?.message
                                 : false,
@@ -1006,6 +1022,8 @@ function useChat() {
         sender,
         receiver,
         handleScroll,
+        msgType,
+        setMsgType,
     };
 }
 

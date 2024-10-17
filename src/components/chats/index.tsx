@@ -79,6 +79,8 @@ function ChatsSec() {
         searchMessagesHandler,
         showToast,
         handleScroll,
+        msgType,
+        setMsgType,
     } = hook();
     console.log("[activeUser", activeUser);
 
@@ -180,8 +182,10 @@ function ChatsSec() {
                     ) : (
                         <DoMsg
                             onSubmit={submitH}
-                            onChange={(e: any) => setMsg(e.target.value)}
+                            // onChange={(e: any) => { console.log("Msg value and type", e.target.value, e.target.type); setMsg(e.target.value), setMsgType(e.target.type)  }}
                             msg={msg}
+                            setMessage={setMsg}
+                            setMessageType={setMsgType}
                         />
                     )}
                     {!groupOptions && moreOptions && (

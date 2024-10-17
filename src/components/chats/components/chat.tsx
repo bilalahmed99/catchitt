@@ -29,8 +29,8 @@ const ITEM_HEIGHT = 60;
 
 
     function UserChat(props: any) {
-        const { userName, lastMsg, ispined, lastSeen, unReadMsgs, OnChatClick, userId, id, isGroup, userImage, conversationId} = props || {};
-        console.log("user chat props ", props);
+        const { userName, lastMsg, ispined, isBlocked, lastSeen, unReadMsgs, OnChatClick, userId, id, isGroup, userImage, conversationId} = props || {};
+        // console.log("user chat props ", props);
         const {
             moreOptions,
             setMoreOptions,
@@ -119,14 +119,16 @@ const ITEM_HEIGHT = 60;
                 
             }else if(text == "Block"){
                 
-                    setdangetBtnText('Block');
-                    setDengerText(`Are you sure you want to block ${activeUser?.userName}?`);
+                    setdangetBtnText(`${isBlocked ? 'UnBlock' : 'Block'}?`);
+                    setDengerText(`Are you sure you want to ${isBlocked ? 'UnBlock' : 'Block'}?`);
                     setblockPopup(true);
                     handleBlockUserFromChat();
+                   
               
             }else if(text == "Pin to top"){
                 console.log("Pin to top")
-                userPinH(userId)
+                userPinH(userId);
+                // window.location.reload(); 
             }else if(text == "Mute"){
                 console.log("Mute")
                 setmuteN(!muteN);
@@ -150,6 +152,7 @@ const ITEM_HEIGHT = 60;
                     }
                 );
                 const res = await response.json();
+                window.location.reload(); 
             } catch (error) {
                 console.log('Error deleting message', error);
             }
@@ -165,6 +168,7 @@ const ITEM_HEIGHT = 60;
                     },
                 });
                 const res = await response.json();
+                window.location.reload(); 
             } catch (error) {
                 console.log('error blocking user', error);
             }
