@@ -6,7 +6,7 @@ import Search from '../../navbar/components/Search';
 import { get, post } from '../../../axios/axiosClient';
 
 function Forwardusers(props: any) {
-    const { onOpen, onClose } = props || {};
+    const { onOpen, onClose, videoLink } = props || {};
     const [loading, setLoading] = useState<any>(false);
     const API_URL = process.env.VITE_API_URL;
     const token = localStorage.getItem('token');
@@ -45,7 +45,7 @@ function Forwardusers(props: any) {
         }
     };
     
-    const handleMessage = async (friendId:any, videoLink:any) => {
+        const handleMessage = async (friendId:any, videoLink:any) => {
         console.log("handleMessage", userId)
             try {
                     const result = await post(`/chat/messages`,{
@@ -116,7 +116,7 @@ function Forwardusers(props: any) {
                                             <img src={duet} alt="" />
                                             Duet
                                         </button> */}
-                                        <button className={style.primaryBtn} onClick={()=>handleMessage(user?.followed_userID?._id, "ads")}>
+                                        <button className={style.primaryBtn} onClick={()=>handleMessage(user?.followed_userID?._id, videoLink)}>
                                             <img src={sendSvgPopup} alt="" />
                                             Send
                                         </button>

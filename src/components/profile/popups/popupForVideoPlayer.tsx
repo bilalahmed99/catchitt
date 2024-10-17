@@ -40,6 +40,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Forwardusers from '../../../shared/popups/shareTo/Forwardusers';
 import CountUp from 'react-countup';
+import EmojiInputPicker from '../../../shared/emojiPicker/EmojiInputPicker';
 
 export default function PopupForVideoPlayer({
     videoModal,
@@ -59,6 +60,7 @@ export default function PopupForVideoPlayer({
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+
     // const [selectedVideoId, setSelectedVideoId] = useState<any>(null);
     const [videoLikes, setVideoLikes] = useState<number>(0);
     const [videoComments, setVideoComments] = useState<any>([]);
@@ -76,7 +78,7 @@ export default function PopupForVideoPlayer({
     const [isReportElipsisVisible, setIsReportElipsisVisible] = useState<boolean>(false);
     const [totalComments, setTotalComments] = useState<any>(null);
     const [commentPageNumber, setCommentPageNumber] = useState<number>(1);
-    const [pageSize, setPageSize] = useState<number>(8);
+    const [pageSize, setPageSize] = useState<number>(2);
     const [currentCommentIndex, setCurrentCommentIndex] = useState(-1);
     const [isReplyToCommentClicked, setIsReplyToCommentClicked] = useState<boolean>(false);
     const [isTooltipVisible, setIsTooltipVisible] = useState<boolean>(false);
@@ -112,6 +114,7 @@ export default function PopupForVideoPlayer({
     const [visibleReplies, setVisibleReplies] = useState<any>({});
     const [currentCommentReplyIndex, setCurrentCommentReplyIndex] = useState(-1);
     const [sendPopup, setSendPopup] = useState(false);
+    const [isPickerVisible, setPickerVisible] = useState(false);
 
     const videoData = {
         videoId: info?.mediaId,
@@ -207,6 +210,9 @@ export default function PopupForVideoPlayer({
         window.open(`https://twitter.com/intent/tweet?url=${url}&text=${info?.description}`, '_blank');
     };
 
+    const onEmojiClick = (event:any, emojiObject:any) => {
+        setComment((prevText) => prevText + emojiObject.emoji); // Append emoji to input text
+    };
 
 
     const saveVideoToggler = async () => {
@@ -297,7 +303,7 @@ export default function PopupForVideoPlayer({
             // Append comments
             if (data?.data && Array.isArray(data?.data)) {
                 setVideoComments((prevComments: string | any[]) =>
-                        prevComments.concat(data?.data)
+                    prevComments.concat(data?.data)
                 );
             }
 
@@ -583,9 +589,9 @@ export default function PopupForVideoPlayer({
             showToastSuccess('Comment posted');
             // fetchMediaById(info?.mediaId);
             setAddCommentLoading(false);
-            setVideoComments((prevComments:[]) => [data?.data, ...prevComments]);
-            setTotalComments((prev:any) => prev===null? 1: prev + 1);
-            
+            setVideoComments((prevComments: []) => [data?.data, ...prevComments]);
+            setTotalComments((prev: any) => prev === null ? 1 : prev + 1);
+
         } catch (error) {
             console.log('🚀 ~ addCommentHandler ~ error:', error);
             setAddCommentLoading(false);
@@ -644,7 +650,7 @@ export default function PopupForVideoPlayer({
     useEffect(() => {
         // setSelectedVideoId(info?.mediaId);
         setTextToCopy(`${BASE_URL_FRONTEND}/${userName}/video/${info?.mediaId}`);
-      
+
     }, [info]);
 
 
@@ -798,7 +804,7 @@ export default function PopupForVideoPlayer({
                                                     />
                                                 </div>
                                                 <p className="font-medium text-sm text-white">
-                                                <CountUp start={0} delay={0.1} duration={0.2} end={videoLikes} />
+                                                    <CountUp start={0} delay={0.1} duration={0.2} end={videoLikes} />
                                                 </p>
                                             </div>
                                             <div className="flex flex-row justify-center items-center gap-1.5 cursor-pointer">
@@ -947,7 +953,7 @@ export default function PopupForVideoPlayer({
                                         endMessage={
                                             <div className="flex flex-row justify-center items-center mt-3">
                                                 <p className="text-white font-normal text-sm">
-                                                   {totalComments === 0? 'Be the first to comment' : 'No more comments'}
+                                                    {totalComments === 0 ? 'Be the first to comment' : 'No more comments'}
                                                 </p>
                                             </div>
                                         }
@@ -1541,6 +1547,7 @@ export default function PopupForVideoPlayer({
                                                     : 'placeholder-[#FFFFFFBC]'
                                                     }`}
                                             />
+                                            {/* <EmojiInputPicker isPickerVisible={isPickerVisible} onEmojiSelect={onEmojiClick} inputRef={inputRef} /> */}
                                             {isUserLoggedIn() && (
                                                 <div className="flex flex-row items-center">
                                                     <div
@@ -1553,13 +1560,15 @@ export default function PopupForVideoPlayer({
                                                             alt="at-the-rate-icon"
                                                         />
                                                     </div>
-                                                    <div className="rounded-lg cursor-pointer hover:bg-[#1618230f] p-[0.313rem] my-[0.438rem] mx-[0.188rem]">
+                                                    <div onClick={() => setPickerVisible(true)} className="rounded-lg cursor-pointer hover:bg-[#1618230f] p-[0.313rem] my-[0.438rem] mx-[0.188rem]">
                                                         <img
                                                             className={`w-5 h-5 object-contain rounded-full`}
                                                             src={commentEmoji}
                                                             alt="comment-icon"
                                                         />
                                                     </div>
+
+
                                                 </div>
                                             )}
                                         </div>
@@ -1663,7 +1672,7 @@ export default function PopupForVideoPlayer({
                     setIsEmbedModalOpen={setIsEmbedPopupVisible}
                 />
             )}
-            <Forwardusers onOpen={sendPopup} onClose={() => setSendPopup(false)} />
+            <Forwardusers videoLink={info?.mediaId} onOpen={sendPopup} onClose={() => setSendPopup(false)} />
             <ToastContainer />
 
         </div>
