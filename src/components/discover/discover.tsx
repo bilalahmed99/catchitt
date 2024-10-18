@@ -66,7 +66,7 @@ export default function Discover() {
     const handleScroll = useCallback(() => {
         if (mainDivRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = mainDivRef.current;
-            if (scrollTop + clientHeight >= scrollHeight - 0.5) {
+            if (scrollTop + clientHeight >= scrollHeight - 50) {
                 setPageNumber((prevPageNumber) => prevPageNumber + 1);
             }
         }

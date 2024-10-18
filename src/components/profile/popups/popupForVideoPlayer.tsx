@@ -40,7 +40,9 @@ import { toast, ToastContainer } from 'react-toastify';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Forwardusers from '../../../shared/popups/shareTo/Forwardusers';
 import CountUp from 'react-countup';
-import EmojiInputPicker from '../../../shared/emojiPicker/EmojiInputPicker';
+import EmojiPicker, { Theme } from 'emoji-picker-react';
+import { set } from 'lodash';
+
 
 export default function PopupForVideoPlayer({
     videoModal,
@@ -63,7 +65,7 @@ export default function PopupForVideoPlayer({
 
     // const [selectedVideoId, setSelectedVideoId] = useState<any>(null);
     const [videoLikes, setVideoLikes] = useState<number>(0);
-    const [videoComments, setVideoComments] = useState<any>([]);
+    const [videoComments, setVideoComments] = useState<any>({ items: [], totalItems: null, pageSize: 5, currentPage: 1 });
     const [videoSaves, setVideoSaves] = useState<number>(0);
     const [isSaved, setIsSaved] = useState<boolean>(false);
     const [isEmbedPopupVisible, setIsEmbedPopupVisible] = useState<boolean>(false);
@@ -76,9 +78,6 @@ export default function PopupForVideoPlayer({
     const [currentTab, setCurrentTab] = useState(0);
     const [isCommentsLoading, setIsCommentsLoading] = useState<boolean>(false);
     const [isReportElipsisVisible, setIsReportElipsisVisible] = useState<boolean>(false);
-    const [totalComments, setTotalComments] = useState<any>(null);
-    const [commentPageNumber, setCommentPageNumber] = useState<number>(1);
-    const [pageSize, setPageSize] = useState<number>(2);
     const [currentCommentIndex, setCurrentCommentIndex] = useState(-1);
     const [isReplyToCommentClicked, setIsReplyToCommentClicked] = useState<boolean>(false);
     const [isTooltipVisible, setIsTooltipVisible] = useState<boolean>(false);
@@ -210,7 +209,7 @@ export default function PopupForVideoPlayer({
         window.open(`https://twitter.com/intent/tweet?url=${url}&text=${info?.description}`, '_blank');
     };
 
-    const onEmojiClick = (event:any, emojiObject:any) => {
+    const onEmojiClick = (emojiObject: any) => {
         setComment((prevText) => prevText + emojiObject.emoji); // Append emoji to input text
     };
 
@@ -276,12 +275,12 @@ export default function PopupForVideoPlayer({
         dispatch(openLoginPopup());
     };
 
-    const paginateComments = async () => {
+    const paginateComments = async (fromStart = false) => {
         setIsCommentsLoading(true);
         try {
             const response = await fetch(
                 `${API_KEY}/media-content/videos/${info?.mediaId
-                }/comments?page=${commentPageNumber}&pageSize=${pageSize}`,
+                }/comments?page=${fromStart ? 1 : videoComments.currentPage}&pageSize=${videoComments.pageSize}`,
                 {
                     method: 'GET',
                     headers: {
@@ -293,18 +292,19 @@ export default function PopupForVideoPlayer({
             const { data } = await response.json();
             // console.log('🚀 ~ paginateComments ~ data', data);
             setIsCommentsLoading(false);
-            setTotalComments(data?.totalItems);
 
-            // check first next page is available or not
-            if (data?.hasNextPage && commentPageNumber < data?.totalPages) {
-                setCommentPageNumber(prev => prev + 1);
-            }
+            const videoCommentsObj = { ...videoComments };
 
             // Append comments
             if (data?.data && Array.isArray(data?.data)) {
-                setVideoComments((prevComments: string | any[]) =>
-                    prevComments.concat(data?.data)
-                );
+                 // check first next page is available or not
+
+                if (data?.hasNextPage) {
+                    videoCommentsObj.currentPage = fromStart ? 2 : videoCommentsObj.currentPage + 1;
+                }
+                videoCommentsObj.items = fromStart ? data?.data : [...videoCommentsObj.items, ...data?.data];
+                videoCommentsObj.totalItems = data?.totalItems;
+                setVideoComments(videoCommentsObj);
             }
 
         } catch (error) {
@@ -589,12 +589,14 @@ export default function PopupForVideoPlayer({
             showToastSuccess('Comment posted');
             // fetchMediaById(info?.mediaId);
             setAddCommentLoading(false);
-            setVideoComments((prevComments: []) => [data?.data, ...prevComments]);
-            setTotalComments((prev: any) => prev === null ? 1 : prev + 1);
-
+            // setVideoComments((prevComments: []) => [data?.data, ...prevComments]);
+            paginateComments(true);
+            setPickerVisible(false);
         } catch (error) {
             console.log('🚀 ~ addCommentHandler ~ error:', error);
             setAddCommentLoading(false);
+            setPickerVisible(false);
+
         }
     };
 
@@ -630,9 +632,7 @@ export default function PopupForVideoPlayer({
         setMentionIndex(0);
         setFilteredUsers([]);
         setAddCommentLoading(false);
-        setCommentPageNumber(1);
-        setTotalComments(null);
-        setVideoComments([]);
+        setVideoComments({ items: [], totalItems: null, pageSize: 5, currentPage: 1 });
         setVideoLikes(0);
         setVideoSaves(0);
         setVideoShares(0);
@@ -643,6 +643,7 @@ export default function PopupForVideoPlayer({
         setIsCommentsLoading(false);
         setIsReportElipsisVisible(false);
         setIsTooltipVisible(false);
+        setPickerVisible(false);
         onclose();
     };
 
@@ -816,7 +817,7 @@ export default function PopupForVideoPlayer({
                                                     />
                                                 </div>
                                                 <p className="font-medium text-sm text-white">
-                                                    <CountUp start={0} delay={0.1} duration={0.2} end={videoComments?.length} />
+                                                    <CountUp start={0} delay={0.1} duration={0.2} end={videoComments?.items?.length} />
                                                 </p>
                                             </div>
                                             <div className="flex flex-row justify-center items-center gap-1.5 cursor-pointer">
@@ -914,7 +915,7 @@ export default function PopupForVideoPlayer({
                                             className="flex justify-center items-center py-2 px-6 flex-1 cursor-pointer"
                                         >
                                             <p className="text-white text-sm font-bold">
-                                                Comments (<CountUp start={0} delay={0.1} duration={0.2} end={videoComments?.length} />)
+                                                Comments (<CountUp start={0} delay={0.1} duration={0.2} end={videoComments?.items?.length} />)
                                             </p>
                                         </div>
                                         {/* <div
@@ -933,9 +934,9 @@ export default function PopupForVideoPlayer({
 
                                     {/* All comments section */}
                                     <InfiniteScroll
-                                        dataLength={videoComments.length}
+                                        dataLength={videoComments?.items?.length}
                                         next={paginateComments}
-                                        hasMore={videoComments.length < totalComments || totalComments === null}
+                                        hasMore={videoComments.items.length < videoComments?.totalItems || videoComments?.totalItems === null}
                                         loader={<div
                                             style={{
                                                 display: 'flex',
@@ -953,12 +954,12 @@ export default function PopupForVideoPlayer({
                                         endMessage={
                                             <div className="flex flex-row justify-center items-center mt-3">
                                                 <p className="text-white font-normal text-sm">
-                                                    {totalComments === 0 ? 'Be the first to comment' : 'No more comments'}
+                                                    {videoComments?.totalItems === 0 ? 'Be the first to comment' : 'No more comments'}
                                                 </p>
                                             </div>
                                         }
                                     >
-                                        {videoComments?.map((comment: any, comment_index: number) => (
+                                        {videoComments?.items.map((comment: any, comment_index: number) => (
                                             <div key={comment?.id}>
                                                 <div
                                                     onMouseEnter={() => {
@@ -997,7 +998,7 @@ export default function PopupForVideoPlayer({
                                                             </p>
                                                         </div>
                                                     )}
-                                                    <div className="flex flex-row items-start justify-between gap-12 w-full">
+                                                    <div className="flex flex-row items-start justify-between gap-12 w-full" >
                                                         <div className="text-left w-full">
                                                             <p
                                                                 onClick={() =>
@@ -1011,11 +1012,11 @@ export default function PopupForVideoPlayer({
                                                             </p>
                                                             <div className="flex flex-row justify-between items-center">
                                                                 <div>
-                                                                    <p className="font-normal text-[#807a7a] text-base cursor-pointer">
+                                                                    <p className="font-normal text-[#807a7a] text-base cursor-pointer w-[350px] " style={{overflowWrap:"break-word"}}>
                                                                         {comment?.comment}
                                                                     </p>
-                                                                    <div className="flex flex-row items-center gap-4 mt-1">
-                                                                        <p className="text-[#FFFFFF80] font-normal text-sm">
+                                                                    <div className="flex flex-row items-center gap-2 mt-1">
+                                                                        <p className="text-[#FFFFFF80] font-normal whitespace-nowrap	 text-sm">
                                                                             {moment(
                                                                                 comment?.createdTime
                                                                             ).format('D-MM')}
@@ -1030,7 +1031,84 @@ export default function PopupForVideoPlayer({
                                                                         >
                                                                             Reply
                                                                         </p>
+                                                                        {comment_index === currentCommentIndex &&
+                                                                            isReplyToCommentClicked && (
+                                                                                <div className="cursor-pointer flex w-full flex-row items-center gap-2.5 mt-2">
+                                                                                    <div className="bg-[#FFFFFF1F] flex flex-row items-center justify-between border-[0.063rem] border-transparent focus-within:border-[#16182333] rounded-lg cursor-text pr-2 pl-4 w-full mr-1">
+                                                                                        <input
+                                                                                            value={commentReply}
+                                                                                            onChange={(e) =>
+                                                                                                setCommentReply(
+                                                                                                    e.target.value
+                                                                                                )
+                                                                                            }
+                                                                                            maxLength={150}
+                                                                                            placeholder="Add comment..."
+                                                                                            type="text"
+                                                                                            className="bg-transparent placeholder-[#4d4e58 text-[#d5cbcb] w-full"
+                                                                                        />
+                                                                                        <div className="flex flex-row items-center">
+                                                                                            <div
+                                                                                                onClick={
+                                                                                                    atRateHandler
+                                                                                                }
+                                                                                                className="rounded-lg cursor-pointer hover:bg-[#1618230f] my-[0.438rem] mx-[0.188rem] mr-1"
+                                                                                            >
+                                                                                                <img
+                                                                                                    className={`w-5 h-5 object-contain rounded-full`}
+                                                                                                    src={
+                                                                                                        atTheRateOf
+                                                                                                    }
+                                                                                                    alt="at-the-rate-icon"
+                                                                                                />
+                                                                                            </div>
+                                                                                            <div className="rounded-lg cursor-pointer hover:bg-[#1618230f] my-[0.438rem] mx-[0.188rem]">
+                                                                                                <img
+                                                                                                    className={`w-5 h-5 object-contain rounded-full`}
+                                                                                                    src={
+                                                                                                        commentEmoji
+                                                                                                    }
+                                                                                                    alt="comment-icon"
+                                                                                                />
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div
+                                                                                        onClick={() =>
+                                                                                            replyToCommentHandler(
+                                                                                                comment?.id
+                                                                                            )
+                                                                                        }
+                                                                                        className="mr-1"
+                                                                                    >
+                                                                                        <p
+                                                                                            className={`${commentReply?.length >
+                                                                                                0
+                                                                                                ? 'text-[#fe2c55]'
+                                                                                                : 'text-[#FFFFFF57]'
+                                                                                                } font-semibold text-base`}
+                                                                                        >
+                                                                                            Post
+                                                                                        </p>
+                                                                                    </div>
+                                                                                    <div
+                                                                                        onClick={() =>
+                                                                                            setIsReplyToCommentClicked(
+                                                                                                false
+                                                                                            )
+                                                                                        }
+                                                                                        className="mr-1"
+                                                                                    >
+                                                                                        <img
+                                                                                            className={`w-5 h-5 object-contain rounded-full`}
+                                                                                            src={crossLightIcon}
+                                                                                            alt="cross-icon"
+                                                                                        />
+                                                                                    </div>
+                                                                                </div>
+                                                                            )}
                                                                     </div>
+                                                                    {/* <EmojiPicker className="mt-2" open={isPickerVisible} theme={Theme.DARK} height={300} width="auto" onEmojiClick={onEmojiClick} /> */}
                                                                 </div>
 
                                                                 <div
@@ -1053,82 +1131,6 @@ export default function PopupForVideoPlayer({
                                                                     </p>
                                                                 </div>
                                                             </div>
-                                                            {comment_index === currentCommentIndex &&
-                                                                isReplyToCommentClicked && (
-                                                                    <div className="cursor-pointer flex w-full flex-row items-center gap-2.5 mt-2">
-                                                                        <div className="bg-[#FFFFFF1F] flex flex-row items-center justify-between border-[0.063rem] border-transparent focus-within:border-[#16182333] rounded-lg cursor-text pr-2 pl-4 w-full mr-1">
-                                                                            <input
-                                                                                value={commentReply}
-                                                                                onChange={(e) =>
-                                                                                    setCommentReply(
-                                                                                        e.target.value
-                                                                                    )
-                                                                                }
-                                                                                maxLength={150}
-                                                                                placeholder="Add comment..."
-                                                                                type="text"
-                                                                                className="bg-transparent placeholder-[#4d4e58 text-[#d5cbcb] w-full"
-                                                                            />
-                                                                            <div className="flex flex-row items-center">
-                                                                                <div
-                                                                                    onClick={
-                                                                                        atRateHandler
-                                                                                    }
-                                                                                    className="rounded-lg cursor-pointer hover:bg-[#1618230f] p-[0.313rem] my-[0.438rem] mx-[0.188rem] mr-1"
-                                                                                >
-                                                                                    <img
-                                                                                        className={`w-5 h-5 object-contain rounded-full`}
-                                                                                        src={
-                                                                                            atTheRateOf
-                                                                                        }
-                                                                                        alt="at-the-rate-icon"
-                                                                                    />
-                                                                                </div>
-                                                                                <div className="rounded-lg cursor-pointer hover:bg-[#1618230f] p-[0.313rem] my-[0.438rem] mx-[0.188rem]">
-                                                                                    <img
-                                                                                        className={`w-5 h-5 object-contain rounded-full`}
-                                                                                        src={
-                                                                                            commentEmoji
-                                                                                        }
-                                                                                        alt="comment-icon"
-                                                                                    />
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div
-                                                                            onClick={() =>
-                                                                                replyToCommentHandler(
-                                                                                    comment?.id
-                                                                                )
-                                                                            }
-                                                                            className="mr-1"
-                                                                        >
-                                                                            <p
-                                                                                className={`${commentReply?.length >
-                                                                                    0
-                                                                                    ? 'text-[#fe2c55]'
-                                                                                    : 'text-[#FFFFFF57]'
-                                                                                    } font-semibold text-base`}
-                                                                            >
-                                                                                Post
-                                                                            </p>
-                                                                        </div>
-                                                                        <div
-                                                                            onClick={() =>
-                                                                                setIsReplyToCommentClicked(
-                                                                                    false
-                                                                                )
-                                                                            }
-                                                                            className="mr-1"
-                                                                        >
-                                                                            <img
-                                                                                className={`w-5 h-5 object-contain rounded-full`}
-                                                                                src={crossLightIcon}
-                                                                                alt="cross-icon"
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                )}
                                                         </div>
                                                     </div>
                                                     {isReportElipsisVisible &&
@@ -1137,7 +1139,7 @@ export default function PopupForVideoPlayer({
                                                             <img
                                                                 className="w-5 h-5 object-contain cursor-pointer"
                                                                 src={
-                                                                    isDarkTheme
+                                                                    isDarkTheme || true
                                                                         ? horizontalElipsisMenuWhiteIcon
                                                                         : horizontalElipsisMenuIcon
                                                                 }
@@ -1342,7 +1344,7 @@ export default function PopupForVideoPlayer({
                                                                             currentCommentIndex &&
                                                                             comment_reply_index ===
                                                                             currentCommentReplyIndex && (
-                                                                                <div className="relative inline-block">
+                                                                                <div className="relative inline-block text-white">
                                                                                     <img
                                                                                         className="w-5 h-5 object-contain cursor-pointer"
                                                                                         src={
@@ -1522,74 +1524,77 @@ export default function PopupForVideoPlayer({
                                         </div>
                                     )} */}
                                     {/* Add comment section */}
-                                    <div className="py-3 border-t border-t-[#252525] cursor-pointer gap-2.5 w-[37%] px-6 flex flex-row items-center bottom-0 fixed right-0 bg-[#121212]">
-                                        <div
-                                            className={`bg-[#FFFFFF1F] flex flex-row items-center justify-between border-[0.063rem] border-transparent ${isUserLoggedIn()
-                                                ? 'focus-within:border-[#16182333]'
-                                                : ''
-                                                } rounded-lg cursor-text pr-2 pl-4 w-full`}
-                                        >
-                                            <input
-                                                ref={inputRef}
-                                                onClick={loginToCommentHandler}
-                                                value={comment}
-                                                onChange={handleInputChange}
-                                                onKeyDown={handleKeyDown}
-                                                maxLength={150}
-                                                placeholder={`${isUserLoggedIn()
-                                                    ? 'Add comment...'
-                                                    : 'Log in to comment'
-                                                    }`}
-                                                type="text"
-                                                readOnly={!isUserLoggedIn()}
-                                                className={`bg-transparent w-full text-[#FFFFFFE6] ${!isUserLoggedIn()
-                                                    ? 'my-[0.438rem] p-[0.313rem] cursor-pointer placeholder-[#ff3b5c] font-medium'
-                                                    : 'placeholder-[#FFFFFFBC]'
-                                                    }`}
-                                            />
-                                            {/* <EmojiInputPicker isPickerVisible={isPickerVisible} onEmojiSelect={onEmojiClick} inputRef={inputRef} /> */}
+                                    <div className="py-3 border-t border-t-[#252525] cursor-pointer gap-2.5 w-[37%] px-6   bottom-0 fixed right-0 bg-[#121212]">
+                                        <div className="flex flex-row items-center">
+                                            <div
+                                                className={`bg-[#FFFFFF1F] flex flex-row items-center justify-between border-[0.063rem] border-transparent ${isUserLoggedIn()
+                                                    ? 'focus-within:border-[#16182333]'
+                                                    : ''
+                                                    } rounded-lg cursor-text pr-2 pl-4 w-full`}
+                                            >
+                                                <input
+                                                    ref={inputRef}
+                                                    onClick={loginToCommentHandler}
+                                                    value={comment}
+                                                    onChange={handleInputChange}
+                                                    onKeyDown={handleKeyDown}
+                                                    maxLength={150}
+                                                    placeholder={`${isUserLoggedIn()
+                                                        ? 'Add comment...'
+                                                        : 'Log in to comment'
+                                                        }`}
+                                                    type="text"
+                                                    readOnly={!isUserLoggedIn()}
+                                                    className={`bg-transparent w-full text-[#FFFFFFE6] ${!isUserLoggedIn()
+                                                        ? 'my-[0.438rem] p-[0.313rem] cursor-pointer placeholder-[#ff3b5c] font-medium'
+                                                        : 'placeholder-[#FFFFFFBC]'
+                                                        }`}
+                                                />
+                                                {/* <EmojiInputPicker isPickerVisible={isPickerVisible} onEmojiSelect={onEmojiClick} inputRef={inputRef} /> */}
+                                                {isUserLoggedIn() && (
+                                                    <div className="flex flex-row items-center">
+                                                        <div
+                                                            onClick={atRateHandler}
+                                                            className="rounded-lg cursor-pointer hover:bg-[#1618230f] p-[0.313rem] my-[0.438rem] mx-[0.188rem] mr-1"
+                                                        >
+                                                            <img
+                                                                className={`w-5 h-5 object-contain rounded-full`}
+                                                                src={atTheRateOf}
+                                                                alt="at-the-rate-icon"
+                                                            />
+                                                        </div>
+                                                        <div onClick={() => setPickerVisible(prev => !prev)} className="rounded-lg cursor-pointer hover:bg-[#1618230f] p-[0.313rem] my-[0.438rem] mx-[0.188rem]">
+                                                            <img
+                                                                className={`w-5 h-5 object-contain rounded-full`}
+                                                                src={commentEmoji}
+                                                                alt="comment-icon"
+                                                            />
+                                                        </div>
+
+
+                                                    </div>
+                                                )}
+                                            </div>
+
                                             {isUserLoggedIn() && (
-                                                <div className="flex flex-row items-center">
-                                                    <div
-                                                        onClick={atRateHandler}
-                                                        className="rounded-lg cursor-pointer hover:bg-[#1618230f] p-[0.313rem] my-[0.438rem] mx-[0.188rem] mr-1"
+                                                <div onClick={addCommentHandler} className="mr-1">
+                                                    <p
+                                                        className={`${comment?.length > 0
+                                                            ? 'text-[#fe2c55]'
+                                                            : 'text-[#FFFFFF57]'
+                                                            } font-semibold text-base ml-2`}
                                                     >
-                                                        <img
-                                                            className={`w-5 h-5 object-contain rounded-full`}
-                                                            src={atTheRateOf}
-                                                            alt="at-the-rate-icon"
-                                                        />
-                                                    </div>
-                                                    <div onClick={() => setPickerVisible(true)} className="rounded-lg cursor-pointer hover:bg-[#1618230f] p-[0.313rem] my-[0.438rem] mx-[0.188rem]">
-                                                        <img
-                                                            className={`w-5 h-5 object-contain rounded-full`}
-                                                            src={commentEmoji}
-                                                            alt="comment-icon"
-                                                        />
-                                                    </div>
-
-
+                                                        {addCommentLoading ? <CircularProgress
+                                                            style={{
+                                                                width: 18,
+                                                                height: 18,
+                                                                color: 'red',
+                                                            }} /> : 'Post'}
+                                                    </p>
                                                 </div>
                                             )}
                                         </div>
-
-                                        {isUserLoggedIn() && (
-                                            <div onClick={addCommentHandler} className="mr-1">
-                                                <p
-                                                    className={`${comment?.length > 0
-                                                        ? 'text-[#fe2c55]'
-                                                        : 'text-[#FFFFFF57]'
-                                                        } font-semibold text-base`}
-                                                >
-                                                    {addCommentLoading ? <CircularProgress
-                                                        style={{
-                                                            width: 18,
-                                                            height: 18,
-                                                            color: 'red',
-                                                        }} /> : 'Post'}
-                                                </p>
-                                            </div>
-                                        )}
+                                        <EmojiPicker className="mt-2" open={isPickerVisible} theme={Theme.DARK} height={300} width="auto" onEmojiClick={onEmojiClick} />
 
                                         {isMentioning && (
                                             <div
