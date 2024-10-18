@@ -26,7 +26,7 @@ export const PublicProfile = (props: any) => {
     const [followModal, setFollowModal] = useState<null | string>(null);
     const [likesModal, setLikesModal] = useState(false);
     const [profileData, setProfileData] = useState<any>(null);
-    const [videosData, setVideosData] = useState<any>(null);
+    const [videosData, setVideosData] = useState<any>({ items: [], page: 1, pageSize: 15, totalItems: null });
     const [loading, setLoading] = useState(false);
     const [videoModalInfo, setVideoModalInfo] = useState({});
     const [reportPopup, setReportPopup] = useState(false);
@@ -37,41 +37,63 @@ export const PublicProfile = (props: any) => {
     const [videoModal, setVideoModal] = useState(false);
     const [copyPopup, setcopyPopup] = useState(false);
 
+
     const MemoizedStoriesOnPublicProfile = memo(publicProfileStories);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const profileResponse = await fetch(`${API_KEY}/profile/${params.id}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-type': 'application/json',
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                const profileData = await profileResponse.json();
-                setProfileData(profileData.data);
-                setLoading(false);
 
-                const { _id } = profileData?.data;
 
-                const videosResponse = await fetch(`${API_KEY}/profile/${_id}/videos`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-type': 'application/json',
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-                const videosData = await videosResponse.json();
-                setVideosData(videosData?.data?.data);
-            } catch (error) {
-                console.log(error);
-                setLoading(false);
+    const fetchProfileData = async () => {
+        try {
+            const profileResponse = await fetch(`${API_KEY}/profile/${params.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const profileData = await profileResponse.json();
+            setProfileData(profileData.data);
+            setLoading(false);
+
+            const { _id } = profileData?.data;
+
+        } catch (error) {
+            console.log(error);
+            setLoading(false);
+        }
+    };
+
+    const fetchProfileVideos = async () => {
+        try {
+            const videosResponsePromise = await fetch(`${API_KEY}/profile/${profileData._id}/videos?page=${videosData.page}&pageSize=${videosData.pageSize}`, {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const videosResponse = await videosResponsePromise.json();
+            if (Array.isArray(videosResponse?.data?.data)) {
+                const videosDataObj = { ...videosData };
+                videosDataObj.page = videosDataObj.page + 1;
+                videosDataObj.items = [...videosDataObj.items, ...videosResponse?.data?.data];
+                videosDataObj.totalItems = videosResponse?.data?.total;
+                console.log('videosDataObj >>>>>>> ', videosDataObj);
+                setVideosData(videosDataObj);
             }
-        };
 
-        fetchData();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        fetchProfileData();
     }, [params?.id]);
+
+    useEffect(() => {
+        if (profileData) fetchProfileVideos();
+    }, [profileData]);
 
     const tabs = [
         {
@@ -173,10 +195,10 @@ export const PublicProfile = (props: any) => {
                             </div>
                         ))}
                     </div>
-                    <div className={styles.contentContainer} style={{ minHeight: '300px' }}>
+                    <div className={`${styles.contentContainer} overflow-y-auto`}  style={{ minHeight: '300px' }}>
                         <p className={styles.title}>{activeTab}</p>
                         {activeTab === 'Videos' ? (
-                            <VideoesMaping videos={videosData} openVideoModal={onVideoModal} />
+                            <VideoesMaping videos={videosData} fetchMore={fetchProfileVideos} openVideoModal={onVideoModal} />
                         ) : null}
                         {activeTab !== 'Videos' ? <PrivatePosts /> : null}
                     </div>

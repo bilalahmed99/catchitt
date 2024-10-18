@@ -241,3 +241,11 @@ video.loading::after {
   flex-wrap: wrap;
   padding: 10px;
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  
+  scrollbar-width: none; 
+}
