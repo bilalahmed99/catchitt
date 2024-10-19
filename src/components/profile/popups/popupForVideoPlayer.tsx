@@ -663,7 +663,6 @@ export default function PopupForVideoPlayer({
         }
     });
 
-
     useLayoutEffect(() => {
         if (videoModal) {
             paginateComments();

@@ -26,7 +26,7 @@ export const PublicProfile = (props: any) => {
     const [followModal, setFollowModal] = useState<null | string>(null);
     const [likesModal, setLikesModal] = useState(false);
     const [profileData, setProfileData] = useState<any>(null);
-    const [videosData, setVideosData] = useState<any>({ items: [], page: 1, pageSize: 5, taotalItems: null });
+    const [videosData, setVideosData] = useState<any>({ items: [], page: 1, pageSize: 15, totalItems: null });
     const [loading, setLoading] = useState(false);
     const [videoModalInfo, setVideoModalInfo] = useState({});
     const [reportPopup, setReportPopup] = useState(false);
@@ -52,8 +52,6 @@ export const PublicProfile = (props: any) => {
             setProfileData(profileData.data);
             setLoading(false);
 
-            const { _id } = profileData?.data;
-
         } catch (error) {
             console.log(error);
             setLoading(false);
@@ -71,12 +69,7 @@ export const PublicProfile = (props: any) => {
             });
             const videosResponse = await videosResponsePromise.json();
             if (Array.isArray(videosResponse?.data?.data)) {
-                const videosDataObj = { ...videosData };
-                videosDataObj.page = videosDataObj.page + 1;
-                videosDataObj.items = [...videosDataObj.items, ...videosResponse?.data?.data];
-                videosDataObj.totalItems = videosResponse?.data?.total;
-                console.log('videosDataObj >>>>>>> ', videosDataObj);
-                setVideosData(videosDataObj);
+                setVideosData((prev: any) => ({ ...prev, items: [...prev.items, ...videosResponse?.data?.data], page: prev.page + 1, totalItems: videosResponse?.data?.total }));
             }
 
         } catch (error) {

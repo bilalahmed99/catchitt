@@ -39,8 +39,8 @@ export default function VideoesMaping({ videos, fetchMore, openVideoModal }: Typ
             // scrollThreshold={0.6}
             scrollableTarget="scrollableDiv"
             endMessage={
-                <div className={`flex justify-center items-center mt-8 ${videos.totalItems === 0 ? ' h-[70vh]' : ''} `}>
-                    <p className="text-white font-normal text-sm">
+                <div className={`flex justify-center items-center mt-8 `}>
+                    <p className="text-dark font-normal text-sm">
                         {videos?.totalItems === 0 ? 'No videos available in this category.' : 'No more videos'}
                     </p>
                 </div>
