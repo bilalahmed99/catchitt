@@ -1,5 +1,5 @@
-import { IconButton } from '@mui/material';
-import { memo, useEffect, useRef, useState } from 'react';
+import { CircularProgress, IconButton } from '@mui/material';
+import { memo, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import defaultProfileIcon from '../../assets/defaultProfileIcon.png';
 import Layout from '../../shared/layout';
@@ -8,15 +8,10 @@ import useDebounce from '../reusables/useDebounce';
 import { ViewSwitchers } from '../view-switchers/view-switchers';
 import styles from './suggested-accounts-page.module.scss';
 import { LeftArrow } from './svg-components/LeftArrow';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 export interface SuggestedAccountsPageProps {
     className?: string;
-}
-
-interface Account {
-    _id: string;
-    avatar: string;
-    name: string;
 }
 
 export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps) => {
@@ -26,10 +21,8 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
     const { selectedTab, setTab } = useAuthStore();
 
     const [errorMessage, setErrorMessage] = useState('');
-    const [accountsData, setAccountsData] = useState<Account[]>([]);
-    const page = useRef(1);
-    const done = useRef(false);
-    const tab = useRef(1);
+    
+    const [accountsData, setAccountsData] = useState<any>({ items: [], page: 1, totalItems: null });
     const API_KEY = process.env.VITE_API_URL;
     const suggestedEndPoint = '/profile/suggested-users';
     const publicSuggestedEndPoint = '/profile/public/suggested-users';
@@ -40,20 +33,10 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
         navigate('/home'); // Navigate back to the previous page
     };
 
-    const removeDuplicates = (arr: any[]) => {
-        let all = [...accountsData, ...arr];
-        let onlyids = all.map((e) => e._id);
-        let unique = Array.from(new Set(onlyids));
-        let sanitized = unique.map((e) => all.find((c) => e == c._id));
-    };
-
     const handleFetchSuggestedAccounts = async () => {
-        if (done.current) {
-            return;
-        }
         const link = isLoggedIn
-            ? `${API_KEY}${suggestedEndPoint}?page=${page.current}`
-            : `${API_KEY}${publicSuggestedEndPoint}?page=${page.current}`;
+            ? `${API_KEY}${suggestedEndPoint}?page=${accountsData.page}`
+            : `${API_KEY}${publicSuggestedEndPoint}?page=${accountsData.page}`;
         try {
             const response = await fetch(link, {
                 method: 'GET',
@@ -62,19 +45,12 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
 
             if (response.ok) {
                 const responseData = await response.json();
-                // if (responseData.data.data.length == 0) {
-                // 	done.current = true
-                // 	return
-                // }
-                page.current++;
-
-                removeDuplicates([...responseData.data.data]);
-                setAccountsData((prev) => {
-                    let all = [...prev, ...responseData.data.data];
+                setAccountsData((prev:any) => {
+                    let all = [...prev.items, ...responseData.data.data];
                     let onlyids = all.map((e) => e._id);
                     let unique = Array.from(new Set(onlyids));
                     let sanitized = unique.map((e) => all.find((c) => e == c._id));
-                    return [...sanitized];
+                    return { items: sanitized, totalItems: responseData.data.total, page: prev.page + 1 };
                 });
             } else {
                 const errorResponseData = await response.json();
@@ -86,34 +62,10 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
             console.log(errorMessage);
         }
     };
-    const dHandleFetchSuggestedAccounts = useDebounce(handleFetchSuggestedAccounts);
 
-    if (accountsData.length <= 10) {
-        dHandleFetchSuggestedAccounts([]);
-    }
-
-    const handleBottomPage = (e: any) => {
-        const windowHeight = window.innerHeight;
-        const documentHeight = document.querySelector('#root > div')?.scrollHeight as number;
-        const scrollPosition = e.target.scrollTop;
-        const threshold = 10;
-
-        if (windowHeight + scrollPosition >= documentHeight - threshold) {
-            dHandleFetchSuggestedAccounts([]);
-        }
-    };
 
     useEffect(() => {
-        document.body.children[0].children[0].addEventListener('scroll', handleBottomPage);
-        return () => {
-            document.body.children[0].children[0].removeEventListener('scroll', handleBottomPage);
-        };
-    }, []);
-
-    useEffect(() => {
-        page.current = 1;
-        done.current = false;
-        dHandleFetchSuggestedAccounts([]);
+        handleFetchSuggestedAccounts();
     }, []);
 
     // if (!isLoggedIn) {
@@ -121,11 +73,11 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
     // }
 
     const SuggestedAccount = memo(
-        ({ account }: { account: Account }) => {
+        ({ account }: { account: any }) => {
             const [isFollowed, setIsFollowed] = useState(false);
             const [followLoading, setFollowLoading] = useState(false);
 
-            const handleFollowClick = async (account: Account) => {
+            const handleFollowClick = async (account:any) => {
                 if (!isLoggedIn) {
                     navigator('/auth');
                 }
@@ -152,7 +104,7 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
 
             const handleFollowBtnClicked = async (
                 event: React.MouseEvent<HTMLElement>,
-                account: Account
+                account: any
             ) => {
                 await handleFollowClick(account);
             };
@@ -178,7 +130,7 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
                             />
                         )}
                         <p>
-                        <h4 className={styles.userNameText}>{account.name}</h4>
+                            <h4 className={styles.userNameText}>{account.name}</h4>
                         </p>
                     </div>
                     <div className={styles.followBtnDiv}>
@@ -213,10 +165,38 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
                                 }}
                             />
                         </div> */}
-                        <div className={styles.gridContainer}>
-                            {accountsData.map((account, i) => (
-                                <SuggestedAccount key={i} account={account} />
-                            ))}
+                        <div className="overflow-y-auto no-scrollbar" id="scrollableDiv">
+                            <InfiniteScroll
+                                dataLength={accountsData.items?.length}
+                                next={handleFetchSuggestedAccounts}
+                                hasMore={accountsData.items.length < accountsData?.totalItems || accountsData?.totalItems === null}
+                                loader={<div
+                                    style={{
+                                        gridColumn: "span 3",
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        margin: '1rem',
+                                        width: 'inherit',
+                                    }}
+                                >
+                                    <CircularProgress />
+                                </div>}
+                                className={styles.gridContainer} 
+                                // scrollThreshold={0.6}
+                                scrollableTarget="scrollableDiv"
+                                endMessage={
+                                    <div className={`flex justify-center items-center mt-8 ${accountsData.totalItems === 0 ? ' h-[70vh]' : ''} `}>
+                                        <p className="text-white font-normal text-sm">
+                                            {accountsData?.totalItems === 0 ? 'No videos available in this category.' : 'No more videos'}
+                                        </p>
+                                    </div>
+                                }
+                            >
+                                {accountsData.items.map((account:any, i:number) => (
+                                    <SuggestedAccount key={i} account={account} />
+                                ))}
+                            </InfiniteScroll>
                         </div>
                     </div>
                     // <></>
@@ -228,19 +208,47 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
                             gap: 0,
                         }}
                     >
-                        <div className={styles.pageHeader} style={{width:'700px'}}>
+                        <div className={styles.pageHeader} style={{ width: '700px' }}>
                             <IconButton
-                                sx={{ margin: '0px', padding: '0px' , display:'flex' , justifyContent:'flex-start' , gap:'1rem' }}
+                                sx={{ margin: '0px', padding: '0px', display: 'flex', justifyContent: 'flex-start', gap: '1rem' }}
                                 onClick={handleGoBack}
                             >
                                 <LeftArrow />
                                 <h4>Suggested accounts</h4>
                             </IconButton>
                         </div>
-                        <div className={styles.gridContainer}>
-                            {accountsData.map((account, i) => (
-                                <SuggestedAccount key={i} account={account} />
-                            ))}
+                        <div className="overflow-y-auto no-scrollbar"  id="scrollableDiv">
+                            <InfiniteScroll
+                                dataLength={accountsData.items?.length}
+                                next={handleFetchSuggestedAccounts}
+                                hasMore={accountsData.items.length < accountsData?.totalItems || accountsData?.totalItems === null}
+                                loader={<div
+                                    style={{
+                                        gridColumn: "span 3",
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        margin: '1rem',
+                                        width: 'inherit',
+                                    }}
+                                >
+                                    <CircularProgress />
+                                </div>}
+                                className={styles.gridContainer}
+                                // scrollThreshold={0.6}
+                                scrollableTarget="scrollableDiv"
+                                endMessage={
+                                    <div className={`flex justify-center items-center mt-8 ${accountsData.totalItems === 0 ? ' h-[70vh]' : ''} `}>
+                                        <p className="text-white font-normal text-sm">
+                                            {accountsData?.totalItems === 0 ? 'No videos available in this category.' : 'No more videos'}
+                                        </p>
+                                    </div>
+                                }
+                            >
+                                {accountsData.items.map((account:any, i:number) => (
+                                    <SuggestedAccount key={i} account={account} />
+                                ))}
+                            </InfiniteScroll>
                         </div>
                     </div>
                 )}
