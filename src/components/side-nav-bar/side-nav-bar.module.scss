@@ -22,10 +22,10 @@
 }
 
 .cardDivOpened {
-  height: 500px; //increase when more settings tabs added
+  height: inherit;
   display: flex;
   flex-direction: column;
-  width: 325px;
+  // width: 325px;
   color: #000000;
   background-color: #ffffff;
   border-radius: 16px;

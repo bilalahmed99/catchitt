@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './payment-method.module.scss';
 
-const PaymentMethod = ({ method, isSelected, onSelect }:any) => {
+const PaymentMethod = ({ darkTheme, method, isSelected, onSelect }:any) => {
   return (
     <div
       className={styles.paymentMethod}
@@ -12,7 +12,7 @@ const PaymentMethod = ({ method, isSelected, onSelect }:any) => {
       <div className={styles.paymentMethodLogo}>
         <img src={method.icon} alt="" style={{ width: '20px', height: '20px' }} />
       </div>
-      <div className={styles.paymentMethodName}>{method.name}</div>
+      <div className={`${styles.paymentMethodName} ${darkTheme&&'text-white'}`}>{method.name}</div>
     </div>
   );
 };

@@ -8,6 +8,7 @@ import { SuggestedActivity } from '../../suggested-activity/suggested-activity';
 import { TopBar } from '../../top-bar/top-bar';
 import diamondIcon from '../svg-components/diamondIcon.svg';
 import styles from './gift-revenue-page.module.scss';
+import Layout from '../../../shared/layout';
 
 export interface GiftRevenuePageProps {
     className?: string;
@@ -74,43 +75,41 @@ const GiftRevenuePage = ({ className }: GiftRevenuePageProps) => {
         handleFetchDiamondsData();
     }, []);
 
+    const [darkTheme, setdarkTheme] = useState('');
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+        if (themeColor == 'dark') {
+            setdarkTheme(styles.darkTheme);
+        }
+    });
+
     return (
         <>
-            <div className={styles.root}>
-                <div className={styles.topBarDiv}>
-                    <TopBar />
-                </div>
-                <div className={styles.container}>
-                    <div className={styles.leftSide}>
-                        <div className={styles.sideNavDiv}>
-                            <SideNavBar
-                                selectedIndex={selectedIndex}
-                                settingsDropdownState={true}
-                            />
-                        </div>
-                        <div className={styles.suggestedActivityDiv}>
-                            <SuggestedActivity showActivity={true} showSuggestedContent={true} />
-                        </div>
-                    </div>
-                    <div className={styles.middleSectionDiv}>
+            <Layout>
+                    <div className={`${styles.middleSectionDiv} ${darkTheme}`}>
                         <div className={styles.settingsWrapper}>
                             <div className={styles.pageHeader}>
                                 <IconButton
-                                    sx={{ margin: '0px', padding: '0px', alignSelf: 'center' }}
+                                     sx={{
+                                        width: 'fit-content !important',
+                                        margin: '0px',
+                                        padding: '0px',
+                                        alignSelf: 'center',
+                                    }}
                                     onClick={handleGoBack}
                                 >
                                     <LeftArrow />
                                 </IconButton>
-                                <h4>Gift revenue</h4>
+                                <h4 className={darkTheme !== ''?'text-white':'text-black'}>Gift revenue</h4>
                             </div>
                             <div className={styles.suggestedContent}>
-                                <div className={styles.settingName}>Total balance</div>
-                                <h4 className={styles.sectionTitle}>
-                                    $ {revenueData.totalGiftRevenue}
+                                <div className={`${styles.settingName} ${darkTheme !== ''?'text-white':'text-black opacity-80'} `}>Total balance</div>
+                                <h4 className={`${styles.sectionTitle} ${darkTheme !== ''?'text-white':'text-black opacity-80'}`}>
+                                    $ {revenueData.totalGiftRevenue??0}
                                 </h4>
                                 <div className={styles.tableHeader}>
                                     <div>
-                                        <h4 className={styles.sectionTitle}>Accumulated Cesium</h4>
+                                        <h4 className={`${styles.sectionTitle} ${darkTheme!==''?'text-white':'text-black opacity-80'}`}>Accumulated Cesium</h4>
                                     </div>
                                     <div
                                         style={{
@@ -120,7 +119,7 @@ const GiftRevenuePage = ({ className }: GiftRevenuePageProps) => {
                                         }}
                                     >
                                         <img src={diamondIcon} alt="" />
-                                        <h4 className={styles.sectionTitle}>
+                                        <h4 className={`${styles.sectionTitle} ${darkTheme!==''?'text-white':'text-black opacity-80'}`}>
                                             {diamondsData.diamonds}
                                         </h4>
                                     </div>
@@ -137,8 +136,8 @@ const GiftRevenuePage = ({ className }: GiftRevenuePageProps) => {
                                 >
                                     <p>Daily whithdrawal limit (Remain/Total)</p>
                                     <p className={styles.limitNum}>
-                                        ${revenueData.userConsumption} / $
-                                        {revenueData.dailyWithdrawalLimit}
+                                        ${revenueData.userConsumption??0} / $
+                                        {revenueData.dailyWithdrawalLimit??0}
                                     </p>
                                 </div>
                             </div>
@@ -186,22 +185,22 @@ const GiftRevenuePage = ({ className }: GiftRevenuePageProps) => {
 
                         <div className={styles.settingsWrapper}>
                             <div className={styles.pageHeader}>
-                                <h4 style={{ fontSize: '18px' }}>Transactions</h4>
+                                <h4 className={darkTheme!==''?'text-white':'text-black opacity-80'} style={{ fontSize: '18px' }}>Transactions</h4>
                             </div>
                             <div className={styles.tableHeader}>
                                 <h4 className={styles.sectionTitle} style={{ textAlign: 'start' }}>
                                     {revenueData.currentMonth}
                                 </h4>
-                                <h4 className={styles.sectionTitle}>in: ${revenueData.income}</h4>
+                                <h4 className={`${styles.sectionTitle} ${darkTheme !== ''? 'text-white':'text-black opacity-70'}`}>in: ${revenueData.income??0}</h4>
                                 <h4
-                                    className={styles.sectionTitle}
+                                    className={`${styles.sectionTitle} ${darkTheme !== ''? 'text-white':'text-black opacity-70'}`}
                                     style={{
                                         textAlign: 'end',
                                         width: '100%',
                                         minWidth: 'max-content',
                                     }}
                                 >
-                                    out: ${revenueData.outcome}
+                                    out: ${revenueData.outcome??0}
                                 </h4>
                             </div>
                             {revenueData.userGiftsTransactions?.map(
@@ -217,14 +216,14 @@ const GiftRevenuePage = ({ className }: GiftRevenuePageProps) => {
                                         <div>
                                             <div key={index} className={styles.tableField}>
                                                 <h4
-                                                    className={styles.sectionTitle}
+                                                    className={`${styles.sectionTitle} ${darkTheme !== ''? 'text-white':'text-black opacity-70'}`}
                                                     style={{ textAlign: 'start' }}
                                                 >{`${formattedDate} ${formattedTime}`}</h4>
-                                                <h4 className={styles.sectionTitle}>
+                                                <h4 className={`${styles.sectionTitle} ${darkTheme !== ''? 'text-white':'text-black opacity-70'}`}>
                                                     {transaction.type}
                                                 </h4>
                                                 <h4
-                                                    className={styles.sectionTitle}
+                                                    className={`${styles.sectionTitle} ${darkTheme !== ''? 'text-white':'text-black opacity-70'}`}
                                                     style={{ textAlign: 'end' }}
                                                 >
                                                     QAR {transaction.amount}
@@ -236,8 +235,7 @@ const GiftRevenuePage = ({ className }: GiftRevenuePageProps) => {
                             )}
                         </div>
                     </div>
-                </div>
-            </div>
+            </Layout>
         </>
     );
 };
@@ -248,7 +246,7 @@ const withdrawBtn = {
     display: 'flex',
     width: '100%',
     height: '48px',
-    padding: '0px 16px',
+    padding: '10px 16px',
     justifyContent: 'center',
     alignItems: 'center',
 
@@ -302,7 +300,7 @@ const smallColoredBtn = {
     border: '1px solid rgb(255, 59, 92)',
     background: 'rgb(255, 59, 92)',
 
-    color: 'var(--foundation-primary-primary-500, #fff)',
+    color: 'var(--foundation-primary-primary-500, rgb(255, 59, 92))',
     fontFamily: 'Poppins',
     fontSize: '16px',
     fontStyle: 'normal',

@@ -1,46 +1,47 @@
 import React from 'react'
 import styles from './payment-success-modal.module.scss';
-import { Box, IconButton, Modal } from '@mui/material';
- import paymentSuccess from '../../../assets/payment-success.png';
- 
+import { Box, IconButton, Modal, ThemeProvider } from '@mui/material';
+import paymentSuccess from '../../../assets/payment-success.png';
 
-const PaymentSuccessModal = ({ openPaymentSuccessModal, onClosePaymentSuccessModal }: any) => {
- 
-  
-  return (
-    <Modal
+
+const PaymentSuccessModal = ({ darkTheme, palette, openPaymentSuccessModal, onClosePaymentSuccessModal }: any) => {
+
+
+    return (
+        <ThemeProvider theme={palette}>
+            <Modal
                 open={openPaymentSuccessModal}
                 onClose={onClosePaymentSuccessModal}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={CustomSuccessPaymentModalStyle}>
-                    
+
 
                     <div
                         className="modal-content-container"
                         style={{
                             width: '100%',
-                            flex:'1',
+                            flex: '1',
                             display: 'flex',
                             flexDirection: 'column',
-                            justifyContent:'space-around',
+                            justifyContent: 'space-around',
                             padding: '10px'
-                            
-                           
+
+
                         }}
                     >
 
                         <div className={styles.paymentInstructions}>
-                            <p className={styles.title}>Payment Successful</p>
-                            <p style={{color:'rgb(255, 59, 92)'}}>Your balance is 902 Cesium</p>
-                             
+                            <p className={`${styles.title} ${darkTheme&&'text-white'}`}>Payment Successful</p>
+                            <p style={{ color: 'rgb(255, 59, 92)' }}>Your balance is 902 Cesium</p>
+
                         </div>
 
 
-                        <div className={styles.paymentMethods} style={{display:'flex', justifyContent:'center'}}>
-                            <img src={paymentSuccess} alt='' style={{ width: '70%'}} />
- 
+                        <div className={styles.paymentMethods} style={{ display: 'flex', justifyContent: 'center' }}>
+                            <img src={paymentSuccess} alt='' style={{ width: '70%' }} />
+
                         </div>
                     </div>
                     {/* footer */}
@@ -51,7 +52,8 @@ const PaymentSuccessModal = ({ openPaymentSuccessModal, onClosePaymentSuccessMod
                     </div>
                 </Box>
             </Modal>
-  )
+        </ThemeProvider>
+    )
 }
 
 export default PaymentSuccessModal

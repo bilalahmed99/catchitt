@@ -7,6 +7,7 @@ import { SideNavBar } from '../../side-nav-bar/side-nav-bar';
 import { SuggestedActivity } from '../../suggested-activity/suggested-activity';
 import { TopBar } from '../../top-bar/top-bar';
 import styles from './transaction-history-page.module.scss';
+import Layout from '../../../shared/layout';
 
 export interface TransactionHistoryPageProps {
     className?: string;
@@ -68,9 +69,8 @@ const TransactionHistoryPage = ({ className }: TransactionHistoryPageProps) => {
             const data = await response.json();
             // Format the currentMonth value
             const currentMonthDate = new Date(data.data.currentMonth);
-            const formattedCurrentMonth = `${
-                currentMonthDate.getMonth() + 1
-            }/${currentMonthDate.getFullYear()}`;
+            const formattedCurrentMonth = `${currentMonthDate.getMonth() + 1
+                }/${currentMonthDate.getFullYear()}`;
 
             setRevenueData({
                 ...data.data,
@@ -87,74 +87,72 @@ const TransactionHistoryPage = ({ className }: TransactionHistoryPageProps) => {
         handleFetchRevenueData();
     }, []);
 
+    
+    const [darkTheme, setdarkTheme] = useState('');
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+        if (themeColor == 'dark') {
+            setdarkTheme(styles.darkTheme);
+        }
+    });
+
     return (
         <>
-            <div className={styles.root}>
-                <div className={styles.topBarDiv}>
-                    <TopBar />
-                </div>
-                <div className={styles.container}>
-                    <div className={styles.leftSide}>
-                        <div className={styles.sideNavDiv}>
-                            <SideNavBar
-                                selectedIndex={selectedIndex}
-                                settingsDropdownState={true}
-                            />
+            <Layout>
+                <div className={styles.middleSectionDiv}>
+                    <div className={styles.settingsWrapper}>
+                        <div className={styles.pageHeader} style={{ display: 'flex', justifyContent: 'sapce-between' }}>
+                            <IconButton
+                                sx={{
+                                    width: 'fit-content !important',
+                                    margin: '0px',
+                                    padding: '0px',
+                                    alignSelf: 'center',
+                                }}
+                                onClick={handleGoBack}
+                            >
+                                <LeftArrow />
+                            </IconButton>
+                            <h4 className={darkTheme !== ''?'text-white':'text-black'} >Transactions History</h4>
                         </div>
-                        <div className={styles.suggestedActivityDiv}>
-                            <SuggestedActivity showActivity={true} showSuggestedContent={true} />
+                        <div className={styles.tableHeader}>
+                            <h4 className={styles.sectionTitle}>Time & Date</h4>
+                            <h4 className={styles.sectionTitle}>Type</h4>
+                            <h4 className={styles.sectionTitle}>Amount</h4>
                         </div>
-                    </div>
-                    <div className={styles.middleSectionDiv}>
-                        <div className={styles.settingsWrapper}>
-                            <div className={styles.pageHeader}>
-                                <IconButton
-                                    sx={{ margin: '0px', padding: '0px', alignSelf: 'center' }}
-                                    onClick={handleGoBack}
-                                >
-                                    <LeftArrow />
-                                </IconButton>
-                                <h4>Transactions History</h4>
-                            </div>
-                            <div className={styles.tableHeader}>
-                                <h4 className={styles.sectionTitle}>Time & Date</h4>
-                                <h4 className={styles.sectionTitle}>Type</h4>
-                                <h4 className={styles.sectionTitle}>Amount</h4>
-                            </div>
-                            {revenueData.userGiftsTransactions?.map(
-                                (transaction: any, index: number) => {
-                                    const formattedDate = new Date(
-                                        transaction.createdTime
-                                    ).toLocaleDateString('en-GB');
-                                    const formattedTime = new Date(
-                                        transaction.createdTime
-                                    ).toLocaleTimeString('en-GB');
+                        {revenueData.userGiftsTransactions?.map(
+                            (transaction: any, index: number) => {
+                                const formattedDate = new Date(
+                                    transaction.createdTime
+                                ).toLocaleDateString('en-GB');
+                                const formattedTime = new Date(
+                                    transaction.createdTime
+                                ).toLocaleTimeString('en-GB');
 
-                                    return (
-                                        <div>
-                                            <div key={index} className={styles.tableField}>
-                                                <h4
-                                                    className={styles.sectionTitle}
-                                                    style={{ textAlign: 'start' }}
-                                                >{`${formattedDate} ${formattedTime}`}</h4>
-                                                <h4 className={styles.sectionTitle}>
-                                                    {transaction.type}
-                                                </h4>
-                                                <h4
-                                                    className={styles.sectionTitle}
-                                                    style={{ textAlign: 'end' }}
-                                                >
-                                                    QAR {transaction.amount}
-                                                </h4>
-                                            </div>
+                                return (
+                                    <div>
+                                        <div key={index} className={styles.tableField}>
+                                            <h4
+                                                className={`${styles.sectionTitle} ${darkTheme !== ''? 'text-white':'text-black opacity-70'}`}
+                                                style={{ textAlign: 'start' }}
+                                            >{`${formattedDate} ${formattedTime}`}</h4>
+                                            <h4 className={`${styles.sectionTitle} ${darkTheme !== ''? 'text-white':'text-black opacity-70'}`}>
+                                                {transaction.type}
+                                            </h4>
+                                            <h4
+                                                className={`${styles.sectionTitle} ${darkTheme !== ''? 'text-white':'text-black opacity-70'}`}
+                                                style={{ textAlign: 'end' }}
+                                            >
+                                                QAR {transaction.amount}
+                                            </h4>
                                         </div>
-                                    );
-                                }
-                            )}
-                        </div>
+                                    </div>
+                                );
+                            }
+                        )}
                     </div>
                 </div>
-            </div>
+            </Layout>
         </>
     );
 };

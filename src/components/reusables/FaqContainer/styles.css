@@ -13,3 +13,23 @@
     margin-bottom: 32px;
     justify-content: space-between;
 }
+
+summary {
+    list-style: none;
+}
+
+/* Simulate the marker using ::before */
+/* summary::marker {
+    content: "⯈"; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: auto; 
+    transform: rotate(0deg);
+    transition: transform 0.3s ease;
+} */
+
+/* When details is open, rotate the marker */
+/* details[open] summary::marker {
+    transform: rotate(90deg);
+}  */

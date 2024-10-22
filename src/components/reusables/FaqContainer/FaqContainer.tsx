@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import './styles.css';
 
 interface Faq {
@@ -7,25 +8,49 @@ interface Faq {
 }
 
 const FaqItem = ({ question, answer }: Faq) => {
-    const details = document.querySelectorAll("details");
 
-    // Add the onclick listeners.
-    details.forEach((targetDetail) => {
-        targetDetail.addEventListener("click", () => {
-            // Close all the details that are not targetDetail.
+    useEffect(() => {
+        const details = document.querySelectorAll("details");
+
+        const callbackFunc = (event: Event) => {
+            const targetDetail = event.currentTarget as HTMLDetailsElement;
+
+            const marker = targetDetail.querySelector('.marker') as HTMLElement;
+
+            if (targetDetail.open) {
+                marker.style.transform = 'rotate(90deg)'; 
+            } else {
+                marker.style.transform = 'rotate(0deg)'; 
+            }
+
             details.forEach((detail) => {
                 if (detail !== targetDetail) {
                     detail.removeAttribute("open");
+                    const otherMarker = detail.querySelector('.marker') as HTMLElement;
+                    if (otherMarker) {
+                        otherMarker.style.transform = 'rotate(0deg)';
+                    }
                 }
             });
+        };
+
+        details.forEach((detail) => {
+            detail.addEventListener("toggle", callbackFunc);
         });
-    });
+
+        return () => {
+            details.forEach((detail) => {
+                detail.removeEventListener("toggle", callbackFunc);
+            });
+        };
+    }, []);
 
     return (
         <details>
             <summary>
                 <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                     <p>{question}</p>
+                    <span className="marker" style={{ fontSize: '2rem' }}>&rsaquo;</span>
                 </div>
             </summary>
             <div>

@@ -6,6 +6,8 @@ import {
     Modal,
     Switch,
     SwitchProps,
+    ThemeProvider,
+    createTheme,
     styled,
 } from '@mui/material';
 import classNames from 'classnames';
@@ -18,10 +20,8 @@ import { SideNavBar } from '../side-nav-bar/side-nav-bar';
 import { SuggestedActivity } from '../suggested-activity/suggested-activity';
 import { TopBar } from '../top-bar/top-bar';
 import styles from './privacy-security-page.module.scss';
+import Layout from '../../shared/layout';
 
-export interface PrivacySecurityPageProps {
-    className?: string;
-}
 
 interface PrivacySettings {
     shareMedia: boolean;
@@ -40,12 +40,15 @@ interface BlockedUser {
     name: string;
 }
 
-export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => {
+export const PrivacySecurityPage = () => {
     const { selectedIndex, setIndex, isLoggedIn, setSettingsDropdown } = useAuthStore();
     const token = localStorage.getItem('token');
     const [privacySettingsData, setPrivacySettingsData] = useState<PrivacySettings>();
     const [blockedAccountsData, setBlockedAccountsData] = useState<any>([]);
+    // const [blockedAccountsData, setBlockedAccountsData] = useState<BlockedUser[]>([{_id: '1', avatar: 'https://via.placeholder.com/150', name: 'John Doe'}, {_id: '2', avatar: 'https://via.placeholder.com/150', name: 'Jane Doe'}]);
+
     const [openBlockedListModal, setOpenBlockedListModal] = useState(false);
+
     const [settings, setSettings] = useState({
         shareMedia: true,
         downloadMedia: true,
@@ -58,6 +61,18 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
     });
     const API_KEY = process.env.VITE_API_URL;
     const navigate = useNavigate();
+
+    const lightThemePalette = createTheme({
+        palette: {
+            mode: 'light',
+        },
+    });
+
+    const darkThemePalette = createTheme({
+        palette: {
+            mode: 'dark',
+        },
+    });
 
     const handleGoBack = () => {
         navigate('/settings/account'); // Navigate back to the previous page
@@ -173,21 +188,29 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
         handleFetchBlockedAccounts();
     }, [openBlockedListModal]);
 
+    const [darkTheme, setdarkTheme] = useState('');
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+        if (themeColor == 'dark') {
+            setdarkTheme(styles.darkTheme);
+        }
+    });
+
     return (
-        <div className={classNames(styles.root, className)}>
-            <div className={styles.topBarDiv}>
+        <Layout>
+            {/* <div className={styles.topBarDiv}>
                 <TopBar />
-            </div>
+            </div> */}
             <div className={styles.container}>
-                <div className={styles.leftSide}>
+                {/* <div className={styles.leftSide}>
                     <div className={styles.sideNavDiv}>
                         <SideNavBar selectedIndex={selectedIndex} settingsDropdownState={true} />
                     </div>
                     <div className={styles.suggestedActivityDiv}>
                         <SuggestedActivity showActivity={true} showSuggestedContent={true} />
                     </div>
-                </div>
-                <div className={styles.middleSectionDiv}>
+                </div> */}
+                <div className={`${styles.middleSectionDiv} ${darkTheme}`}>
                     <div
                         className={styles.pageHeader}
                         style={{ display: 'flex', justifyContent: 'sapce-between' }}
@@ -203,10 +226,10 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
                         >
                             <LeftArrow />
                         </IconButton>
-                        <h4>Privacy and Security</h4>
+                        <h4 className={darkTheme ? 'text-white' : 'text-black'}>Privacy and Security</h4>
                     </div>
                     <div className={styles.suggestedContent} style={{ paddingBottom: 0 }}>
-                        <h4>Activity Status</h4>
+                        <h4 className={darkTheme ? 'text-white' : 'text-black'}>Activity Status</h4>
                         <div className={styles.cards}>
                             <FormGroup
                                 sx={{
@@ -250,7 +273,7 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
                         </div>
                     </div>
                     <div className={styles.suggestedContent}>
-                        <h4>Allow users to</h4>
+                        <h4 className={darkTheme? 'text-white': 'text-black'}>Allow users to</h4>
                         <div className={styles.cards}>
                             <FormGroup
                                 sx={{
@@ -366,16 +389,17 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
                     </div>
 
                     {openBlockedListModal && (
-                        <>
+                        <ThemeProvider theme={darkTheme ? darkThemePalette : lightThemePalette }>
                             <Modal
                                 open={openBlockedListModal}
                                 onClose={handleCloseBlockedModal}
                                 aria-labelledby="modal-modal-title"
                                 aria-describedby="modal-modal-description"
+
                             >
                                 <Box sx={mainModalstyle}>
                                     <div className={styles.contentPrefHeader}>
-                                        <h4 className={styles.contentPrefModalHeader}>
+                                        <h4 className={`${styles.contentPrefModalHeader} ${darkTheme? 'text-white':'text-black'}`}>
                                             Blocked accounts
                                         </h4>
                                     </div>
@@ -390,7 +414,7 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
                                     >
                                         {blockedAccountsData.length === 0 ? (
                                             <div style={{ textAlign: 'center', width: '100%' }}>
-                                                <h4 style={{ fontSize: '18px', color: '#A9A9A9' }}>
+                                                <h4 className={darkTheme? 'text-white':'text-black'} style={{ fontSize: '18px' }}>
                                                     No blocked accounts yet
                                                 </h4>
                                             </div>
@@ -425,10 +449,10 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
                                                                             styles.profileImg
                                                                         }
                                                                     />
-                                                                    <p>{account?.name}</p>
+                                                                    <p className={darkTheme? 'text-white':'text-black'}>{account?.name}</p>
                                                                 </div>
                                                                 <button
-                                                                    className={styles.unblockBtn}
+                                                                    className={`${styles.unblockBtn} ${darkTheme? 'bg-black':'bg-white'}`}
                                                                     onClick={() => {
                                                                         handleBlockAccount(
                                                                             account._id
@@ -460,11 +484,12 @@ export const PrivacySecurityPage = ({ className }: PrivacySecurityPageProps) => 
                                     </Box>
                                 </Box>
                             </Modal>
-                        </>
+                        </ThemeProvider>
                     )}
                 </div>
             </div>
-        </div>
+        </Layout>
+
     );
 };
 
@@ -527,7 +552,7 @@ var mainModalstyle = {
     height: 'auto',
     minHeight: 259,
     bgcolor: 'background.paper',
-    // border: '2px solid #000',
+    border: '2px solid #fff',
     borderRadius: '8px',
     boxShadow: 0,
     display: 'inline-flex',

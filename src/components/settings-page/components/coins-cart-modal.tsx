@@ -1,12 +1,14 @@
 import React from 'react'
 import styles from './coins-cart-modal.module.scss';
-import { Modal } from "@mui/material";
+import { Modal, ThemeProvider } from "@mui/material";
 import { Box, IconButton } from '@mui/material';
 import closeIcon from '../../../assets/closeIcon.png';
- import coin from '../svg-components/coin.svg';
-const CoinsCartModal = ({ openCartModal, onCloseCartModal, next }: any) => {
+import coin from '../svg-components/coin.svg';
+const CoinsCartModal = ({ darkTheme, palette, openCartModal, onCloseCartModal, next }: any) => {
+
     return (
-         
+        <ThemeProvider theme={palette}>
+
             <Modal
                 open={openCartModal}
                 onClose={onCloseCartModal}
@@ -23,10 +25,10 @@ const CoinsCartModal = ({ openCartModal, onCloseCartModal, next }: any) => {
                                 width: '60%',
                             }}
                         >
-                            <p>900 Cesium</p>
-                            <div  style={{width: '40px !important'}}>
+                            <p className={darkTheme ? 'text-white' : ''}>900 Cesium</p>
+                            <div style={{ width: '40px !important' }}>
 
-                            <IconButton onClick={onCloseCartModal}>
+                                <IconButton onClick={onCloseCartModal}>
                                     <img src={closeIcon} alt='' style={{ width: '20px', height: '20px' }} />
                                 </IconButton>
                             </div>
@@ -37,33 +39,33 @@ const CoinsCartModal = ({ openCartModal, onCloseCartModal, next }: any) => {
                         className="modal-content-container"
                         style={{
                             width: '100%',
-                            flex:'1',
+                            flex: '1',
                             display: 'flex',
                             flexDirection: 'column',
-                            justifyContent:'space-around',
+                            justifyContent: 'space-around',
                             padding: '10px'
-                            
-                           
+
+
                         }}
                     >
                         <div className={styles.cartItemsContainer}>
                             <div className={styles.cartItem}>
                                 <div className={styles.itemDetails}>
-                                     <img src={coin} alt=''  style={{ width: '40px', height: '40px', marginRight: '5px' }}  />
-                                    <p>700 Cesium</p>
+                                    <img src={coin} alt='' style={{ width: '40px', height: '40px', marginRight: '5px' }} />
+                                    <p className={darkTheme ? 'text-white' : ''}>700 Cesium</p>
                                 </div>
                                 <div className={styles.itemPrice}>
-                                    <p>QAR 17.90</p>
+                                    <p className={darkTheme ? 'text-white' : ''}>QAR 17.90</p>
                                 </div>
                             </div>
-                            
+
                             <div className={styles.cartItem}>
                                 <div className={styles.itemDetails}>
                                     <img src={coin} alt='' style={{ width: '40px', height: '40px', marginRight: '5px' }} />
-                                    <p>200 Cesium</p>
+                                    <p className={darkTheme? 'text-white':''}>200 Cesium</p>
                                 </div>
                                 <div className={styles.itemPrice}>
-                                    <p>Free</p>
+                                    <p className={darkTheme? 'text-white':''}>Free</p>
                                 </div>
                             </div>
 
@@ -76,21 +78,21 @@ const CoinsCartModal = ({ openCartModal, onCloseCartModal, next }: any) => {
                         <div className={styles.cartSubItemsContainer}>
                             <div className={styles.cartItem}>
                                 <div className={styles.itemDetails}>
-                                     
-                                    <p>Subtotal</p>
+
+                                    <p className={darkTheme? 'text-white':''}>Subtotal</p>
                                 </div>
                                 <div className={styles.itemPrice}>
-                                    <p>QAR 17.90</p>
+                                    <p className={darkTheme? 'text-white':''}>QAR 17.90</p>
                                 </div>
                             </div>
-                            
+
                             <div className={styles.cartItem}>
                                 <div className={styles.itemDetails}>
-                                    
-                                    <p>Tax</p>
+
+                                    <p className={darkTheme? 'text-white':''}>Tax</p>
                                 </div>
                                 <div className={styles.itemPrice}>
-                                    <p>QAR 0</p>
+                                    <p className={darkTheme? 'text-white':''}>QAR 0</p>
                                 </div>
                             </div>
 
@@ -99,34 +101,34 @@ const CoinsCartModal = ({ openCartModal, onCloseCartModal, next }: any) => {
 
 
 
-                         <div className={styles.cartTotalContainer}>
+                        <div className={styles.cartTotalContainer}>
                             <div className={styles.cartItem}>
                                 <div className={styles.itemDetails}>
-                                     
-                                    <p>Subtotal</p>
+
+                                    <p className={darkTheme? 'text-white':''}>Subtotal</p>
                                 </div>
                                 <div className={styles.itemPrice}>
-                                    <p>QAR 17.90</p>
+                                    <p className={darkTheme? 'text-white':''}>QAR 17.90</p>
                                 </div>
                             </div>
-                            
+
 
 
                         </div>
 
-                         
+
 
                     </div>
 
                     {/* footer */}
                     <div style={{ display: 'flex', gap: '16px', flexDirection: 'column' }}>
                         <button onClick={next} className={styles.btnFullWidth}>
-                            <p>Proceed To Payment Method</p>
+                            <p className={darkTheme? 'text-white':''}>Proceed To Payment Method</p>
                         </button>
                     </div>
                 </Box>
             </Modal>
-        
+        </ThemeProvider>
     );
 };
 

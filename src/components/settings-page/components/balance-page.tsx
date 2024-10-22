@@ -1,4 +1,4 @@
-import { Box, IconButton, Modal } from '@mui/material';
+import { Box, createTheme, IconButton, Modal, ThemeProvider } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import closeIcon from '../../../assets/closeIcon.png';
@@ -51,6 +51,7 @@ const BalancePage = ({ className }: BalancePageProps) => {
         coinsPrice: 3.22,
     });
 
+
     const [revenueData, setRevenueData] = useState<any>();
     const [diamondsData, setDiamondsData] = useState<any>();
 
@@ -63,6 +64,18 @@ const BalancePage = ({ className }: BalancePageProps) => {
     const [openCartModal, setOpenCartModal] = useState(false);
     const [openPaymentModal, setOpenPaymentModal] = useState(false);
     const [openPaymentSuccessModal, setPaymentSuccessModal] = useState(false);
+
+    const lightThemePalette = createTheme({
+        palette: {
+            mode: 'light',
+        },
+    });
+
+    const darkThemePalette = createTheme({
+        palette: {
+            mode: 'dark',
+        },
+    });
 
     const handleOpenCalculatorModal = () => {
         setOpenCalculatorModal(true);
@@ -201,13 +214,13 @@ const BalancePage = ({ className }: BalancePageProps) => {
                             >
                                 <LeftArrow />
                             </IconButton>
-                            <h4>Balance</h4>
+                            <h4 className={darkTheme ? 'text-white' : 'text-black'}>Balance</h4>
                         </div>
                         <div className={styles.suggestedContent}>
                             <div
                                 style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
                             >
-                                <h4 className={styles.sectionTitle}>Coin Balance</h4>
+                                <h4 className={`${styles.sectionTitle} ${darkTheme ? 'text-white' : 'text-black'}`}>Coin Balance</h4>
                                 <div
                                     style={{
                                         marginTop: '30px',
@@ -216,7 +229,7 @@ const BalancePage = ({ className }: BalancePageProps) => {
                                     }}
                                 >
                                     <img src={coin} alt="" style={{ width: '39px' }} />
-                                    <h4 className={styles.userCoinsAmount}>{balance}</h4>
+                                    <h4 className={`${styles.userCoinsAmount} ${darkTheme ? 'text-white' : 'text-black'}`}>{balance}</h4>
                                     <div className={styles.btnDiv}>
                                         <button
                                             className={styles.viewTransactionsBtn}
@@ -233,7 +246,7 @@ const BalancePage = ({ className }: BalancePageProps) => {
                     </div>
                     <div className={styles.settingsWrapper}>
                         <div className={styles.suggestedContent}>
-                            <h4 className={styles.sectionTitle}>Recharge</h4>
+                            <h4 className={`${styles.sectionTitle} ${darkTheme ? 'text-white' : 'text-black'}`}>Recharge</h4>
                             <div style={{ width: '100%' }}>
                                 <>
                                     <Box sx={defModalStyle}>
@@ -274,7 +287,7 @@ const BalancePage = ({ className }: BalancePageProps) => {
                                             </button>
                                         </div>
                                         {openCalculatorModal && (
-                                            <div>
+                                            <ThemeProvider theme={darkTheme ? darkThemePalette : lightThemePalette}>
                                                 <Modal
                                                     open={openCalculatorModal}
                                                     onClose={handleCloseCalculatorModal}
@@ -364,11 +377,13 @@ const BalancePage = ({ className }: BalancePageProps) => {
                                                         </div>
                                                     </Box>
                                                 </Modal>
-                                            </div>
+                                            </ThemeProvider>
                                         )}
 
                                         {openCartModal && (
                                             <CoinsCartModal
+                                                darkTheme={darkTheme}
+                                                palette={darkTheme ? darkThemePalette : lightThemePalette}
                                                 openCartModal={openCartModal}
                                                 onCloseCartModal={handleCloseCartModal}
                                                 next={handleOpenPaymentModal}
@@ -377,6 +392,8 @@ const BalancePage = ({ className }: BalancePageProps) => {
 
                                         {openPaymentModal && (
                                             <PaymentMethodModal
+                                                darkTheme={darkTheme}
+                                                palette={darkTheme ? darkThemePalette : lightThemePalette}
                                                 openPaymentModal={openPaymentModal}
                                                 onClosePaymentModal={handleClosePaymentModal}
                                                 next={handleMethodSelection}
@@ -385,6 +402,8 @@ const BalancePage = ({ className }: BalancePageProps) => {
 
                                         {openPaymentSuccessModal && (
                                             <PaymentSuccessModal
+                                                darkTheme={darkTheme}
+                                                palette={darkTheme ? darkThemePalette : lightThemePalette}
                                                 openPaymentSuccessModal={openPaymentSuccessModal}
                                                 onClosePaymentSuccessModal={
                                                     handleClosePaymentSuccessModal
@@ -392,7 +411,7 @@ const BalancePage = ({ className }: BalancePageProps) => {
                                             />
                                         )}
                                         {openFaqsModal && (
-                                            <div>
+                                            <ThemeProvider theme={darkTheme ? darkThemePalette : lightThemePalette}>
                                                 <Modal
                                                     open={openFaqsModal}
                                                     onClose={handleCloseFaqsModal}
@@ -441,7 +460,7 @@ const BalancePage = ({ className }: BalancePageProps) => {
                                                         </div>
                                                     </Box>
                                                 </Modal>
-                                            </div>
+                                            </ThemeProvider>
                                         )}
                                     </Box>
                                 </>
@@ -467,10 +486,9 @@ const BalancePage = ({ className }: BalancePageProps) => {
                             <img src={whiteRightArrow} alt="" style={{ marginLeft: '6px' }} />
                         </div>
                     </div>
-                    <div style={{ marginTop: '60px' }}>
-                        <h4 className={styles.sectionTitle}>Frequently asked questions</h4>
-                    </div>
-                    <div className={styles.faqsContainerInPage}>
+
+                    <div className={`${styles.faqsContainerInPage} `}>
+                        <h4 className={`${styles.sectionTitle} ${darkTheme ? 'text-white' : 'text-black'}`}>Frequently asked questions</h4>
                         <FaqContainer />
                     </div>
                 </div>

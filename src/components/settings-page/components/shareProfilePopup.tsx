@@ -8,6 +8,7 @@ import qrCodeLogo from '../svg-components/qrCodeLogo.svg';
 import styles from './shareProfilePopup.module.scss';
 
 export interface ShareProfilePopupProps {
+    theme?: any;
     className?: string;
     onSubmit?: any;
     handleOpen?: any;
@@ -25,6 +26,7 @@ const defaultUser: User = {
 };
 
 export const ShareProfilePopup = ({
+    theme,
     className,
     onSubmit,
     handleOpen,
@@ -71,7 +73,7 @@ export const ShareProfilePopup = ({
                     <>
                         <div className={styles.frame}>
                             <div className={styles.contentPrefHeader}>
-                                <h4 className={styles.contentPrefModalHeader}>QR Code</h4>
+                                <h4 className={`${styles.contentPrefModalHeader} ${theme? 'text-white': 'text-black'}`}>QR Code</h4>
                                 <p className={styles.blueText}>Your profile’s QR Code</p>
                                 <div
                                     style={{
@@ -91,7 +93,7 @@ export const ShareProfilePopup = ({
                                         removeQrCodeBehindLogo={true}
                                     />
                                 </div>
-                                <p className={styles.greyText}>
+                                <p className={`${styles.greyText} ${theme? 'text-white':''}`}>
                                     Share this QR code to get people to follow you easily!
                                 </p>
                             </div>

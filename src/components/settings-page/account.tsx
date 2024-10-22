@@ -2,9 +2,11 @@ import {
     Box,
     Button,
     Checkbox,
+    createTheme,
     FormControlLabel,
     FormGroup,
     Modal,
+    ThemeProvider,
     Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -166,6 +168,18 @@ const Account = ({ className, openModal }: AccountProps) => {
     const [balanceColor, setBalanceColor] = useState('#222222');
     const [otherBalanceColor, setOtherBalanceColor] = useState('#130F26');
 
+    const lightThemePalette = createTheme({
+        palette: {
+            mode: 'light',
+        },
+    });
+
+    const darkThemePalette = createTheme({
+        palette: {
+            mode: 'dark',
+        },
+    });
+
     useEffect(() => {
         var themeColor = window.localStorage.getItem('theme');
 
@@ -313,7 +327,7 @@ const Account = ({ className, openModal }: AccountProps) => {
     const submitReportHandler = () => {
         setOpenReportsModal(false);
         setOpenReportSubmittedModal(true);
-        images.forEach((element: any) => {});
+        images.forEach((element: any) => { });
     };
 
     const handleSignIn = async (password: string, email: string | null) => {
@@ -539,7 +553,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                 setLoadingAnimation(false);
                 handleCloseNewPassModal();
                 setPasswordSuccessModal(true);
-                setTimeout(() => {}, 2000);
+                setTimeout(() => { }, 2000);
             } else {
                 setLoadingAnimation(false);
                 setErrorMessage('invalid password');
@@ -625,7 +639,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                     <div className={` ${styles.middleSectionDiv} ${darkTheme} `}>
                         <div className={styles.settingsWrapper}>
                             <div className={styles.pageHeader}>
-                                <h4>Account</h4>
+                                <h4 className={darkTheme ? 'text-white' : 'text-black'}>Account</h4>
                             </div>
                             <div className={styles.suggestedContent}>
                                 <div
@@ -816,7 +830,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                         </div>
                         <div className={styles.settingsWrapper}>
                             <div className={styles.pageHeader}>
-                                <h4>Content & Activity</h4>
+                                <h4 className={darkTheme ? 'text-white' : 'text-black'}>Content & Activity</h4>
                             </div>
                             <div className={styles.suggestedContent}>
                                 <div className={styles.accountCards}>
@@ -831,7 +845,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                 </div>
                                 <div
                                     className={styles.accountCards}
-                                    // onClick={handleOpenChangePassMainModal}
+                                // onClick={handleOpenChangePassMainModal}
                                 >
                                     <div
                                         className={styles.settingName}
@@ -844,7 +858,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                 </div>
                                 <div
                                     className={styles.accountCards}
-                                    // onClick={handleOpenChangePassMainModal}
+                                // onClick={handleOpenChangePassMainModal}
                                 >
                                     <div
                                         className={styles.settingName}
@@ -863,7 +877,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                         </div>
                         <div className={styles.settingsWrapper}>
                             <div className={styles.pageHeader}>
-                                <h4>Support</h4>
+                                <h4 className={darkTheme ? 'text-white' : 'text-black'}>Support</h4>
                             </div>
                             <div className={styles.suggestedContent}>
                                 <div className={styles.accountCards}>
@@ -895,7 +909,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                         </div>
                         <div className={styles.settingsWrapper}>
                             <div className={styles.pageHeader}>
-                                <h4>About</h4>
+                                <h4 className={darkTheme ? 'text-white' : 'text-black'}>About</h4>
                             </div>
                             <div className={styles.suggestedContent}>
                                 <div className={styles.accountCards}>
@@ -1005,7 +1019,8 @@ const Account = ({ className, openModal }: AccountProps) => {
 
             {openChangePassMainModal && (
                 <>
-                    <div>
+                    <ThemeProvider theme={darkTheme ? darkThemePalette : lightThemePalette}>
+
                         <Modal
                             open={openChangePassMainModal}
                             onClose={handleCloseChangePassMainModal}
@@ -1027,6 +1042,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                             paddingBottom: '16.5px',
                                             textAlign: 'center',
                                         }}
+                                        className={darkTheme ? 'text-white' : 'text-black'}
                                     >
                                         Change password
                                     </Typography>
@@ -1044,6 +1060,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                                 fontWeight: 400,
                                                 lineHeight: '150%',
                                             }}
+                                            className={darkTheme ? 'text-white' : 'text-black'}
                                         >
                                             Please enter your old password
                                         </Typography>
@@ -1090,13 +1107,14 @@ const Account = ({ className, openModal }: AccountProps) => {
                                     sx={mainModalBtnstyle}
                                     style={{
                                         minHeight: '48px !important',
+                                        color: 'white !important',
                                     }}
                                 >
                                     Continue
                                 </Button>
                             </Box>
                         </Modal>
-                    </div>
+                    </ThemeProvider>
                 </>
             )}
 
@@ -1309,7 +1327,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                         ? `${styles.whiteCards} `
                                         : `${styles.cards}`
                                 }
-                                //{styles.cards}
+                            //{styles.cards}
                             >
                                 <FormGroup
                                     sx={{
@@ -1457,7 +1475,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                     : contentPrefModalStyle
                             }
                         >
-                            <ShareProfilePopup handleClose={handleCloseSwitchToBusinessModal} />
+                            <ShareProfilePopup theme={darkTheme} handleClose={handleCloseSwitchToBusinessModal} />
                         </Box>
                     </Modal>
                 </>
@@ -1544,7 +1562,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                                 type="file"
                                                 accept="image/*"
                                                 className="hidden"
-                                                // onChange={handleImageChange}
+                                            // onChange={handleImageChange}
                                             />
                                         </div>
                                     )}
@@ -1556,7 +1574,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                         type="file"
                                         accept="image/*"
                                         className="hidden"
-                                        // onChange={handleImageChange}
+                                    // onChange={handleImageChange}
                                     />
                                     <img src={upload} height={18.5} width={19.04} alt="" />
                                     <p>Upload photo (0/4)</p>
