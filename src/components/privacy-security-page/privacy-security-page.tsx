@@ -212,7 +212,7 @@ export const PrivacySecurityPage = () => {
                 </div> */}
                 <div className={`${styles.middleSectionDiv} ${darkTheme}`}>
                     <div
-                        className={styles.pageHeader}
+                        className={`${styles.pageHeader} w-full p-3`}
                         style={{ display: 'flex', justifyContent: 'sapce-between' }}
                     >
                         <IconButton

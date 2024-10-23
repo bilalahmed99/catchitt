@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { updateProfileType } from '../../../redux/reducers/auth';
 
 export interface SwitchToPersonalPopupProps {
+    darkTheme?: any;
     className?: string;
     onSubmit?: any;
     handleOpen?: any;
@@ -26,6 +27,7 @@ const defaultUser: User = {
 };
 
 export const SwitchToPersonalPopup = ({
+    darkTheme,
     className,
     onSubmit,
     handleOpen,
@@ -85,7 +87,7 @@ export const SwitchToPersonalPopup = ({
                     <>
                         <div className={styles.frame}>
                             <div className={styles.contentPrefHeader}>
-                                <h4 className={styles.contentPrefModalHeader}>
+                                <h4 className={`${styles.contentPrefModalHeader} ${darkTheme!==''?'text-white':'text-black'}`}>
                                     Switch to Personal Account?
                                 </h4>
                                 <p className={styles.greyText}>

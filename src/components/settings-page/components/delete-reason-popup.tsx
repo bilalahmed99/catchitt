@@ -14,6 +14,7 @@ import InputField from '../../reusables/InputField';
 import LeftArrow from '../svg-components/LeftArrow.svg';
 
 export interface DeleteReasonPopupProps {
+    darkTheme?: any;
     className?: string;
     onSubmit?: any;
     handleOpen?: any;
@@ -31,6 +32,7 @@ const defaultUser: User = {
 };
 
 export const DeleteReasonPopup = ({
+    darkTheme,
     className,
     onSubmit,
     handleOpen,
@@ -214,7 +216,7 @@ export const DeleteReasonPopup = ({
                     <>
                         <div className={styles.frame}>
                             <div className={styles.contentPrefHeader}>
-                                <h4 className={styles.contentPrefModalHeader}>Delete account</h4>
+                                <h4 className={`${styles.contentPrefModalHeader} ${darkTheme!==''?'text-white':'text-black'}`}>Delete account</h4>
                                 <p className={styles.blueText}>Why are you leaving Seezitt?</p>
                                 <p className={styles.greyText}>
                                     It is sad to see you leave. Could you tell us the reason you are
@@ -233,6 +235,8 @@ export const DeleteReasonPopup = ({
                                             flexDirection: 'column',
                                             rowGap: '20px',
                                             width: '100%',
+                                            whiteSpace: 'nowrap',
+                                            textAlign: 'left',
                                         }}
                                         value={selectedValue}
                                         onChange={handleRadioChange}
@@ -244,6 +248,7 @@ export const DeleteReasonPopup = ({
                                             <FormControlLabel
                                                 key={key}
                                                 value={key}
+                                                // labelPlacement="start"
                                                 control={
                                                     <Radio
                                                         sx={{
@@ -258,6 +263,7 @@ export const DeleteReasonPopup = ({
                                                     borderBottom: '1px solid #DFDFDF',
                                                     paddingBottom: '18px',
                                                     // paddingTop: '18px'
+                                                    color: darkTheme!==''?'#fff':'#000'
                                                 }}
                                             />
                                         ))}
@@ -273,6 +279,12 @@ export const DeleteReasonPopup = ({
                                                 />
                                             }
                                             label="Another reason"
+                                            style={{
+                                                // borderBottom: '1px solid #DFDFDF',
+                                                paddingBottom: '18px',
+                                                // paddingTop: '18px'
+                                                color: darkTheme!==''?'#fff':'#000'
+                                            }}
                                         />
                                         {otherReasonField && (
                                             <input
@@ -329,7 +341,7 @@ export const DeleteReasonPopup = ({
                                             <img src={LeftArrow} alt="" />
                                         </div>
                                         <div className={styles.headerTextDiv}>
-                                            <h4 className={styles.contentPrefModalHeader}>
+                                            <h4 className={`${styles.contentPrefModalHeader} ${darkTheme!==''?'text-white':'text-black'}`}>
                                                 Delete account?
                                             </h4>
                                             <p className={styles.blueText}>
@@ -404,7 +416,7 @@ export const DeleteReasonPopup = ({
                                             <img src={LeftArrow} alt="" />
                                         </div>
                                         <div className={styles.headerTextDiv}>
-                                            <h4 className={styles.contentPrefModalHeader}>
+                                            <h4 className={`${styles.contentPrefModalHeader} ${darkTheme!==''?'text-white':'text-black'}`}>
                                                 Delete account
                                             </h4>
                                             <p className={styles.blueText}>Enter password</p>
@@ -420,7 +432,7 @@ export const DeleteReasonPopup = ({
                                     </div>
                                     {errorMessage ? (
                                         <div style={{ marginTop: '10px' }}>
-                                            <h4
+                                            <span
                                                 style={{
                                                     fontWeight: '700',
                                                     fontSize: '16px',
@@ -429,7 +441,7 @@ export const DeleteReasonPopup = ({
                                                 }}
                                             >
                                                 {errorMessage}
-                                            </h4>
+                                            </span>
                                         </div>
                                     ) : null}
                                     {successMessage ? (
@@ -535,16 +547,17 @@ var mainModalstyle = {
 };
 
 var mainModalBtnstyle = {
-    fontFamily: 'Poppins',
-    display: 'flex',
-    width: '478px',
-    height: '48px',
-    padding: '0 16px',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: '6px',
-    background: 'var(--foundation-primary-primary-500, rgb(255, 59, 92))',
-    textTransform: 'none',
+    fontFamily: 'Poppins !important',
+    color: 'white !important',
+    display: 'flex !important',
+    width: '478px !important',
+    height: '48px !important',
+    padding: '0 16px !important',
+    justifyContent: 'center !important',
+    alignItems: 'center !important',
+    borderRadius: '6px !important',
+    background: 'var(--foundation-primary-primary-500, rgb(255, 59, 92)) !important',
+    textTransform: 'none !important',
 };
 
 var lastConfirmationModalstyle = {

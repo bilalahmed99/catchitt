@@ -10,7 +10,9 @@ const MyReports = () => {
     const navigate = useNavigate();
     // const activityEndPoint = '/notification';
     const token = localStorage.getItem('token');
-    const [myReports, setMyReports] = useState<any[]>([])
+    // reports state dummy content
+    // const [myReports, setMyReports] = useState<any[]>([{media:{thumbnail:'',_id:'sdf57688asdfsa879'},reason:'wow',isResolved:false}, {media:{thumbnail:'',_id:'sdf57688asdf'},reason:'wow',isResolved:true}]);
+    const [myReports, setMyReports] = useState<any[]>([]);
     const getMyReports = async () => {
         try {
             const response = await fetch(
@@ -33,7 +35,7 @@ const MyReports = () => {
     };
 
     useEffect(() => {
-    getMyReports();
+        getMyReports();
     }, []);
 
     const [darkTheme, setdarkTheme] = useState('');
@@ -60,7 +62,7 @@ const MyReports = () => {
                     <h6 className={`font-semibold text-xl text-[${headingColor}]`}>My Reports</h6>
                 </div>
                 { myReports.map((ele:any) => (
-                    <div  className="w-[37.563rem] h-[5.875rem] gap-3 rounded-lg px-3 py-4.5 flex flex-row items-center mt-4">
+                    <div key={ele.media._id}  className="w-[37.563rem] h-[5.875rem] gap-3 rounded-lg px-3 py-4.5 flex flex-row items-center mt-4">
                         <img src={ele.media.thumbnail?ele.media.thumbnail:womenAvatar} height={62} width={62} className="rounded" />
                         <div className="flex flex-col items-start justify-between">
                             <p className="font-medium text-base text-[#222222]">Video Id: {ele.media._id }</p>

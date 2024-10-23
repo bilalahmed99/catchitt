@@ -39,9 +39,8 @@ const GiftRevenuePage = ({ className }: GiftRevenuePageProps) => {
             const data = await response.json();
             // Format the currentMonth value
             const currentMonthDate = new Date(data.data.currentMonth);
-            const formattedCurrentMonth = `${
-                currentMonthDate.getMonth() + 1
-            }/${currentMonthDate.getFullYear()}`;
+            const formattedCurrentMonth = `${currentMonthDate.getMonth() + 1
+                }/${currentMonthDate.getFullYear()}`;
 
             setRevenueData({
                 ...data.data,
@@ -86,155 +85,153 @@ const GiftRevenuePage = ({ className }: GiftRevenuePageProps) => {
     return (
         <>
             <Layout>
-                    <div className={`${styles.middleSectionDiv} ${darkTheme}`}>
-                        <div className={styles.settingsWrapper}>
-                            <div className={styles.pageHeader}>
-                                <IconButton
-                                     sx={{
-                                        width: 'fit-content !important',
-                                        margin: '0px',
-                                        padding: '0px',
-                                        alignSelf: 'center',
-                                    }}
-                                    onClick={handleGoBack}
-                                >
-                                    <LeftArrow />
-                                </IconButton>
-                                <h4 className={darkTheme !== ''?'text-white':'text-black'}>Gift revenue</h4>
+                <div className={`${styles.middleSectionDiv} ${darkTheme}`}>
+                    <div className={`${styles.pageHeader} p-3 w-full`}>
+                        <IconButton
+                            sx={{
+                                width: 'fit-content !important',
+                                margin: '0px',
+                                padding: '0px',
+                                alignSelf: 'center',
+                            }}
+                            onClick={handleGoBack}
+                        >
+                            <LeftArrow />
+                        </IconButton>
+                        <h4 className={darkTheme !== '' ? 'text-white' : 'text-black'}>Gift revenue</h4>
+                    </div>
+                    <div className={styles.suggestedContent}>
+                        <div className={`${styles.settingName} ${darkTheme !== '' ? 'text-white' : 'text-black opacity-80'} `}>Total balance</div>
+                        <h4 className={`${styles.sectionTitle} ${darkTheme !== '' ? 'text-white' : 'text-black opacity-80'}`}>
+                            $ {revenueData.totalGiftRevenue ?? 0}
+                        </h4>
+                        <div className={`${styles.tableHeader} ${darkTheme!==''?'bg-black':''}`}>
+                            <div>
+                                <h4 className={`${styles.sectionTitle} ${darkTheme !== '' ? 'text-white' : 'text-black opacity-80'}`}>Accumulated Cesium</h4>
                             </div>
-                            <div className={styles.suggestedContent}>
-                                <div className={`${styles.settingName} ${darkTheme !== ''?'text-white':'text-black opacity-80'} `}>Total balance</div>
-                                <h4 className={`${styles.sectionTitle} ${darkTheme !== ''?'text-white':'text-black opacity-80'}`}>
-                                    $ {revenueData.totalGiftRevenue??0}
-                                </h4>
-                                <div className={styles.tableHeader}>
-                                    <div>
-                                        <h4 className={`${styles.sectionTitle} ${darkTheme!==''?'text-white':'text-black opacity-80'}`}>Accumulated Cesium</h4>
-                                    </div>
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '8px',
-                                        }}
-                                    >
-                                        <img src={diamondIcon} alt="" />
-                                        <h4 className={`${styles.sectionTitle} ${darkTheme!==''?'text-white':'text-black opacity-80'}`}>
-                                            {diamondsData.diamonds}
-                                        </h4>
-                                    </div>
-                                </div>
-                                <div style={{ width: '100%' }}>
-                                    <Button sx={withdrawBtn}>Withdraw</Button>
-                                </div>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        width: '100%',
-                                        justifyContent: 'space-between',
-                                    }}
-                                >
-                                    <p>Daily whithdrawal limit (Remain/Total)</p>
-                                    <p className={styles.limitNum}>
-                                        ${revenueData.userConsumption??0} / $
-                                        {revenueData.dailyWithdrawalLimit??0}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className={styles.suggestedContent}>
                             <div
-                                className={styles.settingName}
                                 style={{
                                     display: 'flex',
-                                    marginBottom: '0px',
-                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    gap: '8px',
                                 }}
                             >
-                                <p>How to increase withdrawal limit?</p>
-                                <Button
-                                    sx={smallBtn}
-                                    onClick={() => navigate('/settings/account/withdrawal-limit')}
-                                >
-                                    How to ?
-                                </Button>
-                            </div>
-                        </div>
-                        <div className={styles.suggestedContent} style={{ marginTop: '24px' }}>
-                            <div
-                                className={styles.settingName}
-                                style={{
-                                    display: 'flex',
-                                    marginBottom: '0px',
-                                    justifyContent: 'space-between',
-                                }}
-                            >
-                                <p>
-                                    Go to LIVE now to earn{' '}
-                                    <span style={{ color: 'rgb(255, 59, 92)' }}>Cesium</span>
-                                </p>
-                                <Button
-                                    variant="contained"
-                                    disableElevation={true}
-                                    sx={smallColoredBtn}
-                                >
-                                    Go LIVE
-                                </Button>
-                            </div>
-                        </div>
-
-                        <div className={styles.settingsWrapper}>
-                            <div className={styles.pageHeader}>
-                                <h4 className={darkTheme!==''?'text-white':'text-black opacity-80'} style={{ fontSize: '18px' }}>Transactions</h4>
-                            </div>
-                            <div className={styles.tableHeader}>
-                                <h4 className={styles.sectionTitle} style={{ textAlign: 'start' }}>
-                                    {revenueData.currentMonth}
-                                </h4>
-                                <h4 className={`${styles.sectionTitle} ${darkTheme !== ''? 'text-white':'text-black opacity-70'}`}>in: ${revenueData.income??0}</h4>
-                                <h4
-                                    className={`${styles.sectionTitle} ${darkTheme !== ''? 'text-white':'text-black opacity-70'}`}
-                                    style={{
-                                        textAlign: 'end',
-                                        width: '100%',
-                                        minWidth: 'max-content',
-                                    }}
-                                >
-                                    out: ${revenueData.outcome??0}
+                                <img src={diamondIcon} alt="" />
+                                <h4 className={`${styles.sectionTitle} ${darkTheme !== '' ? 'text-white' : 'text-black opacity-80'}`}>
+                                    {diamondsData.diamonds}
                                 </h4>
                             </div>
-                            {revenueData.userGiftsTransactions?.map(
-                                (transaction: any, index: number) => {
-                                    const formattedDate = new Date(
-                                        transaction.createdTime
-                                    ).toLocaleDateString('en-GB');
-                                    const formattedTime = new Date(
-                                        transaction.createdTime
-                                    ).toLocaleTimeString('en-GB');
-
-                                    return (
-                                        <div>
-                                            <div key={index} className={styles.tableField}>
-                                                <h4
-                                                    className={`${styles.sectionTitle} ${darkTheme !== ''? 'text-white':'text-black opacity-70'}`}
-                                                    style={{ textAlign: 'start' }}
-                                                >{`${formattedDate} ${formattedTime}`}</h4>
-                                                <h4 className={`${styles.sectionTitle} ${darkTheme !== ''? 'text-white':'text-black opacity-70'}`}>
-                                                    {transaction.type}
-                                                </h4>
-                                                <h4
-                                                    className={`${styles.sectionTitle} ${darkTheme !== ''? 'text-white':'text-black opacity-70'}`}
-                                                    style={{ textAlign: 'end' }}
-                                                >
-                                                    QAR {transaction.amount}
-                                                </h4>
-                                            </div>
-                                        </div>
-                                    );
-                                }
-                            )}
+                        </div>
+                        <div style={{ width: '100%' }}>
+                            <Button sx={withdrawBtn}>Withdraw</Button>
+                        </div>
+                        <div
+                            style={{
+                                display: 'flex',
+                                width: '100%',
+                                justifyContent: 'space-between',
+                            }}
+                        >
+                            <p>Daily whithdrawal limit (Remain/Total)</p>
+                            <p className={styles.limitNum}>
+                                ${revenueData.userConsumption ?? 0} / $
+                                {revenueData.dailyWithdrawalLimit ?? 0}
+                            </p>
                         </div>
                     </div>
+                    <div className={styles.suggestedContent}>
+                        <div
+                            className={styles.settingName}
+                            style={{
+                                display: 'flex',
+                                marginBottom: '0px',
+                                justifyContent: 'space-between',
+                            }}
+                        >
+                            <p>How to increase withdrawal limit?</p>
+                            <Button
+                                sx={smallBtn}
+                                onClick={() => navigate('/settings/account/withdrawal-limit')}
+                            >
+                                How to ?
+                            </Button>
+                        </div>
+                    </div>
+                    <div className={styles.suggestedContent} style={{ marginTop: '24px' }}>
+                        <div
+                            className={styles.settingName}
+                            style={{
+                                display: 'flex',
+                                marginBottom: '0px',
+                                justifyContent: 'space-between',
+                            }}
+                        >
+                            <p>
+                                Go to LIVE now to earn{' '}
+                                <span style={{ color: 'rgb(255, 59, 92)' }}>Cesium</span>
+                            </p>
+                            <Button
+                                variant="contained"
+                                disableElevation={true}
+                                sx={smallColoredBtn}
+                            >
+                                Go LIVE
+                            </Button>
+                        </div>
+                    </div>
+
+                    <div className={styles.suggestedContent}>
+                        <div className={`${styles.pageHeader} my-2`}>
+                            <h4 className={darkTheme !== '' ? 'text-white' : 'text-black opacity-80'} style={{ fontSize: '18px' }}>Transactions</h4>
+                        </div>
+                        <div className={`${styles.tableHeader} ${darkTheme!==''?'bg-black':''}`}>
+                            <h4 className={`${styles.sectionTitle} whitespace-nowrap ${darkTheme !== '' ? 'text-white' : 'text-black opacity-80'}`} style={{ textAlign: 'start' }}>
+                                {revenueData.currentMonth?? 'Till yet'}
+                            </h4>
+                            <h4 className={`${styles.sectionTitle} ${darkTheme !== '' ? 'text-white' : 'text-black opacity-70'}`}>in: ${revenueData.income ?? 0}</h4>
+                            <h4
+                                className={`${styles.sectionTitle} ${darkTheme !== '' ? 'text-white' : 'text-black opacity-70'}`}
+                                style={{
+                                    textAlign: 'end',
+                                    width: '100%',
+                                    minWidth: 'max-content',
+                                }}
+                            >
+                                out: ${revenueData.outcome ?? 0}
+                            </h4>
+                        </div>
+                        {revenueData.userGiftsTransactions?.map(
+                            (transaction: any, index: number) => {
+                                const formattedDate = new Date(
+                                    transaction.createdTime
+                                ).toLocaleDateString('en-GB');
+                                const formattedTime = new Date(
+                                    transaction.createdTime
+                                ).toLocaleTimeString('en-GB');
+
+                                return (
+                                    <div>
+                                        <div key={index} className={styles.tableField}>
+                                            <h4
+                                                className={`${styles.sectionTitle} ${darkTheme !== '' ? 'text-white' : 'text-black opacity-70'}`}
+                                                style={{ textAlign: 'start' }}
+                                            >{`${formattedDate} ${formattedTime}`}</h4>
+                                            <h4 className={`${styles.sectionTitle} ${darkTheme !== '' ? 'text-white' : 'text-black opacity-70'}`}>
+                                                {transaction.type}
+                                            </h4>
+                                            <h4
+                                                className={`${styles.sectionTitle} ${darkTheme !== '' ? 'text-white' : 'text-black opacity-70'}`}
+                                                style={{ textAlign: 'end' }}
+                                            >
+                                                QAR {transaction.amount}
+                                            </h4>
+                                        </div>
+                                    </div>
+                                );
+                            }
+                        )}
+                    </div>
+                </div>
             </Layout>
         </>
     );

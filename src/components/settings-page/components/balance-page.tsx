@@ -184,6 +184,8 @@ const BalancePage = ({ className }: BalancePageProps) => {
     return (
         <>
             <Layout>
+            <ThemeProvider theme={darkTheme ? darkThemePalette : lightThemePalette}>
+
                 {/* <div className={styles.root}>
                 <div className={styles.topBarDiv}>
                     <TopBar />
@@ -198,273 +200,263 @@ const BalancePage = ({ className }: BalancePageProps) => {
                         </div>
                     </div> */}
                 <div className={` ${styles.middleSectionDiv} ${darkTheme} `}>
-                    <div className={styles.settingsWrapper}>
-                        <div
-                            className={styles.pageHeader}
-                            style={{ display: 'flex', justifyContent: 'sapce-between' }}
+                    <div
+                        className={`${styles.pageHeader} p-3 w-full`}
+                        style={{ display: 'flex', justifyContent: 'sapce-between' }}
+                    >
+                        <IconButton
+                            sx={{
+                                width: 'fit-content !important',
+                                margin: '0px',
+                                padding: '0px',
+                                alignSelf: 'center',
+                            }}
+                            onClick={handleGoBack}
                         >
-                            <IconButton
-                                sx={{
-                                    width: 'fit-content !important',
-                                    margin: '0px',
-                                    padding: '0px',
-                                    alignSelf: 'center',
-                                }}
-                                onClick={handleGoBack}
-                            >
-                                <LeftArrow />
-                            </IconButton>
-                            <h4 className={darkTheme ? 'text-white' : 'text-black'}>Balance</h4>
-                        </div>
-                        <div className={styles.suggestedContent}>
+                            <LeftArrow />
+                        </IconButton>
+                        <h4 className={darkTheme ? 'text-white' : 'text-black'}>Balance</h4>
+                    </div>
+                    <div className={styles.suggestedContent}>
+                        <div
+                            style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+                        >
+                            <h4 className={`${styles.sectionTitle} ${darkTheme ? 'text-white' : 'text-black'}`}>Coin Balance</h4>
                             <div
-                                style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+                                style={{
+                                    marginTop: '30px',
+                                    textAlign: 'left',
+                                    display: 'flex',
+                                }}
                             >
-                                <h4 className={`${styles.sectionTitle} ${darkTheme ? 'text-white' : 'text-black'}`}>Coin Balance</h4>
-                                <div
-                                    style={{
-                                        marginTop: '30px',
-                                        textAlign: 'left',
-                                        display: 'flex',
-                                    }}
-                                >
-                                    <img src={coin} alt="" style={{ width: '39px' }} />
-                                    <h4 className={`${styles.userCoinsAmount} ${darkTheme ? 'text-white' : 'text-black'}`}>{balance}</h4>
-                                    <div className={styles.btnDiv}>
-                                        <button
-                                            className={styles.viewTransactionsBtn}
-                                            onClick={() =>
-                                                navigate('/settings/account/transaction-history')
-                                            }
-                                        >
-                                            View transaction History
-                                        </button>
-                                    </div>
+                                <img src={coin} alt="" style={{ width: '39px' }} />
+                                <h4 className={`${styles.userCoinsAmount} ${darkTheme ? 'text-white' : 'text-black'}`}>{balance}</h4>
+                                <div className={styles.btnDiv}>
+                                    <button
+                                        className={styles.viewTransactionsBtn}
+                                        onClick={() =>
+                                            navigate('/settings/account/transaction-history')
+                                        }
+                                    >
+                                        View transaction History
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className={styles.settingsWrapper}>
-                        <div className={styles.suggestedContent}>
-                            <h4 className={`${styles.sectionTitle} ${darkTheme ? 'text-white' : 'text-black'}`}>Recharge</h4>
-                            <div style={{ width: '100%' }}>
-                                <>
-                                    <Box sx={defModalStyle}>
-                                        <div className={styles.warningMsg}>
-                                            <p>Pricing will change depending on payment method.</p>
-                                            <img src={dangerIcon} alt="" />
+                    <div className={styles.suggestedContent}>
+                        <h4 className={`${styles.sectionTitle} ${darkTheme ? 'text-white' : 'text-black'}`}>Recharge</h4>
+                        <div style={{ width: '100%' }}>
+                            <Box sx={defModalStyle}>
+                                <div className={styles.warningMsg} style={darkTheme!==''?{background:'black'}:{}}>
+                                    <p>Pricing will change depending on payment method.</p>
+                                    <img src={dangerIcon} alt="" />
+                                </div>
+                                <Box sx={pricesBox}>
+                                    {coinsData.map((item, index) => (
+                                        <CoinsPrice
+                                            key={index}
+                                            index={index}
+                                            onAmountSelection={onAmountSelection}
+                                            coinsAmount={item.coinsAmount}
+                                            coinsPrice={item.coinsPrice}
+                                            selected={item.selected}
+                                        />
+                                    ))}
+                                    <div
+                                        className={styles.price}
+                                        onClick={handleOpenCalculatorModal}
+                                    >
+                                        <div className={styles.coinsAmount}>Custom</div>
+                                        <div className={styles.coinsPriceCustom}>
+                                            Larger amounts<br></br> supported
                                         </div>
-                                        <Box sx={pricesBox}>
-                                            {coinsData.map((item, index) => (
-                                                <CoinsPrice
-                                                    key={index}
-                                                    index={index}
-                                                    onAmountSelection={onAmountSelection}
-                                                    coinsAmount={item.coinsAmount}
-                                                    coinsPrice={item.coinsPrice}
-                                                    selected={item.selected}
-                                                />
-                                            ))}
-                                            <div
-                                                className={styles.price}
-                                                onClick={handleOpenCalculatorModal}
-                                            >
-                                                <div className={styles.coinsAmount}>Custom</div>
-                                                <div className={styles.coinsPriceCustom}>
-                                                    Larger amounts<br></br> supported
-                                                </div>
-                                            </div>
-                                        </Box>
-                                        <div
-                                            className={styles.giftsBottomDiv}
-                                            style={{ marginBottom: '32px' }}
+                                    </div>
+                                </Box>
+                                <div
+                                    className={styles.giftsBottomDiv}
+                                    style={{ marginBottom: '32px' }}
+                                >
+                                    <button
+                                        onClick={rechargeClick}
+                                        className={styles.rechargeBtn}
+                                    >
+                                        <p>Recharge</p>
+                                    </button>
+                                </div>
+                                {openCalculatorModal && (
+                                        <Modal
+                                            open={openCalculatorModal}
+                                            onClose={handleCloseCalculatorModal}
+                                            aria-labelledby="modal-modal-title"
+                                            aria-describedby="modal-modal-description"
                                         >
-                                            <button
-                                                onClick={rechargeClick}
-                                                className={styles.rechargeBtn}
-                                            >
-                                                <p>Recharge</p>
-                                            </button>
-                                        </div>
-                                        {openCalculatorModal && (
-                                            <ThemeProvider theme={darkTheme ? darkThemePalette : lightThemePalette}>
-                                                <Modal
-                                                    open={openCalculatorModal}
-                                                    onClose={handleCloseCalculatorModal}
-                                                    aria-labelledby="modal-modal-title"
-                                                    aria-describedby="modal-modal-description"
-                                                >
-                                                    <Box sx={CustomCoinsModalStyle}>
-                                                        <div className={styles.rechargeModalHeader}>
-                                                            <div
-                                                                style={{
-                                                                    display: 'flex',
-                                                                    justifyContent: 'space-between',
-                                                                    alignItems: 'center',
-                                                                    width: '60%',
-                                                                }}
-                                                            >
-                                                                <p>Custom</p>
-                                                                <IconButton
-                                                                    onClick={
-                                                                        handleCloseCalculatorModal
-                                                                    }
-                                                                >
-                                                                    <img
-                                                                        src={closeIcon}
-                                                                        alt=""
-                                                                        style={{
-                                                                            width: '20px',
-                                                                            height: '20px',
-                                                                        }}
-                                                                    />
-                                                                </IconButton>
-                                                            </div>
-                                                        </div>
-                                                        <Box sx={{ marginBottom: '32px' }}>
-                                                            <Calculator />
-                                                        </Box>
-                                                        <div
-                                                            className={styles.giftsBottomDiv2}
-                                                            style={{ marginBottom: '32px' }}
+                                            <Box sx={CustomCoinsModalStyle}>
+                                                <div className={styles.rechargeModalHeader}>
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            justifyContent: 'space-between',
+                                                            alignItems: 'center',
+                                                            width: '60%',
+                                                        }}
+                                                    >
+                                                        <p>Custom</p>
+                                                        <IconButton
+                                                            onClick={
+                                                                handleCloseCalculatorModal
+                                                            }
                                                         >
-                                                            <div
-                                                                className={
-                                                                    styles.giftsBottomLeftDiv2
-                                                                }
-                                                            >
-                                                                <p className={styles.giftCoinsText}>
-                                                                    Total
-                                                                </p>
-                                                            </div>
-                                                            <div
-                                                                className={
-                                                                    styles.giftsBottomRightDiv
-                                                                }
-                                                            >
-                                                                <p
-                                                                    className={
-                                                                        styles.giftCoinsAmountText
-                                                                    }
-                                                                >
-                                                                    QAR 0
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                        <div
-                                                            style={{
-                                                                display: 'flex',
-                                                                gap: '16px',
-                                                                flexDirection: 'column',
-                                                            }}
-                                                        >
-                                                            <IconButton
-                                                                onClick={handleOpenFaqsModal}
-                                                            >
-                                                                <img
-                                                                    src={questionBlackIcon}
-                                                                    alt=""
-                                                                />
-                                                            </IconButton>
-                                                            <button
-                                                                onClick={rechargeClick}
-                                                                className={
-                                                                    styles.rechargeBtnFullWidth
-                                                                }
-                                                            >
-                                                                <p>Recharge</p>
-                                                            </button>
-                                                        </div>
-                                                    </Box>
-                                                </Modal>
-                                            </ThemeProvider>
-                                        )}
-
-                                        {openCartModal && (
-                                            <CoinsCartModal
-                                                darkTheme={darkTheme}
-                                                palette={darkTheme ? darkThemePalette : lightThemePalette}
-                                                openCartModal={openCartModal}
-                                                onCloseCartModal={handleCloseCartModal}
-                                                next={handleOpenPaymentModal}
-                                            />
-                                        )}
-
-                                        {openPaymentModal && (
-                                            <PaymentMethodModal
-                                                darkTheme={darkTheme}
-                                                palette={darkTheme ? darkThemePalette : lightThemePalette}
-                                                openPaymentModal={openPaymentModal}
-                                                onClosePaymentModal={handleClosePaymentModal}
-                                                next={handleMethodSelection}
-                                            />
-                                        )}
-
-                                        {openPaymentSuccessModal && (
-                                            <PaymentSuccessModal
-                                                darkTheme={darkTheme}
-                                                palette={darkTheme ? darkThemePalette : lightThemePalette}
-                                                openPaymentSuccessModal={openPaymentSuccessModal}
-                                                onClosePaymentSuccessModal={
-                                                    handleClosePaymentSuccessModal
-                                                }
-                                            />
-                                        )}
-                                        {openFaqsModal && (
-                                            <ThemeProvider theme={darkTheme ? darkThemePalette : lightThemePalette}>
-                                                <Modal
-                                                    open={openFaqsModal}
-                                                    onClose={handleCloseFaqsModal}
-                                                    aria-labelledby="modal-modal-title"
-                                                    aria-describedby="modal-modal-description"
-                                                >
-                                                    <Box sx={faqsModal}>
-                                                        <div className={styles.rechargeModalHeader}>
-                                                            <div
+                                                            <img
+                                                                src={closeIcon}
+                                                                alt=""
                                                                 style={{
-                                                                    display: 'flex',
-                                                                    justifyContent: 'space-between',
-                                                                    alignItems: 'center',
-                                                                    width: '70%',
+                                                                    width: '20px',
+                                                                    height: '20px',
                                                                 }}
-                                                            >
-                                                                <p>Payment FAQS</p>
-                                                                <IconButton
-                                                                    onClick={handleCloseFaqsModal}
-                                                                >
-                                                                    <img
-                                                                        src={closeIcon}
-                                                                        alt=""
-                                                                        style={{
-                                                                            width: '20px',
-                                                                            height: '20px',
-                                                                        }}
-                                                                    />
-                                                                </IconButton>
-                                                            </div>
-                                                        </div>
-                                                        <div className={styles.faqsContainer}>
-                                                            <FaqContainer />
-                                                        </div>
-                                                        <div>
-                                                            <button
-                                                                onClick={handleEmailClick}
-                                                                className={
-                                                                    styles.rechargeBtnFullWidth
-                                                                }
-                                                                style={{ gap: '12px' }}
-                                                            >
-                                                                <img src={reportEmailIcon} alt="" />
-                                                                <p>Report a different issue</p>
-                                                            </button>
-                                                        </div>
-                                                    </Box>
-                                                </Modal>
-                                            </ThemeProvider>
-                                        )}
-                                    </Box>
-                                </>
-                            </div>
+                                                            />
+                                                        </IconButton>
+                                                    </div>
+                                                </div>
+                                                <Box sx={{ marginBottom: '32px' }}>
+                                                    <Calculator />
+                                                </Box>
+                                                <div
+                                                    className={styles.giftsBottomDiv2}
+                                                    style={{ marginBottom: '32px' }}
+                                                >
+                                                    <div
+                                                        className={
+                                                            styles.giftsBottomLeftDiv2
+                                                        }
+                                                    >
+                                                        <p className={styles.giftCoinsText}>
+                                                            Total
+                                                        </p>
+                                                    </div>
+                                                    <div
+                                                        className={
+                                                            styles.giftsBottomRightDiv
+                                                        }
+                                                    >
+                                                        <p
+                                                            className={
+                                                                styles.giftCoinsAmountText
+                                                            }
+                                                        >
+                                                            QAR 0
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        gap: '16px',
+                                                        flexDirection: 'column',
+                                                    }}
+                                                >
+                                                    <IconButton
+                                                        onClick={handleOpenFaqsModal}
+                                                    >
+                                                        <img
+                                                            src={questionBlackIcon}
+                                                            alt=""
+                                                        />
+                                                    </IconButton>
+                                                    <button
+                                                        onClick={rechargeClick}
+                                                        className={
+                                                            styles.rechargeBtnFullWidth
+                                                        }
+                                                    >
+                                                        <p>Recharge</p>
+                                                    </button>
+                                                </div>
+                                            </Box>
+                                        </Modal>
+                                )}
+
+                                {openCartModal && (
+                                    <CoinsCartModal
+                                        darkTheme={darkTheme}
+                                        palette={darkTheme ? darkThemePalette : lightThemePalette}
+                                        openCartModal={openCartModal}
+                                        onCloseCartModal={handleCloseCartModal}
+                                        next={handleOpenPaymentModal}
+                                    />
+                                )}
+
+                                {openPaymentModal && (
+                                    <PaymentMethodModal
+                                        darkTheme={darkTheme}
+                                        palette={darkTheme ? darkThemePalette : lightThemePalette}
+                                        openPaymentModal={openPaymentModal}
+                                        onClosePaymentModal={handleClosePaymentModal}
+                                        next={handleMethodSelection}
+                                    />
+                                )}
+
+                                {openPaymentSuccessModal && (
+                                    <PaymentSuccessModal
+                                        darkTheme={darkTheme}
+                                        palette={darkTheme ? darkThemePalette : lightThemePalette}
+                                        openPaymentSuccessModal={openPaymentSuccessModal}
+                                        onClosePaymentSuccessModal={
+                                            handleClosePaymentSuccessModal
+                                        }
+                                    />
+                                )}
+                                {openFaqsModal && (
+                                        <Modal
+                                            open={openFaqsModal}
+                                            onClose={handleCloseFaqsModal}
+                                            aria-labelledby="modal-modal-title"
+                                            aria-describedby="modal-modal-description"
+                                        >
+                                            <Box sx={faqsModal}>
+                                                <div className={styles.rechargeModalHeader}>
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            justifyContent: 'space-between',
+                                                            alignItems: 'center',
+                                                            width: '70%',
+                                                        }}
+                                                    >
+                                                        <p>Payment FAQS</p>
+                                                        <IconButton
+                                                            onClick={handleCloseFaqsModal}
+                                                        >
+                                                            <img
+                                                                src={closeIcon}
+                                                                alt=""
+                                                                style={{
+                                                                    width: '20px',
+                                                                    height: '20px',
+                                                                }}
+                                                            />
+                                                        </IconButton>
+                                                    </div>
+                                                </div>
+                                                <div className={styles.faqsContainer}>
+                                                    <FaqContainer />
+                                                </div>
+                                                <div>
+                                                    <button
+                                                        onClick={handleEmailClick}
+                                                        className={
+                                                            styles.rechargeBtnFullWidth
+                                                        }
+                                                        style={{ gap: '12px' }}
+                                                    >
+                                                        <img src={reportEmailIcon} alt="" />
+                                                        <p>Report a different issue</p>
+                                                    </button>
+                                                </div>
+                                            </Box>
+                                        </Modal>
+                                )}
+                            </Box>
                         </div>
                     </div>
                     <div
@@ -494,6 +486,8 @@ const BalancePage = ({ className }: BalancePageProps) => {
                 </div>
                 {/* </div> */}
                 {/* </div > */}
+                </ThemeProvider>
+
             </Layout>
         </>
     );

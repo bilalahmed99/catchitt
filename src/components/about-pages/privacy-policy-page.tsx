@@ -39,20 +39,20 @@ export const PrivacyPolicyPage = ({ className }: PrivacyPolicyPageProps) => {
         <Layout>
             <div className={styles.container}>
                 <div className={` ${styles.middleSectionDiv} ${darkTheme} `}>
-                    <div className={styles.pageHeader}>
+                    <div className={`${styles.pageHeader} w-full p-3`}>
                         <IconButton
-                            sx={{ margin: '0px', padding: '0px', alignSelf: 'center' }}
+                            sx={{ margin: '0px', alignSelf: 'center', display: 'flex', gap: '1rem', justifyContent: 'start' }}
                             onClick={handleGoBack}
                         >
                             <LeftArrow />
+                        <h4 className={darkTheme!==''?'text-white':'text-black'}>Privacy Policy</h4>
                         </IconButton>
-                        <h4>Privacy Policy</h4>
                     </div>
                     <div className={styles.suggestedContent}>
                         <div className={styles.cards}>
                             <div>
                                 <div>
-                                    <h4>Privacy Policy</h4>
+                                    <h4 className={darkTheme!==''?'text-white':'text-black'}>Privacy Policy</h4>
                                 </div>
                                 <div>
                                     <p className={styles.paragraphsText}>

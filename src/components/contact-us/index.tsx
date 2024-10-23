@@ -27,10 +27,10 @@ const ContactUs = () => {
     return (
         <div>
             <Navbar />
-            <div className={`py-6 px-32 mt-24 ${darkTheme}`}>
+            <div className={`py-6 px-32 mt-20 ${darkTheme}`}>
                 <div
                     onClick={() => navigate(-1)}
-                    className="flex flex-row items-center gap-4 cursor-pointer"
+                    className="flex flex-row items-center gap-4 cursor-pointer p-4"
                 >
                     <img
                         className="object-contain"
@@ -39,7 +39,7 @@ const ContactUs = () => {
                         src={backArrow}
                         alt="back-arrow-icon"
                     />
-                    <h4 className="font-semibold text-xl text-[#222222]">Contact Us</h4>
+                    <p className="font-semibold text-xl text-[#222222]">Contact Us</p>
                 </div>
                 <div className="mt-8 flex flex-row items-center">
                     <div className="text-center w-[38.563rem] h-[35.813rem] py-8 px-10 rounded-ss-2xl rounded-es-2xl bg-[#EFEDFF]">
@@ -78,22 +78,22 @@ const ContactUs = () => {
                             name="name"
                             id="name"
                             placeholder="Name"
-                            className="px-4 rounded-md text-[#D1D1D1] mt-4 border h-12 w-full"
+                            className={`px-4 rounded-md  mt-4 border h-12 w-full ${darkTheme!==''?'text-white':'bg-[#F7F7F7] '}`}
                         />
                         <input
                             type="email"
                             name="email"
                             id="email"
                             placeholder="Email Address"
-                            className="px-4 rounded-md text-[#D1D1D1] mt-4 border h-12 w-full"
+                            className={`px-4 rounded-md  mt-4 border h-12 w-full ${darkTheme!==''?'text-white':'bg-[#F7F7F7] '}`}
                         />
                         <textarea
                             name="message"
                             id="message"
-                            className="h-[13.5rem] rounded-md text-[#D1D1D1] mt-4 border w-full resize-none p-3"
+                            className={`h-[13.5rem] rounded-md  mt-4 border w-full resize-none p-3 ${darkTheme!==''?'text-white':'bg-[#F7F7F7] '}`}
                             placeholder="Your message"
                         ></textarea>
-                        <button className="bg-[rgb(255, 59, 92)] rounded-md px-4 h-12 text-white font-semibold text-base w-full mt-4">
+                        <button className=" bg-custom-primary rounded-md px-4 h-12 text-white font-semibold text-base w-full mt-4">
                             Send message
                         </button>
                     </div>

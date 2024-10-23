@@ -528,8 +528,10 @@ h6 {
     // background: var(--default-white, #FFF);
 }
 
-.darkTheme div {
-    background: black !important;
+.darkTheme > div {
+    background: #181818 !important;
     color: white !important;
+    border-radius: 16px;
+    margin: 16px 16px 16px;
 }
 

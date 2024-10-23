@@ -638,7 +638,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                     </div> */}
                     <div className={` ${styles.middleSectionDiv} ${darkTheme} `}>
                         <div className={styles.settingsWrapper}>
-                            <div className={styles.pageHeader}>
+                            <div className={`${styles.pageHeader} p-3`}>
                                 <h4 className={darkTheme ? 'text-white' : 'text-black'}>Account</h4>
                             </div>
                             <div className={styles.suggestedContent}>
@@ -829,7 +829,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                             </div>
                         </div>
                         <div className={styles.settingsWrapper}>
-                            <div className={styles.pageHeader}>
+                            <div className={`${styles.pageHeader} p-3`}>
                                 <h4 className={darkTheme ? 'text-white' : 'text-black'}>Content & Activity</h4>
                             </div>
                             <div className={styles.suggestedContent}>
@@ -876,7 +876,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                             </div>
                         </div>
                         <div className={styles.settingsWrapper}>
-                            <div className={styles.pageHeader}>
+                            <div className={`${styles.pageHeader} p-3`}>
                                 <h4 className={darkTheme ? 'text-white' : 'text-black'}>Support</h4>
                             </div>
                             <div className={styles.suggestedContent}>
@@ -887,8 +887,6 @@ const Account = ({ className, openModal }: AccountProps) => {
                                     </div>
                                     <img src={whiteRightArrow} alt="" />
                                 </div>
-                            </div>
-                            <div className={styles.suggestedContent}>
                                 <div className={styles.accountCards}>
                                     <div className={styles.settingName} onClick={myReportsHandler}>
                                         <img src={myReports} alt="" />
@@ -896,8 +894,6 @@ const Account = ({ className, openModal }: AccountProps) => {
                                     </div>
                                     <img src={whiteRightArrow} alt="" />
                                 </div>
-                            </div>
-                            <div className={styles.suggestedContent}>
                                 <div className={styles.accountCards}>
                                     <div className={styles.settingName} onClick={contactUsHandler}>
                                         <img src={contactUS} alt="" />
@@ -908,7 +904,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                             </div>
                         </div>
                         <div className={styles.settingsWrapper}>
-                            <div className={styles.pageHeader}>
+                            <div className={`${styles.pageHeader} p-3`}>
                                 <h4 className={darkTheme ? 'text-white' : 'text-black'}>About</h4>
                             </div>
                             <div className={styles.suggestedContent}>
@@ -948,79 +944,78 @@ const Account = ({ className, openModal }: AccountProps) => {
                 </div>
             </Layout>
 
-            {passwordSuccessModal && (
-                <>
-                    <div>
-                        <Modal
-                            open={passwordSuccessModal}
-                            onClose={handleCloseSuccessModal}
-                            aria-labelledby="modal-modal-title"
-                            aria-describedby="modal-modal-description"
-                        >
-                            <Box
-                                sx={themeColor == 'dark' ? mainModalDarkstyle : mainModalstyle}
-                                style={{ width: '433px' }}
+            <ThemeProvider theme={darkTheme ? darkThemePalette : lightThemePalette}>
+                {passwordSuccessModal && (
+                    <>
+                        <div>
+                            <Modal
+                                open={passwordSuccessModal}
+                                onClose={handleCloseSuccessModal}
+                                aria-labelledby="modal-modal-title"
+                                aria-describedby="modal-modal-description"
                             >
-                                <div style={{ marginBottom: '24px' }}>
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            gap: '25px',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
-                                        }}
-                                    >
+                                <Box
+                                    sx={themeColor == 'dark' ? mainModalDarkstyle : mainModalstyle}
+                                    style={{ width: '433px' }}
+                                >
+                                    <div style={{ marginBottom: '24px' }}>
                                         <div
                                             style={{
-                                                marginTop: '20px',
                                                 display: 'flex',
+                                                flexDirection: 'column',
+                                                gap: '25px',
                                                 justifyContent: 'center',
+                                                alignItems: 'center',
                                             }}
                                         >
-                                            <img src={check} alt="" />
+                                            <div
+                                                style={{
+                                                    marginTop: '20px',
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                }}
+                                            >
+                                                <img src={check} alt="" />
+                                            </div>
+                                            <Typography
+                                                id="modal-modal-title"
+                                                variant="h6"
+                                                component="h2"
+                                                sx={{
+                                                    fontFamily: 'Poppins',
+                                                    fontSize: '20px',
+                                                    fontStyle: 'normal',
+                                                    fontWeight: 500,
+                                                    lineHeight: '30px',
+                                                    paddingBottom: '16.5px',
+                                                    textAlign: 'center',
+                                                }}
+                                            >
+                                                Password changed Successfully{' '}
+                                            </Typography>
                                         </div>
-                                        <Typography
-                                            id="modal-modal-title"
-                                            variant="h6"
-                                            component="h2"
-                                            sx={{
-                                                fontFamily: 'Poppins',
-                                                fontSize: '20px',
-                                                fontStyle: 'normal',
-                                                fontWeight: 500,
-                                                lineHeight: '30px',
-                                                paddingBottom: '16.5px',
-                                                textAlign: 'center',
-                                            }}
-                                        >
-                                            Password changed Successfully{' '}
-                                        </Typography>
                                     </div>
-                                </div>
 
-                                <Button
-                                    className={styles.doneBtn}
-                                    onClick={handleCloseSuccessModal}
-                                    variant="contained"
-                                    sx={mainModalBtnstyle}
-                                    style={{
-                                        minHeight: '48px !important',
-                                        background: 'rgb(255, 59, 92)',
-                                    }}
-                                >
-                                    Done
-                                </Button>
-                            </Box>
-                        </Modal>
-                    </div>
-                </>
-            )}
+                                    <Button
+                                        className={styles.doneBtn}
+                                        onClick={handleCloseSuccessModal}
+                                        variant="contained"
+                                        sx={mainModalBtnstyle}
+                                        style={{
+                                            minHeight: '48px !important',
+                                            background: 'rgb(255, 59, 92)',
+                                        }}
+                                    >
+                                        Done
+                                    </Button>
+                                </Box>
+                            </Modal>
+                        </div>
+                    </>
+                )}
 
-            {openChangePassMainModal && (
-                <>
-                    <ThemeProvider theme={darkTheme ? darkThemePalette : lightThemePalette}>
-
+                {openChangePassMainModal && (
+                    <>
                         <Modal
                             open={openChangePassMainModal}
                             onClose={handleCloseChangePassMainModal}
@@ -1114,524 +1109,527 @@ const Account = ({ className, openModal }: AccountProps) => {
                                 </Button>
                             </Box>
                         </Modal>
-                    </ThemeProvider>
-                </>
-            )}
+                    </>
+                )}
 
-            {openInstructionsPassModal && (
-                <>
-                    <Modal
-                        open={openInstructionsPassModal}
-                        onClose={handleCloseInstructionsPassModal}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                    >
-                        <Box sx={instructionsModalStyle}>
-                            <div>
-                                <img src={atForgotPwd} alt="" className={styles.atForgotPwd} />
-                            </div>
-                            <h3 className={styles.instructionsModalTitleText}>Check your Email</h3>
-                            <p className={styles.instructionsModalText}>
-                                We have sent you instructions to change your password on the email
-                                provided.
-                            </p>
-                            <div>
-                                <Button
-                                    // onClick={handleOpenInstructionsModal}
-                                    variant="contained"
-                                    sx={instructionsModalBtnstyle}
-                                >
-                                    Open Email App
-                                </Button>
-                                <Button
-                                    // onClick={handleOpenInstructionsModal}
-                                    variant="outlined"
-                                    sx={instructionsModalOutlinedBtnstyle}
-                                >
-                                    Resend
-                                </Button>
-                            </div>
-                            <div style={{ display: 'flex' }}>
-                                <p style={{ textAlign: 'center', width: '360px' }}>
-                                    <span className={styles.infoText}>
-                                        Did not receive the email? Check your spam filter,{' '}
-                                    </span>
-                                    <span className={styles.infoText}>or </span>
-                                    <span className={styles.infoTextLink}>
-                                        try another email address
-                                    </span>
-                                </p>
-                            </div>
-                        </Box>
-                    </Modal>
-                </>
-            )}
-
-            {openSetNewPassModal && (
-                <>
-                    <div>
+                {openInstructionsPassModal && (
+                    <>
                         <Modal
-                            open={openSetNewPassModal}
-                            onClose={handleCloseNewPassModal}
+                            open={openInstructionsPassModal}
+                            onClose={handleCloseInstructionsPassModal}
                             aria-labelledby="modal-modal-title"
                             aria-describedby="modal-modal-description"
                         >
-                            <Box sx={mainModalstyle}>
-                                <div style={{ marginBottom: '24px' }}>
-                                    <Typography
-                                        id="modal-modal-title"
-                                        variant="h6"
-                                        component="h2"
-                                        sx={{
-                                            fontFamily: 'Poppins',
-                                            fontSize: '20px',
-                                            fontStyle: 'normal',
-                                            fontWeight: 500,
-                                            lineHeight: '30px',
-                                            paddingBottom: '16px',
-                                            textAlign: 'center',
-                                        }}
+                            <Box sx={instructionsModalStyle}>
+                                <div>
+                                    <img src={atForgotPwd} alt="" className={styles.atForgotPwd} />
+                                </div>
+                                <h3 className={styles.instructionsModalTitleText}>Check your Email</h3>
+                                <p className={styles.instructionsModalText}>
+                                    We have sent you instructions to change your password on the email
+                                    provided.
+                                </p>
+                                <div>
+                                    <Button
+                                        // onClick={handleOpenInstructionsModal}
+                                        variant="contained"
+                                        sx={instructionsModalBtnstyle}
                                     >
-                                        Change password
-                                    </Typography>
-                                    <div>
-                                        <Typography
-                                            id="modal-modal-title"
-                                            variant="h6"
-                                            component="h2"
-                                            sx={{
-                                                // Create new password
-                                                color: 'rgb(255, 59, 92)',
-                                                fontSize: '18px',
-                                                fontFamily: 'Poppins',
-                                                fontWeight: '500',
-                                                lineHeight: '150%',
-                                                wordWrap: 'break-word',
-                                                textAlign: 'center',
-                                                paddingBottom: '16px',
-                                            }}
-                                        >
-                                            Create new password
-                                        </Typography>
-                                        <Typography
-                                            id="modal-modal-title"
-                                            variant="h6"
-                                            component="h2"
-                                            sx={{
-                                                color: 'var(--foundation-body-body-300, #6B6B6B)',
-                                                textAlign: 'center',
-                                                fontFamily: 'Poppins',
-                                                fontSize: '14px',
-                                                fontStyle: 'normal',
-                                                fontWeight: 400,
-                                                lineHeight: '150%',
-                                            }}
-                                        >
-                                            <span>
-                                                Your new password must have: <br></br>
-                                            </span>
-                                            <li>
-                                                8 to 64 characters <br></br>
-                                            </li>
-                                            <li>Letters, numbers, and special characters</li>
-                                        </Typography>
-                                        <div style={{ marginTop: '20px' }}>
-                                            {errorMessage ? (
-                                                <h4
-                                                    style={{
-                                                        fontWeight: '700',
-                                                        fontSize: '16px',
-                                                        color: 'red',
-                                                        marginBottom: '10px',
-                                                        textAlign: 'center',
-                                                    }}
-                                                >
-                                                    {errorMessage}
-                                                </h4>
-                                            ) : null}
-                                            {loadingAnimation ? (
-                                                <div
-                                                    style={{
-                                                        display: 'flex',
-                                                        justifyContent: 'center',
-                                                    }}
-                                                >
-                                                    <span className={styles.loader}></span>
-                                                </div>
-                                            ) : null}
-                                            {response ? renderResponse() : ''}
-                                        </div>
-                                    </div>
+                                        Open Email App
+                                    </Button>
+                                    <Button
+                                        // onClick={handleOpenInstructionsModal}
+                                        variant="outlined"
+                                        sx={instructionsModalOutlinedBtnstyle}
+                                    >
+                                        Resend
+                                    </Button>
                                 </div>
-                                <div style={{ marginBottom: '24px', width: '100%' }}>
-                                    <InputField
-                                        placeholder="Enter new password"
-                                        type="password"
-                                        value={user.password}
-                                        onChange={(e: { target: { value: string } }) => {
-                                            onUserChange('password', e.target.value);
-                                        }}
-                                    />
+                                <div style={{ display: 'flex' }}>
+                                    <p style={{ textAlign: 'center', width: '360px' }}>
+                                        <span className={styles.infoText}>
+                                            Did not receive the email? Check your spam filter,{' '}
+                                        </span>
+                                        <span className={styles.infoText}>or </span>
+                                        <span className={styles.infoTextLink}>
+                                            try another email address
+                                        </span>
+                                    </p>
                                 </div>
-                                <div style={{ marginBottom: '24px', width: '100%' }}>
-                                    <InputField
-                                        placeholder="Confirm new password"
-                                        type="password"
-                                        value={user.confirmPassword}
-                                        onChange={(e: { target: { value: string } }) => {
-                                            onUserChange('confirmPassword', e.target.value);
-                                        }}
-                                    />
-                                </div>
-                                <Button
-                                    className={styles.submitBtn}
-                                    onClick={handleSetNewPasswordSubmit}
-                                    variant="contained"
-                                    sx={mainModalBtnstyle}
-                                >
-                                    Submit
-                                </Button>
                             </Box>
                         </Modal>
-                    </div>
-                </>
-            )}
+                    </>
+                )}
 
-            {openContentPrefModal && (
-                <>
-                    <Modal
-                        open={openContentPrefModal}
-                        onClose={handleCloseContentPrefModal}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                    >
-                        <Box
-                            sx={
-                                themeColor == 'dark'
-                                    ? contentPrefDarkModalStyle
-                                    : contentPrefModalStyle
-                            }
-                        >
-                            <div className={styles.contentPrefHeader}>
-                                <h4 className={styles.contentPrefModalHeader}>
-                                    Content Preference
-                                </h4>
-                                <p className={styles.blueText}>
-                                    Choose the topics that interest you most.
-                                </p>
-                                <p className={styles.greyText}>You can choose from 1 to 5 topics</p>
-                            </div>
-                            <div
-                                className={
-                                    themeColor == 'dark'
-                                        ? `${styles.whiteCards} `
-                                        : `${styles.cards}`
-                                }
-                            //{styles.cards}
+                {openSetNewPassModal && (
+                    <>
+                        <div>
+                            <Modal
+                                open={openSetNewPassModal}
+                                onClose={handleCloseNewPassModal}
+                                aria-labelledby="modal-modal-title"
+                                aria-describedby="modal-modal-description"
                             >
-                                <FormGroup
-                                    sx={{
-                                        width: '100%',
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                        color: 'white',
-                                    }}
-                                >
-                                    {categoriesData.map((category: any) => {
-                                        return (
-                                            <div className={styles.card}>
-                                                <FormControlLabel
-                                                    sx={{
-                                                        marginRight: 0,
-                                                        marginLeft: 0,
-                                                    }}
-                                                    label={undefined}
-                                                    labelPlacement="start"
-                                                    onChange={() => handleCheckboxChange(category)}
-                                                    control={
-                                                        <Checkbox
-                                                            checked={isChecked(category)}
-                                                            sx={{
-                                                                '&.Mui-checked': {
-                                                                    color: 'rgb(255, 59, 92)',
-                                                                },
-                                                            }}
-                                                        />
-                                                    }
-                                                />
-                                                <img
-                                                    src={category.icon}
-                                                    alt=""
-                                                    style={{ marginRight: '12px' }}
-                                                />
-                                                <p>{category.name}</p>
+                                <Box sx={mainModalstyle}>
+                                    <div style={{ marginBottom: '24px' }}>
+                                        <Typography
+                                            id="modal-modal-title"
+                                            variant="h6"
+                                            component="h2"
+                                            sx={{
+                                                fontFamily: 'Poppins',
+                                                fontSize: '20px',
+                                                fontStyle: 'normal',
+                                                fontWeight: 500,
+                                                lineHeight: '30px',
+                                                paddingBottom: '16px',
+                                                textAlign: 'center',
+                                            }}
+                                        >
+                                            Change password
+                                        </Typography>
+                                        <div>
+                                            <Typography
+                                                id="modal-modal-title"
+                                                variant="h6"
+                                                component="h2"
+                                                sx={{
+                                                    // Create new password
+                                                    color: 'rgb(255, 59, 92)',
+                                                    fontSize: '18px',
+                                                    fontFamily: 'Poppins',
+                                                    fontWeight: '500',
+                                                    lineHeight: '150%',
+                                                    wordWrap: 'break-word',
+                                                    textAlign: 'center',
+                                                    paddingBottom: '16px',
+                                                }}
+                                            >
+                                                Create new password
+                                            </Typography>
+                                            <Typography
+                                                id="modal-modal-title"
+                                                variant="h6"
+                                                component="h2"
+                                                sx={{
+                                                    color: 'var(--foundation-body-body-300, #6B6B6B)',
+                                                    textAlign: 'center',
+                                                    fontFamily: 'Poppins',
+                                                    fontSize: '14px',
+                                                    fontStyle: 'normal',
+                                                    fontWeight: 400,
+                                                    lineHeight: '150%',
+                                                }}
+                                            >
+                                                <span>
+                                                    Your new password must have: <br></br>
+                                                </span>
+                                                <li>
+                                                    8 to 64 characters <br></br>
+                                                </li>
+                                                <li>Letters, numbers, and special characters</li>
+                                            </Typography>
+                                            <div style={{ marginTop: '20px' }}>
+                                                {errorMessage ? (
+                                                    <h4
+                                                        style={{
+                                                            fontWeight: '700',
+                                                            fontSize: '16px',
+                                                            color: 'red',
+                                                            marginBottom: '10px',
+                                                            textAlign: 'center',
+                                                        }}
+                                                    >
+                                                        {errorMessage}
+                                                    </h4>
+                                                ) : null}
+                                                {loadingAnimation ? (
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            justifyContent: 'center',
+                                                        }}
+                                                    >
+                                                        <span className={styles.loader}></span>
+                                                    </div>
+                                                ) : null}
+                                                {response ? renderResponse() : ''}
                                             </div>
-                                        );
-                                    })}
+                                        </div>
+                                    </div>
+                                    <div style={{ marginBottom: '24px', width: '100%' }}>
+                                        <InputField
+                                            placeholder="Enter new password"
+                                            type="password"
+                                            value={user.password}
+                                            onChange={(e: { target: { value: string } }) => {
+                                                onUserChange('password', e.target.value);
+                                            }}
+                                        />
+                                    </div>
+                                    <div style={{ marginBottom: '24px', width: '100%' }}>
+                                        <InputField
+                                            placeholder="Confirm new password"
+                                            type="password"
+                                            value={user.confirmPassword}
+                                            onChange={(e: { target: { value: string } }) => {
+                                                onUserChange('confirmPassword', e.target.value);
+                                            }}
+                                        />
+                                    </div>
                                     <Button
+                                        className={styles.submitBtn}
+                                        onClick={handleSetNewPasswordSubmit}
                                         variant="contained"
                                         sx={mainModalBtnstyle}
-                                        onClick={handleSubmitPrefContent}
-                                        disabled={notAcceptable}
                                     >
-                                        Done
+                                        Submit
                                     </Button>
-                                </FormGroup>
-                            </div>
-                        </Box>
-                    </Modal>
-                </>
-            )}
+                                </Box>
+                            </Modal>
+                        </div>
+                    </>
+                )}
 
-            {openDeleteAccountMainModal && (
-                <>
+                {openContentPrefModal && (
+                    <>
+                        <Modal
+                            open={openContentPrefModal}
+                            onClose={handleCloseContentPrefModal}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                        >
+                            <Box
+                                sx={
+                                    themeColor == 'dark'
+                                        ? contentPrefDarkModalStyle
+                                        : contentPrefModalStyle
+                                }
+                            >
+                                <div className={styles.contentPrefHeader}>
+                                    <h4 className={`${styles.contentPrefModalHeader} ${darkTheme !== '' ? 'text-white' : 'text-black'}`}>
+                                        Content Preference
+                                    </h4>
+                                    <p className={styles.blueText}>
+                                        Choose the topics that interest you most.
+                                    </p>
+                                    <p className={styles.greyText}>You can choose from 1 to 5 topics</p>
+                                </div>
+                                <div
+                                    className={
+                                        themeColor == 'dark'
+                                            ? `${styles.whiteCards} `
+                                            : `${styles.cards}`
+                                    }
+                                //{styles.cards}
+                                >
+                                    <FormGroup
+                                        sx={{
+                                            width: '100%',
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                            color: 'white',
+                                        }}
+                                    >
+                                        {categoriesData.map((category: any, index: number) => {
+                                            return (
+                                                <div className={`${styles.card} ${index === (categoriesData.length - 1) ? 'border-none' : ''}`}>
+                                                    <FormControlLabel
+                                                        sx={{
+                                                            marginRight: 0,
+                                                            marginLeft: 0,
+                                                        }}
+                                                        label={undefined}
+                                                        labelPlacement="start"
+                                                        onChange={() => handleCheckboxChange(category)}
+                                                        control={
+                                                            <Checkbox
+                                                                checked={isChecked(category)}
+                                                                sx={{
+                                                                    '&.Mui-checked': {
+                                                                        color: 'rgb(255, 59, 92)',
+                                                                    },
+                                                                }}
+                                                            />
+                                                        }
+                                                    />
+                                                    <img
+                                                        src={category.icon}
+                                                        alt=""
+                                                        style={{ marginRight: '12px' }}
+                                                    />
+                                                    <p>{category.name}</p>
+                                                </div>
+                                            );
+                                        })}
+                                        <Button
+                                            variant="contained"
+                                            sx={mainModalBtnstyle}
+                                            onClick={handleSubmitPrefContent}
+                                            disabled={notAcceptable}
+                                        >
+                                            Done
+                                        </Button>
+                                    </FormGroup>
+                                </div>
+                            </Box>
+                        </Modal>
+                    </>
+                )}
+
+                {openDeleteAccountMainModal && (
+                    <>
+                        <Modal
+                            open={openDeleteAccountMainModal}
+                            onClose={handleCloseDeleteAccountMainModal}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                        >
+                            <Box
+                                sx={
+                                    themeColor == 'dark'
+                                        ? contentPrefDarkModalStyle
+                                        : contentPrefModalStyle
+                                }
+                            >
+                                <DeleteReasonPopup
+                                    darkTheme={darkTheme}
+                                    onSubmit={() => setOpenDeleteAccountMainModal(false)} // Pass the onClose function
+                                    // handleOpen={handleOpenConfirmation}
+                                    handleClose={handleCloseDeleteAccountMainModal}
+                                />
+                            </Box>
+                        </Modal>
+                    </>
+                )}
+
+                {openSwitchToPersonal && (
+                    <>
+                        <Modal
+                            open={openSwitchToPersonal}
+                            onClose={handleCloseSwitchToPersonal}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                        >
+                            <Box
+                                sx={
+                                    themeColor == 'dark'
+                                        ? contentPrefDarkModalStyle
+                                        : contentPrefModalStyle
+                                }
+                            >
+                                <SwitchToPersonalPopup
+                                    darkTheme={darkTheme}
+                                    // onSubmit={() => setOpenDeleteAccountMainModal(false)} // Pass the onClose function
+                                    // handleOpen={handleOpenConfirmation}
+                                    handleClose={handleCloseSwitchToPersonalModal}
+                                />
+                            </Box>
+                        </Modal>
+                    </>
+                )}
+
+                {openSwitchToBusiness && (
+                    <>
+                        <Modal
+                            open={openSwitchToBusiness}
+                            onClose={handleCloseSwitchToBusiness}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                        >
+                            <Box
+                                sx={
+                                    themeColor == 'dark'
+                                        ? contentPrefDarkModalStyle
+                                        : contentPrefModalStyle
+                                }
+                            >
+                                <SwitchToBusinessPopup
+                                    darkTheme={darkTheme}
+                                    // onSubmit={() => setOpenDeleteAccountMainModal(false)} // Pass the onClose function
+                                    // handleOpen={handleOpenConfirmation}
+                                    handleClose={handleCloseSwitchToBusinessModal}
+                                />
+                            </Box>
+                        </Modal>
+                    </>
+                )}
+
+                {openShareProfileModal && (
+                    <>
+                        <Modal
+                            open={openShareProfileModal}
+                            onClose={handleCloseShareProfileModal}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                        >
+                            <Box
+                                sx={
+                                    themeColor == 'dark'
+                                        ? contentPrefDarkModalStyle
+                                        : contentPrefModalStyle
+                                }
+                            >
+                                <ShareProfilePopup theme={darkTheme} handleClose={handleCloseSwitchToBusinessModal} />
+                            </Box>
+                        </Modal>
+                    </>
+                )}
+
+                {openReportsModal && (
                     <Modal
-                        open={openDeleteAccountMainModal}
-                        onClose={handleCloseDeleteAccountMainModal}
+                        open={openReportsModal}
+                        onClose={() => setOpenReportsModal(false)}
                         aria-labelledby="modal-modal-title"
                         aria-describedby="modal-modal-description"
                     >
-                        <Box
-                            sx={
-                                themeColor == 'dark'
-                                    ? contentPrefDarkModalStyle
-                                    : contentPrefModalStyle
-                            }
-                        >
-                            <DeleteReasonPopup
-                                onSubmit={() => setOpenDeleteAccountMainModal(false)} // Pass the onClose function
-                                // handleOpen={handleOpenConfirmation}
-                                handleClose={handleCloseDeleteAccountMainModal}
-                            />
-                        </Box>
-                    </Modal>
-                </>
-            )}
-
-            {openSwitchToPersonal && (
-                <>
-                    <Modal
-                        open={openSwitchToPersonal}
-                        onClose={handleCloseSwitchToPersonal}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                    >
-                        <Box
-                            sx={
-                                themeColor == 'dark'
-                                    ? contentPrefDarkModalStyle
-                                    : contentPrefModalStyle
-                            }
-                        >
-                            <SwitchToPersonalPopup
-                                // onSubmit={() => setOpenDeleteAccountMainModal(false)} // Pass the onClose function
-                                // handleOpen={handleOpenConfirmation}
-                                handleClose={handleCloseSwitchToPersonalModal}
-                            />
-                        </Box>
-                    </Modal>
-                </>
-            )}
-
-            {openSwitchToBusiness && (
-                <>
-                    <Modal
-                        open={openSwitchToBusiness}
-                        onClose={handleCloseSwitchToBusiness}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                    >
-                        <Box
-                            sx={
-                                themeColor == 'dark'
-                                    ? contentPrefDarkModalStyle
-                                    : contentPrefModalStyle
-                            }
-                        >
-                            <SwitchToBusinessPopup
-                                // onSubmit={() => setOpenDeleteAccountMainModal(false)} // Pass the onClose function
-                                // handleOpen={handleOpenConfirmation}
-                                handleClose={handleCloseSwitchToBusinessModal}
-                            />
-                        </Box>
-                    </Modal>
-                </>
-            )}
-
-            {openShareProfileModal && (
-                <>
-                    <Modal
-                        open={openShareProfileModal}
-                        onClose={handleCloseShareProfileModal}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                    >
-                        <Box
-                            sx={
-                                themeColor == 'dark'
-                                    ? contentPrefDarkModalStyle
-                                    : contentPrefModalStyle
-                            }
-                        >
-                            <ShareProfilePopup theme={darkTheme} handleClose={handleCloseSwitchToBusinessModal} />
-                        </Box>
-                    </Modal>
-                </>
-            )}
-
-            {openReportsModal && (
-                <Modal
-                    open={openReportsModal}
-                    onClose={() => setOpenReportsModal(false)}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    {/* <Box sx={contentPrefModalStyle}> */}
-                    {/* <ReportProblemPopup handleClose={handleCloseSwitchToBusinessModal} /> */}
-                    <div
-                        onClick={() => setOpenReportsModal(false)}
-                        className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50"
-                    >
+                        {/* <Box sx={contentPrefModalStyle}> */}
+                        {/* <ReportProblemPopup handleClose={handleCloseSwitchToBusinessModal} /> */}
                         <div
-                            onClick={handleClickInside}
-                            className={
-                                themeColor == 'dark'
-                                    ? `${lightdarkTheme} rounded-lg p-6 w-[32.875rem] h-[33.875rem] flex flex-col`
-                                    : `bg-white rounded-lg p-6 w-[32.875rem] h-[33.875rem] flex flex-col`
-                            }
+                            onClick={() => setOpenReportsModal(false)}
+                            className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50"
                         >
-                            <h2 className="font-medium text-xl text-[#222222] mb-2 text-center">
-                                Report a problem
-                            </h2>
-                            <h3 className="font-normal text-base text-[rgb(255, 59, 92)] mb-4 text-center">
-                                Tell us your problem
-                            </h3>
-                            <textarea
-                                className="w-[478px] h-[214px] border border-gray-300 rounded-lg p-3 placeholder-gray-400 text-gray-800 mb-4 resize-none"
-                                placeholder="Please provide as much detail as possible"
-                                value={reportMessage}
-                                onChange={(e) => setReportMessage(e.target.value)}
-                            />
-                            <h2 className="font-medium text-lg text-[#222222] mb-4">
-                                Upload supporting media
-                            </h2>
-                            {/* <div className="flex flex-row items-center rounded-md gap-2 border-[1.5px] px-3.5 py-2 mb-4">
+                            <div
+                                onClick={handleClickInside}
+                                className={
+                                    themeColor == 'dark'
+                                        ? `${lightdarkTheme} rounded-lg p-6 w-[32.875rem] h-[33.875rem] flex flex-col`
+                                        : `bg-white rounded-lg p-6 w-[32.875rem] h-[33.875rem] flex flex-col`
+                                }
+                            >
+                                <p className="font-medium text-xl mb-2 text-center">
+                                    Report a problem
+                                </p>
+                                <p className="font-normal text-base mb-4 text-center">
+                                    Tell us your problem
+                                </p>
+                                <textarea
+                                    className={`w-[478px] h-[214px] border border-gray-300 rounded-lg p-3 mb-4 resize-none ${darkTheme!=='' ? 'bg-black' : 'bg-white'}`}
+                                    placeholder="Please provide as much detail as possible"
+                                    value={reportMessage}
+                                    onChange={(e) => setReportMessage(e.target.value)}
+                                />
+                                <p className="font-medium text-lg mb-4">
+                                    Upload supporting media
+                                </p>
+                                {/* <div className="flex flex-row items-center rounded-md gap-2 border-[1.5px] px-3.5 py-2 mb-4">
                                 <img src={upload} height={18.5} width={19.04} alt="" />
                                 <p>upload photo (0/4)</p>
                             </div> */}
-                            {images?.length > 0 ? (
-                                <div className="p-2 border border-[#D1D1D1] rounded-md mb-6 flex flex-row items-center gap-2">
-                                    {/* <img
+                                {images?.length > 0 ? (
+                                    <div className="p-2 border border-[#D1D1D1] rounded-md mb-6 flex flex-row items-center gap-2">
+                                        {/* <img
                                         src={image}
                                         alt="Uploaded"
                                         className="rounded-sm h-[6.375rem] w-[6.25rem]"
                                     /> */}
-                                    {images.map(
-                                        (
-                                            image: string | undefined,
-                                            index: React.Key | null | undefined
-                                        ) => (
+                                        {images.map(
+                                            (
+                                                image: string | undefined,
+                                                index: React.Key | null | undefined
+                                            ) => (
+                                                <div
+                                                    key={index}
+                                                    className="p-2 border border-[#D1D1D1] rounded-md flex flex-col items-center"
+                                                >
+                                                    <img
+                                                        src={image}
+                                                        alt="Uploaded"
+                                                        className="rounded-sm h-[6.375rem] w-[6.25rem]"
+                                                    />
+                                                </div>
+                                            )
+                                        )}
+                                        {images.length < 4 && (
                                             <div
-                                                key={index}
-                                                className="p-2 border border-[#D1D1D1] rounded-md flex flex-col items-center"
+                                                // onClick={handleClickMore}
+                                                className="h-[6.375rem] w-[6.25rem] items-center flex justify-center bg-[#DFDFDF] rounded cursor-pointer"
                                             >
                                                 <img
-                                                    src={image}
-                                                    alt="Uploaded"
-                                                    className="rounded-sm h-[6.375rem] w-[6.25rem]"
+                                                    className="object-contain"
+                                                    src={addMore}
+                                                    alt="addmore"
+                                                    height={28.67}
+                                                    width={28.67}
+                                                />
+                                                <input
+                                                    id="fileInput"
+                                                    type="file"
+                                                    accept="image/*"
+                                                    className="hidden"
+                                                // onChange={handleImageChange}
                                                 />
                                             </div>
-                                        )
-                                    )}
-                                    {images.length < 4 && (
-                                        <div
-                                            // onClick={handleClickMore}
-                                            className="h-[6.375rem] w-[6.25rem] items-center flex justify-center bg-[#DFDFDF] rounded cursor-pointer"
-                                        >
-                                            <img
-                                                className="object-contain"
-                                                src={addMore}
-                                                alt="addmore"
-                                                height={28.67}
-                                                width={28.67}
-                                            />
-                                            <input
-                                                id="fileInput"
-                                                type="file"
-                                                accept="image/*"
-                                                className="hidden"
-                                            // onChange={handleImageChange}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                            ) : (
-                                <label className="flex flex-row items-center rounded-md gap-2 border-[1.5px] px-3.5 py-2 mb-4 cursor-pointer">
-                                    <input
-                                        id="fileInput"
-                                        type="file"
-                                        accept="image/*"
-                                        className="hidden"
-                                    // onChange={handleImageChange}
-                                    />
-                                    <img src={upload} height={18.5} width={19.04} alt="" />
-                                    <p>Upload photo (0/4)</p>
-                                </label>
-                            )}
-                            <button
-                                onClick={submitReportHandler}
-                                className="bg-[#EEEDF7] text-white font-semibold px-4 rounded-md w-full"
-                            >
-                                <p className="text-[rgb(255, 59, 92)]">Submit</p>
-                            </button>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <label className="flex flex-row items-center rounded-md gap-2 border-[1.5px] px-3.5 py-2 mb-4 cursor-pointer">
+                                        <input
+                                            id="fileInput"
+                                            type="file"
+                                            accept="image/*"
+                                            className="hidden"
+                                        // onChange={handleImageChange}
+                                        />
+                                        <img src={upload} height={18.5} width={19.04} alt="" />
+                                        <p>Upload photo (0/4)</p>
+                                    </label>
+                                )}
+                                <button
+                                    onClick={submitReportHandler}
+                                    className="bg-[#DE0C0C] text-white font-semibold px-4 rounded-md w-full"
+                                >
+                                    <p className="text-[rgb(255, 59, 92)]">Submit</p>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    {/* </Box> */}
-                </Modal>
-            )}
+                        {/* </Box> */}
+                    </Modal>
+                )}
 
-            {openReportSubmittedModal && (
-                <Modal
-                    open={openReportSubmittedModal}
-                    onClose={() => setOpenReportSubmittedModal(false)}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    {/* <Box sx={contentPrefModalStyle}> */}
-                    {/* <ReportProblemPopup handleClose={handleCloseSwitchToBusinessModal} /> */}
-                    <div
-                        onClick={() => setOpenReportSubmittedModal(false)}
-                        className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50"
+                {openReportSubmittedModal && (
+                    <Modal
+                        open={openReportSubmittedModal}
+                        onClose={() => setOpenReportSubmittedModal(false)}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
                     >
+                        {/* <Box sx={contentPrefModalStyle}> */}
+                        {/* <ReportProblemPopup handleClose={handleCloseSwitchToBusinessModal} /> */}
                         <div
-                            onClick={handleClickInside}
-                            className="bg-white rounded-lg p-6 w-[27.063rem] h-[26.188rem] flex flex-col items-center"
+                            onClick={() => setOpenReportSubmittedModal(false)}
+                            className="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50"
                         >
-                            <h2 className="font-bold text-lg text-[#222222] mb-8">
-                                Report submitted
-                            </h2>
-                            <img
-                                src={checkSubmitted}
-                                alt="Check Submitted"
-                                className="rounded-sm h-[6.375rem] w-[6.25rem] mb-6"
-                            />
-                            <h2 className="font-bold text-xl text-[#222222] mb-1">Thank you</h2>
-                            <p className="font-normal text-lg text-[#222222] mt-3 text-center px-2.5">
-                                Your report helps us provide a safe and supportive environment.
-                            </p>
-                            <button
-                                onClick={() => setOpenReportSubmittedModal(false)}
-                                className="bg-[rgb(255, 59, 92)] text-white font-semibold px-4 rounded-md w-full mt-3.5 py-3"
+                            <div
+                                onClick={handleClickInside}
+                                className="bg-white rounded-lg p-6 w-[27.063rem] h-[26.188rem] flex flex-col items-center"
                             >
-                                <p className="text-[##FFFFFF] font-semibold text-base">Done</p>
-                            </button>
+                                <h2 className="font-bold text-lg text-[#222222] mb-8">
+                                    Report submitted
+                                </h2>
+                                <img
+                                    src={checkSubmitted}
+                                    alt="Check Submitted"
+                                    className="rounded-sm h-[6.375rem] w-[6.25rem] mb-6"
+                                />
+                                <h2 className="font-bold text-xl text-[#222222] mb-1">Thank you</h2>
+                                <p className="font-normal text-lg text-[#222222] mt-3 text-center px-2.5">
+                                    Your report helps us provide a safe and supportive environment.
+                                </p>
+                                <button
+                                    onClick={() => setOpenReportSubmittedModal(false)}
+                                    className="bg-[rgb(255, 59, 92)] text-white font-semibold px-4 rounded-md w-full mt-3.5 py-3"
+                                >
+                                    <p className="text-[##FFFFFF] font-semibold text-base">Done</p>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    {/* </Box> */}
-                </Modal>
-            )}
+                        {/* </Box> */}
+                    </Modal>
+                )}
+            </ThemeProvider>
         </>
     );
 };
@@ -1685,6 +1683,7 @@ var mainModalBtnstyle = {
     borderRadius: '6px',
     background: 'var(--foundation-primary-primary-500, rgb(255, 59, 92)) !important',
     textTransform: 'none',
+    color: 'white !important',
 };
 
 var instructionsModalStyle = {

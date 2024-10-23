@@ -48,7 +48,7 @@ h6 {
 
 .middleSectionDiv {
     display: inline-flex;
-    gap: 15%;
+    gap: 5%;
     height: 100%;
     width: 100%;
     max-width: 655px;
@@ -574,7 +574,7 @@ h6 {
     width: 270px;
     width: 50%;
     height: 110px;
-    background: #EEEDF7;
+    // background: #EEEDF7;
     border-radius: 4px;
     padding: 8px 16px;
     margin-bottom: 16px;
@@ -601,4 +601,11 @@ h6 {
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+}
+
+.darkTheme > div {
+    background: #181818 !important;
+    color: white !important;
+    border-radius: 16px;
+    margin: 16px 16px 16px;
 }

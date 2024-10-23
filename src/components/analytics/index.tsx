@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Layout from '../../shared/layout';
 import whiteRightArrow from './svg-components/whiteRightArrow.svg';
-
+// import styles from './style.module.scss'
 const Analytics = () => {
     const [currentTab, setCurrentTab] = useState(0);
     const API_KEY = process.env.VITE_API_URL;
@@ -48,9 +48,17 @@ const Analytics = () => {
         getUserAnalytics();
     }, []);
 
+    // const [darkTheme, setdarkTheme] = useState<any>(null);
+    // useEffect(() => {
+    //     var themeColor = window.localStorage.getItem('theme');
+    //     if (themeColor == 'dark') {
+    //         setdarkTheme(styles.darkTheme);
+    //     }
+    // });
+
     return (
         <Layout>
-            <div className="p-2">
+            <div className="p-4">
                 <div
                     onClick={currentTabToggler}
                     className="flex flex-row justify-between items-center mt-8 gap-5 px-4"
@@ -77,7 +85,7 @@ const Analytics = () => {
                             </div>
                         </div>
                         <div className="text-left mt-3 flex flex-row items-center w-fit gap-2 ml-1">
-                            <h2 className="font-bold text-lg">Key Metrics</h2>
+                            <span className="font-bold text-lg">Key Metrics</span>
                             <div className="p-2 h-3 w-3 rounded-full border border-pink-400 flex justify-center items-center">
                                 <p className="text-sm font-normal text-pink-500">i</p>
                             </div>
@@ -109,32 +117,32 @@ const Analytics = () => {
                             </div>
                         </div>
                         <div className="text-left mt-2 flex flex-row items-center w-fit gap-2 ">
-                            <h2 className="font-medium text-xl mt-3">Video Views</h2>
+                            <span className="font-medium text-xl mt-3">Video Views</span>
                         </div>
                         <div className="mt-2 flex flex-row items-end justify-end">
-                            <h2 className="font-medium text-xl mt-3">1</h2>
+                            <p className="font-medium text-xl mt-3">1</p>
                         </div>
                         <div className="mt-2 flex flex-row items-center justify-between gap-2">
                             <p className="flex-1">
                                 ------------------------------------------------------------------------------------------------------------
                             </p>
-                            <h2 className="font-medium text-xl">0.5</h2>
+                            <p className="font-medium text-xl">0.5</p>
                         </div>
                         <div className="mt-2 flex flex-row items-center justify-between gap-2">
                             <p className="flex-1">
                                 ------------------------------------------------------------------------------------------------------------
                             </p>
-                            <h2 className="font-medium text-xl">0</h2>
+                            <p className="font-medium text-xl">0</p>
                         </div>
                         <div className="mt-2 flex flex-row items-center justify-between gap-2">
                             <p className="flex-1">
                                 ------------------------------------------------------------------------------------------------------------
                             </p>
-                            <h2 className="font-medium text-xl">-0.5</h2>
+                            <p className="font-medium text-xl">-0.5</p>
                         </div>
                         <div className="mt-2 flex flex-row items-center justify-between gap-2">
                             <p className="font-medium text-xl">0</p>
-                            <h2 className="font-medium text-xl">-1</h2>
+                            <p className="font-medium text-xl">-1</p>
                         </div>
                         <div className="flex flex-row justify-between items-center mt-3">
                             <p className="font-medium text-xl ">For your inspiration</p>
@@ -155,7 +163,7 @@ const Analytics = () => {
                     <>
                         <div className="mt-12">
                             <div className="text-left flex flex-row items-center w-fit gap-2 mt-4">
-                                <h2 className="font-bold text-xl">Video posts</h2>
+                                <p className="font-bold text-xl">Video posts</p>
                                 <div className="p-2 h-3 w-3 rounded-full border border-pink-400 flex justify-center items-center">
                                     <p className="text-sm font-normal text-pink-500">i</p>
                                 </div>
@@ -170,7 +178,7 @@ const Analytics = () => {
                         <div className="w-full bg-gray-400 h-[1px] rounded mt-6" />
                         <div className="mt-4">
                             <div className="text-left flex flex-row items-center w-fit gap-2 mt-4">
-                                <h2 className="font-bold text-xl">Trending videos</h2>
+                                <p className="font-bold text-xl">Trending videos</p>
                                 <div className="p-2 h-3 w-3 rounded-full border border-pink-400 flex justify-center items-center">
                                     <p className="text-sm font-normal text-pink-500">i</p>
                                 </div>

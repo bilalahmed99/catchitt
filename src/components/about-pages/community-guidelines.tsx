@@ -38,14 +38,14 @@ export const CommunityPage = ({ className }: CommunityPageProps) => {
         <Layout>
             <div className={styles.container}>
                 <div className={` ${styles.middleSectionDiv} ${darkTheme} `}>
-                    <div className={styles.pageHeader}>
+                    <div className={`${styles.pageHeader} w-full p-3`}>
                         <IconButton
-                            sx={{ margin: '0px', padding: '0px', alignSelf: 'center' }}
+                            sx={{ margin: '0px', alignSelf: 'center', display: 'flex', gap: '1rem', justifyContent: 'start' }}
                             onClick={handleGoBack}
                         >
                             <LeftArrow />
+                        <h4 className={darkTheme!==''?'text-white':'text-black'}>Community guidelines</h4>
                         </IconButton>
-                        <h4>Community guidelines</h4>
                     </div>
                     <div className={` ${styles.suggestedContent} `}>
                         <div className={styles.cards}>

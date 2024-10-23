@@ -18,6 +18,7 @@ import { useDispatch } from 'react-redux';
 import { updateProfileType } from '../../../redux/reducers/auth';
 
 export interface SwitchToBusinessPopupProps {
+    darkTheme?: any;
     className?: string;
     onSubmit?: any;
     handleOpen?: any;
@@ -46,6 +47,7 @@ interface Category {
 }
 
 export const SwitchToBusinessPopup = ({
+    darkTheme,
     className,
     onSubmit,
     handleOpen,
@@ -219,7 +221,7 @@ export const SwitchToBusinessPopup = ({
                                 <div className={styles.cardDiv}>
                                     <img src={firstParagraphIcon} alt="" />
                                     <div className={styles.textDiv}>
-                                        <p className={styles.paragraphTitle}>
+                                        <p className={`${styles.paragraphTitle} ${darkTheme!==''&&'text-white'}`}>
                                             Learn about your customers
                                         </p>
                                         <p className={styles.paragraphText}>
@@ -231,7 +233,7 @@ export const SwitchToBusinessPopup = ({
                                 <div className={styles.cardDiv}>
                                     <img src={secondParagraphIcon} alt="" />
                                     <div className={styles.textDiv}>
-                                        <p className={styles.paragraphTitle}>
+                                        <p className={`${styles.paragraphTitle} ${darkTheme!==''&&'text-white'}`}>
                                             Use royalty-free sounds
                                         </p>
                                         <p className={styles.paragraphText}>
@@ -243,7 +245,7 @@ export const SwitchToBusinessPopup = ({
                                 <div className={styles.cardDiv}>
                                     <img src={thirdParagraphIcon} alt="" />
                                     <div className={styles.textDiv}>
-                                        <p className={styles.paragraphTitle}>Get inspired</p>
+                                        <p className={`${styles.paragraphTitle} ${darkTheme!==''&&'text-white'}`}>Get inspired</p>
                                         <p className={styles.paragraphText}>
                                             Get guidance and inspiration for your content in our
                                             Business Creative Hub .{' '}
@@ -253,7 +255,7 @@ export const SwitchToBusinessPopup = ({
                                 <div className={styles.cardDiv}>
                                     <img src={fourthParagraphIcon} alt="" />
                                     <div className={styles.textDiv}>
-                                        <p className={styles.paragraphTitle}>
+                                        <p className={`${styles.paragraphTitle} ${darkTheme!==''&&'text-white'}`}>
                                             Access Business Suit tools
                                         </p>
                                         <p className={styles.paragraphText}>
@@ -332,7 +334,7 @@ export const SwitchToBusinessPopup = ({
                                                         alt=""
                                                         style={{ marginRight: '12px' }}
                                                     />
-                                                    <p>{category.name}</p>
+                                                    <p className={darkTheme !== '' ? 'text-white' : ''}>{category.name}</p>
                                                 </div>
                                             );
                                         })}
@@ -429,7 +431,7 @@ export const SwitchToBusinessPopup = ({
                                         className={styles.finalDeleteConfirmationDiv}
                                         style={{ textAlign: 'center' }}
                                     >
-                                        <h4>Business profile created</h4>
+                                        <h4 className={darkTheme!==''?'texh-white':'text-black'}>Business profile created</h4>
                                         <img
                                             src={congratsIcon}
                                             alt=""
@@ -437,8 +439,8 @@ export const SwitchToBusinessPopup = ({
                                         />
                                     </div>
                                     <div>
-                                        <h1 className={styles.boldText}>You’re all set</h1>
-                                        <p className={styles.blackText}>
+                                        <h1 className={`${styles.boldText} ${darkTheme!==''&&'text-white'}`}>You’re all set</h1>
+                                        <p className={darkTheme!==''?styles.greyText:styles.blackText}>
                                             Now you can access more tools to better connect with
                                             your customers and grow your business.
                                         </p>
@@ -473,6 +475,7 @@ var mainModalstyle = {
 
 var mainModalBtnstyle = {
     fontFamily: 'Poppins !important',
+    color: 'white !important',
     display: 'flex !important',
     width: '478px !important',
     height: '48px !important',

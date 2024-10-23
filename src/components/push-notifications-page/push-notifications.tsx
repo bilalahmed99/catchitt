@@ -48,8 +48,8 @@ export const PushNotificationsPage = ({ className }: PushNotificationsPageProps)
     };
 
     // if (!isLoggedIn) {
-        console.log("IS Logged In : ",isLoggedIn);
-        // return <Navigate to="/auth" />;
+    console.log("IS Logged In : ", isLoggedIn);
+    // return <Navigate to="/auth" />;
     // }
 
     useEffect(() => {
@@ -118,7 +118,7 @@ export const PushNotificationsPage = ({ className }: PushNotificationsPageProps)
             });
     };
 
-    const [darkTheme, setdarkTheme] = useState('');
+    const [darkTheme, setdarkTheme] = useState<any>(null);
     useEffect(() => {
         var themeColor = window.localStorage.getItem('theme');
         if (themeColor == 'dark') {
@@ -128,154 +128,140 @@ export const PushNotificationsPage = ({ className }: PushNotificationsPageProps)
     });
 
     return (
-        // <div className={classNames(styles.root, className)}>
         <Layout>
-            {/* <div className={styles.topBarDiv}>
-                <TopBar />
-            </div> */}
-            <div className={styles.container}>
-                {/* <div className={styles.leftSide}>
-                    <div className={styles.sideNavDiv}>
-                        <SideNavBar selectedIndex={selectedIndex} settingsDropdownState={true} />
-                    </div>
-                    <div className={styles.suggestedActivityDiv}>
-                        <SuggestedActivity showActivity={true} showSuggestedContent={true} />
-                    </div>
-                </div> */}
-                <div className={` ${styles.middleSectionDiv} ${darkTheme}`}>
-                    <div className={styles.pageHeader}>
-                        <IconButton
-                            sx={{ margin: '0px', padding: '0px', alignSelf: 'center' , display:'flex' , gap:'1rem' }}
-                            onClick={handleGoBack}
+            <div className={` ${styles.middleSectionDiv} ${darkTheme ?? ''}`}>
+                <div className={`${styles.pageHeader} p-3 w-full`}>
+                    <IconButton
+                        sx={{ margin: '0px', padding: '0px', alignSelf: 'center', display: 'flex', gap: '1rem', justifyContent:'start' }}
+                        onClick={handleGoBack}
+                    >
+                        <LeftArrow />
+                        <h4 className={darkTheme ? 'text-white' : 'text-black'}>Push notifications</h4>
+                    </IconButton>
+                </div>
+                <div className={styles.suggestedContent}>
+                    <h4 className={darkTheme ? 'text-white' : 'text-black'}>Email notifications</h4>
+                    <div className={styles.cards}>
+                        <FormGroup
+                            sx={{
+                                width: '100%',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                            }}
                         >
-                            <LeftArrow />
-                            <h4>Push notifications</h4>
-                        </IconButton>
+                            <div className={styles.card}>
+                                <p>Feedback Emails</p>
+                                <FormControlLabel
+                                    label={undefined}
+                                    labelPlacement="start"
+                                    control={
+                                        <IOSSwitch
+                                            sx={{ m: 1 }}
+                                            checked={settings?.feedback || false}
+                                            onChange={(e: any) =>
+                                                handleSwitchChange(e, 'feedback')
+                                            }
+                                        />
+                                    }
+                                />
+                            </div>
+                            <div className={styles.card}>
+                                <p>Reminder Emails</p>
+                                <FormControlLabel
+                                    label={undefined}
+                                    labelPlacement="start"
+                                    control={
+                                        <IOSSwitch
+                                            sx={{ m: 1 }}
+                                            checked={settings?.reminders || false}
+                                            onChange={(e: any) =>
+                                                handleSwitchChange(e, 'reminders')
+                                            }
+                                        />
+                                    }
+                                />
+                            </div>
+                            <div className={styles.card}>
+                                <p>News Emails</p>
+                                <FormControlLabel
+                                    label={undefined}
+                                    labelPlacement="start"
+                                    control={
+                                        <IOSSwitch
+                                            sx={{ m: 1 }}
+                                            checked={settings?.news || false}
+                                            onChange={(e: any) => handleSwitchChange(e, 'news')}
+                                        />
+                                    }
+                                />
+                            </div>
+                        </FormGroup>
                     </div>
-                    <div className={styles.suggestedContent}>
-                        <h4>Email notifications</h4>
-                        <div className={styles.cards}>
-                            <FormGroup
-                                sx={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <div className={styles.card}>
-                                    <p>Feedback Emails</p>
-                                    <FormControlLabel
-                                        label={undefined}
-                                        labelPlacement="start"
-                                        control={
-                                            <IOSSwitch
-                                                sx={{ m: 1 }}
-                                                checked={settings?.feedback || false}
-                                                onChange={(e: any) =>
-                                                    handleSwitchChange(e, 'feedback')
-                                                }
-                                            />
-                                        }
-                                    />
-                                </div>
-                                <div className={styles.card}>
-                                    <p>Reminder Emails</p>
-                                    <FormControlLabel
-                                        label={undefined}
-                                        labelPlacement="start"
-                                        control={
-                                            <IOSSwitch
-                                                sx={{ m: 1 }}
-                                                checked={settings?.reminders || false}
-                                                onChange={(e: any) =>
-                                                    handleSwitchChange(e, 'reminders')
-                                                }
-                                            />
-                                        }
-                                    />
-                                </div>
-                                <div className={styles.card}>
-                                    <p>News Emails</p>
-                                    <FormControlLabel
-                                        label={undefined}
-                                        labelPlacement="start"
-                                        control={
-                                            <IOSSwitch
-                                                sx={{ m: 1 }}
-                                                checked={settings?.news || false}
-                                                onChange={(e: any) => handleSwitchChange(e, 'news')}
-                                            />
-                                        }
-                                    />
-                                </div>
-                            </FormGroup>
-                        </div>
+                </div>
+                <div className={styles.suggestedContent} >
+                    <h4 className={darkTheme ? 'text-white' : 'text-black'}>Following and Followers</h4>
+                    <div className={styles.cards}>
+                        <FormGroup
+                            // onChange={handleSettingsChange}
+                            sx={{
+                                width: '100%',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <div className={styles.card}>
+                                <p>New Followers</p>
+                                <FormControlLabel
+                                    label={undefined}
+                                    labelPlacement="start"
+                                    control={
+                                        <IOSSwitch
+                                            sx={{ m: 1 }}
+                                            checked={settings?.followers || false}
+                                            onChange={(e: any) =>
+                                                handleSwitchChange(e, 'followers')
+                                            }
+                                        />
+                                    }
+                                />
+                            </div>
+                        </FormGroup>
                     </div>
-                    <div className={styles.suggestedContent} style={{ paddingTop: 0 }}>
-                        <h4>Following and Followers</h4>
-                        <div className={styles.cards}>
-                            <FormGroup
-                                // onChange={handleSettingsChange}
-                                sx={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <div className={styles.card}>
-                                    <p>New Followers</p>
-                                    <FormControlLabel
-                                        label={undefined}
-                                        labelPlacement="start"
-                                        control={
-                                            <IOSSwitch
-                                                sx={{ m: 1 }}
-                                                checked={settings?.followers || false}
-                                                onChange={(e: any) =>
-                                                    handleSwitchChange(e, 'followers')
-                                                }
-                                            />
-                                        }
-                                    />
-                                </div>
-                            </FormGroup>
-                        </div>
-                    </div>
-                    <div className={styles.suggestedContent} style={{ paddingTop: 0 }}>
-                        <h4>Messages and Calls</h4>
-                        <div className={styles.cards}>
-                            <FormGroup
-                                // onChange={handleSettingsChange}
-                                sx={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <div className={styles.card}>
-                                    <p>Messages</p>
-                                    <FormControlLabel
-                                        label={undefined}
-                                        labelPlacement="start"
-                                        control={
-                                            <IOSSwitch
-                                                sx={{ m: 1 }}
-                                                checked={settings?.messages || false}
-                                                onChange={(e: any) =>
-                                                    handleSwitchChange(e, 'messages')
-                                                }
-                                            />
-                                        }
-                                    />
-                                </div>
-                            </FormGroup>
-                        </div>
+                </div>
+                <div className={styles.suggestedContent}>
+                    <h4 className={darkTheme ? 'text-white' : 'text-black'}>Messages and Calls</h4>
+                    <div className={styles.cards}>
+                        <FormGroup
+                            // onChange={handleSettingsChange}
+                            sx={{
+                                width: '100%',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <div className={styles.card}>
+                                <p>Messages</p>
+                                <FormControlLabel
+                                    label={undefined}
+                                    labelPlacement="start"
+                                    control={
+                                        <IOSSwitch
+                                            sx={{ m: 1 }}
+                                            checked={settings?.messages || false}
+                                            onChange={(e: any) =>
+                                                handleSwitchChange(e, 'messages')
+                                            }
+                                        />
+                                    }
+                                />
+                            </div>
+                        </FormGroup>
                     </div>
                 </div>
             </div>

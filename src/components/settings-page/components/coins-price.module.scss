@@ -24,7 +24,7 @@
      // flex-shrink: 0;
      border-radius  : 4px;
      border         : 1px solid var(--foundation-primary-primary-50, #EEEDF7);
-     background     : var(--default-white, #FFF);
+    //  background     : var(--default-white, #FFF);
      align-items    : center;
      justify-content: space-between;
      padding        : 16px 0px;
@@ -34,7 +34,7 @@
 
  .price:hover {
      border    : 1px solid var(--foundation-primary-primary-500, rgb(255, 59, 92));
-     background: var(--default-white, #FFF);
+    //  background: var(--default-white, #FFF);
  }
 
 
