@@ -30,28 +30,26 @@ export default function Discover() {
     // theme
     const [darkTheme, setdarkTheme] = useState('');
 
-    const getExplorePageData = async (fromStart = false) => {
+    const getExplorePageData = async (signal: AbortSignal) => {
         let identifier = selectedCategory ? `/${selectedCategory}` : '';
         try {
             const response = await fetch(
-                `${API_KEY}/media-content/public/videos/feed/upgraded${identifier}?page=${fromStart ? 1 : exploredVideos.page}&pageSize=${exploredVideos.pageSize}&forWeb=1`,
+                `${API_KEY}/media-content/public/videos/feed/upgraded${identifier}?page=${exploredVideos.page}&pageSize=${exploredVideos.pageSize}&forWeb=1`,
                 {
                     method: 'GET',
                     headers: {
                         'Content-type': 'application/json',
                         Authorization: `Bearer ${token}`,
                     },
+                    signal,
                 }
             );
             const { data } = await response.json();
             console.log('DATA >>>>>>> ', data?.data);
-            if (data?.data.length === 0) return getExplorePageData();
+            if (data?.data.length === 0 && data?.hasNextPage) return getExplorePageData(signal);
             if (Array.isArray(data?.data)) {
                 const exploredVideosObj = { ...exploredVideos };
-                if (data?.hasNextPage) {
-                    exploredVideosObj.page = fromStart ? 2 : exploredVideosObj.page + 1;
-                }
-                exploredVideosObj.items = fromStart ? data?.data : [...exploredVideosObj.items, ...data?.data];
+                exploredVideosObj.items = [...exploredVideosObj.items, ...data?.data];
                 exploredVideosObj.totalItems = data?.totalItems;
                 console.log('exploredVideosObj >>>>>>> ', exploredVideosObj);
                 setExploredVideos(exploredVideosObj);
@@ -64,6 +62,8 @@ export default function Discover() {
             }
         } catch (error) {
             console.error('Error fetching trending videos:', error);
+            setExploredVideos((prev: any) => ({ ...prev, totalItems: undefined }));
+
         }
     }
 
@@ -79,16 +79,36 @@ export default function Discover() {
     };
 
     useEffect(() => {
+        const controller = new AbortController();
+        const signal = controller.signal;
         const fetchVedios = async () => {
             setIsLoading(true);
-            await getExplorePageData();
+            await getExplorePageData(signal);
             setIsLoading(false);
         };
         fetchVedios();
+        return () => {
+            controller.abort();
+        }
     }, []);
 
     useUpdateEffect(() => {
-        getExplorePageData();
+        const controller = new AbortController();
+        const signal = controller.signal;
+        getExplorePageData(signal);
+        return () => {
+            controller.abort();
+        }
+    }, [exploredVideos.page]);
+
+
+    useUpdateEffect(() => {
+        const controller = new AbortController();
+        const signal = controller.signal;
+        getExplorePageData(signal);
+        return () => {
+            controller.abort();
+        }
     }, [selectedCategory]);
 
     useEffect(() => {
@@ -132,7 +152,7 @@ export default function Discover() {
                                 ))}
                             </div>
                             <VideoPanel
-                                fetchMore={getExplorePageData}
+                                fetchMore={() => setExploredVideos({ ...exploredVideos, page: exploredVideos.page + 1 })}
                                 videos={exploredVideos}
                                 openVideoModal={openVideoModal}
                                 muteStates={muteStates}

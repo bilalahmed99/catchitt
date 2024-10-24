@@ -9,6 +9,7 @@ import { ViewSwitchers } from '../view-switchers/view-switchers';
 import styles from './suggested-accounts-page.module.scss';
 import { LeftArrow } from './svg-components/LeftArrow';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useUpdateEffect } from 'react-use';
 
 export interface SuggestedAccountsPageProps {
     className?: string;
@@ -21,7 +22,7 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
     const { selectedTab, setTab } = useAuthStore();
 
     const [errorMessage, setErrorMessage] = useState('');
-    
+
     const [accountsData, setAccountsData] = useState<any>({ items: [], page: 1, totalItems: null });
     const API_KEY = process.env.VITE_API_URL;
     const suggestedEndPoint = '/profile/suggested-users';
@@ -33,7 +34,7 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
         navigate('/home'); // Navigate back to the previous page
     };
 
-    const handleFetchSuggestedAccounts = async () => {
+    const handleFetchSuggestedAccounts = async (signal: AbortSignal) => {
         const link = isLoggedIn
             ? `${API_KEY}${suggestedEndPoint}?page=${accountsData.page}`
             : `${API_KEY}${publicSuggestedEndPoint}?page=${accountsData.page}`;
@@ -41,16 +42,17 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
             const response = await fetch(link, {
                 method: 'GET',
                 headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+                signal
             });
 
             if (response.ok) {
                 const responseData = await response.json();
-                setAccountsData((prev:any) => {
+                setAccountsData((prev: any) => {
                     let all = [...prev.items, ...responseData.data.data];
                     let onlyids = all.map((e) => e._id);
                     let unique = Array.from(new Set(onlyids));
                     let sanitized = unique.map((e) => all.find((c) => e == c._id));
-                    return { items: sanitized, totalItems: responseData.data.total, page: prev.page + 1 };
+                    return { ...prev, items: sanitized, totalItems: responseData.data.total };
                 });
             } else {
                 const errorResponseData = await response.json();
@@ -60,13 +62,28 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
         } catch (error) {
             // console.error(error);
             console.log(errorMessage);
+            setAccountsData((prev: any) => ({ ...prev, totalItems: undefined }));
         }
     };
 
 
     useEffect(() => {
-        handleFetchSuggestedAccounts();
+        const controller = new AbortController();
+        const signal = controller.signal;
+        handleFetchSuggestedAccounts(signal);
+        return () => {
+            controller.abort();
+        };
     }, []);
+
+    useUpdateEffect(() => {
+        const controller = new AbortController();
+        const signal = controller.signal;
+        handleFetchSuggestedAccounts(signal);
+        return () => {
+            controller.abort();
+        }
+    }, [accountsData.page]);
 
     // if (!isLoggedIn) {
     // 	return <Navigate to="/auth" />;
@@ -77,7 +94,7 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
             const [isFollowed, setIsFollowed] = useState(false);
             const [followLoading, setFollowLoading] = useState(false);
 
-            const handleFollowClick = async (account:any) => {
+            const handleFollowClick = async (account: any) => {
                 if (!isLoggedIn) {
                     navigator('/auth');
                 }
@@ -168,7 +185,7 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
                         <div className="overflow-y-auto no-scrollbar" id="scrollableDiv">
                             <InfiniteScroll
                                 dataLength={accountsData.items?.length}
-                                next={handleFetchSuggestedAccounts}
+                                next={() => setAccountsData((prev: any) => ({ ...prev, page: prev.page + 1 }))}
                                 hasMore={accountsData.items.length < accountsData?.totalItems || accountsData?.totalItems === null}
                                 loader={<div
                                     style={{
@@ -182,18 +199,22 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
                                 >
                                     <CircularProgress />
                                 </div>}
-                                className={styles.gridContainer} 
+                                className={styles.gridContainer}
                                 // scrollThreshold={0.6}
                                 scrollableTarget="scrollableDiv"
                                 endMessage={
                                     <div className={`flex justify-center items-center mt-8 ${accountsData.totalItems === 0 ? ' h-[70vh]' : ''} `}>
                                         <p className="text-white font-normal text-sm">
-                                            {accountsData?.totalItems === 0 ? 'No videos available in this category.' : 'No more videos'}
+                                            {(() => {
+                                                if (accountsData?.totalItems === 0) return 'No videos available in this category.';
+                                                if (accountsData.totalItems) return 'No more videos';
+                                                return 'Something went wrong. Please refresh the page.';
+                                            })()}
                                         </p>
                                     </div>
                                 }
                             >
-                                {accountsData.items.map((account:any, i:number) => (
+                                {accountsData.items.map((account: any, i: number) => (
                                     <SuggestedAccount key={i} account={account} />
                                 ))}
                             </InfiniteScroll>
@@ -217,10 +238,10 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
                                 <h4>Suggested accounts</h4>
                             </IconButton>
                         </div>
-                        <div className="overflow-y-auto no-scrollbar"  id="scrollableDiv">
+                        <div className="overflow-y-auto no-scrollbar" id="scrollableDiv">
                             <InfiniteScroll
                                 dataLength={accountsData.items?.length}
-                                next={handleFetchSuggestedAccounts}
+                                next={() => setAccountsData((prev: any) => ({ ...prev, page: prev.page + 1 }))}
                                 hasMore={accountsData.items.length < accountsData?.totalItems || accountsData?.totalItems === null}
                                 loader={<div
                                     style={{
@@ -240,12 +261,16 @@ export const SuggestedAccountsPage = ({ className }: SuggestedAccountsPageProps)
                                 endMessage={
                                     <div className={`flex justify-center items-center mt-8 ${accountsData.totalItems === 0 ? ' h-[70vh]' : ''} `}>
                                         <p className="text-white font-normal text-sm">
-                                            {accountsData?.totalItems === 0 ? 'No videos available in this category.' : 'No more videos'}
+                                            {(() => {
+                                                if (accountsData?.totalItems === 0) return 'No videos available in this category.';
+                                                if (accountsData.totalItems) return 'No more videos';
+                                                return 'Something went wrong. Please refresh the page.';
+                                            })()}
                                         </p>
                                     </div>
                                 }
                             >
-                                {accountsData.items.map((account:any, i:number) => (
+                                {accountsData.items.map((account: any, i: number) => (
                                     <SuggestedAccount key={i} account={account} />
                                 ))}
                             </InfiniteScroll>

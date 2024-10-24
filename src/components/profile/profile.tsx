@@ -37,8 +37,8 @@ export const Profile = (props: any) => {
     const [likesModal, setLikesModal] = useState<any>(false);
     const API_KEY = process.env.VITE_API_URL;
     const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('userId');
-    // const userId = "6397aca6561d39d318d07297";
+    // const userId = localStorage.getItem('userId');
+    const userId = "6397aca6561d39d318d07297";
     const [videoModal, setVideoModal] = useState(false);
     const [userVideos, setUserVideos] = useState<any>({ items: [], page: 1, pageSize: 15, totalItems: null });
     const [userlikedVideos, setUserLikedVideos] = useState<any>({ items: [], page: 1, pageSize: 15, totalItems: null });
@@ -163,7 +163,7 @@ export const Profile = (props: any) => {
         console.log('View Item Click : ', index);
     };
 
-    const fetchData = async () => {
+    const fetchData = async (signal: AbortSignal) => {
         // 63a04301a00ed2af91f17e1d user id contain videos
         const promises = [];
 
@@ -178,6 +178,7 @@ export const Profile = (props: any) => {
                             'Content-type': 'application/json',
                             Authorization: `Bearer ${token}`,
                         },
+                        signal,
                     }
                 )
                     .then((res) => res.json())
@@ -185,11 +186,13 @@ export const Profile = (props: any) => {
                         setUserVideos((prev: any) => ({
                             ...prev,
                             items: [...prev.items, ...data.data.data],
-                            page: prev.page + 1,
                             totalItems: data.data.total,
                         }));
                     })
-                    .catch((err) => console.log(err))
+                    .catch((err) =>{
+                        console.log(err)
+                        setUserVideos((prev: any) => ({...prev, totalItems: undefined}))
+                    })
             );
         }
 
@@ -204,6 +207,7 @@ export const Profile = (props: any) => {
                             'Content-type': 'application/json',
                             Authorization: `Bearer ${token}`,
                         },
+                        signal,
                     }
                 )
                     .then((res) => res.json())
@@ -211,11 +215,13 @@ export const Profile = (props: any) => {
                         setUserLikedVideos((prev: any) => ({
                             ...prev,
                             items: [...prev.items, ...data.data.data],
-                            page: prev.page + 1,
                             totalItems: data.data.total,
                         }));
                     })
-                    .catch((err) => console.log(err))
+                    .catch((err) =>{
+                        console.log(err)
+                        setUserLikedVideos((prev: any) => ({...prev, totalItems: undefined}))
+                    })
             );
         }
 
@@ -230,6 +236,7 @@ export const Profile = (props: any) => {
                             'Content-type': 'application/json',
                             Authorization: `Bearer ${token}`,
                         },
+                        signal,
                     }
                 )
                     .then((res) => res.json())
@@ -237,11 +244,13 @@ export const Profile = (props: any) => {
                         setUserTaggedVideos((prev: any) => ({
                             ...prev,
                             items: [...prev.items, ...data.data.data],
-                            page: prev.page + 1,
                             totalItems: data.data.total,
                         }));
                     })
-                    .catch((err) => console.log(err))
+                    .catch((err) =>{
+                        console.log(err)
+                        setUserTaggedVideos((prev: any) => ({...prev, totalItems: undefined}))
+                    })
             );
         }
 
@@ -256,6 +265,7 @@ export const Profile = (props: any) => {
                             'Content-type': 'application/json',
                             Authorization: `Bearer ${token}`,
                         },
+                        signal,
                     }
                 )
                     .then((res) => res.json())
@@ -263,11 +273,13 @@ export const Profile = (props: any) => {
                         setBookmarkVideos((prev: any) => ({
                             ...prev,
                             items: [...prev.items, ...data.data.data],
-                            page: prev.page + 1,
                             totalItems: data.data.total,
                         }));
                     })
-                    .catch((err) => console.log(err))
+                    .catch((err) =>{
+                        console.log(err)
+                        setBookmarkVideos((prev: any) => ({...prev, totalItems: undefined}))
+                    })
             );
         }
 
@@ -350,14 +362,34 @@ export const Profile = (props: any) => {
         setActiveTab(title);
     };
 
+
     useUpdateEffect(() => {
-        fetchData();
+        const controller = new AbortController();
+        const signal = controller.signal;
+        fetchData(signal);
+        return () => {
+            controller.abort();
+        };
     }, [activeTab]);
 
     useEffect(() => {
+        const controller = new AbortController();
+        const signal = controller.signal;
         initialFetchData();
-        fetchData();
+        fetchData(signal);
+        return () => {
+            controller.abort();
+        };
     }, []);
+
+    useUpdateEffect(() => {
+        const controller = new AbortController();
+        const signal = controller.signal;
+        fetchData(signal);
+        return () => {
+            controller.abort();
+        }
+    }, [userVideos.page, userlikedVideos.page, usertaggedVideos.page, bookmarkVideos.page]);
 
     return (
         <Layout showCopyPopup={copyPopup}>
@@ -426,15 +458,15 @@ export const Profile = (props: any) => {
                             {(() => {
                                 switch (activeTab) {
                                     case 'Videos':
-                                        return (<VideoesMaping videos={userVideos} fetchMore={fetchData} openVideoModal={onVideoModal} />);
+                                        return (<VideoesMaping videos={userVideos} fetchMore={()=>setUserVideos({...userVideos, page:userVideos.page+1})} openVideoModal={onVideoModal} />);
                                     case 'Private':
-                                        return (<VideoesMaping videos={userVideos} fetchMore={fetchData} openVideoModal={onVideoModal} />);
+                                        return (<VideoesMaping videos={userVideos} fetchMore={()=>setUserVideos({...userVideos, page:userVideos.page+1})} openVideoModal={onVideoModal} />);
                                     case 'Bookmarks':
-                                        return (<VideoesMaping videos={bookmarkVideos} fetchMore={fetchData} openVideoModal={onVideoModal} />);
+                                        return (<VideoesMaping videos={bookmarkVideos} fetchMore={()=>setBookmarkVideos({...bookmarkVideos, page:bookmarkVideos.page+1})} openVideoModal={onVideoModal} />);
                                     case 'Liked Videos':
-                                        return (<VideoesMaping videos={userlikedVideos} fetchMore={fetchData} openVideoModal={onVideoModal} />);
+                                        return (<VideoesMaping videos={userlikedVideos} fetchMore={()=>setUserLikedVideos({...userlikedVideos, page:userlikedVideos.page+1})} openVideoModal={onVideoModal} />);
                                     case 'Tagged Posts':
-                                        return (<VideoesMaping videos={usertaggedVideos} fetchMore={fetchData} openVideoModal={onVideoModal} />);
+                                        return (<VideoesMaping videos={usertaggedVideos} fetchMore={()=>setUserTaggedVideos({...usertaggedVideos, page:usertaggedVideos.page+1})} openVideoModal={onVideoModal} />);
                                     default:
                                         return null;
                                 }

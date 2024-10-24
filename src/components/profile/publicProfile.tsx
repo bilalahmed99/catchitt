@@ -17,6 +17,7 @@ import styles from './profile.module.scss';
 import { Liked } from './svg-components/Liked';
 import { Tagged } from './svg-components/Tagged';
 import { VideoIcon } from './svg-components/VideoIcon';
+import { useUpdateEffect } from 'react-use';
 
 export const PublicProfile = (props: any) => {
     const [storyPopup, setStoryPopup] = useState(false);
@@ -58,7 +59,7 @@ export const PublicProfile = (props: any) => {
         }
     };
 
-    const fetchProfileVideos = async () => {
+    const fetchProfileVideos = async (signal:AbortSignal) => {
         try {
             const videosResponsePromise = await fetch(`${API_KEY}/profile/${profileData._id}/videos?page=${videosData.page}&pageSize=${videosData.pageSize}`, {
                 method: 'GET',
@@ -66,14 +67,16 @@ export const PublicProfile = (props: any) => {
                     'Content-type': 'application/json',
                     Authorization: `Bearer ${token}`,
                 },
+                signal
             });
             const videosResponse = await videosResponsePromise.json();
             if (Array.isArray(videosResponse?.data?.data)) {
-                setVideosData((prev: any) => ({ ...prev, items: [...prev.items, ...videosResponse?.data?.data], page: prev.page + 1, totalItems: videosResponse?.data?.total }));
+                setVideosData((prev: any) => ({ ...prev, items: [...prev.items, ...videosResponse?.data?.data], totalItems: videosResponse?.data?.total }));
             }
 
         } catch (error) {
             console.log(error);
+            setVideosData((prev: any) => ({ ...prev, totalItems: undefined }));
         }
     }
 
@@ -81,9 +84,14 @@ export const PublicProfile = (props: any) => {
         fetchProfileData();
     }, [params?.id]);
 
-    useEffect(() => {
-        if (profileData) fetchProfileVideos();
-    }, [profileData]);
+    useUpdateEffect(() => {
+        const controller = new AbortController();
+        const signal = controller.signal;
+        if (profileData) fetchProfileVideos(signal);
+        return () => {
+            controller.abort();
+        }
+    }, [profileData, videosData.page]);
 
     const tabs = [
         {
@@ -188,7 +196,7 @@ export const PublicProfile = (props: any) => {
                     <div className={`${styles.contentContainer}`}>
                         <p className={styles.title}>{activeTab}</p>
                         {activeTab === 'Videos' ? (
-                            <VideoesMaping videos={videosData} fetchMore={fetchProfileVideos} openVideoModal={onVideoModal} />
+                            <VideoesMaping videos={videosData} fetchMore={() => setVideosData({...videosData, page: videosData.page+ 1})} openVideoModal={onVideoModal} />
                         ) : null}
                         {activeTab !== 'Videos' ? <PrivatePosts /> : null}
                     </div>

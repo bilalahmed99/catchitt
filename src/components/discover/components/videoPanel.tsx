@@ -45,7 +45,11 @@ export default function VideoesMaping({ fetchMore, videos, openVideoModal, muteS
             endMessage={
                 <div className={`flex justify-center items-center mt-8 ${videos.totalItems === 0 ? ' h-[70vh]' : ''} `}>
                     <p className="text-white font-normal text-sm">
-                        {videos?.totalItems === 0 ? 'No videos available in this category.' : 'No more videos'}
+                        {(()=> {
+                            if (videos?.totalItems === 0) return 'No videos available in this category.';
+                            if (videos.totalItems) return 'No more videos';
+                            return 'Something went wrong. Please refresh the page.';
+                        })()}
                     </p>
                 </div>
             }
