@@ -61,6 +61,7 @@ import activeShare from './assets/activeShare.svg';
 import saveVideo from './assets/saveVideo.svg';
 import notAllowed from './assets/notAllowed.svg';
 import report from './assets/report.svg';
+import repost from './assets/repost.svg';
 import duet from './assets/duet.svg';
 import sendSvgPopup from './assets/sndinpopup.svg';
 import backArrow from './assets/back.svg';
@@ -124,6 +125,7 @@ export {
     saveVideo,
     notAllowed,
     report,
+    repost,
     activeShare,
     activeFvrt,
     activeLike,

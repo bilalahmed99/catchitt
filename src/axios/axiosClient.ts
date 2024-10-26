@@ -129,3 +129,22 @@ export const post = async (url: any, params: any = null, auth = null) => {
 export const patch = async (url: any, params: any = null, auth = null) => {
     return await request(url, { method: 'PATCH', ...(params && params) }, auth);
 };
+
+
+/**
+ * Alias function for making put request
+ * @param {string | URL} endpoint - Endpoint or URL
+ * @param {object} [params={type: "application/json", params: null, data: null}] - Request data
+ */
+export const put = async (url: any, params: any = null, auth = null) => {
+    return await request(url, { method: 'PUT', ...(params && params) }, auth);
+};
+
+/**
+ * Alias function for making delete request
+ * @param {string | URL} endpoint - Endpoint or URL
+ * @param {object} [params={type: "application/json", params: null, data: null}] - Request data
+ */
+export const del = async (url: any, params: any = null, auth = null) => {
+    return await request(url, { method: 'DELETE', ...(params && params) }, auth);
+};

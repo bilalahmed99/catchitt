@@ -142,7 +142,7 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
                 <button style={{ width: 98, position: 'relative' }} className={styles.button}>
                     <ShareIcon />
                     Share
-                    <COPY_AND_SEND_MENU copyHandler={copyHandler} />
+                    <COPY_AND_SEND_MENU copyHandler={copyHandler} userName={profileData?.username} />
                 </button>
             </div>
             <div className={styles.pfContent}>

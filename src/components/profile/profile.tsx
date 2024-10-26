@@ -28,6 +28,7 @@ import viewerAvatarPlaceholder from './svg-components/placeholderAvatar.png';
 import style from './profile.module.scss';
 import { useUpdateEffect } from 'react-use';
 import PopupForDeleteVideo from './popups/popupForDeleteVideo';
+import { Repost } from './svg-components/Repost';
 
 export const Profile = (props: any) => {
     const [activeTab, setActiveTab] = useState('Videos');
@@ -44,6 +45,7 @@ export const Profile = (props: any) => {
     const [userlikedVideos, setUserLikedVideos] = useState<any>({ items: [], page: 1, pageSize: 15, totalItems: null });
     const [usertaggedVideos, setUserTaggedVideos] = useState<any>({ items: [], page: 1, pageSize: 15, totalItems: null });
     const [bookmarkVideos, setBookmarkVideos] = useState<any>({ items: [], page: 1, pageSize: 15, totalItems: null });
+    const [repostVideos, setRepostsVideos] = useState<any>({ items: [], page: 1, pageSize: 15, totalItems: null });
     const [videoModalInfo, setVideoModalInfo] = useState<any>({});
     const [reportPopup, setReportPopup] = useState(false);
     const [giftsPopup, setGiftsPopup] = useState(false);
@@ -88,6 +90,11 @@ export const Profile = (props: any) => {
             icon: <Tagged active={activeTab === 'Tagged Posts'} />,
             key: 6,
         },
+        {
+            title: 'Reposts',
+            icon: <Repost active={activeTab === 'Reposts'} />,
+            key: 7,
+        }
     ];
 
     const onCancel = () => {
@@ -283,6 +290,34 @@ export const Profile = (props: any) => {
             );
         }
 
+        // Fetch Repost Videos
+        if (activeTab === 'Reposts') {
+            promises.push(
+                fetch(
+                    `${API_KEY}/media-content/reposts?page=${repostVideos.page}&pageSize=${repostVideos.pageSize}`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Content-type': 'application/json',
+                            Authorization: `Bearer ${token}`,
+                        },
+                        signal,
+                    }
+                )
+                    .then((res) => res.json())
+                    .then((data) => {
+                        setRepostsVideos((prev: any) => ({
+                            ...prev,
+                            items: [...prev.items, ...data.data],
+                            totalItems: data.data.total??10,
+                        }));
+                    })
+                    .catch((err) =>{
+                        console.log(err)
+                        setRepostsVideos((prev: any) => ({...prev, totalItems: undefined}))
+                    })
+            );
+        }
         await Promise.all(promises);
     };
 
@@ -389,7 +424,7 @@ export const Profile = (props: any) => {
         return () => {
             controller.abort();
         }
-    }, [userVideos.page, userlikedVideos.page, usertaggedVideos.page, bookmarkVideos.page]);
+    }, [userVideos.page, userlikedVideos.page, usertaggedVideos.page, bookmarkVideos.page, repostVideos.page]);
 
     return (
         <Layout showCopyPopup={copyPopup}>
@@ -454,7 +489,7 @@ export const Profile = (props: any) => {
                     {/* Videoes Maping */}
                     <div className={styles.contentContainer} style={{ minHeight: '300px' }}>
                         <p className={styles.title}>{activeTab}</p>
-                        <div className={`${styles.posts} justify-center`}>
+                        <div className={`${styles.posts}`}>
                             {(() => {
                                 switch (activeTab) {
                                     case 'Videos':
@@ -467,6 +502,8 @@ export const Profile = (props: any) => {
                                         return (<VideoesMaping videos={userlikedVideos} fetchMore={()=>setUserLikedVideos({...userlikedVideos, page:userlikedVideos.page+1})} openVideoModal={onVideoModal} />);
                                     case 'Tagged Posts':
                                         return (<VideoesMaping videos={usertaggedVideos} fetchMore={()=>setUserTaggedVideos({...usertaggedVideos, page:usertaggedVideos.page+1})} openVideoModal={onVideoModal} />);
+                                    case 'Reposts':
+                                        return (<VideoesMaping videos={repostVideos} fetchMore={()=>setRepostsVideos({...repostVideos, page:repostVideos.page+1})} openVideoModal={onVideoModal} />);
                                     default:
                                         return null;
                                 }

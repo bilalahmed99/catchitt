@@ -47,6 +47,7 @@ const ProfileHeader: FunctionComponent<Props> = ({
     const dispatch = useDispatch();
     const profileImg = useSelector((state: any) => state?.reducers?.profile?.avatar);
     const name = useSelector((state: any) => state?.reducers?.profile?.name);
+    const userName = useSelector((state: any) => state?.reducers?.profile?.username);
     const coverImg = useSelector((state: any) => state?.reducers?.profile?.cover);
     const [imgBase64, setImgBase64] = useState(coverImg);
     try {
@@ -238,7 +239,7 @@ const ProfileHeader: FunctionComponent<Props> = ({
                     >
                         <ShareIcon />
                         Share
-                        <COPY_AND_SEND_MENU copyHandler={copyHandler} BASE_URL_FRONTEND={BASE_URL_FRONTEND} profileData={profileData} />
+                        <COPY_AND_SEND_MENU copyHandler={copyHandler} BASE_URL_FRONTEND={BASE_URL_FRONTEND} profileData={profileData} userName={userName} />
                     </button>
                 </div>
                 <div className={styles.pfContent}>

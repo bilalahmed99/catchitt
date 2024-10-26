@@ -42,6 +42,7 @@ import Forwardusers from '../../../shared/popups/shareTo/Forwardusers';
 import CountUp from 'react-countup';
 import EmojiPicker, { Theme } from 'emoji-picker-react';
 import { set } from 'lodash';
+import { copyLinkHandler, facebookShareHandler, shareToLinkedIn, shareToTwitter, whatsappShareHandler } from '../../../utils/helpers';
 
 
 export default function PopupForVideoPlayer({
@@ -187,27 +188,6 @@ export default function PopupForVideoPlayer({
         }
     };
 
-    function extractVideoId(url: string) {
-        const regex = /videos\/(.*?)\/reduced/;
-        const match = url.match(regex);
-        return match ? match[1] : null;
-    }
-
-    const whatsappShareHandler = () => {
-        let url = `${BASE_URL_FRONTEND}/${userName}/video/${extractVideoId(videoUrl)}`;
-        window.open(`https://api.whatsapp.com/send?text=${url}`, '_blank');
-    };
-
-    const facebookShareHandler = () => {
-        let url = `${BASE_URL_FRONTEND}/${userName}/video/${extractVideoId(videoUrl)}`;
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
-    };
-
-    const shareToTwitter = () => {
-        let url = `${BASE_URL_FRONTEND}/${userName}/video/${extractVideoId(videoUrl)}`;
-
-        window.open(`https://twitter.com/intent/tweet?url=${url}&text=${info?.description}`, '_blank');
-    };
 
     const onEmojiClick = (emojiObject: any) => {
         setComment((prevText) => prevText + emojiObject.emoji); // Append emoji to input text
@@ -245,14 +225,6 @@ export default function PopupForVideoPlayer({
         });
     };
 
-    const shareToLinkedIn = () => {
-        let url = `${BASE_URL_FRONTEND}/${userName}/video/${extractVideoId(videoUrl)}`;
-
-        window.open(
-            `https://www.linkedin.com/shareArticle?url=${url}&title=${info?.description}`,
-            '_blank'
-        );
-    };
 
     const embedShareHandler = () => {
         setIsEmbedPopupVisible(true);
@@ -262,14 +234,6 @@ export default function PopupForVideoPlayer({
 
     const sharePopupHandler = () => { setSendPopup(true) };
 
-    const copyHandler = (msg: string) => {
-        navigator.clipboard
-            .writeText(`${BASE_URL_FRONTEND}/${userName}/video/${info?.mediaId}`)
-            .then(() => {
-                showToast(msg);
-                // toast.success('Link Copied');
-            });
-    };
 
     const loginPopup = () => {
         dispatch(openLoginPopup());
@@ -836,7 +800,7 @@ export default function PopupForVideoPlayer({
                                             <div className="flex flex-row justify-center items-center mt-3 px-3 gap-2">
                                                 <div className="flex justify-center items-center rounded-full cursor-pointer">
                                                     <img
-                                                        onClick={shareToLinkedIn}
+                                                        onClick={()=>shareToLinkedIn(userName, videoUrl, info?.description)}
                                                         className="h-6 w-6 object-contain cursor-pointer"
                                                         src={linkedInShare}
                                                     />
@@ -850,7 +814,7 @@ export default function PopupForVideoPlayer({
                                                 </div> */}
                                                 <div className="flex justify-center items-center rounded-full cursor-pointer border">
                                                     <img
-                                                        onClick={shareToTwitter}
+                                                        onClick={() =>shareToTwitter(userName, videoUrl, info?.description)}
                                                         className="h-6 w-6 object-contain cursor-pointer"
                                                         // src={sendToFriendsIcon}
                                                         src={twitterShare}
@@ -858,14 +822,14 @@ export default function PopupForVideoPlayer({
                                                 </div>
                                                 <div className="flex justify-center items-center rounded-full bg-[#24d366] p-1 cursor-pointer">
                                                     <img
-                                                        onClick={whatsappShareHandler}
+                                                        onClick={()=>whatsappShareHandler(userName, videoUrl)}
                                                         className="h-4 w-4 object-contain cursor-pointer"
                                                         src={whatsappShare}
                                                     />
                                                 </div>
                                                 <div className="flex justify-center items-center rounded-full bg-[#0075fb] p-1 cursor-pointer">
                                                     <img
-                                                        onClick={facebookShareHandler}
+                                                        onClick={()=>facebookShareHandler(userName, videoUrl)}
                                                         className="h-4 w-4 object-contain cursor-pointer"
                                                         src={facebookShare}
                                                     />
@@ -895,7 +859,7 @@ export default function PopupForVideoPlayer({
                                             </p>
                                         </div>
                                         <div
-                                            onClick={() => copyHandler('Copied')}
+                                            onClick={() => copyLinkHandler(userName, info?.mediaId, 'Copied')}
                                             className="flex justify-center items-center hover:bg-[#1b1b1b] w-1/5 bg-[#252525] rounded-r-lg py-1.5 px-2 cursor-pointer"
                                         >
                                             <p className="text-white font-bold text-sm">

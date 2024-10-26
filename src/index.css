@@ -249,3 +249,7 @@ video.loading::after {
   -ms-overflow-style: none;  
   scrollbar-width: none; 
 }
+
+.infinite-scroll-component__outerdiv{
+  width: 100%;
+}

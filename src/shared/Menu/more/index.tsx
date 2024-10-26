@@ -5,13 +5,13 @@ import ListItemButton from '@mui/material/ListItemButton';
 import Menu, { MenuProps } from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import * as React from 'react';
-import { copyLink, notAllowed, report, saveVideo, send } from '../../../icons';
+import { copyLink, notAllowed, report, saveVideo, send, repost } from '../../../icons';
 import style from './index.module.scss';
 const options = ['View profile', 'Make admin', 'Remove from group', 'Block', 'Report'];
 import {
     showToastSuccess,
 } from '../../../utils/constants';
-import { videoNotInterestedHandle } from '../../../redux/AsyncFuncs';
+import { videoNotInterestedHandle, videoRepostHandle } from '../../../redux/AsyncFuncs';
 
 export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId }: any) {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -38,6 +38,12 @@ export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId }:
         showToastSuccess('Media marked as not interested successfully');
         dispatch(videoNotInterestedHandle(postMediaId));
     };
+
+    const repostVideoEventHandle = async (postMediaId: any) => {
+        console.log(postMediaId);
+        showToastSuccess('Media reposted successfully');
+        dispatch(videoRepostHandle(postMediaId));
+    }
 
     const StyledMenu = styled((props: MenuProps) => (
         <Menu
@@ -153,6 +159,12 @@ export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId }:
                     <div className={style.menuItem} onClick={visibleReportPopup}>
                         <img src={report} />
                         <p className={`${style.p} ${style.black_500}`}>Report</p>
+                    </div>
+                </MenuItem>
+                <MenuItem onClick={()=>{ repostVideoEventHandle(postMediaId),handleClose()}} style={{ padding: '0px', margin: '0px' }}>
+                    <div className={style.menuItem}>
+                        <img src={repost} />
+                        <p className={`${style.p} ${style.black_500}`}>Repost</p>
                     </div>
                 </MenuItem>
             </StyledMenu>

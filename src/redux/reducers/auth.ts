@@ -59,6 +59,7 @@ const loginSlice: any = createSlice({
             _state.cover = action?.payload?.cover;
             _state.name = action?.payload?.name;
             _state.likesNum = action?.payload?.likesNum;
+            _state.username = action?.payload?.username;
             return _state;
         });
 

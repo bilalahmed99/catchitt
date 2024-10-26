@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { get, post } from '../axios/axiosClient';
+import { del, get, post } from '../axios/axiosClient';
 
 const API_KEY = process.env.VITE_API_URL;
 const userId: any = localStorage.getItem('userId');
@@ -180,6 +180,23 @@ export const videoNotInterestedHandle: any = createAsyncThunk(
 
             if (res?.data) {
                     return { id:postMediaId };
+            } else {
+                return false;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+);
+
+export const videoRepostHandle: any = createAsyncThunk(
+    'set/repost/video',
+    async (postMediaId: string) => {
+        try {
+            const res = await post(`/media-content/repost/${postMediaId}`);
+
+            if (res?.data) {
+                return res?.data;
             } else {
                 return false;
             }

@@ -14,10 +14,12 @@ import {
     facebookShare
  } from '../../../icons';
 import style from './index.module.scss';
+import { shareProfileby } from '../../../utils/helpers';
+import { showToastError } from '../../../utils/constants';
 const options = ['View profile', 'Make admin', 'Remove from group', 'Block', 'Report'];
 
 
-export default function COPY_AND_SEND_MENU({ copyHandler, BASE_URL_FRONTEND, profileData }: any) {
+export default function COPY_AND_SEND_MENU({ copyHandler, BASE_URL_FRONTEND, profileData, userName }: any) {
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [selectedIndex, setSelectedIndex] = React.useState(1);
@@ -81,28 +83,10 @@ export default function COPY_AND_SEND_MENU({ copyHandler, BASE_URL_FRONTEND, pro
         },
     }));
 
-    const shareToWhatsApp = () => {
-        window.open(`https://api.whatsapp.com/send?text=/${BASE_URL_FRONTEND}/profile/${loggedUserId}`, '_blank');
-    };
-
-    const shareToFacebook = () => {
-        window.open(`https://www.facebook.com/share/share.php?u=${BASE_URL_FRONTEND}/profile/${loggedUserId}`, '_blank');
-    };
-
-    const shareToTwitter = () => {
-        window.open(
-            `https://twitter.com/intent/tweet?url=${BASE_URL_FRONTEND}/profile/${loggedUserId}`,
-            '_blank'
-        );
-    };
-
-    const shareToLinkedIn = () => {
-        window.open(
-            `https://www.linkedin.com/shareArticle?url=${BASE_URL_FRONTEND}/profile/${loggedUserId}`,
-            '_blank'
-        );
-    };
-
+    const copyLinkHandler = async () => {
+        const isCopied = await shareProfileby.copyLink(userName);
+        isCopied ? copyHandler(): showToastError('Failed to copy link');
+    }
     return (
         <div
             style={{
@@ -149,31 +133,31 @@ export default function COPY_AND_SEND_MENU({ copyHandler, BASE_URL_FRONTEND, pro
                     </div>
                 </MenuItem> */}
                 <MenuItem onClick={handleClose} style={{ padding: '0px', margin: '0px' }}>
-                    <div className={style.menuItem} onClick={copyHandler}>
+                    <div className={style.menuItem} onClick={copyLinkHandler}>
                         <img src={copyLink} />
                         <p className={`${style.p} ${style.black_500}`}>Copy link</p>
                     </div>
                 </MenuItem>
                 <MenuItem onClick={handleClose} style={{ padding: '0px', margin: '0px' }}>
-                    <div className={style.menuItem} onClick={shareToWhatsApp}>
+                    <div className={style.menuItem} onClick={()=>shareProfileby.whatsapp(userName)}>
                         <img src={whatsappShare} />
                         <p className={`${style.p} ${style.black_500}`}>Whatsapp</p>
                     </div>
                 </MenuItem>
                 <MenuItem onClick={handleClose} style={{ padding: '0px', margin: '0px' }}>
-                    <div className={style.menuItem} onClick={shareToFacebook}>
+                    <div className={style.menuItem} onClick={()=>shareProfileby.facebook(userName)}>
                         <img src={facebookShare} />
                         <p className={`${style.p} ${style.black_500}`}>Facebook</p>
                     </div>
                 </MenuItem>
                 <MenuItem onClick={handleClose} style={{ padding: '0px', margin: '0px' }}>
-                    <div className={style.menuItem} onClick={shareToTwitter}>
+                    <div className={style.menuItem} onClick={()=>shareProfileby.twitter(userName)}>
                         <img src={twitterShare} />
                         <p className={`${style.p} ${style.black_500}`}>Twitter</p>
                     </div>
                 </MenuItem>
                 <MenuItem onClick={handleClose} style={{ padding: '0px', margin: '0px' }}>
-                    <div className={style.menuItem} onClick={shareToLinkedIn}>
+                    <div className={style.menuItem} onClick={()=>shareProfileby.linkedin(userName)}>
                         <img src={linkedInShare} />
                         <p className={`${style.p} ${style.black_500}`}>LinkedIn</p>
                     </div>

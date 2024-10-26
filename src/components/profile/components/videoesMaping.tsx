@@ -35,7 +35,7 @@ export default function VideoesMaping({ videos, fetchMore, openVideoModal }: Typ
             >
                 <CircularProgress />
             </div>}
-            className="mt-6 mb-20 flex flex-row flex-wrap w-full gap-4 justify-around"
+            className="mt-6 mb-20 flex flex-row flex-wrap w-full gap-4"
             // scrollThreshold={0.6}
             scrollableTarget="scrollableDiv"
             endMessage={

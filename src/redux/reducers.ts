@@ -12,6 +12,7 @@ import {
     videoSavehandle,
     addMoreVideos,
     videoNotInterestedHandle,
+    videoRepostHandle,
 } from './AsyncFuncs';
 import loginSlice from './reducers/auth';
 import isuploading from './reducers/upload';
@@ -177,6 +178,10 @@ const homeVideos: any = createSlice({
                 (element.mediaId  !== action.payload.id
               ));
             return filteredData;
+        });
+        builder.addCase(videoRepostHandle.fulfilled, (state: any, action: any) => {
+            console.log(' 🚀 >>>>>> action.payload 🚀', action.payload);
+            return state;
         });
     },
 });
