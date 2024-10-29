@@ -18,19 +18,19 @@ function VideoNavigation(props: { videoListRef: any }) {
     };
 
     useEffect(() => {
-        const handleScroll = () => {
+        const scrollHandler = () => {
             if (timeoutRef.current) {
                 clearTimeout(timeoutRef.current);
             }
             timeoutRef.current = setTimeout(() => {
                 const { scrollTop } = videoListRef.current;
                 setIsFirstVideo(scrollTop === 0);
-            }, 100);
+            }, 300);
         };
 
-        videoListRef.current.addEventListener('scroll', handleScroll);
+        videoListRef.current.addEventListener('scroll', scrollHandler);
         return () => {
-            videoListRef.current.removeEventListener('scroll', handleScroll);
+            videoListRef.current.removeEventListener('scroll', scrollHandler);
             if (timeoutRef.current) clearTimeout(timeoutRef.current);
         };
     }, []);
