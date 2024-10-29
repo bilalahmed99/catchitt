@@ -57,8 +57,10 @@
   flex-direction: column;
   gap: 32px;
   padding-bottom: 1rem;
-  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
   .videoParent {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
     .videoHeader {
       // background: #000;
       max-width: 435px;
