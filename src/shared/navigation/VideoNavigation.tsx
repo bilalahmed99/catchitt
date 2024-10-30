@@ -5,10 +5,11 @@ import DownArrow from './DownArrow';
 
 function VideoNavigation(props: { videoListRef: any }) {
     const { videoListRef } = props;
-    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+    // const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const [isFirstVideo, setIsFirstVideo] = useState(true);
 
     const scrollToVideo = (isNext = false) => {
+        if (!videoListRef.current) return;
         const videoHeight = videoListRef.current.children[0].offsetHeight + 32;
         const { scrollTop } = videoListRef.current;
         videoListRef.current.scrollTo({
@@ -17,23 +18,25 @@ function VideoNavigation(props: { videoListRef: any }) {
         });
     };
 
-    useEffect(() => {
-        const scrollHandler = () => {
-            if (timeoutRef.current) {
-                clearTimeout(timeoutRef.current);
-            }
-            timeoutRef.current = setTimeout(() => {
-                const { scrollTop } = videoListRef.current;
-                setIsFirstVideo(scrollTop === 0);
-            }, 300);
-        };
+    // useEffect(() => {
+    //     if (videoListRef.current) {
+    //         const scrollHandler = () => {
+    //             if (timeoutRef.current) {
+    //                 clearTimeout(timeoutRef.current);
+    //             }
+    //             timeoutRef.current = setTimeout(() => {
+    //                 const { scrollTop } = videoListRef.current;
+    //                 setIsFirstVideo(scrollTop === 0);
+    //             }, 300);
+    //         };
 
-        videoListRef.current.addEventListener('scroll', scrollHandler);
-        return () => {
-            videoListRef.current.removeEventListener('scroll', scrollHandler);
-            if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        };
-    }, []);
+    //         videoListRef.current.addEventListener('scroll', scrollHandler);
+    //         return () => {
+    //             videoListRef.current.removeEventListener('scroll', scrollHandler);
+    //             if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    //         };
+    //     }
+    // }, []);
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -53,9 +56,9 @@ function VideoNavigation(props: { videoListRef: any }) {
 
     return (
         <div className={style.navigation}>
-            {!isFirstVideo &&<button id="prevVideoBtn" onClick={() => scrollToVideo(false)}>
+            <button id="prevVideoBtn" onClick={() => scrollToVideo(false)}>
                 <UpArrow />
-            </button>}
+            </button>
             <button id="nextVideoBtn" onClick={() => scrollToVideo(true)}>
                 <DownArrow />
             </button>

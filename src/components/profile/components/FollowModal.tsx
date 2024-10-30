@@ -17,7 +17,7 @@ const FollowModal: React.FC<{ onClose: () => void; isPublic: boolean; userId: an
     isPublic,
     userId,
 }) => {
-    const name = useSelector((state: any) => state?.profile?.name);
+    const name = useSelector((state: any) => state?.reducers?.profile?.name);
 
     const totalFollowers = useSelector((state: any) => {
         return state.reducers?.followers.total;
@@ -203,7 +203,7 @@ const FollowModal: React.FC<{ onClose: () => void; isPublic: boolean; userId: an
     const onTabClick = (tabIndex: number) => {
         setActiveTab(tabIndex);
     };
-
+    
     return (
         <>
             <div className={styles.div}>

@@ -446,7 +446,7 @@ export const Profile = (props: any) => {
                                 <FollowModal
                                     isPublic={false}
                                     onClose={closeFollowModal}
-                                    userId={undefined}
+                                    userId={userId}
                                 />
                             </div>
                         </ClickAwayListener>

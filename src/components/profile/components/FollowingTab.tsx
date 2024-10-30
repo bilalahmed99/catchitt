@@ -32,6 +32,12 @@ function FollowingTab({ onClose, following, isPublic, onScrollBottom }: any) {
             onScrollBottom();
         }
     };
+
+    useEffect(() => {
+      console.log('🚀🚀🚀following', following);
+    }, [following]);
+    
+
     return (
         <div
             style={{

@@ -169,7 +169,7 @@ const ProfileHeader: FunctionComponent<Props> = ({
     // }, []);
 
     useEffect(() => {
-        // loadProfile();
+        loadProfile();
     }, [onProfileEdit]);
 
     return (
@@ -252,7 +252,7 @@ const ProfileHeader: FunctionComponent<Props> = ({
                             onClick={() => onFollowModalActive('following')}
                             className={styles.statContainer}
                         >
-                            <p className={styles.boldText}>{profileData?.followingNumber ?? 0}</p>
+                            <p className={styles.boldText} onClick={()=>console.log(profileData)}>{profileData?.followingNumber ?? 0}</p>
                             <p className={styles.text}>Following</p>
                         </div>
                         <div
