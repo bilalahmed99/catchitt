@@ -92,6 +92,24 @@ export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId }:
     }));
 
 
+    const handleDownload = async (videoUrl:any) => {
+        
+        try {
+          showToastSuccess('Video is downloading...');
+          const response = await fetch(videoUrl);
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+    
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'video.mp4';
+          link.click();
+    
+          window.URL.revokeObjectURL(url); // Clean up the URL object
+        } catch (error) {
+          console.error('Failed to download video', error);
+        }
+      };
 
     return (
         <div
@@ -145,7 +163,10 @@ export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId }:
                             top: 0,
                             left: 0,
                             background: 'transparent !important'
-                        }} href={url} download></a>
+                        }} 
+                        // href={url} download 
+                        // href={url} download="video.mp4" 
+                        onClick={()=>handleDownload(url)}></a>
                         <p className={`${style.p} ${style.fp} ${style.black_500}`}>Save video</p>
                     </div>
                 </MenuItem>

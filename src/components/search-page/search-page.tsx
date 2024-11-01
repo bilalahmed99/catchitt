@@ -1160,6 +1160,16 @@ export const SearchPage = () => {
         );
     }, [usersFilter, open]);
 
+    const TopModal = useMemo(() => { 
+        return (
+            <>
+            {UsersModal}
+            { VideosModal}
+            </>
+        )
+        
+    }, [videosFilter, usersFilter, open])
+
     const SoundsModal = useMemo(() => {
         return (
             <div>
@@ -1532,7 +1542,7 @@ export const SearchPage = () => {
                     {/* Render the modal based on the selected tab */}
                     {open && (
                         <div className={styles.modal}>
-                            {selectedTab === 'All' ? VideosModal : null}
+                            {selectedTab === 'All' ? VideosModal: null}
                             {selectedTab === 'Users' ? UsersModal : null}
                             {selectedTab === 'Videos' ? VideosModal : null}
                             {selectedTab === 'Sounds' ? SoundsModal : null}

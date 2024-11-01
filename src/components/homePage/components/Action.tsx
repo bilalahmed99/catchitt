@@ -47,9 +47,11 @@ function Action({
     };
 
     useEffect(() => {
+        console.log('post', post, obj.actionType, obj.activeImage, obj.img);
         if (post.isLiked && obj.actionType === 'like') {
             setIsActive(true);
         } else if (post.isSaved && obj.actionType === 'fvrt') {
+            console.log('fvrt post');
             setIsActive(true);
         } else {
             setIsActive(false);
@@ -111,7 +113,8 @@ function Action({
                 }}
                 onClick={() => actionClickHandler()}
             >
-                <img src={shouldDisplayActiveImage() ? obj.activeImage : obj.img} alt="" />
+                
+                <img src={shouldDisplayActiveImage() ? obj.activeImage : obj.img} alt="" /> 
                 {obj.actionType === 'share' && (
                     <COPY_AND_SEND_MENU_HOME
                         copyHandler={() =>
@@ -135,9 +138,10 @@ function Action({
                         videoTitle={post?.description} // Assuming you have a title property
                     />
                 )}
-                {obj.actionType === 'more' && (
+                { isUserLoggedIn() && obj.actionType === 'more' && (
                     <MORE_MENU_HOME
-                        url={post.originalUrl}
+                        url={ post?.reducedVideoUrl
+                            ? post?.reducedVideoUrl : post.originalUrl}
                         visibleReportPopup={visibleReportPopup}
                         postMediaId={post?.mediaId }
                     />

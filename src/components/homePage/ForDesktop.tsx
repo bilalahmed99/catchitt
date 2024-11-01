@@ -64,7 +64,7 @@ function ForDesktop(props: any) {
     const userBlackActions: any = [
         { img: moreBlack, actionType: 'more' },
         { img: shareBlack, actionType: 'share', activeImage: shareBlack },
-        { img: savedBlack, actionType: 'fvrt', activeImage: savedBlack },
+        { img: savedBlack, actionType: 'fvrt', activeImage: activeFvrt },
         { img: commentBlack, actionType: 'comment', activeImage: commentBlack },
         { img: likeBlack, actionType: 'like', activeImage: activeLike },
     ];
@@ -342,6 +342,7 @@ function ForDesktop(props: any) {
                                                         ? post?.reducedVideoHlsUrl
                                                         : post?.originalUrl
                                                 }
+                                                thumbnailImage={post?.thumbnailUrl}
                                                 controls={true}
                                                 post={post}
                                                 number={number} 

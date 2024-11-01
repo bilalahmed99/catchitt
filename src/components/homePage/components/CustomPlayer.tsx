@@ -9,7 +9,7 @@ import {
     volumeUnmute,
 } from '../../../icons';
 
-function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, controls, number }: any) {
+function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailImage, controls, number }: any) {
     const [duration, setDuration] = useState<number>();
     const [playingTime, setPlayingTime] = useState<number>();
     const { ref, inView, entry } = useInView({
@@ -29,7 +29,7 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, controls, 
         setDuration(video?.duration);
         setPlayingTime(video?.currentTime);
     };
-
+    // console.log("number", number);
     video.src = src; // Replace with the URL of your video
     video.load(); // Start loading the video metadata
 
@@ -120,9 +120,11 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, controls, 
             ref={ref}
             className={`${style.mainContainer} video-container`}
         >
-            <div className={style.videoContainer}  style={{backgroundImage:
-                `url('https://dsntquwfcg5yv.cloudfront.net/output/videos/6710c3e84bee6249cb3a5571/thumbnail/6710c3e84bee6249cb3a5571-thumbnail.jpg')`
-            }} onClick={togglePlayPause}>
+            <div className={style.videoContainer}  
+            style={{backgroundImage:
+                `url(${thumbnailImage})`
+            }} 
+            onClick={togglePlayPause}>
                 <video
                     disablePictureInPicture
                     controlsList="nodownload noplaybackrate"
