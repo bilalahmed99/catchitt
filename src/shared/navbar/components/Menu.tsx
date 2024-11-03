@@ -171,7 +171,7 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                         <p className={`${style.p} ${style.black_500}`}>{options[2]}</p>
                     </div>
                 </MenuItem>
-                <MenuItem
+                {/* <MenuItem
                     style={{ margin: 0, padding: 0 }}
                     onClick={() => {
                         handleClose();
@@ -182,7 +182,7 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                         <img src={switchAcount} alt="" />
                         <p className={`${style.p} ${style.black_500}`}>{options[3]}</p>
                     </div>
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem
                     style={{ margin: 0, padding: 0 }}
                 >
