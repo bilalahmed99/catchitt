@@ -680,7 +680,7 @@ export default function PopupForVideoPlayer({
                                     <video
                                         className="relative w-3/5 h-full"
                                         loop={true}
-                                        controls={false}
+                                        controls={true}
                                         autoPlay={true}
                                         preload="auto"
                                         playsInline
@@ -708,8 +708,8 @@ export default function PopupForVideoPlayer({
                                                     </p>
                                                     <p className="text-sm font-normal">
                                                         {info?.user?.username} .{' '}
-                                                        {moment(info?.user?.createdTime).format(
-                                                            'D-MM'
+                                                        {moment(info?.createdTime).format(
+                                                            'DD-MM-YYYY'
                                                         )}
                                                     </p>
                                                 </div>
