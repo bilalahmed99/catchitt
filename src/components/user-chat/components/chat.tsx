@@ -143,7 +143,7 @@ const ITEM_HEIGHT = 60;
         const handleDeleteUserFromChat = async() => {
             try {
                 const response = await fetch(
-                    `${API_KEY}/chat/conversation=${conversationId}`,
+                    `${API_KEY}/chat/conversation/${conversationId}`,
                     {
                         method: 'DELETE',
                         headers: {
@@ -154,6 +154,7 @@ const ITEM_HEIGHT = 60;
                 );
                 const res = await response.json();
                 // window.location.reload(); 
+                console.log("delete user chat", res);
                 setTimeout(() => {
                     window.location.reload(); 
                 }, 1000); 
