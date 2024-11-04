@@ -199,7 +199,7 @@ export const PublicProfile = (props: any) => {
                         {activeTab === 'Videos' ? (
                             <VideoesMaping videos={videosData} fetchMore={() => setVideosData({...videosData, page: videosData.page+ 1})} openVideoModal={onVideoModal} />
                         ) : null}
-                        {activeTab !== 'Videos' ? <PrivatePosts /> : null}
+                        {activeTab !== 'Videos' ? <PrivatePosts tab={activeTab} name={profileData.name} /> : null}
                     </div>
                 </div>
                 <MemoizedStoriesOnPublicProfile
