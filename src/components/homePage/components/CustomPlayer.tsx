@@ -9,7 +9,7 @@ import {
     volumeUnmute,
 } from '../../../icons';
 
-function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, controls, number }: any) {
+function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailImage, controls, number }: any) {
     const [duration, setDuration] = useState<number>();
     const [playingTime, setPlayingTime] = useState<number>();
     const { ref, inView, entry } = useInView({
@@ -30,7 +30,7 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, controls, 
         setDuration(video?.duration);
         setPlayingTime(video?.currentTime);
     };
-
+    // console.log("number", number);
     video.src = src; // Replace with the URL of your video
     video.load(); // Start loading the video metadata
 
@@ -74,61 +74,7 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, controls, 
     };
 
 
-    const handleWaiting = () => {
-        console.log('Loading...');
-        // setIsLoading(true);
-    };
 
-    const handleCanPlay = () => {
-        console.log('Video is ready to play.');
-        // setIsLoading(false);
-    };
-
-    // useEffect(() => {
-    //     // const video = videoRef.current;
-
-    //     // Update duration when video metadata is loaded
-    //     const handleLoadedMetadata = () => {
-    //       setDuration(video.duration);
-    //     };
-
-    //     // Update current time as video plays
-    //     const handleTimeUpdate = () => {
-    //       setCurrentTime(video.currentTime);
-    //       console.log("handle duration", duration)
-    //     };
-
-    //     video.addEventListener('loadedmetadata', handleLoadedMetadata);
-    //     video.addEventListener('timeupdate', handleTimeUpdate);
-
-    //     return () => {
-    //       video.removeEventListener('loadedmetadata', handleLoadedMetadata);
-    //       video.removeEventListener('timeupdate', handleTimeUpdate);
-    //     };
-    //   }, [duration]);
-
-
-    //     const progress = (currentTime / duration) * 100;
-
-    // useLayoutEffect(() => {
-
-    //     const adjustVideoSize = () => {
-    //         console.log('adjusting video size');
-    //         if (!window) return;
-    //         const { innerWidth, innerHeight } = window;
-    //         if (innerWidth < 700) return;
-    //         const aspectRatio = 16 / 9;
-    //         const videoWidth = innerHeight / aspectRatio;
-    //         const videoHeight = innerHeight - 80;
-    //         setVideoSize({ width: `${videoWidth}px`, height: `${videoHeight}px` });
-    //     }
-
-    //     window.addEventListener('resize', adjustVideoSize);
-        
-    //     return () => {
-    //         window.removeEventListener('resize', adjustVideoSize);
-    //     };
-    // }, [])
 
     return (
         <div
@@ -140,7 +86,11 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, controls, 
             ref={ref}
             className={`${style.mainContainer} video-container`}
         >
-            <div className={style.videoContainer} onClick={togglePlayPause}>
+            <div className={style.videoContainer}  
+            style={{backgroundImage:
+                `url(${thumbnailImage})`
+            }} 
+            onClick={togglePlayPause}>
                 <video
                     disablePictureInPicture
                     controlsList="nodownload noplaybackrate"
@@ -151,7 +101,7 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, controls, 
                     src={src}
                     ref={videoRef}
                     className={style.video}
-                    preload={number == 0 ? 'auto' : 'metadata'}
+                    preload='none' //{number == 0 ? 'auto' : 'none'}
                     playsInline
                 />
 

@@ -25,6 +25,7 @@ function Actions(props: any) {
         activeUser,
         longPressH,
         autoScrolElem,
+        scrollToBottom,
         activeChat,
         copyH,
         showToast,
@@ -37,8 +38,11 @@ function Actions(props: any) {
     console.log('activeChat',activeChat);
     useEffect(() => {
         console.log('activeChat new 2', activeChat);
+        scrollToBottom()
     }, [activeChat]);
-    
+    useEffect(() => {
+        scrollToBottom()
+    }, []);
     
     return (
         <>
@@ -131,7 +135,14 @@ function Actions(props: any) {
                                     </div>
                                 )}
                                 <div style={{ position: 'relative', zIndex: 20 }}>
-                                    <LongPressButton onLongPress={() => longPressH(item)}>
+                                    <LongPressButton onLongPress={() => longPressH(item)} 
+                                                // onMouseEnter={() => {
+                                                //     longPressH(item)
+                                                //   }}
+                                                //   onMouseLeave={() => {
+                                                //     longPressH(item)
+                                                //   }}
+                                                  >
                                         {item?.replysms ? (
                                             <div
                                                 className={style.tempparent}

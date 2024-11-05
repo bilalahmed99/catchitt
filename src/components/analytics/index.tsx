@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Layout from '../../shared/layout';
 import whiteRightArrow from './svg-components/whiteRightArrow.svg';
+import { useNavigate } from 'react-router-dom';
 // import styles from './style.module.scss'
 const Analytics = () => {
     const [currentTab, setCurrentTab] = useState(0);
@@ -13,6 +14,7 @@ const Analytics = () => {
     const [likes, setLikes] = useState(0);
     const [comments, setComments] = useState(0);
     const [shares, setShares] = useState(0);
+    const navigate = useNavigate();
 
     const currentTabToggler = () => {
         if (currentTab === 0) setCurrentTab(1);
@@ -171,7 +173,7 @@ const Analytics = () => {
                             <p className="font-medium text-lg text-left mt-3 text-gray-400">
                                 You created 0 new posts in the last 7 days.
                             </p>
-                            <div className="rounded-xl flex justify-center items-center bg-pink-500 w-fit py-2 px-3 mt-3 cursor-pointer">
+                            <div className="rounded-xl flex justify-center items-center bg-pink-500 w-fit py-2 px-3 mt-3 cursor-pointer" onClick={() => navigate('/upload')}>
                                 <p className="text-white text-lg font-normal">Create post</p>
                             </div>
                         </div>

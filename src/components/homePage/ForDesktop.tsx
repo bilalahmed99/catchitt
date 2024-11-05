@@ -46,6 +46,7 @@ function ForDesktop(props: any) {
     const [showCopyPopup, setshowCopyPopup] = useState(false);
     const [darkTheme, setdarkTheme] = useState('');
     const [isDarkTheme, setIsDarkTheme] = useState(false);
+    const [countFlag, setCountFlag] = useState(true);
     // @ts-ignore
     const followers = useSelector((store) => store.reducers.followings);
     // @ts-ignore
@@ -63,7 +64,7 @@ function ForDesktop(props: any) {
     const userBlackActions: any = [
         { img: moreBlack, actionType: 'more' },
         { img: shareBlack, actionType: 'share', activeImage: shareBlack },
-        { img: savedBlack, actionType: 'fvrt', activeImage: savedBlack },
+        { img: savedBlack, actionType: 'fvrt', activeImage: activeFvrt },
         { img: commentBlack, actionType: 'comment', activeImage: commentBlack },
         { img: likeBlack, actionType: 'like', activeImage: activeLike },
     ];
@@ -151,12 +152,13 @@ function ForDesktop(props: any) {
                 const token = localStorage.getItem('token');
                 // setLoadingVideo(true);
                 dispatch(addMoreVideos({ tab: activeTab, token, page: page }));
-                console.log('loadingVideo',loadingVideo);
+                console.log('loadingVideo',loadingVideo, 'countFlag',countFlag);
+                setCountFlag(true);
                 // setHasMore(newVideos.length > 0);
             } catch (error) {
                 console.error('Error fetching videos:', error);
             }
-            const token = localStorage.getItem('token');
+            // const token = localStorage.getItem('token');
             // dispatch(getHomeVideos({tab : activeTab, token})).then(() => setLoading(false));
 
             setLoadingVideo(false);
@@ -171,9 +173,11 @@ function ForDesktop(props: any) {
         if (scrollableDivRef.current) {
             const { scrollTop, clientHeight, scrollHeight } = scrollableDivRef.current;
             console.log("scroll position: ", scrollHeight, (scrollTop + clientHeight + 100), scrollTop, clientHeight);
-            if (scrollTop + clientHeight + 100 >= scrollHeight) {
+            if (scrollTop + clientHeight + 100 > scrollHeight && countFlag ==true) {
                 setLoadingVideo(true);
                 setPage((prevPage) => prevPage + 1);
+                setCountFlag(false);
+                console.log('countFlag',countFlag);
             }
         }
     };
@@ -222,26 +226,7 @@ function ForDesktop(props: any) {
             paddingBottomProp={true}
         >
             <div className={`relative  ${style.parent} ${darkTheme}`}>
-                {/* <div className={style.tabs}>
-                     <div
-                        onClick={() => setActiveTab(1)}
-                        className={activeTab === 1 ? style.activeTab : style.tab}
-                    >
-                        <p>Following</p>
-                    </div>
-                    <div
-                        onClick={() => setActiveTab(2)}
-                        className={activeTab === 2 ? style.activeTab : style.tab}
-                    >
-                        <p>For You</p>
-                    </div>
-                    <div
-                        onClick={() => setActiveTab(3)}
-                        className={activeTab === 3 ? style.activeTab : style.tab}
-                    >
-                        <p>Live</p>
-                    </div> 
-                </div> */}
+               
                 <VideoNavigation videoListRef={scrollableDivRef} />
                 <div className={`${style.videoesParent} no-scrollbar mt-2`} ref={scrollableDivRef}>
                     {videoes?.length > 0 && !loading && activeTab !== 3 ? (
@@ -249,69 +234,10 @@ function ForDesktop(props: any) {
                             return (
                                 <div key={number} id={post?.mediaId} className={style.videoParent}
                                     // ref={(el: HTMLLIElement | null) => itemsRef.current[number] = el} 
-                                   
                                     // style={{
                                         // backgroundColor: focusedIndex === number ? 'blue' : 'red',
                                     // }}
                                     >
-                                         
-                                    {/* <div className={style.videoHeader}>
-                                        <div className={style.videoHeaderSec1}>
-                                            <img
-                                                style={{
-                                                    borderRadius: '50%',
-                                                    width: '44px',
-                                                    height: '44px',
-                                                    cursor: 'pointer',
-                                                }}
-                                                src={post?.user?.avatar || defaultAvatar}
-                                                alt=""
-                                                onClick={() =>
-                                                    navigate(`/profile/${post?.user?._id}`)
-                                                }
-                                            />
-                                            <div>
-                                                <p className={style.name}>{post?.user?.name}</p>
-                                                <p className={style.userName}>
-                                                    {post?.user?.username}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <button
-                                            className={
-                                                followers?.data?.some(
-                                                    (user: any) =>
-                                                        user.followed_userID._id === post?.user?._id
-                                                )
-                                                    ? style.btn2
-                                                    : style.btn
-                                            }
-                                            onClick={() => follow_Unfollow_handler(post?.user?._id)}
-                                        >
-                                            {followBtnLoading &&
-                                            followimgbtnId === post?.user?._id ? (
-                                                <CircularProgress
-                                                    style={{ width: 20, height: 20 }}
-                                                />
-                                            ) : followers?.data?.some(
-                                                  (user: any) =>
-                                                      user.followed_userID._id === post?.user?._id
-                                              ) ? (
-                                                'Following'
-                                            ) : (
-                                                'Follow'
-                                            )}
-                                        </button>
-                                    </div> */}
-                                    {/* <div className={style.contentSec}>
-                                        <p>{post?.description}</p>
-                                        {post?.sound && (
-                                            <div>
-                                                <img src={music} alt="" />
-                                                <p>{post?.sound?.category?.name}</p>
-                                            </div>
-                                        )}
-                                    </div> */}
                                     <div className={style.mediaContainer} >
                                         <div
                                             style={{
@@ -338,36 +264,13 @@ function ForDesktop(props: any) {
                                                         ? post?.reducedVideoHlsUrl
                                                         : post?.originalUrl
                                                 }
+                                                thumbnailImage={post?.thumbnailUrl}
                                                 controls={true}
                                                 post={post}
                                                 number={number} 
                                             />
                                         </div>
-                                        {/* <div className={style.DivMediaCardBottom}>
-                                            <p
-                                                style={{
-                                                    textOverflow: 'ellipsis',
-                                                    overflow: 'hidden',
-                                                    whiteSpace: 'nowrap',
-                                                }}
-                                            >
-                                                {' '}
-                                                {post?.description}
-                                            </p>
-                                            {post?.sound && (
-                                                <p
-                                                    className="flex"
-                                                    style={{
-                                                        textOverflow: 'ellipsis',
-                                                        overflow: 'hidden',
-                                                        whiteSpace: 'nowrap',
-                                                    }}
-                                                >
-                                                    <img src={music} alt="" />{' '}
-                                                    {post?.sound?.category?.name}{' '}
-                                                </p>
-                                            )}
-                                        </div> */}
+                                    
                                         <div className={style.actions}>
                                             {isDarkTheme == true &&
                                                 userActions.map((obj: any, i: number) => {

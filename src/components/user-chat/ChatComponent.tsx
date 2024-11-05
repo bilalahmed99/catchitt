@@ -111,26 +111,30 @@ const ChatComponent = () => {
         };
 
         (socketRef.current as any).on('receive-msg', (message: any) => {
-
-            setActiveChat((currentChat: any) => ({
-                ...currentChat,
-                chats: [
-                    ...currentChat?.chats,
-                    {
-                        msg:  message?.message,
-                        time: `${new Date().getHours()}:${new Date().getMinutes()}`,
-                        emojis: false,
-                        dropdown: false,
-                        id: `${new Date().getTime()}`,
-                        isrecevied: true,
-                        receiverId: message?.receiverId?._id,
-                        stared: message?.isStarred,
-                        isRead: message?.isRead,
-                        type: message?.type,
-                        replysms: false
-                    },
-                ],
-            }));
+            let chatActiveUser = localStorage.getItem('chatActiveUser');
+            activeUser?.userId
+            if(chatActiveUser == message.senderId._id){
+                console.log('received msg');
+                setActiveChat((currentChat: any) => ({
+                    ...currentChat,
+                    chats: [
+                        ...currentChat?.chats,
+                        {
+                            msg:  message?.message,
+                            time: `${new Date().getHours()}:${new Date().getMinutes()}`,
+                            emojis: false,
+                            dropdown: false,
+                            id: `${new Date().getTime()}`,
+                            isrecevied: true,
+                            receiverId: message?.receiverId?._id,
+                            stared: message?.isStarred,
+                            isRead: message?.isRead,
+                            type: message?.type,
+                            replysms: false
+                        },
+                    ],
+                }));
+            }
         });
 
     }
@@ -148,6 +152,7 @@ const ChatComponent = () => {
                 setConversationId(user?.conversationId);
                 loadChatMessages(user?.senderId, user?.receiverId, user?.conversationId, user);
                 setActiveUser(user);
+                localStorage.setItem('chatActiveUser', user?.userId);
                 markMessageAsSeen(user?.senderId, user?.conversationId);
             }
         });
@@ -506,6 +511,7 @@ const ChatComponent = () => {
                 chatSwitchH(valueReceived);
             } else {
                 setActiveUser(users[0]);
+                localStorage.setItem('chatActiveUser', users[0]?.userId);
             }
         }
     }, [users]);
@@ -700,6 +706,7 @@ const ChatComponent = () => {
                                 activeUser={activeUser}
                                 longPressH={longPressH}
                                 autoScrolElem={autoScrolElem}
+                                scrollToBottom={scrollToBottom}
                                 activeChat={activeChat}
                                 copyH={copyH}
                                 showToast={showToast}
