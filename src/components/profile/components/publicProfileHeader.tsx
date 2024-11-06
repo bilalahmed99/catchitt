@@ -70,7 +70,7 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
         console.log("handleProfileData", userId)
         try {
             const response = await fetch(
-                API_KEY + `/profile/${userId}`, {
+                API_KEY + `/profile/public/${userId}`, {
                 method: 'GET',
                 headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
             }

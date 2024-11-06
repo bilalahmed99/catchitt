@@ -13,7 +13,7 @@ import PopupForReport from './popups/PopupForReport';
 import PopupForBlock from './popups/popupForBlock';
 import PopupForVideoPlayer from './popups/popupForVideoPlayer';
 
-import { getFriends, getProfileData, getRandomUsers, loadFollowers, loadFollowing } from '../../redux/AsyncFuncs';
+import { getProfileData } from '../../redux/AsyncFuncs';
 import publicProfileStories from './popups/publicProfileStories';
 import styles from './profile.module.scss';
 import { Bookmark } from './svg-components/Bookmark';
@@ -363,11 +363,7 @@ export const Profile = (props: any) => {
             .catch((err) => {
                 console.log(err);
             });
-        // dispatch(getRandomUsers(1));
-        // dispatch(getRandomUsers(1));
-        dispatch(loadFollowing(1));
-        dispatch(loadFollowers(1));
-        dispatch(getFriends(1));
+     
         await dispatch(getProfileData());
     };
 

@@ -42,7 +42,7 @@ export const PublicProfile = (props: any) => {
 
     const fetchProfileData = async () => {
         try {
-            const profileResponse = await fetch(`${API_KEY}/profile/${params.id}`, {
+            const profileResponse = await fetch(`${API_KEY}/profile/public/${params.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-type': 'application/json',

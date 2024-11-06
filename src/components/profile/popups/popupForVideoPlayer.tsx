@@ -1523,7 +1523,7 @@ export default function PopupForVideoPlayer({
                                                 {/* <EmojiInputPicker isPickerVisible={isPickerVisible} onEmojiSelect={onEmojiClick} inputRef={inputRef} /> */}
                                                 {isUserLoggedIn() && (
                                                     <div className="flex flex-row items-center">
-                                                        {/* <div
+                                                        <div
                                                             onClick={atRateHandler}
                                                             className="rounded-lg cursor-pointer hover:bg-[#1618230f] p-[0.313rem] my-[0.438rem] mx-[0.188rem] mr-1"
                                                         >
@@ -1532,7 +1532,7 @@ export default function PopupForVideoPlayer({
                                                                 src={atTheRateOf}
                                                                 alt="at-the-rate-icon"
                                                             />
-                                                        </div> */}
+                                                        </div>
                                                         <div onClick={() =>setCommentEmojiIndex(prev => prev===-2? -1: -2)} className="rounded-lg cursor-pointer hover:bg-[#1618230f] p-[0.313rem] my-[0.438rem] mx-[0.188rem]">
                                                             <img
                                                                 className={`w-5 h-5 object-contain rounded-full`}
