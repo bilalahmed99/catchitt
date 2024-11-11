@@ -37,7 +37,7 @@ function ChatHeader(props: any) {
                         {/* <p className={chatHeader.userMention}>{name}</p> */}
                     </div>
                 </div>
-                {/* <img onClick={moreOptionH} chatHeader={{ cursor: 'pointer' }} src={more} alt="" /> */}
+                <img onClick={moreOptionH} style={{ cursor: 'pointer' }} src={more} alt="" />
             </div>
             {/* {!safeMsg && (
                 <div className={chatHeader.chatWarner}>
@@ -56,16 +56,17 @@ function ChatHeader(props: any) {
                     </div>
                 </div>
             )} */}
-            {/* {searchMessage && (
+            {searchMessage && (
                 <div className="flex flex-row items-center justify-between">
                     <Search
                         onInputChangeHandler={searchMessagesHandler}
                         placeholder={'Search'}
                         showClose={true}
                         searchMsgBar={searchMsgBar}
+                        selectFirstSearch={true}
                     />
                 </div>
-            )} */}
+            )}
         </div>
     );
 }

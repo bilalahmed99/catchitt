@@ -251,7 +251,7 @@ export default function PopupForVideoPlayer({
         setIsCommentsLoading(true);
         try {
             const response = await fetch(
-                `${API_KEY}/media-content/videos/${info?.mediaId
+                `${API_KEY}/media-content${token?'':'/public'}/videos/${info?.mediaId
                 }/comments?page=${fromStart ? 1 : videoComments.currentPage}&pageSize=${videoComments.pageSize}`,
                 {
                     method: 'GET',

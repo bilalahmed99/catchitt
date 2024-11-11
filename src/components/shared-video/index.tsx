@@ -415,7 +415,7 @@ const VideoPage = () => {
         setIsCommentsLoading(true);
         try {
             const response = await fetch(
-                `${API_KEY}/media-content/videos/${selectedVideoId ?? videoId
+                `${API_KEY}/media-content${token?'':'/public'}/videos/${selectedVideoId ?? videoId
                 }/comments?page=${fromStart ? 1 : videoComments.currentPage}&pageSize=${videoComments.pageSize}`,
                 {
                     method: 'GET',
@@ -1420,8 +1420,8 @@ const VideoPage = () => {
                     {/* Add comment section */}
                     <div className="mt-6">
                         <p className="text-[#161823] font-bold text-[1.125rem] text-left">
-                            {videoComments?.length || 0}{' '}
-                            {videoComments?.length === 1 ? 'comment' : 'comments'}
+                            {videoComments?.totalItems ?? 0}{' '}
+                            {videoComments?.totalItems ? 'comment' : 'comments'}
                         </p>
                         <div className="flex flex-row items-start gap-3 mt-3">
                             {/* Commenter avatar */}
@@ -1576,7 +1576,7 @@ const VideoPage = () => {
                         scrollableTarget="scrollableDiv"
                         endMessage={
                             <div className="flex flex-row justify-center items-center mt-3">
-                                <p className="text-white font-normal text-sm">
+                                <p className="font-bold text-xl">
                                     {videoComments?.totalItems === 0 && 'Be the first to comment'}
                                 </p>
                             </div>

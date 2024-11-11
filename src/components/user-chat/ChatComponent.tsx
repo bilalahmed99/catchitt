@@ -16,10 +16,17 @@ import { avatar, groupDefaultIcon, more, cross } from '../../icons';
 // style
 import style from './index.module.scss';
 import chatHeader from './components/ChatHeader.module.scss';
+import SearchUser from './components/modals/SearchUser';
+import DropDown from './components/DropDown';
+import Search from '../../shared/navbar/components/Search';
+import ChatHeader from './components/ChatHeader';
+import ForFriends from './components/welcomeScreens/ForFriends';
+import ForPeoples from './components/welcomeScreens/ForPeoples';
+import ForGroups from './components/welcomeScreens/ForGroups';
 
 const ChatComponent = () => {
     // const socket = useSocket();
-    
+
     const API_KEY = process.env.VITE_API_URL;
     const [moreOptions, setMoreOptions] = useState<boolean>(false);
     const [reportPopup, setreportPopup] = useState<boolean>(false);
@@ -58,11 +65,12 @@ const ChatComponent = () => {
     const location = useLocation();
     const valueReceived = location.state?.value;
     const [page, setPage] = useState(1);
+    const [queryPage, setQueryPage] = useState(1);
     const autoScrolElem: any = useRef(null);
     const [blockToggle, setBlockToggle] = useState(false);
-    
+
     const [staredMsgs, setstaredMsgs] = useState<any[]>([]);
-    
+
     const longPressH = (item: any) => {
         const tempArr: any[] = [];
         activeChat?.chats.forEach((msg: any) => {
@@ -92,12 +100,12 @@ const ChatComponent = () => {
         (socketRef.current as any).on('connect', () => {
             setIsConnected(true);
             console.log('Connected to socket server.', (socketRef.current as any));
-            let addUserObject = {userId:sender, accessToken:token };
+            let addUserObject = { userId: sender, accessToken: token };
             let newAddUserObject = JSON.stringify(addUserObject);
             (socketRef.current as any).emit('add-user', newAddUserObject);
         });
-        
-        (socketRef.current as any).on('connect_error', (error:any) => {
+
+        (socketRef.current as any).on('connect_error', (error: any) => {
             console.error('Connection Error:', error);
         });
 
@@ -105,22 +113,22 @@ const ChatComponent = () => {
             setIsConnected(false);
             console.log('Disconnected from socket server.');
         });
-        
-        (socketRef.current as any).onclose = (event:any) => {
+
+        (socketRef.current as any).onclose = (event: any) => {
             console.error('WebSocket closed:', event);
         };
 
         (socketRef.current as any).on('receive-msg', (message: any) => {
             let chatActiveUser = localStorage.getItem('chatActiveUser');
             activeUser?.userId
-            if(chatActiveUser == message.senderId._id){
+            if (chatActiveUser == message.senderId._id) {
                 console.log('received msg');
                 setActiveChat((currentChat: any) => ({
                     ...currentChat,
                     chats: [
                         ...currentChat?.chats,
                         {
-                            msg:  message?.message,
+                            msg: message?.message,
                             time: `${new Date().getHours()}:${new Date().getMinutes()}`,
                             emojis: false,
                             dropdown: false,
@@ -138,12 +146,12 @@ const ChatComponent = () => {
         });
 
     }
-    
+
     const chatSwitchH = (e: any) => {
         console.log(
             "chatSwitchH"
         );
-        
+
         users?.forEach((user) => {
             if (user?.userId === e) {
                 setActiveChat({});
@@ -159,7 +167,7 @@ const ChatComponent = () => {
 
         setstaredMsgs([]);
     };
-    
+
     const loadChatMessages = async (
         senderId: String | Number,
         receiverId: String | Number,
@@ -184,14 +192,14 @@ const ChatComponent = () => {
                 const messageTimeStamp = moment(date).format('h:mm A');
                 setActiveChat((currentChat: any) => {
                     // Condition: Check if a message with the same ID already exists in chats
-                   if(currentChat.length > 0){
-                    const messageExists = currentChat?.chats.some(
-                        (chat: any) => chat.id === element?._id
-                    );
-                    if (messageExists) return currentChat;
-                   }[]
+                    if (currentChat.length > 0) {
+                        const messageExists = currentChat?.chats.some(
+                            (chat: any) => chat.id === element?._id
+                        );
+                        if (messageExists) return currentChat;
+                    } []
                     // If message exists, return the current state without changes
-                    
+
                     // Otherwise, add the new message to chats
                     return {
                         ...currentChat,
@@ -223,13 +231,13 @@ const ChatComponent = () => {
             console.log('error chat messages', error);
         }
     };
-    
+
     const markMessageAsSeen = (userId: any, conversationId: any) => {
         let newDataObject = JSON.stringify({ userId, conversationId });
-        (socketRef.current as any).emit('mark-conversation-as-seen', { userId, newDataObject});
+        (socketRef.current as any).emit('mark-conversation-as-seen', { userId, newDataObject });
     };
 
-    
+
     const loadChats = async () => {
         console.log('GET load chat');
         try {
@@ -279,9 +287,9 @@ const ChatComponent = () => {
 
                     // if (isLastIndex) markMessageAsSeen(chats?.users[0]?._id, chats?._id);
                     tempArr.push({
-                        userId: loggedUserId == chats?.users[1]?._id ? chats?.users[0]?._id: chats?.users[1]?._id,
-                        userName: loggedUserId == chats?.users[1]?._id ? chats?.users[0]?.name: chats?.users[1]?.name, //chats?.users[1]?.name,
-                        userImage: loggedUserId == chats?.users[1]?._id ? chats?.users[0]?.avatar: chats?.users[1]?.avatar,
+                        userId: loggedUserId == chats?.users[1]?._id ? chats?.users[0]?._id : chats?.users[1]?._id,
+                        userName: loggedUserId == chats?.users[1]?._id ? chats?.users[0]?.name : chats?.users[1]?.name, //chats?.users[1]?.name,
+                        userImage: loggedUserId == chats?.users[1]?._id ? chats?.users[0]?.avatar : chats?.users[1]?.avatar,
                         lastMsg: lastMessage,
                         ispined: isPinned,
                         lastSeen: conversationTimeStamp,
@@ -306,7 +314,7 @@ const ChatComponent = () => {
             console.log('error trendinghashtags', error);
         }
     };
-    
+
     const valuesH = (item: any, keyName: any) => {
         const tempArr: any[] = [];
         activeChat?.chats.forEach((msg: any) => {
@@ -330,7 +338,7 @@ const ChatComponent = () => {
         });
         setActiveChat({ ...activeChat, chats: tempArr });
     };
-    
+
     const setMessageAsStared = async (messageId: any, conversationId: string) => {
         try {
             const response = await fetch(`${API_KEY}/chat/messages/star`, {
@@ -346,7 +354,7 @@ const ChatComponent = () => {
             console.log('error trendinghashtags', error);
         }
     };
-    
+
     const deleteH = async (item: any) => {
         const tempArr: any[] = [];
         activeChat?.chats.forEach((msg: any) => {
@@ -372,7 +380,7 @@ const ChatComponent = () => {
             console.log('Error deleting message', error);
         }
     };
-    
+
     const copyH = (msg: any) => {
         if (msg) {
             navigator.clipboard.writeText(msg).then(() => {
@@ -385,14 +393,14 @@ const ChatComponent = () => {
         });
         setActiveChat({ ...activeChat, chats: tempArr });
     };
-    
+
     const showToast = () => {
         toast.success('🎉 Copied successfully', {
             position: 'bottom-right', // Set the position (top-right, top-center, top-left, bottom-right, bottom-center, bottom-left)
             autoClose: 2000, // Set the auto-close duration in milliseconds (e.g., 2000ms = 2 seconds)
         });
     };
-    
+
     const handleScroll = (event: any) => {
         const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
         if (scrollTop + clientHeight === scrollHeight) {
@@ -400,7 +408,7 @@ const ChatComponent = () => {
             // loadMoreMessages();
         }
     };
-    
+
     const submitH = (e: any) => {
         // console.log("htting", msg, msgType);
         if (e) {
@@ -408,11 +416,11 @@ const ChatComponent = () => {
         }
         e.stopPropagation();
         const messageData = {
-            to: loggedUserId != receiver ? receiver: sender,
+            to: loggedUserId != receiver ? receiver : sender,
             message: msg,
-            from: loggedUserId == sender ? sender: sender,
+            from: loggedUserId == sender ? sender : sender,
             type: msgType,
-            accessToken:token,
+            accessToken: token,
         };
         // Get current time
         const currentTime = moment();
@@ -420,7 +428,7 @@ const ChatComponent = () => {
         // Format the current time using moment.js
         const formattedTime = currentTime.format('h:mm A');
         if (msg.length !== 0) {
-            let tempUserArr: any[]=[];
+            let tempUserArr: any[] = [];
             users?.forEach((user) => {
                 if (user?.userId === activeUser?.userId) {
                     tempUserArr.push({
@@ -439,8 +447,8 @@ const ChatComponent = () => {
                     chats: [
                         ...activeChat?.chats,
                         {
-                            to: loggedUserId != receiver ? receiver: sender,
-                            from: loggedUserId == sender ? sender: sender,
+                            to: loggedUserId != receiver ? receiver : sender,
+                            from: loggedUserId == sender ? sender : sender,
                             msg: msg,
                             type: msgType,
                             time: formattedTime,
@@ -464,8 +472,8 @@ const ChatComponent = () => {
                     chats: [
                         ...activeChat?.chats,
                         {
-                            to: loggedUserId != receiver ? receiver: sender,
-                            from: loggedUserId == sender ? sender: sender,
+                            to: loggedUserId != receiver ? receiver : sender,
+                            from: loggedUserId == sender ? sender : sender,
                             type: msgType,
                             msg: msg,
                             time: formattedTime,
@@ -484,28 +492,28 @@ const ChatComponent = () => {
             setMsg('');
             setMsgType('');
         }
-        
+
         setSmsRef('');
         setSmsId('');
         scrollToBottom();
         setreplysms(false);
     };
-    
+
     const scrollToBottom = () => {
         if (autoScrolElem.current) {
             autoScrolElem.current.scrollTop = autoScrolElem.current.scrollHeight + 300;
         }
     };
-    
+
     useEffect(() => {
         loadChats();
         startSocket();
         console.log(
-            'activeUser',activeUser);
+            'activeUser', activeUser);
     }, []);
-    
+
     useEffect(() => {
-        if(Object.keys(activeUser).length == 0 && users.length > 0){
+        if (Object.keys(activeUser).length == 0 && users.length > 0) {
             loadChatMessages(users[0]?.senderId, users[0]?.receiverId, users[0]?.conversationId, users[0]);
             if (valueReceived) {
                 chatSwitchH(valueReceived);
@@ -515,7 +523,7 @@ const ChatComponent = () => {
             }
         }
     }, [users]);
-    
+
     const userPinH = async (userId?: any) => {
 
         const tempArr: any[] = [];
@@ -525,7 +533,7 @@ const ChatComponent = () => {
             ispined: !activeUser?.ispined,
         });
         users?.forEach((user) => {
-            console.log("active users",user)
+            console.log("active users", user)
             if (user?.userId === userId) {
                 tempArr.push({
                     ...activeUser,
@@ -560,7 +568,7 @@ const ChatComponent = () => {
             console.log('error trendinghashtags', error);
         }
     };
-    
+
     const onBlock = async () => {
         const tempchat: any = [];
         let filteredArr = selectedData.map((item) => item.id);
@@ -588,7 +596,7 @@ const ChatComponent = () => {
             console.log('error blocking user', error);
         }
     };
-    
+
     const onChangeH = (item: any) => {
         if (selectedData.find((ACHat: any) => ACHat?.id === item?.id)) {
             let filterArr = selectedData.filter((chat: any) => {
@@ -623,7 +631,7 @@ const ChatComponent = () => {
             setblockPopup(true);
         }
     };
-    
+
     const multipleUnstarHandlr = () => {
         let filteredArr = selectedData.map((item: any) => item.id);
         const tempArr: any[] = [];
@@ -637,18 +645,84 @@ const ChatComponent = () => {
         setActiveChat({ ...activeChat, chats: tempArr });
         setselectedData([]);
     };
-    
+
+    const searchChatMessages = async (
+        query: String | Number, 
+        // receiverId: String | Number,
+        conversationId: String | Number
+    ) => {
+        try {
+            const response = await fetch(
+                `${API_KEY}/chat/search/conversation/messages?page=${queryPage}&pageSize=10&searchQuery=${query}&conversationId=${conversationId}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            const res = await response.json();
+            const tempArr: any[] = [];
+            res?.data?.data.forEach((element: any, index: number, array: any[]) => {
+                // Convert milliseconds to date
+                const date = new Date(element?.createdTime);
+
+                // Format the date using moment.js
+                const messageTimeStamp = moment(date).format('h:mm A');
+                
+                tempArr.push({
+                        msg: element?.message,
+                        time: messageTimeStamp,
+                        emojis: false,
+                        dropdown: false,
+                        id: element?._id,
+                        isrecevied: element?.receiverId?._id == loggedUserId ? false : true,
+                        receiverId: element?.receiverId?._id,
+                        stared: element?.isStarred,
+                        isRead: element?.isRead,
+                        type: element?.type,
+                        replysms: element?.repliedMessage
+                            ? element?.repliedMessage?.message
+                            : false,
+                    });
+               
+            });
+
+            setActiveChat((currentChat: any) => ({
+                ...currentChat,
+                chats: tempArr,
+            }));
+        } catch (error) {
+            console.log('error chat messages', error);
+        }
+    };
+
+    const flushChatState = () => {
+        setActiveChat({});
+    }
+
+    const searchMessagesHandler = (e: any) => {
+        if (e.length >= 3) {
+            searchChatMessages(e, users[0]?.conversationId);
+        }
+        if (e.length === 0) {
+            flushChatState();
+            loadChatMessages(users[0]?.senderId, users[0]?.receiverId, users[0]?.conversationId, users[0]);
+        }
+    };
+
     return (
         <Layout
-            // globalClicker={globalClickH}
-            // showReportPopup={reportPopup}
-            // closeReportPopup={() => setreportPopup(false)}
-            // showBlockPopup={blockPopup}
-            // closeBlockPopup={() => setblockPopup(false)}
-            // showShortSidebar={showShortSidebar}
-            // DangerText={DangerText}
-            // dangetBtnText={dangetBtnText}
-            // onBlock={onBlock}
+        // globalClicker={globalClickH}
+        // showReportPopup={reportPopup}
+        // closeReportPopup={() => setreportPopup(false)}
+        // showBlockPopup={blockPopup}
+        // closeBlockPopup={() => setblockPopup(false)}
+        // showShortSidebar={showShortSidebar}
+        // DangerText={DangerText}
+        // dangetBtnText={dangetBtnText}
+        // onBlock={onBlock}
         >
             <div className={style.parent}>
                 <UserChats
@@ -661,10 +735,10 @@ const ChatComponent = () => {
                     setstaredmodal={setstaredmodal}
                 />
                 <div className={style.chat}>
-                    <div className={style.sec1} 
+                    <div className={style.sec1}
                     // ref={autoScrolElem}
                     >
-                        <div className={chatHeader.parent}>
+                        {/* <div className={chatHeader.parent}>
                             <div className={chatHeader.chatHeader}>
                                 <div>
                                     {activeUser?.isGroup ? (
@@ -675,17 +749,60 @@ const ChatComponent = () => {
                                             alt=""
                                         />
                                     ) : (
-                                        
+
                                         null
                                     )}
-                                    <div style={{display:'flex',flexDirection:'column'}}>
+                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
                                         <p className={chatHeader.name}>{activeUser?.userName}</p>
                                     </div>
                                 </div>
-                                {/* <img onClick={moreOptionH} chatHeader={{ cursor: 'pointer' }} src={more} alt="" /> */}
+                                <img className='pointer-cursor'
+                                    onClick={() => {
+                                        console.log('clicked 🤖🤖', moreOptions);
+                                        if (activeUser?.isGroup) {
+                                            setGroupOptions(!groupOptions);
+                                            setshowShortSidebar(!showShortSidebar);
+                                            if (showShortSidebar) {
+                                                // setMoreOptions(!moreOptions);
+                                                setshowShortSidebar(false);
+                                            }
+                                        } else {
+                                            setMoreOptions(!moreOptions);
+                                        }
+                                    }}
+                                    //  chatHeader={{ cursor: 'pointer' }}
+                                    src={more} alt="" />
                             </div>
-                        </div>
-                    
+                        </div> */}
+
+                        <ChatHeader
+                            isGroup={activeUser?.isGroup}
+                            safeMsg={markTheMsgSafe}
+                            name={activeUser?.userName}
+                            profilePic={activeUser?.avatar}
+                            moreOptionH={() => {
+                                if (activeUser?.isGroup) {
+                                    setGroupOptions(!groupOptions);
+                                    setshowShortSidebar(!showShortSidebar);
+                                    if (showShortSidebar) {
+                                        // setMoreOptions(!moreOptions);
+                                        setshowShortSidebar(false);
+                                    }
+                                } else {
+                                    setMoreOptions(!moreOptions);
+                                }
+                            }}
+                            onReportClick={() => setreportPopup(true)}
+                            onMarkSafe={() => setMarkTheMsgSafe(true)}
+                            searchMessage={searchMessage}
+                            showSearchMessage={showSearchMessage}
+                            searchMessagesHandler={searchMessagesHandler}
+                            searchMsgBar={() => {
+                                flushChatState();
+                                showSearchMessage(false);
+                                loadChatMessages(users[0]?.senderId, users[0]?.receiverId, users[0]?.conversationId, users[0]);
+                            }}
+                        />
                         {/* {activeChat?.chats?.length === 0 ? (
                             !activeUser?.isGroup ? (
                                 <div className={style.msgsContainer}>
@@ -699,20 +816,20 @@ const ChatComponent = () => {
                                 <ForGroups />
                             )
                         ) : ( */}
-                            <Actions
-                                valuesH={valuesH}
-                                valuesH2={valuesH2}
-                                deleteH={deleteH}
-                                activeUser={activeUser}
-                                longPressH={longPressH}
-                                autoScrolElem={autoScrolElem}
-                                scrollToBottom={scrollToBottom}
-                                activeChat={activeChat}
-                                copyH={copyH}
-                                showToast={showToast}
-                                handleScroll={handleScroll}
-                            />
-                         {/* )} */}
+                        <Actions
+                            valuesH={valuesH}
+                            valuesH2={valuesH2}
+                            deleteH={deleteH}
+                            activeUser={activeUser}
+                            longPressH={longPressH}
+                            autoScrolElem={autoScrolElem}
+                            scrollToBottom={scrollToBottom}
+                            activeChat={activeChat}
+                            copyH={copyH}
+                            showToast={showToast}
+                            handleScroll={handleScroll}
+                        />
+                         {/* )}  */}
                     </div>
                     {/* {replySms && (
                         <div className={style.replyC}>
@@ -724,7 +841,7 @@ const ChatComponent = () => {
                             <img onClick={() => setreplysms(false)} src={closeSvg} alt="" />
                         </div>
                     )}*/ }
-                 
+
                     {activeUser?.isBlocked ? (
                         <p className="p-8">
                             You can't send message to {activeUser?.userName} as you've blocked this
@@ -739,7 +856,7 @@ const ChatComponent = () => {
                             setMessageType={setMsgType}
                         />
                     )}
-                    {/* {!groupOptions && moreOptions && (
+                    {!groupOptions && moreOptions && (
                         <DropDown
                             activeUser={activeUser}
                             pinUserH={userPinH}
@@ -748,8 +865,7 @@ const ChatComponent = () => {
                                     `   ${activeUser?.isBlocked ? 'UnBlock' : 'Block'}`
                                 );
                                 setDengerText(
-                                    `Are you sure you want to ${
-                                        activeUser?.isBlocked ? 'UnBlock' : 'Block'
+                                    `Are you sure you want to ${activeUser?.isBlocked ? 'UnBlock' : 'Block'
                                     } ${activeUser?.userName}?`
                                 );
                                 setblockPopup(true);
@@ -766,7 +882,7 @@ const ChatComponent = () => {
                             }}
                             numberOfMessages={staredMsgs[0]?.chats?.length}
                         />
-                    )}  */}
+                    )}
                 </div>
                 {/* {groupOptions && (
                     <div>
@@ -813,7 +929,7 @@ const ChatComponent = () => {
                         }}
                         selectedData={selectedData}
                     />
-                )} 
+                )}
             </div>
             {/* <SearchUser
                 onOpen={addMembersPopup}
@@ -824,8 +940,8 @@ const ChatComponent = () => {
                 }}
                 reportPopupHandler={() => setreportPopup(true)}
                 onClose={() => setAddMembersPopup(false)}
-            />
-            <EditChatName
+            /> */}
+            {/* <EditChatName
                 onOpen={editGroupNameModal}
                 onClose={() => setEditGroupNameModal(false)}
                 onSaveChanges={onSaveChanges}
