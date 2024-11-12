@@ -42,7 +42,7 @@ const ChatComponent = () => {
     const [replySms, setreplysms] = useState<boolean>(false);
     const [forwardModal, setforwardModal] = useState<boolean>(false);
     const [staredmodal, setstaredmodal] = useState<boolean>(false);
-    const [searchMessage, showSearchMessage] = useState<boolean>(true);
+    const [searchMessage, showSearchMessage] = useState<boolean>(false);
     const [selectedData, setselectedData] = useState<any[]>([]);
     const [addMembersPopup, setAddMembersPopup] = useState<boolean>(false);
     const [showShortSidebar, setshowShortSidebar] = useState<boolean>(false);
@@ -68,6 +68,8 @@ const ChatComponent = () => {
     const [queryPage, setQueryPage] = useState(1);
     const autoScrolElem: any = useRef(null);
     const [blockToggle, setBlockToggle] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isDarkTheme, setIsDarkTheme] = useState('');
 
     const [staredMsgs, setstaredMsgs] = useState<any[]>([]);
 
@@ -703,6 +705,7 @@ const ChatComponent = () => {
     }
 
     const searchMessagesHandler = (e: any) => {
+        setSearchQuery(e);
         if (e.length >= 3) {
             searchChatMessages(e, users[0]?.conversationId);
         }
@@ -711,6 +714,13 @@ const ChatComponent = () => {
             loadChatMessages(users[0]?.senderId, users[0]?.receiverId, users[0]?.conversationId, users[0]);
         }
     };
+
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+        if (themeColor == 'dark') {
+            setIsDarkTheme(style.darkTheme);
+        }
+    });
 
     return (
         <Layout
@@ -724,7 +734,7 @@ const ChatComponent = () => {
         // dangetBtnText={dangetBtnText}
         // onBlock={onBlock}
         >
-            <div className={style.parent}>
+            <div className={`${style.parent} ${isDarkTheme}`}>
                 <UserChats
                     // onUsersInputChangeHandler={onUsersInputChangeHandler}
                     id={activeUser?.userId}
@@ -733,6 +743,7 @@ const ChatComponent = () => {
                     userPinH={userPinH}
                     onBlock={onBlock}
                     setstaredmodal={setstaredmodal}
+                    isDarkTheme={!!isDarkTheme}
                 />
                 <div className={style.chat}>
                     <div className={style.sec1}
@@ -799,9 +810,11 @@ const ChatComponent = () => {
                             searchMessagesHandler={searchMessagesHandler}
                             searchMsgBar={() => {
                                 flushChatState();
+                                setSearchQuery('');
                                 showSearchMessage(false);
                                 loadChatMessages(users[0]?.senderId, users[0]?.receiverId, users[0]?.conversationId, users[0]);
                             }}
+                            isDarkTheme={!!isDarkTheme}
                         />
                         {/* {activeChat?.chats?.length === 0 ? (
                             !activeUser?.isGroup ? (
@@ -828,6 +841,8 @@ const ChatComponent = () => {
                             copyH={copyH}
                             showToast={showToast}
                             handleScroll={handleScroll}
+                            searchQuery={searchQuery}
+                            isDarkTheme={!!isDarkTheme}
                         />
                          {/* )}  */}
                     </div>
@@ -854,6 +869,7 @@ const ChatComponent = () => {
                             msg={msg}
                             setMessage={setMsg}
                             setMessageType={setMsgType}
+                            isDarkTheme={!!isDarkTheme}
                         />
                     )}
                     {!groupOptions && moreOptions && (
@@ -881,6 +897,7 @@ const ChatComponent = () => {
                                 setMoreOptions(false);
                             }}
                             numberOfMessages={staredMsgs[0]?.chats?.length}
+                            isDarkTheme={!!isDarkTheme}
                         />
                     )}
                 </div>

@@ -5,10 +5,10 @@ import { search } from '../../../icons';
 import { useState } from 'react';
 
 function DropDown(props: any) {
-    const { blockH, reportH, pinUserH, activeUser, staredModal, numberOfMessages, searchMsgBar } = props || {};
+    const { blockH, reportH, pinUserH, activeUser, staredModal, numberOfMessages, searchMsgBar, isDarkTheme} = props || {};
     const [muteN, setmuteN] = useState(false);
     return (
-        <div onClick={(e) => e.stopPropagation()} className={style.dropdownMenu}>
+        <div onClick={(e) => e.stopPropagation()} className={`${style.dropdownMenu} ${isDarkTheme?'bg-[#282828]':'bg-white'}` }>
             {/* <div className={style.dropdownRow}>
                 <p>Mute notifications</p>
                 <Switch

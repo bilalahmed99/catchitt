@@ -12,12 +12,14 @@ import deleteMsg from './assets/delete.svg';
 import addChat from './assets/addChat.svg';
 import pinChat from './assets/pinChat.svg';
 import more from './assets/more.svg';
+import moreInWhite from './assets/moreInWhite.svg';
 import mic from './assets/mic.svg';
 import paperClip from './assets/paperClip.svg';
 import rightArrow from './assets/rightArrow.svg';
 import emoji from './assets/emoji.svg';
 import tagMsg from './assets/tagMsg.svg';
 import moreInMsg from './assets/moreInMsg.svg';
+import moreInMsgWhite from './assets/moreInMsgWhite.svg';
 import seenMsgSvg from './assets/seen.svg';
 import friendsChatWelcomeSvg from './assets/friendsChatWelcome.svg';
 import notfriendsChatWelcome from './assets/notfriendsChatWelcome.svg';
@@ -123,6 +125,8 @@ import whiteblock from './assets/whiteblock.svg'
 import trippleDotIcon from './assets/tripple-dot-icon.svg'
 
 export {
+    moreInMsgWhite,
+    moreInWhite,
     trippleDotIcon,
     block,
     whiteblock,
