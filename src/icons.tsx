@@ -52,6 +52,7 @@ import logoutSvg from './assets/logout.svg';
 import settingsDark from './assets/settingsDark.svg';
 import switchAcount from './assets/switchAcount.svg';
 import music from './assets/musicSvg.svg';
+import musicBlack from './assets/musicSvgInBlack.svg';
 import like from './assets/like.svg';
 import commentInHome from './assets/commentInHome.svg';
 import shareInHome from './assets/shareInHome.svg';
@@ -123,8 +124,10 @@ import volumeUnmute from './assets/volume-unmute.svg';
 import block from './assets/block.svg';
 import whiteblock from './assets/whiteblock.svg'
 import trippleDotIcon from './assets/tripple-dot-icon.svg'
-
+import editVideoIcon from './assets/editVideoIcon.svg'
 export {
+    musicBlack,
+    editVideoIcon,
     moreInMsgWhite,
     moreInWhite,
     trippleDotIcon,

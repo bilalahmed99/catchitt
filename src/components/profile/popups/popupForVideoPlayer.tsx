@@ -1,11 +1,11 @@
-import { CircularProgress, ClickAwayListener, Modal } from '@mui/material';
+import { CircularProgress, ClickAwayListener, createTheme, Divider, IconButton, Menu, MenuItem, Modal, ThemeProvider } from '@mui/material';
 import style from './popupForVideoPlayer.module.scss';
 import VideoModel from '../components/videoModel';
 import moment from 'moment';
 import musicTuneLight from '../svg-components/music-tune-light.svg';
 import locationIcon from '../svg-components/location-icon.svg';
 import { isUserLoggedIn } from '../../../utils/common';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import redHeartIcon from '../svg-components/red-heart-icon.svg';
 import whiteHeartIcon from '../svg-components/white-filled-heart-icon.svg';
 import commentIcon from '../svg-components/comment-icon.svg';
@@ -35,7 +35,7 @@ import EmbedSharePopup from '../../../shared/components/EmbedSharePopup';
 import { BASE_URL_FRONTEND, showToast, showToastSuccess } from '../../../utils/constants';
 import { useNavigate } from 'react-router-dom';
 import PopupForReport from './PopupForReport';
-import { defaultAvatar, linkedInShare, twitterShare } from '../../../icons';
+import { defaultAvatar, linkedInShare, more, moreInWhite, twitterShare } from '../../../icons';
 import { toast, ToastContainer } from 'react-toastify';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Forwardusers from '../../../shared/popups/shareTo/Forwardusers';
@@ -44,6 +44,7 @@ import EmojiPicker, { Theme } from 'emoji-picker-react';
 import { set } from 'lodash';
 import { copyLinkHandler, facebookShareHandler, shareToLinkedIn, shareToTwitter, whatsappShareHandler } from '../../../utils/helpers';
 import HashtagText from '../../../shared/hashTag/HashtagText';
+import PopupForPrivacySettings from './popupForPrivacySettings';
 
 
 export default function PopupForVideoPlayer({
@@ -59,11 +60,15 @@ export default function PopupForVideoPlayer({
 }: any) {
     console.log('INFO', info);
     const token = localStorage.getItem('token');
+    const loggedUserId = localStorage.getItem('userId');
     const API_KEY = process.env.VITE_API_URL;
     const [isLiked, setIsLiked] = useState<boolean>(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    const ITEM_HEIGHT = 60;
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
 
     // const [selectedVideoId, setSelectedVideoId] = useState<any>(null);
     const [videoLikes, setVideoLikes] = useState<number>(0);
@@ -117,6 +122,9 @@ export default function PopupForVideoPlayer({
     const [sendPopup, setSendPopup] = useState(false);
     const [isPickerVisible, setPickerVisible] = useState(false);
     const [commentEmojiIndex, setCommentEmojiIndex] = useState(-1);
+    const [isPrivacyModalOpened, setIsPrivacyModalOpened] = useState(false)
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
 
     const videoData = {
         videoId: info?.mediaId,
@@ -251,7 +259,7 @@ export default function PopupForVideoPlayer({
         setIsCommentsLoading(true);
         try {
             const response = await fetch(
-                `${API_KEY}/media-content${token?'':'/public'}/videos/${info?.mediaId
+                `${API_KEY}/media-content${token ? '' : '/public'}/videos/${info?.mediaId
                 }/comments?page=${fromStart ? 1 : videoComments.currentPage}&pageSize=${videoComments.pageSize}`,
                 {
                     method: 'GET',
@@ -653,7 +661,20 @@ export default function PopupForVideoPlayer({
         }
     }, [videoModal]);
 
+    const lightThemePalette = createTheme({
+        palette: {
+            mode: 'light',
+        },
+    });
+
+    const darkThemePalette = createTheme({
+        palette: {
+            mode: 'dark',
+        },
+    });
     return (
+        <ThemeProvider theme={darkThemePalette}>
+        <PopupForPrivacySettings isPrivacyModalOpened={isPrivacyModalOpened} setIsPrivacyModalOpened={setIsPrivacyModalOpened} />
         <div className={style.parent}>
             <Modal open={videoModal}>
                 <ClickAwayListener onClickAway={() => console.log('abc')}>
@@ -732,7 +753,8 @@ export default function PopupForVideoPlayer({
                                                     </p>
                                                 </div>
                                             </div>
-                                            <div onClick={handleFollowClick} className="rounded-sm bg-[#FF3B5C] p-2 w-[6rem] h-[2.25rem] flex flex-row justify-center items-center cursor-pointer">
+
+                                            {userId && (loggedUserId !== userId ? <div onClick={handleFollowClick} className="rounded-sm bg-[#FF3B5C] p-2 w-[6rem] h-[2.25rem] flex flex-row justify-center items-center cursor-pointer">
                                                 <p className="text-base text-white font-bold">
                                                     {followLoading ? <CircularProgress
                                                         style={{
@@ -742,7 +764,66 @@ export default function PopupForVideoPlayer({
                                                         }}
                                                     /> : isFollowed ? 'Following' : 'Follow'}
                                                 </p>
+                                            </div> : <div>
+                                                <IconButton
+                                                    aria-label="more"
+                                                    id="long-button"
+                                                    aria-controls={open ? 'privacry-menu' : undefined}
+                                                    aria-expanded={open ? 'true' : undefined}
+                                                    aria-haspopup="true"
+                                                    onClick={handleClick}
+                                                    style={{ padding: '0px' }}
+                                                >
+                                                    <img onClick={() => { }} style={{ cursor: 'pointer' }} src={moreInWhite} alt="" />
+                                                </IconButton>
+                                                <Menu
+                                                    id="privacry-menu"
+                                                    MenuListProps={{
+                                                        'aria-labelledby': 'long-button',
+                                                    }}
+                                                    anchorEl={anchorEl}
+                                                    open={open}
+                                                    onClose={() => {
+                                                        setAnchorEl(null);
+                                                    }}
+                                                    slotProps={{
+                                                        paper: {
+                                                          elevation: 0,
+                                                          sx: {
+                                                            overflow: 'visible',
+                                                            padding: '10px',
+                                                            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                                            mt: 1.5,
+                                                            '& .MuiAvatar-root': {
+                                                              width: 32,
+                                                              height: 32,
+                                                              ml: -0.5,
+                                                              mr: 1,
+                                                            },
+                                                            '&::before': {
+                                                              content: '""',
+                                                              display: 'block',
+                                                              position: 'absolute',
+                                                              top: 0,
+                                                              right: 14,
+                                                              width: 10,
+                                                              height: 10,
+                                                              bgcolor: 'background.paper',
+                                                              transform: 'translateY(-50%) rotate(45deg)',
+                                                              zIndex: 0,
+                                                            },
+                                                          },
+                                                        },
+                                                      }}
+                                                      transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                                                      anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                                                >
+                                                    <MenuItem onClick={()=>{setIsPrivacyModalOpened(true);setAnchorEl(null)}}><span className='font-bold' style={{color:'rgb(255,59,92)'}}>Privacy settings</span></MenuItem>
+                                                    <Divider />
+                                                    <MenuItem><span className='font-bold'>Delete</span></MenuItem>
+                                                </Menu>
                                             </div>
+                                            )}
                                         </div>
                                         <p className="text-base font-normal text-white mt-2.5 break-words text-left">
                                             <HashtagText text={info?.description} />
@@ -1660,5 +1741,6 @@ export default function PopupForVideoPlayer({
             <ToastContainer />
 
         </div>
+        </ThemeProvider>
     );
 }
