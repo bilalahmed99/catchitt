@@ -28,6 +28,7 @@ import groupMembers from './assets/groupMembers.svg';
 import groupWelcome from './assets/groupWelcome.svg';
 import editGroupName from './assets/editGroupName.svg';
 import comment from './assets/comment.svg';
+import commentWhite from './assets/commentWhite.svg';
 import moreinfouser from './assets/moreinfouser.svg';
 import settingsTab from './assets/settingsTab.svg';
 import forthTab from './assets/forthTab.svg';
@@ -56,6 +57,7 @@ import musicBlack from './assets/musicSvgInBlack.svg';
 import like from './assets/like.svg';
 import commentInHome from './assets/commentInHome.svg';
 import shareInHome from './assets/shareInHome.svg';
+import shareWhite from './assets/shareWhite.svg';
 import fvrt from './assets/fvrt.svg';
 import moreInHome from './assets/moreInHome.svg';
 import activeLike from './assets/activeLike.svg';
@@ -103,6 +105,7 @@ import termsConditionsIconWhite from './assets/termsConditionsIcon-white.svg';
 import closeSquare from './assets/closeSquare.svg';
 import commentBlack from './assets/commentBlack.svg';
 import likeBlack from './assets/likeBlack.svg';
+import likeWhite from './assets/likeWhite.svg';
 import shareBlack from './assets/shareBlack.svg';
 import moreBlack from './assets/moreBlack.svg';
 import savedBlack from './assets/savedBlack.svg';
@@ -125,7 +128,11 @@ import block from './assets/block.svg';
 import whiteblock from './assets/whiteblock.svg'
 import trippleDotIcon from './assets/tripple-dot-icon.svg'
 import editVideoIcon from './assets/editVideoIcon.svg'
+
 export {
+    shareWhite,
+    commentWhite,
+    likeWhite,
     musicBlack,
     editVideoIcon,
     moreInMsgWhite,
