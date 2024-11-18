@@ -118,6 +118,16 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailI
                         }}
                     >
                         {' '}
+                        {post?.user?.username}
+                    </p>
+                    <p
+                        style={{
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                        }}
+                    >
+                        {' '}
                        <HashtagText text={post?.description} />
                     </p>
                     {post?.sound && (
@@ -129,8 +139,8 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailI
                                 whiteSpace: 'nowrap',
                             }}
                         >
-                            <img src={music} alt="" />{' '}
-                            {post?.sound?.category?.name}
+                            <img src={music} alt="" />
+                            {post?.sound?.category}
                         </p>
                     )}
                 </div>
