@@ -84,10 +84,9 @@ const EmbedSharePopup: React.FC<EmbedSharePopupProps> = ({
     //   console.log(post)
     // }, [post])
     
-
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white px-6 py-12 rounded-md shadow-lg w-2/5 h-fit">
+            <div className="bg-white px-6 pt-4 pb-8 rounded-md shadow-lg w-2/5 h-fit">
                 <div className="flex flex-row justify-between items-center mb-4">
                     <h2 className="text-xl font-bold text-black text-left">Embed Video</h2>
                     <img
@@ -110,22 +109,22 @@ const EmbedSharePopup: React.FC<EmbedSharePopupProps> = ({
                             src={videoUrl}
                         />
                         <div className="text-left px-1 py-2">
-                            <p className="font-medium text-[0.9rem]">@{videoOwner}</p>
-                            <p className="font-normal text-[0.8rem] mt-[0.2rem]">
+                            <p className="font-medium text-[0.8rem]">@{videoOwner}</p>
+                            <p className="font-medium text-[0.6rem] mt-[0.2rem]">
                                 {videoDescription?.length > 50
                                     ? `${videoDescription?.slice(0, 60)}... See more`
                                     : videoDescription}
                             </p>
-                            <div className="mt-[0.2rem]">
+                            <div className="mt-[0.1rem] leading-3" >
                                 <img
                                     className={`w-2.5 h-2.5 object-contain inline-block mr-1`}
                                     src={musicIcon}
                                     alt="music-icon"
                                 />
-                                <span className="font-normal text-[0.7rem]">
+                                <span className="font-normal text-[0.6rem]">
                                     {musicTitle?.toLowerCase()} -{' '}
                                 </span>
-                                <span className="font-normal text-[0.7rem]">
+                                <span className="font-normal text-[0.6rem]">
                                     {videoOwner}
                                 </span>
                             </div>
@@ -179,7 +178,7 @@ const EmbedSharePopup: React.FC<EmbedSharePopupProps> = ({
                                             {followBtnLoading &&
                                                 followimgbtnId === videoOwnerId ? (
                                                 <CircularProgress
-                                                    style={{ width: 3, height: 3 }}
+                                                    style={{ width: 3, height: 3, color:'white' }}
                                                 />
                                             ) : followers?.data?.some(
                                                 (user: any) =>

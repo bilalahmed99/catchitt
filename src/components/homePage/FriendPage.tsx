@@ -26,6 +26,8 @@ import {
 import MenuItem from '@mui/material/MenuItem';
 import { SelectChangeEvent } from '@mui/material/Select';
 import style from './index.module.scss';
+import EmbedSharePopup from '../../shared/components/EmbedSharePopup';
+import { activeLike, commentWhite, likeWhite, musicBlack, shareWhite } from '../../icons';
 
 function FriendPage() {
     const isMobile = useMediaQuery('(max-width:700px)');
@@ -77,9 +79,65 @@ function FriendPage() {
     const [videoUrl, setVideoUrl] = useState<string>('');
     const [mediaId, setMediaId] = useState<string>('');
 
+    
+    const [videoOwner, setVideoOwner] = useState('');
+    const [videoOwnerId, setVideoOwnerId] = useState('');
+    const [videoOwnerAvatar, setVideoOwnerAvatar] = useState('');
+    const [description, setDescription] = useState('');
+    const [musicTitle, setMusicTitle] = useState('');
+    const [isLiked, setIsLiked] = useState(false);
+    const [likesCount, setLikesCount] = useState(0);
+    const [commentCount, setCommentCount] = useState(0);
+    const [shareCount, setShareCount] = useState(0);
+    const [musicLink, setMusicLink] = useState('');
+
+    const videoData = {
+        videoId: mediaId,
+        username: videoOwner,
+        caption: description,
+        tags: ['support', 'fypシ゚viral', 'foryou', 'viral'],
+        musicTitle: musicTitle,
+        musicLink: musicLink,
+    };
+
+    const userUrl = `https://stagingweb.seezitt.com/@${videoData?.username}?refer=embed`;
+
+    // const embedCode = `<blockquote class="seezitt-embed" cite="${BASE_URL_FRONTEND}/video/${mediaId}" data-video-id="${mediaId}" style="max-width: 605px;min-width: 325px;" > <section> <a target="_blank" title="@sharjeelriaz489" href="https://stagingweb.seezitt.com/@sharjeelriaz489?refer=embed">@sharjeelriaz489</a> 14 Auguest coming soon very video 😂😂😂plzzz tik tok team viral my video plzzz <a title="support" target="_blank" href="https://stagingweb.seezitt.com/tag/support?refer=embed">#support</a> <a title="fypシ゚viral" target="_blank" href="https://stagingweb.seezitt.com/tag/fyp%E3%82%B7%E3%82%9Aviral?refer=embed">#fypシ゚viral</a> <a title="fypシ゚viral🖤tiktok" target="_blank" href="https://stagingweb.seezitt.com/tag/fyp%E3%82%B7%E3%82%9Aviral%F0%9F%96%A4tiktok?refer=embed">#fypシ゚viral🖤tiktok</a> ##<a title="foryou" target="_blank" href="https://stagingweb.seezitt.com/tag/foryou?refer=embed">#foryou</a> <a title="viral" target="_blank" href="https://stagingweb.seezitt.com/tag/viral?refer=embed">#viral</a> <a title="fypシ゚viral" target="_blank" href="https://stagingweb.seezitt.com/tag/fyp%E3%82%B7%E3%82%9Aviral?refer=embed">#fypシ゚viral</a> <a title="fypシ゚viral" target="_blank" href="https://stagingweb.seezitt.com/tag/fyp%E3%82%B7%E3%82%9Aviral?refer=embed">#fypシ゚viral</a> <a title="fypシ゚viral🖤tiktok☆♡🦋myvideo🤗foryou✨♥️" target="_blank" href="https://stagingweb.seezitt.com/tag/fyp%E3%82%B7%E3%82%9Aviral%F0%9F%96%A4tiktok%E2%98%86%E2%99%A1%F0%9F%A6%8Bmyvideo%F0%9F%A4%97foryou%E2%9C%A8%E2%99%A5%EF%B8%8F?refer=embed">#fypシ゚viral🖤tiktok☆♡🦋myvideo🤗foryou✨♥️</a> <a target="_blank" title="♬ original sound - 👑(SHÃRJÊÊL RIÃZ)👑" href="https://stagingweb.seezitt.com/music/original-sound-7398885360903965441?refer=embed">♬ original sound - 👑(SHÃRJÊÊL RIÃZ)👑</a> </section> </blockquote> <script async src="https://stagingweb.seezitt.com/embed.js"></script>`;
     const embedCode = `
-<blockquote class="seezitt-embed" cite="${BASE_URL_FRONTEND}/video/${mediaId}" data-video-id="${mediaId}" style="max-width: 605px;min-width: 325px;" > <section> <a target="_blank" title="@sharjeelriaz489" href="https://stagingweb.seezitt.com/@sharjeelriaz489?refer=embed">@sharjeelriaz489</a> 14 Auguest coming soon very video 😂😂😂plzzz tik tok team viral my video plzzz <a title="support" target="_blank" href="https://stagingweb.seezitt.com/tag/support?refer=embed">#support</a> <a title="fypシ゚viral" target="_blank" href="https://stagingweb.seezitt.com/tag/fyp%E3%82%B7%E3%82%9Aviral?refer=embed">#fypシ゚viral</a> <a title="fypシ゚viral🖤tiktok" target="_blank" href="https://stagingweb.seezitt.com/tag/fyp%E3%82%B7%E3%82%9Aviral%F0%9F%96%A4tiktok?refer=embed">#fypシ゚viral🖤tiktok</a> ##<a title="foryou" target="_blank" href="https://stagingweb.seezitt.com/tag/foryou?refer=embed">#foryou</a> <a title="viral" target="_blank" href="https://stagingweb.seezitt.com/tag/viral?refer=embed">#viral</a> <a title="fypシ゚viral" target="_blank" href="https://stagingweb.seezitt.com/tag/fyp%E3%82%B7%E3%82%9Aviral?refer=embed">#fypシ゚viral</a> <a title="fypシ゚viral" target="_blank" href="https://stagingweb.seezitt.com/tag/fyp%E3%82%B7%E3%82%9Aviral?refer=embed">#fypシ゚viral</a> <a title="fypシ゚viral🖤tiktok☆♡🦋myvideo🤗foryou✨♥️" target="_blank" href="https://stagingweb.seezitt.com/tag/fyp%E3%82%B7%E3%82%9Aviral%F0%9F%96%A4tiktok%E2%98%86%E2%99%A1%F0%9F%A6%8Bmyvideo%F0%9F%A4%97foryou%E2%9C%A8%E2%99%A5%EF%B8%8F?refer=embed">#fypシ゚viral🖤tiktok☆♡🦋myvideo🤗foryou✨♥️</a> <a target="_blank" title="♬ original sound - 👑(SHÃRJÊÊL RIÃZ)👑" href="https://stagingweb.seezitt.com/music/original-sound-7398885360903965441?refer=embed">♬ original sound - 👑(SHÃRJÊÊL RIÃZ)👑</a> </section> </blockquote> <script async src="https://stagingweb.seezitt.com/embed.js"></script>
-  `;
+    <blockquote
+        className="your-embed-class"
+        cite="${videoUrl}"
+        data-video-id="${videoData?.videoId}"
+        style="max-width: 509px; min-width: 325px;"
+    >
+        <section>
+            <a target="_blank" rel="noopener noreferrer" title="@${
+                videoData?.username
+            }" href="${userUrl}">
+                @${videoData?.username}
+            </a>
+            ${videoData?.caption}
+            ${videoData?.tags
+                .map(
+                    (tag, index) => `
+                <a
+                    key=${index}
+                    title="${tag}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="https://stagingweb.seezitt.com/tag/${tag}?refer=embed"
+                >
+                    #${tag}
+                </a>
+            `
+                )
+                .join('')}
+            <a target="_blank" rel="noopener noreferrer" title="${musicTitle}" href="${musicLink}">
+                ♬ ${musicTitle}
+            </a>
+        </section>
+    </blockquote>
+    `;
 
     const signupItemClickHandler = (name: string) => {
         switch (name) {
@@ -402,10 +460,33 @@ function FriendPage() {
         });
     };
 
-    const generateEmbedCodeHandler = (videoUrl: string, mediaId: string) => {
+    const generateEmbedCodeHandler = (
+        videoUrl: string,
+        mediaId: string,
+        videoOwner: string,
+        videoOwnerId: string,
+        videoOwnerAvatar: string,
+        videoDescription: string,
+        musicTitle: string,
+        musicLink: string,
+        isLiked: boolean,
+        videoLikes: any,
+        commentCount: any,
+        shareCount: any
+    ) => {
         setVideoUrl(videoUrl);
         setMediaId(mediaId);
+        setVideoOwner(videoOwner);
+        setVideoOwnerId(videoOwnerId);
+        setVideoOwnerAvatar(videoOwnerAvatar);
+        setDescription(videoDescription);
+        setMusicTitle(musicTitle);
+        setMusicLink(musicLink);
+        setIsLiked(isLiked);
         setIsEmbedModalOpen(true);
+        setLikesCount(videoLikes);
+        setCommentCount(commentCount);
+        setShareCount(shareCount);
     };
 
     useEffect(() => {
@@ -473,47 +554,26 @@ function FriendPage() {
                 userId={{ id: videoModalInfo?.user?._id, name: videoModalInfo?.user?.name }}
             />
             {isEmbedModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-white p-6 rounded-md shadow-lg w-2/5">
-                        <h2 className="text-xl font-bold mb-4 text-black text-left">Embed Video</h2>
-                        <div className="w-full h-[1px] bg-gray-300 mb-3 -mt-2" />
-                        <div className="flex flex-row justify-between items-center gap-4">
-                            <div className={'h-[400px] w-1/2'}>
-                                <video
-                                    className="h-full w-full rounded-md object-cover"
-                                    loop={true}
-                                    controls={false}
-                                    autoPlay={true}
-                                    width="300px"
-                                    preload="auto"
-                                    playsInline
-                                    src={videoUrl}
-                                />
-                            </div>
-                            <div className="w-1/2 flex flex-col justify-between items-center h-[400px]">
-                                <textarea
-                                    readOnly
-                                    className="w-full p-2 border border-gray-300 rounded-md mb-4 h-full bg-gray-100"
-                                    value={embedCode}
-                                />
-                                <div>
-                                    <button
-                                        className="w-full px-4 py-2 bg-blue-500 text-white rounded-md"
-                                        onClick={copyEmbedCodeHandler}
-                                    >
-                                        Copy Embed Code
-                                    </button>
-                                    <button
-                                        className="mt-4 w-full px-4 py-2 bg-gray-300 text-black rounded-md"
-                                        onClick={() => setIsEmbedModalOpen(false)}
-                                    >
-                                        Close
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <EmbedSharePopup
+                videoUrl={videoUrl}
+                embedCode={embedCode}
+                copyEmbedCodeHandler={copyEmbedCodeHandler}
+                setIsEmbedModalOpen={setIsEmbedModalOpen}
+                videoOwner={videoOwner}
+                videoOwnerId={videoOwnerId}
+                videoOwnerAvatar={videoOwnerAvatar}
+                videoDescription={description}
+                musicTitle={musicTitle}
+                isLiked={isLiked}
+                whiteHeartIcon={likeWhite}
+                redHeartIcon={activeLike}
+                musicIcon={musicBlack}
+                videoLikes={likesCount}
+                commentIcon={commentWhite}
+                videoComments={commentCount}
+                shareIcon={shareWhite}
+                videoShares={shareCount}
+            />
             )}
             <Gifts
                 mediaId={videoModalInfo?.mediaId}
