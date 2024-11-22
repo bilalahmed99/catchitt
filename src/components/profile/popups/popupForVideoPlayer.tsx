@@ -827,7 +827,7 @@ export default function PopupForVideoPlayer({
                                             )}
                                         </div>
                                         <p className="text-base font-normal text-white mt-2.5 break-words text-left">
-                                            <HashtagText text={info?.description} />
+                                            <HashtagText text={info?.description} maxLength={100} />
                                         </p>
                                         <div className="flex flex-row items-center mt-2.5 gap-2.5">
                                             <img

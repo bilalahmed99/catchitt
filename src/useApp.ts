@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { followingsMethod, getRandomUsers } from './redux/AsyncFuncs';
+import { followingsMethod, getProfileData, getRandomUsers } from './redux/AsyncFuncs';
 import { updateProfile } from './redux/reducers/auth';
 import { db } from './utils/db';
 import { getVideoCategories } from './redux/reducers/videoCategories';
@@ -16,7 +16,8 @@ function useApp() {
                 dispatch(followingsMethod());
                 dispatch(getVideoCategories());
                 dispatch(getRandomUsers(1));
-            });
+                dispatch(getProfileData());
+            }); 
         } else {
             dispatch(getRandomUsers(1));
         }

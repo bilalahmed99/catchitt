@@ -27,6 +27,7 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailI
     const [playbackRate, setPlaybackRate] = useState(1.0);
     const [isDragging, setIsDragging] = useState(false);
     const [videoSize, setVideoSize] = useState({ width: '100vw', height: '100vh' });
+
     // const progress = (currentTime / post?.duration) * 100;
     video.onloadedmetadata = function () {
         setDuration(video?.duration);
@@ -75,9 +76,6 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailI
         onMuteToggle();
     };
 
-
-
-
     return (
         <div
             style={{
@@ -88,11 +86,12 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailI
             ref={ref}
             className={`${style.mainContainer} video-container`}
         >
-            <div className={style.videoContainer}  
-            style={{backgroundImage:
-                `url(${thumbnailImage})`
-            }} 
-            onClick={togglePlayPause}>
+            <div className={style.videoContainer}
+                style={{
+                    backgroundImage:
+                        `url(${thumbnailImage})`
+                }}
+                onClick={togglePlayPause}>
                 <video
                     disablePictureInPicture
                     controlsList="nodownload noplaybackrate"
@@ -125,11 +124,11 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailI
                         style={{
                             textOverflow: 'ellipsis',
                             overflow: 'hidden',
-                            whiteSpace: 'nowrap',
+                            // whiteSpace: 'nowrap',
                         }}
                     >
                         {' '}
-                       <HashtagText text={post?.description} />
+                        <HashtagText text={post?.description} maxLength={30} />
                     </p>
                     {post?.sound && (
                         <p
@@ -142,7 +141,7 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailI
                         >
                             <img src={music} alt="" />
                             {isUserLoggedIn() ?
-                            (post?.sound?.category): (post?.sound?.category.name) }
+                                (post?.sound?.category) : (post?.sound?.category.name)}
                         </p>
                     )}
                 </div>

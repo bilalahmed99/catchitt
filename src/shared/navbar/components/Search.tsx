@@ -18,8 +18,8 @@ function Search({
     const submitH = (e: any) => {
         e.preventDefault(); // navigate(`/searchPage/${searchText}/All`);
         setSearch('');
-        onInputChangeHandler(Search);
-        // submitHandler(Search);
+        // onInputChangeHandler(Search);
+        submitHandler(Search);
         // handleSearchChange(Search)
         // navigate(`/searchPage/${Search}/All`);
     };

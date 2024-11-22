@@ -23,6 +23,8 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const profile = useSelector((store: any) => store?.reducers?.profile);
+
     const { pathname } = useLocation()
 
     const [isRotated, setRotated] = useState(false);
@@ -99,6 +101,11 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
             dispatch(openLoginPopup());
         }
     }
+
+    useEffect(() => {
+        console.log(profile)
+    }, [profile])
+    
 
     return (
         <div className={` ${classNames(styles.root, className)} ${darkTheme}`}>
@@ -349,9 +356,10 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                                 borderRadius: '50%',
                                 maxWidth:'initial'
                             }}
-                            src={isUserLoggedInData().avatar || defaultAvatar}
+                            src={profile?.avatar || defaultAvatar}
                             alt=""
-                        /></>
+                        />
+                        </>
                            ):
                             (
                         <svg id="svg-section" width="24" data-e2e="" height="32" viewBox="0 0 48 48" fill={ pathname.includes('/profile') ?  'rgb(255, 59, 92)': textColor} xmlns="http://www.w3.org/2000/svg"

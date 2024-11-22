@@ -55,6 +55,7 @@ const loginSlice: any = createSlice({
         });
 
         builder.addCase(getProfileData.fulfilled, (_state: any, action: any) => {
+            localStorage.setItem('profile', JSON.stringify(action?.payload) || '');
             _state.avatar = action?.payload?.avatar;
             _state.cover = action?.payload?.cover;
             _state.name = action?.payload?.name;
