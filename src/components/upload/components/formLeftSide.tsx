@@ -3,9 +3,11 @@ import CustomPlayer from '../../homePage/components/CustomPlayer';
 import style from '../styles.module.scss';
 import CustomPopup from '../../../shared/popups/CustomPopup';
 import React from 'react';
+import PopupForEditVideo from '../../profile/popups/popupForEditVideo';
 
 function FormLeftSide({ selectedVideoSrc, selectFilesHandler, darkTheme, videoInfo }: any) {
     const [replaceVideoPopup, setReplaceVideoPopup] = React.useState(false);
+    const [openEditModal, setOpenEditModal] = React.useState(false);
     return (
         <div className="flex-[0.6] p-[2.5rem] flex flex-col gap-[1rem]">
             <p className="text-start text-[1.25rem] font-semibold leading-[1.5rem] text-custom-dark-222">
@@ -19,6 +21,12 @@ function FormLeftSide({ selectedVideoSrc, selectFilesHandler, darkTheme, videoIn
             >
                 <CustomPlayer src={selectedVideoSrc ? selectedVideoSrc : videoInfo?.originalUrl} />
             </div>
+            <CustomButton
+                onClick={() => setOpenEditModal(true)}
+                textSize="14px"
+                islight
+                text="Edit video"
+            />
             <CustomButton
                 onClick={() => setReplaceVideoPopup(true)}
                 textSize="14px"
@@ -35,6 +43,7 @@ function FormLeftSide({ selectedVideoSrc, selectFilesHandler, darkTheme, videoIn
                 onPrimaryBtnClick={selectFilesHandler}
                 onClose={() => setReplaceVideoPopup(false)}
             />
+            <PopupForEditVideo open={openEditModal} handleClose={()=>setOpenEditModal(false)} targetVideo={selectedVideoSrc ? selectedVideoSrc : videoInfo?.originalUrl} isDarkTheme={darkTheme} />
         </div>
     );
 }

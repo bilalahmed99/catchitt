@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { appleAuth, defaultAvatar, emailOrPhone, googleAuth, googleIcon, musicBlack } from '../icons';
+import { appleAuth, defaultAvatar, emailOrPhone, googleAuth, googleIcon, musicBlack, templates } from '../icons';
 
 export const API_KEY = process.env.VITE_API_URL;
 
@@ -253,5 +253,5 @@ export const COMMENTS = [
 
 export const EDIT_VIDEO_ACTIONS = [
     { action: 'SOUND', icon: musicBlack, title: 'Sounds' },
-    { action: 'TEMPLATE', icon: musicBlack, title: 'Templates' },
+    { action: 'TEMPLATE', icon: templates, title: 'Templates' },
 ];

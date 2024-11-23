@@ -17,11 +17,7 @@ import CircularProgressWithLabel from '../../../shared/components/CircularProgre
 const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme }: any) => {
 
   const API_KEY = process.env.VITE_API_URL;
-  const GIPHY_KEY = process.env.VITE_GIPHY_API_KEY;
-  if (!GIPHY_KEY) {
-    throw new Error("GIPHY_KEY is not defined");
-  }
-  const giphyFetch = new GiphyFetch(GIPHY_KEY);
+ 
   const token = localStorage.getItem('token');
   const [uploadedFile, setUploadedFile] = useState<string>('');
   const [openUploadPic, setOpenUploadPic] = useState(false);

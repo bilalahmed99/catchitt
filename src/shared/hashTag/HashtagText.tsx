@@ -9,11 +9,11 @@ const HashtagText = ({ text, maxLength }: { text: string, maxLength: number }) =
     navigate(`/discover/${hashtag}`);
   };
 
-  const isTruncated = text.length > maxLength;
+  const isTruncated = text?.length > maxLength;
 
   const displayDesc = (text:string) => {
-    if (text.length < maxLength || isExpanded) return text
-    return text.substring(0, maxLength) + "...";
+    if (text?.length < maxLength || isExpanded) return text
+    return text?.substring(0, maxLength) + "...";
   }
 
   const parseTextWithHashtags = (text: string) => {

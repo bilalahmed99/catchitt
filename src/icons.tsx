@@ -128,8 +128,10 @@ import block from './assets/block.svg';
 import whiteblock from './assets/whiteblock.svg'
 import trippleDotIcon from './assets/tripple-dot-icon.svg'
 import editVideoIcon from './assets/editVideoIcon.svg'
+import templates from './assets/templates.svg'
 
 export {
+    templates,
     shareWhite,
     commentWhite,
     likeWhite,

@@ -6,7 +6,6 @@
         justify-content: space-between;
         align-items: center;
         padding: 10px 20px;
-        border-bottom: 1px solid #e0e0e0;
         .modalTitle{
             font-size: 20px;
             font-weight: 600;
@@ -24,18 +23,55 @@
             flex-direction: row;
             width: 100%;
             .actions{
-                margin-top: 1rem;
+                padding-top: 1rem;
                 display: flex;
                 flex-direction: column;
             }
             .recommendedContainer{
-                width: 40%;
+                width: 70%;
+                .audioTabs{
+                    display: flex;
+                    padding:  0.5rem 0.5rem 0 0.5rem;
+                    justify-content: space-between;
+                    margin-bottom: 1rem;
+                    border-bottom: 1px solid #fff;
+                    text-align: center;
+                    .audioTab{
+                        padding: 10px 20px;
+                        color: #fff;
+                        font-size: 16px;
+                        cursor: pointer;
+                        width: 50%;
+                    }
+                    .audioTabSelected{
+                        border-bottom: 2px solid #f50057;
+                        color: #f50057;
+                    }
+                }
+                .audioList{
+                    padding: 0.5rem;
+                }
             }
             .videoContainer{
                 padding: 20px;
-                width: 40%;
+                width: inherit;
                 display: flex;
                 justify-content: center;
+            }
+        }
+        .bottomActionBar{
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            width: 100%;
+            .actionBtn{
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                border-bottom:1px solid #f50057;
+                color: #fff;
+                font-size: 16px;
+                cursor: pointer;
             }
         }
     }
