@@ -129,8 +129,16 @@ import whiteblock from './assets/whiteblock.svg'
 import trippleDotIcon from './assets/tripple-dot-icon.svg'
 import editVideoIcon from './assets/editVideoIcon.svg'
 import templates from './assets/templates.svg'
+import leftArrowCurved from './assets/leftArrowCurved.svg'
+import leftArrowCurvedinWhite from './assets/leftArrowCurvedInWhite.svg'
+import rightArrowCurved from './assets/rightArrowCurved.svg'
+import rightArrowCurvedinWhite from './assets/rightArrowCurvedinWhite.svg'
 
 export {
+    leftArrowCurved,
+    rightArrowCurved,
+    rightArrowCurvedinWhite,
+    leftArrowCurvedinWhite,
     templates,
     shareWhite,
     commentWhite,
