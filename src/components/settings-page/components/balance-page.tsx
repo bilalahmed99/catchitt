@@ -94,8 +94,7 @@ const BalancePage = ({ className }: BalancePageProps) => {
     const onAmountSelection = (
         index: number,
         coinsAmount: number,
-        coinsPrice: number,
-        selected: boolean
+        coinsPrice: number
     ) => {
         setCoinsData(
             coinsData.map((coin, i) => {
@@ -378,6 +377,7 @@ const BalancePage = ({ className }: BalancePageProps) => {
 
                                 {openCartModal && (
                                     <CoinsCartModal
+                                        coinData={selectedCoinsAmount}
                                         darkTheme={darkTheme}
                                         palette={darkTheme ? darkThemePalette : lightThemePalette}
                                         openCartModal={openCartModal}

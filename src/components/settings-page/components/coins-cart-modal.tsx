@@ -1,14 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styles from './coins-cart-modal.module.scss';
 import { Modal, ThemeProvider } from "@mui/material";
 import { Box, IconButton } from '@mui/material';
 import closeIcon from '../../../assets/closeIcon.png';
 import coin from '../svg-components/coin.svg';
-const CoinsCartModal = ({ darkTheme, palette, openCartModal, onCloseCartModal, next }: any) => {
+const CoinsCartModal = ({ coinData:{coinsAmount, coinsPrice}, darkTheme, palette, openCartModal, onCloseCartModal, next }: any) => {
 
     return (
         <ThemeProvider theme={palette}>
-
             <Modal
                 open={openCartModal}
                 onClose={onCloseCartModal}
@@ -25,7 +24,7 @@ const CoinsCartModal = ({ darkTheme, palette, openCartModal, onCloseCartModal, n
                                 width: '60%',
                             }}
                         >
-                            <p className={darkTheme ? 'text-white' : ''}>900 Cesium</p>
+                            <p className={darkTheme ? 'text-white' : ''}>{coinsAmount} Cesium</p>
                             <div style={{ width: '40px !important' }}>
 
                                 <IconButton onClick={onCloseCartModal}>
@@ -44,18 +43,16 @@ const CoinsCartModal = ({ darkTheme, palette, openCartModal, onCloseCartModal, n
                             flexDirection: 'column',
                             justifyContent: 'space-around',
                             padding: '10px'
-
-
                         }}
                     >
                         <div className={styles.cartItemsContainer}>
                             <div className={styles.cartItem}>
                                 <div className={styles.itemDetails}>
                                     <img src={coin} alt='' style={{ width: '40px', height: '40px', marginRight: '5px' }} />
-                                    <p className={darkTheme ? 'text-white' : ''}>700 Cesium</p>
+                                    <p className={darkTheme ? 'text-white' : ''}>{coinsAmount} Cesium</p>
                                 </div>
                                 <div className={styles.itemPrice}>
-                                    <p className={darkTheme ? 'text-white' : ''}>QAR 17.90</p>
+                                    <p className={darkTheme ? 'text-white' : ''}>QAR {coinsPrice}</p>
                                 </div>
                             </div>
 
