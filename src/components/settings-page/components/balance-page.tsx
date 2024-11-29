@@ -393,6 +393,7 @@ const BalancePage = ({ className }: BalancePageProps) => {
                                         openPaymentModal={openPaymentModal}
                                         onClosePaymentModal={handleClosePaymentModal}
                                         next={handleMethodSelection}
+                                        coinData={selectedCoinsAmount}
                                     />
                                 )}
 

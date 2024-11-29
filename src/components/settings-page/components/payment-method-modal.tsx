@@ -8,11 +8,11 @@ import cc from '../../../assets/cc.png';
 import stripe from '../../../assets/stripe.svg';
 import PaymentMethod from './payment-method';
 
-const PaymentMethodModal = ({ darkTheme, palette, openPaymentModal, onClosePaymentModal, next }: any) => {
+const PaymentMethodModal = ({ darkTheme, palette, openPaymentModal, onClosePaymentModal, next, coinData:{coinsPrice} }: any) => {
 
 
 
-    const [selectedMethod, setSelectedMethod] = React.useState('paypal');
+    const [selectedMethod, setSelectedMethod] = React.useState('PayPal');
     const handleSelectPaymentMethod = (method: string) => {
         setSelectedMethod(method);
         // onSelectPaymentMethod(method);
@@ -85,7 +85,7 @@ const PaymentMethodModal = ({ darkTheme, palette, openPaymentModal, onClosePayme
                 {/* footer */}
                 <div style={{ display: 'flex', gap: '16px', flexDirection: 'column' }}>
                     <button onClick={paymentMethodSelected} className={styles.btnFullWidth}>
-                        <p>Pay QAR 19.50</p>
+                        <p>Pay QAR {coinsPrice}</p>
                     </button>
                 </div>
             </Box>

@@ -79,7 +79,7 @@ const CoinsCartModal = ({ coinData:{coinsAmount, coinsPrice}, darkTheme, palette
                                     <p className={darkTheme? 'text-white':''}>Subtotal</p>
                                 </div>
                                 <div className={styles.itemPrice}>
-                                    <p className={darkTheme? 'text-white':''}>QAR 17.90</p>
+                                    <p className={darkTheme? 'text-white':''}>QAR {coinsPrice}</p>
                                 </div>
                             </div>
 
@@ -105,7 +105,7 @@ const CoinsCartModal = ({ coinData:{coinsAmount, coinsPrice}, darkTheme, palette
                                     <p className={darkTheme? 'text-white':''}>Subtotal</p>
                                 </div>
                                 <div className={styles.itemPrice}>
-                                    <p className={darkTheme? 'text-white':''}>QAR 17.90</p>
+                                    <p className={darkTheme? 'text-white':''}>QAR {coinsPrice}</p>
                                 </div>
                             </div>
 
