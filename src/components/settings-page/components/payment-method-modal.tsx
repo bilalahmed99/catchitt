@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './payment-method-modal.module.scss';
-import { Box, IconButton, Modal, ThemeProvider } from '@mui/material';
+import { Box, CircularProgress, IconButton, Modal, ThemeProvider } from '@mui/material';
 
 import paypal from '../../../assets/paypal.svg';
 import squarePay from '../../../assets/square-pay.svg';
@@ -13,13 +13,14 @@ const PaymentMethodModal = ({ darkTheme, palette, openPaymentModal, onClosePayme
 
 
     const [selectedMethod, setSelectedMethod] = React.useState('PayPal');
+    const [isProceedToBuy, setIsProceedToBuy] = React.useState(false);
     const handleSelectPaymentMethod = (method: string) => {
         setSelectedMethod(method);
         // onSelectPaymentMethod(method);
     };
 
     const paymentMethodSelected = () => {
-
+        setIsProceedToBuy(true);
         next(selectedMethod);
 
     }
@@ -32,7 +33,11 @@ const PaymentMethodModal = ({ darkTheme, palette, openPaymentModal, onClosePayme
         // Add more payment methods as needed
     ];
 
-
+    React.useEffect(() => {
+        return () => {
+            setIsProceedToBuy(false);
+        }
+    }, []);
 
 
     return (
@@ -82,7 +87,7 @@ const PaymentMethodModal = ({ darkTheme, palette, openPaymentModal, onClosePayme
                 {/* footer */}
                 <div style={{ display: 'flex', gap: '16px', flexDirection: 'column' }}>
                     <button onClick={paymentMethodSelected} className={styles.btnFullWidth}>
-                        <p>Pay QAR {coinsPrice}</p>
+                      {isProceedToBuy?<CircularProgress style={{width:'1.5rem',height:'1.5rem',color:'white',margin:'0 0.5rem'}} />:<p>Pay QAR {coinsPrice}</p>}
                     </button>
                 </div>
             </Box>

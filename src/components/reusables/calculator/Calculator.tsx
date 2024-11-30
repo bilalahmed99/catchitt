@@ -1,9 +1,9 @@
 import * as math from 'mathjs';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import backspaceIcon from '../../../assets/backspaceIcon.png';
 import './calculator.css';
 
-export default function Calculator() {
+export default function Calculator({isDarkTheme, setCustomCoin}:{isDarkTheme:boolean, setCustomCoin:Function}) {
     const [result, setResult] = useState<string>('');
     const [selectedOperator, setSelectedOperator] = useState<string>('');
 
@@ -58,11 +58,18 @@ export default function Calculator() {
         }
     };
 
+    useEffect(() => {
+        if (result) {
+            setCustomCoin((prev:any)=>({...prev, coinsAmount:result}))
+        }
+    }, [result])
+    
+
     return (
         <div className="container">
             <form>
                 <div style={{ marginBottom: '32px' }}>
-                    <input className="calculatorInput" type="text" value={result} />
+                    <input className="calculatorInput" type="text" value={result} style={{color:isDarkTheme?'white':''}} />
                     <p className='priceRangeText'>30 - 2,500,000</p>
                 </div>
             </form>
@@ -112,10 +119,7 @@ export default function Calculator() {
                         </div>
                     </div>
                 </div>
-
             </div>
-
-
         </div>
     );
 }

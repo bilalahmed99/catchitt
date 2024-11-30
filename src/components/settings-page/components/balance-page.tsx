@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import closeIcon from '../../../assets/closeIcon.png';
 import dangerIcon from '../../../assets/dangerIcon.png';
 import questionBlackIcon from '../../../assets/questionBlackIcon.png';
+import questionIcon from '../../../assets/questionIcon.png';
 import reportEmailIcon from '../../../assets/reportEmailIcon.png';
 import { useAuthStore } from '../../../store/authStore';
 import { LeftArrow } from '../../push-notifications-page/svg-components/LeftArrow';
@@ -127,7 +128,8 @@ const BalancePage = ({ className }: BalancePageProps) => {
 
     const handleMethodSelection = (method: string) => {
         console.log(method);
-        handleOpenPaymentSuccessModal();
+        buyCoin();
+        // handleOpenPaymentSuccessModal();
         setOpenPaymentModal(false);
     };
 
@@ -170,20 +172,19 @@ const BalancePage = ({ className }: BalancePageProps) => {
     const buyCoin = async () => {
         try {
             const response = await fetch(`${API_KEY}/payment/web/coins/${selectedCoinsAmount.coinsAmount}`, {
-                method: 'GET',
+                method: 'POST',
                 headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
             });
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const data = await response.json();
-            setRevenueData(data.data.totalGiftRevenue);
+            const { url } = data.data;
+            window.location.href = url;
         } catch (error) {
             console.error('Error fetching profile data:', error);
         }
     };
-
-
 
     useEffect(() => {
         setIndex(4);
@@ -201,14 +202,14 @@ const BalancePage = ({ className }: BalancePageProps) => {
     return (
         <>
             <Layout>
-            <ThemeProvider theme={darkTheme ? darkThemePalette : lightThemePalette}>
+                <ThemeProvider theme={darkTheme ? darkThemePalette : lightThemePalette}>
 
-                {/* <div className={styles.root}>
+                    {/* <div className={styles.root}>
                 <div className={styles.topBarDiv}>
                     <TopBar />
                 </div> */}
-                {/* <div className={styles.container}> */}
-                {/* <div className={styles.leftSide}>
+                    {/* <div className={styles.container}> */}
+                    {/* <div className={styles.leftSide}>
                         <div className={styles.sideNavDiv}>
                             <SideNavBar selectedIndex={selectedIndex} settingsDropdownState={true} />
                         </div>
@@ -216,92 +217,92 @@ const BalancePage = ({ className }: BalancePageProps) => {
                             <SuggestedActivity showActivity={true} showSuggestedContent={true} />
                         </div>
                     </div> */}
-                <div className={` ${styles.middleSectionDiv} ${darkTheme} `}>
-                    <div
-                        className={`${styles.pageHeader} p-3 w-full`}
-                        style={{ display: 'flex', justifyContent: 'sapce-between' }}
-                    >
-                        <IconButton
-                            sx={{
-                                width: 'fit-content !important',
-                                margin: '0px',
-                                padding: '0px',
-                                alignSelf: 'center',
-                            }}
-                            onClick={handleGoBack}
-                        >
-                            <LeftArrow />
-                        </IconButton>
-                        <h4 className={darkTheme ? 'text-white' : 'text-black'}>Balance</h4>
-                    </div>
-                    <div className={styles.suggestedContent}>
+                    <div className={` ${styles.middleSectionDiv} ${darkTheme} `}>
                         <div
-                            style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+                            className={`${styles.pageHeader} p-3 w-full`}
+                            style={{ display: 'flex', justifyContent: 'sapce-between' }}
                         >
-                            <h4 className={`${styles.sectionTitle} ${darkTheme ? 'text-white' : 'text-black'}`}>Coin Balance</h4>
-                            <div
-                                style={{
-                                    marginTop: '30px',
-                                    textAlign: 'left',
-                                    display: 'flex',
+                            <IconButton
+                                sx={{
+                                    width: 'fit-content !important',
+                                    margin: '0px',
+                                    padding: '0px',
+                                    alignSelf: 'center',
                                 }}
+                                onClick={handleGoBack}
                             >
-                                <img src={coin} alt="" style={{ width: '39px' }} />
-                                <h4 className={`${styles.userCoinsAmount} ${darkTheme ? 'text-white' : 'text-black'}`}>{balance}</h4>
-                                <div className={styles.btnDiv}>
-                                    <button
-                                        className={styles.viewTransactionsBtn}
-                                        onClick={() =>
-                                            navigate('/settings/account/transaction-history')
-                                        }
-                                    >
-                                        View transaction History
-                                    </button>
+                                <LeftArrow />
+                            </IconButton>
+                            <h4 className={darkTheme ? 'text-white' : 'text-black'}>Balance</h4>
+                        </div>
+                        <div className={styles.suggestedContent}>
+                            <div
+                                style={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+                            >
+                                <h4 className={`${styles.sectionTitle} ${darkTheme ? 'text-white' : 'text-black'}`}>Coin Balance</h4>
+                                <div
+                                    style={{
+                                        marginTop: '30px',
+                                        textAlign: 'left',
+                                        display: 'flex',
+                                    }}
+                                >
+                                    <img src={coin} alt="" style={{ width: '39px' }} />
+                                    <h4 className={`${styles.userCoinsAmount} ${darkTheme ? 'text-white' : 'text-black'}`}>{balance}</h4>
+                                    <div className={styles.btnDiv}>
+                                        <button
+                                            className={styles.viewTransactionsBtn}
+                                            onClick={() =>
+                                                navigate('/settings/account/transaction-history')
+                                            }
+                                        >
+                                            View transaction History
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className={styles.suggestedContent}>
-                        <h4 className={`${styles.sectionTitle} ${darkTheme ? 'text-white' : 'text-black'}`}>Recharge</h4>
-                        <div style={{ width: '100%' }}>
-                            <Box sx={defModalStyle}>
-                                <div className={styles.warningMsg} style={darkTheme!==''?{background:'black'}:{}}>
-                                    <p>Pricing will change depending on payment method.</p>
-                                    <img src={dangerIcon} alt="" />
-                                </div>
-                                <Box sx={pricesBox}>
-                                    {coinsData.map((item, index) => (
-                                        <CoinsPrice
-                                            key={index}
-                                            index={index}
-                                            onAmountSelection={onAmountSelection}
-                                            coinsAmount={item.coinsAmount}
-                                            coinsPrice={item.coinsPrice}
-                                            selected={item.selected}
-                                        />
-                                    ))}
-                                    <div
-                                        className={styles.price}
-                                        onClick={handleOpenCalculatorModal}
-                                    >
-                                        <div className={styles.coinsAmount}>Custom</div>
-                                        <div className={styles.coinsPriceCustom}>
-                                            Larger amounts<br></br> supported
-                                        </div>
+                        <div className={styles.suggestedContent}>
+                            <h4 className={`${styles.sectionTitle} ${darkTheme ? 'text-white' : 'text-black'}`}>Recharge</h4>
+                            <div style={{ width: '100%' }}>
+                                <Box sx={defModalStyle}>
+                                    <div className={styles.warningMsg} style={darkTheme !== '' ? { background: 'black' } : {}}>
+                                        <p>Pricing will change depending on payment method.</p>
+                                        <img src={dangerIcon} alt="" />
                                     </div>
-                                </Box>
-                                <div
-                                    className={styles.giftsBottomDiv}
-                                    style={{ marginBottom: '32px' }}
-                                >
-                                    <button
-                                        onClick={rechargeClick}
-                                        className={styles.rechargeBtn}
+                                    <Box sx={pricesBox}>
+                                        {coinsData.map((item, index) => (
+                                            <CoinsPrice
+                                                key={index}
+                                                index={index}
+                                                onAmountSelection={onAmountSelection}
+                                                coinsAmount={item.coinsAmount}
+                                                coinsPrice={item.coinsPrice}
+                                                selected={item.selected}
+                                            />
+                                        ))}
+                                        <div
+                                            className={styles.price}
+                                            onClick={handleOpenCalculatorModal}
+                                        >
+                                            <div className={styles.coinsAmount}>Custom</div>
+                                            <div className={styles.coinsPriceCustom}>
+                                                Larger amounts<br></br> supported
+                                            </div>
+                                        </div>
+                                    </Box>
+                                    <div
+                                        className={styles.giftsBottomDiv}
+                                        style={{ marginBottom: '32px' }}
                                     >
-                                        <p>Recharge</p>
-                                    </button>
-                                </div>
-                                {openCalculatorModal && (
+                                        <button
+                                            onClick={rechargeClick}
+                                            className={styles.rechargeBtn}
+                                        >
+                                            <p>Recharge</p>
+                                        </button>
+                                    </div>
+                                    {openCalculatorModal && (
                                         <Modal
                                             open={openCalculatorModal}
                                             onClose={handleCloseCalculatorModal}
@@ -318,25 +319,24 @@ const BalancePage = ({ className }: BalancePageProps) => {
                                                             width: '60%',
                                                         }}
                                                     >
-                                                        <p>Custom</p>
-                                                        <IconButton
+                                                        <p className={darkTheme === '' ? '' : 'text-white'}>Custom</p>
+
+                                                        <img
+                                                            className='cursor-pointer'
                                                             onClick={
                                                                 handleCloseCalculatorModal
                                                             }
-                                                        >
-                                                            <img
-                                                                src={closeIcon}
-                                                                alt=""
-                                                                style={{
-                                                                    width: '20px',
-                                                                    height: '20px',
-                                                                }}
-                                                            />
-                                                        </IconButton>
+                                                            src={closeIcon}
+                                                            alt=""
+                                                            style={{
+                                                                width: '20px',
+                                                                height: '20px',
+                                                            }}
+                                                        />
                                                     </div>
                                                 </div>
                                                 <Box sx={{ marginBottom: '32px' }}>
-                                                    <Calculator />
+                                                    <Calculator isDarkTheme={!!darkTheme} setCustomCoin={setSelectedCoinsAmount} />
                                                 </Box>
                                                 <div
                                                     className={styles.giftsBottomDiv2}
@@ -347,7 +347,7 @@ const BalancePage = ({ className }: BalancePageProps) => {
                                                             styles.giftsBottomLeftDiv2
                                                         }
                                                     >
-                                                        <p className={styles.giftCoinsText}>
+                                                        <p className={styles.giftCoinsText} style={{ color: darkTheme === '' ? '' : 'white' }}>
                                                             Total
                                                         </p>
                                                     </div>
@@ -360,6 +360,7 @@ const BalancePage = ({ className }: BalancePageProps) => {
                                                             className={
                                                                 styles.giftCoinsAmountText
                                                             }
+                                                            style={{ color: darkTheme === '' ? '' : 'white' }}
                                                         >
                                                             QAR 0
                                                         </p>
@@ -376,7 +377,7 @@ const BalancePage = ({ className }: BalancePageProps) => {
                                                         onClick={handleOpenFaqsModal}
                                                     >
                                                         <img
-                                                            src={questionBlackIcon}
+                                                            src={darkTheme === '' ? questionBlackIcon : questionIcon}
                                                             alt=""
                                                         />
                                                     </IconButton>
@@ -391,41 +392,41 @@ const BalancePage = ({ className }: BalancePageProps) => {
                                                 </div>
                                             </Box>
                                         </Modal>
-                                )}
+                                    )}
 
-                                {openCartModal && (
-                                    <CoinsCartModal
-                                        coinData={selectedCoinsAmount}
-                                        darkTheme={darkTheme}
-                                        palette={darkTheme ? darkThemePalette : lightThemePalette}
-                                        openCartModal={openCartModal}
-                                        onCloseCartModal={handleCloseCartModal}
-                                        next={handleOpenPaymentModal}
-                                    />
-                                )}
+                                    {openCartModal && (
+                                        <CoinsCartModal
+                                            coinData={selectedCoinsAmount}
+                                            darkTheme={darkTheme}
+                                            palette={darkTheme ? darkThemePalette : lightThemePalette}
+                                            openCartModal={openCartModal}
+                                            onCloseCartModal={handleCloseCartModal}
+                                            next={handleOpenPaymentModal}
+                                        />
+                                    )}
 
-                                {openPaymentModal && (
-                                    <PaymentMethodModal
-                                        darkTheme={darkTheme}
-                                        palette={darkTheme ? darkThemePalette : lightThemePalette}
-                                        openPaymentModal={openPaymentModal}
-                                        onClosePaymentModal={handleClosePaymentModal}
-                                        next={handleMethodSelection}
-                                        coinData={selectedCoinsAmount}
-                                    />
-                                )}
+                                    {openPaymentModal && (
+                                        <PaymentMethodModal
+                                            darkTheme={darkTheme}
+                                            palette={darkTheme ? darkThemePalette : lightThemePalette}
+                                            openPaymentModal={openPaymentModal}
+                                            onClosePaymentModal={handleClosePaymentModal}
+                                            next={handleMethodSelection}
+                                            coinData={selectedCoinsAmount}
+                                        />
+                                    )}
 
-                                {openPaymentSuccessModal && (
-                                    <PaymentSuccessModal
-                                        darkTheme={darkTheme}
-                                        palette={darkTheme ? darkThemePalette : lightThemePalette}
-                                        openPaymentSuccessModal={openPaymentSuccessModal}
-                                        onClosePaymentSuccessModal={
-                                            handleClosePaymentSuccessModal
-                                        }
-                                    />
-                                )}
-                                {openFaqsModal && (
+                                    {openPaymentSuccessModal && (
+                                        <PaymentSuccessModal
+                                            darkTheme={darkTheme}
+                                            palette={darkTheme ? darkThemePalette : lightThemePalette}
+                                            openPaymentSuccessModal={openPaymentSuccessModal}
+                                            onClosePaymentSuccessModal={
+                                                handleClosePaymentSuccessModal
+                                            }
+                                        />
+                                    )}
+                                    {openFaqsModal && (
                                         <Modal
                                             open={openFaqsModal}
                                             onClose={handleCloseFaqsModal}
@@ -442,23 +443,22 @@ const BalancePage = ({ className }: BalancePageProps) => {
                                                             width: '70%',
                                                         }}
                                                     >
-                                                        <p>Payment FAQS</p>
-                                                        <IconButton
+                                                        <p className={`whitespace-nowrap ${darkTheme === '' ? '' : 'text-white'}`}>Payment FAQS</p>
+
+                                                        <img
+                                                            className='cursor-pointer'
                                                             onClick={handleCloseFaqsModal}
-                                                        >
-                                                            <img
-                                                                src={closeIcon}
-                                                                alt=""
-                                                                style={{
-                                                                    width: '20px',
-                                                                    height: '20px',
-                                                                }}
-                                                            />
-                                                        </IconButton>
+                                                            src={closeIcon}
+                                                            alt=""
+                                                            style={{
+                                                                width: '20px',
+                                                                height: '20px',
+                                                            }}
+                                                        />
                                                     </div>
                                                 </div>
                                                 <div className={styles.faqsContainer}>
-                                                    <FaqContainer />
+                                                    <FaqContainer isDarkTheme={!!darkTheme} />
                                                 </div>
                                                 <div>
                                                     <button
@@ -474,37 +474,37 @@ const BalancePage = ({ className }: BalancePageProps) => {
                                                 </div>
                                             </Box>
                                         </Modal>
-                                )}
-                            </Box>
-                        </div>
-                    </div>
-                    <div
-                        className={styles.accountCards}
-                        onClick={() => navigate('/settings/account/gift-revenue')}
-                    >
-                        <div className={styles.settingName}>
-                            <img src={coin} alt="" className={styles.coinImgCard} />
-                            <p>Gift revenue</p>
+                                    )}
+                                </Box>
+                            </div>
                         </div>
                         <div
-                            style={{
-                                display: 'flex',
-                                minWidth: '100px',
-                                justifyContent: 'flex-end',
-                            }}
+                            className={styles.accountCards}
+                            onClick={() => navigate('/settings/account/gift-revenue')}
                         >
-                            <p>QAR {revenueData}</p>
-                            <img src={whiteRightArrow} alt="" style={{ marginLeft: '6px' }} />
+                            <div className={styles.settingName}>
+                                <img src={coin} alt="" className={styles.coinImgCard} />
+                                <p>Gift revenue</p>
+                            </div>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    minWidth: '100px',
+                                    justifyContent: 'flex-end',
+                                }}
+                            >
+                                <p>QAR {revenueData}</p>
+                                <img src={whiteRightArrow} alt="" style={{ marginLeft: '6px' }} />
+                            </div>
+                        </div>
+
+                        <div className={`${styles.faqsContainerInPage} `}>
+                            <h4 className={`${styles.sectionTitle} ${darkTheme ? 'text-white' : 'text-black'}`}>Frequently asked questions</h4>
+                            <FaqContainer isDarkTheme={!!darkTheme} />
                         </div>
                     </div>
-
-                    <div className={`${styles.faqsContainerInPage} `}>
-                        <h4 className={`${styles.sectionTitle} ${darkTheme ? 'text-white' : 'text-black'}`}>Frequently asked questions</h4>
-                        <FaqContainer />
-                    </div>
-                </div>
-                {/* </div> */}
-                {/* </div > */}
+                    {/* </div> */}
+                    {/* </div > */}
                 </ThemeProvider>
 
             </Layout>

@@ -4,10 +4,10 @@ import './styles.css';
 interface Faq {
     question: any;
     answer: any;
-
+    isDarkTheme: boolean;
 }
 
-const FaqItem = ({ question, answer }: Faq) => {
+const FaqItem = ({ question, answer, isDarkTheme }: Faq) => {
 
     useEffect(() => {
         const details = document.querySelectorAll("details");
@@ -49,18 +49,18 @@ const FaqItem = ({ question, answer }: Faq) => {
         <details>
             <summary>
                 <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                    <p>{question}</p>
+                    <p className={isDarkTheme?'text-white':''}>{question}</p>
                     <span className="marker" style={{ fontSize: '2rem' }}>&rsaquo;</span>
                 </div>
             </summary>
             <div>
-                <p>{answer}</p>
+                <p className={isDarkTheme?'text-white':''}>{answer}</p>
             </div>
         </details>
     );
 };
 
-const FaqContainer = () => {
+const FaqContainer = ({ isDarkTheme }:{ isDarkTheme: boolean }) => {
 
     const faqData = [
         { question: 'Question 1', answer: 'Answer 1' },
@@ -73,6 +73,7 @@ const FaqContainer = () => {
         <div className="faqsContainer">
             {faqData.map((faq, index) => (
                 <FaqItem
+                    isDarkTheme={isDarkTheme}
                     key={index}
                     question={faq.question}
                     answer={faq.answer}
