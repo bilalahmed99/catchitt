@@ -7,8 +7,8 @@ import OverviewTab from './OverviewTab';
 import ContentTab from './ContentTab';
 import ViewersTab from './ViewersTab';
 import FollowersTab from './FollowersTab';
+import styles from './style.module.scss'
 
-// import styles from './style.module.scss'
 const Analytics = () => {
     const [currentTab, setCurrentTab] = useState(ANALYTICSTABS.OVERVIEW);
     const API_KEY = process.env.VITE_API_URL;
@@ -50,13 +50,13 @@ const Analytics = () => {
         getUserAnalytics();
     }, []);
 
-    // const [darkTheme, setdarkTheme] = useState<any>(null);
-    // useEffect(() => {
-    //     var themeColor = window.localStorage.getItem('theme');
-    //     if (themeColor == 'dark') {
-    //         setdarkTheme(styles.darkTheme);
-    //     }
-    // });
+    const [darkTheme, setdarkTheme] = useState<any>('');
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+        if (themeColor == 'dark') {
+            setdarkTheme(styles.darkTheme);
+        }
+    });
 
     return (
         <Layout>
@@ -107,7 +107,7 @@ const Analytics = () => {
                     case ANALYTICSTABS.OVERVIEW:
                         return <OverviewTab analyticsData={analyticsData} />    
                     case ANALYTICSTABS.CONTENT:
-                        return <ContentTab />
+                        return <ContentTab isDarkTheme={darkTheme} />
                     case ANALYTICSTABS.VIEWERS:
                         return <ViewersTab />
                     case ANALYTICSTABS.FOLLOWERS:

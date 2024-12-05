@@ -266,6 +266,12 @@ export enum ANALYTICSTABS {
     FOLLOWERS
 };
 
+export enum POSTANALYTICSTABS {
+    OVERVIEW,
+    VIEWERS,
+    ENGAGEMENT,
+};
+
 export enum STATISTICSTABS {
     VIDEO_VIEWS,
     PROFILE_VIEWS,

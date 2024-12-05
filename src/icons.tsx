@@ -140,8 +140,32 @@ import rightArrowCurvedinWhite from './assets/rightArrowCurvedinWhite.svg'
 import minusIcon from './assets/minus.svg'
 import minusInwhite from './assets/minusInWhite.svg'
 import videoDuration from './assets/video-duration.svg';
+import heartOutline from "./assets/heart_outline.svg";
+import heartOutlineWhite from "./assets/heart_outline_white.svg";
+import playOutline from './assets/play_outline.svg'
+import playOutlineWhite from './assets/play_outline_white.svg'
+import commentOutlineDark from './assets/comment_outline_dark.svg'
+import commentOutline from './assets/comment_outline.svg'
+import commentOutlineWhite from './assets/comment_outline_white.svg'
+import analytics from './assets/analytics.svg';
+import analyticsOutline from './assets/analytics_outline.svg';
+import analyticsOutlineWhite from './assets/analytics_outline_white.svg';
+import pencilOutline from './assets/pencil_outline.svg';
+import pencilOutlineWhite from './assets/pencil_outline_white.svg';
 
 export {
+    commentOutlineDark,
+    pencilOutlineWhite,
+    pencilOutline,
+    analyticsOutlineWhite,  
+    analyticsOutline,
+    analytics,
+    commentOutline,
+    commentOutlineWhite,
+    playOutline,
+    playOutlineWhite,
+    heartOutlineWhite,
+    heartOutline,
     setting,
     viewProfileInWhite,
     videoDuration,

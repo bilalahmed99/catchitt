@@ -83,6 +83,7 @@ import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props
 import { setGeoData } from './redux/reducers/geoServices';
 import VideoPage from './components/shared-video';
 import PostPage from './components/shared-post';
+import PostAnalytics from './components/analytics/PostAnalytics';
 
 // Functional component to handle the initial route navigation
 const InitialRouteHandler = () => {
@@ -832,6 +833,7 @@ function App() {
                             <Route path="/golive" element={<GoLive />} />
                             <Route path="/myreports" element={<MyReports />} />
                             <Route path="/analytics" element={<Analytics />} />
+                            <Route path="/analytics/post/:postId" element={<PostAnalytics />} />
                             <Route path="/contactus" element={<ContactUs />} />
                             <Route path="/signup" element={<Signup />} />
                             <Route path="/signup/phone-or-email/email" element={<SignupEmail />} />

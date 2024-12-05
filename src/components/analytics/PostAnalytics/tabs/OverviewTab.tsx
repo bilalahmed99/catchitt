@@ -1,25 +1,29 @@
 import React, { useEffect, useState } from 'react'
-import { STATISTICSTABS } from '../../utils/constants'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { STATISTICSTABS } from '../../../../utils/constants';
 
 // {
 //     "status": 200,
 //     "message": "",
 //     "data": {
-//       "videoViews": 0,
-//       "profileViews": 0,
-//       "likes": 0,
+//       "views": 0,
 //       "comments": 0,
+//       "likes": 0,
 //       "shares": 0,
-//       "viewsGraph": {},
-//       "profileViewsGraph": {},
-//       "likesGraph": {},
-//       "commentsGraph": {},
-//       "sharesGraph": {}
+//       "saves": 0,
+//       "watchedFullVideo": {
+//         "percentage": 0,
+//         "yesterday": 0
+//       },
+//       "reachedAudience": {
+//         "count": 0,
+//         "yesterday": 0
+//       },
+//       "viewsGraph": {}
 //     }
 //   }
 
-function OverviewTab({ analyticsData }: any) {
+function OverviewTab({ postAnalytics }: any) {
 
     const [activeTab, setActiveTab] = useState(STATISTICSTABS.VIDEO_VIEWS)
     const [chartData, setChartData] = useState<any>([])
@@ -45,7 +49,7 @@ function OverviewTab({ analyticsData }: any) {
     }
 
     useEffect(() => {
-        if(analyticsData && activeTab) setChartData(prepareData(analyticsData[possibleGraphs[activeTab]]));
+        if(postAnalytics && activeTab) setChartData(prepareData(postAnalytics[possibleGraphs[activeTab]]));
     }, [activeTab])
 
     return (
@@ -53,11 +57,11 @@ function OverviewTab({ analyticsData }: any) {
             {/* statistics card */}
             <div className='bg-white rounded shadow-sm'>
                 <div className='inline-flex w-full ' >
-                    <div onClick={switchTab} id={STATISTICSTABS.VIDEO_VIEWS.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.VIDEO_VIEWS ? 'border-t-red-500 border-t-4' : 'border-t border-b'} rounded-tl-md`}>Video views <br /><span className='text-2xl font-semibold'>{analyticsData.videoViews || 0}</span></div>
-                    <div onClick={switchTab} id={STATISTICSTABS.PROFILE_VIEWS.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.PROFILE_VIEWS ? 'border-t-red-500 border-t-4' : 'border-t border-b'} border-x`}>Profile views <br /> <span className='text-2xl font-semibold'>{analyticsData.profileViews || 0}</span></div>
-                    <div onClick={switchTab} id={STATISTICSTABS.LIKES.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.LIKES ? 'border-t-red-500 border-t-4' : 'border-t border-b'} border-x`}>Likes <br /> <span className='text-2xl font-semibold'>{analyticsData.likes || 0}</span></div>
-                    <div onClick={switchTab} id={STATISTICSTABS.COMMENTS.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.COMMENTS ? 'border-t-red-500 border-t-4' : 'border-t border-b'} border-x`}>Comments <br /> <span className='text-2xl font-semibold'>{analyticsData.comments || 0}</span></div>
-                    <div onClick={switchTab} id={STATISTICSTABS.SHARES.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.SHARES ? 'border-t-red-500 border-t-4' : 'border-t border-b'} rounded-tr-md`}>Shares <br /> <span className='text-2xl font-semibold'>{analyticsData.shares || 0}</span></div>
+                    <div onClick={switchTab} id={STATISTICSTABS.VIDEO_VIEWS.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.VIDEO_VIEWS ? 'border-t-red-500 border-t-4' : 'border-t border-b'} rounded-tl-md`}>Video views <br /><span className='text-2xl font-semibold'>{postAnalytics.videoViews || 0}</span></div>
+                    <div onClick={switchTab} id={STATISTICSTABS.PROFILE_VIEWS.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.PROFILE_VIEWS ? 'border-t-red-500 border-t-4' : 'border-t border-b'} border-x`}>Profile views <br /> <span className='text-2xl font-semibold'>{postAnalytics.profileViews || 0}</span></div>
+                    <div onClick={switchTab} id={STATISTICSTABS.LIKES.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.LIKES ? 'border-t-red-500 border-t-4' : 'border-t border-b'} border-x`}>Likes <br /> <span className='text-2xl font-semibold'>{postAnalytics.likes || 0}</span></div>
+                    <div onClick={switchTab} id={STATISTICSTABS.COMMENTS.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.COMMENTS ? 'border-t-red-500 border-t-4' : 'border-t border-b'} border-x`}>Comments <br /> <span className='text-2xl font-semibold'>{postAnalytics.comments || 0}</span></div>
+                    <div onClick={switchTab} id={STATISTICSTABS.SHARES.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.SHARES ? 'border-t-red-500 border-t-4' : 'border-t border-b'} rounded-tr-md`}>Shares <br /> <span className='text-2xl font-semibold'>{postAnalytics.shares || 0}</span></div>
                 </div>
                 {/* Chart Section */}
                 <div className="m-4 border-t pt-6 mb-6 ">
