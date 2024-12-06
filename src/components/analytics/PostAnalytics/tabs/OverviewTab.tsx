@@ -65,11 +65,11 @@ function OverviewTab({ postAnalytics, post, isDarkTheme }: any) {
             <div className="bg-white rounded shadow-sm flex items-center justify-between p-3 mb-4">
                 <div className='flex items-center space-x-4'>
                     <div className="w-14 h-24 bg-gray-200 rounded overflow-hidden">
-                        <img src={post?.thumbnailUrl} className='w-full h-full' alt="post-thumbnail" />
+                        <img src={post?.thumbnailUrl || 'https://placehold.co/56x96'} className='w-full h-full' alt="post-thumbnail" />
                     </div>
                     <div>
                         <span>{post?.description?.length > 30 ? post?.description?.slice(0, 30) + '...' : ''}</span>
-                        <div className="text-gray-400 text-sm">{formatDate(post?.createdTime)} </div>
+                        <div className="text-gray-400 text-sm text-left ">{formatDate(post?.createdTime)} </div>
                     </div>
                 </div>
                 <div className='flex gap-12 mr-3'>
@@ -138,28 +138,9 @@ function OverviewTab({ postAnalytics, post, isDarkTheme }: any) {
                     <p className="text-gray-400 text-sm">
                         Most viewers stopped watching at 0:04. play the video below to see when they lost interest.
                     </p>
-                    <ul className="mt-4 space-y-2 px-4 pb-4">
-                        <li className="flex justify-between text-gray-400 text-sm">
-                            <span>-</span>
-                            <span>-%</span>
-                        </li>
-                        <li className="flex justify-between text-gray-400 text-sm">
-                            <span>-</span>
-                            <span>-%</span>
-                        </li>
-                        <li className="flex justify-between text-gray-400 text-sm">
-                            <span>-</span>
-                            <span>-%</span>
-                        </li>
-                        <li className="flex justify-between text-gray-400 text-sm">
-                            <span>-</span>
-                            <span>-%</span>
-                        </li>
-                        <li className="flex justify-between text-gray-400 text-sm">
-                            <span>-</span>
-                            <span>-%</span>
-                        </li>
-                    </ul>
+                    <div className="mt-4 space-y-2 px-4 pb-4 ">
+                        <video className='w-44 h-80 m-auto' controls src={post?.reducedVideoUrl?.length > 0? post?.reducedVideoUrl: post?.originalUrl} />
+                    </div>
                 </div>
                 <div className="bg-white shadow-sm rounded">
                     <div className='py-2 px-3 border-b mb-4 text-left'>

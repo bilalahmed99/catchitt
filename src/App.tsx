@@ -84,6 +84,7 @@ import { setGeoData } from './redux/reducers/geoServices';
 import VideoPage from './components/shared-video';
 import PostPage from './components/shared-post';
 import PostAnalytics from './components/analytics/PostAnalytics';
+import CommentAnalytics from './components/analytics/PostAnalytics/CommentAnalytics';
 
 // Functional component to handle the initial route navigation
 const InitialRouteHandler = () => {
@@ -834,6 +835,7 @@ function App() {
                             <Route path="/myreports" element={<MyReports />} />
                             <Route path="/analytics" element={<Analytics />} />
                             <Route path="/analytics/post/:postId" element={<PostAnalytics />} />
+                            <Route path="/analytics/comment/:postId" element={<CommentAnalytics />} />
                             <Route path="/contactus" element={<ContactUs />} />
                             <Route path="/signup" element={<Signup />} />
                             <Route path="/signup/phone-or-email/email" element={<SignupEmail />} />

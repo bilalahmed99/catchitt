@@ -10,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ReactPaginate from 'react-paginate';
 import PopupForDeleteVideo from '../profile/popups/popupForDeleteVideo';
 import { useNavigate } from 'react-router-dom';
+import { CircularProgress } from '@mui/material';
 
 
 function ContentTab({ isDarkTheme }: any) {
@@ -122,7 +123,7 @@ function ContentTab({ isDarkTheme }: any) {
             </tr>
           </thead>
           <tbody>
-            {posts.items.map((post: any, index: number) => (
+            {posts.items.length? posts.items.map((post: any, index: number) => (
               <tr key={index} className="border-b hover:bg-gray-50">
                 <td className="p-4 flex items-center space-x-4">
                   <div className="w-14 h-24 bg-gray-200 rounded overflow-hidden">
@@ -165,7 +166,7 @@ function ContentTab({ isDarkTheme }: any) {
                   <div className='h-full flex items-center space-x-6'>
                     <img className='cursor-pointer' src={isDarkTheme ? pencilOutlineWhite : pencilOutline} alt="edit" />
                     <img onClick={()=>navigate(`/analytics/post/${post.mediaId}`)} className='cursor-pointer' src={isDarkTheme ? analyticsOutlineWhite : analyticsOutline} alt="analytics" />
-                    <img className='cursor-pointer w-5' src={isDarkTheme ? commentOutlineWhite : commentOutlineDark} alt="comments" />
+                    <img onClick={()=>navigate(`/analytics/comment/${post.mediaId}`)} className='cursor-pointer w-5' src={isDarkTheme ? commentOutlineWhite : commentOutlineDark} alt="comments" />
 
                     <img id="basic-button"
                       aria-controls={open ? 'basic-menu' : undefined}
@@ -186,7 +187,11 @@ function ContentTab({ isDarkTheme }: any) {
                   </div>
                 </td>
               </tr>
-            ))}
+            )):
+            <tr>
+              <td colSpan={4} className="text-center p-4"><CircularProgress /></td>
+            </tr>
+            }
           </tbody>
         </table>
         <div className='py-4'>
