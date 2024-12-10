@@ -13,6 +13,7 @@ import Gifts from './popups/gifts';
 import { DISCOVER_CATEGORIES } from '../../utils/constants';
 import { useUpdateEffect } from 'react-use';
 import { useParams } from 'react-router-dom';
+import DiscoverStories from './components/discoverStories';
 
 export default function Discover() {
     const { hashtag } = useParams();
@@ -25,7 +26,7 @@ export default function Discover() {
     const [blockPopup, setBlockPopup] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [giftPopup, setGiftPopup] = useState(false);
-    const [storyPopup, setStoryPopup] = useState(false);
+    const [storyPopup, setStoryPopup] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(hashtag);
     const [muteStates, setMuteStates] = useState<any>([]);
 
@@ -133,6 +134,7 @@ export default function Discover() {
                     </div>
                 ) : (
                     <>
+                        <DiscoverStories showStories={setStoryPopup} />
                         <div className=" pl-6 h-screen w-full overflow-y-auto no-scrollbar" id='scrollableDiv'>
                             <div className="flex flex-row mt-8 gap-4 overflow-auto">
                                 {DISCOVER_CATEGORIES?.map((category, index) => (
@@ -189,7 +191,7 @@ export default function Discover() {
                 <Gifts openGifts={giftPopup} onGiftsClose={() => setGiftPopup(false)} />
                 <StoriesOnPublicProfile
                     story={storyPopup}
-                    onclose={() => setStoryPopup(false)}
+                    onclose={() => setStoryPopup([])}
                     openReport={() => setReportPopup(true)}
                 />
             </div>

@@ -6,8 +6,9 @@ import moment from 'moment';
 import EmojiPicker, { Theme } from 'emoji-picker-react';
 import { isUserLoggedIn } from '../../../../utils/common';
 import { openLoginPopup } from '../../../../redux/reducers';
-import { cross, defaultAvatar, heartOutline } from '../../../../icons';
+import { cross, defaultAvatar, emoji, heartOutline } from '../../../../icons';
 import atTheRateOf from '../../../profile/svg-components/at-the-rate-of.svg';
+import atTheRateOfWhite from '../../../profile/svg-components/at-the-rate-of-white.svg';
 import commentEmoji from '../../../profile/svg-components/comment-emoji.svg';
 import redHeartIcon from '../../../profile/svg-components/red-heart-icon.svg';
 import reportFlagIcon from '../../../profile/svg-components/report-flag-icon.svg';
@@ -21,7 +22,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import PopupForReport from '../../../profile/popups/PopupForReport';
 
-function RenderComments({ postId }: any) {
+function RenderComments({ postId, isDarkTheme }: any) {
 
     const token = localStorage.getItem('token');
     const loggedUserId = localStorage.getItem('userId');
@@ -65,7 +66,6 @@ function RenderComments({ postId }: any) {
     const [commentReply, setCommentReply] = useState('');
     const [isMentioning, setIsMentioning] = useState<boolean>(false);
     const inputRef = useRef<any>(null);
-    const [isDarkTheme, setIsDarkTheme] = useState<boolean>(false);
     const [reportPopup, setReportPopup] = useState<boolean>(false);
     const [toggleImage, setToggleImage] = useState(false);
     // hooks for comment replies
@@ -382,7 +382,7 @@ function RenderComments({ postId }: any) {
                                                 {comment_index === currentCommentIndex &&
                                                     isReplyToCommentClicked && (
                                                         <div className="cursor-pointer flex w-full flex-row items-center gap-2.5 mt-2">
-                                                            <div className="bg-gray-50 flex flex-row items-center justify-between border-[0.063rem] border-transparent focus-within:border-[#16182333] rounded-lg cursor-text pr-2 pl-4 w-full mr-1">
+                                                            <div className={`${isDarkTheme?'border-[0.063rem]':'bg-gray-50'} flex flex-row items-center justify-between rounded-lg cursor-text pr-2 pl-4 w-full mr-1`}>
                                                                 <form onSubmit={(e) => { e.preventDefault(); replyToCommentHandler(comment?.id); }}>
                                                                     <input
                                                                         value={commentReply}
@@ -394,7 +394,7 @@ function RenderComments({ postId }: any) {
                                                                         maxLength={150}
                                                                         placeholder="Add comment..."
                                                                         type="text"
-                                                                        className="bg-transparent placeholder-[#d5cbcb] text-[#4d4e58] w-full"
+                                                                        className={`p-2 bg-transparent rounded ${isDarkTheme?'placeholder-[#ffffff73]':'placeholder-slate-600'}  w-full`}
                                                                         required
                                                                     />
                                                                 </form>
@@ -408,18 +408,14 @@ function RenderComments({ postId }: any) {
                                                                     >
                                                                         <img
                                                                             className={`w-5 h-5 object-contain rounded-full`}
-                                                                            src={
-                                                                                atTheRateOf
-                                                                            }
+                                                                            src={isDarkTheme ? atTheRateOfWhite : atTheRateOf}
                                                                             alt="at-the-rate-icon"
                                                                         />
                                                                     </div>
                                                                     <div onClick={() => setCommentEmojiIndex(comment_index)} className="rounded-lg cursor-pointer hover:bg-[#1618230f] my-[0.438rem] mx-[0.188rem]">
                                                                         <img
                                                                             className={`w-5 h-5 object-contain rounded-full`}
-                                                                            src={
-                                                                                commentEmoji
-                                                                            }
+                                                                            src={isDarkTheme ? emoji : commentEmoji}
                                                                             alt="comment-icon"
                                                                         />
                                                                     </div>
@@ -433,15 +429,15 @@ function RenderComments({ postId }: any) {
                                                                 }
                                                                 className="mr-1"
                                                             >
-                                                                <p
+                                                                <span
                                                                     className={`${commentReply?.length >
                                                                         0
-                                                                        ? 'text-[#fe2c55]'
-                                                                        : 'text-gray-600'
+                                                                        ? 'text-[#fe2c55] cursor-pointer'
+                                                                        : 'text-gray-600 cursor-not-allowed'
                                                                         } font-semibold text-base`}
                                                                 >
                                                                     Post
-                                                                </p>
+                                                                </span>
                                                             </div>
                                                             <div
                                                                 onClick={() =>

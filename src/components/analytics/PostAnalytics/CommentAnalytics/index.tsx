@@ -38,22 +38,22 @@ function CommentAnalytics() {
         fetchPost();
     }, [postId]);
 
-    const [isDarkTheme, setIsDarkTheme] = useState<any>('');
+    const [isDarkTheme, setIsDarkTheme] = useState<boolean>(false);
 
     useEffect(() => {
         var themeColor = window.localStorage.getItem('theme');
         if (themeColor == 'dark') {
-            // setdarkTheme(styles.darkTheme);
+            setIsDarkTheme(true);
         }
     });
 
 
     return (
         <Layout>
-            <div className="p-4 bg-gray-100 min-h-screen overflow-y-auto h-full no-scrollbar" id="analyticsComments">
+            <div className="p-4 min-h-screen overflow-y-auto h-full no-scrollbar" id="analyticsComments">
                 {/* Back to posts */}
                 <div className="flex items-center mb-4">
-                    <button onClick={()=>navigate('/analytics')} className="text-gray-800 hover:text-gray-900 flex items-center text-lg font-bold border-none">
+                    <button onClick={()=>navigate('/analytics')} className="flex items-center text-lg font-bold border-none">
                         <svg
                             className="w-4 h-4 mr-2"
                             fill="none"
@@ -72,10 +72,10 @@ function CommentAnalytics() {
                     </button>
                 </div>
                 {/* Post Section */}
-                <div className="bg-white rounded-lg shadow p-4">
+                <div className={`${isDarkTheme?'bg-[#181818]':'bg-white'} rounded-lg shadow p-4`}>
                     {/* Post Thumbnail */}
                     <div className="flex space-x-4 mb-4">
-                        <div className="w-44 h-80 bg-gray-200 rounded overflow-hidden">
+                        <div className={`w-44 h-80 ${isDarkTheme?'bg-gray-800':'bg-gray-200'} rounded overflow-hidden`}>
                             <img
                                 src={post?.thumbnailUrl || 'https://placehold.co/176x320'}
                                 alt="Video thumbnail"
@@ -94,7 +94,7 @@ function CommentAnalytics() {
                             <p className="text-sm text-gray-500 text-left">11/3</p>
                             {/* Comment Input */}
                             <textarea
-                                className="float-left w-4/5 bg-gray-50 p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 mt-4"
+                                className={`float-left w-4/5 ${isDarkTheme?'':'bg-gray-50'} p-3 border rounded focus:outline-none mt-4`}
                                 rows={3}
                                 placeholder="Reply to comment"
                                 defaultValue={""}
@@ -108,21 +108,21 @@ function CommentAnalytics() {
                         <input
                             type="text"
                             placeholder="Search for comment or username"
-                            className="bg-gray-50 flex-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className={`${isDarkTheme?'':'bg-gray-50'} flex-1 p-2 border rounded focus:outline-none`}
                         />
-                        <select className="bg-gray-50 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select className={`${isDarkTheme?'':'bg-gray-50'} p-2 border rounded focus:outline-none`}>
                             <option>Sort by latest comments</option>
                             <option>Sort by oldest comments</option>
                         </select>
-                        <select className="bg-gray-50 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select className={`${isDarkTheme?'':'bg-gray-50'} p-2 border rounded focus:outline-none`}>
                             <option>All comments</option>
                             <option>Only my comments</option>
                         </select>
-                        <select className="bg-gray-50 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select className={`${isDarkTheme?'':'bg-gray-50'} p-2 border rounded focus:outline-none`}>
                             <option>Posted by all</option>
                             <option>Posted by me</option>
                         </select>
-                        <select className="bg-gray-50 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select className={`${isDarkTheme?'':'bg-gray-50'} p-2 border rounded focus:outline-none`}>
                             <option>All follower counts</option>
                             <option>Less than 100</option>
                             <option>100+</option>
@@ -137,11 +137,11 @@ function CommentAnalytics() {
                             type="text"
                             id="date-filter"
                             defaultValue="11/4/2024 - 12/4/2024"
-                            className="bg-gray-50 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className={`${isDarkTheme?'':'bg-gray-50'} p-2 border rounded focus:outline-none`}
                         />
                     </div>
                     {/* No Results */}
-                    <RenderComments postId={postId} />
+                    <RenderComments postId={postId} isDarkTheme={isDarkTheme}  />
                     {/* <div className="text-center text-gray-500 mt-6">
                         
                         <p>No results found</p>

@@ -62,7 +62,7 @@ function OverviewTab({ postAnalytics, post, isDarkTheme }: any) {
     return (
         <div className='max-w-5xl mx-auto mt-8  overflow-hidden'>
             {/* post data card  */}
-            <div className="bg-white rounded shadow-sm flex items-center justify-between p-3 mb-4">
+            <div className={`${isDarkTheme?'bg-[#181818]':'bg-white'} rounded shadow-sm flex items-center justify-between p-3 mb-4`}>
                 <div className='flex items-center space-x-4'>
                     <div className="w-14 h-24 bg-gray-200 rounded overflow-hidden">
                         <img src={post?.thumbnailUrl || 'https://placehold.co/56x96'} className='w-full h-full' alt="post-thumbnail" />
@@ -81,7 +81,7 @@ function OverviewTab({ postAnalytics, post, isDarkTheme }: any) {
                 </div>
             </div>
             {/* statistics card */}
-            <div className='bg-white rounded shadow-sm'>
+            <div className={`${isDarkTheme?'bg-[#181818]':'bg-white'} rounded shadow-sm`}>
                 <div className='inline-flex w-full ' >
                     <div onClick={switchTab} id={POSTSTATISTICSTABS.VIDEO_VIEWS.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === POSTSTATISTICSTABS.VIDEO_VIEWS ? 'border-t-red-500 border-t-4' : 'border-t border-b'} rounded-tl-md`}>Video views <br /><span className='text-2xl font-semibold'>{postAnalytics?.views || 0}</span></div>
                     <div onClick={switchTab} id={POSTSTATISTICSTABS.TOTAL_PLAY_TIME.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === POSTSTATISTICSTABS.TOTAL_PLAY_TIME ? 'border-t-red-500 border-t-4' : 'border-t border-b'} border-x`}>Total play time <br /> <span className='text-2xl font-semibold'>{postAnalytics?.profileViews || 0}s</span></div>
@@ -131,9 +131,9 @@ function OverviewTab({ postAnalytics, post, isDarkTheme }: any) {
             </div>
             {/* Bottom Metrics Section */}
             <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white shadow-sm rounded">
+                <div className={`${isDarkTheme?'bg-[#181818]':'bg-white'} shadow-sm rounded`}>
                     <div className='py-2 px-4 border-b mb-4 text-left'>
-                        <span className="text-gray-600 text-sm">Retention rate</span>
+                        <span className={`${isDarkTheme?'text-gray-300':'text-gray-600'} text-sm`}>Retention rate</span>
                     </div>
                     <p className="text-gray-400 text-sm">
                         Most viewers stopped watching at 0:04. play the video below to see when they lost interest.
@@ -142,9 +142,9 @@ function OverviewTab({ postAnalytics, post, isDarkTheme }: any) {
                         <video className='w-44 h-80 m-auto' controls src={post?.reducedVideoUrl?.length > 0? post?.reducedVideoUrl: post?.originalUrl} />
                     </div>
                 </div>
-                <div className="bg-white shadow-sm rounded">
+                <div className={`${isDarkTheme?'bg-[#181818]':'bg-white'} shadow-sm rounded`}>
                     <div className='py-2 px-3 border-b mb-4 text-left'>
-                        <span className="text-gray-600 text-sm mb-2">Traffic source</span>
+                        <span className={`${isDarkTheme?'text-gray-300':'text-gray-600'} text-sm mb-2`}>Traffic source</span>
                     </div>
                     <p className="text-gray-400 text-sm">
                         Data will show when video views reach 100

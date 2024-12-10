@@ -118,6 +118,7 @@ import whatsappShare from './assets/whatsapp-share.svg';
 import twitterShare from './assets/twitter-share.svg';
 import facebookShare from './assets/facebook-share.svg';
 import linkedInShare from './assets/linkedin-share.svg';
+import deleteVideoIconWhite from './assets/delete-video-white.svg';
 import deleteVideoIcon from './assets/delete-video.svg';
 import editIcon from './assets/edit-icon.svg';
 import seezitt_qr from './assets/seezitt_qr.png';
@@ -314,6 +315,7 @@ export {
     twitterShare,
     facebookShare,
     linkedInShare,
+    deleteVideoIconWhite,
     deleteVideoIcon,
     editIcon,
     seezitt_qr,

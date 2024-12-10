@@ -1,12 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { API_KEY } from '../../utils/constants';
-import { analyticsOutline, analyticsOutlineWhite, commentOutline, commentOutlineDark, commentOutlineWhite, deleteVideoIcon, heartOutline, heartOutlineWhite, moreBlack, moreInWhite, pencilOutline, pencilOutlineWhite, playOutline, playOutlineWhite } from '../../icons';
+import { analyticsOutline, analyticsOutlineWhite, commentOutline, commentOutlineDark, commentOutlineWhite, deleteVideoIcon, deleteVideoIconWhite, heartOutline, heartOutlineWhite, moreBlack, moreInWhite, pencilOutline, pencilOutlineWhite, playOutline, playOutlineWhite } from '../../icons';
 // import { CircularProgress } from '@mui/material';
 import style from './contentTab.module.scss';
 import { formatCustomDate } from '../../utils/helpers';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import ReactPaginate from 'react-paginate';
 import PopupForDeleteVideo from '../profile/popups/popupForDeleteVideo';
 import { useNavigate } from 'react-router-dom';
@@ -22,21 +19,11 @@ function ContentTab({ isDarkTheme }: any) {
 
   const userId = localStorage.getItem('userId');
   const token = localStorage.getItem('token');
-
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  
   const navigate = useNavigate();
-  const handleClick = (event: React.MouseEvent<HTMLImageElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const deletePost = (post:any) => {
     setMediaToDelete(post);
-    setAnchorEl(null);
   }
 
   const fetchPosts = async () => {
@@ -81,38 +68,38 @@ function ContentTab({ isDarkTheme }: any) {
   }, [posts.page]);
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-6 min-h-screen">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">Manage your posts</h1>
         <input
           type="text"
           placeholder="Search for post description"
-          className="border border-gray-300 rounded-lg p-2 w-64 bg-white"
+          className={`border border-gray-300 rounded-lg p-2 w-64 ${isDarkTheme?'':'bg-white'}`}
         />
       </div>
       {/* Filters */}
       <div className="flex space-x-4 mb-4">
-        <select className="border border-gray-300 rounded-lg p-2 bg-white">
+        <select className={`border border-gray-300 rounded-lg p-2 ${isDarkTheme?'':'bg-white'}`}>
           <option>Sort by</option>
           {/* Add sorting options */}
         </select>
-        <select className="border border-gray-300 rounded-lg p-2 bg-white">
+        <select className={`border border-gray-300 rounded-lg p-2 ${isDarkTheme?'':'bg-white'}`}>
           <option>All video views</option>
           {/* Add filtering options */}
         </select>
-        <select className="border border-gray-300 rounded-lg p-2 bg-white">
+        <select className={`border border-gray-300 rounded-lg p-2 ${isDarkTheme?'':'bg-white'}`}>
           <option>All comments</option>
         </select>
-        <select className="border border-gray-300 rounded-lg p-2 bg-white">
+        <select className={`border border-gray-300 rounded-lg p-2 ${isDarkTheme?'':'bg-white'}`}>
           <option>All likes</option>
         </select>
-        <select className="border border-gray-300 rounded-lg p-2 bg-white">
+        <select className={`border border-gray-300 rounded-lg p-2 ${isDarkTheme?'':'bg-white'}`}>
           <option>All privacy</option>
         </select>
       </div>
       {/* Posts Table */}
-      <div className="bg-white shadow rounded-lg">
+      <div className={`${isDarkTheme?'bg-[#181818]':'bg-white'} shadow rounded-lg`}>
         <table className="w-full text-left">
           <thead className="border-b text-gray-400">
             <tr>
@@ -124,10 +111,10 @@ function ContentTab({ isDarkTheme }: any) {
           </thead>
           <tbody>
             {posts.items.length? posts.items.map((post: any, index: number) => (
-              <tr key={index} className="border-b hover:bg-gray-50">
+              <tr key={index} className={`border-b ${isDarkTheme?'hover:bg-gray-900':'hover:bg-gray-50'}`}>
                 <td className="p-4 flex items-center space-x-4">
                   <div className="w-14 h-24 bg-gray-200 rounded overflow-hidden">
-                    <img src={post.thumbnailUrl} className='w-full h-full' alt="post-thumbnail" />
+                    <img src={post.thumbnailUrl||'https://placehold.co/67x67'} className='w-full h-full' alt="post-thumbnail" />
                   </div>
                   <div>
                     <span>{post.description.length > 30 ? post.description.slice(0, 30) + '...' : ''}</span>
@@ -164,26 +151,9 @@ function ContentTab({ isDarkTheme }: any) {
                 </td>
                 <td className="p-4">
                   <div className='h-full flex items-center space-x-6'>
-                    <img className='cursor-pointer' src={isDarkTheme ? pencilOutlineWhite : pencilOutline} alt="edit" />
+                    <img onClick={()=>deletePost(post)} className='cursor-pointer h-5' src={isDarkTheme ? deleteVideoIconWhite : deleteVideoIcon} alt="edit" />
                     <img onClick={()=>navigate(`/analytics/post/${post.mediaId}`)} className='cursor-pointer' src={isDarkTheme ? analyticsOutlineWhite : analyticsOutline} alt="analytics" />
                     <img onClick={()=>navigate(`/analytics/comment/${post.mediaId}`)} className='cursor-pointer w-5' src={isDarkTheme ? commentOutlineWhite : commentOutlineDark} alt="comments" />
-
-                    <img id="basic-button"
-                      aria-controls={open ? 'basic-menu' : undefined}
-                      aria-haspopup="true"
-                      aria-expanded={open ? 'true' : undefined}
-                      onClick={handleClick} className='cursor-pointer w-5' src={isDarkTheme ? moreInWhite : moreBlack} alt="more-options" />
-                    <Menu
-                      id="basic-menu"
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
-                      MenuListProps={{
-                        'aria-labelledby': 'basic-button',
-                      }}
-                    >
-                      <MenuItem onClick={()=>deletePost(post)}> <img className='h-4' src={deleteVideoIcon} alt="delete" /> &nbsp; Delete</MenuItem>
-                    </Menu>
                   </div>
                 </td>
               </tr>

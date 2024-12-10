@@ -19,7 +19,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 //     }
 //   }
 
-function OverviewTab({ analyticsData }: any) {
+function OverviewTab({ analyticsData, isDarkTheme }: any) {
 
     const [activeTab, setActiveTab] = useState(STATISTICSTABS.VIDEO_VIEWS)
     const [chartData, setChartData] = useState<any>([])
@@ -51,7 +51,7 @@ function OverviewTab({ analyticsData }: any) {
     return (
         <div className='max-w-5xl mx-auto mt-8  overflow-hidden'>
             {/* statistics card */}
-            <div className='bg-white rounded shadow-sm'>
+            <div className={`${isDarkTheme?'bg-[#181818]':'bg-white'} rounded shadow-sm`}>
                 <div className='inline-flex w-full ' >
                     <div onClick={switchTab} id={STATISTICSTABS.VIDEO_VIEWS.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.VIDEO_VIEWS ? 'border-t-red-500 border-t-4' : 'border-t border-b'} rounded-tl-md`}>Video views <br /><span className='text-2xl font-semibold'>{analyticsData.videoViews || 0}</span></div>
                     <div onClick={switchTab} id={STATISTICSTABS.PROFILE_VIEWS.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.PROFILE_VIEWS ? 'border-t-red-500 border-t-4' : 'border-t border-b'} border-x`}>Profile views <br /> <span className='text-2xl font-semibold'>{analyticsData.profileViews || 0}</span></div>
@@ -101,9 +101,9 @@ function OverviewTab({ analyticsData }: any) {
             </div>
             {/* Bottom Metrics Section */}
             <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white shadow-sm rounded">
+                <div className={`${isDarkTheme?'bg-[#181818]':'bg-white'} shadow-sm rounded`}>
                     <div className='py-2 px-4 border-b mb-4 text-left'>
-                        <span className="text-gray-600 text-sm">Traffic source</span>
+                        <span className={`${isDarkTheme?'text-gray-300':'text-gray-600'} text-sm`}>Traffic source</span>
                     </div>
                     <p className="text-gray-400 text-sm">
                         You'll be able to see this information once there’s enough data for
@@ -132,9 +132,9 @@ function OverviewTab({ analyticsData }: any) {
                         </li>
                     </ul>
                 </div>
-                <div className="bg-white shadow-sm rounded">
+                <div className={`${isDarkTheme?'bg-[#181818]':'bg-white'} shadow-sm rounded`}>
                     <div className='py-2 px-3 border-b mb-4 text-left'>
-                        <span className="text-gray-600 text-sm mb-2">Search queries</span>
+                        <span className={`${isDarkTheme?'text-gray-300':'text-gray-600'} text-sm mb-2`}>Search queries</span>
                     </div>
                     <p className="text-gray-400 text-sm">
                         You'll be able to see this information once there’s enough data for

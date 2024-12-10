@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAuthStore } from "../../../store/authStore";
 import VideoPlayer from "./storyVideo";
 import { useParams } from "react-router-dom";
+import { deleteVideoIcon } from "../../../icons";
 const API_KEY = process.env.VITE_API_URL;
 
 function StoriesOnPublicProfile({ story, onclose, openReport }: any) {
@@ -12,8 +13,7 @@ function StoriesOnPublicProfile({ story, onclose, openReport }: any) {
     // const token = localStorage.getItem('token');
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userId');
-    
-    
+
     const auth = useAuthStore((state) => state._id);
     const [sliderIndex, setSliderIndex] = useState<any>(0)
     const sliderRef = useRef<any>(null);
@@ -26,18 +26,18 @@ function StoriesOnPublicProfile({ story, onclose, openReport }: any) {
     const [beforeItems, setBeforeItems] = useState<any>([]);
     const [afterItems, setAfterItems] = useState<any>([]);
 
-     
-    
+
+
     const storiesData = [
         {
             id: 1,
-              thumbnailUrl: "https://d1qomu2i6h2trq.cloudfront.net/output/videos/64359a250eeb9afcc5105f87/thumbnail/64359a250eeb9afcc5105f87-thumbnail.jpg",
+            thumbnailUrl: "https://d1qomu2i6h2trq.cloudfront.net/output/videos/64359a250eeb9afcc5105f87/thumbnail/64359a250eeb9afcc5105f87-thumbnail.jpg",
             reducedVideoUrl: "https://d1qomu2i6h2trq.cloudfront.net/output/videos/643666c1acee813edc53c0da/reduced/643666c1acee813edc53c0da-reduced.mp4",
             user: {
-            name: "John Doe",
-            username: "john_doe",
-            avatar: "https://seezitt-videos-source-bucket.s3.amazonaws.com/1671036058694-3Cc3SHjbOh.jpg",
-               
+                name: "John Doe",
+                username: "john_doe",
+                avatar: "https://seezitt-videos-source-bucket.s3.amazonaws.com/1671036058694-3Cc3SHjbOh.jpg",
+
             }
         },
         {
@@ -45,33 +45,33 @@ function StoriesOnPublicProfile({ story, onclose, openReport }: any) {
             thumbnailUrl: "https://d1qomu2i6h2trq.cloudfront.net/output/videos/654926c9c1ce250c2599f86d/thumbnail/654926c9c1ce250c2599f86d-thumbnail.jpg",
             reducedVideoUrl: "https://d1qomu2i6h2trq.cloudfront.net/output/videos/659eb3144bdda87087451456/reduced/659eb3144bdda87087451456-reduced.mp4",
             user: {
-            name: "Jane Smith",
-            username: "jane_smith",
-            avatar: "https://seezitt-videos-source-bucket.s3.amazonaws.com/1671036058694-3Cc3SHjbOh.jpg",
-               
+                name: "Jane Smith",
+                username: "jane_smith",
+                avatar: "https://seezitt-videos-source-bucket.s3.amazonaws.com/1671036058694-3Cc3SHjbOh.jpg",
+
             }
         },
 
-          {
+        {
             id: 3,
-              thumbnailUrl: "https://d1qomu2i6h2trq.cloudfront.net/output/videos/643599f50eeb9afcc5105e93/thumbnail/643599f50eeb9afcc5105e93-thumbnail.jpg",            reducedVideoUrl: "https://d1qomu2i6h2trq.cloudfront.net/output/videos/659eb3144bdda87087451456/reduced/659eb3144bdda87087451456-reduced.mp4",
+            thumbnailUrl: "https://d1qomu2i6h2trq.cloudfront.net/output/videos/643599f50eeb9afcc5105e93/thumbnail/643599f50eeb9afcc5105e93-thumbnail.jpg", reducedVideoUrl: "https://d1qomu2i6h2trq.cloudfront.net/output/videos/659eb3144bdda87087451456/reduced/659eb3144bdda87087451456-reduced.mp4",
             user: {
-            name: "Jane Smith",
-            username: "jane_smith",
-            avatar: "https://seezitt-videos-source-bucket.s3.amazonaws.com/1671036058694-3Cc3SHjbOh.jpg",
-               
+                name: "Jane Smith",
+                username: "jane_smith",
+                avatar: "https://seezitt-videos-source-bucket.s3.amazonaws.com/1671036058694-3Cc3SHjbOh.jpg",
+
             }
         },
 
-          {
+        {
             id: 4,
             thumbnailUrl: "https://d1qomu2i6h2trq.cloudfront.net/output/videos/654926c9c1ce250c2599f86d/thumbnail/654926c9c1ce250c2599f86d-thumbnail.jpg",
             reducedVideoUrl: "https://d1qomu2i6h2trq.cloudfront.net/output/videos/659eb3144bdda87087451456/reduced/659eb3144bdda87087451456-reduced.mp4",
             user: {
-            name: "Jane Smith",
-            username: "jane_smith",
-            avatar: "https://seezitt-videos-source-bucket.s3.amazonaws.com/1671036058694-3Cc3SHjbOh.jpg",
-               
+                name: "Jane Smith",
+                username: "jane_smith",
+                avatar: "https://seezitt-videos-source-bucket.s3.amazonaws.com/1671036058694-3Cc3SHjbOh.jpg",
+
             }
         },
         // Add more stories as needed
@@ -88,31 +88,29 @@ function StoriesOnPublicProfile({ story, onclose, openReport }: any) {
     }, [sliderIndex, stories]);
 
     // const token = localStorage.getItem('token') ? localStorage.getItem('token') : "";
-    
+
 
     // useEffect(() => {
-    //     if (params.id) {
-    //         fetch(`${API_KEY}/media-content/stories/feed`, {
-    //             method: 'GET',
-    //             headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
-    //         }).then((res) => res.json()).then((data) => {
-    //             setStories(data.data[0].stories)
-    //         }).catch((err) => {
-    //             console.log('collectons error', err);
-    //         })
-    //     } else {
+    //     console.log(params._id);
+    //     if (!storyProfile) return;
+    //     fetch(`${API_KEY}/media-content/stories/feed`, {
+    //         method: 'GET',
+    //         headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+    //     }).then((res) => res.json()).then((data) => {
+    //         console.log('some is form to 😍😍🥶🥶',data);
+    //         // setStories(data.data[0].stories)
+    //     }).catch((err) => {
+    //         console.log('collectons error', err);
+    //     })
 
-    //         fetch(`${API_KEY}/media-content/stories/feed`, {
-    //             method: 'GET',
-    //             headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
-    //         }).then((res) => res.json()).then((data) => {
-    //             setStories(data.data[0].stories)
-    //         }).catch((err) => {
-    //             console.log('collectons error', err);
-    //         })
-    //     }
     // }, [])
+
+    useEffect(() => {
+        if (!story.length) return;
+        setStories(story);
+    }, [story])
     
+
 
     const settings = {
         dots: true,
@@ -134,7 +132,7 @@ function StoriesOnPublicProfile({ story, onclose, openReport }: any) {
         const video = event.target;
         console.log("time updating")
         const currentProgress = (video.currentTime / video.duration) * 100;
-        
+
         // setProgress(currentProgress);
     };
 
@@ -197,7 +195,7 @@ function StoriesOnPublicProfile({ story, onclose, openReport }: any) {
 
     return (
         <div className={style.popup}>
-            <Modal open={story}>
+            <Modal open={Boolean(story?.length)}>
                 <ClickAwayListener onClickAway={() => {
                     onclose()
                     setSliderIndex(0)
@@ -207,9 +205,9 @@ function StoriesOnPublicProfile({ story, onclose, openReport }: any) {
                             onclose()
                             setSliderIndex(0)
                         }} src="../../../../public/images/icons/storiesSec/close 1 (1).svg" alt="" />
-                        
-                          <div className={style.storySideItems} style={{justifyContent: 'flex-end'}}>
-                            {beforeItems.map((item:any, index:number) => (
+
+                        <div className={style.storySideItems} style={{ justifyContent: 'flex-end' }}>
+                            {beforeItems.map((item: any, index: number) => (
                                 <div className={style.sideItem} key={index}>
                                     {item && (
                                         <>
@@ -217,7 +215,7 @@ function StoriesOnPublicProfile({ story, onclose, openReport }: any) {
                                             <div className={style.overlay}>
                                                 <img className={style.avatar} src={item.user?.avatar} alt="" />
                                                 <h6 className={style.username}>@{item.user?.username}</h6>
-                                             </div>
+                                            </div>
                                         </>
                                     )}
                                 </div>
@@ -230,7 +228,7 @@ function StoriesOnPublicProfile({ story, onclose, openReport }: any) {
                                     return (
                                         <div className={style.story} key={i}>
                                             <VideoPlayer
-                                                videoPath={story?.reducedVideoUrl}
+                                                videoPath={story?.reducedVideoUrl?.length > 0 ? story?.reducedVideoUrl: story?.originalUrl}
                                                 index={i}
                                                 onEnded={handleVideoEnded}
                                                 autoplay={i === sliderIndex}
@@ -271,10 +269,9 @@ function StoriesOnPublicProfile({ story, onclose, openReport }: any) {
                                                         setDropdown(!dropdown)
                                                     }} src="../../../../public/images/icons/storiesSec/Group (12).svg" alt="" />
                                                     {
-                                                        dropdown ? <div className={style.dropdown} onClick={() => {
-                                                            openReport()
-                                                        }}>
-                                                            <p> <img src="../../../../public/images/icons/report.svg" alt="" />Report</p>
+                                                        dropdown ? <div className={style.dropdown}>
+                                                            <p onClick={() => {openReport()}} className="py-1"> <img src="../../../../public/images/icons/report.svg" alt="" />Report</p>
+                                                            {story?.user?._id===userId&&<p className="py-1"> <img src={deleteVideoIcon} alt="" />Delete</p>}
                                                         </div> : null
                                                     }
 
@@ -292,7 +289,7 @@ function StoriesOnPublicProfile({ story, onclose, openReport }: any) {
                         </Slider>
 
                         <div className={style.storySideItems}>
-                            {afterItems.map((item:any, index:number) => (
+                            {afterItems.map((item: any, index: number) => (
                                 <div className={style.sideItem} key={index}>
                                     {item && (
                                         <>

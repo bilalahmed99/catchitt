@@ -1,6 +1,6 @@
 .story,
 .story1 {
-    margin-top: 40px;
+    margin-top: 30px;
     position  : relative;
     width     : 80px;
     height    : 80px;
@@ -9,10 +9,10 @@
 }
 
 .story>img {
-    width        : 67px;
-    height       : 67px;
+    width        : 80px;
+    height       : 80px;
     border-radius: 50%;
-    border       : 1px solid #641A92;
+    border       : 1px solid rgb(255, 59, 92);
     padding      : 2px;
     cursor       : pointer;
 }

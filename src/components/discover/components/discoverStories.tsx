@@ -104,7 +104,7 @@ const mockStories = [
 
 
 
-    const [stories, setStories] = useState(mockStories);
+    const [stories, setStories] = useState([]);
     const sliderRef: any = useRef(null);
     const API_KEY = process.env.VITE_API_URL;
     const token = localStorage.getItem('token');
@@ -113,7 +113,8 @@ const mockStories = [
     useEffect(() => {
         get('/media-content/stories')
             .then((data:any) => {
-                // setStories(data?.data?.data);
+                console.log('stories 🤖🤖💖🤑🥶🤮😍', data);
+                setStories(data?.data?.data||[]);
             })
             .catch((err) => {
                 console.log('collectons error', err);
@@ -161,19 +162,14 @@ const mockStories = [
             } */}
 
             <Slider className={styles.slider} ref={sliderRef} {...settings}>
-                  
-                 
- 
                 {stories.map((storyGroup: any, index: number) => {
                    console.log('afking stories',storyGroup?.stories[0]?.thumbnailUrl)
                    return (
-                        <div key={index} onClick={showStories} className={styles.story}>
-                            <img src={storyGroup?.stories[0]?.thumbnailUrl} alt="" />
+                        <div key={index} onClick={()=>showStories(storyGroup?.stories)} className={styles.story}>
+                            <img src={storyGroup?.stories[0]?.thumbnailUrl||'https://placehold.co/80x80'} alt="" />
                         </div>
                     )
                 }
-                        
-                    
                 )}
             </Slider>
         </>
