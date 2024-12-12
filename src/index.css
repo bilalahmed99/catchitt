@@ -376,9 +376,8 @@ a.customPlayBtn::after {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: #e1434b;
   color: #fff;
-  border: none;
+  border: 1px solid white;
   border-radius: 50%;
   padding: 10px;
   cursor: pointer;
@@ -395,5 +394,5 @@ a.customPlayBtn::after {
 
 .custom-prev:hover,
 .custom-next:hover {
-  background-color: #bb2c2c;
+  background-color: #e1434b;
 }
