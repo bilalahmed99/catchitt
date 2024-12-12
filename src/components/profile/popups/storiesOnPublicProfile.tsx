@@ -6,9 +6,10 @@ import { useAuthStore } from "../../../store/authStore";
 import VideoPlayer from "./storyVideo";
 import { useNavigate, useParams } from "react-router-dom";
 import { avgIcon, backArrow, crossClose, defaultAvatar, deleteVideoIcon, moreInWhite, nextArrow, pauseWhite, playWhite, prevArrow, report, storyHeart, storySend, volumeOff, volumeUp } from "../../../icons";
+import PopupForDeleteVideo from "./popupForDeleteVideo";
 const API_KEY = process.env.VITE_API_URL;
 
-function StoriesOnPublicProfile({ story, onclose, openReport }: any) {
+function StoriesOnPublicProfile({ story, onclose, openReport, isDarkTheme }: any) {
     const params: any = useParams();
     // const token = localStorage.getItem('token');
     const token = localStorage.getItem('token');
@@ -20,9 +21,8 @@ function StoriesOnPublicProfile({ story, onclose, openReport }: any) {
     const [sliderIndex, setSliderIndex] = useState<any>(0)
     const sliderRef = useRef<any>(null);
     const [progress, setProgress] = useState(0);
-    const [isplaying, setIsplaying] = useState(true);
-    const [ismute, setMute] = useState(true);
     const [dropdown, setDropdown] = useState(false);
+    const [mediaToDelete, setMediaToDelete] = useState<any>(null)
 
 
     const [beforeItems, setBeforeItems] = useState<any>([]);
@@ -109,6 +109,9 @@ function StoriesOnPublicProfile({ story, onclose, openReport }: any) {
     useEffect(() => {
         if (!story.length) return;
         setStories(story);
+        return () => {
+            setDropdown(false);
+        }
     }, [story])
 
     const CustomPrevArrow = ({ onClick }: any) => (
@@ -161,31 +164,44 @@ function StoriesOnPublicProfile({ story, onclose, openReport }: any) {
         const newVideo: any = document.getElementById(`video-${currentSlide}`);
         if (newVideo) {
             newVideo.play();
+            newVideo.muted = false;
+            setDropdown(false);
+            const playPause = document.getElementById(`playPause-${currentSlide}`) as HTMLImageElement;
+            if (playPause) {
+                playPause.src = pauseWhite
+            }
+
+            const muteIndex = document.getElementById(`muteIndex-${currentSlide}`) as HTMLImageElement;
+            if (muteIndex) {
+                muteIndex.src = volumeUp
+            }
             // newVideo.addEventListener('timeupdate', updateProgress);
         }
     };
 
-    const handlepause = () => {
+    const handlepause = (event: React.MouseEvent<HTMLImageElement>) => {
         // const updateProgress = (event: any) => handleVideoTimeUpdate(event);
         const Video: any = document.getElementById(`video-${sliderIndex}`);
-        if (isplaying) {
-            Video.pause()
-            setIsplaying(false)
-        } else {
-            setIsplaying(true)
+        if (!Video) return;
+        if (Video.paused) {
             Video.play()
+            event.currentTarget.src = pauseWhite
+        } else {
+            Video.pause()
+            event.currentTarget.src = playWhite
         }
     };
 
-    const handlemute = () => {
+    const handlemute = (event: React.MouseEvent<HTMLImageElement>) => {
         // const updateProgress = (event: any) => handleVideoTimeUpdate(event);
         const Video: any = document.getElementById(`video-${sliderIndex}`);
-        if (ismute) {
-            Video.muted = true
-            setMute(false)
-        } else {
-            setMute(true)
+        if (!Video) return;
+        if (Video.muted) {
             Video.muted = false
+            event.currentTarget.src = volumeUp
+        } else {
+            Video.muted = true
+            event.currentTarget.src = volumeOff
         }
     };
 
@@ -221,6 +237,10 @@ function StoriesOnPublicProfile({ story, onclose, openReport }: any) {
             return `${minutes}min${minutes > 9 ? 's' : ''} ago`;
         }
         return 'Just now';
+    }
+
+    const deleteStory = (story: any) => {
+        setMediaToDelete(story);
     }
 
     return (
@@ -284,26 +304,17 @@ function StoriesOnPublicProfile({ story, onclose, openReport }: any) {
                                                         <p><img src={avgIcon} alt="" />{story?.user?.username}</p>
                                                     </div>
                                                     <p className={style.time}>{getformattedHours(story?.createdTime)}</p>
-                                                    {
-                                                        isplaying ?
-                                                            <img onClick={handlepause} src={pauseWhite} alt="" />
-                                                            :
-                                                            <img onClick={handlepause} src={playWhite} alt="" />
-                                                    }
-                                                    {
-                                                        ismute ?
-                                                            <img onClick={handlemute} src={volumeUp} alt="" />
-                                                            :
-                                                            <img onClick={handlemute} src={volumeOff} alt="" />
 
-                                                    }
+                                                    <img onClick={handlepause} id={`playPause-${i}`} src={pauseWhite} alt="" />
+                                                    <img onClick={handlemute} id={`muteIndex-${i}`} src={volumeUp} alt="" />
+
                                                     <img onClick={() => {
                                                         setDropdown(!dropdown)
                                                     }} src={moreInWhite} alt="" />
                                                     {
                                                         dropdown ? <div className={style.dropdown}>
                                                             <p onClick={() => { openReport() }} className="py-1"> <img src={report} alt="" />Report</p>
-                                                            {story?.user?._id === userId && <p className="py-1"> <img src={deleteVideoIcon} alt="" />Delete</p>}
+                                                            {story?.user?._id === userId && <p className="py-1" onClick={()=>deleteStory(story)}> <img src={deleteVideoIcon} alt="" />Delete</p>}
                                                         </div> : null
                                                     }
 
@@ -339,6 +350,15 @@ function StoriesOnPublicProfile({ story, onclose, openReport }: any) {
                     </div>
                 </ClickAwayListener >
             </Modal >
+            <PopupForDeleteVideo
+                entity="story"
+                openBlock={Boolean(mediaToDelete)}
+                onBlockClose={() => setMediaToDelete(null)}
+                info={mediaToDelete}
+                darkTheme={isDarkTheme}
+                // @ts-ignore
+                userId={{ id: userId, name: '' }}
+            />
         </div >
     )
 }

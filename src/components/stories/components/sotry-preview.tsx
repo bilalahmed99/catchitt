@@ -1,4 +1,4 @@
-import { Box, Modal } from '@mui/material';
+import { Box, CircularProgress, Modal } from '@mui/material';
 import styles from './story-preview.module.scss';
 import { useEffect, useState } from 'react';
 const StoryPreview = ({ open, onCancel, onPost, url, isPosting }: any) => {
@@ -14,6 +14,12 @@ const StoryPreview = ({ open, onCancel, onPost, url, isPosting }: any) => {
         }
         // const imageUrl = URL.createObjectURL(blob);
     }, [url]);
+
+    const submitPost = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.currentTarget.disabled = true;
+        onPost();
+    };
+    
     return (
         <div>
             <Modal
@@ -51,11 +57,12 @@ const StoryPreview = ({ open, onCancel, onPost, url, isPosting }: any) => {
                                 Discard
                             </button>
                             <button
-                                onClick={onPost}
-                                className="bg-[rgb(255, 59, 92)] text-[white]"
+                                onClick={submitPost}
+                                className={`bg-[rgb(255, 59, 92)] text-[white] w-[80px] h-[48px] flex justify-center items-center ${isPosting ? 'cursor-not-allowed' : ''}`}
                                 style={{ ...filledButton, textTransform: 'none' }}
                             >
-                                Post
+                                { isPosting? <CircularProgress style={{ width: '1.3rem', height:'1.3rem', color: 'white'}} /> :'Post'}
+
                             </button>
                         </div>
                     </div>

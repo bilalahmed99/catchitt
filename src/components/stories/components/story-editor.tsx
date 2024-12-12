@@ -18,10 +18,14 @@ import { ToastContainer } from 'react-toastify';
 import {
     showToastSuccess,
 } from '../../../utils/constants';
+import { useNavigate } from 'react-router-dom';
 const API_KEY = process.env.VITE_API_URL;
 const token = localStorage.getItem('token') ? localStorage.getItem('token') : '';
 
 const StoryEditor = ({ file }: any) => {
+
+    const navigate = useNavigate();
+
     const videoRef = useRef<any>(null);
     const [canvas, setCanvas] = useState<any>('');
     const [paused, setPaused] = useState(false);
@@ -149,6 +153,7 @@ const StoryEditor = ({ file }: any) => {
     };
 
     const postStory = () => {
+        if (isPosting) return;
         const formData = new FormData();
 
         // Append other information to the FormData object
@@ -174,6 +179,9 @@ const StoryEditor = ({ file }: any) => {
             .then((res) => {
                 setIsPosting(false);
                 showToastSuccess('Story posted successfully');
+                setTimeout(() => {
+                    navigate('/profile');
+                }, 2000);
             })
             .catch((err) => {
                 console.log(err);
@@ -530,7 +538,7 @@ const StoryEditor = ({ file }: any) => {
             <div className="w-[25rem] h-[5px] flex justify-end py-2 border"></div>
             {isPreview ? (
                 <StoryPreview
-                    isPosing={isPosting}
+                    isPosting={isPosting}
                     open={isPreview}
                     url={previewUrl}
                     onCancel={() => {

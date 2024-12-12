@@ -87,7 +87,7 @@ export default function Discover() {
         const signal = controller.signal;
         const fetchVedios = async () => {
             setIsLoading(true);
-            await getExplorePageData(signal);
+            // await getExplorePageData(signal);
             setIsLoading(false);
         };
         fetchVedios();
@@ -193,6 +193,7 @@ export default function Discover() {
                     story={storyPopup}
                     onclose={() => setStoryPopup([])}
                     openReport={() => setReportPopup(true)}
+                    isDarkTheme={!!darkTheme}
                 />
             </div>
         </Layout>
