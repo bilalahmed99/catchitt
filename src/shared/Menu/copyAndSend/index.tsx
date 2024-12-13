@@ -161,6 +161,12 @@ export default function COPY_AND_SEND_MENU({ copyHandler, BASE_URL_FRONTEND, pro
                         </div>
                     </MenuItem>
                     <MenuItem onClick={handleClose} style={{ padding: '0px', margin: '0px' }}>
+                        <div className={`${style.menuItem} ${isDarkTheme?'hover:bg-custom-dark-222':'hover:bg-slate-100'}`} onClick={()=>{}}>
+                            <img src={embedShare} />
+                            <p className={`${style.p} ${style.black_500}`}>Embed</p>
+                        </div>
+                    </MenuItem>
+                    <MenuItem onClick={handleClose} style={{ padding: '0px', margin: '0px' }}>
                         <div className={`${style.menuItem} ${isDarkTheme?'hover:bg-custom-dark-222':'hover:bg-slate-100'}`} onClick={() => shareProfileby.whatsapp(userName)}>
                             <img src={whatsappShare} />
                             <p className={`${style.p} ${style.black_500}`}>Whatsapp</p>

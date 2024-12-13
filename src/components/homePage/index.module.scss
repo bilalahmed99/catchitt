@@ -156,8 +156,8 @@
       // background-color: #000;
       margin: auto;
       // max-width: 435px;
-      max-width: 48vh;
-      max-height: 85vh;
+      max-width: var(--media-post-width, 48vh );
+      max-height: var(--media-post-height, 85vh );
       position: relative;
       display: flex;
       justify-content: center;

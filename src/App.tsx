@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useLayoutEffect, useState } from 'react';
 import { IntlProvider } from 'react-intl';
 import { Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
 import messages from '../src/languages-intl';
@@ -742,6 +742,31 @@ function App() {
             rootStyle.setProperty("--scrollbar-thumb-color", "#a0a0a0");
         }
     });
+
+    useLayoutEffect(() => {
+        const adjustVideoSize = () => {
+            console.log('adjusting video size');
+            if (!window) return;
+            const { innerWidth, innerHeight } = window;
+            const rootStyle = document.documentElement.style;
+            if (innerWidth < 700) {
+                rootStyle.setProperty("--media-post-height", `${innerHeight}px`);
+                rootStyle.setProperty("--media-post-width", `${innerWidth}px`);
+                return;
+            }
+            const aspectRatio = 16 / 9;
+            const videoWidth = innerHeight / aspectRatio;
+            const videoHeight = innerHeight - 100;
+            rootStyle.setProperty("--media-post-height", `${videoHeight}px`);
+            rootStyle.setProperty("--media-post-width", `${videoWidth}px`);
+        }
+        adjustVideoSize();
+        window.addEventListener('resize', adjustVideoSize);
+        
+        return () => {
+            window.removeEventListener('resize', adjustVideoSize);
+        };
+    }, [])
 
     const responseFacebook = (response: any) => {
         loginWithFBAccessToken(response?.access_token);

@@ -26,7 +26,7 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailI
     const [muted, setMuted] = useState(false);
     const [playbackRate, setPlaybackRate] = useState(1.0);
     const [isDragging, setIsDragging] = useState(false);
-    const [videoSize, setVideoSize] = useState({ width: '100vw', height: '100vh' });
+    // const [videoSize, setVideoSize] = useState({ width: '100vw', height: '100vh' });
 
     // const progress = (currentTime / post?.duration) * 100;
     video.onloadedmetadata = function () {
@@ -76,27 +76,6 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailI
         onMuteToggle();
     };
 
-    
-    useLayoutEffect(() => {
-
-        const adjustVideoSize = () => {
-            console.log('adjusting video size');
-            if (!window) return;
-            const { innerWidth, innerHeight } = window;
-            if (innerWidth < 700) return;
-            const aspectRatio = 16 / 9;
-            const videoWidth = innerHeight / aspectRatio;
-            const videoHeight = innerHeight - 80;
-            setVideoSize({ width: `${videoWidth}px`, height: `${videoHeight}px` });
-        }
-
-        window.addEventListener('resize', adjustVideoSize);
-        
-        return () => {
-            window.removeEventListener('resize', adjustVideoSize);
-        };
-    }, [])
-
     return (
         <div
             style={{
@@ -119,7 +98,7 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailI
                     loop={true}
                     autoPlay={videoModal ? false : inView}
                     controls={false} //{controls}
-                    style={{ height: '85vh', position: 'relative', zIndex: 1, }}
+                    style={{ height: 'var(--media-post-height, 85vh )', position: 'relative', zIndex: 1, }}
                     src={src}
                     ref={videoRef}
                     className={style.video}

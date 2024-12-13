@@ -240,7 +240,7 @@ function ForDesktop(props: any) {
         >
             <div className={`relative  ${style.parent} ${darkTheme}`}>
                 <VideoNavigation videoListRef={scrollableDivRef} />
-                <div className={`${style.videoesParent} no-scrollbar mt-2`} ref={scrollableDivRef}>
+                <div className={`${style.videoesParent} no-scrollbar`} ref={scrollableDivRef}>
                     {videoes?.length > 0 && !loading && activeTab !== 3 ? (
                         videoes.map((post: any, number: number) => {
                             return (
@@ -253,7 +253,7 @@ function ForDesktop(props: any) {
                                     // backgroundColor: focusedIndex === number ? 'blue' : 'red',
                                     // }}
                                 >
-                                    <div className={style.mediaContainer}>
+                                    <div className={style.mediaContainer} style={{margin:'10px auto'}}>
                                         <div
                                             style={{
                                                 // width: '100%',

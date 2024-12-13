@@ -59,6 +59,14 @@ export const Profile = (props: any) => {
     const [profileViewsContent, setProfileViewsContent] = useState<any>([]);
     const [darkTheme, setdarkTheme] = useState<any>('');
     const [editVideo, setEditVideo] = useState(false);
+    const [isEmbedModalOpen, setIsEmbedModalOpen] = useState(false);
+
+    const username = useSelector((state: any) => state?.reducers?.profile?.username);
+
+
+    const embedCode = `<blockquote class="your-embed-class" cite="https://web.seezitt.com/profile/${username}" data-unique-id=${username} data-embed-type="creator" style="max-width: 780px; min-width: 288px;" ><section> <a target="_blank" href="https://www.tiktok.com/@hartz4vibes?refer=creator_embed">@hartz4vibes</a> </section></blockquote>`;
+
+
     // @ts-ignore
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -598,6 +606,28 @@ export const Profile = (props: any) => {
             <div>
                 <ToastContainer />
             </div>
+            {/* {isEmbedModalOpen && (
+                <EmbedSharePopup
+                    videoUrl={videoUrl}
+                    embedCode={embedCode}
+                    copyEmbedCodeHandler={copyEmbedCodeHandler}
+                    setIsEmbedModalOpen={setIsEmbedModalOpen}
+                    videoOwner={videoOwner}
+                    videoOwnerId={videoOwnerId}
+                    videoOwnerAvatar={videoOwnerAvatar}
+                    videoDescription={description}
+                    musicTitle={musicTitle}
+                    isLiked={isLiked}
+                    whiteHeartIcon={likeWhite}
+                    redHeartIcon={activeLike}
+                    musicIcon={musicBlack}
+                    videoLikes={likesCount}
+                    commentIcon={commentWhite}
+                    videoComments={commentCount}
+                    shareIcon={shareWhite}
+                    videoShares={shareCount}
+                />
+            )} */}
         </Layout>
     );
 };
