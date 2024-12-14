@@ -15,6 +15,7 @@ import defaultBanner from '../../../assets/default_banner.jpeg';
 import { block, myReportWhite, report, trippleDotIcon, whiteblock } from '../../../icons';
 
 interface Props {
+    setIsEmbedModalOpen: (value: boolean) => void;
     setProfileModal: (value: boolean) => void;
     setLikesModal: (value: boolean) => void;
     onFollowModalActive: (value: string) => void;
@@ -29,6 +30,7 @@ interface Props {
 }
 
 const PublicProfileHeader: FunctionComponent<Props> = ({
+    setIsEmbedModalOpen,
     onFollowModalActive,
     setLikesModal,
     profileData,
@@ -144,7 +146,7 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
                 <button style={{ width: 98, position: 'relative' }} className={styles.button}>
                     <ShareIcon />
                     Share
-                    <COPY_AND_SEND_MENU copyHandler={copyHandler} userName={profileData?.username} />
+                    <COPY_AND_SEND_MENU setIsEmbedModalOpen={setIsEmbedModalOpen} copyHandler={copyHandler} userName={profileData?.username} />
                 </button>
             </div>
             <div className={styles.pfContent}>

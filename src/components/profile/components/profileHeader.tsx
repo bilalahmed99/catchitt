@@ -19,6 +19,7 @@ import { BASE_URL_FRONTEND } from '../../../utils/constants';
 import defaultBanner from '../../../assets/default_banner.jpeg';
 
 interface Props {
+    setIsEmbedModalOpen: (value: boolean) => void;
     setProfileModal: (value: boolean) => void;
     setLikesModal: (value: boolean) => void;
     onFollowModalActive: (value: string) => void;
@@ -29,6 +30,7 @@ interface Props {
 }
 
 const ProfileHeader: FunctionComponent<Props> = ({
+    setIsEmbedModalOpen,
     setProfileModal,
     onFollowModalActive,
     setLikesModal,
@@ -238,7 +240,7 @@ const ProfileHeader: FunctionComponent<Props> = ({
                     >
                         <ShareIcon />
                         Share
-                        <COPY_AND_SEND_MENU copyHandler={copyHandler} BASE_URL_FRONTEND={BASE_URL_FRONTEND} profileData={profileData} userName={userName} />
+                        <COPY_AND_SEND_MENU setIsEmbedModalOpen={setIsEmbedModalOpen} copyHandler={copyHandler} BASE_URL_FRONTEND={BASE_URL_FRONTEND} profileData={profileData} userName={userName} />
                     </button>
                 </div>
                 <div className={styles.pfContent}>

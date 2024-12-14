@@ -19,7 +19,7 @@ import { showToastError } from '../../../utils/constants';
 const options = ['View profile', 'Make admin', 'Remove from group', 'Block', 'Report'];
 
 
-export default function COPY_AND_SEND_MENU({ copyHandler, BASE_URL_FRONTEND, profileData, userName }: any) {
+export default function COPY_AND_SEND_MENU({ setIsEmbedModalOpen, copyHandler, BASE_URL_FRONTEND, profileData, userName }: any) {
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [selectedIndex, setSelectedIndex] = React.useState(1);
@@ -161,7 +161,7 @@ export default function COPY_AND_SEND_MENU({ copyHandler, BASE_URL_FRONTEND, pro
                         </div>
                     </MenuItem>
                     <MenuItem onClick={handleClose} style={{ padding: '0px', margin: '0px' }}>
-                        <div className={`${style.menuItem} ${isDarkTheme?'hover:bg-custom-dark-222':'hover:bg-slate-100'}`} onClick={()=>{}}>
+                        <div className={`${style.menuItem} ${isDarkTheme?'hover:bg-custom-dark-222':'hover:bg-slate-100'}`} onClick={() => setIsEmbedModalOpen(true)}>
                             <img src={embedShare} />
                             <p className={`${style.p} ${style.black_500}`}>Embed</p>
                         </div>

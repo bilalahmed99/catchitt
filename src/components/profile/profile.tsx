@@ -30,6 +30,9 @@ import { useUpdateEffect } from 'react-use';
 import PopupForDeleteVideo from './popups/popupForDeleteVideo';
 import { Repost } from './svg-components/Repost';
 import PopupForEditVideo from './popups/popupForEditVideo';
+import EmbedSharePopup from '../../shared/components/EmbedSharePopup';
+import { activeLike, commentWhite, likeWhite, musicBlack, shareWhite } from '../../icons';
+import { showToastSuccess } from '../../utils/constants';
 
 export const Profile = (props: any) => {
     const [activeTab, setActiveTab] = useState('Videos');
@@ -62,10 +65,15 @@ export const Profile = (props: any) => {
     const [isEmbedModalOpen, setIsEmbedModalOpen] = useState(false);
 
     const username = useSelector((state: any) => state?.reducers?.profile?.username);
+    const avatar = useSelector((state: any) => state?.reducers?.profile?.avatar);
 
+    const embedCode = `<blockquote class="your-embed-class" cite="https://web.seezitt.com/profile/${username}" data-unique-id=${username} data-embed-type="creator" style="max-width: 780px; min-width: 288px;" ><section> <a target="_blank" href="https://web.seezitt.com/profile/${username}">@${username}</a></section></blockquote>`;
 
-    const embedCode = `<blockquote class="your-embed-class" cite="https://web.seezitt.com/profile/${username}" data-unique-id=${username} data-embed-type="creator" style="max-width: 780px; min-width: 288px;" ><section> <a target="_blank" href="https://www.tiktok.com/@hartz4vibes?refer=creator_embed">@hartz4vibes</a> </section></blockquote>`;
-
+     const copyEmbedCodeHandler = () => {
+        navigator.clipboard.writeText(embedCode).then(() => {
+            showToastSuccess('Embed Code Copied.');
+        });
+    };
 
     // @ts-ignore
     const dispatch = useDispatch();
@@ -503,6 +511,7 @@ export const Profile = (props: any) => {
                 </Modal>
                 <div className={styles.middleSectionDiv} >
                     <ProfileHeader
+                        setIsEmbedModalOpen={setIsEmbedModalOpen}
                         onFollowModalActive={onFollowModalActive}
                         setProfileModal={setProfileModal}
                         setLikesModal={setLikesModal}
@@ -606,28 +615,16 @@ export const Profile = (props: any) => {
             <div>
                 <ToastContainer />
             </div>
-            {/* {isEmbedModalOpen && (
+            {isEmbedModalOpen && (
                 <EmbedSharePopup
-                    videoUrl={videoUrl}
+                    shareEntity="profile"
+                    isDarkTheme={!!darkTheme}
                     embedCode={embedCode}
                     copyEmbedCodeHandler={copyEmbedCodeHandler}
                     setIsEmbedModalOpen={setIsEmbedModalOpen}
-                    videoOwner={videoOwner}
-                    videoOwnerId={videoOwnerId}
-                    videoOwnerAvatar={videoOwnerAvatar}
-                    videoDescription={description}
-                    musicTitle={musicTitle}
-                    isLiked={isLiked}
-                    whiteHeartIcon={likeWhite}
-                    redHeartIcon={activeLike}
-                    musicIcon={musicBlack}
-                    videoLikes={likesCount}
-                    commentIcon={commentWhite}
-                    videoComments={commentCount}
-                    shareIcon={shareWhite}
-                    videoShares={shareCount}
+                    videoOwner={username}
                 />
-            )} */}
+            )}
         </Layout>
     );
 };

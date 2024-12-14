@@ -18,6 +18,8 @@ import { Liked } from './svg-components/Liked';
 import { Tagged } from './svg-components/Tagged';
 import { VideoIcon } from './svg-components/VideoIcon';
 import { useUpdateEffect } from 'react-use';
+import EmbedSharePopup from '../../shared/components/EmbedSharePopup';
+import { showToastSuccess } from '../../utils/constants';
 
 export const PublicProfile = (props: any) => {
     const [storyPopup, setStoryPopup] = useState(false);
@@ -38,8 +40,17 @@ export const PublicProfile = (props: any) => {
     const [videoModal, setVideoModal] = useState(false);
     const [copyPopup, setcopyPopup] = useState(false);
     const [darkTheme, setdarkTheme] = useState<any>('');
+    const [isEmbedModalOpen, setIsEmbedModalOpen] = useState(false);
 
     const MemoizedStoriesOnPublicProfile = memo(publicProfileStories);
+
+    const embedCode = `<blockquote class="your-embed-class" cite="https://web.seezitt.com/profile/${profileData?.username||''}" data-unique-id=${profileData?.username||''} data-embed-type="creator" style="max-width: 780px; min-width: 288px;" ><section> <a target="_blank" href="https://web.seezitt.com/profile/${profileData?.username||''}">@${profileData?.username||''}</a></section></blockquote>`;
+
+     const copyEmbedCodeHandler = () => {
+        navigator.clipboard.writeText(embedCode).then(() => {
+            showToastSuccess('Embed Code Copied.');
+        });
+    };
 
     const fetchProfileData = async () => {
         try {
@@ -212,6 +223,7 @@ export const PublicProfile = (props: any) => {
                 </Modal> */}
                 <div className={`${styles.middleSectionDiv} h-screen overflow-y-auto no-scrollbar`} id="scrollableDiv">
                     <PublicProfileHeader
+                        setIsEmbedModalOpen={setIsEmbedModalOpen}
                         profileData={profileData}
                         onFollowModalActive={onFollowModalActive}
                         setProfileModal={setProfileModal}
@@ -283,6 +295,16 @@ export const PublicProfile = (props: any) => {
                 <Gifts openGifts={giftsPopup} onGiftsClose={() => setGiftsPopup(false)} />
             </div>
             {/* </div> */}
+            {isEmbedModalOpen && (
+                <EmbedSharePopup
+                    shareEntity="profile"
+                    isDarkTheme={!!darkTheme}
+                    embedCode={embedCode}
+                    copyEmbedCodeHandler={copyEmbedCodeHandler}
+                    setIsEmbedModalOpen={setIsEmbedModalOpen}
+                    videoOwner={profileData?.username || ''}
+                />
+            )}
         </Layout>
     );
 };

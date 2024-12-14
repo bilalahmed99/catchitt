@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { cross, defaultAvatar } from '../../icons';
+import { cross, defaultAvatar, music } from '../../icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
@@ -7,7 +7,9 @@ import style from './embed.module.scss'
 import { followingsMethod } from '../../redux/AsyncFuncs';
 
 interface EmbedSharePopupProps {
-    videoUrl: string;
+    shareEntity?: string;
+    isDarkTheme?: boolean;
+    videoUrl?: string;
     embedCode: string;
     copyEmbedCodeHandler: () => void;
     setIsEmbedModalOpen: (isOpen: boolean) => void;
@@ -35,6 +37,8 @@ interface EmbedSharePopupProps {
 }
 
 const EmbedSharePopup: React.FC<EmbedSharePopupProps> = ({
+    shareEntity,
+    isDarkTheme,
     videoUrl,
     embedCode,
     copyEmbedCodeHandler,
@@ -85,10 +89,10 @@ const EmbedSharePopup: React.FC<EmbedSharePopupProps> = ({
     // }, [post])
     
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white px-6 pt-4 pb-8 rounded-md shadow-lg w-2/5 h-fit">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10">
+            <div className={`${isDarkTheme?'bg-[#181818]':'bg-white'} px-6 pt-4 pb-8 rounded-md shadow-lg w-2/5 h-fit`}>
                 <div className="flex flex-row justify-between items-center mb-4">
-                    <h2 className="text-xl font-bold text-black text-left">Embed Video</h2>
+                    <span className="text-xl font-bold text-left">Embed {shareEntity==='profile'?'Profile':'Video'}</span>
                     <img
                         onClick={() => setIsEmbedModalOpen(false)}
                         className="object-contain h-8 w-8 cursor-pointer"
@@ -97,7 +101,10 @@ const EmbedSharePopup: React.FC<EmbedSharePopupProps> = ({
                 </div>
                 <div className="w-full h-[1px] bg-gray-300 mb-3 -mt-2" />
                 <div className="flex flex-row justify-between items-center gap-4">
-                    <div className={'h-fit w-1/3 relative border border-gray-100 rounded-b-md'}>
+                    {shareEntity === 'profile' ? (<div className=" w-4/5 relative border border-gray-100 rounded-md">
+                        <iframe src={`http://localhost:5173/profile/${videoOwner}`} height="500" style={{width: '-webkit-fill-available', height:'400px'}}></iframe>
+                    </div>) : (
+                    <div className={'h-fit w-1/3 relative border border-gray-100 rounded-md'}>
                         <video
                             className="h-[350px] w-full rounded-t-md object-cover"
                             loop={true}
@@ -118,7 +125,7 @@ const EmbedSharePopup: React.FC<EmbedSharePopupProps> = ({
                             <div className="mt-[0.1rem] leading-3" >
                                 <img
                                     className={`w-2.5 h-2.5 object-contain inline-block mr-1`}
-                                    src={musicIcon}
+                                    src={isDarkTheme? music:musicIcon}
                                     alt="music-icon"
                                 />
                                 <span className="font-normal text-[0.6rem]">
@@ -240,11 +247,11 @@ const EmbedSharePopup: React.FC<EmbedSharePopupProps> = ({
                                 </p>
                             </div>
                         </div>
-                    </div>
+                    </div>)}
                     <div className="w-2/3 flex flex-col justify-between items-center h-[400px]">
-                        <h4 className="font-medium text-lg text-black text-left mr-auto mb-3.5 -mt-2">
-                            Copy code to embed this video
-                        </h4>
+                        <span className="font-medium text-lg text-left mr-auto mb-3.5 -mt-2">
+                            Copy code to embed this {shareEntity==='profile'?'profile':'video'}
+                        </span>
                         <textarea
                             readOnly
                             className="w-full p-2 border border-gray-300 text-justify rounded-md mb-4 h-full bg-gray-100 text-gray-500"
@@ -252,13 +259,13 @@ const EmbedSharePopup: React.FC<EmbedSharePopupProps> = ({
                         />
                         <div className="w-full">
                             <button
-                                className="w-full px-4 py-2 bg-white border border-gray-100 text-black rounded-md"
+                                className="w-full px-4 py-2 border border-gray-100 rounded-md hover:bg-[#e1434b] hover:text-white"
                                 onClick={copyEmbedCodeHandler}
                             >
                                 Copy Code
                             </button>
                             <p className="font-normal text-sm text-gray-500 text-justify mt-2 tracking-normal">
-                                By embedding this video, you confirm that you agree to our{' '}
+                                By embedding this {shareEntity==='profile'?'profile':'video'}, you confirm that you agree to our{' '}
                                 <span className="underline cursor-pointer">Terms of Service </span>{' '}
                                 and acknowledge you have read and understood our{' '}
                                 <span className="underline cursor-pointer">Privacy Policy</span>
