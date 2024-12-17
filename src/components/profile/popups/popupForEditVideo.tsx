@@ -8,8 +8,9 @@ import { addIcon, addInWhite, leftArrowCurved, leftArrowCurvedinWhite, minusIcon
 import ReactSlider from "react-slider";
 import { VideoToFrames, VideoToFramesMethod } from '../../../utils/videoToFrame';
 import { CircularProgress } from '@mui/material';
-import { addAudioToVideo } from '../../../utils/helpers';
 import AudioWaveForm from './AudioWaveForm';
+import { FFmpeg } from '@ffmpeg/ffmpeg';
+import { fetchFile, toBlobURL } from '@ffmpeg/util'
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -21,6 +22,10 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any) {
+
+  const [loaded, setLoaded] = useState(false);
+  const ffmpegRef = useRef(new FFmpeg());
+  const messageRef = useRef<HTMLParagraphElement | null>(null)
 
   const [selectedActionIndex, setSelectedActionIndex] = useState(1);
   const [selectedAudio, setSelectedAudio] = useState<string | null>(null);
@@ -45,6 +50,31 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
       mode: 'dark',
     },
   });
+
+  const load = async () => {
+    const baseURL = "https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/esm";
+    const ffmpeg = ffmpegRef.current;
+    ffmpeg.on("log", ({ message }) => {
+      console.log(message);
+      if (messageRef.current) messageRef.current.innerHTML = message;
+    });
+    // toBlobURL is used to bypass CORS issue, urls with the same
+    // domain can be used directly.
+    await ffmpeg.load({
+      coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, "text/javascript"),
+      wasmURL: await toBlobURL(
+        `${baseURL}/ffmpeg-core.wasm`,
+        "application/wasm"
+      ),
+      workerURL: await toBlobURL(
+        `${baseURL}/ffmpeg-core.worker.js`,
+        "text/javascript"
+      ),
+    });
+    console.log('loadded 👩‍🦳💖🤑')
+    setLoaded(true);
+  };
+
 
   function formatTime(seconds: number) {
     const date = new Date(0);
@@ -155,15 +185,48 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
   }, [targetVideo])
 
   useEffect(() => {
-    console.log('thumbnails💖💖💖💖', thumbnails);
-  }, [thumbnails])
+    load();
+  }, []);
+
+  useEffect(()=>{
+    console.log(loaded);
+  },[loaded]);
 
   const handleAudioManipulation = async () => {
     try {
       if (!selectedAudio) return;
-      const newVideo = await addAudioToVideo(targetVideo, selectedAudio);
+      // const newVideo = await addAudioToVideo(targetVideo, selectedAudio);
+      console.log('step 1');
+
+      const ffmpeg = ffmpegRef.current;
+      const videoArrayBuffer = await fetchFile(targetVideo);
+      console.log('step 2', videoArrayBuffer);
+      const audioArrayBuffer = await fetchFile(selectedAudio);
+      console.log('step 3');
+      
+      await ffmpeg.writeFile('input.mp4', videoArrayBuffer);
+      console.log('step 4');
+      await ffmpeg.writeFile('input.mp3', new Uint8Array(audioArrayBuffer));
+      console.log('step 5');
+      await ffmpeg.exec(['-i', 'input.mp4', '-i', 'input.mp3', '-c:v', 'copy', '-c:a', 'aac', 'output.mp4']);
+      console.log('step 6');
+      const fileData = await ffmpeg.readFile('output.mp4');
+      console.log('step 7');
+      console.log(fileData);
+      console.log('step 8');
+      const data = new Uint8Array(fileData as unknown as ArrayBuffer);
+      console.log('step 9');
+      const newVideo = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
+      console.log('step 10');
       console.log('newVideo', newVideo);
-      targetVideo = newVideo;
+      console.log('step 11');
+      // targetVideo = newVideo;
+      if (videoRef.current) {
+        videoRef.current.src = URL.createObjectURL(
+          new Blob([data.buffer], { type: 'video/mp4' })
+        )
+      }
+      console.log('step 12');
     } catch (error) {
       console.error(error);
     }
@@ -173,7 +236,6 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
     if (!selectedAudio) return;
     handleAudioManipulation();
   }, [selectedAudio])
-
 
 
   return (
@@ -191,6 +253,7 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
         }}
       >
         <div className={style.EditModal}>
+          <p className='text-white' ref={messageRef}></p>
           <div className={`${style.modalHeader} border-b border-gray-200`} >
             <span className={style.modalTitle}>Edit Video</span>
             <button className={style.closeIcon} onClick={handleClose}>X</button>
@@ -200,7 +263,7 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
               {/* LEFT ACTION BAR */}
               <div className={`${style.actions} border-r border-gray-200`}>
                 {EDIT_VIDEO_ACTIONS.map((action, index) => (
-                  <div className='p-2 text-center'>
+                  <div key={index} className='p-2 text-center'>
                     <img className='m-auto' src={action.icon} alt="music" />
                     <span className='text-sm'>{action.title}</span>
                   </div>
@@ -294,6 +357,7 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
                   height: "100%",
                   backgroundColor: "red",
                   cursor: "pointer",
+                  zIndex: 9
                 }}
                 onMouseDown={(e) => {
                   e.preventDefault();

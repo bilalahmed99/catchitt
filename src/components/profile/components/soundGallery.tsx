@@ -4,6 +4,53 @@ import { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { CircularProgress } from '@mui/material';
 import { defaultAvatar } from "../../../icons";
+import audioFile1 from '../../../assets/audio1.mp3';
+import audioFile2 from '../../../assets/audio2.mp3';
+
+const mockAudios = [
+    {
+        "_id": "638fd3c43552a4628ad08d10",
+        "createdTime": 1670368436916,
+        "lastModifiedTime": 1670368436916,
+        "isDeleted": false,
+        "artist_id": "638fd3c43552a4628ad08cfd",
+        "name": "Cinematic musical dark guitar pluck",
+        "image": "",
+        "url": audioFile1,
+        "active": true,
+        "__v": 0,
+        "artist": {
+            "_id": "638fd3c43552a4628ad08cfd",
+            "createdTime": 1670368436917,
+            "lastModifiedTime": 1670368436917,
+            "isDeleted": false,
+            "active": true,
+            "name": "Sia Records",
+            "__v": 0
+        }
+    },
+    {
+        "_id": "638fd3c43552a4628ad08d0f",
+        "createdTime": 1670368436916,
+        "lastModifiedTime": 1670368436916,
+        "isDeleted": false,
+        "artist_id": "638fd3c43552a4628ad08cfd",
+        "name": "Melody and drums",
+        "image": "",
+        "url": audioFile2,
+        "active": true,
+        "__v": 0,
+        "artist": {
+            "_id": "638fd3c43552a4628ad08cfd",
+            "createdTime": 1670368436917,
+            "lastModifiedTime": 1670368436917,
+            "isDeleted": false,
+            "active": true,
+            "name": "Sia Records",
+            "__v": 0
+        }
+    }
+]
 
 function SoundGallery({ selectedAudio, setSelectedAudio }: any) {
     const abortController = useRef<AbortController | null>(null);
