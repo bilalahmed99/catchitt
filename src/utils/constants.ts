@@ -287,3 +287,11 @@ export enum POSTSTATISTICSTABS {
     FULL_WATCH_PERCENTAGE,
     NEW_FOLLOWERS
 }
+
+export const ANALYTICS_OVERVIEW_TIME_PERIODS = {
+    'Last 7 days': 7,
+    'Last 30 days': 30,
+    'Last 90 days': 90,
+    'Last 180 days': 180,
+    'Last 365 days': 365,
+};

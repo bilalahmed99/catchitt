@@ -46,7 +46,7 @@ function OverviewTab({ analyticsData, isDarkTheme }: any) {
 
     useEffect(() => {
         if(analyticsData && activeTab) setChartData(prepareData(analyticsData[possibleGraphs[activeTab]]));
-    }, [activeTab])
+    }, [analyticsData,activeTab])
 
     return (
         <div className='max-w-5xl mx-auto mt-8  overflow-hidden'>

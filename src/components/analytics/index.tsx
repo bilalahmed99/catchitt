@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import Layout from '../../shared/layout';
 import whiteRightArrow from './svg-components/whiteRightArrow.svg';
 import { useNavigate } from 'react-router-dom';
-import { ANALYTICSTABS } from '../../utils/constants';
+import { ANALYTICS_OVERVIEW_TIME_PERIODS, ANALYTICSTABS } from '../../utils/constants';
 import OverviewTab from './OverviewTab';
 import ContentTab from './ContentTab';
 import ViewersTab from './ViewersTab';
 import FollowersTab from './FollowersTab';
 import styles from './style.module.scss'
+import { Divider, MenuItem, Menu, ThemeProvider, createTheme } from '@mui/material';
+import React from 'react';
 
 const Analytics = () => {
     const [currentTab, setCurrentTab] = useState(ANALYTICSTABS.OVERVIEW);
@@ -16,18 +18,30 @@ const Analytics = () => {
     // const [startDate, setStartDate] = useState('02-1-2024');
     // const [endDate, setEndDate] = useState('03-18-2024');
     const [analyticsData, setAnalyticsData] = useState<any>('');
+    const [selectedPeriod, setSelectedPeriod] = useState(7);
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    
+    const open = Boolean(anchorEl);
+
     const navigate = useNavigate();
 
-    const switchTab = (event:React.MouseEvent<HTMLAnchorElement>) => {
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const switchTab = (event: React.MouseEvent<HTMLAnchorElement>) => {
         setCurrentTab(Number(event.currentTarget.id));
     }
 
-    const today = new Date();
-    const startDate = `${today.getFullYear()}-${String(today.getMonth()).padStart(2, '0')}-01`;
-    const endDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-
-    const getUserAnalytics = async () => {
+    
+    const getUserAnalytics = async (period = 7) => {
         try {
+            const periodsInMiliSecond = 1000 * 60 * 60 * 24 * period;
+            const gap = Date.now() - periodsInMiliSecond;
+            const startingDate = new Date(gap) 
+            const today = new Date();
+            const startDate = `${startingDate.getFullYear()}-${String(startingDate.getMonth() + 1).padStart(2, '0')}-${String(startingDate.getDate()).padStart(2, '0')}`;
+            const endDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
             const response = await fetch(
                 `${API_KEY}/analytics/user?startDate=${startDate}&endDate=${endDate}`,
                 {
@@ -47,8 +61,8 @@ const Analytics = () => {
     };
 
     useEffect(() => {
-        getUserAnalytics();
-    }, []);
+        getUserAnalytics(selectedPeriod);
+    }, [selectedPeriod]);
 
     const [darkTheme, setdarkTheme] = useState<any>('');
     useEffect(() => {
@@ -58,64 +72,131 @@ const Analytics = () => {
         }
     });
 
+    const lightThemePalette = createTheme({
+        palette: {
+            mode: 'light',
+        },
+    });
+
+    const darkThemePalette = createTheme({
+        palette: {
+            mode: 'dark',
+        },
+    });
+
     return (
         <Layout>
-            <header className={`text-gray-600 body-font ${darkTheme===''?'bg-white':styles.header} border-b px-4`}>
-                <div className="flex flex-wrap flex-col md:flex-row items-center justify-between">
-                    <nav className="flex flex-wrap items-center text-base text-gray-400">
-                        <a onClick={switchTab} className={`${currentTab===ANALYTICSTABS.OVERVIEW?'text-gray-500 font-semibold border-b border-gray-800':''} py-3 mr-5 ${darkTheme===''?'hover:text-gray-900':'hover:text-white'} cursor-pointer`} id={ANALYTICSTABS.OVERVIEW.toString()}>Overview</a>
-                        <a onClick={switchTab} className={`${currentTab===ANALYTICSTABS.CONTENT?'text-gray-500 font-semibold border-b border-gray-800':''} py-3 mr-5 ${darkTheme===''?'hover:text-gray-900':'hover:text-white'} cursor-pointer`} id={ANALYTICSTABS.CONTENT.toString()}>Content</a>
-                        <a onClick={switchTab} className={`${currentTab===ANALYTICSTABS.VIEWERS?'text-gray-500 font-semibold border-b border-gray-800':''} py-3 mr-5 ${darkTheme===''?'hover:text-gray-900':'hover:text-white'} cursor-pointer`} id={ANALYTICSTABS.VIEWERS.toString()}>Viewers</a>
-                        <a onClick={switchTab} className={`${currentTab===ANALYTICSTABS.FOLLOWERS?'text-gray-500 font-semibold border-b border-gray-800':''} py-3 ${darkTheme===''?'hover:text-gray-900':'hover:text-white'} cursor-pointer`} id={ANALYTICSTABS.FOLLOWERS.toString()}>Followers</a>
-                    </nav>
-                    <div className="inline-flex lg:justify-end ml-5 lg:ml-0 my-2">
-                        <button className={`inline-flex mx-2 items-center ${darkTheme===''?'bg-gray-100':'bg-gray-800'}  border-0 py-2 px-3 focus:outline-none ${darkTheme===''?'hover:bg-gray-200':'hover:bg-gray-900'} rounded-full text-sm`}>Last 7 Days &#129087;</button>
-                        <button className={`inline-flex gap-1 items-center ${darkTheme===''?'bg-gray-100':'bg-gray-800'}  border-0 py-2 px-3 focus:outline-none ${darkTheme===''?'hover:bg-gray-200':'hover:bg-gray-900'} rounded-full text-sm`}>
-                            <svg
-                                fill="#000000"
-                                version="1.1"
-                                id="Capa_1"
-                                xmlns="http://www.w3.org/2000/svg"
-                                xmlnsXlink="http://www.w3.org/1999/xlink"
-                                viewBox="0 0 537.794 537.795"
-                                xmlSpace="preserve"
-                                width={15}
-                                height={15}
+            <ThemeProvider theme={darkTheme === '' ? lightThemePalette: darkThemePalette}>
+                <header className={`text-gray-600 body-font ${darkTheme === '' ? 'bg-white' : styles.header} border-b px-4`}>
+                    <div className="flex flex-wrap flex-col md:flex-row items-center justify-between">
+                        <nav className="flex flex-wrap items-center text-base text-gray-400">
+                            <a onClick={switchTab} className={`${currentTab === ANALYTICSTABS.OVERVIEW ? 'text-gray-500 font-semibold border-b border-gray-800' : ''} py-3 mr-5 ${darkTheme === '' ? 'hover:text-gray-900' : 'hover:text-white'} cursor-pointer`} id={ANALYTICSTABS.OVERVIEW.toString()}>Overview</a>
+                            <a onClick={switchTab} className={`${currentTab === ANALYTICSTABS.CONTENT ? 'text-gray-500 font-semibold border-b border-gray-800' : ''} py-3 mr-5 ${darkTheme === '' ? 'hover:text-gray-900' : 'hover:text-white'} cursor-pointer`} id={ANALYTICSTABS.CONTENT.toString()}>Content</a>
+                            <a onClick={switchTab} className={`${currentTab === ANALYTICSTABS.VIEWERS ? 'text-gray-500 font-semibold border-b border-gray-800' : ''} py-3 mr-5 ${darkTheme === '' ? 'hover:text-gray-900' : 'hover:text-white'} cursor-pointer`} id={ANALYTICSTABS.VIEWERS.toString()}>Viewers</a>
+                            <a onClick={switchTab} className={`${currentTab === ANALYTICSTABS.FOLLOWERS ? 'text-gray-500 font-semibold border-b border-gray-800' : ''} py-3 ${darkTheme === '' ? 'hover:text-gray-900' : 'hover:text-white'} cursor-pointer`} id={ANALYTICSTABS.FOLLOWERS.toString()}>Followers</a>
+                        </nav>
+                        <div className="inline-flex lg:justify-end ml-5 lg:ml-0 my-2">
+                            <button
+                                aria-label="duration-period"
+                                id="duration-period"
+                                aria-controls={open ? 'duration-menu' : undefined}
+                                aria-expanded={open ? 'true' : undefined}
+                                aria-haspopup="true"
+                                onClick={handleClick}
+                                className={`inline-flex mx-2 items-center ${darkTheme === '' ? 'bg-gray-100' : 'bg-gray-800'}  border-0 py-2 px-3 focus:outline-none ${darkTheme === '' ? 'hover:bg-gray-200' : 'hover:bg-gray-900'} rounded-full text-sm`}>Last {selectedPeriod} Days &#129087;</button>
+                            <Menu
+                                id="duration-menu"
+                                MenuListProps={{
+                                    'aria-labelledby': 'duration-period',
+                                }}
+                                anchorEl={anchorEl}
+                                open={open}
+                                onClose={() => {
+                                    setAnchorEl(null);
+                                }}
+                                slotProps={{
+                                    paper: {
+                                        elevation: 0,
+                                        sx: {
+                                            overflow: 'visible',
+                                            padding: '10px',
+                                            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                            mt: 1.5,
+                                            '& .MuiAvatar-root': {
+                                                width: 32,
+                                                height: 32,
+                                                ml: -0.5,
+                                                mr: 1,
+                                            },
+                                            '&::before': {
+                                                content: '""',
+                                                display: 'block',
+                                                position: 'absolute',
+                                                top: 0,
+                                                right: 14,
+                                                width: 10,
+                                                height: 10,
+                                                bgcolor: 'background.paper',
+                                                transform: 'translateY(-50%) rotate(45deg)',
+                                                zIndex: 0,
+                                            },
+                                        },
+                                    },
+                                }}
+                                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                             >
-                                <g id="SVGRepo_bgCarrier" strokeWidth={0} />
-                                <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
-                                <g id="SVGRepo_iconCarrier">
-                                    {" "}
-                                    <g>
+                                {Object.keys(ANALYTICS_OVERVIEW_TIME_PERIODS).map((period:string, index:number) => (
+                                    <MenuItem key={index} onClick={() => { setSelectedPeriod(ANALYTICS_OVERVIEW_TIME_PERIODS[period as keyof typeof ANALYTICS_OVERVIEW_TIME_PERIODS]); setAnchorEl(null) }}><span className={`font-bold ${ANALYTICS_OVERVIEW_TIME_PERIODS[period as keyof typeof ANALYTICS_OVERVIEW_TIME_PERIODS] === selectedPeriod ? 'text-[rgb(255,59,92)]' : ''}`}>{period}</span></MenuItem>
+                                ))}
+                            </Menu>
+                            <button className={`inline-flex gap-1 items-center ${darkTheme === '' ? 'bg-gray-100' : 'bg-gray-800'}  border-0 py-2 px-3 focus:outline-none ${darkTheme === '' ? 'hover:bg-gray-200' : 'hover:bg-gray-900'} rounded-full text-sm`}>
+                                <svg
+                                    fill="#000000"
+                                    version="1.1"
+                                    id="Capa_1"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    xmlnsXlink="http://www.w3.org/1999/xlink"
+                                    viewBox="0 0 537.794 537.795"
+                                    xmlSpace="preserve"
+                                    width={15}
+                                    height={15}
+                                >
+                                    <g id="SVGRepo_bgCarrier" strokeWidth={0} />
+                                    <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" />
+                                    <g id="SVGRepo_iconCarrier">
                                         {" "}
                                         <g>
                                             {" "}
-                                            <path d="M463.091,466.114H74.854c-11.857,0-21.497,9.716-21.497,21.497v28.688c0,11.857,9.716,21.496,21.497,21.496h388.084 c11.857,0,21.496-9.716,21.496-21.496v-28.688C484.665,475.677,474.949,466.114,463.091,466.114z" />{" "}
-                                            <path d="M253.94,427.635c4.208,4.208,9.716,6.35,15.147,6.35c5.508,0,11.016-2.142,15.147-6.35l147.033-147.033 c8.339-8.338,8.339-21.955,0-30.447l-20.349-20.349c-8.339-8.339-21.956-8.339-30.447,0l-75.582,75.659V21.497 C304.889,9.639,295.173,0,283.393,0h-28.688c-11.857,0-21.497,9.562-21.497,21.497v284.044l-75.658-75.659 c-8.339-8.338-22.032-8.338-30.447,0l-20.349,20.349c-8.338,8.338-8.338,22.032,0,30.447L253.94,427.635z" />{" "}
+                                            <g>
+                                                {" "}
+                                                <path d="M463.091,466.114H74.854c-11.857,0-21.497,9.716-21.497,21.497v28.688c0,11.857,9.716,21.496,21.497,21.496h388.084 c11.857,0,21.496-9.716,21.496-21.496v-28.688C484.665,475.677,474.949,466.114,463.091,466.114z" />{" "}
+                                                <path d="M253.94,427.635c4.208,4.208,9.716,6.35,15.147,6.35c5.508,0,11.016-2.142,15.147-6.35l147.033-147.033 c8.339-8.338,8.339-21.955,0-30.447l-20.349-20.349c-8.339-8.339-21.956-8.339-30.447,0l-75.582,75.659V21.497 C304.889,9.639,295.173,0,283.393,0h-28.688c-11.857,0-21.497,9.562-21.497,21.497v284.044l-75.658-75.659 c-8.339-8.338-22.032-8.338-30.447,0l-20.349,20.349c-8.338,8.338-8.338,22.032,0,30.447L253.94,427.635z" />{" "}
+                                            </g>{" "}
                                         </g>{" "}
-                                    </g>{" "}
-                                </g>
-                            </svg>
-                            Download data
-                        </button>
+                                    </g>
+                                </svg>
+                                Download data
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </header>
+                </header>
 
-            {(()=>{
-                switch(currentTab){
-                    case ANALYTICSTABS.OVERVIEW:
-                        return <OverviewTab analyticsData={analyticsData} isDarkTheme={!!darkTheme} />    
-                    case ANALYTICSTABS.CONTENT:
-                        return <ContentTab isDarkTheme={darkTheme} />
-                    case ANALYTICSTABS.VIEWERS:
-                        return <ViewersTab />
-                    case ANALYTICSTABS.FOLLOWERS:
-                        return <FollowersTab />
-                    default:
-                        return <OverviewTab analyticsData={analyticsData} />
-                }
-            })()}
+                {(() => {
+                    switch (currentTab) {
+                        case ANALYTICSTABS.OVERVIEW:
+                            return <OverviewTab analyticsData={analyticsData} isDarkTheme={!!darkTheme} />
+                        case ANALYTICSTABS.CONTENT:
+                            return <ContentTab isDarkTheme={darkTheme} />
+                        case ANALYTICSTABS.VIEWERS:
+                            return <ViewersTab />
+                        case ANALYTICSTABS.FOLLOWERS:
+                            return <FollowersTab />
+                        default:
+                            return <OverviewTab analyticsData={analyticsData} isDarkTheme={!!darkTheme} />
+                    }
+                })()}
+            </ThemeProvider>
         </Layout>
     )
 

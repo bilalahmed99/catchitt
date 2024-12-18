@@ -751,22 +751,22 @@ const mockStories = [
 
 
 
-    const [stories, setStories] = useState([]);
+    const [stories, setStories] = useState(mockStories);
     const sliderRef: any = useRef(null);
     const API_KEY = process.env.VITE_API_URL;
     const token = localStorage.getItem('token');
 
     const [sliderIndex, setSliderIndex] = useState(0);
-    useEffect(() => {
-        get('/media-content/stories')
-            .then((data:any) => {
-                console.log('stories 🤖🤖💖🤑🥶🤮😍', data);
-                setStories(data?.data?.data||[]);
-            })
-            .catch((err) => {
-                console.log('collectons error', err);
-            });
-    }, []);
+    // useEffect(() => {
+    //     get('/media-content/stories')
+    //         .then((data:any) => {
+    //             console.log('stories 🤖🤖💖🤑🥶🤮😍', data);
+    //             setStories(data?.data?.data||[]);
+    //         })
+    //         .catch((err) => {
+    //             console.log('collectons error', err);
+    //         });
+    // }, []);
 
     const nextSlide = () => {
         // Check if the slider reference exists
