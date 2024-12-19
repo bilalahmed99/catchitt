@@ -252,7 +252,7 @@ const ChatComponent = () => {
 
     const markMessageAsSeen = (userId: any, conversationId: any) => {
         let newDataObject = JSON.stringify({ userId, conversationId });
-        (socketRef.current as any).emit('mark-conversation-as-seen', { userId, newDataObject });
+        // (socketRef.current as any).emit('mark-conversation-as-seen', { userId, newDataObject });
     };
 
 

@@ -6,6 +6,7 @@ import { useAuthStore } from '../../../store/authStore';
 import loadingCircle from '../svg-components/loadingCircle.svg';
 import qrCodeLogo from '../svg-components/qrCodeLogo.svg';
 import styles from './shareProfilePopup.module.scss';
+import { useSelector } from 'react-redux';
 
 export interface ShareProfilePopupProps {
     theme?: any;
@@ -32,7 +33,9 @@ export const ShareProfilePopup = ({
     handleOpen,
     handleClose,
 }: ShareProfilePopupProps) => {
-    const username = useAuthStore((state) => state.username);
+    // const username = useAuthStore((state) => state.username);
+    const username = useSelector((state: any) => state?.reducers?.profile?.username);
+    
     const userId = useAuthStore((state) => state._id);
     const email = useAuthStore((state) => state.email);
     const logout = useAuthStore((state) => state.logout);
@@ -46,7 +49,7 @@ export const ShareProfilePopup = ({
     const API_KEY = process.env.VITE_API_URL;
 
     const handleCopyToClipboard = () => {
-        const qrCodeValue = `https://app.seezitt.com/profile/${userId}`;
+        const qrCodeValue = `https://app.seezitt.com/profile/${username}`;
         // Copy to clipboard
         navigator.clipboard
             .writeText(qrCodeValue)
@@ -86,7 +89,7 @@ export const ShareProfilePopup = ({
                                         size={220}
                                         logoPadding={5}
                                         qrStyle="dots"
-                                        value={`https://app.seezitt.com/profile/${userId}`}
+                                        value={`https://app.seezitt.com/profile/${username}`}
                                         bgColor="white"
                                         fgColor="rgb(255, 59, 92)"
                                         logoImage={qrCodeLogo}
