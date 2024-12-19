@@ -85,6 +85,7 @@ import VideoPage from './components/shared-video';
 import PostPage from './components/shared-post';
 import PostAnalytics from './components/analytics/PostAnalytics';
 import CommentAnalytics from './components/analytics/PostAnalytics/CommentAnalytics';
+import { db } from './utils/db';
 
 // Functional component to handle the initial route navigation
 const InitialRouteHandler = () => {
@@ -330,8 +331,8 @@ function App() {
                 },
                 body: JSON.stringify({ email: email, otp: Number(otpCode) }),
             });
-            const { data }: any = await response.json();
-            if (response.code == 200) {
+            const data: any = await response.json();
+            if (data.status == 200) {
                 setOtpError(false);
                 setSignupNext(true);
             } else {
@@ -444,7 +445,7 @@ function App() {
         if (loginWithPhone) {
             signupObj = { password, phoneNumber: countryCode + phoneNumber, dateOfBirth, name };
         } else {
-            signupObj = { password, email, dateOfBirth, name };
+            signupObj = { password, email, dateOfBirth: dob, name };
         }
 
         // return false;
@@ -462,9 +463,17 @@ function App() {
                 } else if (res?.payload?.status == 200) {
                     console.log('res 2', res);
                     console.log('data after successfull login', res?.payload?.data);
+
+                    localStorage.setItem('userId', res?.payload?.data?._id || '');
+                    localStorage.setItem('token', res?.payload?.data?.token || '');
+                    localStorage.setItem('profile', JSON.stringify(res?.payload?.data) || '');
+                    db.profile.add(res?.payload?.data);
+                    useAuthStore.setState(res?.payload?.data);
+
                     setIsLoading(false);
                     closeLoginPopupHandler();
                     // navigate('/home');
+                    window.location.href = '/home';
                 }
             })
             .catch((error: any) => {
@@ -762,7 +771,7 @@ function App() {
         }
         adjustVideoSize();
         window.addEventListener('resize', adjustVideoSize);
-        
+
         return () => {
             window.removeEventListener('resize', adjustVideoSize);
         };
@@ -977,8 +986,8 @@ function App() {
                                                                         </p>
                                                                         <img
                                                                             className={`object-contain h-2.5 w-2.5 chevron ${countryModelOpened
-                                                                                    ? 'rotate'
-                                                                                    : ''
+                                                                                ? 'rotate'
+                                                                                : ''
                                                                                 }`}
                                                                             src={chevronDown}
                                                                         />
@@ -992,9 +1001,9 @@ function App() {
                                                                                     modelClickHandler
                                                                                 }
                                                                                 className={`absolute ${filteredCountryCodes.length ===
-                                                                                        0
-                                                                                        ? 'h-fit'
-                                                                                        : 'h-80'
+                                                                                    0
+                                                                                    ? 'h-fit'
+                                                                                    : 'h-80'
                                                                                     }  w-80 bg-white top-11 -left-2.5 rounded-md shadow-md cursor-default z-10`}
                                                                             >
                                                                                 <div className="flex flex-row items-center p-2 gap-2">
@@ -1017,9 +1026,9 @@ function App() {
                                                                                 <div className="w-full h-[1px] bg-gray-300" />
                                                                                 <div
                                                                                     className={`overflow-y-auto ${filteredCountryCodes.length ===
-                                                                                            0
-                                                                                            ? 'h-fit'
-                                                                                            : 'max-h-[17.188rem]'
+                                                                                        0
+                                                                                        ? 'h-fit'
+                                                                                        : 'max-h-[17.188rem]'
                                                                                         } `}
                                                                                 >
                                                                                     {filteredCountryCodes.map(
@@ -1038,9 +1047,9 @@ function App() {
                                                                                                     index
                                                                                                 }
                                                                                                 className={`flex flex-row justify-between items-center p-2.5 cursor-pointer mb-2 rounded-b-md ${selectedCountryIndex ===
-                                                                                                        index
-                                                                                                        ? 'bg-gray-50'
-                                                                                                        : ''
+                                                                                                    index
+                                                                                                    ? 'bg-gray-50'
+                                                                                                    : ''
                                                                                                     }`}
                                                                                             >
                                                                                                 <p
@@ -1102,10 +1111,10 @@ function App() {
                                                                             />
                                                                             <div
                                                                                 className={`flex flex-row justify-center items-center gap-2 flex-1 ${phoneNumber?.length >
-                                                                                        0 ||
-                                                                                        email.length > 0
-                                                                                        ? 'cursor-pointer'
-                                                                                        : 'cursor-not-allowed'
+                                                                                    0 ||
+                                                                                    email.length > 0
+                                                                                    ? 'cursor-pointer'
+                                                                                    : 'cursor-not-allowed'
                                                                                     }`}
                                                                             >
                                                                                 <p className="text-gray-400 ">
@@ -1117,11 +1126,11 @@ function App() {
                                                                                         sendOTP
                                                                                     }
                                                                                     className={`text-sm ${phoneNumber?.length >
-                                                                                            0 ||
-                                                                                            email.length >
-                                                                                            0
-                                                                                            ? textColor
-                                                                                            : 'text-gray-400'
+                                                                                        0 ||
+                                                                                        email.length >
+                                                                                        0
+                                                                                        ? textColor
+                                                                                        : 'text-gray-400'
                                                                                         }`}
                                                                                 >
                                                                                     {
@@ -1180,8 +1189,8 @@ function App() {
                                                                         className="w-2/3 bg-login-btn"
                                                                         type="text"
                                                                         placeholder={`${isForgotPasswordScenario
-                                                                                ? 'Email address'
-                                                                                : 'Email or username'
+                                                                            ? 'Email address'
+                                                                            : 'Email or username'
                                                                             }`}
                                                                         value={email}
                                                                         onChange={(e) =>
@@ -1204,10 +1213,10 @@ function App() {
                                                                             />
                                                                             <div
                                                                                 className={`flex flex-row justify-center items-center gap-2 flex-1 ${phoneNumber?.length >
-                                                                                        0 ||
-                                                                                        email.length > 0
-                                                                                        ? 'cursor-pointer'
-                                                                                        : 'cursor-not-allowed'
+                                                                                    0 ||
+                                                                                    email.length > 0
+                                                                                    ? 'cursor-pointer'
+                                                                                    : 'cursor-not-allowed'
                                                                                     }`}
                                                                             >
                                                                                 <p className="text-gray-400 ">
@@ -1219,11 +1228,11 @@ function App() {
                                                                                         sendOTP
                                                                                     }
                                                                                     className={`text-sm ${phoneNumber?.length >
-                                                                                            0 ||
-                                                                                            email.length >
-                                                                                            0
-                                                                                            ? textColor
-                                                                                            : 'text-gray-400'
+                                                                                        0 ||
+                                                                                        email.length >
+                                                                                        0
+                                                                                        ? textColor
+                                                                                        : 'text-gray-400'
                                                                                         }`}
                                                                                 >
                                                                                     {
@@ -1281,8 +1290,8 @@ function App() {
                                                         <p
                                                             onClick={loginOrForgetPasswordHandler}
                                                             className={`font-medium text-left text-xs text-gray-600 mt-2.5 ${loginWithPhone && !loginWithPassword
-                                                                    ? 'hover:underline cursor-pointer'
-                                                                    : ''
+                                                                ? 'hover:underline cursor-pointer'
+                                                                : ''
                                                                 } `}
                                                         >
                                                             {isError && (
@@ -1306,20 +1315,20 @@ function App() {
                                                             <div
                                                                 onClick={loginHandler}
                                                                 className={`flex flex-row items-center ${(phoneNumber?.length > 0 ||
-                                                                        email.length > 0) &&
-                                                                        code?.length > 0 &&
-                                                                        password?.length > 0
-                                                                        ? 'bg-red-500'
-                                                                        : 'bg-login-btn'
+                                                                    email.length > 0) &&
+                                                                    code?.length > 0 &&
+                                                                    password?.length > 0
+                                                                    ? 'bg-red-500'
+                                                                    : 'bg-login-btn'
                                                                     } mt-4 rounded-md py-2.5 px-3 cursor-pointer h-11`}
                                                             >
                                                                 <div
                                                                     className={`${(phoneNumber?.length > 0 ||
-                                                                            email.length > 0) &&
-                                                                            code?.length > 0 &&
-                                                                            password?.length > 0
-                                                                            ? 'text-white'
-                                                                            : textColor
+                                                                        email.length > 0) &&
+                                                                        code?.length > 0 &&
+                                                                        password?.length > 0
+                                                                        ? 'text-white'
+                                                                        : textColor
                                                                         } flex flex-row justify-center items-center gap-2 flex-1`}
                                                                 >
                                                                     <p>
@@ -1748,8 +1757,8 @@ function App() {
                                                                                 </p>
                                                                                 <img
                                                                                     className={`object-contain h-2.5 w-2.5 chevron ${countryModelOpened
-                                                                                            ? 'rotate'
-                                                                                            : ''
+                                                                                        ? 'rotate'
+                                                                                        : ''
                                                                                         }`}
                                                                                     src={
                                                                                         chevronDown
@@ -1765,9 +1774,9 @@ function App() {
                                                                                             modelClickHandler
                                                                                         }
                                                                                         className={`absolute ${filteredCountryCodes.length ===
-                                                                                                0
-                                                                                                ? 'h-fit'
-                                                                                                : 'h-80'
+                                                                                            0
+                                                                                            ? 'h-fit'
+                                                                                            : 'h-80'
                                                                                             }  w-80 bg-white top-11 -left-2.5 rounded-md shadow-md cursor-default z-10`}
                                                                                     >
                                                                                         <div className="flex flex-row items-center p-2 gap-2">
@@ -1792,9 +1801,9 @@ function App() {
                                                                                         <div className="w-full h-[1px] bg-gray-300" />
                                                                                         <div
                                                                                             className={`overflow-y-auto ${filteredCountryCodes.length ===
-                                                                                                    0
-                                                                                                    ? 'h-fit'
-                                                                                                    : 'max-h-[17.188rem]'
+                                                                                                0
+                                                                                                ? 'h-fit'
+                                                                                                : 'max-h-[17.188rem]'
                                                                                                 } `}
                                                                                         >
                                                                                             {filteredCountryCodes.map(
@@ -1813,9 +1822,9 @@ function App() {
                                                                                                             index
                                                                                                         }
                                                                                                         className={`flex flex-row justify-between items-center p-2.5 cursor-pointer mb-2 rounded-b-md ${selectedCountryIndex ===
-                                                                                                                index
-                                                                                                                ? 'bg-gray-50'
-                                                                                                                : ''
+                                                                                                            index
+                                                                                                            ? 'bg-gray-50'
+                                                                                                            : ''
                                                                                                             }`}
                                                                                                     >
                                                                                                         <p
@@ -1913,7 +1922,7 @@ function App() {
                                                                                     onClick={
                                                                                         sendOTPCode
                                                                                     }
-                                                                                    className={`text-black`}
+                                                                                    className={`text-black cursor-pointer`}
                                                                                 >
                                                                                     {otpbuttonText}
                                                                                 </p>
