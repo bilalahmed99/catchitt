@@ -76,26 +76,26 @@ function PopupForPrivacySettings({ isPrivacyModalOpened, setIsPrivacyModalOpened
     const [data, setData] = useState<any>();
 
     const [privacyPrivilege, setPrivacyPrivilege] = useState({
-        allow_duet: true,
+        allowDuet: true,
+        allowStitch: true,
         privacyOptions: {
             allowComments: true,
             allowDownload: true,
             isOnlyMe: true,
-            isShareable: true
+            isShareable: true,
+            canView: "everyone",
         }
     });
 
-    const handleChange = (event: SelectChangeEvent) => {
-        // setVideoPrivilege(event.target.value as string);
-    };
-
-    const handleSwitchChange = (event: any, isPrivacyOption: boolean, name: string) => {
+    const handleSwitchChange = (event: any, isPrivacyOption: boolean, name: string, isBooleanProperty = true) => {
         const updatedPrivileges: any = { ...privacyPrivilege };
-        if (isPrivacyOption) {
-            updatedPrivileges.privacyOptions[name] = event.target.checked;
-        } else {
-            updatedPrivileges[name] = event.target.checked;
-        }
+            if (isPrivacyOption) {
+                if (isBooleanProperty) updatedPrivileges.privacyOptions[name] = event.target.checked;
+                else updatedPrivileges.privacyOptions[name] = event.target.value;
+            } else {
+                updatedPrivileges[name] = event.target.checked;
+            }
+        
         // Make a PATCH request to update the settings
         fetch(`${API_KEY}/media-content/${mediaId}`, {
             method: 'PATCH',
@@ -137,12 +137,14 @@ function PopupForPrivacySettings({ isPrivacyModalOpened, setIsPrivacyModalOpened
     useEffect(() => {
         if (data) {
             setPrivacyPrivilege({
-                allow_duet: data.allowDuet,
+                allowDuet: data.allowDuet,
+                allowStitch: data.allowStitch,
                 privacyOptions: {
                     allowComments: data.privacyOptions.allowComments,
                     allowDownload: data.privacyOptions.allowDownload,
                     isOnlyMe: data.privacyOptions.isOnlyMe,
                     isShareable: data.privacyOptions.isShareable,
+                    canView: data.privacyOptions.canView
                 },
             })
         }
@@ -170,12 +172,12 @@ function PopupForPrivacySettings({ isPrivacyModalOpened, setIsPrivacyModalOpened
                         <Select
                             labelId="demo-simple-select-standard-label"
                             id="demo-simple-select-standard"
-                            value={'everyone'}
-                            onChange={handleChange}
+                            value={privacyPrivilege.privacyOptions.canView}
+                            onChange={(e: any) => handleSwitchChange(e, true, 'canView', false)}
                         >
                             <MenuItem value='everyone' defaultChecked>everyone</MenuItem>
-                            <MenuItem value='only me'>only me</MenuItem>
-                            <MenuItem value='friends'>friends</MenuItem>
+                            <MenuItem value='onlyme'>only me</MenuItem>
+                            <MenuItem value='followers'>friends</MenuItem>
                         </Select>
                     </FormControl>
                     <div className='flex justify-between items-center mb-1 mt-2'>
@@ -184,11 +186,11 @@ function PopupForPrivacySettings({ isPrivacyModalOpened, setIsPrivacyModalOpened
                     </div>
                     <div className='flex justify-between items-center my-1'>
                         <span className=''>Allow Duet</span>
-                        <IOSSwitch sx={{ m: 1 }} checked={privacyPrivilege.allow_duet || false} onChange={(e: any) => handleSwitchChange(e, false, 'allow_duet')} />
+                        <IOSSwitch sx={{ m: 1 }} checked={privacyPrivilege.allowDuet || false} onChange={(e: any) => handleSwitchChange(e, false, 'allowDuet')} />
                     </div>
                     <div className='flex justify-between items-center mt-1'>
                         <span className=''>Allow Stitch</span>
-                        <IOSSwitch sx={{ m: 1 }} checked={false} />
+                        <IOSSwitch sx={{ m: 1 }} checked={privacyPrivilege.allowStitch || false} onChange={(e: any) => handleSwitchChange(e, false, 'allowStitch')} />
                     </div>
                     <span className='text-xs opacity-50 '>Duet and Stitch aren't available on videos from private accounts</span>
                 </div>
