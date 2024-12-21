@@ -396,3 +396,9 @@ a.customPlayBtn::after {
 .custom-next:hover {
   background-color: #e1434b;
 }
+
+/* #HomeMediaContainer .infinite-scroll-component__outerdiv {
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  height: 100vh;
+} */
