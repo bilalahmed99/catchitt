@@ -690,7 +690,7 @@ export default function PopupForVideoPlayer({
 
     return (
         <ThemeProvider theme={darkThemePalette}>
-        <PopupForPrivacySettings isPrivacyModalOpened={isPrivacyModalOpened} setIsPrivacyModalOpened={setIsPrivacyModalOpened} mediaId={info?.mediaId} />
+        <PopupForPrivacySettings fetchUpdatedMedia={fetchMediaById} isPrivacyModalOpened={isPrivacyModalOpened} setIsPrivacyModalOpened={setIsPrivacyModalOpened} mediaId={info?.mediaId} />
         <div className={style.parent}>
             <Modal open={videoModal}>
                 <ClickAwayListener onClickAway={() => console.log('abc')}>

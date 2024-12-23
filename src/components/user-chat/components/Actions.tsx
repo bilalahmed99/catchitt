@@ -19,7 +19,7 @@ import { io } from 'socket.io-client';
 import { useEffect, useRef, useState } from 'react';
 import TextHighlighter from './TextHighlighter';
 import VideoModal from './VideoModal';
-
+import { CircularProgress } from '@mui/material';
 function Actions(props: any) {
     const {
         valuesH,
@@ -74,11 +74,9 @@ function Actions(props: any) {
 
     return (
         <>
-
             <div ref={autoScrolElem} className={style.msgsContainer} onScroll={handleScroll}>
                 {playingVideo && <VideoModal src={playingVideo} close={closeVideoModal} parentRef={autoScrolElem} />}
-                {activeChat?.userId &&
-                    activeChat?.chats?.map((item: any, index: number) => {
+                {Object.keys(activeChat).length? activeChat?.userId && activeChat?.chats?.map((item: any, index: number) => {
                         return (
                             <div
                                 key={index}
@@ -342,7 +340,7 @@ function Actions(props: any) {
                                 </div>
                             </div>
                         );
-                    })}
+                    }): <div className="flex justify-center items-center h-full"><CircularProgress /></div>}
             </div>
         </>
     );

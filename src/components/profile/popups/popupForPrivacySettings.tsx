@@ -67,7 +67,7 @@ const IOSSwitch = styled((props: SwitchProps) => (
     },
 }));
 
-function PopupForPrivacySettings({ isPrivacyModalOpened, setIsPrivacyModalOpened, mediaId }: any) {
+function PopupForPrivacySettings({ fetchUpdatedMedia, isPrivacyModalOpened, setIsPrivacyModalOpened, mediaId }: any) {
 
     const token = localStorage.getItem('token');
 
@@ -108,6 +108,7 @@ function PopupForPrivacySettings({ isPrivacyModalOpened, setIsPrivacyModalOpened
             .then((response) => {
                 if (response.ok) {
                     // Handle a successful response here
+                    fetchUpdatedMedia(mediaId);
                     setPrivacyPrivilege(updatedPrivileges);
                 } else {
                     // Handle errors here

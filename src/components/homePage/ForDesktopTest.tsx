@@ -28,8 +28,6 @@ import FollowUserCard from '../../shared/cards/followCard';
 import { ToastContainer } from 'react-toastify';
 import { updateHomeVideos } from '../../redux/reducers';
 import VideoNavigation from '../../shared/navigation/VideoNavigation';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import { useUpdateEffect } from 'react-use';
 // import { Toast } from 'react-toastify/dist/components';
 
 function ForDesktopTest(props: any) {
@@ -47,8 +45,6 @@ function ForDesktopTest(props: any) {
         setSendPopup,
         generateEmbedCodeHandler,
     } = props || {};
-
-    const token = localStorage.getItem('token');
 
     const [reportPopup, setreportPopup] = useState(false);
     const [followBtnLoading, setfollowBtnLoading] = useState(false);
@@ -80,9 +76,13 @@ function ForDesktopTest(props: any) {
         { img: likeBlack, actionType: 'like', activeImage: activeLike },
     ];
 
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const isFechingPost = useRef(true);
+    
     const [videos, setVideos] = useState<Video[]>([]);
     const [page, setPage] = useState<number>(1);
     const [loading, setLoading] = useState<boolean>(false);
+    const [loadingVideo, setLoadingVideo] = useState<boolean>(false);
     const [hasMore, setHasMore] = useState<boolean>(true);
     const [scrollY, setScrollY] = useState(0);
     const scrollableDivRef = useRef<HTMLDivElement>(null);
@@ -113,8 +113,6 @@ function ForDesktopTest(props: any) {
             console.log(error);
         }
     };
-
-
     const copyHandler = (msg: string) => {
         navigator.clipboard.writeText(msg).then(() => {
             setshowCopyPopup(true);
@@ -132,51 +130,95 @@ function ForDesktopTest(props: any) {
         }
     }, [isuploading]);
 
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
 
-    const fetchVideos = async () => {
-        try {
-            console.log('fetching videos:', activeTab, page);
-            dispatch(addMoreVideos({ tab: activeTab, token, page: page }));
-        } catch (error) {
-            console.error('Error fetching videos:', error);
+        if (themeColor == 'dark') {
+            setdarkTheme(style.darkTheme);
+            setIsDarkTheme(true);
+        }
+    });
+
+    useEffect(() => {
+        // Function to fetch data from your API
+        const fetchVideos = async () => {
+            //   setLoading(true);
+            console.log('loadingVideo', loadingVideo);
+            try {
+                // const response = await fetch(
+                //     APP_URL + `/media-content/public/videos/feed/upgraded?page=${page}&pageSize=5`
+                // );
+                // const responseData = await response.json();
+                // const newVideos = Array.isArray(responseData.data)
+                //     ? (responseData.data as Video[])
+                //     : [];
+
+                // const newVideos = useSelector((store:any) => store.reducers.homeVideos);
+                // const API_KEY = process.env.VITE_API_URL;
+                // dispatch(addMoreVideos(newVideos));
+                // dispatch(getHomeVideos({tab : 2, token})).then(() => setLoading(false));
+                // setVideos(prevVideos => [...prevVideos, ...newVideos]);
+                const token = localStorage.getItem('token');
+                // setLoadingVideo(true);
+                dispatch(addMoreVideos({ tab: activeTab, token, page: page }));
+                console.log('loadingVideo', loadingVideo, 'countFlag', countFlag);
+                setCountFlag(true);
+                isFechingPost.current = true;
+                // setHasMore(newVideos.length > 0);
+            } catch (error) {
+                console.error('Error fetching videos:', error);
+            }
+            // const token = localStorage.getItem('token');
+            // dispatch(getHomeVideos({tab : activeTab, token})).then(() => setLoading(false));
+
+            setLoadingVideo(false);
+        };
+
+        if (hasMore) {
+            fetchVideos();
+        }
+    }, [page]);
+
+    const handleScroll = () => {
+        if (scrollableDivRef.current) {
+            const { scrollTop, clientHeight, scrollHeight } = scrollableDivRef.current;
+            console.log(
+                'scroll position: ',
+                scrollHeight,
+                scrollTop + clientHeight + 100,
+                scrollTop,
+                clientHeight
+            );
+            if (scrollTop + clientHeight + scrollHeight * 0.4 > scrollHeight && isFechingPost.current) {
+                isFechingPost.current = false;
+                setLoadingVideo(true);
+                setPage((prevPage) => prevPage + 1);
+                setCountFlag(false);
+                console.log('countFlag', countFlag);
+            }
         }
     };
 
-    useUpdateEffect(() => {
-        console.log('page 🥶🥶🥶🥶🤮', page);
-        fetchVideos();
-    }, [page])
+    useEffect(() => {
+        if (scrollableDivRef.current) {
+            const scrollHandler = () => {
+                if (timeoutRef.current) {
+                    clearTimeout(timeoutRef.current);
+                }
+                timeoutRef.current = setTimeout(() => {
+                    handleScroll();
+                }, 500);
+            };
+            scrollableDivRef.current.addEventListener('scroll', scrollHandler);
+        }
 
-    // const handleScroll = () => {
-    //     if (scrollableDivRef.current) {
-    //         const { scrollTop, clientHeight, scrollHeight } = scrollableDivRef.current;
-    //         console.log(
-    //             'scroll position: ',
-    //             scrollHeight,
-    //             scrollTop + clientHeight + 100,
-    //             scrollTop,
-    //             clientHeight
-    //         );
-    //         if (scrollTop + clientHeight + 100 > scrollHeight && countFlag == true) {
-    //             setLoadingVideo(true);
-    //             setPage((prevPage) => prevPage + 1);
-    //             setCountFlag(false);
-    //             console.log('countFlag', countFlag);
-    //         }
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     if (scrollableDivRef.current) {
-    //         scrollableDivRef.current.addEventListener('scroll', handleScroll);
-    //     }
-
-    //     return () => {
-    //         if (scrollableDivRef.current) {
-    //             scrollableDivRef.current.removeEventListener('scroll', handleScroll);
-    //         }
-    //     };
-    // }, []);
+        return () => {
+            if (scrollableDivRef.current) {
+                scrollableDivRef.current.removeEventListener('scroll', handleScroll);
+            }
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        };
+    }, []);
 
     // useEffect(() => {
     //     const observer = new IntersectionObserver((videoes) => {
@@ -202,14 +244,6 @@ function ForDesktopTest(props: any) {
     //     };
     //   }, []);
 
-    useEffect(() => {
-        var themeColor = window.localStorage.getItem('theme');
-
-        if (themeColor == 'dark') {
-            setdarkTheme(style.darkTheme);
-            setIsDarkTheme(true);
-        }
-    });
 
     return (
         <Layout
@@ -218,41 +252,22 @@ function ForDesktopTest(props: any) {
             closeReportPopup={() => setreportPopup(false)}
             paddingBottomProp={true}
         >
-            <div className={`relative  ${style.parent} ${darkTheme} overflow-y-auto no-scrollbar`} id='HomeMediaContainer'>
+            <div className={`relative  ${style.parent} ${darkTheme}`}>
                 <VideoNavigation videoListRef={scrollableDivRef} />
-                <InfiniteScroll
-                    dataLength={videoes?.length}
-                    next={() => {console.log('func called successfully🤮🤮🤮');setPage(page + 1)}}
-                    hasMore={true}
-                    loader={<div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            margin: '1rem',
-                            width: 'inherit',
-                        }}
-                    >
-                        <CircularProgress />
-                    </div>}
-                    // style={{ overflow: "unset" }}
-                    className=""
-                    scrollThreshold={0.6}
-                    scrollableTarget="HomeMediaContainer"
-                >
-                    <div className={`${style.videoesParent} no-scrollbar`} id='HomeScrollableDiv' ref={scrollableDivRef}>
-                        {videoes.map((post: any, number: number) => {
+                <div className={`${style.videoesParent} no-scrollbar`} ref={scrollableDivRef}>
+                    {videoes?.length > 0 && !loading && activeTab !== 3 ? (
+                        videoes.map((post: any, number: number) => {
                             return (
                                 <div
                                     key={number}
                                     id={post?.mediaId}
                                     className={style.videoParent}
-                                // ref={(el: HTMLLIElement | null) => itemsRef.current[number] = el}
-                                // style={{
-                                // backgroundColor: focusedIndex === number ? 'blue' : 'red',
-                                // }}
+                                    // ref={(el: HTMLLIElement | null) => itemsRef.current[number] = el}
+                                    // style={{
+                                    // backgroundColor: focusedIndex === number ? 'blue' : 'red',
+                                    // }}
                                 >
-                                    <div className={style.mediaContainer} style={{ margin: '10px auto' }}>
+                                    <div className={style.mediaContainer} style={{margin:'10px auto'}}>
                                         <div
                                             style={{
                                                 // width: '100%',
@@ -275,8 +290,8 @@ function ForDesktopTest(props: any) {
                                                     post?.reducedVideoUrl
                                                         ? post?.reducedVideoUrl
                                                         : post?.reducedVideoHlsUrl
-                                                            ? post?.reducedVideoHlsUrl
-                                                            : post?.originalUrl
+                                                        ? post?.reducedVideoHlsUrl
+                                                        : post?.originalUrl
                                                 }
                                                 thumbnailImage={post?.thumbnailUrl}
                                                 controls={true}
@@ -365,15 +380,15 @@ function ForDesktopTest(props: any) {
                                                 >
                                                     <span className={style.ColorButtonContent}>
                                                         {followBtnLoading &&
-                                                            followimgbtnId === post?.user?._id ? (
+                                                        followimgbtnId === post?.user?._id ? (
                                                             <CircularProgress
                                                                 style={{ width: 3, height: 3 }}
                                                             />
                                                         ) : followers?.data?.some(
-                                                            (user: any) =>
-                                                                user.followed_userID._id ===
-                                                                post?.user?._id
-                                                        ) ? (
+                                                              (user: any) =>
+                                                                  user.followed_userID._id ===
+                                                                  post?.user?._id
+                                                          ) ? (
                                                             <svg
                                                                 fill="white"
                                                                 viewBox="0 0 48 48"
@@ -399,12 +414,40 @@ function ForDesktopTest(props: any) {
                                             </div>
                                         </div>
                                     </div>
+                                    {loadingVideo && <CircularProgress />}
                                 </div>
                             );
                         })
-                        }
-                    </div>
-                </InfiniteScroll>
+                    ) : videoes?.length === 0 && !loading && activeTab === 1 ? (
+                        <div className={style.suggestedUsersContainer}>
+                            {suggestedUsers.map((suggestedUser: any, key: number) => {
+                                return (
+                                    <FollowUserCard
+                                        key={key}
+                                        user={suggestedUser}
+                                        darkTheme={darkTheme}
+                                    />
+                                );
+                            })}
+                        </div>
+                    ) : !loading && activeTab === 3 ? (
+                        <>
+                            <h4>No LIVE Stream are available!</h4>
+                        </>
+                    ) : (
+                        <div
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <CircularProgress />
+                        </div>
+                    )}
+                </div>
                 {toastOfUploading && (
                     <div className="w-[393px] h-[62px] rounded-[8px] bg-custom-gray-100 absolute right-[2rem] bottom-[2rem] z-[2] flex justify-between items-center px-[1rem]">
                         <p className="text-custom-dark-222 font-medium">
