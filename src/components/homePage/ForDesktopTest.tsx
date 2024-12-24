@@ -28,6 +28,7 @@ import FollowUserCard from '../../shared/cards/followCard';
 import { ToastContainer } from 'react-toastify';
 import { updateHomeVideos } from '../../redux/reducers';
 import VideoNavigation from '../../shared/navigation/VideoNavigation';
+import { useUpdateEffect } from 'react-use';
 // import { Toast } from 'react-toastify/dist/components';
 
 function ForDesktopTest(props: any) {
@@ -77,7 +78,7 @@ function ForDesktopTest(props: any) {
     ];
 
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const isFechingPost = useRef(true);
+    const canFetchVideos = useRef(true);
     
     const [videos, setVideos] = useState<Video[]>([]);
     const [page, setPage] = useState<number>(1);
@@ -163,7 +164,6 @@ function ForDesktopTest(props: any) {
                 dispatch(addMoreVideos({ tab: activeTab, token, page: page }));
                 console.log('loadingVideo', loadingVideo, 'countFlag', countFlag);
                 setCountFlag(true);
-                isFechingPost.current = true;
                 // setHasMore(newVideos.length > 0);
             } catch (error) {
                 console.error('Error fetching videos:', error);
@@ -179,6 +179,10 @@ function ForDesktopTest(props: any) {
         }
     }, [page]);
 
+    useUpdateEffect(() => {
+        canFetchVideos.current = true;
+    }, [videoes.length]);
+
     const handleScroll = () => {
         if (scrollableDivRef.current) {
             const { scrollTop, clientHeight, scrollHeight } = scrollableDivRef.current;
@@ -189,8 +193,9 @@ function ForDesktopTest(props: any) {
                 scrollTop,
                 clientHeight
             );
-            if (scrollTop + clientHeight + scrollHeight * 0.4 > scrollHeight && isFechingPost.current) {
-                isFechingPost.current = false;
+
+            if (scrollTop + clientHeight + scrollHeight * 0.4 > scrollHeight && canFetchVideos.current) {
+                canFetchVideos.current = false;
                 setLoadingVideo(true);
                 setPage((prevPage) => prevPage + 1);
                 setCountFlag(false);

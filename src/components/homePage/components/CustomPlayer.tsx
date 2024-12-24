@@ -86,13 +86,18 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailI
             ref={ref}
             className={`${style.mainContainer} video-container`}
         >
-            <div className={style.videoContainer}
-                style={{
-                    backgroundImage:
-                        `url(${thumbnailImage})`
+            <div className={`${style.videoContainer} ${inView ? 'true' : 'false'}`}
+                style={inView?{}:{
+                    backgroundImage:`url(${thumbnailImage})`,
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    height: 'var(--media-post-height, 85vh )',
+                    backgroundSize: 'cover',
+                    width: 'var(--media-post-width, 48vh)',
                 }}
                 onClick={togglePlayPause}>
-                <video
+                {inView && <video
+                    poster={thumbnailImage}
                     disablePictureInPicture
                     controlsList="nodownload noplaybackrate"
                     loop={true}
@@ -104,7 +109,7 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailI
                     className={style.video}
                     preload='none' //{number == 0 ? 'auto' : 'none'}
                     playsInline
-                />
+                />}
 
             </div>
 

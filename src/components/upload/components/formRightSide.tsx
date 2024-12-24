@@ -116,6 +116,12 @@ function FormRightSide(props: any) {
         setPostCategories(filteredCategories);
     };
 
+    const handleDescriptionChange = (e: any) => {
+        if (e.target.value.length <= 2200) {
+            updateState('description', e.target.value);
+        }
+    }
+
     return (
         <div className="flex-[1.7] flex flex-col mt-[8rem] items-start pl-[2.5rem] md:pl-0 pr-[2.5rem]">
             <div className="w-[100%]">
@@ -136,7 +142,7 @@ function FormRightSide(props: any) {
                                     # @
                                 </p>
                             }
-                            onChange={(e: any) => updateState('description', e?.target?.value)}
+                            onChange={handleDescriptionChange}
                         />
                     </div>
                     <div className="w-[100%] flex flex-col gap-1.5">

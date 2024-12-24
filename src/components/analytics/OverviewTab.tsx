@@ -28,16 +28,22 @@ function OverviewTab({ analyticsData, isDarkTheme }: any) {
         setActiveTab(Number(event.currentTarget.id));
     }
 
-    const possibleGraphs = [ 'viewsGraph', 'profileViewsGraph', 'likesGraph', 'commentsGraph', 'sharesGraph' ]
+    const convertDateFormat = (inputDate:string) => {
+        const date = new Date(inputDate);
+        const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric' };
+        return date.toLocaleDateString('en-GB', options).replace(',', '');
+    };
+
+    const possibleGraphs = ['viewsGraph', 'profileViewsGraph', 'likesGraph', 'commentsGraph', 'sharesGraph']
 
     const prepareData = (data: any) => {
-        // data in format like { 5: 1, 20: 6, 29: 1} { date: value }
-        const dataArr = Object.entries(data)
-        if (dataArr.length === 0) return []
         const yAxisLabel = possibleGraphs[activeTab].replace('Graph', '')
-        const result = dataArr.map(([key, value]) => {
-            const obj: { date: string; [key: string]: any } = { date: key }
-            obj[yAxisLabel as string] = value;
+        const result = data.map((item: any) => {
+
+            // const obj = { date: item.date, [yAxisLabel]: item.count } 
+            // convert date in this format 12 Jan 2021 in above line
+            const obj = { date: convertDateFormat(item.date), [yAxisLabel]: item.count }
+
             return obj
         })
         console.log('result🤖🤖🤖', result)
@@ -45,13 +51,13 @@ function OverviewTab({ analyticsData, isDarkTheme }: any) {
     }
 
     useEffect(() => {
-        if(analyticsData && activeTab) setChartData(prepareData(analyticsData[possibleGraphs[activeTab]]));
-    }, [analyticsData,activeTab])
+        if (analyticsData && activeTab) setChartData(prepareData(analyticsData[possibleGraphs[activeTab]]));
+    }, [analyticsData, activeTab])
 
     return (
         <div className='max-w-5xl mx-auto mt-8  overflow-hidden'>
             {/* statistics card */}
-            <div className={`${isDarkTheme?'bg-[#181818]':'bg-white'} rounded shadow-sm`}>
+            <div className={`${isDarkTheme ? 'bg-[#181818]' : 'bg-white'} rounded shadow-sm`}>
                 <div className='inline-flex w-full ' >
                     <div onClick={switchTab} id={STATISTICSTABS.VIDEO_VIEWS.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.VIDEO_VIEWS ? 'border-t-red-500 border-t-4' : 'border-t border-b'} rounded-tl-md`}>Video views <br /><span className='text-2xl font-semibold'>{analyticsData.videoViews || 0}</span></div>
                     <div onClick={switchTab} id={STATISTICSTABS.PROFILE_VIEWS.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.PROFILE_VIEWS ? 'border-t-red-500 border-t-4' : 'border-t border-b'} border-x`}>Profile views <br /> <span className='text-2xl font-semibold'>{analyticsData.profileViews || 0}</span></div>
@@ -61,7 +67,7 @@ function OverviewTab({ analyticsData, isDarkTheme }: any) {
                 </div>
                 {/* Chart Section */}
                 <div className="m-4 border-t pt-6 mb-6 ">
-                    <div className={`${chartData.length?'h-64':'h-32'} flex items-center justify-center text-gray-400`}>
+                    <div className={`${chartData.length ? 'h-64' : 'h-32'} flex items-center justify-center text-gray-400`}>
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart
                                 data={chartData}
@@ -77,8 +83,8 @@ function OverviewTab({ analyticsData, isDarkTheme }: any) {
                                 <YAxis />
                                 <Tooltip />
                                 <Legend />
-                                {(()=>{
-                                    switch(activeTab) {
+                                {(() => {
+                                    switch (activeTab) {
                                         case STATISTICSTABS.VIDEO_VIEWS:
                                             return <Line type="monotone" dataKey="views" stroke="#82ca9d" activeDot={{ r: 8 }} />
                                         case STATISTICSTABS.PROFILE_VIEWS:
@@ -101,9 +107,9 @@ function OverviewTab({ analyticsData, isDarkTheme }: any) {
             </div>
             {/* Bottom Metrics Section */}
             <div className="grid grid-cols-2 gap-4">
-                <div className={`${isDarkTheme?'bg-[#181818]':'bg-white'} shadow-sm rounded`}>
+                <div className={`${isDarkTheme ? 'bg-[#181818]' : 'bg-white'} shadow-sm rounded`}>
                     <div className='py-2 px-4 border-b mb-4 text-left'>
-                        <span className={`${isDarkTheme?'text-gray-300':'text-gray-600'} text-sm`}>Traffic source</span>
+                        <span className={`${isDarkTheme ? 'text-gray-300' : 'text-gray-600'} text-sm`}>Traffic source</span>
                     </div>
                     <p className="text-gray-400 text-sm">
                         You'll be able to see this information once there’s enough data for
@@ -132,9 +138,9 @@ function OverviewTab({ analyticsData, isDarkTheme }: any) {
                         </li>
                     </ul>
                 </div>
-                <div className={`${isDarkTheme?'bg-[#181818]':'bg-white'} shadow-sm rounded`}>
+                <div className={`${isDarkTheme ? 'bg-[#181818]' : 'bg-white'} shadow-sm rounded`}>
                     <div className='py-2 px-3 border-b mb-4 text-left'>
-                        <span className={`${isDarkTheme?'text-gray-300':'text-gray-600'} text-sm mb-2`}>Search queries</span>
+                        <span className={`${isDarkTheme ? 'text-gray-300' : 'text-gray-600'} text-sm mb-2`}>Search queries</span>
                     </div>
                     <p className="text-gray-400 text-sm">
                         You'll be able to see this information once there’s enough data for

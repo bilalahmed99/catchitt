@@ -35,14 +35,20 @@ function OverviewTab({ postAnalytics, post, isDarkTheme }: any) {
 
     const possibleGraphs = ['viewsGraph', 'playtimeGraph', 'watchtimeGraph', 'fullwatchedGraph', 'newfollowersGraph']
 
+    const convertDateFormat = (inputDate:string) => {
+        const date = new Date(inputDate);
+        const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric' };
+        return date.toLocaleDateString('en-GB', options).replace(',', '');
+    };
+
     const prepareData = (data: any) => {
-        // data in format like { 5: 1, 20: 6, 29: 1} { date: value }
-        const dataArr = Object.entries(data)
-        if (dataArr.length === 0) return []
         const yAxisLabel = possibleGraphs[activeTab].replace('Graph', '')
-        const result = dataArr.map(([key, value]) => {
-            const obj: { date: string;[key: string]: any } = { date: key }
-            obj[yAxisLabel as string] = value;
+        const result = data.map((item: any) => {
+
+            // const obj = { date: item.date, [yAxisLabel]: item.count } 
+            // convert date in this format 12 Jan 2021 in above line
+            const obj = { date: convertDateFormat(item.date), [yAxisLabel]: item.count }
+
             return obj
         })
         console.log('result🤖🤖🤖', result)
