@@ -77,6 +77,8 @@ function ForDesktopTest(props: any) {
     ];
 
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const resetFetchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
     const canFetchVideos = useRef(true);
     
     const [videos, setVideos] = useState<Video[]>([]);
@@ -179,6 +181,7 @@ function ForDesktopTest(props: any) {
 
     useUpdateEffect(() => {
         canFetchVideos.current = true;
+        if (resetFetchTimeoutRef.current) clearTimeout(resetFetchTimeoutRef.current);
     }, [videoes.length]);
 
     const handleScroll = () => {
@@ -194,6 +197,9 @@ function ForDesktopTest(props: any) {
 
             if (scrollTop + clientHeight + scrollHeight * 0.4 > scrollHeight && canFetchVideos.current) {
                 canFetchVideos.current = false;
+                resetFetchTimeoutRef.current = setTimeout(() => {
+                    canFetchVideos.current = true;
+                }, 3 * 1000);
                 setLoadingVideo(true);
                 setPage((prevPage) => prevPage + 1);
             }
@@ -201,7 +207,6 @@ function ForDesktopTest(props: any) {
     };
 
     useEffect(() => {
-        if (scrollableDivRef.current) {
             const scrollHandler = () => {
                 if (timeoutRef.current) {
                     clearTimeout(timeoutRef.current);
@@ -210,14 +215,14 @@ function ForDesktopTest(props: any) {
                     handleScroll();
                 }, 500);
             };
-            scrollableDivRef.current.addEventListener('scroll', scrollHandler);
-        }
+            if (scrollableDivRef.current) scrollableDivRef.current.addEventListener('scroll', scrollHandler);
 
         return () => {
             if (scrollableDivRef.current) {
-                scrollableDivRef.current.removeEventListener('scroll', handleScroll);
+                scrollableDivRef.current.removeEventListener('scroll', scrollHandler);
             }
             if (timeoutRef.current) clearTimeout(timeoutRef.current);
+            if (resetFetchTimeoutRef.current) clearTimeout(resetFetchTimeoutRef.current);
         };
     }, []);
 

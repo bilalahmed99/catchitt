@@ -273,7 +273,7 @@ function FriendVideos(props: any) {
                                             </div>
                                         )}
                                     </div> */}
-                                    <div className={style.mediaContainer}>
+                                    <div className={style.mediaContainer} style={{margin:'10px auto'}}>
                                         <div
                                             style={{
                                                 // width: '100%',
