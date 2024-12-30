@@ -3,9 +3,12 @@ import styles from './messageTab.module.scss';
 import { CircularProgress } from '@mui/material';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { defaultAvatar } from '../../../icons';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 function MessageTab({ friends, totalFriends, loadMoreFriends, onClose }: any) {
+
+    const navigate = useNavigate();
+
     useEffect(() => {
         console.log('🚀🚀🚀friends', friends, totalFriends);
     }, [])
@@ -56,7 +59,7 @@ function MessageTab({ friends, totalFriends, loadMoreFriends, onClose }: any) {
                                 <span className={styles['div-20']}>{friend?.followed_userID?.name}</span>
                             </Link>
                         </div>
-                        <div className={styles['div-21']}>Message</div>
+                        <div onClick={()=>navigate('/chat')} className={styles['div-21']}>Message</div>
                     </div>
                     <div className={styles['div-border']} />
                 </div>))}

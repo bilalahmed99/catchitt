@@ -14,6 +14,7 @@ import {
     videoNotInterestedHandle,
     videoRepostHandle,
     getUpdatedVideoState,
+    refreshFollowing,
 } from './AsyncFuncs';
 import loginSlice from './reducers/auth';
 import isuploading from './reducers/upload';
@@ -253,6 +254,12 @@ const profileSlice = createSlice({
             state.friends = [...state.friends,...action.payload.data];
             state.friendsTotal = action.payload.total;
             state.friendsPage = state.friendsPage + 1;
+            return state;
+        });
+        builder.addCase(refreshFollowing.fulfilled, (state: profileInitialState, action: any) => {
+            state.following = action.payload.data;
+            state.followingTotal = action.payload.total;
+            state.followingPage = 2;
             return state;
         });
     },

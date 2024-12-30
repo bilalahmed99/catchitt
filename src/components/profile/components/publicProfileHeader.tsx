@@ -2,7 +2,7 @@ import { Avatar, CircularProgress } from '@mui/material';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { followingsMethod } from '../../../redux/AsyncFuncs';
+import { followingsMethod, refreshFollowing } from '../../../redux/AsyncFuncs';
 import COPY_AND_SEND_MENU from '../../../shared/Menu/copyAndSend';
 import LinkIcon from '../svg-components/LinkIcon';
 import MailIcon from '../svg-components/MailIcon';
@@ -119,7 +119,10 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
 
     const manageFollowBtn = async () => {
         setfollowBtnLoading(true);
-        dispatch(followingsMethod(userId)).then(() => setfollowBtnLoading(false));
+        dispatch(followingsMethod(userId)).then(() => {
+            dispatch(refreshFollowing());
+            setfollowBtnLoading(false);
+        });
     };
 
     return (

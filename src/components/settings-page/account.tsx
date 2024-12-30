@@ -1610,9 +1610,9 @@ const Account = ({ className, openModal }: AccountProps) => {
                                 onClick={handleClickInside}
                                 className="bg-white rounded-lg p-6 w-[27.063rem] h-[26.188rem] flex flex-col items-center"
                             >
-                                <h2 className="font-bold text-lg text-[#222222] mb-8">
+                                <span className="font-bold text-lg text-[#222222] mb-8">
                                     Report submitted
-                                </h2>
+                                </span>
                                 <img
                                     src={checkSubmitted}
                                     alt="Check Submitted"
@@ -1624,9 +1624,9 @@ const Account = ({ className, openModal }: AccountProps) => {
                                 </p>
                                 <button
                                     onClick={() => setOpenReportSubmittedModal(false)}
-                                    className="bg-[rgb(255, 59, 92)] text-white font-semibold px-4 rounded-md w-full mt-3.5 py-3"
+                                    className="bg-[#DE0C0C] text-white font-semibold px-4 rounded-md w-full mt-3.5 py-3"
                                 >
-                                    <p className="text-[##FFFFFF] font-semibold text-base">Done</p>
+                                    Done
                                 </button>
                             </div>
                         </div>
