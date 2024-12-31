@@ -141,11 +141,11 @@ function PopupForPrivacySettings({ fetchUpdatedMedia, isPrivacyModalOpened, setI
                 allowDuet: data.allowDuet,
                 allowStitch: data.allowStitch,
                 privacyOptions: {
-                    allowComments: data.privacyOptions.allowComments,
-                    allowDownload: data.privacyOptions.allowDownload,
-                    isOnlyMe: data.privacyOptions.isOnlyMe,
-                    isShareable: data.privacyOptions.isShareable,
-                    canView: data.privacyOptions.canView
+                    allowComments: data?.privacyOptions?.allowComments || false,
+                    allowDownload: data?.privacyOptions?.allowDownload || false,
+                    isOnlyMe: data?.privacyOptions?.isOnlyMe  || false,
+                    isShareable: data?.privacyOptions?.isShareable || false,
+                    canView: data?.privacyOptions?.canView || 'everyone',
                 },
             })
         }

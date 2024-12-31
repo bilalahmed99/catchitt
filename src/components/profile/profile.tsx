@@ -356,7 +356,7 @@ export const Profile = (props: any) => {
                         setRepostsVideos((prev: any) => ({
                             ...prev,
                             items: [...prev.items, ...data.data],
-                            totalItems: data.data.total??10,
+                            totalItems: data.data.length? null: prev.items.length? -1: 0,
                         }));
                     })
                     .catch((err) =>{

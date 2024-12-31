@@ -26,7 +26,7 @@ export default function VideoesMaping({ videos, fetchMore, openVideoModal, setEd
         <InfiniteScroll
             dataLength={videos.items?.length}
             next={fetchMore}
-            hasMore={videos.items.length < videos?.totalItems || videos?.totalItems === null}
+            hasMore={videos?.totalItems === null}
             loader={<div
                 style={{
                     display: 'flex',
