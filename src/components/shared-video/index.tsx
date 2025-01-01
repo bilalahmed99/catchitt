@@ -347,7 +347,7 @@ const VideoPage = () => {
             setVideoViews(data?.views);
             setVideoDescription(data?.description);
             // loading comments from different API
-            setVideoUrl(data?.reducedVideoUrl);
+            setVideoUrl(data?.reducedVideoUrl.length? data?.reducedVideoUrl : data?.originalUrl);
             setIsSaved(data?.isSaved);
             setIsLiked(data?.isLiked);
             setMusicTitle(data?.sound?.title);
@@ -470,6 +470,10 @@ const VideoPage = () => {
         fetchMediaById(videoId);
         getExplorePageData();
     };
+
+    useUpdateEffect(() => {
+        paginateComments(true);
+    }, [selectedVideoId]);
 
     const loadUserProfile = async () => {
         // If user is logged-in only then we can fetch it's data
@@ -1859,7 +1863,7 @@ const VideoPage = () => {
                                                                                 ?.username
                                                                         )
                                                                     }
-                                                                    className="font-semibold text-sm text-[#161823] cursor-pointer hover:underline cursor-pointer"
+                                                                    className="font-semibold text-sm text-[#161823] cursor-pointer hover:underline"
                                                                 >
                                                                     {comment_replies?.user?.name}
                                                                 </p>

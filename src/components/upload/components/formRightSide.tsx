@@ -19,6 +19,7 @@ import styles from './index.module.scss';
 import DndContainer from './DndContainer';
 import CloseIcon from '@mui/icons-material/Close';
 import { message } from 'antd';
+import { useUpdateEffect } from 'react-use';
 
 function FormRightSide(props: any) {
     const {
@@ -39,12 +40,11 @@ function FormRightSide(props: any) {
     const [selectedLocation, setSelectedLocation] = useState('');
     const [taggedUsers, setTaggedUser] = useState<any[]>([]);
     const [customCover, setCustomCover] = useState<string | null>(null);
-    const [followersPage, setFollowersPage] = useState(1);
 
     const dispatch = useDispatch();
 
     const loadMoreFollowers = () => {
-        setFollowersPage(followersPage + 1);
+        dispatch(loadFollowers(followersPage));
         // Fetch more data for the next page
     };
 
@@ -54,6 +54,7 @@ function FormRightSide(props: any) {
     }, [thumbnails]);
     const categories = useSelector((store: any) => store?.reducers?.videoCategories) || [];
     const followers = useSelector((state: any) => state.reducers?.followers.data);
+    const followersPage = useSelector((state: any) => state?.reducers?.followers?.page);
     const totalFollowers = useSelector((state: any) => state.reducers?.followers.total);
 
     const [postCategories, setPostCategories] = useState(categories);
@@ -96,11 +97,8 @@ function FormRightSide(props: any) {
 
     useEffect(() => {
         loadCountries();
+        if (totalFollowers === null) dispatch(loadFollowers(1));
     }, []);
-
-    useEffect(() => {
-        dispatch(loadFollowers(followersPage));
-    }, [followersPage]);
 
     useEffect(() => {
         const taggedFollowers = taggedUsers.map((user: any) => user?._id);
