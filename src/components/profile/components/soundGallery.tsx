@@ -56,7 +56,7 @@ function SoundGallery({ isFavoriteSounds, selectedAudio, setSelectedAudio }: any
     const abortController = useRef<AbortController | null>(null);
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userId');
-    const [gallery, setGallery] = useState<any>({ items: [], page: 1, pageSize: 10, isNextpage: true });
+    const [gallery, setGallery] = useState<any>({ items: mockAudios, page: 1, pageSize: 10, isNextpage: true });
 
     const fetchPaginatedSounds = async (fromStart=false) => {
         try {
@@ -80,14 +80,14 @@ function SoundGallery({ isFavoriteSounds, selectedAudio, setSelectedAudio }: any
         }
     }
 
-    useEffect(() => {
-        fetchPaginatedSounds(true);
-        return () => {
-            if (abortController.current) {
-                abortController.current.abort();
-            }
-        }
-    }, [isFavoriteSounds])
+    // useEffect(() => {
+    //     fetchPaginatedSounds(true);
+    //     return () => {
+    //         if (abortController.current) {
+    //             abortController.current.abort();
+    //         }
+    //     }
+    // }, [isFavoriteSounds])
 
     useEffect(() => {
         console.log('🚀🚀🚀gallery', gallery);

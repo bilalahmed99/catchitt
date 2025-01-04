@@ -982,6 +982,28 @@ export default function PopupForVideoPlayer({
                                             </p>
                                         </div>
                                     </div>
+                                    {/* recieved gifts section */}
+                                    <div className={style.gifts}>
+                                        <p className={style.receivedGifftsText}>Gifts received</p>
+                                        <div>
+                                            <img
+                                                src="../../../../public/images/icons/commentSec/CoinChestPNG.svg"
+                                                alt=""
+                                            />
+                                            <img
+                                                src="../../../../public/images/icons/commentSec/CrystalPNG.svg"
+                                                alt=""
+                                            />
+                                            <img src="../../../../public/images//icons/commentSec/Gift2.svg" alt="" />
+                                            <img src="../../../../public/images/icons/commentSec/Mjolnir.svg" alt="" />
+                                            <img
+                                                src="../../../../public/images/icons/commentSec/RamdanLantern.svg"
+                                                alt=""
+                                            />
+                                            <img src="../../../../public/images/icons/commentSec/Roses.svg" alt="" />
+                                            <img src="../../../../public/images/icons/commentSec/StarPNG.svg" alt="" />
+                                        </div>
+                                    </div>
                                     {/* Comment and creator video tab */}
                                     <div className="flex flex-row justify-center items-center mt-2.5 w-full px-3">
                                         <div

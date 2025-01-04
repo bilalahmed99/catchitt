@@ -35,6 +35,7 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
   const [videoDuration, setVideoDuration] = useState(0);
   const [thumbnails, setThumbnails] = useState<any>([]);
 
+  const [video, setVideo] = useState(targetVideo);
   const videoRef = useRef<HTMLVideoElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
   const playbackTrack = useRef<HTMLDivElement>(null);
@@ -52,29 +53,34 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
   });
 
   const load = async () => {
-    const baseURL = "https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/esm";
-    const ffmpeg = ffmpegRef.current;
-    ffmpeg.on("log", ({ message }) => {
-      console.log(message);
-      if (messageRef.current) messageRef.current.innerHTML = message;
-    });
-    // toBlobURL is used to bypass CORS issue, urls with the same
-    // domain can be used directly.
-    await ffmpeg.load({
-      coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, "text/javascript"),
-      wasmURL: await toBlobURL(
-        `${baseURL}/ffmpeg-core.wasm`,
-        "application/wasm"
-      ),
-      workerURL: await toBlobURL(
-        `${baseURL}/ffmpeg-core.worker.js`,
-        "text/javascript"
-      ),
-    });
-    console.log('loadded 👩‍🦳💖🤑')
-    setLoaded(true);
-  };
-
+    try {
+      const baseURL = "https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/esm";
+      const ffmpeg = ffmpegRef.current;
+      console.log('check first this is called or note')
+      ffmpeg.on("log", ({ message }) => {
+        console.log(message);
+        if (messageRef.current) messageRef.current.innerHTML = message;
+      });
+      // toBlobURL is used to bypass CORS issue, urls with the same
+      // domain can be used directly.
+      const isLoaded = await ffmpeg.load({
+        coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, "text/javascript"),
+        wasmURL: await toBlobURL(
+          `${baseURL}/ffmpeg-core.wasm`,
+          "application/wasm"
+        ),
+        workerURL: await toBlobURL(
+          `${baseURL}/ffmpeg-core.worker.js`,
+          "text/javascript"
+        ),
+      });
+      // await ffmpeg.load();
+      console.log('loadded 👩‍🦳💖🤑', isLoaded)
+      setLoaded(true);
+    } catch (error) {
+      console.log('check ffmpeg load error', error);
+    }
+  }
 
   function formatTime(seconds: number) {
     const date = new Date(0);
@@ -188,45 +194,40 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
     load();
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(loaded);
-  },[loaded]);
+  }, [loaded]);
 
   const handleAudioManipulation = async () => {
     try {
       if (!selectedAudio) return;
       // const newVideo = await addAudioToVideo(targetVideo, selectedAudio);
-      console.log('step 1');
 
       const ffmpeg = ffmpegRef.current;
       const videoArrayBuffer = await fetchFile(targetVideo);
-      console.log('step 2', videoArrayBuffer);
       const audioArrayBuffer = await fetchFile(selectedAudio);
-      console.log('step 3');
-      
       await ffmpeg.writeFile('input.mp4', videoArrayBuffer);
-      console.log('step 4');
-      await ffmpeg.writeFile('input.mp3', new Uint8Array(audioArrayBuffer));
-      console.log('step 5');
-      await ffmpeg.exec(['-i', 'input.mp4', '-i', 'input.mp3', '-c:v', 'copy', '-c:a', 'aac', 'output.mp4']);
-      console.log('step 6');
+      await ffmpeg.writeFile('input.mp3', audioArrayBuffer);
+      // await ffmpeg.writeFile('input.mp3', new Uint8Array(audioArrayBuffer));
+      // await ffmpeg.exec(['-i', 'input.mp4', '-i', 'input.mp3', '-c:v', 'copy', '-c:a', 'aac', 'output.mp4']);
+      await ffmpeg.exec([
+        '-i', 'input.mp4', // Input video
+        '-i', 'input.mp3', // Input audio
+        '-c:v', 'copy',          // Copy video codec
+        '-map', '0:v:0',         // Map video stream from input-video
+        '-map', '1:a:0',         // Map audio stream from input-audio
+        'output.mp4'
+      ]);
       const fileData = await ffmpeg.readFile('output.mp4');
-      console.log('step 7');
-      console.log(fileData);
-      console.log('step 8');
       const data = new Uint8Array(fileData as unknown as ArrayBuffer);
-      console.log('step 9');
       const newVideo = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
-      console.log('step 10');
-      console.log('newVideo', newVideo);
-      console.log('step 11');
-      // targetVideo = newVideo;
-      if (videoRef.current) {
-        videoRef.current.src = URL.createObjectURL(
-          new Blob([data.buffer], { type: 'video/mp4' })
-        )
-      }
-      console.log('step 12');
+      setVideo(newVideo);
+      // if (videoRef.current) {
+      //   videoRef.current.src = URL.createObjectURL(
+      //     new Blob([data.buffer], { type: 'video/mp4' })
+      //   )
+      // }
+      // console.log('step 12');
     } catch (error) {
       console.error(error);
     }
@@ -237,14 +238,14 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
     handleAudioManipulation();
   }, [selectedAudio])
 
-  const skip = (forward=false) => {
+  const skip = (forward = false) => {
     if (!videoRef.current) return;
     if (forward) {
       videoRef.current.currentTime += 5;
     } else {
       videoRef.current.currentTime -= 5;
     }
-  } 
+  }
   return (
     <ThemeProvider theme={isDarkTheme ? darkThemePalette : lightThemePalette}>
       <BootstrapDialog
@@ -283,19 +284,19 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
                   <span onClick={switchAudioTab} id='Recommended' className={`${style.audioTab} ${audioTabSelected === 'Recommended' ? style.audioTabSelected : ''} font-medium`}>Recommended</span>
                   <span onClick={switchAudioTab} id='Favorites' className={`${style.audioTab} ${audioTabSelected === 'Favorites' ? style.audioTabSelected : ''} font-medium`}>Favorites</span>
                 </div>
-                <SoundGallery isFavoriteSounds={audioTabSelected==='Favorites'} selectedAudio={selectedAudio} setSelectedAudio={setSelectedAudio} />
+                <SoundGallery isFavoriteSounds={audioTabSelected === 'Favorites'} selectedAudio={selectedAudio} setSelectedAudio={setSelectedAudio} />
               </div>
               {/* RIGHT VIDEO CONTAINER */}
               <div className={style.videoContainer}>
-                <video ref={videoRef} onLoadedMetadata={getMediaInfo} onTimeUpdate={getCurrentTime} onEnded={endedVideoHandler} src={targetVideo} style={{ width: '170px', height: '302px' }} />
+                <video ref={videoRef} onLoadedMetadata={getMediaInfo} onTimeUpdate={getCurrentTime} onEnded={endedVideoHandler} src={video} style={{ width: '170px', height: '302px' }} />
               </div>
 
             </div>
             {/* bottom controls bar */}
             <div className={`${style.videoControlBar} border-b border-gray-200`}>
               <div className={style.prevNextArrows}>
-                <img onClick={()=>skip()} src={isDarkTheme ? leftArrowCurvedinWhite : leftArrowCurved} alt="left-arrow-curved" />
-                <img onClick={()=>skip(true)} src={isDarkTheme ? rightArrowCurvedinWhite : rightArrowCurved} alt="left-arrow-curved" />
+                <img onClick={() => skip()} src={isDarkTheme ? leftArrowCurvedinWhite : leftArrowCurved} alt="left-arrow-curved" />
+                <img onClick={() => skip(true)} src={isDarkTheme ? rightArrowCurvedinWhite : rightArrowCurved} alt="left-arrow-curved" />
               </div>
               <div className="flex items-center justify-between">
                 <img onClick={togglePlayback} id='playBtn' src={play} alt="play" className='mx-2' />
