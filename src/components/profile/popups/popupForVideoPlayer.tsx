@@ -983,7 +983,7 @@ export default function PopupForVideoPlayer({
                                         </div>
                                     </div>
                                     {/* recieved gifts section */}
-                                    <div className={style.gifts}>
+                                    {/* <div className={style.gifts}>
                                         <p className={style.receivedGifftsText}>Gifts received</p>
                                         <div>
                                             <img
@@ -1003,7 +1003,7 @@ export default function PopupForVideoPlayer({
                                             <img src="../../../../public/images/icons/commentSec/Roses.svg" alt="" />
                                             <img src="../../../../public/images/icons/commentSec/StarPNG.svg" alt="" />
                                         </div>
-                                    </div>
+                                    </div> */}
                                     {/* Comment and creator video tab */}
                                     <div className="flex flex-row justify-center items-center mt-2.5 w-full px-3">
                                         <div

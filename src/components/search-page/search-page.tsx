@@ -22,6 +22,7 @@ import PopupForReport from '../profile/popups/PopupForReport';
 import PopupForBlock from '../profile/popups/popupForBlock';
 import Gifts from '../discover/popups/gifts';
 import { useSelector } from 'react-redux';
+import { useUpdateEffect } from 'react-use';
 
 interface User {
     _id: string;
@@ -247,6 +248,11 @@ export const SearchPage = () => {
         setPage(1);
         typingDebouncedFetchSearch(searchQuery, 1);
     }, [searchQuery]);
+
+    useUpdateEffect(() => {
+        const extractedValue = query?.replace('query=', '');
+        setSearchQuery(extractedValue);
+    }, [query]);
 
 
     const [darkTheme, setdarkTheme] = useState('');
