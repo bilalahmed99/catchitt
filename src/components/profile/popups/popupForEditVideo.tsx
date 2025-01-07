@@ -11,6 +11,7 @@ import { CircularProgress } from '@mui/material';
 import AudioWaveForm from './AudioWaveForm';
 import { FFmpeg } from '@ffmpeg/ffmpeg';
 import { fetchFile, toBlobURL } from '@ffmpeg/util'
+import useUpload from '../../upload/hooks';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -23,7 +24,10 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any) {
 
+  const { onChangeFileHandler } = useUpload();
+
   const [loaded, setLoaded] = useState(false);
+  const [isInProcess, setIsInProcess] = useState(false);
   const ffmpegRef = useRef(new FFmpeg());
   const messageRef = useRef<HTMLParagraphElement | null>(null)
 
@@ -200,6 +204,19 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
 
   const handleAudioManipulation = async () => {
     try {
+      setIsInProcess(true);
+      // await ffmpeg.exec([
+      //   '-i', 'input.mp4', // Input video
+      //   '-stream_loop', '-1', // Loop video
+      //   '-i', 'input.mp3', // Input audio
+      //   '-c:v', 'copy',          // Copy video codec
+      //   '-shortest',             // Finish encoding when the shortest input stream ends
+      //   '-map', '0:v:0',         // Map video stream from input-video
+      //   '-map', '1:a:0',         // Map audio stream from input-audio
+      //   '-af', 'volume=0.5',     // Reduce audio volume
+      //   'output.mp4'
+      // ]);
+
       if (!selectedAudio) return;
       // const newVideo = await addAudioToVideo(targetVideo, selectedAudio);
 
@@ -209,15 +226,18 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
       await ffmpeg.writeFile('input.mp4', videoArrayBuffer);
       await ffmpeg.writeFile('input.mp3', audioArrayBuffer);
       // await ffmpeg.writeFile('input.mp3', new Uint8Array(audioArrayBuffer));
-      // await ffmpeg.exec(['-i', 'input.mp4', '-i', 'input.mp3', '-c:v', 'copy', '-c:a', 'aac', 'output.mp4']);
       await ffmpeg.exec([
-        '-i', 'input.mp4', // Input video
-        '-i', 'input.mp3', // Input audio
-        '-c:v', 'copy',          // Copy video codec
-        '-map', '0:v:0',         // Map video stream from input-video
-        '-map', '1:a:0',         // Map audio stream from input-audio
+        '-i', 'input.mp4',
+        '-stream_loop', '-1',
+        '-i', 'input.mp3',
+        '-filter_complex', 'amix=inputs=2:duration=first:dropout_transition=2', 
+        '-c:v', 'copy',          
+        '-shortest',             
+        '-map', '0:v:0',         
+        '-map', '1:a:0',   
         'output.mp4'
       ]);
+      
       const fileData = await ffmpeg.readFile('output.mp4');
       const data = new Uint8Array(fileData as unknown as ArrayBuffer);
       const newVideo = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
@@ -228,15 +248,23 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
       //   )
       // }
       // console.log('step 12');
+      // get file format and download
+      // const file = new File([data.buffer], 'edited-video.mp4', { type: 'video/mp4' });
+      // // download file
+      // const url = URL.createObjectURL(file);
+      // const a = document.createElement('a');
+      // a.href = url;
+      // a.download = 'edited-video.mp4';
+      // a.click();
+      // URL.revokeObjectURL(url);
+      // console.log('saveEdit 🚀🚀🚀👩‍🚀', file);
     } catch (error) {
       console.error(error);
     }
+    finally {
+      setIsInProcess(false);
+    }
   }
-
-  useEffect(() => {
-    if (!selectedAudio) return;
-    handleAudioManipulation();
-  }, [selectedAudio])
 
   const skip = (forward = false) => {
     if (!videoRef.current) return;
@@ -246,6 +274,33 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
       videoRef.current.currentTime -= 5;
     }
   }
+
+  const saveEdit = async () => {
+    // convert blob to file
+    setIsInProcess(true);
+    const res = await fetch(video);
+    const blob = await res.blob();
+    const file = new File([blob], 'edited-video.mp4', { type: 'video/mp4' });
+    // download file
+    const url = URL.createObjectURL(file);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'edited-video.mp4';
+    a.click();
+    URL.revokeObjectURL(url);
+
+    console.log('saveEdit 🚀🚀🚀👩‍🚀', file);
+    onChangeFileHandler({ target: { files: [file] } });
+    setIsInProcess(false);
+    handleClose();
+  }
+
+  useEffect(() => {
+    if (open) {
+      setVideo(targetVideo);
+    }
+  }, [open])
+
   return (
     <ThemeProvider theme={isDarkTheme ? darkThemePalette : lightThemePalette}>
       <BootstrapDialog
@@ -261,12 +316,12 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
         }}
       >
         <div className={style.EditModal}>
-          <p className='text-white' ref={messageRef}></p>
           <div className={`${style.modalHeader} border-b border-gray-200`} >
             <span className={style.modalTitle}>Edit Video</span>
             <button className={style.closeIcon} onClick={handleClose}>X</button>
           </div>
-          <div className={style.modalBody}>
+          <div className={`${style.modalBody} relative`}>
+            {isInProcess&&<div className={`absolute top-0 left-0 right-0 bottom-0 z-10 opacity-60 ${isDarkTheme?'bg-black':'bg-white'} flex justify-center items-center`}> <CircularProgress style={{width:'30px',height:'30px',color:'#f50057'}} /> </div>}
             <div className={`${style.content} border-b border-gray-200`}>
               {/* LEFT ACTION BAR */}
               <div className={`${style.actions} border-r border-gray-200`}>
@@ -279,12 +334,14 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
 
               </div>
               {/* RECOMENDETION CONTAINER */}
-              <div className={`${style.recommendedContainer} border-r border-gray-200 overflow-y-auto`}>
+              <div className={`${style.recommendedContainer} border-r border-gray-200 overflow-y-auto relative`}>
                 <div className={style.audioTabs}>
                   <span onClick={switchAudioTab} id='Recommended' className={`${style.audioTab} ${audioTabSelected === 'Recommended' ? style.audioTabSelected : ''} font-medium`}>Recommended</span>
                   <span onClick={switchAudioTab} id='Favorites' className={`${style.audioTab} ${audioTabSelected === 'Favorites' ? style.audioTabSelected : ''} font-medium`}>Favorites</span>
                 </div>
-                <SoundGallery isFavoriteSounds={audioTabSelected === 'Favorites'} selectedAudio={selectedAudio} setSelectedAudio={setSelectedAudio} />
+                <SoundGallery isDarkTheme={isDarkTheme} isFavoriteSounds={audioTabSelected === 'Favorites'} selectedAudio={selectedAudio} setSelectedAudio={setSelectedAudio} />
+                {selectedAudio && <button onClick={handleAudioManipulation} className="bg-red-500 rounded-full w-[90%] block mx-auto p-2 absolute bottom-1 left-1/2 -translate-x-1/2 hover:bg-red-700 border-0">Add Sound</button>}
+
               </div>
               {/* RIGHT VIDEO CONTAINER */}
               <div className={style.videoContainer}>
@@ -392,7 +449,7 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
             {/* footer section */}
             <div className="float-right px-3 mb-3">
               <button className='mx-1' style={{ color: isDarkTheme ? '#fff' : 'rgb(22, 24, 35)', backgroundColor: isDarkTheme ? '#282828' : '', borderColor: 'rgba(22, 24, 35, 0.12)', minWidth: '120px', }} onClick={handleClose}>Cancel</button>
-              <button className='mx-1' style={{ color: '#fff', backgroundColor: 'rgb(255, 59, 92)', minWidth: '120px' }} autoFocus>Save edit</button>
+              <button onClick={saveEdit} className='mx-1' style={{ color: '#fff', backgroundColor: 'rgb(255, 59, 92)', minWidth: '120px' }} autoFocus>Save edit</button>
             </div>
           </div>
         </div>

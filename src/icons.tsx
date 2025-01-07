@@ -171,7 +171,12 @@ import storyHeart from './assets/story_heart.svg';
 import storySend from './assets/story_send.svg';
 import prevArrow from './assets/prev_icon.svg';
 import nextArrow from './assets/next_icon.svg';
+import attachMusic from './assets/attactchMusic.svg';
+import attachMusicInWhite from './assets/attactchMusicInWhite.svg';
+
 export {
+    attachMusic,
+    attachMusicInWhite,
     nextArrow,
     prevArrow,
     storySend,

@@ -19,7 +19,6 @@ import styles from './index.module.scss';
 import DndContainer from './DndContainer';
 import CloseIcon from '@mui/icons-material/Close';
 import { message } from 'antd';
-import { useUpdateEffect } from 'react-use';
 
 function FormRightSide(props: any) {
     const {

@@ -52,7 +52,7 @@ const mockAudios = [
     }
 ]
 
-function SoundGallery({ isFavoriteSounds, selectedAudio, setSelectedAudio }: any) {
+function SoundGallery({ isDarkTheme, isFavoriteSounds, selectedAudio, setSelectedAudio }: any) {
     const abortController = useRef<AbortController | null>(null);
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userId');
@@ -125,21 +125,16 @@ function SoundGallery({ isFavoriteSounds, selectedAudio, setSelectedAudio }: any
                 {gallery.items.map((audio: any) => (
                     <li
                         key={audio._id}
-                        className={`flex items-center justify-between p-2 rounded-lg hover:bg-gray-100 cursor-pointer ${selectedAudio === audio.url ? 'bg-gray-200' : ''
+                        className={`flex items-center p-2 rounded-lg ${isDarkTheme?'hover:bg-gray-400':'hover:bg-gray-100'} cursor-pointer ${selectedAudio === audio.url ? isDarkTheme?'bg-gray-500':'bg-gray-200' : ''
                             }`}
                         onClick={() => setSelectedAudio(audio.url)}
                     >
                         <img className="w-10 h-10 bg-gray-200 mr-2" src={defaultAvatar} alt="soundImg" />
                         <div>
-                            <span className="font-medium">{audio.name}</span>
+                            <div className="font-medium text-sm">{audio.name}</div>
                             <span className="text-sm text-gray-500">{audio.duration || '00:15'}</span>
                         </div>
-                        <button
-                            className="text-blue-500 text-sm"
-                            onClick={() => new Audio(audio.url).play()}
-                        >
-                            Play
-                        </button>
+                       {/* <img src={attachMusicInWhite} alt="attach-sound" /> */}
                     </li>
                 ))}
             </InfiniteScroll>
