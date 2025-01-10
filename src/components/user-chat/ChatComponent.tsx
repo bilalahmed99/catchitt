@@ -169,7 +169,7 @@ const ChatComponent = () => {
             "chatSwitchH"
         );
 
-        users?.forEach((user) => {
+        users?.forEach((user,index) => {
             if (user?.userId === e) {
                 setActiveChat({});
                 setSender(user?.senderId);
@@ -180,6 +180,9 @@ const ChatComponent = () => {
                 localStorage.setItem('chatActiveUser', user?.userId);
                 setChatActiveUserId(user?.userId)
                 markMessageAsSeen(user?.senderId, user?.conversationId);
+                const mutableUsers = [...users];
+                mutableUsers[index].unReadMsgs = 0;
+                setUsers(mutableUsers);
             }
         });
 

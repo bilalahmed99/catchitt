@@ -5,14 +5,35 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { defaultAvatar } from '../../../icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { post } from '../../../axios/axiosClient';
 function MessageTab({ friends, totalFriends, loadMoreFriends, onClose }: any) {
-
+    
+    const LoggedInUserId = localStorage.getItem('userId');
     const navigate = useNavigate();
+
+    const handleMessage = async (userId: string) => {
+        try {
+            const result = await post(`/chat/messages`, {
+                type: 'application/json',
+                data: {
+                    from: LoggedInUserId,
+                    to: userId,
+                    message: "Hi",
+                },
+            });
+            if (result?.data) {
+                console.log("Message sent");
+                navigate(`/chat`);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     useEffect(() => {
         console.log('🚀🚀🚀friends', friends, totalFriends);
     }, [])
-    
+
     return (
         <InfiniteScroll
             dataLength={friends?.length}
@@ -59,7 +80,7 @@ function MessageTab({ friends, totalFriends, loadMoreFriends, onClose }: any) {
                                 <span className={styles['div-20']}>{friend?.followed_userID?.name}</span>
                             </Link>
                         </div>
-                        <div onClick={()=>navigate('/chat')} className={styles['div-21']}>Message</div>
+                        <div onClick={() => handleMessage(friend?.followed_userID?._id)} className={styles['div-21']}>Message</div>
                     </div>
                     <div className={styles['div-border']} />
                 </div>))}

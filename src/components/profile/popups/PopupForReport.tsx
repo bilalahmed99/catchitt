@@ -18,7 +18,7 @@ export default function PopupForReport({ openReport, onReportClose, info }: any)
 
     return (
         <div className={style.parent}>
-            <Modal open={openReport}>
+            <Modal open={openReport??false}>
                 <ClickAwayListener
                     onClickAway={() => {
                         onReportClose();

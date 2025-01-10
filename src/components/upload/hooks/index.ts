@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { get, patch } from '../../../axios/axiosClient';
-import { updateUploadingStatus } from '../../../redux/reducers/upload';
+import { setSelectedFile, updateUploadingStatus } from '../../../redux/reducers/upload';
 import { STATUS_CODE, UPLOAD_VIDEO_DETAILS } from '../../../utils/constants';
 import { VideoToFrames, VideoToFramesMethod } from '../../../utils/videoToFrame';
 
@@ -23,7 +23,9 @@ interface StateInterface {
 }
 
 function useUpload() {
-    const [selectedFile, setselectedFile] = useState(null);
+    const selectedFile = useSelector((store: any) => store?.reducers?.isuploading?.selectedFile);
+    const selectedVideoSrc = useSelector((store: any) => store?.reducers?.isuploading?.selectedVideoSrc);
+    // const [selectedFile, setselectedFile] = useState(null);
     const [isPosting, setIsPosting] = useState(false);
     const [selectedThumbnail, setSelectedThumbnail] = useState(null);
     const [thumbnails, setThumbnails] = useState<any>([]);
@@ -41,7 +43,7 @@ function useUpload() {
         allowDownload: info?.privacyOptions?.allowDownload,
         allowAddStory: info?.privacyOptions?.allowAddStory,
     });
-    const [selectedVideoSrc, setSelectedVideoSrc] = useState('');
+    // const [selectedVideoSrc, setSelectedVideoSrc] = useState('');
     const token = useSelector((store: any) => store?.reducers?.profile?.token);
     const inputElementRef: any = useRef();
     const dispatch = useDispatch();
@@ -61,7 +63,8 @@ function useUpload() {
         const file = Array.isArray(e?.target?.files) ? e.target.files[0] : e;
         if (file) {
             if (file?.name?.includes('.mp4')) {
-                setselectedFile(file);
+                // setselectedFile(file);
+                dispatch(setSelectedFile({file}));
             }
         }
     };
@@ -96,10 +99,11 @@ function useUpload() {
     }, [state?.thumbnailUrl]);
 
     useMemo(() => {
+        console.log(selectedFile)
         if (selectedFile) {
-            setSelectedVideoSrc(
-                URL.createObjectURL(new Blob([selectedFile], { type: 'video/mp4' }))
-            );
+            // setSelectedVideoSrc(
+            //     URL.createObjectURL(new Blob([selectedFile], { type: 'video/mp4' }))
+            // );
             videoCoverHandler();
         }
     }, [selectedFile]);
@@ -275,6 +279,10 @@ function useUpload() {
         }
     };
 
+    useEffect(() => {
+      console.log(selectedFile);
+    }, [selectedFile])
+    
     useEffect(() => {
         updateState('category', categories?.[0] || {});
     }, [categories]);

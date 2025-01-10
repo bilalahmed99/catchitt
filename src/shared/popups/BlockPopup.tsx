@@ -2,8 +2,8 @@ import { ClickAwayListener, Modal } from '@mui/material';
 import style from './BlockPopup.module.scss';
 function BlockPopup({ onBlock, dangetBtnText, openBlock, onBlockClose, DangerText }: any) {
     return (
-        <Modal open={openBlock}>
-            <ClickAwayListener onClickAway={onBlockClose}>
+        <Modal open={openBlock??false}>
+            <ClickAwayListener onClickAway={onBlockClose??(()=>{})}>
                 <div onClick={(e) => e.stopPropagation()} className={style.parent}>
                     <p className={style.text}>{DangerText || ''}</p>
                     <div>

@@ -240,7 +240,7 @@ function publicProfileStories({ story, onclose, openReport }: any) {
                                                     {
                                                         stories.map((obj: any, index: any) => {
                                                             return (
-                                                                <input
+                                                                <input key={index}
                                                                     className={style.progressBar} type="range" value={i > index ? 100 : i < index ? 0 : progress} />
                                                             )
                                                         })

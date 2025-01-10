@@ -1,3 +1,5 @@
+import { useDispatch } from 'react-redux';
+import { setSelectedFile } from '../../redux/reducers/upload';
 import Navbar from '../../shared/navbar';
 import UploadFile from './components/uploadFile';
 import UploadForm from './components/uploadForm';
@@ -21,6 +23,8 @@ function UploadPage() {
         isPosting,
     } = useUpload();
 
+    const dispatch = useDispatch();
+
     const [darkTheme, setdarkTheme] = useState('');
     const location = useLocation();
     const { isEditMode, info } = location.state || { isEditMode: false, info: {} };
@@ -33,6 +37,12 @@ function UploadPage() {
         } else {
         }
     });
+
+    useEffect(() => {
+      return () => {
+        dispatch(setSelectedFile({ file: null }));
+      }
+    }, [])
 
     return (
         <div className={`flex flex-col ${darkTheme}`}>
