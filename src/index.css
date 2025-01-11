@@ -402,3 +402,7 @@ a.customPlayBtn::after {
   scroll-snap-type: y mandatory;
   height: 100vh;
 } */
+
+.EmojiPickerReact {
+  --epr-category-navigation-button-size: 37px !important;
+}

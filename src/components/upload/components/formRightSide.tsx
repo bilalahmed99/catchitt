@@ -123,7 +123,7 @@ function FormRightSide(props: any) {
         <div className="flex-[1.7] flex flex-col mt-[8rem] items-start pl-[2.5rem] md:pl-0 pr-[2.5rem]">
             <div className="w-[100%]">
                 <div className="w-[100%] flex flex-col gap-[2rem] pb-[2rem]">
-                    <div className="w-[100%] flex flex-col gap-[1rem]">
+                    <div className="w-[100%] flex flex-col gap-[1rem] relative">
                         <div className="flex justify-between w-[100%]">
                             <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
                                 Caption
@@ -132,7 +132,7 @@ function FormRightSide(props: any) {
                                 {state?.description?.length || 0}/2200
                             </p>
                         </div>
-                        <BasicInput
+                        {/* <BasicInput
                             value={state?.description || ''}
                             endAdornment={
                                 <p className="text-custom-color-000 leading-[1.5rem] text-[1rem] font-normal">
@@ -140,7 +140,11 @@ function FormRightSide(props: any) {
                                 </p>
                             }
                             onChange={handleDescriptionChange}
-                        />
+                        /> */}
+                         <textarea value={state?.description || ''} onChange={handleDescriptionChange} id="message" name="message" className="w-full bg-transparent rounded border border-gray-300 focus:border-white focus:ring-1 focus:ring-white h-32 text-base outline-none py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" />
+                         <p className="text-gray-500 leading-[1.5rem] text-[1rem] font-normal absolute right-4 bottom-1">
+                                    # @
+                        </p>
                     </div>
                     <div className="w-[100%] flex flex-col gap-1.5">
                         <div className="w-full flex items-center justify-start gap-2.5 no-underline list-none h-[46px] cursor-pointer">
