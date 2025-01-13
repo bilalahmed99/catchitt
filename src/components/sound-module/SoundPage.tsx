@@ -167,6 +167,7 @@ export default function SoundPage() {
             if (response.ok) {
                 // Toggle the bookmark status here
                 // setBookMarkStatus(!bookMarkStatus);
+                showToast('Bookmark toggled');
                 handleFetchSound();
             } else {
                 console.error('Failed to toggle bookmark:', response.status);

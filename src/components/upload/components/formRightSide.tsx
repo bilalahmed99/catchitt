@@ -19,6 +19,7 @@ import styles from './index.module.scss';
 import DndContainer from './DndContainer';
 import CloseIcon from '@mui/icons-material/Close';
 import { message } from 'antd';
+import { useUpdateEffect } from 'react-use';
 
 function FormRightSide(props: any) {
     const {
@@ -58,6 +59,7 @@ function FormRightSide(props: any) {
 
     const [postCategories, setPostCategories] = useState(categories);
     const [countries, setCountries] = useState<any>([]);
+    const [filteredCountries, setFilteredCountries] = useState<any>([]);
     const [loading, setLoading] = useState(true);
     const token = localStorage.getItem('token');
     const [coverTab, setCoverTab] = useState<string>('suggestion');
@@ -83,6 +85,7 @@ function FormRightSide(props: any) {
                         }
                     );
                     setCountries(countriesList);
+                    setFilteredCountries(countriesList);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -119,6 +122,19 @@ function FormRightSide(props: any) {
         }
     }
 
+    const filterCountries = (e: any) => {
+        const filteredCountriesArr = countries.filter((country: any) => {
+            if (country?.name?.toLowerCase().includes(e.target.value.toLowerCase())) {
+                return country;
+            }
+        });
+        setFilteredCountries(filteredCountriesArr);
+    }
+
+    useUpdateEffect(() => {
+        setFilteredCountries(countries);
+    }, [postLocationsPopup]);
+
     return (
         <div className="flex-[1.7] flex flex-col mt-[8rem] items-start pl-[2.5rem] md:pl-0 pr-[2.5rem]">
             <div className="w-[100%]">
@@ -141,9 +157,9 @@ function FormRightSide(props: any) {
                             }
                             onChange={handleDescriptionChange}
                         /> */}
-                         <textarea value={state?.description || ''} onChange={handleDescriptionChange} id="message" name="message" className="w-full bg-transparent rounded border border-gray-300 focus:border-white focus:ring-1 focus:ring-white h-32 text-base outline-none py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" />
-                         <p className="text-gray-500 leading-[1.5rem] text-[1rem] font-normal absolute right-4 bottom-1">
-                                    # @
+                        <textarea value={state?.description || ''} onChange={handleDescriptionChange} id="message" name="message" className="w-full bg-transparent rounded border border-gray-300 focus:border-white focus:ring-1 focus:ring-white h-32 text-base outline-none py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" />
+                        <p className="text-gray-500 leading-[1.5rem] text-[1rem] font-normal absolute right-4 bottom-1">
+                            # @
                         </p>
                     </div>
                     <div className="w-[100%] flex flex-col gap-1.5">
@@ -151,10 +167,9 @@ function FormRightSide(props: any) {
                             <Tab
                                 onClick={() => setCoverTab('suggestion')}
                                 className={`${styles.coverTab} 
-                                    ${
-                                        coverTab === 'suggestion'
-                                            ? `${styles.coverTabSelected} text-[var(--primary-color)]`
-                                            : 'text-custom-dark-222'
+                                    ${coverTab === 'suggestion'
+                                        ? `${styles.coverTabSelected} text-[var(--primary-color)]`
+                                        : ''
                                     } 
                                     leading-[1.7rem] text-[1.125rem] font-medium
                                 `}
@@ -164,10 +179,9 @@ function FormRightSide(props: any) {
                             <Tab
                                 onClick={() => setCoverTab('custom')}
                                 className={`${styles.coverTab}
-                                    ${
-                                        coverTab === 'custom'
-                                            ? `${styles.coverTabSelected} text-[var(--primary-color)]`
-                                            : 'text-custom-dark-222'
+                                    ${coverTab === 'custom'
+                                        ? `${styles.coverTabSelected} text-[var(--primary-color)]`
+                                        : ''
                                     } 
                                     leading-[1.7rem] text-[1.125rem] font-medium
                                 `}
@@ -186,12 +200,11 @@ function FormRightSide(props: any) {
                                                     updateState('thumbnailUrl', imageUrl);
                                                     setSelectedThumb(index);
                                                 }}
-                                                className={`ease-in-out duration-200 block ${
-                                                    imageUrl === selectedThumb ||
-                                                    index === selectedThumb
+                                                className={`ease-in-out duration-200 block ${imageUrl === selectedThumb ||
+                                                        index === selectedThumb
                                                         ? 'h-[254px] opacity-100'
                                                         : 'h-[224px] '
-                                                } w-[124px] pointer opacity-50 my-[auto] rounded-[5px]`}
+                                                    } w-[124px] pointer opacity-50 my-[auto] rounded-[5px]`}
                                                 src={imageUrl}
                                                 alt=""
                                             />
@@ -266,9 +279,8 @@ function FormRightSide(props: any) {
                                     <img
                                         src={downArrow}
                                         alt=""
-                                        className={`cursor-pointer transition-all duration-200 transform ${
-                                            dropDown ? 'rotate-180' : 'rotate-0'
-                                        }`}
+                                        className={`cursor-pointer transition-all duration-200 transform ${dropDown ? 'rotate-180' : 'rotate-0'
+                                            }`}
                                     />
                                 }
                             />
@@ -475,6 +487,8 @@ function FormRightSide(props: any) {
                 <div className="bg-custom-light p-[2rem] rounded-[8px] w-[570px]">
                     <div className="mb-[1rem]">
                         <BasicInput
+                            autoFocus
+                            onChange={filterCountries}
                             startAdornment={
                                 <img className="w-[1.5rem] h-[1.5rem]" src={search} alt="" />
                             }
@@ -482,7 +496,7 @@ function FormRightSide(props: any) {
                         />
                     </div>
                     <div className="flex flex-col h-[60vh] overflow-y-scroll gap-2">
-                        {countries.map((country: any, index: number) => {
+                        {filteredCountries.map((country: any, index: number) => {
                             return (
                                 <div
                                     key={index}
