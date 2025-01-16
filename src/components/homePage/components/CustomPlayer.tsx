@@ -26,7 +26,7 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailI
     const seekbarRef = useRef<any>(null);
     const [isPlaying, setIsPlaying] = useState(true);
     const [currentTime, setCurrentTime] = useState(0);
-    const [muted, setMuted] = useState(false);
+    const [muted, setMuted] = useState(true);
     const [playbackRate, setPlaybackRate] = useState(1.0);
     const [isDragging, setIsDragging] = useState(false);
     // const [videoSize, setVideoSize] = useState({ width: '100vw', height: '100vh' });
