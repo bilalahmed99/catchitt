@@ -55,7 +55,7 @@ import fullScreen from './svg-components/fullscreen.svg';
 import styles from './video-page.module.scss';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import HashtagText from '../../shared/hashTag/HashtagText';
-import { getCaretCoordinates } from '../../utils/helpers';
+import { getCaretCoordinates, searchUserToAnnotate } from '../../utils/helpers';
 
 const VideoPage = () => {
     // hooks
@@ -1018,11 +1018,16 @@ const VideoPage = () => {
         if (isMentioning) {
             // Filter users based on the current input
             const query = comment.slice(comment.lastIndexOf('@') + 1).toLowerCase();
-            if (query) {
-                const filtered = dummyUsers.filter((user) =>
-                    user.username.toLowerCase().includes(query)
-                );
-                setFilteredUsers(filtered.slice(0, 5)); // Limit to 5 users
+            if (query.length > 2) {
+                // const filtered = dummyUsers.filter((user) =>
+                //     user.username.toLowerCase().includes(query)
+                // );
+                // setFilteredUsers(filtered.slice(0, 5)); // Limit to 5 users
+                (async ()=>{
+                    const searchResultArr = await searchUserToAnnotate(query);
+                    console.log(searchResultArr);
+                    setFilteredUsers(searchResultArr);
+                })()
             } else {
                 setFilteredUsers([]);
             }
@@ -1538,7 +1543,7 @@ const VideoPage = () => {
                                 {isMentioning && (
                                     <div
                                         ref={popupRef}
-                                        className="absolute bottom-[4.39rem] left-10 bg-black border rounded-lg shadow-lg w-max z-10"
+                                        className="absolute bottom-[4.39rem] left-10 bg-black border rounded-lg shadow-lg w-max z-10 max-h-80"
                                     >
                                         {filteredUsers.length > 0 ? (
                                             filteredUsers.map(
