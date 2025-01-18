@@ -14,6 +14,7 @@ import {
     linkedInShare,
     twitterShare,
     whatsappShare,
+    defaultAvatar,
 } from '../../icons';
 import { openLoginPopup } from '../../redux/reducers';
 import EmbedSharePopup from '../../shared/components/EmbedSharePopup';
@@ -1569,7 +1570,7 @@ const VideoPage = () => {
                                                     >
                                                         <img
                                                             className="object-contain w-10 h-10 rounded-full"
-                                                            src={user.avatar}
+                                                            src={user.avatar||defaultAvatar}
                                                         />
                                                         <div className="text-left text-white">
                                                             <p className="text-base font-medium">
