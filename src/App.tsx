@@ -55,6 +55,7 @@ import {
     loginWithGoogleService,
     loginWithFBService,
     signupService,
+    signupWithPhoneNumberService,
     logoutUserPopup,
 } from './redux/reducers/auth';
 import {
@@ -344,6 +345,12 @@ function App() {
             console.log('send otp error:', error);
         }
     };
+    
+    const signupPhoneNumberNextScreen = async () => {
+        
+        setSignupNext(true);
+        
+    };
 
     const simpleLoginHandler = async () => {
         let loginObj;
@@ -440,45 +447,80 @@ function App() {
 
     const signupHandler = async () => {
         let signupObj;
+        let signupURL;
         if (loginWithPhone) {
+            
             signupObj = { password, phoneNumber: countryCode + phoneNumber, dateOfBirth, name };
+            setIsLoading(true);
+            dispatch(signupWithPhoneNumberService(signupObj))
+                .then((res: any) => {
+                    console.log('res', res);
+                    if (res?.payload?.status == 400) {
+                        console.log('res 1', res);
+                        setIsError(true);
+                        // setPasswordBorderColor('border-red-400');
+                        // setErrorMessage(res?.payload || res?.payload?.message);
+                        setErrorMessage(res?.payload?.message);
+                        setIsLoading(false);
+                    } else if (res?.payload?.status == 200) {
+                        console.log('res 2', res);
+                        console.log('data after successfull login', res?.payload?.data);
+
+                        localStorage.setItem('userId', res?.payload?.data?._id || '');
+                        localStorage.setItem('token', res?.payload?.data?.token || '');
+                        localStorage.setItem('profile', JSON.stringify(res?.payload?.data) || '');
+                        db.profile.add(res?.payload?.data);
+                        useAuthStore.setState(res?.payload?.data);
+
+                        setIsLoading(false);
+                        closeLoginPopupHandler();
+                        // navigate('/home');
+                        window.location.href = '/home';
+                    }
+                })
+                .catch((error: any) => {
+                    console.log('error', error);
+                    setIsError(true);
+                    setIsLoading(false);
+                });
         } else {
             signupObj = { password, email, dateOfBirth, name };
+            // return false;
+            setIsLoading(true);
+            dispatch(signupService(signupObj))
+                .then((res: any) => {
+                    console.log('res', res);
+                    if (res?.payload?.status == 400) {
+                        console.log('res 1', res);
+                        setIsError(true);
+                        // setPasswordBorderColor('border-red-400');
+                        // setErrorMessage(res?.payload || res?.payload?.message);
+                        setErrorMessage(res?.payload?.message);
+                        setIsLoading(false);
+                    } else if (res?.payload?.status == 200) {
+                        console.log('res 2', res);
+                        console.log('data after successfull login', res?.payload?.data);
+
+                        localStorage.setItem('userId', res?.payload?.data?._id || '');
+                        localStorage.setItem('token', res?.payload?.data?.token || '');
+                        localStorage.setItem('profile', JSON.stringify(res?.payload?.data) || '');
+                        db.profile.add(res?.payload?.data);
+                        useAuthStore.setState(res?.payload?.data);
+
+                        setIsLoading(false);
+                        closeLoginPopupHandler();
+                        // navigate('/home');
+                        window.location.href = '/home';
+                    }
+                })
+                .catch((error: any) => {
+                    console.log('error', error);
+                    setIsError(true);
+                    setIsLoading(false);
+                });
         }
 
-        // return false;
-        setIsLoading(true);
-        dispatch(signupService(signupObj))
-            .then((res: any) => {
-                console.log('res', res);
-                if (res?.payload?.status == 400) {
-                    console.log('res 1', res);
-                    setIsError(true);
-                    // setPasswordBorderColor('border-red-400');
-                    // setErrorMessage(res?.payload || res?.payload?.message);
-                    setErrorMessage(res?.payload?.message);
-                    setIsLoading(false);
-                } else if (res?.payload?.status == 200) {
-                    console.log('res 2', res);
-                    console.log('data after successfull login', res?.payload?.data);
-
-                    localStorage.setItem('userId', res?.payload?.data?._id || '');
-                    localStorage.setItem('token', res?.payload?.data?.token || '');
-                    localStorage.setItem('profile', JSON.stringify(res?.payload?.data) || '');
-                    db.profile.add(res?.payload?.data);
-                    useAuthStore.setState(res?.payload?.data);
-
-                    setIsLoading(false);
-                    closeLoginPopupHandler();
-                    // navigate('/home');
-                    window.location.href = '/home';
-                }
-            })
-            .catch((error: any) => {
-                console.log('error', error);
-                setIsError(true);
-                setIsLoading(false);
-            });
+        
     };
 
     const handleSignInSubmit = () => {
@@ -732,7 +774,7 @@ function App() {
 
     function generateMenuItems() {
         const rows = [];
-        let i = 2025; // Start with 2025
+        let i = 2024; // Start with 2025
         const len = 1900; // End at 1900
 
         while (i >= len) {
@@ -1892,6 +1934,26 @@ function App() {
                                                                                 }
                                                                             />
                                                                         </div>
+                                                                        <div
+                                                                            onClick={signupPhoneNumberNextScreen}
+                                                                            className={`flex flex-row items-center bg-login-btn mt-4 rounded-md py-2.5 px-3 cursor-pointer ${style.NextBtn}`}
+                                                                        >
+                                                                            <div className="flex flex-row justify-center items-center gap-2 flex-1">
+                                                                                <p>
+                                                                                    {isLoading ? (
+                                                                                        <CircularProgress
+                                                                                            style={{
+                                                                                                width: 18,
+                                                                                                height: 18,
+                                                                                                color: 'red',
+                                                                                            }}
+                                                                                        />
+                                                                                    ) : (
+                                                                                        'Next'
+                                                                                    )}
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
                                                                     </>
                                                                 ) : (
                                                                     <>
@@ -1955,29 +2017,30 @@ function App() {
                                                                                 }
                                                                             </p>
                                                                         ) : null}
+                                                                        <div
+                                                                            onClick={signupNextScreen}
+                                                                            className={`flex flex-row items-center bg-login-btn mt-4 rounded-md py-2.5 px-3 cursor-pointer ${style.NextBtn}`}
+                                                                        >
+                                                                            <div className="flex flex-row justify-center items-center gap-2 flex-1">
+                                                                                <p>
+                                                                                    {isLoading ? (
+                                                                                        <CircularProgress
+                                                                                            style={{
+                                                                                                width: 18,
+                                                                                                height: 18,
+                                                                                                color: 'red',
+                                                                                            }}
+                                                                                        />
+                                                                                    ) : (
+                                                                                        'Next'
+                                                                                    )}
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
                                                                     </>
                                                                 )}
 
-                                                                <div
-                                                                    onClick={signupNextScreen}
-                                                                    className={`flex flex-row items-center bg-login-btn mt-4 rounded-md py-2.5 px-3 cursor-pointer ${style.NextBtn}`}
-                                                                >
-                                                                    <div className="flex flex-row justify-center items-center gap-2 flex-1">
-                                                                        <p>
-                                                                            {isLoading ? (
-                                                                                <CircularProgress
-                                                                                    style={{
-                                                                                        width: 18,
-                                                                                        height: 18,
-                                                                                        color: 'red',
-                                                                                    }}
-                                                                                />
-                                                                            ) : (
-                                                                                'Next'
-                                                                            )}
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
+                                                                
                                                                 <div
                                                                     onClick={handleSignUpMainScreen}
                                                                     className="flex flex-row justify-center items-center gap-2 mt-4 cursor-pointer"

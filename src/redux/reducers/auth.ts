@@ -155,6 +155,22 @@ export const signupService = createAsyncThunk('auth/signupService', async (value
     }
 });
 
+export const signupWithPhoneNumberService = createAsyncThunk('auth/signupPhoneNumberService', async (values: any) => {
+    if (!values) return;
+    try {
+        let res = await post('/auth/web-phone-number-sign-up', {
+            type: 'application/json',
+            data: {
+                isLoggedIn: true,
+                ...values,
+            },
+        });
+        return res?.data;
+    } catch (error) {
+        return;
+    }
+});
+
 export const signupOTPService = createAsyncThunk('auth/signupOTPService', async (values: any) => {
     if (!values) return;
     try {

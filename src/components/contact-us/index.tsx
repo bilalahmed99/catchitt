@@ -6,6 +6,10 @@ import location from './svg-components/gps-icon.svg';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import style from './index.module.scss';
+import {
+    showToastSuccess,
+} from '../../utils/constants';
+import { ToastContainer } from 'react-toastify';
 
 const ContactUs = () => {
     const navigate = useNavigate();
@@ -24,6 +28,11 @@ const ContactUs = () => {
         // }
     });
 
+    const handleContact = () => {
+        console.log("Message sent successfully.");
+        showToastSuccess("Message sent successfully.");
+    };
+    
     return (
         <div>
             <Navbar />
@@ -93,13 +102,15 @@ const ContactUs = () => {
                             className={`h-[13.5rem] rounded-md  mt-4 border w-full resize-none p-3 ${darkTheme!==''?'text-white':'bg-[#F7F7F7] '}`}
                             placeholder="Your message"
                         ></textarea>
-                        <button className=" bg-custom-primary rounded-md px-4 h-12 text-white font-semibold text-base w-full mt-4">
+                        <button onClick={handleContact} className=" bg-custom-primary rounded-md px-4 h-12 text-white font-semibold text-base w-full mt-4">
                             Send message
                         </button>
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </div>
+        
     );
 };
 

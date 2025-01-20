@@ -396,7 +396,7 @@ function FormRightSide(props: any) {
                                     onChange={(e: any) =>
                                         updateState('replyOnComment', e?.target?.checked)
                                     }
-                                    checked={state?.replyOnComment || false}
+                                    checked={state?.replyOnComment || true}
                                 />
                                 <p className="text-[1rem] font-medium text-custom-dark-222 leading-[1.1rem]">
                                     Comment
@@ -407,7 +407,7 @@ function FormRightSide(props: any) {
                                     onChange={(e: any) =>
                                         updateState('allowDuet', e?.target?.checked)
                                     }
-                                    checked={state?.allowDuet || false}
+                                    checked={state?.allowDuet || true}
                                 />
                                 <p className="text-[1rem] font-medium text-custom-dark-222 leading-[1.1rem]">
                                     Duet

@@ -1,0 +1,9 @@
+[
+  {
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+  "namespace": "android_app",
+  "package_name": "com.posh.seezitt",
+  "sha256_cert_fingerprints": ["46:C0:80:8A:AE:0F:5F:C8:5E:73:B7:06:52:8F:1D:1D:35:9C:22:F8:9A:FD:4F:14:0B:D8:CB:7E:40:61:55:0E"]
+  }}
+]
