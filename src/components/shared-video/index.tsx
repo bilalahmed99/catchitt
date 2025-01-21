@@ -895,7 +895,6 @@ const VideoPage = () => {
             );
         });
         setIsMentioning(false);
-        setMentionIndex(0);
         // Restore focus to input field
         if (inputRef.current) {
             inputRef.current.focus();
@@ -1059,6 +1058,7 @@ const VideoPage = () => {
             }
         } else {
             setFilteredUsers([]);
+            setMentionIndex(0);
         }
         
         return () => {

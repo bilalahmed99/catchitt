@@ -740,6 +740,7 @@ export default function PopupForVideoPlayer({
             }
         } else {
             setFilteredUsers([]);
+            setMentionIndex(0);
         }
         
         return () => {
