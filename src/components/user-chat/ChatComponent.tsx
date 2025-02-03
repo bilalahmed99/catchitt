@@ -1067,32 +1067,35 @@ const ChatComponent = () => {
                         />
                     )}
                 </div>
-                {/* {groupOptions && (
-                    <div>
-                        <GroupSideBar
-                            onBack={() => {
-                                setshowShortSidebar(false);
-                                setGroupOptions(false);
-                            }}
-                            activeUser={activeUser}
-                            pinUserH={userPinH}
-                            showEditPopup={() => setEditGroupNameModal(!editGroupNameModal)}
-                            addMembersHandler={() => setAddMembersPopup(true)}
-                            openStaredSMS={() => {
-                                setstaredmodal(true);
-                                setGroupOptions(false);
-                            }}
-                            numberOfMessages={staredMsgs[0]?.chats?.length}
-                            blockPopupHandler={() => {
-                                setdangetBtnText('Block');
-                                setDengerText('');
-                                setblockPopup(true);
-                            }}
-                            reportPopupHandler={() => setreportPopup(true)}
-                        />
-                    </div>
-                )}
-                    */}
+                
+                {/* 
+                    {groupOptions && (
+                        <div>
+                            <GroupSideBar
+                                onBack={() => {
+                                    setshowShortSidebar(false);
+                                    setGroupOptions(false);
+                                }}
+                                activeUser={activeUser}
+                                pinUserH={userPinH}
+                                showEditPopup={() => setEditGroupNameModal(!editGroupNameModal)}
+                                addMembersHandler={() => setAddMembersPopup(true)}
+                                openStaredSMS={() => {
+                                    setstaredmodal(true);
+                                    setGroupOptions(false);
+                                }}
+                                numberOfMessages={staredMsgs[0]?.chats?.length}
+                                blockPopupHandler={() => {
+                                    setdangetBtnText('Block');
+                                    setDengerText('');
+                                    setblockPopup(true);
+                                }}
+                                reportPopupHandler={() => setreportPopup(true)}
+                            />
+                        </div>
+                    )}
+                */}
+                
                 {staredmodal && (
                     <StaredMesagesSec
                         isDarkTheme={isDarkTheme}
@@ -1116,21 +1119,25 @@ const ChatComponent = () => {
                 )}
                 {isProfileSecVisible && <ProfileSec data={activeUser} isDarkTheme={isDarkTheme} onClose={() => setIsProfileSecVisible(false)} />}
             </div>
-            {/* <SearchUser
-                onOpen={addMembersPopup}
-                blockPopupHandler={() => {
-                    setdangetBtnText('Block');
-                    setDengerText(`Are you sure you want to block ${activeUser?.userName}?`);
-                    setblockPopup(true);
-                }}
-                reportPopupHandler={() => setreportPopup(true)}
-                onClose={() => setAddMembersPopup(false)}
-            /> */}
-            {/* <EditChatName
-                onOpen={editGroupNameModal}
-                onClose={() => setEditGroupNameModal(false)}
-                onSaveChanges={onSaveChanges}
-            />*/}
+            {/* 
+                <SearchUser
+                    onOpen={addMembersPopup}
+                    blockPopupHandler={() => {
+                        setdangetBtnText('Block');
+                        setDengerText(`Are you sure you want to block ${activeUser?.userName}?`);
+                        setblockPopup(true);
+                    }}
+                    reportPopupHandler={() => setreportPopup(true)}
+                    onClose={() => setAddMembersPopup(false)}
+                /> 
+            */}
+            {/* 
+                <EditChatName
+                    onOpen={editGroupNameModal}
+                    onClose={() => setEditGroupNameModal(false)}
+                    onSaveChanges={onSaveChanges}
+                />
+            */}
             <Forwardusers onOpen={forwardModal} forwardNow={forwardNow} onClose={() => { setforwardModal(false); setForwardMsg(null) }} />
             <div>
                 <ToastContainer />

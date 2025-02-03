@@ -264,16 +264,16 @@ function UserChat(props: any) {
                         }}
                     >
                         {/* {options.map((option, index) => ( */}
-                        {/* <div key={option.text}>
-                            <MenuItem onClick={handleClose}>
-                            
-                                {option.icon}
-                                <span style={{ marginLeft: '8px',fontWeight:'bold' }} 
-                                // onClick={() => handleAction(option.text, ispined)}
-                                >{option.text}</span>
-                            </MenuItem>
-                            {index < options.length - 1 && <Divider />}
-                        </div> */}
+                            {/* <div key={option.text}>
+                                <MenuItem onClick={handleClose}>
+                                
+                                    {option.icon}
+                                    <span style={{ marginLeft: '8px',fontWeight:'bold' }} 
+                                    // onClick={() => handleAction(option.text, ispined)}
+                                    >{option.text}</span>
+                                </MenuItem>
+                                {index < options.length - 1 && <Divider />}
+                            </div> */}
                         {/* ))} */}
                         <div key="pintotop">
                             <MenuItem onClick={handlePin}>
@@ -282,7 +282,7 @@ function UserChat(props: any) {
                             </MenuItem>
                             <Divider />
                         </div>
-                        <div key="Delete">
+                        <div key="delete">
                             <MenuItem onClick={handleDeleteUserFromChat}>
                                 <DeleteOutlinedIcon />
                                 <span style={{ marginLeft: '8px', fontWeight: 'bold' }} >Delete chat</span>
@@ -296,7 +296,7 @@ function UserChat(props: any) {
                             </MenuItem>
                             <Divider />
                         </div>
-                        <div key="block">
+                        <div key="stared">
                             <MenuItem onClick={() => { setstaredmodal(true); handleClose() }}>
                                 <GradeIcon />
                                 <span style={{ marginLeft: '8px', fontWeight: 'bold' }} >Stared Message</span>
@@ -323,16 +323,18 @@ function UserChat(props: any) {
                     )}
                 </div>
                 {/* <PopupForReport
-                openReport={reportPopup}
-                onReportClose={() => setreportPopup(false)}
-            /> */}
+                        openReport={reportPopup}
+                        onReportClose={() => setreportPopup(false)}
+                    /> 
+                */}
                 {/* <BlockPopup
-                onBlock={onBlock}
-                dangetBtnText={dangetBtnText}
-                DangerText={DangerText}
-                openBlock={blockPopup}
-                onBlockClose={() => setblockPopup(false)}
-            /> */}
+                        onBlock={onBlock}
+                        dangetBtnText={dangetBtnText}
+                        DangerText={DangerText}
+                        openBlock={blockPopup}
+                        onBlockClose={() => setblockPopup(false)}
+                    /> 
+                */}
             </div>
         </ThemeProvider>
     );

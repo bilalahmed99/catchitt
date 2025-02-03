@@ -196,9 +196,11 @@ function Actions(props: any) {
                                     //     longPressH(item)
                                     //   }}
                                     >
-                                {item.isForwarded && <div className='text-xs text-start flex px-1 gap-1'>
-                                                          <img className='w-4' src={isDarkTheme?rightArrowCurvedinWhite:rightArrowCurved} alt="forwarded-icon"/>  Forwarded
-                                                        </div>}
+                                    {item.isForwarded && 
+                                        <div className='text-xs text-start flex px-1 gap-1'>
+                                            <img className='w-4' src={isDarkTheme?rightArrowCurvedinWhite:rightArrowCurved} alt="forwarded-icon"/>  Forwarded
+                                        </div>
+                                    }
 
                                         {item?.replysms ? (
                                             <div
