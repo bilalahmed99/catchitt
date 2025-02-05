@@ -1128,7 +1128,7 @@ const ChatComponent = () => {
                         selectedData={selectedData}
                     />
                 )}
-                {isProfileSecVisible && <ProfileSec data={activeUser} isDarkTheme={isDarkTheme} onClose={() => setIsProfileSecVisible(false)} />}
+                {isProfileSecVisible && <ProfileSec data={activeUser} isDarkTheme={isDarkTheme} onClose={() => setIsProfileSecVisible(false)} searchMessage={showSearchMessage} />}
             </div>
             {/* 
                 <SearchUser
