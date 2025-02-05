@@ -15,6 +15,7 @@ import {
     rightArrowCurvedinWhite,
     rightArrowCurved,
     weightedDownArrowInWhite,
+    weightedDownArrow,
 } from '../../../icons';
 import style from './Actions.module.scss';
 import LongPressButton from './LongPressEvent';
@@ -140,7 +141,7 @@ function Actions(props: any) {
                                                 Delete
                                             </p>
                                         </div>
-                                        {item.isrecevied && (
+                                        {/* {item.isrecevied && ( */}
                                             <>
                                                 <hr className={style.hr} />
                                                 <div
@@ -160,7 +161,7 @@ function Actions(props: any) {
                                                     </p>
                                                 </div>
                                             </>
-                                        )}
+                                        {/* )} */}
                                         <hr className={style.hr} />
                                         <div
                                             style={{
@@ -191,7 +192,7 @@ function Actions(props: any) {
                                         onClick={() => {
                                             valuesH({ ...item, showEmogis: false }, 'dropdown');
                                         }}
-                                        src={isDarkTheme ? weightedDownArrowInWhite : moreInMsg}
+                                        src={isDarkTheme ? weightedDownArrowInWhite : weightedDownArrow  }//moreInMsg}
                                         alt="more"
                                     />}
                                     {item.emojis && <img
