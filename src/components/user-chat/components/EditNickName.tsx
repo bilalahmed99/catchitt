@@ -7,9 +7,15 @@ export const EditNickName: React.FC<any> = ({
     isDarkTheme,
     currentNickName,
     onClose,
+    onUpdateNickName,
 }) => {
 
     const [nickName, setNickName] = React.useState(currentNickName);
+
+    const onSubmitHandler = () => {
+        onUpdateNickName(nickName);
+        onClose();
+    }
 
     return (<>
         <div className="flex items-center justify-between mb-6">
@@ -31,8 +37,10 @@ export const EditNickName: React.FC<any> = ({
             />
         </div>
         <div>
-            <input type="text" onChange={(e:any)=>setNickName(e.target.value)} value={nickName} placeholder='Enter Nickname' className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md" />
-            <input type="submit" value="Save" className="w-full p-2 mt-4 bg-red-700 text-white rounded-md cursor-pointer" />
+            <form onSubmit={onSubmitHandler}>
+                <input type="text" onChange={(e: any) => setNickName(e.target.value)} value={nickName} placeholder='Enter Nickname' className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md" />
+                <input type="submit" value="Save" className="w-full p-2 mt-4 bg-red-700 text-white rounded-md cursor-pointer" />
+            </form>
         </div>
     </>
 

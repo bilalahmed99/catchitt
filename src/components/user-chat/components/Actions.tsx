@@ -186,7 +186,7 @@ function Actions(props: any) {
 
                                     </div>
                                 )}
-                                <div className={`${item.isForwarded ? (item.receiverId == loggedInUserId ? (isDarkTheme ? 'bg-[#262626] py-1 ' : 'bg-slate-100 border py-1') : (isDarkTheme ? 'bg-[#414141] py-1' : 'bg-gray-100 border py-1')) : ''} min-w-52 rounded`} style={{ position: 'relative', zIndex: 20 }}>
+                                <div className={`${item.isForwarded ? (item.receiverId == loggedInUserId ? (activeUser.themeColor? activeUser.themeColor: isDarkTheme ? 'bg-[#262626] py-1 ' : 'bg-slate-100 border py-1') : (activeUser.themeColor?activeUser.themeColor+' bg-opacity-75':isDarkTheme ? 'bg-[#414141] py-1' : 'bg-gray-100 border py-1')) : ''} min-w-52 rounded`} style={{ position: 'relative', zIndex: 20 }}>
                                     {item.emojis && <img
                                         className='absolute w-[1.2rem] h-[1.2rem] top-1 right-2 cursor-pointer'
                                         onClick={() => {
@@ -244,7 +244,7 @@ function Actions(props: any) {
                                                         className={`${item.receiverId == loggedInUserId
                                                             ? style.receivedMsg
                                                             : style.sendedMsg
-                                                            } ${item.isForwarded ? 'py-0 bg-transparent border-0' : ''} ${item.receiverId == loggedInUserId ? (isDarkTheme ? 'bg-[#262626]' : 'bg-slate-100') : (isDarkTheme ? 'bg-[#414141]' : 'bg-gray-100')}`}
+                                                            } ${item.isForwarded ? 'py-0 bg-transparent border-0' : ''} ${item.receiverId == loggedInUserId ? (activeUser.themeColor? activeUser.themeColor: isDarkTheme ? 'bg-[#262626]' : 'bg-slate-100') : (activeUser.themeColor?activeUser.themeColor+' bg-opacity-75':isDarkTheme ? 'bg-[#414141]' : 'bg-gray-100')}`}
                                                     >
                                                         <TextHighlighter searchQuery={searchQuery} text={item.msg} />
                                                     </p>}

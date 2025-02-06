@@ -32,7 +32,7 @@ const ITEM_HEIGHT = 60;
 
 
 function UserChat(props: any) {
-    const { userName, lastMsg, ispined, isBlocked, lastSeen, unReadMsgs, OnChatClick, userId, id, isGroup, userImage, conversationId, userPinH, onBlock, setstaredmodal, isDarkTheme, isActive } = props || {};
+    const { userName, nickName, lastMsg, ispined, isBlocked, lastSeen, unReadMsgs, OnChatClick, userId, id, isGroup, userImage, conversationId, userPinH, onBlock, setstaredmodal, isDarkTheme, isActive } = props || {};
     // console.log("user chat props ", props);
     // const {
     //     moreOptions,
@@ -226,7 +226,7 @@ function UserChat(props: any) {
                             <img src={userImage != "" ? userImage : defaultAvatar} alt="" />
                         )}
                         <div>
-                            <p className={style.nameText}>{userName}</p>
+                            <p className={style.nameText}>{nickName?nickName:userName}</p>
                             <p className={style.msgText}>{lastMsg}</p>
                         </div>
                     </div>

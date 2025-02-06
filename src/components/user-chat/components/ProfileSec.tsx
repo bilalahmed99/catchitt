@@ -37,15 +37,48 @@ import { CustomEmojis } from './CustomEmojis';
 //     "isBlocked": false
 // }
 
-function ProfileSec({ data, onClose, isDarkTheme, searchMessage }: any) {
+function ProfileSec({ data, onClose, isDarkTheme, searchMessage, manipulateUsers, manipulateActiveUser }: any) {
     const navigate = useNavigate();
+    const token = localStorage.getItem("token");
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [activeComponent, setActiveComponent] = useState(CUSTOMIZE_COMPONENT.THEME_COLOR_PICKER);
 
     const allCustomizeComponents: { [key in CUSTOMIZE_COMPONENT]: JSX.Element } = {
-        [CUSTOMIZE_COMPONENT.THEME_COLOR_PICKER]: <ThemeColorPicker isDarkTheme={isDarkTheme} onClose={() => setIsModalOpen(false)} currentColor={'blue'} onColorSelect={(color) => console.log(color)} />,
-        [CUSTOMIZE_COMPONENT.EMOJI_PICKER]: <CustomEmojis isDarkTheme={isDarkTheme} onClose={() => setIsModalOpen(false)} />,
-        [CUSTOMIZE_COMPONENT.EDIT_NICKNAME]: <EditNickName currentNickName={data.userName} isDarkTheme={isDarkTheme} onClose={() => setIsModalOpen(false)} />
+        [CUSTOMIZE_COMPONENT.THEME_COLOR_PICKER]: <ThemeColorPicker isDarkTheme={isDarkTheme} onClose={() => setIsModalOpen(false)} currentColor={data?.themeColor} onColorSelect={(color) => updateSettings({'themeColor':color})} />,
+        [CUSTOMIZE_COMPONENT.EMOJI_PICKER]: <CustomEmojis emoji={data?.emoji} isDarkTheme={isDarkTheme} onClose={() => setIsModalOpen(false)} />,
+        [CUSTOMIZE_COMPONENT.EDIT_NICKNAME]: <EditNickName currentNickName={data?.nickName} isDarkTheme={isDarkTheme} onClose={() => setIsModalOpen(false)} onUpdateNickName={(nickName:any) => updateSettings({'nickName':nickName})} />
+    }
+
+    const updateSettings = async (parameters: any) => {
+        try {
+            if (!data?.conversationId) return;
+            let response = await fetch("https://prodapi.seezitt.com/chat/conversation/update", {
+                method: "PATCH",
+                body: JSON.stringify({
+                    'conversationId': data.conversationId,
+                    ...parameters
+                }),
+                headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+            });
+            if (!response.ok) return;
+            let resp = await response.json();
+            console.log('🥳🥳🚀🚀🚀',resp);
+            manipulateUsers((users:any)=>{
+                let newUsers = users.map((user:any)=>{
+                    if(user.conversationId === data.conversationId){
+                        return {...user,...parameters}
+                    }
+                    return user;
+                }
+                )
+                return newUsers;
+            })
+            manipulateActiveUser((user:any)=>{
+                return {...user,...parameters}
+            })
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     useEffect(() => {

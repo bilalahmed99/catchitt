@@ -392,6 +392,9 @@ const ChatComponent = () => {
                             avatar: any;
                         }[];
                         receiverId: any;
+                        themeColor: any;
+                        nickName: any;
+                        emoji: any;
                         _id: any;
                     },
                     index: number
@@ -415,11 +418,13 @@ const ChatComponent = () => {
                         senderId: chats?.users[0]?._id,
                         receiverId: chats?.users[1]?._id,
                         conversationId: chats?._id,
+                        themeColor: chats?.themeColor,
+                        nickName: chats?.nickName,
+                        emoji: chats?.emoji,
                         isBlocked,
                     });
                     // });
 
-                    setUsers(tempArr);
                     // if (index == 0) {
                     //     setSender(chats?.users[0]?._id);
                     //     setReceiver(chats?.users[1]?._id);
@@ -428,6 +433,7 @@ const ChatComponent = () => {
                     // }
                 }
             );
+            setUsers(tempArr);
         } catch (error) {
             console.log('error trendinghashtags', error);
         }
@@ -962,7 +968,7 @@ const ChatComponent = () => {
                             openProfileSec={() => setIsProfileSecVisible(!isProfileSecVisible)}
                             isGroup={activeUser?.isGroup}
                             safeMsg={markTheMsgSafe}
-                            name={activeUser?.userName}
+                            name={activeUser.nickName?activeUser.nickName:activeUser?.userName}
                             profilePic={activeUser?.avatar}
                             moreOptionH={() => {
                                 if (activeUser?.isGroup) {
@@ -1128,7 +1134,7 @@ const ChatComponent = () => {
                         selectedData={selectedData}
                     />
                 )}
-                {isProfileSecVisible && <ProfileSec data={activeUser} isDarkTheme={isDarkTheme} onClose={() => setIsProfileSecVisible(false)} searchMessage={showSearchMessage} />}
+                {isProfileSecVisible && <ProfileSec data={activeUser} isDarkTheme={isDarkTheme} onClose={() => setIsProfileSecVisible(false)} searchMessage={showSearchMessage} manipulateUsers={setUsers} manipulateActiveUser={setActiveUser} />}
             </div>
             {/* 
                 <SearchUser
