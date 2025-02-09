@@ -38,7 +38,7 @@ export const EditNickName: React.FC<any> = ({
         </div>
         <div>
             <form onSubmit={onSubmitHandler}>
-                <input type="text" onChange={(e: any) => setNickName(e.target.value)} value={nickName} placeholder='Enter Nickname' className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md" />
+                <input type="text" onChange={(e: any) => setNickName(e.target.value)} value={nickName} placeholder='Enter Nickname' style={{color: 'black'}} className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md" />
                 <input type="submit" value="Save" className="w-full p-2 mt-4 bg-red-700 text-white rounded-md cursor-pointer" />
             </form>
         </div>

@@ -14,7 +14,7 @@ import {
 } from '../../../icons';
 import Search from '../../../shared/navbar/components/Search';
 import style from './stared.module.scss';
-import { AccountCircle, AccountCircleOutlined, DonutSmallRounded, NotificationsNoneOutlined, Phone, SearchOutlined, ThumbUpAlt, VideoCall } from '@mui/icons-material';
+import { AccountCircle, AccountCircleOutlined, DonutSmallRounded, NotificationsNoneOutlined, NotificationsOffOutlined, Phone, SearchOutlined, ThumbUpAlt, VideoCall } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { ThemeColorPicker } from './ThemeColorPicker';
 import { EditNickName } from './EditNickName';
@@ -45,7 +45,7 @@ function ProfileSec({ data, onClose, isDarkTheme, searchMessage, manipulateUsers
 
     const allCustomizeComponents: { [key in CUSTOMIZE_COMPONENT]: JSX.Element } = {
         [CUSTOMIZE_COMPONENT.THEME_COLOR_PICKER]: <ThemeColorPicker isDarkTheme={isDarkTheme} onClose={() => setIsModalOpen(false)} currentColor={data?.themeColor} onColorSelect={(color) => updateSettings({'themeColor':color})} />,
-        [CUSTOMIZE_COMPONENT.EMOJI_PICKER]: <CustomEmojis emoji={data?.emoji} isDarkTheme={isDarkTheme} onClose={() => setIsModalOpen(false)} />,
+        [CUSTOMIZE_COMPONENT.EMOJI_PICKER]: <CustomEmojis emoji={data?.emoji} isDarkTheme={isDarkTheme} onClose={() => setIsModalOpen(false)} onEmojiChange={(emoji:any)=>updateSettings({'emoji':emoji})} />,
         [CUSTOMIZE_COMPONENT.EDIT_NICKNAME]: <EditNickName currentNickName={data?.nickName} isDarkTheme={isDarkTheme} onClose={() => setIsModalOpen(false)} onUpdateNickName={(nickName:any) => updateSettings({'nickName':nickName})} />
     }
 
@@ -133,14 +133,15 @@ function ProfileSec({ data, onClose, isDarkTheme, searchMessage, manipulateUsers
                 <div className='flex flex-col items-center'>
                     <img className='w-32 rounded-full' src={data.userImage || defaultAvatar} alt="avatar" />
                     <span className='text-xl font-bold mt-4'>{data.userName}</span>
+                    <span className='text-sm'>{data.nickName}</span>
                 </div>
                 <div className='flex gap-3 justify-center items-center mt-4'>
                     <div className='flex flex-col items-center cursor-pointer' onClick={() => navigate(`/profile/${data.userId}`)}>
                         <span className={`${isDarkTheme ? 'bg-gray-500' : 'bg-slate-100'} p-1 shadow-md rounded-full`}><AccountCircleOutlined sx={{ fontSize: '27px' }} /></span>
                         <span className='ml-2 text-sm mt-1'>Profile</span>
                     </div>
-                    <div className='flex flex-col items-center cursor-pointer'>
-                        <span className={`${isDarkTheme ? 'bg-gray-500' : 'bg-slate-100'} p-1 shadow-md rounded-full`}><NotificationsNoneOutlined sx={{ fontSize: '27px' }} /></span>
+                    <div className='flex flex-col items-center cursor-pointer' onClick={() => updateSettings({'mute':data.mute?false:true})}>
+                        <span className={`${isDarkTheme ? 'bg-gray-500' : 'bg-slate-100'} p-1 shadow-md rounded-full`}>{data.mute? <NotificationsOffOutlined sx={{ fontSize: '27px' }} /> :<NotificationsNoneOutlined sx={{ fontSize: '27px' }} />}</span>
                         <span className='ml-2 text-sm mt-1'>Mute</span>
                     </div>
                     <div className='flex flex-col items-center cursor-pointer' onClick={(e) => { searchMessage(true), onClose() }}>

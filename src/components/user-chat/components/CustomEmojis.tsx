@@ -5,20 +5,29 @@ import EmojiPicker, { Theme } from 'emoji-picker-react';
 
 
 export const CustomEmojis: React.FC<any> = ({
+    emoji,
     isDarkTheme,
     onClose,
+    onEmojiChange
 }) => {
 
-    const [emojis, setEmojis] = useState('')
+    const [emojis, setEmojis] = useState(emoji);
 
     const onEmojiClick = (emojiObject: any) => {
-        setEmojis((prevEmojis) => {
-            return prevEmojis + emojiObject.emoji;
-        });
+        // setEmojis((prevEmojis) => {
+        //     return prevEmojis + emojiObject.emoji;
+        // });
+        setEmojis(emojiObject.emoji);
     };
 
-    const mutateSelectedEmojis = (e: any) => {
-        setEmojis(e.target.value);
+    // const mutateSelectedEmojis = (e: any) => {
+    //     setEmojis(e.target.value);
+    // }
+
+    const onSubmitHandler = (e: any) => {
+        e.preventDefault();
+        onEmojiChange(emojis);
+        onClose();
     }
 
     return (<>
@@ -40,11 +49,13 @@ export const CustomEmojis: React.FC<any> = ({
                 }}
             />
         </div>
-        <div>
-            <div className='flex items-center gap-2 mb-2'>
-                <input type="text" value={emojis} onChange={mutateSelectedEmojis} placeholder='Enter Emoji' className="w-3/4 p-2 border border-gray-300 dark:border-gray-700 rounded-md" />
-                <button className="w-1/4 p-2 bg-red-700 text-white rounded-md cursor-pointer"><TaskAltOutlined /></button>
-            </div>
+        <div> 
+            <form onSubmit={onSubmitHandler} >
+                <div className='flex items-center gap-2 mb-2'>
+                    <input type="text" value={emojis} placeholder='Enter Emoji' className="w-3/4 p-2 border border-gray-300 dark:border-gray-700 rounded-md" />
+                    <button type='submit' className="w-1/4 p-2 bg-red-700 text-white rounded-md cursor-pointer"><TaskAltOutlined /></button>
+                </div>
+            </form>
             <EmojiPicker theme={isDarkTheme ? Theme.DARK : Theme.LIGHT} height={340} width="auto" onEmojiClick={onEmojiClick} />
         </div>
     </>

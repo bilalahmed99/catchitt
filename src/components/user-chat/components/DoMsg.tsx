@@ -21,7 +21,7 @@ import fileLabel from '../../../assets/files.png';
 import musicLabel from '../../../assets/music_file.png';
 // import commentEmoji from '../../../icons/commentEmoji.svg';
 
-const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme }: any) => {
+const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme, data }: any) => {
 
   const API_KEY = process.env.VITE_API_URL;
  
@@ -169,7 +169,11 @@ const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme }: any) 
       }
     }
   }, [])
-  
+
+  const appendCustomEmoji = () => {
+    setMessage(msg + data.emoji);
+    setMessageType('Text');
+  }
 
   return (
     <>
@@ -201,13 +205,14 @@ const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme }: any) 
             value={!!uploadedFile ? '' : msg}
             style={{ width: '-webkit-fill-available', padding: '0.5rem' }}
           />
+          {data.emoji&&<button type='button' onClick={appendCustomEmoji} className={`rounded-full text-xl px-2 border-none`}>{data.emoji}</button>}
           <SendIcon className={style.sendIcon} onClick={onSubmit} style={{ fontSize: '23px', }} />
         </form>
         <div>
           <div className={style.actions}>
             <input type="file" onChange={(e) => { uploadfile(e) }} className={style.filetype} accept="image/*, video/*" />
             {/* <input type='hidden' value={upload} onInput={onSubmit}/> */}
-            <img src={paperClip} alt="" />
+            <img src={paperClip} alt="attach" />
           </div>
           {/* <div className={style.actions}>
                     <img src={mic} alt="" />

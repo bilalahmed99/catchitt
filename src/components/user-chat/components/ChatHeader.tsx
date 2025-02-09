@@ -7,6 +7,7 @@ function ChatHeader(props: any) {
         openProfileSec,
         moreOptionH,
         name,
+        nickName,
         profilePic,
         isGroup,
         safeMsg,
@@ -36,7 +37,7 @@ function ChatHeader(props: any) {
                     )}
                     <div style={{display:'flex',flexDirection:'column'}}>
                         <p onClick={openProfileSec} className={`${chatHeader.name} cursor-pointer`}>{name}</p>
-                        {/* <p className={chatHeader.userMention}>{name}</p> */}
+                        {nickName&&<p className={chatHeader.userMention+' text-xs'}>({nickName})</p>}
                     </div>
                 </div>
                 <img onClick={moreOptionH} style={{ cursor: 'pointer' }} src={isDarkTheme?moreInWhite:more} alt="" />

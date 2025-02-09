@@ -395,6 +395,7 @@ const ChatComponent = () => {
                         themeColor: any;
                         nickName: any;
                         emoji: any;
+                        mute: any;
                         _id: any;
                     },
                     index: number
@@ -422,6 +423,7 @@ const ChatComponent = () => {
                         nickName: chats?.nickName,
                         emoji: chats?.emoji,
                         isBlocked,
+                        mute: chats?.mute,
                     });
                     // });
 
@@ -968,7 +970,8 @@ const ChatComponent = () => {
                             openProfileSec={() => setIsProfileSecVisible(!isProfileSecVisible)}
                             isGroup={activeUser?.isGroup}
                             safeMsg={markTheMsgSafe}
-                            name={activeUser.nickName?activeUser.nickName:activeUser?.userName}
+                            name={activeUser?.userName}
+                            nickName={activeUser?.nickName}
                             profilePic={activeUser?.avatar}
                             moreOptionH={() => {
                                 if (activeUser?.isGroup) {
@@ -1053,6 +1056,7 @@ const ChatComponent = () => {
                             setMessage={setMsg}
                             setMessageType={setMsgType}
                             isDarkTheme={!!isDarkTheme}
+                            data={activeUser}
                         />
                     )}
                     {!groupOptions && moreOptions && (

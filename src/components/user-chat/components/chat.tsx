@@ -226,7 +226,7 @@ function UserChat(props: any) {
                             <img src={userImage != "" ? userImage : defaultAvatar} alt="" />
                         )}
                         <div>
-                            <p className={style.nameText}>{nickName?nickName:userName}</p>
+                            <p className={style.nameText}>{userName}</p>
                             <p className={style.msgText}>{lastMsg}</p>
                         </div>
                     </div>
