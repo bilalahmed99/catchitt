@@ -728,6 +728,17 @@ function App() {
 
     useUpdateEffect(() => {
         if (month && date && year) {
+            const numMonth = Number(month);
+            const numDate = Number(date);
+            const numYear = Number(year);
+    
+            // Check if it's February and the date is 29
+            if (numMonth === 2 && numDate === 29 && !isLeapYear(numYear)) {
+                console.log('Invalid date of birth: Not a leap year');
+                setIsInvalidDate(true);
+                return;
+            }
+
             let dob = year + '-' + month.toString().padStart(2, "0") + '-' + date.toString().padStart(2, "0");
             const parsedDob = new Date(dob);
             const currentDate = new Date();
@@ -740,6 +751,11 @@ function App() {
             }
         }
     }, [month, date, year]);
+
+    // Helper function to check if the year is a leap year
+    const isLeapYear  = (year: any) => {
+        return (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0));
+    }
 
     const handleMonthChange = (event: SelectChangeEvent) => {
         setMonth(event.target.value as string);
@@ -1742,11 +1758,9 @@ function App() {
                                                                                 >
                                                                                     28
                                                                                 </MenuItem>
-                                                                                <MenuItem
-                                                                                    value={29}
-                                                                                >
-                                                                                    29
-                                                                                </MenuItem>
+                                                                                {(!month || !year || (month === 2 && isLeapYear(year))) && (
+                                                                                    <MenuItem value={29}>29</MenuItem>
+                                                                                )}
                                                                                 {!['2'].some(i => i == month) && <MenuItem
                                                                                     value={30}
                                                                                 >
