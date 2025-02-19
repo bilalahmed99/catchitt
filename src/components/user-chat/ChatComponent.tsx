@@ -691,7 +691,9 @@ const ChatComponent = () => {
             } else {
                 setActiveUser(users[0]);
                 localStorage.setItem('chatActiveUser', users[0]?.userId);
-                setChatActiveUserId(users[0]?.userId)
+                setChatActiveUserId(users[0]?.userId);
+                setSender(users[0]?.senderId);
+                setReceiver(users[0]?.receiverId);
             }
         }
     }, [users]);
