@@ -20,6 +20,7 @@ import xlsxLabel from '../../../assets/xlsx.png';
 import fileLabel from '../../../assets/files.png';
 import musicLabel from '../../../assets/music_file.png';
 // import commentEmoji from '../../../icons/commentEmoji.svg';
+import CollectionsIcon from '@mui/icons-material/CollectionsBookmarkOutlined';
 
 const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme, data }: any) => {
 
@@ -31,6 +32,7 @@ const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme, data }:
   const [uploadProgress, setUploadProgress] = useState(0);
   const [filePreview, setFilePreview] = useState<string>('');
   const [isPickerVisible, setIsPickerVisible] = useState(false);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false); 
 
   const abortController = useRef<AbortController | null>(null);
 
@@ -144,6 +146,16 @@ const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme, data }:
 
   };
 
+
+  const openModalImage = () => {
+    setIsImageModalOpen(true);
+  };
+
+  // Function to close the image modal
+  const closeModalImage = () => {
+    setIsImageModalOpen(false);
+  };
+
   // const openUploadPic = () => { setOpenUploadPic(true); }
   const closeUploadPic = () => {
     setMessage("");
@@ -198,6 +210,18 @@ const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme, data }:
               alt="comment-icon"
             />
           </div>
+          <CollectionsIcon onClick={openModalImage} />
+          {/* Image Modal */}
+          <Modal open={isImageModalOpen} onClose={closeModalImage}>
+            <div onClick={(e) => e.stopPropagation()} className={style.popupbackground} style={{ background: isDarkTheme ? '#181818' : '#fff' }}>
+              <span className={isDarkTheme ? 'text-white' : 'text-dark'}>Image Gallery</span>
+              <div>
+                {/* Add your image gallery or content here */}
+                <p>This is the image modal content.</p>
+                <button onClick={closeModalImage}>Close</button>
+              </div>
+            </div>
+          </Modal>
           <input
             onChange={(e: any) => { setMessage(e.target.value), setMessageType('Text') }}
             type="text"
