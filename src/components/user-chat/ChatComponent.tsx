@@ -343,6 +343,7 @@ const ChatComponent = () => {
                                 stared: element?.isStarred,
                                 isRead: element?.isRead,
                                 type: element?.type,
+                                reactions: element?.reactions,
                                 replysms: element?.repliedMessage
                                     ? element?.repliedMessage?.message
                                     : false,

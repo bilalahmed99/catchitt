@@ -275,6 +275,11 @@ function Actions(props: any) {
                                                           <small>{item.recieverName}</small>
                                                         </div>} */}
                                     </LongPressButton>
+                                    {item?.reactions?.length > 0 ? (
+                                        item.reactions.map((reaction: any, index: number) => (
+                                            <span key={index}>{reaction.react} </span>
+                                        ))
+                                        ) : null}
                                 </div>
                                 <div className={style.subContent}>
                                     {item.stared && <><span>❤️</span>
