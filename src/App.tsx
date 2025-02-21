@@ -850,7 +850,7 @@ function App() {
     }, [])
 
     const responseFacebook = (response: any) => {
-        loginWithFBAccessToken(response?.access_token);
+        loginWithFBAccessToken(response?.accessToken);
     };
 
     const loginWithFBAccessToken = async (accessToken: string) => {
