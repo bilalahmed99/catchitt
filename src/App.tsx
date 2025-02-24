@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useLayoutEffect, useState } from 'react';
 import { IntlProvider } from 'react-intl';
-import { Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
+import { Navigate, Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
 import messages from '../src/languages-intl';
 import styles from './App.module.scss';
 import CommunityPage from './components/about-pages/community-guidelines';
@@ -921,11 +921,11 @@ function App() {
                                     />
                                 }
                             /> */}
-                            <Route
+                            {/* <Route
                                 path="/auth"
                                 element={<Login />}
                             // element={<Login setLanguage={setLanguage} language={appLanguage} />}
-                            />
+                            /> */}
                             <Route path="/login/phone-or-email" element={<PhoneOrEmail />} />
                             <Route path="/login/forget-password" element={<ForgetPassword />} />
                             <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -982,6 +982,8 @@ function App() {
                             <Route path="/contactus" element={<ContactUs />} />
                             <Route path="/signup" element={<Signup />} />
                             <Route path="/signup/phone-or-email/email" element={<SignupEmail />} />
+                            <Route path="*" element={<Navigate to="/home" replace />} /> {/* Catch-all */}
+
                             {/* <Route path="/signup/phone-or-email/phone" element={<SignupPhone />} /> */}
                         </Routes>
 
