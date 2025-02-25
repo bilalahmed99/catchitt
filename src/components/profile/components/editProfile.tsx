@@ -267,7 +267,7 @@ export default function EditProfile({ onCancel, onSave }: Props) {
                     const phone = response?.phoneNumber;
 
                     // Match the country code and the number separately
-                    const match = phone.match(/^\+(\d+)-(\d+)$/);
+                    const match = phone?.match(/^\+(\d+)-(\d+)$/);
                     //+92-3061922300
 
                     if (match) {
