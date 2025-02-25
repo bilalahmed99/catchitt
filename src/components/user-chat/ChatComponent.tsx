@@ -647,9 +647,9 @@ const ChatComponent = () => {
 
     const scrollChatToBottom = () => {
         if(autoScrolElem.current) {
-            setTimeout(() => {
-            autoScrolElem.current.scrollTop = autoScrolElem.current.scrollHeight;
-            }, 1500);
+            // setTimeout(() => {
+            // // autoScrolElem.current.scrollTop = autoScrolElem.current.scrollHeight;
+            // }, 1500);
         }
     };
 

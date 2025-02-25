@@ -236,20 +236,23 @@ const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme, data,cu
     <>
       <CustomMediaPicker isDarkTheme={isDarkTheme} isPickerVisible={isPickerVisible} setIsPickerVisible={setIsPickerVisible} setMessageType={setMessageType} setMessage={setMessage} setUploadedFile={setUploadedFile} setOpenUploadPic={setOpenUploadPic} setFilePreview={setFilePreview} />
       {currentReplyToMessage  && (
-            <div>
-              <div className="d-flex justify-content-between align-items-center">
-                <h5 className="mb-0">Reply to {loggedInUserId == currentReplyToMessage.receiverId ? currentReplyToMessage.recieverName: 'Yourself'} :</h5>
+            <div className="px-3 py-2">
+              <div className="d-flex justify-content-between align-items-center position-relative">
+                {/* <h5 className="mb-0">Reply to  <b className={style.replyUser}>{loggedInUserId == currentReplyToMessage.receiverId ? currentReplyToMessage.recieverName: 'Yourself'}</b> :</h5> */}
                 <button
                   type="button"
                   data-dismiss="modal"
                   aria-label="Close"
-                  className="close replyClose"
+                  className={style.replyClose}
                   onClick={closeReply}
                 >
-                  <span>×</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M1.8982 15.4349C1.52901 15.4563 1.16591 15.3336 0.88549 15.0925C0.332441 14.5362 0.332441 13.6377 0.88549 13.0813L12.9954 0.971323C13.5707 0.433069 14.4732 0.462991 15.0115 1.03821C15.4983 1.55838 15.5266 2.35789 15.078 2.91122L2.89664 15.0925C2.61984 15.3301 2.26257 15.4526 1.8982 15.4349Z" fill="black"/>
+                    <path d="M13.9956 15.4351C13.6215 15.4335 13.2628 15.2848 12.9972 15.0214L0.88717 2.91132C0.374798 2.31299 0.444458 1.41254 1.04279 0.900119C1.57682 0.442799 2.36439 0.442799 2.89838 0.900119L15.0797 13.0101C15.6548 13.5486 15.6845 14.4512 15.1461 15.0263C15.1247 15.0492 15.1026 15.0713 15.0797 15.0927C14.7814 15.352 14.3889 15.476 13.9956 15.4351Z" fill="black"/>
+                    </svg>
                 </button>
               </div>
-              <div className="replyMsg">
+              <div className={style.replyMsg}>
                 {renderMessageContent(currentReplyToMessage.msg)}
               </div>
             </div>

@@ -104,16 +104,16 @@ function Actions(props: any) {
         setPlayingVideo('');
     }
 
-    const scrollChatToBottom = () => {
-        if(autoScrolElem.current) {
-            setTimeout(() => {
-            autoScrolElem.current.scrollTop = autoScrolElem.current.scrollHeight;
-            }, 1000);
-        }
-    };
+    // const scrollChatToBottom = () => {
+    //     if(autoScrolElem.current) {
+    //         setTimeout(() => {
+    //         autoScrolElem.current.scrollTop = autoScrolElem.current.scrollHeight;
+    //         }, 1000);
+    //     }
+    // };
 
     console.log('activeChat', activeChat, chatActiveUserId);
-    scrollChatToBottom();
+    // scrollChatToBottom();
 
     // useEffect(() => {
     //     setTimeout(() => {
@@ -181,7 +181,6 @@ function Actions(props: any) {
                                                     <path d="M9 7V4C9 3.73478 9.10536 3.48043 9.29289 3.29289C9.48043 3.10536 9.73478 3 10 3H14C14.2652 3 14.5196 3.10536 14.7071 3.29289C14.8946 3.48043 15 3.73478 15 4V7" stroke="#FF2C55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                                 </svg>
                                                 <p
-                                                     
                                                     className={style.dropdText} style={{ color: '#FF2C55'}} >
                                                     Delete
                                                 </p>
@@ -231,7 +230,6 @@ function Actions(props: any) {
                                                 Forward
                                             </p>
                                         </div>
-                                        <hr className={style.hr} />
                                         <div
                                             style={{
                                                 cursor: 'pointer',
@@ -242,12 +240,13 @@ function Actions(props: any) {
                                                 replyMessage(item);
                                             }}
                                         >
-                                           
+                                           <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M8.99981 1V5C15.5748 6.028 18.0198 11.788 18.9998 17C19.0368 17.206 13.6158 11.038 8.99981 11V15L0.999811 8L8.99981 1Z" stroke="#B6B6B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
                                             <p className={style.dropdText}>
                                                 Reply
                                             </p>
                                         </div>
-
                                     </div>
                                 )}
                                 <div className={`${item.isForwarded ? (item.receiverId == loggedInUserId ? (activeUser.themeColor? activeUser.themeColor: isDarkTheme ? 'bg-[#262626] py-1 ' : 'bg-slate-100 border py-1') : (activeUser.themeColor?activeUser.themeColor+' bg-opacity-75':isDarkTheme ? 'bg-[#414141] py-1' : 'bg-gray-100 border py-1')) : ''} min-w-52 rounded`} style={{ position: 'relative', zIndex: 20 }}>
@@ -259,7 +258,7 @@ function Actions(props: any) {
                                         src={isDarkTheme ? weightedDownArrowInWhite : weightedDownArrow  }//moreInMsg}
                                         alt="more"
                                     />}
-                                    {item.emojis && <img
+                                    { <img
                                         className={`absolute w-[1.2rem] h-[1.2rem] top-3 ${item.receiverId == loggedInUserId?'-right-10':'-left-10'} cursor-pointer`}
                                         src={emoji}
                                         alt=""

@@ -88,6 +88,7 @@ import CommentAnalytics from './components/analytics/PostAnalytics/CommentAnalyt
 import { db } from './utils/db';
 import { useUpdateEffect } from 'react-use';
 import SoundPage from './components/sound-module/SoundPage';
+import { PopupModal } from './components/reusables/popupModal';
 
 // Functional component to handle the initial route navigation
 const InitialRouteHandler = () => {
@@ -1519,6 +1520,14 @@ function App() {
                                                     </p>
                                                 </div>
                                             )}
+                                            <div
+                                                className={`rounded-[0.5rem] font-medium text-base flex flex-row items-center border border-loginItem h-11 px-3 cursor-pointer `}
+                                            >
+                                                <p className="mx-auto text-[0.938rem]">WN Social</p>
+                                            </div>
+                                            <PopupModal>
+                                                <h1>test</h1>
+                                            </PopupModal>
                                             <div className="mt-3 absolute bottom-0 w-full py-4">
                                                 <div className="border-t-[0.3px] border-gray-200 text-center pt-3.5">
                                                     <h3
@@ -1534,6 +1543,7 @@ function App() {
                                                     </h3>
                                                 </div>
                                             </div>
+                                            
                                         </>
                                     ) : (
                                         <>
