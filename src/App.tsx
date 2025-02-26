@@ -196,6 +196,7 @@ function App() {
     const [isMainSignupOption, setIsMainSignupOption] = useState(true);
     const [isLoginSection, setIsLoginSection] = useState(true);
     const [isLoginWithWN, setIsLoginWithWN] = useState(false);
+    const [isWNLoginWithCreds, setIsWNLoginWithCreds] = useState(false);
     const [isForgotPasswordScenario, setIsForgotPasswordScenario] = useState(false);
     const isLoginPopup = useSelector((store: any) => store?.reducers?.popupSlice?.isLoginPopup);
     const isLogoutPopup = useSelector((store: any) => store?.reducers?.popupLogoutSlice?.isLogoutPopup);
@@ -328,6 +329,14 @@ function App() {
         setIsMainLoginOption(false);
         setIsMainSignupOption(false);
 
+    }
+
+    const addWNSocialAccountHandler = async() => {
+        alert('Handler called');
+        setIsLoginWithWN(false);
+        setIsWNLoginWithCreds(true);
+        setIsMainLoginOption(false);
+        setIsMainSignupOption(false);
     }
 
     const loginWithGoogleAccessToken = async (accessToken: string) => {
@@ -1030,6 +1039,232 @@ function App() {
                                 >
 {/* start wn social modal */}
 {/* {style.wnSocialModal} */}
+
+
+{isWNLoginWithCreds && !isLoginWithWN ? (
+                                                            <>
+                                                            <div 
+                                        onClick={closeLoginPopupHandler}
+                                        className="bg-gray-100/50 rounded-full h-10 w-10 flex flex-row justify-center items-center relative right-4 p-1 cursor-pointer">
+                                            <img className="h-4 w-4 object-contain" src="/public/images/icons/close.svg" />
+                                        </div>
+                                                                <div className="flex flex-row items-center border border-gray-500 bg-login-btn mt-2 rounded-md p-2.5">
+                                                                    <div
+                                                                        onClick={
+                                                                            countryCodeModelHandler
+                                                                        }
+                                                                        className="flex flex-row items-center gap-2 flex-1 cursor-pointer relative text-black"
+                                                                    >
+                                                                        <p>
+                                                                            {isoCode +
+                                                                                ' ' +
+                                                                                countryCode}
+                                                                        </p>
+                                                                        <img
+                                                                            className={`object-contain h-2.5 w-2.5 chevron ${countryModelOpened
+                                                                                ? 'rotate'
+                                                                                : ''
+                                                                                }`}
+                                                                            src={chevronDown}
+                                                                        />
+                                                                        <p className="text-gray-400 ">
+                                                                            {' '}
+                                                                            |{' '}
+                                                                        </p>
+                                                                        {countryModelOpened && (
+                                                                            <div
+                                                                                onClick={
+                                                                                    modelClickHandler
+                                                                                }
+                                                                                className={`absolute ${filteredCountryCodes.length ===
+                                                                                    0
+                                                                                    ? 'h-fit'
+                                                                                    : 'h-80'
+                                                                                    }  w-80 bg-white top-11 -left-2.5 rounded-md shadow-md cursor-default z-10`}
+                                                                            >
+                                                                                <div className="flex flex-row items-center p-2 gap-2 border rounded-t-lg">
+                                                                                    <img
+                                                                                        className="object-contain h-3 w-3 m-2"
+                                                                                        src={search}
+                                                                                    />
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        placeholder="Search"
+                                                                                        className="w-full text-sm font-normal caret-red-500 bg-white"
+                                                                                        value={
+                                                                                            searchQuery
+                                                                                        }
+                                                                                        onChange={
+                                                                                            handleSearchChange
+                                                                                        }
+                                                                                    />
+                                                                                </div>
+                                                                                <div className="w-full h-[1px] bg-gray-300" />
+                                                                                <div
+                                                                                    className={`overflow-y-auto ${filteredCountryCodes.length ===
+                                                                                        0
+                                                                                        ? 'h-fit'
+                                                                                        : 'max-h-[17.188rem]'
+                                                                                        } `}
+                                                                                >
+                                                                                    {filteredCountryCodes.map(
+                                                                                        (
+                                                                                            countryItem: any,
+                                                                                            index: number
+                                                                                        ) => (
+                                                                                            <div
+                                                                                                onClick={() =>
+                                                                                                    countryItemClickHandler(
+                                                                                                        countryItem,
+                                                                                                        index
+                                                                                                    )
+                                                                                                }
+                                                                                                key={
+                                                                                                    index
+                                                                                                }
+                                                                                                className={`flex flex-row justify-between items-center p-2.5 cursor-pointer mb-2 rounded-b-md ${selectedCountryIndex ===
+                                                                                                    index
+                                                                                                    ? 'bg-gray-50'
+                                                                                                    : ''
+                                                                                                    }`}
+                                                                                            >
+                                                                                                <p
+                                                                                                    className={`font-normal text-black text-left text-xs hover:bg-gray-50`}
+                                                                                                >
+                                                                                                    {countryItem?.name +
+                                                                                                        ' ' +
+                                                                                                        countryItem?.code}
+                                                                                                </p>
+                                                                                                {selectedCountryIndex ===
+                                                                                                    index && (
+                                                                                                        <img
+                                                                                                            className="h-4 w-4 object-contain"
+                                                                                                            alt="check-mark"
+                                                                                                            src={
+                                                                                                                checkCountryCode
+                                                                                                            }
+                                                                                                        />
+                                                                                                    )}
+                                                                                            </div>
+                                                                                        )
+                                                                                    )}
+                                                                                    {filteredCountryCodes.length ===
+                                                                                        0 && (
+                                                                                            <p className="font-normal text-gray-400 text-xs hover:bg-gray-50 my-2">
+                                                                                                {
+                                                                                                    APP_TEXTS.NO_RESULT_FOUND
+                                                                                                }
+                                                                                            </p>
+                                                                                        )}
+                                                                                </div>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                    <input
+                                                                        className="w-2/3 bg-login-btn"
+                                                                        type="text" // ✅ Change from "number" to "text" to enforce max length
+                                                                        placeholder="Phone number"
+                                                                        value={phoneNumber}
+                                                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                                            const { value } = e.target;
+                                                                            const maxLength = getMaxPhoneLength(isoCode.toLocaleUpperCase());
+
+                                                                            // ✅ Remove non-numeric characters and enforce max length
+                                                                            const sanitizedValue = value.replace(/\D/g, '').substring(0, maxLength);
+                                                                            setPhoneNumber(sanitizedValue);
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                                {isForgotPasswordScenario && (
+                                                                    <>
+                                                                        <div className="flex flex-row items-center border border-gray-500 bg-login-btn mt-2 rounded-md py-2.5 px-3">
+                                                                            <input
+                                                                                className="w-2/3 bg-login-btn"
+                                                                                type="number"
+                                                                                maxLength={6}
+                                                                                placeholder="Enter 6-digit code"
+                                                                                value={code}
+                                                                                onChange={
+                                                                                    handleChange
+                                                                                }
+                                                                            />
+                                                                            <div
+                                                                                className={`flex flex-row justify-center items-center gap-2 flex-1 ${phoneNumber?.length >
+                                                                                    0 ||
+                                                                                    email.length > 0
+                                                                                    ? 'cursor-pointer'
+                                                                                    : 'cursor-not-allowed'
+                                                                                    }`}
+                                                                            >
+                                                                                <p className="text-gray-400 ">
+                                                                                    {' '}
+                                                                                    |{' '}
+                                                                                </p>
+                                                                                <p
+                                                                                    onClick={
+                                                                                        sendOTP
+                                                                                    }
+                                                                                    className={`text-sm ${phoneNumber?.length >
+                                                                                        0 ||
+                                                                                        email.length >
+                                                                                        0
+                                                                                        ? textColor
+                                                                                        : 'text-gray-400'
+                                                                                        }`}
+                                                                                >
+                                                                                    {
+                                                                                        APP_TEXTS.SEND_CODE
+                                                                                    }
+                                                                                </p>
+                                                                                {loadingOtp && (
+                                                                                    <Loader />
+                                                                                )}
+                                                                            </div>
+                                                                        </div>
+                                                                        {error && (
+                                                                            <p className="text-red-500 font-normal text-xs text-left mt-2">
+                                                                                {error}
+                                                                            </p>
+                                                                        )}
+                                                                    </>
+                                                                )}
+                                                                <div className="flex flex-row justify-between items-center border border-gray-500 bg-login-btn mt-2 rounded-md py-2.5 px-3 text-black">
+                                                                    <input
+                                                                        className="w-2/3 bg-login-btn"
+                                                                        type={
+                                                                            showPassword
+                                                                                ? 'text'
+                                                                                : 'password'
+                                                                        }
+                                                                        placeholder="Password"
+                                                                        value={password}
+                                                                        onChange={(e) =>
+                                                                            setPassword(
+                                                                                e.target.value
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                    {!showPassword ? (
+                                                                        <Visibility
+                                                                            style={{
+                                                                                cursor: 'pointer',
+                                                                            }}
+                                                                            onClick={togglePassword}
+                                                                        />
+                                                                    ) : (
+                                                                        <VisibilityOff
+                                                                            style={{
+                                                                                cursor: 'pointer',
+                                                                            }}
+                                                                            onClick={togglePassword}
+                                                                        />
+                                                                    )}
+                                                                </div>
+                                                                <div className="flex flex-row items-center bg-login-btn mt-4 rounded-md py-2.5 px-3 cursor-pointer  _NextBtn_11sgr_193"><div className="flex flex-row justify-center items-center gap-2 flex-1"><p>Login to Worldnoor</p></div></div>
+                                                            </>
+                                                        ) : null
+}
+
                                 { isLoginWithWN &&
                                 <div className={style.wnSocialModal}>
                                     <div className="d-flex justify-content-between">
@@ -1038,7 +1273,9 @@ function App() {
                                         >
                                             <img className="h-6 w-6 object-contain" src="/public/images/icons/backArrow.svg" />
                                         </div>
-                                        <div className="bg-gray-100/50 rounded-full h-10 w-10 flex flex-row justify-center items-center relative right-4 p-1 cursor-pointer">
+                                        <div 
+                                        onClick={closeLoginPopupHandler}
+                                        className="bg-gray-100/50 rounded-full h-10 w-10 flex flex-row justify-center items-center relative right-4 p-1 cursor-pointer">
                                             <img className="h-4 w-4 object-contain" src="/public/images/icons/close.svg" />
                                         </div>
                                     </div>
@@ -1057,6 +1294,9 @@ function App() {
                                         </svg>
                                         </div>
                                     </div>
+
+
+
                                     <div className='px-5'>
                                         <div className={style.userInfo}>
                                         <img src="profile.jpg" alt="Profile Picture" className={style.profilePic} />
@@ -1066,7 +1306,9 @@ function App() {
                                         </div>
                                         </div>
 
-                                        <div className={style.addAccount}>
+                                        <div 
+                                        onClick={addWNSocialAccountHandler}
+                                        className={style.addAccount}>
                                         <span className={style.plusIcon}>
                                         <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -1102,20 +1344,17 @@ function App() {
                                         <span>WN Social</span> values your privacy and security. By logging into <span>Seezitt</span> through <span>WN Social</span>, rest assured that your information and data are treated with the utmost confidentiality. Our commitment to your privacy means that your data will not be shared or compromised.
                                         </p>
                                     </div>
-                                    <button className={style.continueBtn}>Continue with Email</button>
                                 </div>
                                 }
 {/* end wn social modal */}
-                                    { !isLoginWithWN &&
-                                    <div
+                                    {!isLoginWithWN && !isWNLoginWithCreds && isLoginSection ? (
+                                        <>
+                                        <div
                                         onClick={closeLoginPopupHandler}
                                         className="bg-gray-100/50 rounded-full h-10 w-10 flex flex-row justify-center items-center absolute right-5 p-1 cursor-pointer"
                                     >
-                                        <img className="h-4 w-4 object-contain" src={closeIcon} />
+                                        <img className="h-4 w-4 object-contain" src="/public/images/icons/close.svg" />
                                     </div>
-                                    }
-                                    {!isLoginWithWN && isLoginSection ? (
-                                        <>
                                             <div className=" w-[21.888rem] mx-auto ">
                                                 <h2
                                                     className={`font-bold text-3xl mt-5 mb-4 ${textColor}`}
@@ -1652,7 +1891,7 @@ function App() {
                                         </>
                                     ) : (
                                         <>
-                                            { !isLoginWithWN && 
+                                            { !isLoginWithWN && !isWNLoginWithCreds &&
                                             <div className=" w-[21.888rem] mx-auto ">
                                                 <h2
                                                     className={`font-bold text-3xl mt-5 mb-4 ${textColor}`}
@@ -2349,23 +2588,30 @@ function App() {
                                                     </p>
                                                 </div>
                                             )}
-                                            { !isLoginWithWN &&
-                                            <div className="mt-3 bottom-0 absolute w-full py-4">
-                                                <div className="border-t-[0.3px] border-gray-200 text-center pt-3.5">
-                                                    <h3
-                                                        className={`font-normal text-[0.938rem] flex flex-row items-center justify-center gap-1 ${textColor} `}
-                                                    >
-                                                        {SIGNUP_APP_TEXTS.ALREADY_ACCOUNT}{' '}
-                                                        <span
-                                                            className="text-danger-1 font-semibold hover:underline cursor-pointer"
-                                                            onClick={handleLoginpopupClick}
-                                                        >
-                                                            {SIGNUP_APP_TEXTS.LOGIN}
-                                                        </span>
-                                                    </h3>
+                                            {isLoginWithWN ? (
+                                                <div className="mt-3 bottom-0 absolute w-full py-4">
+                                                    <div className="border-t-[0.3px] border-gray-200 text-center pt-3.5">
+                                                        <button className={style.continueBtn}>Continue with Email</button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            }
+                                            ) : (
+                                                <div className="mt-3 bottom-0 absolute w-full py-4">
+                                                    <div className="border-t-[0.3px] border-gray-200 text-center pt-3.5">
+                                                        <h3
+                                                            className={`font-normal text-[0.938rem] flex flex-row items-center justify-center gap-1 ${textColor}`}
+                                                        >
+                                                            {SIGNUP_APP_TEXTS.ALREADY_ACCOUNT}{' '}
+                                                            <span
+                                                                className="text-danger-1 font-semibold hover:underline cursor-pointer"
+                                                                onClick={handleLoginpopupClick}
+                                                            >
+                                                                {SIGNUP_APP_TEXTS.LOGIN}
+                                                            </span>
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                            )}
+
                                         </>
                                     )}
                                 </div>
