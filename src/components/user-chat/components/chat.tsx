@@ -336,7 +336,7 @@ function UserChat(props: any) {
                         </div>
                         <div key="report">
                             <MenuItem onClick={() => { handleReport(); } }>
-                                <AccountCircleOutlined />
+                                <img src="/src/assets/report.svg" />
                                 <span style={{ marginLeft: '8px', fontWeight: 'bold' }} >Report</span>
                             </MenuItem>
                             <Divider />
