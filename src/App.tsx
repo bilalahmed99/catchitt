@@ -996,8 +996,8 @@ function App() {
                                     className={`w-[30.688rem] mx-auto mt-3 bg-white py-4 rounded-lg relative h-[42.125rem]  ${lightDarkTheme} `}
                                 >
 {/* start wn social modal */}
-
-                                <div className={style.wnSocialModal}>
+{/* {style.wnSocialModal} */}
+                                <div className="d-none">
                                     <div className="d-flex justify-content-between">
                                         <div className="bg-gray-100/50 rounded-full h-10 w-10 flex flex-row justify-center items-center relative left-4 p-1 cursor-pointer">
                                             <img className="h-6 w-6 object-contain" src="/public/images/icons/backArrow.svg" />
