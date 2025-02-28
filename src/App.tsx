@@ -305,7 +305,9 @@ function App() {
             console.log(data);
 
             if (response.ok) {
-                
+                setIsLoading(false);
+                closeLoginPopupHandler();
+                window.location.href = '/home';
                 // Handle successful login (e.g., store token, redirect user)
             } else {
                 // display error message here...
