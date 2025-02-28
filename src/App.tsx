@@ -472,7 +472,6 @@ function App() {
                     setIsLoading(false);
                     console.log('response payload...', res.payload);
                 } else if (res?.payload?.status == 200) {
-                    console.log('data after successfull login', res?.payload?.data);
                     closeLoginPopupHandler();
                     window.location.href = '/home';
                 }
