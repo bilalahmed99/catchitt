@@ -1272,7 +1272,7 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                             <button className={`${style.buttontab} ${commentSection ? activeClass : ''} `} onClick={handleComment}>Comments</button>
                             <button className={`${style.buttontab} ${tagSection ? activeClass : ''} `} onClick={handleTag}>Mentions and tags</button>
                             <button className={`${style.buttontab} ${followerSection ? activeClass : ''}`} onClick={handlefollower}>Followers</button>
-                            <button className={`${style.buttontab} ${messageRequest ? activeClass : ''} `} onClick={handleMessageRequest}>Message Requests</button>
+                            {/* <button className={`${style.buttontab} ${messageRequest ? activeClass : ''} `} onClick={handleMessageRequest}>Message Requests</button> */}
                         </div>
 
                         <div className={`${style.inboxList} no-scrollbar`}>

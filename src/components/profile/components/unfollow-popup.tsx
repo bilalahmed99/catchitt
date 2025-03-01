@@ -2,12 +2,50 @@ import React, { useState } from 'react';
 import styles from './unfollow-popup-module.scss';
 import { Box, Modal, Button } from '@mui/material';
 import { defaultAvatar } from '../../../icons';
+import { useDispatch, useSelector } from 'react-redux';
 
 const API_KEY = process.env.VITE_API_URL;
-const UnfollowPopup = ({ openUnfollowPopup, onUnfollow, onCancel, user }: any) => {
+const UnfollowPopup = ({ openUnfollowPopup, onUnfollow, onCancel, user, description, heading, btnText,IsFollowerTab, removeCurrentUser }: any) => {
     console.log('UnfollowPopup');
+    console.log('selectd user', user);
+    console.log(user?.follower_userID);
+
+    const profile = useSelector((state: any) => state?.reducers?.profile);
+    console.log('profile', profile);
+    const loggedInUserId = localStorage.getItem('userId');
+    console.log('loggedInUserId', loggedInUserId);
     const [loading, setLoading] = useState(false);
-    const [text, setText] = useState('Unfollow');
+    const [text, setText] = useState(btnText? btnText:'Unfollow');
+
+    const BlockUser = async () => {
+        if (loading) return; // Prevent further execution if already in loading state
+        setLoading(true); // Set loading state to true to indicate progress
+        try {
+            const API_KEY = process.env.VITE_API_URL;
+            const token = localStorage.getItem('token');
+            let accountId = user?.follower_userID?._id;
+            if(!accountId){
+                 accountId = user?.followed_userID?._id;
+            }
+            const response = await fetch(`${API_KEY}/profile/${accountId}/block`, {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ id: accountId }),
+            });
+            const res = await response.json();
+            setLoading(false);
+            removeCurrentUser();
+        } catch (error) {
+            setLoading(false);
+            console.error('Error during BlockUser action:', error);
+        } finally {
+            setLoading(false); // Reset loading state after the function completes
+        }
+    };
+    
 
     const handleFollowClick = async () => {
         setLoading(true);
@@ -64,19 +102,30 @@ const UnfollowPopup = ({ openUnfollowPopup, onUnfollow, onCancel, user }: any) =
                             width: '100px',
                             borderRadius: '50%',
                         }}
-                        srcSet={user?.follower_userID?.avatar || defaultAvatar}
+                        srcSet={IsFollowerTab  ? (user?.follower_userID?.avatar || defaultAvatar) : (user?.followed_userID?.avatar || defaultAvatar)}
                         alt=""
                     />
+                    {heading && <h4 className='text-black pt-3'>{heading}</h4>}
                     <p
                         style={{
                             textAlign: 'center',
                         }}
                     >
-                        If you changed your mind you will have to request to follow{' '}
-                        {user?.follower_userID?.name} aggain.
+                        {description ? description : `If you changed your mind, you will have to request to follow ${user?.followed_userID?.name} again.`}
+                        
                     </p>
 
-                    <Button
+                    {IsFollowerTab &&  <Button
+                        variant="contained"
+                        sx={filledButton}
+                        onClick={BlockUser}
+                        disabled={loading} // Disable button while loading to prevent multiple clicks
+                    >
+                        {loading ? '...' : text}
+                    </Button>}
+
+
+                    {!IsFollowerTab && <Button
                         variant="contained"
                         sx={filledButton}
                         onClick={handleFollowClick}
@@ -84,6 +133,9 @@ const UnfollowPopup = ({ openUnfollowPopup, onUnfollow, onCancel, user }: any) =
                     >
                         {loading ? '...' : text}
                     </Button>
+                    }
+
+
                     <Button
                         variant="contained"
                         sx={secondaryBtn}

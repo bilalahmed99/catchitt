@@ -24,6 +24,10 @@ export default function FollowersTab({ onClose, followers, isPublic, onScrollBot
     const [privacySettingsData, setPrivacySettingsData] = useState<PrivacySettings>();
     const token = localStorage.getItem('token');
 
+    const removeCurrentUser = async (user:any) => {
+        console.log('removeCurrentUser', user);
+    }
+
     const handleFetchPrivacySettings = async () => {
         try {
             const response = await fetch(`${API_KEY}/profile/privacy-settings`, {
@@ -84,6 +88,7 @@ export default function FollowersTab({ onClose, followers, isPublic, onScrollBot
                     user={follower}
                     popupClose={onClose}
                     onRemoveClick={() => { }}
+                    removeCurrentUser={() => removeCurrentUser(follower)}
                 />
             ))
                 :
@@ -96,6 +101,7 @@ export default function FollowersTab({ onClose, followers, isPublic, onScrollBot
                         user={follower}
                         popupClose={onClose}
                         onRemoveClick={() => { }}
+                        removeCurrentUser={() => removeCurrentUser(follower)}
                     />
                 ))
             }

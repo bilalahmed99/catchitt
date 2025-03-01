@@ -225,7 +225,7 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
                             )}
                         </button>
                     )}
-                    {followings?.data?.length > 0 &&
+                    {/* {followings?.data?.length > 0 &&
                         followings?.data?.some(
                             (user: any) => user.followed_userID._id === params?.id
                         ) ? (
@@ -252,7 +252,7 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
                                 <CircularProgress style={{ width: 16, height: 16 }} />
                             )}
                         </button>
-                    )}
+                    )} */}
                     <button
                         onClick={() => {
                             setDropdown(!dropdown);

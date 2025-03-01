@@ -110,14 +110,14 @@ function FollowingTab({ onClose, following, isPublic, onScrollBottom, followingT
                             <PublicUser
                                 key={user._id}
                                 user={user}
-                                onUnfollowClick={openUnfollowPopup}
+                                onUnfollowClick={()=> openUnfollowPopup(user)}
                                 popupClose={onClose}
                             />
                         ) : (
                             <User
                                 key={user._id}
                                 user={user}
-                                onUnfollowClick={openUnfollowPopup}
+                                onUnfollowClick={()=> openUnfollowPopup(user)}
                                 popupClose={onClose}
                             />
                         )
