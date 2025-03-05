@@ -141,6 +141,12 @@ export default function CommentsComponent({
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [isFetchingUsers, setIsFetchingUsers] = useState(false);
 
+    const previewConfig = {
+        defaultEmoji: "1f60a", // Default emoji if necessary
+        defaultCaption: "What's your mood?", // Default caption if needed
+        showPreview: false, // This will hide the preview
+      };
+
     const open = Boolean(anchorEl);
 
     const videoData = {
@@ -1083,7 +1089,7 @@ export default function CommentsComponent({
                                                                                     </div>
                                                                                 )}
                                                                         
-                                                                        <EmojiPicker className="mt-2 position-absolute left-0 bg-[#fff] w-[18rem]" open={(commentEmojiIndex === comment_index) ? true : false} theme={Theme.DARK} height={300} onEmojiClick={onReplyEmojiClick} />
+                                                                        <EmojiPicker className="mt-2 position-absolute left-0 bg-[#fff] w-[18rem]" open={(commentEmojiIndex === comment_index) ? true : false} searchDisabled={true} theme={Theme.light} previewConfig={previewConfig} previewConfig={previewConfig} height={300} onEmojiClick={onReplyEmojiClick} />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1571,7 +1577,7 @@ export default function CommentsComponent({
                                                 </div>
                                             )}
                                         </div>
-                                        <EmojiPicker className="mt-2 bottom-15 position-absolute left-0 bg-[#fff] w-[18rem]" open={commentEmojiIndex === -2 ? true : false} theme={Theme.DARK} height={300}  onEmojiClick={onEmojiClick} />
+                                        <EmojiPicker className="mt-2 bottom-15 position-absolute left-0 bg-[#fff] w-[18rem]" open={commentEmojiIndex === -2 ? true : false} theme={Theme.light} searchDisabled={true} height={300}  onEmojiClick={onEmojiClick} />
                                 {isMentioning && (
                                     <div
                                         ref={popupRef}
