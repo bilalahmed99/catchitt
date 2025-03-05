@@ -782,27 +782,27 @@ export default function CommentsComponent({
                 {/* <ClickAwayListener onClickAway={() => console.log('abc')}> */}
                     <div className={style.videoModalContainer}>
                         <div
-                            className="flex flex-row items-center w-screen h-screen relative"
+                            className="flex flex-row items-center h-screen relative"
                         >
                             {/* Video and right panel */}
                             <div className="flex w-full h-full">
                                 {/* Right side (37%) bg-white and bg-f8f8f8 for light */}
-                                <div className="w-[37%] h-full bg-[#121212] py-4 px-4 overflow-y-auto relative" id="scrollableDiv">
-                                    <div className="bg-[#1b1b1b] rounded-lg p-3.5">
+                                <div className={style.fixedComment} id="scrollableDiv">
+                                    <div className="">
 
-                                        <p className="text-base font-normal text-white mt-2.5 break-words text-left">
+                                        {/* <p className="text-base font-normal text-black mt-2.5 break-words text-left">
                                             <HashtagText text={info?.description} maxLength={100} />
-                                        </p>
-                                        <div className="flex flex-row items-center mt-2.5 gap-2.5">
+                                        </p> */}
+                                        {/* <div className="flex flex-row items-center mt-2.5 gap-2.5">
                                             <img
                                                 className="w-3 h-3 object-contain"
                                                 src={musicTuneLight}
                                                 alt="tune-icon"
                                             />
-                                            <p onClick={()=>navigate(`/sounds/${info?.sound?._id}`)} className="text-xs font-normal text-white cursor-pointer">
+                                            <p onClick={()=>navigate(`/sounds/${info?.sound?._id}`)} className="text-xs font-normal text-black cursor-pointer">
                                                 {info?.sound?.title}
                                             </p>
-                                        </div>
+                                        </div> */}
                                         {/* {info?.locationPlace != null && ( */}
                                         {/* <div className="flex flex-row items-center w-fit bg-[#252525] rounded-md py-1 px-1.5 mt-2.5 gap-2 cursor-pointer">
                                             <div className="rounded-sm bg-[#04c39b] p-[0.09rem] flex justify-center items-center">
@@ -812,125 +812,13 @@ export default function CommentsComponent({
                                                     alt="location"
                                                 />
                                             </div>
-                                            <p className="text-white font-normal text-xs">
+                                            <p className="text-black font-normal text-xs">
                                                 Karachi
                                             </p>
                                         </div> */}
                                         {/* )} */}
                                     </div>
                                     {/* Social icons */}
-                                    <div className="flex flex-row justify-between items-center">
-                                        <div className="flex flex-row justify-center items-center mt-3 px-3 gap-3.5 space-x-1">
-                                            <div className="flex flex-row justify-center items-center gap-1.5 cursor-pointer">
-                                                <div className="flex justify-center items-center rounded-full bg-[#2f2f2f] p-2">
-                                                    <img
-                                                        onClick={likeVideoToggler}
-                                                        className="h-4 w-4 object-contain cursor-pointer transform transition-transform duration-300 hover:scale-125 hover:rotate-12"
-                                                        src={
-                                                            isLiked ? redHeartIcon : whiteHeartIcon
-                                                        }
-                                                    />
-                                                </div>
-                                                <p className="font-medium text-sm text-white">
-                                                    <CountUp start={0} delay={0.1} duration={0.2} end={videoLikes} />
-                                                </p>
-                                            </div>
-                                            <div className="flex flex-row justify-center items-center gap-1.5 cursor-pointer">
-                                                <div className="flex justify-center items-center rounded-full bg-[#2f2f2f] p-2">
-                                                    <img
-                                                        // onClick={likeVideoToggler}
-                                                        className="h-4 w-4 object-contain cursor-pointer transform transition-transform duration-300 hover:scale-125 hover:rotate-12"
-                                                        src={commentIcon}
-                                                    />
-                                                </div>
-                                                <p className="font-medium text-sm text-white">
-                                                    <CountUp start={0} delay={0.1} duration={0.2} end={videoComments?.items?.length} />
-                                                </p>
-                                            </div>
-                                            <div className="flex flex-row justify-center items-center gap-1.5 cursor-pointer">
-                                                <div className="flex justify-center items-center rounded-full bg-[#2f2f2f] p-2">
-                                                    <img
-                                                        onClick={saveVideoToggler}
-                                                        className="h-4 w-4 object-contain cursor-pointer transform transition-transform duration-300 hover:scale-125 hover:rotate-12"
-                                                        src={isSaved ? savedIcon : saveIcon}
-                                                    />
-                                                </div>
-                                                <p className="font-medium text-sm text-white">
-                                                    <CountUp start={0} delay={0.1} duration={0.2} end={videoSaves} />
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-row items-center">
-                                            <div className="flex flex-row justify-center items-center mt-3 px-3 gap-2">
-                                                <div className="flex justify-center items-center rounded-full cursor-pointer">
-                                                    <img
-                                                        onClick={() => shareToLinkedIn(userName, videoUrl, info?.description)}
-                                                        className="h-6 w-6 object-contain cursor-pointer"
-                                                        src={linkedInShare}
-                                                    />
-                                                </div>
-                                                {/* <div className="flex justify-center items-center rounded-full bg-[#363636] p-1 cursor-pointer">
-                                                    <img
-                                                        onClick={embedShareHandler}
-                                                        className="h-4 w-4 object-contain cursor-pointer"
-                                                        src={embedShare}
-                                                    />
-                                                </div> */}
-                                                <div className="flex justify-center items-center rounded-full cursor-pointer border">
-                                                    <img
-                                                        onClick={() => shareToTwitter(userName, videoUrl, info?.description)}
-                                                        className="h-6 w-6 object-contain cursor-pointer"
-                                                        // src={sendToFriendsIcon}
-                                                        src={twitterShare}
-                                                    />
-                                                </div>
-                                                <div className="flex justify-center items-center rounded-full bg-[#24d366] p-1 cursor-pointer">
-                                                    <img
-                                                        onClick={() => whatsappShareHandler(userName, videoUrl)}
-                                                        className="h-4 w-4 object-contain cursor-pointer"
-                                                        src={whatsappShare}
-                                                    />
-                                                </div>
-                                                <div className="flex justify-center items-center rounded-full bg-[#0075fb] p-1 cursor-pointer">
-                                                    <img
-                                                        onClick={() => facebookShareHandler(userName, videoUrl)}
-                                                        className="h-4 w-4 object-contain cursor-pointer"
-                                                        src={facebookShare}
-                                                    />
-                                                </div>
-                                                <div className="flex justify-center items-center p-1 cursor-pointer">
-                                                    <img
-                                                        onClick={sharePopupHandler}
-                                                        className="h-4 w-4 object-contain cursor-pointer"
-                                                        src={shareIcon}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* Copy link */}
-                                    <div className="flex flex-row items-center mt-[1.2rem] px-3">
-                                        <div className="w-4/5 bg-[#2f2f2f] rounded-l-lg py-1.5 px-2.5">
-                                            <p
-                                                style={{
-                                                    textOverflow: 'ellipsis',
-                                                    overflow: 'hidden',
-                                                    whiteSpace: 'nowrap',
-                                                }}
-                                                className="text-white font-medium text-sm"
-                                            >
-                                                {textToCopy}
-                                            </p>
-                                        </div>
-                                        <div
-                                            onClick={() => copyLinkHandler(userName, info?.mediaId, 'Copied')}
-                                            className="flex justify-center items-center hover:bg-[#1b1b1b] w-1/5 bg-[#252525] rounded-r-lg py-1.5 px-2 cursor-pointer"
-                                        >
-                                            <p className="text-white font-bold text-sm">
-                                                Copy Link
-                                            </p>
-                                        </div>
-                                    </div>
                                     {/* recieved gifts section */}
                                     {/* <div className={style.gifts}>
                                         <p className={style.receivedGifftsText}>Gifts received</p>
@@ -954,16 +842,16 @@ export default function CommentsComponent({
                                         </div>
                                     </div> */}
                                     {/* Comment and creator video tab */}
-                                    <div className="flex flex-row justify-center items-center mt-2.5 w-full px-3">
+                                    <div className="flex flex-row  mt-2.5 w-full px-3">
                                         <div
                                             onClick={() => setCurrentTab(0)}
                                             style={{
                                                 borderBottom:
                                                     currentTab === 0 ? '2px solid white' : 'none',
                                             }}
-                                            className="flex justify-center items-center py-2 px-6 flex-1 cursor-pointer"
+                                            className="flex cursor-pointer"
                                         >
-                                            <p className="text-white text-sm font-bold">
+                                            <p className="text-black text-sm font-medium">
                                                 Comments (<CountUp start={0} delay={0.1} duration={0.2} end={videoComments?.items?.length} />)
                                             </p>
                                         </div>
@@ -975,12 +863,12 @@ export default function CommentsComponent({
                                             }}
                                             className="flex justify-center items-center py-2 px-6 flex-1 cursor-pointer"
                                         >
-                                            <p className="text-white text-sm font-bold">
+                                            <p className="text-black text-sm font-bold">
                                                 Creator videos
                                             </p>
                                         </div> */}
                                     </div>
-                                       My Video length {videoComments?.items?.length} 
+                                       {/* My Video length {videoComments?.items?.length}  */}
                                     {/* All comments section */}
                                     {Boolean(privacyPrivilege)? privacyPrivilege?.privacyOptions?.allowComments?<InfiniteScroll
                                         dataLength={videoComments?.items?.length}
@@ -997,331 +885,297 @@ export default function CommentsComponent({
                                         >
                                             <CircularProgress />
                                         </div>}
-                                        className="mb-20"
+                                        className={style.InfiniteScrollH}
                                         // scrollThreshold={0.6}
                                         scrollableTarget="scrollableDiv"
                                         endMessage={
                                             <div className="flex flex-row justify-center items-center mt-3">
-                                                <p className="text-white font-normal text-sm">
+                                                <p className="text-black font-normal text-sm">
                                                     {videoComments?.totalItems === 0 ? 'Be the first to comment' : 'No more comments'}
                                                 </p>
                                             </div>
                                         }
                                     >
                                         {videoComments?.items.map((comment: any, comment_index: number) => (
-                                            <div key={comment?.id}>
-                                                <div
-                                                    onMouseEnter={() => {
-                                                        setIsReportElipsisVisible(true);
-                                                        // setCurrentCommentIndex(comment_index);
-                                                        // setIsReplyToCommentClicked(false);
-                                                        setCommentEmojiIndex(-1);
-                                                    }}
-                                                    onMouseLeave={() => {
-                                                        setIsReportElipsisVisible(false);
-                                                        setIsTooltipVisible(false);
-                                                    }}
-                                                    className="flex flex-row items-start gap-3 mt-4"
-                                                >
-                                                    {comment?.user?.avatar ? (
-                                                        <img
-                                                            onClick={() =>
-                                                                openUserPublicProfileHandler(
-                                                                    comment?.user?.username
-                                                                )
-                                                            }
-                                                            className={`w-12 h-12 object-contain rounded-full cursor-pointer`}
-                                                            src={comment?.user?.avatar || defaultAvatar}
-                                                            alt=""
-                                                        />
-                                                    ) : (
-                                                        <div
-                                                            onClick={() =>
-                                                                openUserPublicProfileHandler(
-                                                                    comment?.user?.username
-                                                                )
-                                                            }
-                                                            className="w-12 h-12 object-cover rounded-full bg-gray-800 flex justify-center items-center p-4"
-                                                        >
-                                                            <p className="text-lg text-white font-medium">
-                                                                {comment?.user?.name?.charAt(0)}
-                                                            </p>
-                                                        </div>
-                                                    )}
-                                                    <div className="flex flex-row items-start justify-between gap-12 w-full" >
-                                                        <div className="text-left w-full">
-                                                            <p
+                                           
+                                                <div key={comment?.id}>
+                                                    <div
+                                                        onMouseEnter={() => {
+                                                            setIsReportElipsisVisible(true);
+                                                            // setCurrentCommentIndex(comment_index);
+                                                            // setIsReplyToCommentClicked(false);
+                                                            setCommentEmojiIndex(-1);
+                                                        }}
+                                                        onMouseLeave={() => {
+                                                            setIsReportElipsisVisible(false);
+                                                            setIsTooltipVisible(false);
+                                                        }}
+                                                        className="flex flex-row items-start gap-3 mt-4"
+                                                    >
+                                                        {comment?.user?.avatar ? (
+                                                            <img
                                                                 onClick={() =>
                                                                     openUserPublicProfileHandler(
                                                                         comment?.user?.username
                                                                     )
                                                                 }
-                                                                className="font-semibold text-sm text-white cursor-pointer hover:underline"
+                                                                className={`w-12 h-12 object-contain rounded-full cursor-pointer`}
+                                                                src={comment?.user?.avatar || defaultAvatar}
+                                                                alt=""
+                                                            />
+                                                        ) : (
+                                                            <div
+                                                                onClick={() =>
+                                                                    openUserPublicProfileHandler(
+                                                                        comment?.user?.username
+                                                                    )
+                                                                }
+                                                                className="w-12 h-12 object-cover rounded-full bg-gray-800 flex justify-center items-center p-4"
                                                             >
-                                                                {comment?.user?.name}
-                                                            </p>
-                                                            <div className="flex flex-row justify-between items-center">
-                                                                <div>
-                                                                    <p className="font-normal text-[#807a7a] text-base cursor-pointer w-[350px] " style={{ overflowWrap: "break-word" }}>
-                                                                        {comment?.comment}
-                                                                    </p>
-                                                                    <div className="flex flex-row items-center gap-2 mt-1">
-                                                                        <p className="text-[#FFFFFF80] font-normal whitespace-nowrap	 text-sm">
-                                                                            {moment(
-                                                                                comment?.createdTime
-                                                                            ).format('D-MM')}
+                                                                <p className="text-lg text-black font-medium">
+                                                                    {comment?.user?.name?.charAt(0)}
+                                                                </p>
+                                                            </div>
+                                                        )}
+                                                        <div className="flex flex-row items-start justify-between gap-12 w-full" >
+                                                            <div className="text-left w-full">
+                                                                <p
+                                                                    onClick={() =>
+                                                                        openUserPublicProfileHandler(
+                                                                            comment?.user?.username
+                                                                        )
+                                                                    }
+                                                                    className="font-medium text-sm text-black cursor-pointer hover:underline"
+                                                                >
+                                                                    {comment?.user?.name}
+                                                                </p>
+                                                                <div className="flex flex-row justify-between items-center">
+                                                                    <div>
+                                                                        <p className="font-normal text-[#000] cursor-pointer w-[350px] " style={{ overflowWrap: "break-word" }}>
+                                                                            {comment?.comment}
                                                                         </p>
-                                                                        <p
-                                                                            onClick={() => { setCurrentCommentIndex(comment_index); setIsReplyToCommentClicked(true) }}
-                                                                            className="text-[#FFFFFF80] font-normal text-[0.938rem] cursor-pointer"
-                                                                        >
-                                                                            Reply
+                                                                        <div className="flex flex-row items-center gap-2 mt-1">
+                                                                            <p className="text-[#0000007A] font-normal whitespace-nowrap	 text-sm">
+                                                                                {moment(
+                                                                                    comment?.createdTime
+                                                                                ).format('D-MM')}
+                                                                            </p>
+                                                                            <div
+                                                                        onClick={() =>
+                                                                            commentLikeToggler(comment?.id)
+                                                                        }
+                                                                        className="flex items-center gap-[0.09rem] px-4"
+                                                                    >
+                                                                        <img
+                                                                            className={`w-6 h-6 object-contain cursor-pointer`}
+                                                                            src={
+                                                                                comment?.isLiked
+                                                                                    ? redHeartIcon
+                                                                                    : emptyHeartLightIcon
+                                                                            }
+                                                                            alt=""
+                                                                        />
+                                                                        <p className="text-[#0000007A] font-normal text-sm">
+                                                                            {comment?.likes ?? 0}
                                                                         </p>
-                                                                        {comment_index === currentCommentIndex &&
-                                                                            isReplyToCommentClicked && (
-                                                                                <div className="cursor-pointer flex w-full flex-row items-center gap-2.5 mt-2">
-                                                                                    <div className="bg-[#FFFFFF1F] flex flex-row items-center justify-between border-[0.063rem] border-transparent focus-within:border-[#16182333] rounded-lg cursor-text pr-2 pl-4 w-full mr-1">
-                                                                                        <form onSubmit={(e)=>{e.preventDefault();replyToCommentHandler(comment?.id);}}>
-                                                                                        <input
-                                                                                            value={commentReply}
-                                                                                            onChange={(e) =>
-                                                                                                setCommentReply(
-                                                                                                    e.target.value
-                                                                                                )
-                                                                                            }
-                                                                                            maxLength={150}
-                                                                                            placeholder="Add comment..."
-                                                                                            type="text"
-                                                                                            className="bg-transparent placeholder-[#4d4e58 text-[#d5cbcb] w-full"
-                                                                                            required
-                                                                                        />
-                                                                                        </form>
-
-                                                                                        <div className="flex flex-row items-center">
-                                                                                            <div
-                                                                                                onClick={
-                                                                                                    atRateHandler
+                                                                    </div>
+                                                                            <p
+                                                                                onClick={() => { setCurrentCommentIndex(comment_index); setIsReplyToCommentClicked(true) }}
+                                                                                className="text-[#0000007A] font-normal text-[0.938rem] cursor-pointer"
+                                                                            >
+                                                                                Reply
+                                                                            </p>
+                                                                        </div>
+                                                                            {comment_index === currentCommentIndex &&
+                                                                                isReplyToCommentClicked && (
+                                                                                    <div className="cursor-pointer flex w-[90%] flex-row items-center gap-2.5 mt-2">
+                                                                                        <div className="bg-[#1618230F] flex flex-row items-center justify-between border-[0.063rem] border-transparent focus-within:border-[#16182333] rounded-lg cursor-text pr-2 pl-4 w-full mr-1">
+                                                                                            <form onSubmit={(e)=>{e.preventDefault();replyToCommentHandler(comment?.id);}}>
+                                                                                            <input
+                                                                                                value={commentReply}
+                                                                                                onChange={(e) =>
+                                                                                                    setCommentReply(
+                                                                                                        e.target.value
+                                                                                                    )
                                                                                                 }
-                                                                                                className="rounded-lg cursor-pointer hover:bg-[#1618230f] my-[0.438rem] mx-[0.188rem] mr-1"
-                                                                                            >
-                                                                                                <img
-                                                                                                    className={`w-5 h-5 object-contain rounded-full`}
-                                                                                                    src={
-                                                                                                        atTheRateOf
+                                                                                                maxLength={150}
+                                                                                                placeholder="Add comment..."
+                                                                                                type="text"
+                                                                                                className="bg-transparent placeholder-[#4d4e58 text-[#d5cbcb] w-[90%]"
+                                                                                                required
+                                                                                            />
+                                                                                            </form>
+
+                                                                                            <div className="flex flex-row items-center">
+                                                                                                <div
+                                                                                                    onClick={
+                                                                                                        atRateHandler
                                                                                                     }
-                                                                                                    alt="at-the-rate-icon"
-                                                                                                />
-                                                                                            </div> 
-                                                                                            <div onClick={() => setCommentEmojiIndex(comment_index)} className="rounded-lg cursor-pointer hover:bg-[#1618230f] my-[0.438rem] mx-[0.188rem]">
-                                                                                                <img
-                                                                                                    className={`w-5 h-5 object-contain rounded-full`}
-                                                                                                    src={
-                                                                                                        commentEmoji
-                                                                                                    }
-                                                                                                    alt="comment-icon"
-                                                                                                />
+                                                                                                    className="rounded-lg cursor-pointer hover:bg-[#1618230f] my-[0.438rem] mx-[0.188rem] mr-1"
+                                                                                                >
+                                                                                                    <img
+                                                                                                        className={`w-5 h-5 object-contain rounded-full`}
+                                                                                                        src={
+                                                                                                            atTheRateOf
+                                                                                                        }
+                                                                                                        alt="at-the-rate-icon"
+                                                                                                    />
+                                                                                                </div> 
+                                                                                                <div onClick={() => setCommentEmojiIndex(comment_index)} className="rounded-lg cursor-pointer hover:bg-[#1618230f] my-[0.438rem] mx-[0.188rem]">
+                                                                                                    <img
+                                                                                                        className={`w-5 h-5 object-contain rounded-full`}
+                                                                                                        src={
+                                                                                                            commentEmoji
+                                                                                                        }
+                                                                                                        alt="comment-icon"
+                                                                                                    />
+                                                                                                </div>
                                                                                             </div>
                                                                                         </div>
-                                                                                    </div>
-                                                                                    <div
-                                                                                        onClick={() =>
-                                                                                            replyToCommentHandler(
-                                                                                                comment?.id
-                                                                                            )
-                                                                                        }
-                                                                                        className="mr-1"
-                                                                                    >
-                                                                                        <p
-                                                                                            className={`${commentReply?.length >
-                                                                                                0
-                                                                                                ? 'text-[#fe2c55]'
-                                                                                                : 'text-[#FFFFFF57]'
-                                                                                                } font-semibold text-base`}
+                                                                                        <div
+                                                                                            onClick={() =>
+                                                                                                replyToCommentHandler(
+                                                                                                    comment?.id
+                                                                                                )
+                                                                                            }
+                                                                                            className="mr-1"
                                                                                         >
-                                                                                            Post
-                                                                                        </p>
+                                                                                            <p
+                                                                                                className={`${commentReply?.length >
+                                                                                                    0
+                                                                                                    ? 'text-[#16182357]'
+                                                                                                    : 'text-[#FFFFFF57]'
+                                                                                                    } font-semibold text-base`}
+                                                                                            >
+                                                                                                Post
+                                                                                            </p>
+                                                                                        </div>
+                                                                                        <div
+                                                                                            onClick={() =>
+                                                                                                setIsReplyToCommentClicked(
+                                                                                                    false
+                                                                                                )
+                                                                                            }
+                                                                                            className="mr-1"
+                                                                                        >
+                                                                                            <img
+                                                                                                className={`w-5 h-5 object-contain rounded-full`}
+                                                                                                src={crossLightIcon}
+                                                                                                alt="cross-icon"
+                                                                                            />
+                                                                                        </div>
                                                                                     </div>
-                                                                                    <div
-                                                                                        onClick={() =>
-                                                                                            setIsReplyToCommentClicked(
-                                                                                                false
-                                                                                            )
-                                                                                        }
-                                                                                        className="mr-1"
-                                                                                    >
-                                                                                        <img
-                                                                                            className={`w-5 h-5 object-contain rounded-full`}
-                                                                                            src={crossLightIcon}
-                                                                                            alt="cross-icon"
-                                                                                        />
-                                                                                    </div>
-                                                                                </div>
-                                                                            )}
+                                                                                )}
+                                                                        
+                                                                        <EmojiPicker className="mt-2" open={(commentEmojiIndex === comment_index) ? true : false} theme={Theme.DARK} height={300} width="auto" onEmojiClick={onReplyEmojiClick} />
                                                                     </div>
-                                                                    <EmojiPicker className="mt-2" open={(commentEmojiIndex === comment_index) ? true : false} theme={Theme.DARK} height={300} width="auto" onEmojiClick={onReplyEmojiClick} />
-                                                                </div>
-
-                                                                <div
-                                                                    onClick={() =>
-                                                                        commentLikeToggler(comment?.id)
-                                                                    }
-                                                                    className="flex flex-col items-center gap-[0.09rem]"
-                                                                >
-                                                                    <img
-                                                                        className={`w-4 h-4 object-contain cursor-pointer`}
-                                                                        src={
-                                                                            comment?.isLiked
-                                                                                ? redHeartIcon
-                                                                                : emptyHeartLightIcon
-                                                                        }
-                                                                        alt=""
-                                                                    />
-                                                                    <p className="text-[#FFFFFF80] font-normal text-sm">
-                                                                        {comment?.likes ?? 0}
-                                                                    </p>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    {isReportElipsisVisible &&
-                                                        comment_index === currentCommentIndex ? (
-                                                        <div className="relative inline-block">
-                                                            <img
-                                                                className="w-5 h-5 object-contain cursor-pointer"
-                                                                src={
-                                                                    isDarkTheme || true
-                                                                        ? horizontalElipsisMenuWhiteIcon
-                                                                        : horizontalElipsisMenuIcon
-                                                                }
-                                                                alt="horizontal-elipsis-menu-icon"
-                                                                onMouseEnter={() =>
-                                                                    setIsTooltipVisible(true)
-                                                                }
-                                                            />
-                                                            {isTooltipVisible && (
-                                                                <div
-                                                                    className="absolute right-0 mt-2 cursor-pointer"
+                                                        {isReportElipsisVisible &&
+                                                            comment_index === currentCommentIndex ? (
+                                                            <div className="relative inline-block">
+                                                                <img
+                                                                    className="w-5 h-5 object-contain cursor-pointer"
+                                                                    src={
+                                                                        isDarkTheme || true
+                                                                            ? horizontalElipsisMenuWhiteIcon
+                                                                            : horizontalElipsisMenuIcon
+                                                                    }
+                                                                    alt="horizontal-elipsis-menu-icon"
                                                                     onMouseEnter={() =>
                                                                         setIsTooltipVisible(true)
                                                                     }
-                                                                    onMouseLeave={() =>
-                                                                        setIsTooltipVisible(false)
-                                                                    }
-                                                                    onClick={() => setReportPopup(true)}
-                                                                >
+                                                                />
+                                                                {isTooltipVisible && (
                                                                     <div
+                                                                        className="absolute right-0 mt-2 cursor-pointer"
                                                                         onMouseEnter={() =>
-                                                                            setToggleImage(true)
+                                                                            setIsTooltipVisible(true)
                                                                         }
                                                                         onMouseLeave={() =>
-                                                                            setToggleImage(false)
+                                                                            setIsTooltipVisible(false)
                                                                         }
-                                                                        className="bg-white text-black text-sm pr-16 pl-4 py-3 rounded-lg shadow flex flex-row justify-start gap-2.5 items-center"
+                                                                        onClick={() => setReportPopup(true)}
                                                                     >
-                                                                        {toggleImage ? (
-                                                                            <img
-                                                                                className="h-6 w-6 object-contain"
-                                                                                src={reportFlagIcon}
-                                                                                style={{
-                                                                                    filter: 'invert(27%) sepia(100%) saturate(7098%) hue-rotate(339deg) brightness(92%) contrast(110%)',
-                                                                                }}
-                                                                            />
-                                                                        ) : (
-                                                                            <img
-                                                                                className="h-6 w-6 object-contain bg-pink"
-                                                                                src={reportFlagIcon}
-                                                                            />
-                                                                        )}
-                                                                        <span
-                                                                            style={{
-                                                                                color: toggleImage
-                                                                                    ? '#fe2c55'
-                                                                                    : '#000000',
-                                                                            }}
-                                                                            className="font-semibold text-base mb-1"
+                                                                        <div
+                                                                            onMouseEnter={() =>
+                                                                                setToggleImage(true)
+                                                                            }
+                                                                            onMouseLeave={() =>
+                                                                                setToggleImage(false)
+                                                                            }
+                                                                            className="bg-white text-black text-sm pr-16 pl-4 py-3 rounded-lg shadow flex flex-row justify-start gap-2.5 items-center"
                                                                         >
-                                                                            Report
-                                                                        </span>
-                                                                    </div>
-                                                                    {/* Tooltip arrow */}
-                                                                    <div className="absolute top-2.5 right-1.5 transform -translate-x-1/2 -translate-y-full">
-                                                                        <div className="w-3 h-3.5 bg-white rotate-45 shadow-lg"></div>
-                                                                    </div>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    ) : (
-                                                        <div className="h-5 w-5" />
-                                                    )}
-                                                </div>
-                                                {/* Comment Replies */}
-                                                <div className="pl-[3.25rem] mt-2">
-                                                    {comment?.replies?.map(
-                                                        (
-                                                            comment_replies: any,
-                                                            comment_reply_index: number
-                                                        ) => (
-                                                            <div key={comment_replies?.id}>
-                                                                {visibleReplies[comment?.id] && (
-                                                                    <div
-                                                                        onMouseEnter={() => {
-                                                                            setCommentReplyIsReportElipsisVisible(
-                                                                                true
-                                                                            );
-                                                                            // setCurrentCommentIndex(
-                                                                            //     comment_index
-                                                                            // );
-                                                                            setCurrentCommentReplyIndex(
-                                                                                comment_reply_index
-                                                                            );
-                                                                        }}
-                                                                        onMouseLeave={() => {
-                                                                            setCommentReplyIsReportElipsisVisible(
-                                                                                false
-                                                                            );
-                                                                            setCommentReplyIsTooltipVisible(
-                                                                                false
-                                                                            );
-                                                                        }}
-                                                                        className="flex flex-row items-start gap-3 mt-3"
-                                                                    >
-                                                                        {comment?.user?.avatar ? (
-                                                                            <img
-                                                                                onClick={() =>
-                                                                                    openUserPublicProfileHandler(
-                                                                                        comment_replies
-                                                                                            ?.user
-                                                                                            ?.username
-                                                                                    )
-                                                                                }
-                                                                                className={`w-6 h-6 object-contain rounded-full cursor-pointer`}
-                                                                                src={
-                                                                                    comment_replies
-                                                                                        ?.user?.avatar
-                                                                                }
-                                                                                alt="comment-replyavatar"
-                                                                            />
-                                                                        ) : (
-                                                                            <div
-                                                                                onClick={() =>
-                                                                                    openUserPublicProfileHandler(
-                                                                                        comment_replies
-                                                                                            ?.user
-                                                                                            ?.username
-                                                                                    )
-                                                                                }
-                                                                                className={`w-7 h-7 object-contain rounded-full bg-gray-800 flex justify-center items-center cursor-pointer p-2`}
+                                                                            {toggleImage ? (
+                                                                                <img
+                                                                                    className="h-6 w-6 object-contain"
+                                                                                    src={reportFlagIcon}
+                                                                                    style={{
+                                                                                        filter: 'invert(27%) sepia(100%) saturate(7098%) hue-rotate(339deg) brightness(92%) contrast(110%)',
+                                                                                    }}
+                                                                                />
+                                                                            ) : (
+                                                                                <img
+                                                                                    className="h-6 w-6 object-contain bg-pink"
+                                                                                    src={reportFlagIcon}
+                                                                                />
+                                                                            )}
+                                                                            <span
+                                                                                style={{
+                                                                                    color: toggleImage
+                                                                                        ? '#fe2c55'
+                                                                                        : '#000000',
+                                                                                }}
+                                                                                className="font-semibold text-base mb-1"
                                                                             >
-                                                                                <p className="text-lg text-white font-medium">
-                                                                                    {comment?.user?.name?.charAt(
-                                                                                        0
-                                                                                    )}
-                                                                                </p>
-                                                                            </div>
-                                                                        )}
-                                                                        <div className="flex flex-row items-start justify-between gap-12 w-full">
-                                                                            <div className="text-left">
-                                                                                <p
+                                                                                Report
+                                                                            </span>
+                                                                        </div>
+                                                                        {/* Tooltip arrow */}
+                                                                        <div className="absolute top-2.5 right-1.5 transform -translate-x-1/2 -translate-y-full">
+                                                                            <div className="w-3 h-3.5 bg-white rotate-45 shadow-lg"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        ) : (
+                                                            <div className="h-5 w-5" />
+                                                        )}
+                                                    </div>
+                                                    {/* Comment Replies */}
+                                                    <div className="pl-[3.25rem] mt-2">
+                                                        {comment?.replies?.map(
+                                                            (
+                                                                comment_replies: any,
+                                                                comment_reply_index: number
+                                                            ) => (
+                                                                <div key={comment_replies?.id}>
+                                                                    {visibleReplies[comment?.id] && (
+                                                                        <div
+                                                                            onMouseEnter={() => {
+                                                                                setCommentReplyIsReportElipsisVisible(
+                                                                                    true
+                                                                                );
+                                                                                // setCurrentCommentIndex(
+                                                                                //     comment_index
+                                                                                // );
+                                                                                setCurrentCommentReplyIndex(
+                                                                                    comment_reply_index
+                                                                                );
+                                                                            }}
+                                                                            onMouseLeave={() => {
+                                                                                setCommentReplyIsReportElipsisVisible(
+                                                                                    false
+                                                                                );
+                                                                                setCommentReplyIsTooltipVisible(
+                                                                                    false
+                                                                                );
+                                                                            }}
+                                                                            className="flex flex-row items-start gap-3 mt-3"
+                                                                        >
+                                                                            {comment?.user?.avatar ? (
+                                                                                <img
                                                                                     onClick={() =>
                                                                                         openUserPublicProfileHandler(
                                                                                             comment_replies
@@ -1329,234 +1183,270 @@ export default function CommentsComponent({
                                                                                                 ?.username
                                                                                         )
                                                                                     }
-                                                                                    className="font-semibold text-sm text-white hover:underline cursor-pointer"
-                                                                                >
-                                                                                    {
+                                                                                    className={`w-6 h-6 object-contain rounded-full cursor-pointer`}
+                                                                                    src={
                                                                                         comment_replies
-                                                                                            ?.user?.name
+                                                                                            ?.user?.avatar
                                                                                     }
-                                                                                </p>
-                                                                                <p className="font-normal text-[#807a7a] text-base cursor-pointer">
-                                                                                    {
-                                                                                        comment_replies?.reply
+                                                                                    alt="comment-replyavatar"
+                                                                                />
+                                                                            ) : (
+                                                                                <div
+                                                                                    onClick={() =>
+                                                                                        openUserPublicProfileHandler(
+                                                                                            comment_replies
+                                                                                                ?.user
+                                                                                                ?.username
+                                                                                        )
                                                                                     }
-                                                                                </p>
-                                                                                <div className="flex flex-row items-center gap-4 mt-1">
-                                                                                    <p className="text-[#FFFFFF80] font-normal text-sm">
-                                                                                        {moment(
-                                                                                            comment?.createdTime
-                                                                                        ).format(
-                                                                                            'D-MM'
+                                                                                    className={`w-7 h-7 object-contain rounded-full bg-gray-800 flex justify-center items-center cursor-pointer p-2`}
+                                                                                >
+                                                                                    <p className="text-lg text-black font-medium">
+                                                                                        {comment?.user?.name?.charAt(
+                                                                                            0
                                                                                         )}
                                                                                     </p>
-                                                                                    <div
-                                                                                        onClick={() =>
-                                                                                            commentReplyLikeToggler(
-                                                                                                comment?.id,
-                                                                                                comment_replies?.id
-                                                                                            )
-                                                                                        }
-                                                                                        className="flex flex-row items-center gap-1.5"
-                                                                                    >
-                                                                                        <img
-                                                                                            className={`w-4 h-4 object-contain cursor-pointer`}
-                                                                                            src={
-                                                                                                comment_replies?.isLiked
-                                                                                                    ? redHeartIcon
-                                                                                                    : emptyHeartLightIcon
-                                                                                            }
-                                                                                            alt="like-icon"
-                                                                                        />
-                                                                                        <p className="text-[#FFFFFF80] font-normal text-sm">
-                                                                                            {
-                                                                                                comment_replies?.likes
-                                                                                            }
-                                                                                        </p>
-                                                                                    </div>
-                                                                                    {/* <p
-                                                                    onClick={() =>
-                                                                        setIsReplyToCommentClicked(
-                                                                            true
-                                                                        )
-                                                                    }
-                                                                    className="text-[#161823] font-normal text-[0.938rem] cursor-pointer"
-                                                                >
-                                                                    Reply
-                                                                </p> */}
                                                                                 </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        {isCommentReplyReportElipsisVisible &&
-                                                                            comment_index ===
-                                                                            currentCommentIndex &&
-                                                                            comment_reply_index ===
-                                                                            currentCommentReplyIndex && (
-                                                                                <div className="relative inline-block text-white">
-                                                                                    <img
-                                                                                        className="w-5 h-5 object-contain cursor-pointer"
-                                                                                        src={
-                                                                                            horizontalElipsisMenuIcon
-                                                                                        }
-                                                                                        alt="horizontal-elipsis-menu-icon"
-                                                                                        onMouseEnter={() =>
-                                                                                            setCommentReplyIsTooltipVisible(
-                                                                                                true
+                                                                            )}
+                                                                            <div className="flex flex-row items-start justify-between gap-12 w-full">
+                                                                                <div className="text-left">
+                                                                                    <p
+                                                                                        onClick={() =>
+                                                                                            openUserPublicProfileHandler(
+                                                                                                comment_replies
+                                                                                                    ?.user
+                                                                                                    ?.username
                                                                                             )
                                                                                         }
-                                                                                    />
-                                                                                    {isCommentReplyTooltipVisible && (
+                                                                                        className="font-semibold text-sm text-black hover:underline cursor-pointer"
+                                                                                    >
+                                                                                        {
+                                                                                            comment_replies
+                                                                                                ?.user?.name
+                                                                                        }
+                                                                                    </p>
+                                                                                    <p className="font-normal text-[#807a7a] text-base cursor-pointer">
+                                                                                        {
+                                                                                            comment_replies?.reply
+                                                                                        }
+                                                                                    </p>
+                                                                                    <div className="flex flex-row items-center gap-4 mt-1">
+                                                                                        <p className="text-black font-normal text-sm">
+                                                                                            {moment(
+                                                                                                comment?.createdTime
+                                                                                            ).format(
+                                                                                                'D-MM'
+                                                                                            )}
+                                                                                        </p>
                                                                                         <div
                                                                                             onClick={() =>
-                                                                                                setReportPopup(
-                                                                                                    true
+                                                                                                commentReplyLikeToggler(
+                                                                                                    comment?.id,
+                                                                                                    comment_replies?.id
                                                                                                 )
                                                                                             }
-                                                                                            className="absolute right-0 mt-2 cursor-pointer"
+                                                                                            className="flex flex-row items-center gap-1.5"
+                                                                                        >
+                                                                                            <img
+                                                                                                className={`w-4 h-8 object-contain cursor-pointer`}
+                                                                                                src={
+                                                                                                    comment_replies?.isLiked
+                                                                                                        ? redHeartIcon
+                                                                                                        : emptyHeartLightIcon
+                                                                                                }
+                                                                                                alt="like-icon"
+                                                                                            />
+                                                                                            <p className="text-black font-normal text-sm">
+                                                                                                {
+                                                                                                    comment_replies?.likes
+                                                                                                }
+                                                                                            </p>
+                                                                                        </div>
+                                                                                        {/* <p
+                                                                        onClick={() =>
+                                                                            setIsReplyToCommentClicked(
+                                                                                true
+                                                                            )
+                                                                        }
+                                                                        className="text-[#161823] font-normal text-[0.938rem] cursor-pointer"
+                                                                    >
+                                                                        Reply
+                                                                    </p> */}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            {isCommentReplyReportElipsisVisible &&
+                                                                                comment_index ===
+                                                                                currentCommentIndex &&
+                                                                                comment_reply_index ===
+                                                                                currentCommentReplyIndex && (
+                                                                                    <div className="relative inline-block text-black">
+                                                                                        <img
+                                                                                            className="w-5 h-5 object-contain cursor-pointer"
+                                                                                            src={
+                                                                                                horizontalElipsisMenuIcon
+                                                                                            }
+                                                                                            alt="horizontal-elipsis-menu-icon"
                                                                                             onMouseEnter={() =>
                                                                                                 setCommentReplyIsTooltipVisible(
                                                                                                     true
                                                                                                 )
                                                                                             }
-                                                                                            onMouseLeave={() =>
-                                                                                                setCommentReplyIsTooltipVisible(
-                                                                                                    false
-                                                                                                )
-                                                                                            }
-                                                                                        >
+                                                                                        />
+                                                                                        {isCommentReplyTooltipVisible && (
                                                                                             <div
+                                                                                                onClick={() =>
+                                                                                                    setReportPopup(
+                                                                                                        true
+                                                                                                    )
+                                                                                                }
+                                                                                                className="absolute right-0 mt-2 cursor-pointer"
                                                                                                 onMouseEnter={() =>
-                                                                                                    setToggleCommentReplyImage(
+                                                                                                    setCommentReplyIsTooltipVisible(
                                                                                                         true
                                                                                                     )
                                                                                                 }
                                                                                                 onMouseLeave={() =>
-                                                                                                    setToggleCommentReplyImage(
+                                                                                                    setCommentReplyIsTooltipVisible(
                                                                                                         false
                                                                                                     )
                                                                                                 }
-                                                                                                className="bg-white text-black text-sm pr-16 pl-4 py-3 rounded-lg shadow flex flex-row justify-start gap-2.5 items-center"
                                                                                             >
-                                                                                                {toggleCommentReplyImage ? (
-                                                                                                    <img
-                                                                                                        className="h-6 w-6 object-contain"
-                                                                                                        src={
-                                                                                                            reportFlagIcon
-                                                                                                        }
-                                                                                                        style={{
-                                                                                                            filter: 'invert(27%) sepia(100%) saturate(7098%) hue-rotate(339deg) brightness(92%) contrast(110%)',
-                                                                                                        }}
-                                                                                                    />
-                                                                                                ) : (
-                                                                                                    <img
-                                                                                                        className="h-6 w-6 object-contain bg-pink"
-                                                                                                        src={
-                                                                                                            reportFlagIcon
-                                                                                                        }
-                                                                                                    />
-                                                                                                )}
-                                                                                                <span
-                                                                                                    style={{
-                                                                                                        color: toggleCommentReplyImage
-                                                                                                            ? '#fe2c55'
-                                                                                                            : '#000000',
-                                                                                                    }}
-                                                                                                    className="font-semibold text-base mb-1"
+                                                                                                <div
+                                                                                                    onMouseEnter={() =>
+                                                                                                        setToggleCommentReplyImage(
+                                                                                                            true
+                                                                                                        )
+                                                                                                    }
+                                                                                                    onMouseLeave={() =>
+                                                                                                        setToggleCommentReplyImage(
+                                                                                                            false
+                                                                                                        )
+                                                                                                    }
+                                                                                                    className="bg-white text-black text-sm pr-16 pl-4 py-3 rounded-lg shadow flex flex-row justify-start gap-2.5 items-center"
                                                                                                 >
-                                                                                                    Report
-                                                                                                </span>
+                                                                                                    {toggleCommentReplyImage ? (
+                                                                                                        <img
+                                                                                                            className="h-6 w-6 object-contain"
+                                                                                                            src={
+                                                                                                                reportFlagIcon
+                                                                                                            }
+                                                                                                            style={{
+                                                                                                                filter: 'invert(27%) sepia(100%) saturate(7098%) hue-rotate(339deg) brightness(92%) contrast(110%)',
+                                                                                                            }}
+                                                                                                        />
+                                                                                                    ) : (
+                                                                                                        <img
+                                                                                                            className="h-6 w-6 object-contain bg-pink"
+                                                                                                            src={
+                                                                                                                reportFlagIcon
+                                                                                                            }
+                                                                                                        />
+                                                                                                    )}
+                                                                                                    <span
+                                                                                                        style={{
+                                                                                                            color: toggleCommentReplyImage
+                                                                                                                ? '#fe2c55'
+                                                                                                                : '#000000',
+                                                                                                        }}
+                                                                                                        className="font-semibold text-base mb-1"
+                                                                                                    >
+                                                                                                        Report
+                                                                                                    </span>
+                                                                                                </div>
+                                                                                                {/* Tooltip arrow */}
+                                                                                                <div className="absolute top-2.5 right-1.5 transform -translate-x-1/2 -translate-y-full">
+                                                                                                    <div className="w-3 h-3.5 bg-white rotate-45 shadow-lg"></div>
+                                                                                                </div>
                                                                                             </div>
-                                                                                            {/* Tooltip arrow */}
-                                                                                            <div className="absolute top-2.5 right-1.5 transform -translate-x-1/2 -translate-y-full">
-                                                                                                <div className="w-3 h-3.5 bg-white rotate-45 shadow-lg"></div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    )}
-                                                                                </div>
-                                                                            )}
+                                                                                        )}
+                                                                                    </div>
+                                                                                )}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            )
+                                                        )}
+
+                                                        {/* Render "View Replies" or "Hide" outside of the loop */}
+                                                        {comment?.replies?.length > 0 && (
+                                                            <div className="flex flex-row justify-between items-center">
+                                                                {!visibleReplies[comment?.id] ? (
+                                                                    <div className="flex flex-row justify-between items-center w-full">
+                                                                        <div
+                                                                            onClick={() =>
+                                                                                toggleRepliesVisibility(
+                                                                                    comment?.id
+                                                                                )
+                                                                            }
+                                                                            className="flex flex-row items-center gap-2 text-left hover:underline decoration-[#16182380] cursor-pointer mt-[0.688rem]"
+                                                                        >
+                                                                            <p className="text-black font-medium text-sm">
+                                                                                View{' '}
+                                                                                {comment?.replies?.length}{' '}
+                                                                                replies
+                                                                            </p>
+                                                                            <img
+                                                                                className="w-2.5 h-2.5 object-contain cursor-pointer"
+                                                                                src={chevronDownLightIcon}
+                                                                                alt="chevron-down-icon"
+                                                                                style={{
+                                                                                    filter: 'invert(15%) sepia(%) saturate(145%) hue-rotate(178deg) brightness(95%) contrast(90%)',
+                                                                                }}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
+                                                                ) : (
+                                                                    <div className="flex flex-row justify-between items-center w-full">
+                                                                        {/* I will use this in future for comment replies pagination */}
+
+                                                                        {/* <div
+                                                    onClick={() => toggleRepliesVisibility(comment?.id)}
+                                                    className="flex flex-row items-center gap-2 text-left hover:underline decoration-[#16182380] cursor-pointer mt-[0.688rem]"
+                                                >
+                                                    <div className="w-[2.25rem] h-[0.063rem] bg-[#1618231f] mr-2" />
+                                                    <p className="text-[#16182380] font-medium text-sm">
+                                                        View {comment?.comment_replies?.length} replies
+                                                    </p>
+                                                    <img
+                                                        className="w-2.5 h-2.5 object-contain cursor-pointer"
+                                                        src={chevronDownIcon}
+                                                        alt="chevron-down-icon"
+                                                        style={{
+                                                            filter: 'invert(15%) sepia(%) saturate(145%) hue-rotate(178deg) brightness(95%) contrast(90%)',
+                                                        }}
+                                                    />
+                                                </div> */}
+                                                                        <div
+                                                                            onClick={() =>
+                                                                                toggleRepliesVisibility(
+                                                                                    comment?.id
+                                                                                )
+                                                                            }
+                                                                            className="flex flex-row justify-end w-full items-center gap-2 text-left hover:underline decoration-[#16182380] cursor-pointer mt-[0.688rem]"
+                                                                        >
+                                                                            <p className="text-[#16182380] font-medium text-sm">
+                                                                                Hide
+                                                                            </p>
+                                                                            <img
+                                                                                className="w-2.5 h-2.5 object-contain cursor-pointer animate-bounce"
+                                                                                src={chevronTopLightIcon}
+                                                                                alt="chevron-top-icon"
+                                                                                style={{
+                                                                                    filter: 'invert(15%) sepia(%) saturate(145%) hue-rotate(178deg) brightness(95%) contrast(90%)',
+                                                                                }}
+                                                                            />
+                                                                        </div>
                                                                     </div>
                                                                 )}
                                                             </div>
-                                                        )
-                                                    )}
-
-                                                    {/* Render "View Replies" or "Hide" outside of the loop */}
-                                                    {comment?.replies?.length > 0 && (
-                                                        <div className="flex flex-row justify-between items-center">
-                                                            {!visibleReplies[comment?.id] ? (
-                                                                <div className="flex flex-row justify-between items-center w-full">
-                                                                    <div
-                                                                        onClick={() =>
-                                                                            toggleRepliesVisibility(
-                                                                                comment?.id
-                                                                            )
-                                                                        }
-                                                                        className="flex flex-row items-center gap-2 text-left hover:underline decoration-[#16182380] cursor-pointer mt-[0.688rem]"
-                                                                    >
-                                                                        <p className="text-[#FFFFFF80] font-medium text-sm">
-                                                                            View{' '}
-                                                                            {comment?.replies?.length}{' '}
-                                                                            replies
-                                                                        </p>
-                                                                        <img
-                                                                            className="w-2.5 h-2.5 object-contain cursor-pointer"
-                                                                            src={chevronDownLightIcon}
-                                                                            alt="chevron-down-icon"
-                                                                            style={{
-                                                                                filter: 'invert(15%) sepia(%) saturate(145%) hue-rotate(178deg) brightness(95%) contrast(90%)',
-                                                                            }}
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            ) : (
-                                                                <div className="flex flex-row justify-between items-center w-full">
-                                                                    {/* I will use this in future for comment replies pagination */}
-
-                                                                    {/* <div
-                                                onClick={() => toggleRepliesVisibility(comment?.id)}
-                                                className="flex flex-row items-center gap-2 text-left hover:underline decoration-[#16182380] cursor-pointer mt-[0.688rem]"
-                                            >
-                                                <div className="w-[2.25rem] h-[0.063rem] bg-[#1618231f] mr-2" />
-                                                <p className="text-[#16182380] font-medium text-sm">
-                                                    View {comment?.comment_replies?.length} replies
-                                                </p>
-                                                <img
-                                                    className="w-2.5 h-2.5 object-contain cursor-pointer"
-                                                    src={chevronDownIcon}
-                                                    alt="chevron-down-icon"
-                                                    style={{
-                                                        filter: 'invert(15%) sepia(%) saturate(145%) hue-rotate(178deg) brightness(95%) contrast(90%)',
-                                                    }}
-                                                />
-                                            </div> */}
-                                                                    <div
-                                                                        onClick={() =>
-                                                                            toggleRepliesVisibility(
-                                                                                comment?.id
-                                                                            )
-                                                                        }
-                                                                        className="flex flex-row justify-end w-full items-center gap-2 text-left hover:underline decoration-[#16182380] cursor-pointer mt-[0.688rem]"
-                                                                    >
-                                                                        <p className="text-[#16182380] font-medium text-sm">
-                                                                            Hide
-                                                                        </p>
-                                                                        <img
-                                                                            className="w-2.5 h-2.5 object-contain cursor-pointer animate-bounce"
-                                                                            src={chevronTopLightIcon}
-                                                                            alt="chevron-top-icon"
-                                                                            style={{
-                                                                                filter: 'invert(15%) sepia(%) saturate(145%) hue-rotate(178deg) brightness(95%) contrast(90%)',
-                                                                            }}
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    )}
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            </div>
+                                                                                
                                         ))}
                                     </InfiniteScroll>:<div className="flex flex-row justify-center items-center mt-3">
-                                <p className="font-bold text-xl text-white">
+                                <p className="font-bold text-xl text-black">
                                     Comments are disabled
                                 </p>
                             </div>:''}
@@ -1575,10 +1465,10 @@ export default function CommentsComponent({
                                         </div>
                                     )} */}
                                     {/* Add comment section */}
-                                    {privacyPrivilege?.privacyOptions?.allowComments && <div className="py-3 border-t border-t-[#252525] cursor-pointer gap-2.5 w-[37%] px-6   bottom-0 fixed right-0 bg-[#121212]" style={{ zIndex: 99 }}>
+                                    {privacyPrivilege?.privacyOptions?.allowComments && <div className="py-3 border-t cursor-pointer gap-2.5 sticky px-6 top-100  bottom-0 w-full right-0" style={{ zIndex: 99 }}>
                                          <div className="flex flex-row items-center">
                                             <div
-                                                className={`bg-[#FFFFFF1F] flex flex-row items-center justify-between border-[0.063rem] border-transparent ${isUserLoggedIn()
+                                                className={`bg-[#1618230F] flex flex-row items-center justify-between border-[0.063rem] border-transparent ${isUserLoggedIn()
                                                     ? 'focus-within:border-[#16182333]'
                                                     : ''
                                                     } rounded-lg cursor-text pr-2 pl-4 w-full`}
@@ -1602,9 +1492,9 @@ export default function CommentsComponent({
                                                         }`}
                                                     type="text"
                                                     readOnly={!isUserLoggedIn()}
-                                                    className={`bg-transparent w-full text-[#FFFFFFE6] ${!isUserLoggedIn()
+                                                    className={`bg-transparent w-full text-[#000] ${!isUserLoggedIn()
                                                         ? 'my-[0.438rem] p-[0.313rem] cursor-pointer placeholder-[#ff3b5c] font-medium'
-                                                        : 'placeholder-[#FFFFFFBC]'
+                                                        : 'placeholder-[#16182357]'
                                                         }`}
                                                 required
                                                 />
@@ -1639,8 +1529,8 @@ export default function CommentsComponent({
                                                 <div onClick={addCommentHandler} className="mr-1">
                                                     <p
                                                         className={`${comment?.length > 0
-                                                            ? 'text-[#fe2c55]'
-                                                            : 'text-[#FFFFFF57]'
+                                                            ? 'text-[#16182357]'
+                                                            : 'text-[#16182357]'
                                                             } font-semibold text-base ml-2`}
                                                     >
                                                         {addCommentLoading ? <CircularProgress
@@ -1687,7 +1577,7 @@ export default function CommentsComponent({
                                                             className="object-contain w-10 h-10 rounded-full"
                                                             src={user.avatar||defaultAvatar}
                                                         />
-                                                        <div className="text-left text-white">
+                                                        <div className="text-left text-black">
                                                             <p className="text-base font-medium">
                                                                 {user.name}
                                                             </p>
@@ -1699,7 +1589,7 @@ export default function CommentsComponent({
                                                 )
                                             )
                                         ) : (
-                                            <div className="px-4 py-2 text-white min-w-32 text-center">
+                                            <div className="px-4 py-2 text-black min-w-32 text-center">
                                                {isFetchingUsers? <CircularProgress style={{width:'20px',height:'20px',padding:'0px',marginBottom:'-4px'}}/>:'No users found'} 
                                             </div>
                                         )}
