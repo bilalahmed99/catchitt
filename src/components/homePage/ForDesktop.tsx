@@ -56,6 +56,7 @@ function ForDesktop(props: any) {
     const [isDarkTheme, setIsDarkTheme] = useState(false);
     const [countFlag, setCountFlag] = useState(true);
     const [commentModal, setCommentModal] = useState(true);
+    const [totalPostComments, setTotalPostComments] = useState<number>(0);
     // @ts-ignore
     const followers = useSelector((store) => store.reducers.followings);
     // @ts-ignore
@@ -133,10 +134,15 @@ function ForDesktop(props: any) {
         });
     };
 
+    const totalCommentsCount = (count: any) => {
+        setTotalPostComments(count);
+        console.log('totalCommentsCount', count);
+    }
+
     useEffect(() => {
         // If no video is playing, set the first video as active (or any other criteria)
         if (!activeMediaId && videoes.length > 0) {
-            setActiveMediaId(videoes[0]?.mediaId); // Set the first video as the active one
+            // setActiveMediaId(videoes[0]?.mediaId); // Set the first video as the active one
         }
 
         // You can also set a fallback or default logic, for example, last played video, or first available video, etc.
@@ -149,8 +155,11 @@ function ForDesktop(props: any) {
     }, [videoes, activeMediaId]); // This will run on initial load or when `videoes` changes
 
     const handleMediaPlay = (mediaId: string) => {
+        // alert('mediaId='+mediaId);
         console.log("Playing media with ID:", mediaId);
         setActiveMediaId(mediaId);
+        setTotalPostComments(0);
+        setCommentModal(true);
         // Handle the media ID (e.g., send it to the server, track analytics, etc.)
     };
       
@@ -277,7 +286,7 @@ function ForDesktop(props: any) {
             paddingBottomProp={true}
         >
             <div className={`relative  ${style.parent} ${darkTheme}`}>
-                <VideoNavigation videoListRef={scrollableDivRef} />
+                <VideoNavigation videoListRef={scrollableDivRef} commentModal={commentModal} />
                 <div className={`${style.videoesParent} no-scrollbar`} ref={scrollableDivRef}>
                     {videoes?.length > 0 && !loading && activeTab !== 3 ? (
                         videoes.map((post: any, number: number) => {
@@ -286,7 +295,7 @@ function ForDesktop(props: any) {
                                     data-media-id={post?.mediaId}
                                     key={number}
                                     id={post?.mediaId}
-                                    className={style.videoParent}
+                                    className={`${style.videoParent} ${commentModal ? '' : 'mw-100'}`}
                                     // ref={(el: HTMLLIElement | null) => itemsRef.current[number] = el}
                                     // style={{
                                     // backgroundColor: focusedIndex === number ? 'blue' : 'red',
@@ -362,6 +371,8 @@ function ForDesktop(props: any) {
                                                             popupHandler={() => setSendPopup(true)}
                                                             showVideoModal={showVideoModal}
                                                             post={post}
+                                                            totalPostComments={totalPostComments}
+                                                            showCommentsModal={() => setCommentModal(true)}
                                                         />
                                                     );
                                                 })}
@@ -440,18 +451,22 @@ function ForDesktop(props: any) {
                                             </div>
                                         </div>
                                         <div >
+                                            {/* ACTIVE MEDIA ID: {activeMediaId}
+                                        <pre>{JSON.stringify(post?.mediaId, null, 2)}</pre> */}
                                                 {/* current state:{activeMediaId} -- {post?.mediaId} */}
-                                                {activeMediaId === post?.mediaId && (
+                                                {activeMediaId === post?.mediaId  && (
                                                 <CommentsComponent
                                                 key={`mystr_${post?.mediaId}`}
                                                     gifts={true}
                                                     onBlockPopup={true}
                                                     onReportPopup={true}
-                                                    // commentModal={commentModal}
-                                                    onclose={false}
+                                                    commentModal={commentModal}
+                                                    onclose={()=> {console.log('here clonse...');setCommentModal(false)}}
                                                     info={post}
+                                                    postId={post?.mediaId}
                                                     sendPopupHandler={true}
-                                                    commentModal={ true}  // Default to false if undefined
+                                                    // commentModal={true} 
+                                                    totalCommentsCount={totalCommentsCount}
                                                 />
                                             )}
                                     </div>

@@ -1,5 +1,5 @@
 import { CircularProgress, ClickAwayListener, createTheme, Divider, IconButton, Menu, MenuItem, Modal, ThemeProvider } from '@mui/material';
-import style from './popupForVideoPlayer.module.scss';
+import style from './commentsComponent.module.scss';
 import VideoModel from '../components/videoModel';
 import moment from 'moment';
 import musicTuneLight from '../svg-components/music-tune-light.svg';
@@ -52,6 +52,7 @@ interface CommentsComponentProps {
     info: any;
     commentModal: boolean;
     onStateChange: (newState: boolean) => void;
+    totalCommentsCount:any;
   }
 
 export default function CommentsComponent({
@@ -64,7 +65,9 @@ export default function CommentsComponent({
     sendPopupHandler,
     deleteVideoPopup,
     editVideoHandler,
-    onStateChange
+    onStateChange,
+    postId,
+    totalCommentsCount
 }: any) {
     console.log('INFO', info);
     const token = localStorage.getItem('token');
@@ -74,7 +77,7 @@ export default function CommentsComponent({
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const ITEM_HEIGHT = 60;
-    const [localModalState, setLocalModalState] = useState(commentModal);
+    // const [localModalState, setLocalModalState] = useState(commentModal);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -83,7 +86,7 @@ export default function CommentsComponent({
 
     // const [selectedVideoId, setSelectedVideoId] = useState<any>(null);
     const [videoLikes, setVideoLikes] = useState<number>(0);
-    const [videoComments, setVideoComments] = useState<any>({ items: [], totalItems: null, pageSize: 5, currentPage: 1 });
+    const [videoComments, setVideoComments] = useState<any>({ items: [], totalItems: null, pageSize: 50, currentPage: 1 });
     const [videoSaves, setVideoSaves] = useState<number>(0);
     const [isSaved, setIsSaved] = useState<boolean>(false);
     const [isEmbedPopupVisible, setIsEmbedPopupVisible] = useState<boolean>(false);
@@ -269,6 +272,7 @@ export default function CommentsComponent({
 
     const paginateComments = async (fromStart = false) => {
         setIsCommentsLoading(true);
+        // alert(info?.mediaId+'---'+postId);
         try {
             const response = await fetch(
                 `${API_KEY}/media-content${token ? '' : '/public'}/videos/${info?.mediaId
@@ -299,6 +303,7 @@ export default function CommentsComponent({
                 videoCommentsObj.totalItems = data?.totalItems;
                 //alert('posted')
                 setVideoComments(videoCommentsObj);
+                totalCommentsCount(videoComments.items.length+1);
                 console.log('video length',videoComments?.items?.length)
             }
 
@@ -631,7 +636,8 @@ export default function CommentsComponent({
             // setVideoComments((prevComments: []) => [data?.data, ...prevComments]);
             paginateComments(true);
             setCommentEmojiIndex(-1);
-            toggleModal()
+            // toggleModal();
+            totalCommentsCount(videoComments.items.length+1);
         } catch (error) {
             console.log('🚀 ~ addCommentHandler ~ error:', error);
             setAddCommentLoading(false);
@@ -670,7 +676,7 @@ export default function CommentsComponent({
         setMentionIndex(0);
         setFilteredUsers([]);
         setAddCommentLoading(false);
-        setVideoComments({ items: [], totalItems: null, pageSize: 5, currentPage: 1 });
+        setVideoComments({ items: [], totalItems: null, pageSize: 50, currentPage: 1 });
         setVideoLikes(0);
         setVideoSaves(0);
         setVideoShares(0);
@@ -692,11 +698,12 @@ export default function CommentsComponent({
 
     }, [info]);
 
-    useEffect(() => {
-        setLocalModalState(commentModal);
-      }, [commentModal]);
+    // useEffect(() => {
+    //     setLocalModalState(commentModal);
+    //   }, [commentModal]);
 
     useEffect(() => {
+        totalCommentsCount(videoComments.items.length);
         console.log('Updated video length:', videoComments?.items?.length);
     }, [videoComments]);
 
@@ -723,11 +730,11 @@ export default function CommentsComponent({
       if (privacyPrivilege?.privacyOptions?.allowComments) paginateComments(true);
     }, [privacyPrivilege?.privacyOptions?.allowComments])
     
-    const toggleModal = () => {
-        const newState = !localModalState;
-        setLocalModalState(newState); // Update local state
-        onStateChange(newState); // Notify parent about the state change
-      };
+    // const toggleModal = () => {
+    //     const newState = !localModalState;
+    //     setLocalModalState(newState); // Update local state
+    //     onStateChange(newState); // Notify parent about the state change
+    //   };
 
     const lightThemePalette = createTheme({
         palette: {
@@ -777,10 +784,10 @@ export default function CommentsComponent({
     return (
         <ThemeProvider theme={darkThemePalette}>
         <PopupForPrivacySettings fetchUpdatedMedia={fetchMediaById} isPrivacyModalOpened={isPrivacyModalOpened} setIsPrivacyModalOpened={setIsPrivacyModalOpened} mediaId={info?.mediaId} />
-        <div className={style.parent}>
+        {commentModal && (<div className={style.parent}>
             {/* <Modal open={commentModal}> */}
                 {/* <ClickAwayListener onClickAway={() => console.log('abc')}> */}
-                    <div className={style.videoModalContainer}>
+                    <div  className={style.videoModalContainer}>
                         <div
                             className="flex flex-row items-center h-screen relative"
                         >
@@ -842,6 +849,11 @@ export default function CommentsComponent({
                                         </div>
                                     </div> */}
                                     {/* Comment and creator video tab */}
+
+                                    {/* <svg onClick={onclose()} className="ml-auto" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M16.5999 18.0097C16.6934 18.1013 16.8191 18.1527 16.9499 18.1527C17.0808 18.1527 17.2065 18.1013 17.2999 18.0097L18.0099 17.2997C18.1016 17.2063 18.1529 17.0806 18.1529 16.9497C18.1529 16.8188 18.1016 16.6932 18.0099 16.5997L13.4099 11.9997L18.0099 7.39973C18.1016 7.30626 18.1529 7.1806 18.1529 7.04973C18.1529 6.91885 18.1016 6.79319 18.0099 6.69973L17.3049 5.98973C17.2585 5.94286 17.2032 5.90566 17.1422 5.88028C17.0813 5.8549 17.0159 5.84183 16.9499 5.84183C16.8839 5.84183 16.8186 5.8549 16.7577 5.88028C16.6967 5.90566 16.6414 5.94286 16.5949 5.98973L11.9999 10.5847L7.39994 5.98473C7.30648 5.89311 7.18082 5.8418 7.04994 5.8418C6.91906 5.8418 6.7934 5.89311 6.69994 5.98473L5.98994 6.69473C5.94308 6.74121 5.90588 6.79651 5.88049 6.85744C5.85511 6.91837 5.84204 6.98372 5.84204 7.04973C5.84204 7.11573 5.85511 7.18108 5.88049 7.24201C5.90588 7.30294 5.94308 7.35824 5.98994 7.40473L10.5899 11.9997L5.98994 16.5997C5.89833 16.6932 5.84701 16.8188 5.84701 16.9497C5.84701 17.0806 5.89833 17.2063 5.98994 17.2997L6.69494 18.0097C6.74142 18.0566 6.79672 18.0938 6.85765 18.1192C6.91858 18.1446 6.98393 18.1576 7.04994 18.1576C7.11595 18.1576 7.1813 18.1446 7.24223 18.1192C7.30316 18.0938 7.35846 18.0566 7.40494 18.0097L11.9999 13.4097L16.5999 18.0097Z" fill="black"/>
+                                        </svg> */}
+                                        <button onClick={onclose}>Close</button>
                                     <div className="flex flex-row  mt-2.5 w-full px-3">
                                         <div
                                             onClick={() => setCurrentTab(0)}
@@ -854,7 +866,10 @@ export default function CommentsComponent({
                                             <p className="text-black text-sm font-medium">
                                                 Comments (<CountUp start={0} delay={0.1} duration={0.2} end={videoComments?.items?.length} />)
                                             </p>
+
+                                            
                                         </div>
+                                        
                                         {/* <div
                                             onClick={() => setCurrentTab(1)}
                                             style={{
@@ -868,6 +883,7 @@ export default function CommentsComponent({
                                             </p>
                                         </div> */}
                                     </div>
+                                    
                                        {/* My Video length {videoComments?.items?.length}  */}
                                     {/* All comments section */}
                                     {Boolean(privacyPrivilege)? privacyPrivilege?.privacyOptions?.allowComments?<InfiniteScroll
@@ -932,7 +948,7 @@ export default function CommentsComponent({
                                                                 }
                                                                 className="w-12 h-12 object-cover rounded-full bg-gray-800 flex justify-center items-center p-4"
                                                             >
-                                                                <p className="text-lg text-black font-medium">
+                                                                <p className="text-lg text-white font-medium">
                                                                     {comment?.user?.name?.charAt(0)}
                                                                 </p>
                                                             </div>
@@ -1624,7 +1640,7 @@ export default function CommentsComponent({
             <Forwardusers videoLink={info?.mediaId} onOpen={sendPopup} onClose={() => setSendPopup(false)} />
             <ToastContainer />
 
-        </div>
+        </div> )}
         </ThemeProvider>
     );
 }

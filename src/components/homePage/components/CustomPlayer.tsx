@@ -1,6 +1,9 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import style from './customPlayer.module.scss';
+import {setVideoUrl} from '../../../redux/reducers';
+import { useDispatch, useSelector } from 'react-redux';
+
 import {
     music,
     play,
@@ -15,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailImage, controls, number, onMediaPlay  }: any) {
     const [duration, setDuration] = useState<number>();
     const [playingTime, setPlayingTime] = useState<number>();
+    const dispatch = useDispatch();
     const { ref, inView, entry } = useInView({
         rootMargin: '-400px 0px -200px 0px',
     });
@@ -49,10 +53,16 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailI
             videoRef?.current?.play();
             if (post?.mediaId && onMediaPlay) {
                 onMediaPlay(post.mediaId);  // Capture media ID when video starts playing
+                let videoUrl = post?.reducedVideoUrl
+                ? post?.reducedVideoUrl
+                : post?.reducedVideoHlsUrl
+                ? post?.reducedVideoHlsUrl
+                : post?.originalUrl;
+                dispatch(setVideoUrl(videoUrl));
             }
         } else {
             if (post?.mediaId && onMediaPlay) {
-                onMediaPlay(post.mediaId);  // Capture media ID when video starts playing
+                // onMediaPlay(post.mediaId);  // Capture media ID when video starts playing
             }
             videoRef?.current?.pause();
         }
@@ -79,13 +89,18 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailI
         const video = videoRef.current;
         if (isPlaying) {
             if (onMediaPlay && post?.mediaId) {
-                onMediaPlay(post?.mediaId);
             }
             video.pause();
         } else {
             video.play();
             if (onMediaPlay && post?.mediaId) {
                 onMediaPlay(post?.mediaId);
+                let videoUrl = post?.reducedVideoUrl
+                ? post?.reducedVideoUrl
+                : post?.reducedVideoHlsUrl
+                ? post?.reducedVideoHlsUrl
+                : post?.originalUrl;
+                dispatch(setVideoUrl(videoUrl));
             }
         }
         setIsPlaying(!isPlaying);
@@ -105,6 +120,7 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailI
             ref={ref}
             className={`${style.mainContainer} video-container`}
         >
+            {/* {post.mediaId} */}
             <div className={`${style.videoContainer} ${inView ? 'true' : 'false'}`}
                 style={inView?{}:{
                     backgroundImage:`url(${thumbnailImage})`,
