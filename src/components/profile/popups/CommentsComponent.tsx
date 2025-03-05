@@ -1381,7 +1381,7 @@ export default function CommentsComponent({
                                                                             }
                                                                             className="flex flex-row items-center gap-2 text-left hover:underline decoration-[#16182380] cursor-pointer mt-[0.688rem]"
                                                                         >
-                                                                            <p className="text-black font-medium d-flex items-center text-sm w-[11rem] justify-around">
+                                                                            <p className="text-[#0000007A] font-medium d-flex items-center text-sm w-[11rem] justify-around">
                                                                             <span
                                                                                 style={{
                                                                                     display: "inline-block", 
@@ -1477,7 +1477,7 @@ export default function CommentsComponent({
                                         </div>
                                     )} */}
                                     {/* Add comment section */}
-                                    {privacyPrivilege?.privacyOptions?.allowComments && <div className="py-3 border-t cursor-pointer gap-2.5 sticky px-6 top-100  bottom-0 w-full right-0" style={{ zIndex: 99 }}>
+                                    {privacyPrivilege?.privacyOptions?.allowComments && <div className="py-3 border-t cursor-pointer gap-2.5 sticky px-3 top-100  bottom-0 w-full right-0" style={{ zIndex: 99 }}>
                                          <div className="flex flex-row items-center">
                                             <div
                                                 className={`bg-[#1618230F] flex flex-row items-center justify-between border-[0.063rem] border-transparent ${isUserLoggedIn()
