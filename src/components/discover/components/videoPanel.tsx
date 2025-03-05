@@ -127,29 +127,36 @@ export default function VideoesMaping({ fetchMore, videos, openVideoModal, muteS
                         }
 
                         { window.location.pathname.includes("/sounds/") &&
-                        <div className="sound-div">
-                            <div>
+                        <div className="sound-div position-relative">
+                            <div className="d-flex p-3 position-absolute top-[-3rem]">
                                 <span
                                     style={{
-                                        display: "inline-flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        width: "auto", // Adjust as needed
+                                        fontSize: '1rem',
+                                        color: "#fff",
+                                        paddingLeft: '0.2rem'
                                     }}
                                     >
                                     <img
                                         src={item?.user.avatar || "https://cdn.worldnoordev.com/icon-person.png"}
                                         alt="User profile"
                                         style={{
-                                        width: "24px",
-                                        height: "24px",
+                                            borderRadius: "50%",
+                                            alignItems: "center",
+                                            width: "1.5rem", // Adjust as needed
+                                            height: "1.5rem", // Adjust as needed
+                                            overflow: 'hidden',
+    
                                         }}
                                     />
                                 </span>
-                                <span>{item.user?.username}</span>
+                                <span style={{
+                                        fontSize: '1rem',
+                                        color: "#fff",
+                                        paddingLeft: '0.2rem'
+                                    }}>{item.user?.username}</span>
                             </div>
-                            <div className="description">
-                                <span>
+                            <div className="d-flex pt-3 description">
+                                <span className='text-[#0064E0] font-semibold'>
                                     {item.description?.length > 20 
                                         ? item.description.slice(0, 20)
                                         : item.description}
