@@ -439,21 +439,21 @@ function ForDesktop(props: any) {
                                                 </button>
                                             </div>
                                         </div>
-                                        <div style={{width:'20%'}}>
-                                        {/* current state:{activeMediaId} -- {post?.mediaId} */}
-                                        {activeMediaId === post?.mediaId && (
-                                        <CommentsComponent
-                                           key={`mystr_${post?.mediaId}`}
-                                            gifts={true}
-                                            onBlockPopup={true}
-                                            onReportPopup={true}
-                                            // commentModal={commentModal}
-                                            onclose={false}
-                                            info={post}
-                                            sendPopupHandler={true}
-                                            commentModal={ true}  // Default to false if undefined
-                                        />
-                                    )}
+                                        <div >
+                                                {/* current state:{activeMediaId} -- {post?.mediaId} */}
+                                                {activeMediaId === post?.mediaId && (
+                                                <CommentsComponent
+                                                key={`mystr_${post?.mediaId}`}
+                                                    gifts={true}
+                                                    onBlockPopup={true}
+                                                    onReportPopup={true}
+                                                    // commentModal={commentModal}
+                                                    onclose={false}
+                                                    info={post}
+                                                    sendPopupHandler={true}
+                                                    commentModal={ true}  // Default to false if undefined
+                                                />
+                                            )}
                                     </div>
                                     </div>
                                     {loadingVideo && <CircularProgress />}

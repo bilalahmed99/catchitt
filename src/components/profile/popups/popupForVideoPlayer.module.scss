@@ -44,3 +44,20 @@
     display: inline;
   }
   
+  .fixedComment{
+    position: fixed;
+    right: 0;
+    height: calc(100vh - 5rem);
+    max-width: 384px;
+    top: 5rem;
+    padding: 0 !important;
+    z-index: 9999;
+    box-shadow: -1px 0 2px -1px #d9d9d9;
+    background: white;
+  }
+  .InfiniteScrollH{
+    overflow-x: hidden !important;
+    padding: 1rem;
+    overflow-y: auto !important;
+    height: calc(100vh - 12rem) !important;
+  }

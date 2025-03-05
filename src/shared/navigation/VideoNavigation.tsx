@@ -56,10 +56,10 @@ function VideoNavigation(props: { videoListRef: any }) {
 
     return (
         <div className={style.navigation}>
-            <button id="prevVideoBtn" onClick={() => scrollToVideo(false)}>
+            <button id="prevVideoBtn" className='border-0' onClick={() => scrollToVideo(false)}>
                 <UpArrow />
             </button>
-            <button id="nextVideoBtn" onClick={() => scrollToVideo(true)}>
+            <button id="nextVideoBtn" className='border-0' onClick={() => scrollToVideo(true)}>
                 <DownArrow />
             </button>
         </div>
