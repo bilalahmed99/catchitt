@@ -32,6 +32,7 @@ import { updateHomeVideos } from '../../redux/reducers';
 import VideoNavigation from '../../shared/navigation/VideoNavigation';
 // import { Toast } from 'react-toastify/dist/components';
 
+
 function ForDesktop(props: any) {
     interface Video {
         id: number;
@@ -96,10 +97,9 @@ function ForDesktop(props: any) {
     const [focusedIndex, setFocusedIndex] = useState(0);
     const itemsRef = useRef<(HTMLLIElement | null)[]>([]);
     const [activeMediaId, setActiveMediaId] = useState<string | null>(null); // Track active video mediaId
-
-
+    const { isEnabled } = useSelector((store: any) => store?.reducers?.autoScrollUserSettings);
+    // console.info('isEnabled',isEnabled)
     
-
     const toggleMute = () => {
         if(isMuted){
             localStorage.setItem('videoMuted', 'false');
@@ -134,6 +134,36 @@ function ForDesktop(props: any) {
             }, 1500);
         });
     };
+    // Add these to your main component
+const handleVideoEnd = (endedMediaId: string) => {
+    const currentIndex = videoes.findIndex((post: any) => post.mediaId === endedMediaId);
+    if (currentIndex === -1 || currentIndex >= videoes.length - 1) return;
+  
+    const nextMediaId = videoes[currentIndex + 1].mediaId;
+    
+    // Scroll to next video
+    scrollToVideo(true);
+    
+    // Play next video after scroll completes
+    setTimeout(() => { console.info('here next video'+nextMediaId);
+      setActiveMediaId(nextMediaId);
+    }, 500); // Adjust timeout based on your scroll duration
+  };
+  
+  // Add this scroll function in your main component
+  const scrollToVideo = (isNext: boolean) => {
+    if (!scrollableDivRef.current) return;
+    const videoHeight = (scrollableDivRef.current.children[0] as HTMLElement)?.offsetHeight + 32;
+    const { scrollTop } = scrollableDivRef.current;
+    console.log({
+        top: scrollTop + (isNext ? videoHeight : -videoHeight),
+        behavior: 'smooth'
+      });
+    scrollableDivRef.current.scrollTo({
+      top: scrollTop + (isNext ? videoHeight : -videoHeight),
+      behavior: 'smooth'
+    });
+  };
 
     const totalCommentsCount = (count: any) => {
         setTotalPostComments(count);
@@ -332,10 +362,12 @@ function ForDesktop(props: any) {
                                                 controls={true}
                                                 post={post}
                                                 number={number}
+                                                onEnded={handleVideoEnd}
                                                 onMediaPlay={handleMediaPlay}
                                                 visibleReportPopup={() =>
                                                     setreportPopup(true)
                                                 }
+                                                
                                             />
                                         </div>
 

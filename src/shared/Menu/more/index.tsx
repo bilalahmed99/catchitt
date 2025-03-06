@@ -1,10 +1,11 @@
-import { alpha, styled } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { alpha, FormControlLabel, FormGroup, IconButton, Switch,SwitchProps,styled } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import Menu, { MenuProps } from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import * as React from 'react';
+
 import { copyLink, notAllowed, report, saveVideo, send, repost, blackHeartOutline, blackCrossHeart } from '../../../icons';
 import style from './index.module.scss';
 const options = ['View profile', 'Make admin', 'Remove from group', 'Block', 'Report'];
@@ -12,6 +13,8 @@ import {
     showToastSuccess,
 } from '../../../utils/constants';
 import { videoNotInterestedHandle, videoRepostHandle } from '../../../redux/AsyncFuncs';
+import { toggleAutoScroll, setScrollSpeed } from '../../../redux/reducers/autoScrollUserSettings';
+
 
 export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId }: any) {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -23,6 +26,14 @@ export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId }:
     const API_URL = process.env.VITE_API_URL;
     const token = localStorage.getItem('token');
     const dispatch = useDispatch();
+    const { isEnabled } = useSelector((store: any) => store?.reducers?.autoScrollUserSettings);
+    console.info('isEnabled in more menu',isEnabled)
+    const [autoScroll, setAutoScroll] = React.useState(isEnabled);
+
+    // Update autoScroll when isEnabled changes (if isEnabled is dynamic)
+    React.useEffect(() => {
+        setAutoScroll(isEnabled);
+    }, [isEnabled]);
 
     const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
         setSelectedIndex(index);
@@ -90,6 +101,12 @@ export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId }:
             // },
         },
     }));
+
+    const handleSwitchChange = (event: any) => {
+        console.log('is checked:',event.target.checked)
+        setAutoScroll(event.target.checked);
+        dispatch(toggleAutoScroll());  
+    };
 
 
     const handleDownload = async (videoUrl: any) => {
@@ -179,6 +196,45 @@ export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId }:
                     // display:'flex !important'
                 }}
             >
+                <MenuItem  style={{ padding: '0px', margin: '0px', position: 'relative' }}>
+                    <div className={style.menuItem} >
+                        <p>Auto scroll</p>
+                        <input type="checkbox" checked={autoScroll} onChange={(e: any) =>
+                                                handleSwitchChange(e)
+                                            } 
+                                            name="autoScrollCheckbox" id="autoScrollCheckbox"  />
+
+
+                        {/* <div className={style.cards}>
+                            <FormGroup
+                            sx={{
+                                width: '100%',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <div className={style.card}>
+                                <FormControlLabel
+                                    label={undefined}
+                                    labelPlacement="start"
+                                    control={
+                                        <IOSSwitch
+                                            sx={{ m: 1 }}
+                                            // checked={settings?.feedback || false}
+                                            onChange={(e: any) =>
+                                                handleSwitchChange(e, 'feedback')
+                                            }
+                                        />
+                                    }
+                                />
+                                </div>
+                            </FormGroup>
+                        </div> */}
+                    </div>
+                </MenuItem>
+
                 <MenuItem onClick={handleClose} style={{ padding: '0px', margin: '0px', position: 'relative' }}>
                     <div className={style.menuItem} >
                         <img src={saveVideo} />
@@ -218,3 +274,53 @@ export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId }:
         </div>
     );
 }
+
+
+const IOSSwitch = styled((props: SwitchProps) => (
+    <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
+))(({ theme }) => ({
+    width: 42,
+    height: 26,
+    padding: 0,
+    '& .MuiSwitch-switchBase': {
+        padding: 0,
+        margin: 2,
+        transitionDuration: '300ms',
+        '&.Mui-checked': {
+            transform: 'translateX(16px)',
+            color: '#fff',
+            '& + .MuiSwitch-track': {
+                backgroundColor: theme.palette.mode === 'dark' ? 'rgb(255, 59, 92)' : 'rgb(255, 59, 92)',
+                opacity: 1,
+                border: 0,
+            },
+            '&.Mui-disabled + .MuiSwitch-track': {
+                opacity: 0.5,
+            },
+        },
+        '&.Mui-focusVisible .MuiSwitch-thumb': {
+            color: 'rgb(255, 59, 92)',
+            border: '6px solid #fff',
+        },
+        '&.Mui-disabled .MuiSwitch-thumb': {
+            color:
+                theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[600],
+        },
+        '&.Mui-disabled + .MuiSwitch-track': {
+            opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
+        },
+    },
+    '& .MuiSwitch-thumb': {
+        boxSizing: 'border-box',
+        width: 22,
+        height: 22,
+    },
+    '& .MuiSwitch-track': {
+        borderRadius: 26 / 2,
+        backgroundColor: theme.palette.mode === 'light' ? '#E9E9EA' : '#39393D',
+        opacity: 1,
+        transition: theme.transitions.create(['background-color'], {
+            duration: 500,
+        }),
+    },
+}));
