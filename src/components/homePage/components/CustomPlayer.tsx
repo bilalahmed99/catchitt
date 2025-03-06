@@ -16,7 +16,7 @@ import { isUserLoggedIn } from '../../../utils/common';
 import { useNavigate } from 'react-router-dom';
 import MORE_MENU_HOME from '../../../shared/Menu/more';
 
-function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailImage, controls, number, onMediaPlay, visibleReportPopup  }: any) {
+function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailImage, controls, number, onMediaPlay, visibleReportPopup, onEnded  }: any) {
     const [duration, setDuration] = useState<number>();
     const [playingTime, setPlayingTime] = useState<number>();
     const dispatch = useDispatch();
@@ -35,6 +35,7 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailI
     const [playbackRate, setPlaybackRate] = useState(1.0);
     const [isDragging, setIsDragging] = useState(false);
     const [isShowMore, setIsShowMore] = useState(false);
+    const { isEnabled } = useSelector((store: any) => store?.reducers?.autoScrollUserSettings);
     // const [videoSize, setVideoSize] = useState({ width: '100vw', height: '100vh' });
 
     // const progress = (currentTime / post?.duration) * 100;
@@ -112,6 +113,12 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailI
         onMuteToggle();
     };
 
+    const handleEnded = () => {
+        // console.log('Herer ended....'+post.mediaId);
+        onEnded(post.mediaId); // Pass mediaId when video ends
+    };
+    
+
     return (
         <>
         {/* <div
@@ -162,7 +169,7 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailI
                         poster={thumbnailImage}
                         disablePictureInPicture
                         controlsList="nodownload noplaybackrate"
-                        loop={true}
+                        loop={isEnabled ? false : true}
                         autoPlay={videoModal ? false : inView}
                         controls={false} //{controls}
                         style={{ height: 'var(--media-post-height, 85vh )', position: 'relative', zIndex: 1, }}
@@ -171,6 +178,7 @@ function CustomPlayer({ isMuted, onMuteToggle, src, videoModal, post, thumbnailI
                         className={style.video}
                         preload='none' //{number == 0 ? 'auto' : 'none'}
                         playsInline
+                        onEnded={isEnabled ? handleEnded : undefined}  
                     />}
 
                 </div>

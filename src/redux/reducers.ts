@@ -20,6 +20,7 @@ import loginSlice from './reducers/auth';
 import isuploading from './reducers/upload';
 import videoCategories from './reducers/videoCategories';
 import geoSlice from './reducers/geoServices';
+import autoScrollUserSettings from './reducers/autoScrollUserSettings';
 
 const followings: any = createSlice({
     name: 'followings',
@@ -334,5 +335,5 @@ export default combineReducers({
     notifications: notifications.reducer,
     videoUrl,
     setVideoUrl,
-    
+    autoScrollUserSettings, 
 });
