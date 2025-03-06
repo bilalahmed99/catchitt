@@ -1581,7 +1581,7 @@ export default function CommentsComponent({
                                                 </div>
                                             )}
                                         </div>
-                                        <EmojiPicker className="mt-2 bottom-15 position-absolute left-0 bg-[#fff] w-[18rem]" open={commentEmojiIndex === -2 ? true : false} theme={Theme.light} searchDisabled={true} height={300}  onEmojiClick={onEmojiClick} />
+                                        <EmojiPicker className="mt-2 bottom-16 position-absolute left-0 bg-[#fff] w-[18rem]" open={commentEmojiIndex === -2 ? true : false} theme={Theme.light} searchDisabled={true} height={300} width={300}  onEmojiClick={onEmojiClick} />
                                 {isMentioning && (
                                     <div
                                         ref={popupRef}
