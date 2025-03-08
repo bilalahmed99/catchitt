@@ -472,6 +472,8 @@ input:checked + .slider::before {
 }
 .css-o1dzqo-MuiModal-root-MuiPopover-root-MuiMenu-root .MuiPaper-root{
   min-width: 220px !important;
-  top: 1.5rem;
-  right: 2rem;
+  transform: translate(40px , 1rem) !important;
+}
+.css-o1dzqo-MuiModal-root-MuiPopover-root-MuiMenu-root .MuiPaper-root ._menuItem_1i0or_1{
+  padding: 0.25rem 1rem;
 }
