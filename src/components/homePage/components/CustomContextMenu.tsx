@@ -39,6 +39,7 @@ function CustomContextMenu({ x, y, onClose, onDownload, onCopyLink,popupHandler,
                     padding: '8px 16px',
                     cursor: 'pointer',
                     fontSize: '16px',
+                    fontWeight: '500',
                     color: '#161823',
                     display: 'flex',
                     alignItems: 'center'
@@ -84,6 +85,7 @@ function CustomContextMenu({ x, y, onClose, onDownload, onCopyLink,popupHandler,
                     cursor: 'pointer',
                     fontSize: '16px',
                     color: '#161823',
+                    fontWeight: '500',
                     display: 'flex',
                     alignItems: 'center'
                 }}
@@ -129,6 +131,7 @@ function CustomContextMenu({ x, y, onClose, onDownload, onCopyLink,popupHandler,
                     cursor: 'pointer',
                     fontSize: '16px',
                     color: '#161823',
+                    fontWeight: '500',
                     display: 'flex',
                     alignItems: 'center'
                 }}
@@ -156,6 +159,7 @@ function CustomContextMenu({ x, y, onClose, onDownload, onCopyLink,popupHandler,
                     cursor: 'pointer',
                     fontSize: '16px',
                     color: '#161823',
+                    fontWeight: '500',
                     display: 'flex',
                     alignItems: 'center'
                 }}
