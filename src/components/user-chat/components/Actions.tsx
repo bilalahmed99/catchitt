@@ -112,7 +112,7 @@ function Actions(props: any) {
     //     }
     // };
 
-    console.log('activeChat', activeChat, chatActiveUserId);
+    console.log('activeChat in Actions.tsx', activeChat, chatActiveUserId);
 
     // useEffect(() => {
     //     setTimeout(() => {
