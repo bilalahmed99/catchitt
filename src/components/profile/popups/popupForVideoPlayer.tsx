@@ -46,7 +46,11 @@ import { copyLinkHandler, facebookShareHandler, getCaretCoordinates, searchUserT
 import HashtagText from '../../../shared/hashTag/HashtagText';
 import PopupForPrivacySettings from './popupForPrivacySettings';
 import { useUpdateEffect } from 'react-use';
+// import CustomContextMenu from '../../homePage/components/CustomContextMenu';
 // import PopupForDeleteMedia from './popupForDeleteMedia';
+// const [showContextMenu, setShowContextMenu] = useState(false);
+// const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
+
 
 
 export default function PopupForVideoPlayer({
@@ -130,6 +134,120 @@ export default function PopupForVideoPlayer({
     const [privacyPrivilege, setPrivacyPrivilege] = useState<any>(null);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [isFetchingUsers, setIsFetchingUsers] = useState(false);
+
+
+    const handleContextMenu = (e: React.MouseEvent<HTMLVideoElement>) => {
+            e.preventDefault();
+        
+            const videoRect = e.currentTarget.getBoundingClientRect(); // Get video position relative to the viewport
+            const clickX = e.clientX - videoRect.left; // Adjust X based on video position
+            const clickY = e.clientY - videoRect.top; // Adjust Y based on video position
+        
+            const menuWidth = 224; // Approximate width of the context menu
+            const menuHeight = 180; // Approximate height of the context menu
+        
+            // Prevent the menu from going outside the video bounds
+            const adjustedX = clickX + menuWidth > videoRect.width ? videoRect.width - menuWidth - 10 : clickX;
+            const adjustedY = clickY + menuHeight > videoRect.height ? videoRect.height - menuHeight - 10 : clickY;
+        
+            setContextMenuPosition({ x: adjustedX, y: adjustedY });
+            setShowContextMenu(true);
+        };
+        
+    
+        const handleDownload = async (event: any) => {
+            event.stopPropagation();
+            // Implement your download logic here
+            console.log('Downloading video...');
+            setShowContextMenu(false);
+    
+            try {
+                showToastSuccess('Video is downloading...');
+                
+                // Fetch the video data as a blob
+                const videoUrl = info?.reducedVideoUrl?.length > 0
+                    ? info?.reducedVideoUrl
+                    : info?.originalUrl;
+
+                const response = await fetch(videoUrl, {
+                    method: 'GET',
+                    headers: {
+                        // Add headers if needed for authorization or content type
+                    },
+                });
+        
+                if (!response.ok) {
+                    throw new Error('Failed to fetch video');
+                }
+                const blob = await response.blob();
+                // Ensure the response is a valid video blob
+                const contentType = response.headers.get('Content-Type');
+                if (!contentType || !contentType.includes('video')) {
+                    throw new Error('The file is not a valid video');
+                }
+        
+                // Create a URL for the blob
+                const url = window.URL.createObjectURL(blob);
+                // Create a download link
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'video.mp4'; // Set default file name
+        
+                // Trigger the download
+                document.body.appendChild(link); // Append the link to the DOM
+                link.click();
+                document.body.removeChild(link); // Clean up the DOM
+        
+                // Revoke the object URL after download to free up resources
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error('Failed to download video', error);
+            }
+        };
+    
+        const handleCopyLink = (event: any) => {
+            event.stopPropagation();
+            copyLinkHandler(info?.user?.username, info?.mediaId, 'Copied successfully')
+            setShowContextMenu(false);
+        };
+    
+        const handleVideoDetail = (event: any) => {
+            event.stopPropagation();
+            setShowContextMenu(false);
+            const url = `${BASE_URL_FRONTEND}/${info?.user?.username}/video/${info?.mediaId}`;
+            // Open the URL in a new tab
+            window.open(url, '_blank');
+    
+           
+        };
+    
+        const sendToFriends = (event: any) => {
+            event.stopPropagation();
+            // popupHandler();
+        }
+        
+        const handleCloseContextMenu = (event: any) => {
+            event.stopPropagation();  // Stop the click event from bubbling up to the parent
+            setShowContextMenu(false);
+        };
+    
+        useEffect(()=> {
+            console.log('current post');
+            console.log(info);
+        },[])
+    
+        // useEffect(() => {
+        //     const handleClickOutside = (e: MouseEvent) => {
+        //         if (showContextMenu) {
+        //             setShowContextMenu(false);
+        //         }
+        //     };
+        
+        //     document.addEventListener('click', handleClickOutside);
+        //     return () => {
+        //         document.removeEventListener('click', handleClickOutside);
+        //     };
+        // }, [showContextMenu]);
 
     const open = Boolean(anchorEl);
 
@@ -792,6 +910,18 @@ export default function PopupForVideoPlayer({
                                         </div>
                                     </div>
                                     {/* Video content */}
+                                    {/* {showContextMenu && (
+                                        <CustomContextMenu
+                                            x={contextMenuPosition.x}
+                                            y={contextMenuPosition.y}
+                                            onClose={handleCloseContextMenu}
+                                            onDownload={handleDownload}
+                                            onCopyLink={handleCopyLink}
+                                            popupHandler={sendToFriends}
+                                            onVideoDetail={handleVideoDetail}
+                                        />
+                                    )} */}
+
                                     <video
                                         className="relative w-3/5 h-full"
                                         loop={true}
@@ -804,6 +934,7 @@ export default function PopupForVideoPlayer({
                                                 ? info?.reducedVideoUrl
                                                 : info?.originalUrl
                                         }
+                                        onContextMenu={handleContextMenu}
                                     />
                                 </div>
 
