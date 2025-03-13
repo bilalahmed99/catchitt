@@ -27,7 +27,7 @@ import MORE_MENU_HOME from '../../../shared/Menu/more';
 import CustomContextMenu from './CustomContextMenu';
 import { BASE_URL_FRONTEND, showToastSuccess } from '../../../utils/constants';
 
-function CustomPlayer({ isMuted, src, videoModal, post, thumbnailImage, controls, number, onMediaPlay, visibleReportPopup, onEnded, isMutedVolume, onMuteToggle, popupHandler  }: any) {
+function CustomPlayer({ isMuted, src, videoModal, post, thumbnailImage, controls, number, onMediaPlay, visibleReportPopup, onEnded, isMutedVolume, onMuteToggle, popupHandler1  }: any) {
     const [duration, setDuration] = useState<number>();
     const [playingTime, setPlayingTime] = useState<number>();
     const dispatch = useDispatch();
@@ -224,7 +224,7 @@ function CustomPlayer({ isMuted, src, videoModal, post, thumbnailImage, controls
 
     const sendToFriends = (event: any) => {
         event.stopPropagation();
-        popupHandler();
+        popupHandler1();
     }
     
     const handleCloseContextMenu = (event: any) => {
