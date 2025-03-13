@@ -639,26 +639,64 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
     <div className={styles.overlay} onClick={handleCloseOverlay}>
        
                         <div className={styles.overlayContent}>
-                        <p onClick={backNewBar}>Back</p>
-                            <div onClick={darkThemeFun} className='d-flex mt-4 justify-between align-items-center'>
-                                <p className='font-medium'>Dark mode </p>
-                                {currentActiveTheme =='dark' ? 'active':''}
-                                <span>
-                                    <svg width="8" height="15" viewBox="0 0 8 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 1.26953L7 7.26953L1 13.2695" stroke="#D3D3D3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
+                            <p className='d-flex align-items-center cursor-pointer' onClick={backNewBar}>
+                                <span className='bg-[#f1f2f3] p-1 rounded-full w-[1.35rem] mr-2'>
+                                    <svg fill="#424242"  color="inherit" font-size="12" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"><path d="m19.26 24 13.66-13.67a1 1 0 0 0 0-1.41l-1.84-1.84a1 1 0 0 0-1.41 0L13.46 23.3a1 1 0 0 0 0 1.42l16.2 16.21a1 1 0 0 0 1.42 0l1.84-1.84a1 1 0 0 0 0-1.41L19.26 24Z"></path></svg>
                                 </span>
-                            </div>
-                            <div onClick={lightThemeFun} className='d-flex mt-4 justify-between align-items-center'>
-                                <p className='font-medium'>Light mode </p>
-                                {currentActiveTheme == 'light' ? 'active':''}
-                                <span>
-                                    <svg width="8" height="15" viewBox="0 0 8 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M1 1.26953L7 7.26953L1 13.2695" stroke="#D3D3D3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </span>
-                            </div>
-                            
+                                {currentActiveTheme}
+                            </p>
+                            <div onClick={darkThemeFun} className="d-flex mt-3 p-2 rounded-full cursor-pointer justify-between align-items-center"
+                             onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f2f3f4")}
+                             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                            >
+                                    <p className="font-medium">Dark mode</p>
+                                    <span>
+                                        {currentActiveTheme === "dark" ? (
+                                            <svg
+                                                fill="white"  // White color for dark mode
+                                                stroke="white" // White stroke
+                                                fontSize="14"
+                                                viewBox="0 0 48 48"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="1em"
+                                                height="1em"
+                                            >
+                                                <path
+                                                    fillRule="evenodd"
+                                                    clipRule="evenodd"
+                                                    d="M43 6.08c.7.45 1.06.67 1.25.98c.16.27.23.59.2.9c-.03.36-.26.72-.7 1.43L23.06 42.14a3.5 3.5 0 0 1-5.63.39L4.89 27.62c-.54-.64-.81-.96-.9-1.32a1.5 1.5 0 0 1 .09-.92c.14-.33.46-.6 1.1-1.14l1.69-1.42c.64-.54.96-.81 1.31-.9c.3-.06.63-.04.92.09c.34.14.6.46 1.15 1.1l9.46 11.25 18.11-28.7c.45-.72.68-1.07.99-1.26c.27-.16.59-.23.9-.2c.36.03.71.25 1.43.7L43 6.08Z"
+                                                ></path>
+                                            </svg>
+                                        ) : null}
+                                    </span>
+                                </div>
+
+                                <div onClick={lightThemeFun} className="d-flex mt-3 p-2 rounded-full cursor-pointer justify-between align-items-center"
+                                 onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f2f3f4")}
+                                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                                >
+                                    <p className="font-medium">Light mode</p>
+                                    <span>
+                                        {currentActiveTheme === "light" ? (
+                                            <svg
+                                                fill="black"  // Black color for light mode
+                                                stroke="black" // Black stroke
+                                                fontSize="14"
+                                                viewBox="0 0 48 48"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="1em"
+                                                height="1em"
+                                            >
+                                                <path
+                                                    fillRule="evenodd"
+                                                    clipRule="evenodd"
+                                                    d="M43 6.08c.7.45 1.06.67 1.25.98c.16.27.23.59.2.9c-.03.36-.26.72-.7 1.43L23.06 42.14a3.5 3.5 0 0 1-5.63.39L4.89 27.62c-.54-.64-.81-.96-.9-1.32a1.5 1.5 0 0 1 .09-.92c.14-.33.46-.6 1.1-1.14l1.69-1.42c.64-.54.96-.81 1.31-.9c.3-.06.63-.04.92.09c.34.14.6.46 1.15 1.1l9.46 11.25 18.11-28.7c.45-.72.68-1.07.99-1.26c.27-.16.59-.23.9-.2c.36.03.71.25 1.43.7L43 6.08Z"
+                                                ></path>
+                                            </svg>
+                                        ) : null}
+                                    </span>
+                                </div>
+
                         </div>
                     </div>
   ) : ( <div className={styles.overlay} onClick={handleCloseOverlay}>
@@ -671,13 +709,17 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                                 </svg>                                  
                                 </button>
                             </div>
-                            <div className='d-flex mt-4' onClick={handleGetCoins}>
+                            <div
+                            className='d-flex mt-2 p-2 cursor-pointer rounded-full' onClick={handleGetCoins} 
+                             onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f2f3f4")}
+                             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                            >
                                 <p className='font-medium'>Get Coins </p>
                             </div>
-                            {/* <div className='d-flex mt-4'>
+                            {/* <div className='d-flex mt-4 cursor-pointer '>
                                 <p className='font-medium'>Create Seezitt effects </p>
                             </div> */}
-                            {/* <div className='d-flex mt-4 justify-between align-items-center'>
+                            {/* <div className='d-flex mt-4 cursor-pointer  justify-between align-items-center'>
                                 <p className='font-medium'>Creator tools </p>
                                 <span>
                                     <svg width="8" height="15" viewBox="0 0 8 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -685,15 +727,18 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                                     </svg>
                                 </span>
                             </div> */}
-                            <div className='d-flex mt-4 justify-between align-items-center'>
+                            {/* <div className='d-flex mt-4 cursor-pointer  justify-between align-items-center'>
                                 <p className='font-medium'>English</p>
                                 <span>
                                     <svg width="8" height="15" viewBox="0 0 8 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M1 1.26953L7 7.26953L1 13.2695" stroke="#D3D3D3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
                                 </span>
-                            </div>
-                            <div onClick={openThemeMenu} className='d-flex mt-4 justify-between align-items-center'>
+                            </div> */}
+                            <div onClick={openThemeMenu} className='d-flex mt-2 p-2 cursor-pointer rounded-full  justify-between align-items-center'   
+                            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f2f3f4")}
+                            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                            >
                                 <p className='font-medium'>Dark mode </p>
                                 <span>
                                     <svg width="8" height="15" viewBox="0 0 8 15" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -701,22 +746,30 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                                     </svg>
                                 </span>
                             </div>
-                            <div className='d-flex mt-4' onClick={getSettings}>
+                            <div className='d-flex mt-2 p-2 cursor-pointer rounded-full' onClick={getSettings} 
+                             onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f2f3f4")}
+                             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                            >
                                 <p className='font-medium'>Settings </p>
                             </div>
 
                             
-                            <a className='hover:text-inherit' href="https://help.seezitt.com/" target="_blank">
-                                <div className='d-flex mt-4'>
+                            <a className='d-flex mt-2 p-2 cursor-pointer rounded-full' href="https://help.seezitt.com/" target="_blank" 
+                             onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f2f3f4")}
+                             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}>
                                     <p className='font-medium'>Feedback and help </p>
-                                </div>
                             </a>
-                            <div className='d-flex mt-4' onClick={showAppPopup}>
+                            <div className='d-flex mt-2 p-2 cursor-pointer rounded-full ' onClick={showAppPopup} 
+                            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f2f3f4")}
+                            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}>
                                 <p className='font-medium'>Get app </p>
                             </div>
-                            <div className='d-flex mt-4' onClick={() => {
-                                                        dispatch(openLogoutPopup());
-                                                    }}>
+                            <div 
+                                                        className='d-flex mt-2 p-2 cursor-pointer rounded-full 'onClick={() => {
+                                                            dispatch(openLogoutPopup());
+                                                        }} 
+                            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f2f3f4")}
+                            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}>
                                 <p className='font-medium'>Logout </p>
                             </div>
                         </div>
