@@ -46,11 +46,10 @@ import { copyLinkHandler, facebookShareHandler, getCaretCoordinates, searchUserT
 import HashtagText from '../../../shared/hashTag/HashtagText';
 import PopupForPrivacySettings from './popupForPrivacySettings';
 import { useUpdateEffect } from 'react-use';
-// import CustomContextMenu from '../../homePage/components/CustomContextMenu';
-// import PopupForDeleteMedia from './popupForDeleteMedia';
-// const [showContextMenu, setShowContextMenu] = useState(false);
-// const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
+import CustomContextMenu from '../../homePage/components/CustomContextMenu';
+import MORE_MENU_HOME from '../../../shared/Menu/more';
 
+// import PopupForDeleteMedia from './popupForDeleteMedia';
 
 
 export default function PopupForVideoPlayer({
@@ -75,6 +74,11 @@ export default function PopupForVideoPlayer({
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
+
+    const [showContextMenu, setShowContextMenu] = useState(false);
+    const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
+
+
 
     const abortController = useRef<AbortController | null>(null);
 
@@ -223,7 +227,7 @@ export default function PopupForVideoPlayer({
     
         const sendToFriends = (event: any) => {
             event.stopPropagation();
-            // popupHandler();
+            sharePopupHandler();
         }
         
         const handleCloseContextMenu = (event: any) => {
@@ -236,18 +240,18 @@ export default function PopupForVideoPlayer({
             console.log(info);
         },[])
     
-        // useEffect(() => {
-        //     const handleClickOutside = (e: MouseEvent) => {
-        //         if (showContextMenu) {
-        //             setShowContextMenu(false);
-        //         }
-        //     };
+        useEffect(() => {
+            const handleClickOutside = (e: MouseEvent) => {
+                if (showContextMenu) {
+                    setShowContextMenu(false);
+                }
+            };
         
-        //     document.addEventListener('click', handleClickOutside);
-        //     return () => {
-        //         document.removeEventListener('click', handleClickOutside);
-        //     };
-        // }, [showContextMenu]);
+            document.addEventListener('click', handleClickOutside);
+            return () => {
+                document.removeEventListener('click', handleClickOutside);
+            };
+        }, [showContextMenu]);
 
     const open = Boolean(anchorEl);
 
@@ -886,6 +890,16 @@ export default function PopupForVideoPlayer({
                         <div
                             className="flex flex-row items-center w-screen h-screen relative"
                         >
+
+                                    <MORE_MENU_HOME
+                                        visibleReportPopup={true}
+                                        url={ info?.reducedVideoUrl
+                                            ? info?.reducedVideoUrl : info.originalUrl}
+                                        postMediaId={info?.mediaId }
+                                        activeMediaId={info?.mediaId}
+                                        isFromPopupVideoPlayer={'yes'}
+                                    />
+
                             {/* Video and right panel */}
                             <div className="flex w-full h-full">
                                 {/* Left side (63%) */}
@@ -910,7 +924,7 @@ export default function PopupForVideoPlayer({
                                         </div>
                                     </div>
                                     {/* Video content */}
-                                    {/* {showContextMenu && (
+                                    {showContextMenu && (
                                         <CustomContextMenu
                                             x={contextMenuPosition.x}
                                             y={contextMenuPosition.y}
@@ -920,7 +934,9 @@ export default function PopupForVideoPlayer({
                                             popupHandler={sendToFriends}
                                             onVideoDetail={handleVideoDetail}
                                         />
-                                    )} */}
+                                    )}
+
+                                    
 
                                     <video
                                         className="relative w-3/5 h-full"

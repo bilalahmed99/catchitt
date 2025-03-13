@@ -16,7 +16,7 @@ import { videoNotInterestedHandle, videoRepostHandle } from '../../../redux/Asyn
 import { toggleAutoScroll, setScrollSpeed } from '../../../redux/reducers/autoScrollUserSettings';
 
 
-export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId,activeMediaId }: any) {
+export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId,activeMediaId,isFromPopupVideoPlayer }: any) {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [selectedIndex, setSelectedIndex] = React.useState(1);
     const open = Boolean(anchorEl);
@@ -179,7 +179,7 @@ export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId,ac
             // }}
             className={style.actionMoreStyle}
         >
-            <List component="nav" aria-label="Device settings" sx={{ bgcolor: 'background.paper' }}>
+            <List component="nav" className={`${isFromPopupVideoPlayer ? isFromPopupVideoPlayer : ''} more_menu_item_class`} aria-label="Device settings" sx={{ bgcolor: 'background.paper' }}>
                 <ListItemButton
                     id="lock-button"
                     aria-haspopup="listbox"
