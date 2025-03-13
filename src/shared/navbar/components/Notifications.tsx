@@ -573,9 +573,9 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                 </div>)) :
                                 (<div className={`${style.inboxNoLikes}`}>
                                     <div className={`${style.inboxNoLikesInner}`}>
-                                        <FavoriteBorder style={{ fontSize: 60 }} />
-                                        <p className={`${style.inboxBoldText}`}>Likes on your videos</p>
-                                        <p>When someone likes one of your videos, you'll see it here</p>
+                                        <FavoriteBorder style={{ fontSize: 50 }} />
+                                        <p className={`${style.inboxBoldText}`} style={{ fontSize: '20px', fontWeight: '600' }} >Likes on your videos</p>
+                                        <p style={{ fontSize: '14px', marginTop: '0.5rem', fontWeight: '500' }} >When someone likes one of your videos, you'll see it here</p>
                                     </div>
                                 </div>))
                             }
@@ -597,9 +597,9 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                 </div>)) :
                                 (<div className={`${style.inboxNoComments}`}>
                                     <div className={`${style.inboxNoCommentsInner}`}>
-                                        <ChatBubbleOutlineSharp style={{ fontSize: 60 }} />
-                                        <p className={`${style.inboxBoldText}`}>Comments on your videos</p>
-                                        <p>When someone likes one of your comments, you'll see it here</p>
+                                        <ChatBubbleOutlineSharp style={{ fontSize: 50 }} />
+                                        <p className={`${style.inboxBoldText}`} style={{ fontSize: '20px',  fontWeight: '600'}}>Comments on your videos</p>
+                                        <p style={{ fontSize: '14px', marginTop: '0.5rem', fontWeight: '500' }}>When someone likes one of your comments, you'll see it here</p>
                                     </div>
                                 </div>))
                             }
@@ -621,9 +621,9 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                 </div> )) :
                                 (<div className={`${style.inboxNoMentions}`}>
                                     <div className={`${style.inboxNoMentionsInner}`}>
-                                        <AlternateEmail style={{ fontSize: 60 }} />
-                                        <p className={`${style.inboxBoldText}`}>Mentions of you</p>
-                                        <p>When someone mentions you, you'll see it here</p>
+                                        <AlternateEmail style={{ fontSize: 50 }} />
+                                        <p className={`${style.inboxBoldText}`} style={{ fontSize: '20px',  fontWeight: '600'}}>Mentions of you</p>
+                                        <p style={{ fontSize: '14px', marginTop: '0.5rem', fontWeight: '500' }}>When someone mentions you, you'll see it here</p>
                                     </div>
                                 </div>
                                 ))
@@ -646,9 +646,9 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                 </div> )) :
                                 (<div className={`${style.inboxNoMentions}`}>
                                     <div className={`${style.inboxNoMentionsInner}`}>
-                                        <AlternateEmail style={{ fontSize: 60 }} />
-                                        <p className={`${style.inboxBoldText}`}>Follow of you</p>
-                                        <p>When someone follows you, you'll see it here</p>
+                                        <AlternateEmail style={{ fontSize: 50 }} />
+                                        <p className={`${style.inboxBoldText}`} style={{ fontSize: '20px',  fontWeight: '600'}}>Follow of you</p>
+                                        <p style={{ fontSize: '14px', marginTop: '0.5rem', fontWeight: '500' }}>When someone follows you, you'll see it here</p>
                                     </div>
                                 </div>
                                 ))
@@ -683,9 +683,9 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                 ) : (
                                     <div className={`${style.inboxNoMentions}`}>
                                         <div className={`${style.inboxNoMentionsInner}`}>
-                                            <AlternateEmail style={{ fontSize: 60 }} />
-                                            <p className={`${style.inboxBoldText}`}>No new requests</p>
-                                            <p>You'll see your requests here when someone sends them.</p>
+                                            <AlternateEmail style={{ fontSize: 50 }} />
+                                            <p className={`${style.inboxBoldText}`} style={{ fontSize: '20px',  fontWeight: '600'}}>No new requests</p>
+                                            <p style={{ fontSize: '14px', marginTop: '0.5rem', fontWeight: '500' }}>You'll see your requests here when someone sends them.</p>
                                         </div>
                                     </div>
                                 ))}
