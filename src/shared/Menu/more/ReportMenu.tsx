@@ -169,7 +169,7 @@ export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId,ac
                 position: 'relative',
             }}
             className={`${style.actionMoreStyle} position-relative`}>
-            <List component="nav" className={`${isFromPopupVideoPlayer ? isFromPopupVideoPlayer : ''} more_menu_item_class`} aria-label="Device settings" sx={{ bgcolor: 'background.paper' }}>
+            <List component="nav" className={`${isFromPopupVideoPlayer ? isFromPopupVideoPlayer : ''} more_menu_item_class`} aria-label="Device settings" >
                 <ListItemButton
                     id="lock-button"
                     aria-haspopup="listbox"
@@ -177,7 +177,7 @@ export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId,ac
                     //   aria-label="when device is locked"
                     aria-expanded={open ? 'true' : undefined}
                     onClick={handleClickListItem}
-                    style={{ background: 'transparent !important', padding: '0', display: 'flex', alignItems: 'baseline' }}>
+                    style={{ backgroundColor: 'transparent !important', padding: '0', display: 'flex', alignItems: 'center',  }}>
                     <svg className="!w-[2rem] !h-[2rem]" style={{minWidth: '2rem'}} viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M2 12.1309C2 11.0263 2.89543 10.1309 4 10.1309C5.10455 10.1309 6 11.0263 6 12.1309C6 13.2354 5.10455 14.1309 4 14.1309C2.89543 14.1309 2 13.2354 2 12.1309ZM10 12.1309C10 11.0263 10.8954 10.1309 12 10.1309C13.1046 10.1309 14 11.0263 14 12.1309C14 13.2354 13.1046 14.1309 12 14.1309C10.8954 14.1309 10 13.2354 10 12.1309ZM18 12.1309C18 11.0263 18.8955 10.1309 20 10.1309C21.1045 10.1309 22 11.0263 22 12.1309C22 13.2354 21.1045 14.1309 20 14.1309C18.8955 14.1309 18 13.2354 18 12.1309Z" fill="#161823"/>
                     </svg>
