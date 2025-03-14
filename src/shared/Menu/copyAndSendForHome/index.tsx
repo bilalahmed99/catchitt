@@ -118,7 +118,7 @@ export default function COPY_AND_SEND_MODAL_HOME({
                     // style={{ background: 'transparent' }}
                 ></ListItemButton>
             </List>
-            <Dialog  open={open} onClose={handleClose} maxWidth='xs'           >
+            <Dialog  open={open} onClose={handleClose} maxWidth='xs'  >
             <DialogTitle className={isDarkTheme ? 'bg-[#181818]' : 'bg-white'} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', color: '#000' }}>
                 <span className='font-medium'>Share to</span>
                 <DialogActions onClick={handleClose} sx={{ color: 'inherit', position: 'absolute', right: '1rem', cursor: 'pointer' }}>

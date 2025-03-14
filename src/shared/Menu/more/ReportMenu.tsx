@@ -6,7 +6,7 @@ import Menu, { MenuProps } from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import * as React from 'react';
 
-import { copyLink, notAllowed, report, saveVideo, send, repost, blackHeartOutline, blackCrossHeart } from '../../../icons';
+import { copyLink, notAllowed, report, saveVideo, send, repost, blackHeartOutline, blackCrossHeart, moreInWhite } from '../../../icons';
 import style from './index.module.scss';
 const options = ['View profile', 'Make admin', 'Remove from group', 'Block', 'Report'];
 import {
@@ -179,7 +179,6 @@ export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId,ac
             // }}
             className={style.actionMoreStyle}
         >
-            {/* <p>More Items 01</p> */}
             <List component="nav" className={`${isFromPopupVideoPlayer ? isFromPopupVideoPlayer : ''} more_menu_item_class`} aria-label="Device settings" sx={{ bgcolor: 'background.paper' }}>
                 <ListItemButton
                     id="lock-button"
@@ -189,7 +188,11 @@ export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId,ac
                     aria-expanded={open ? 'true' : undefined}
                     onClick={handleClickListItem}
                     style={{ background: 'transparent !important' }}
-                ></ListItemButton>
+                >
+                    <img src={moreInWhite} alt="" />
+                    More in white
+
+                </ListItemButton>
             </List>
             <StyledMenu
                 id="lock-menu"
@@ -204,17 +207,16 @@ export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId,ac
                     top: '100px',
                     right: '50px',
                     marginRight: 20,
-                    // display:'flex !important'
                 }}
             >
-                <MenuItem  style={{ padding: '0px', margin: '0px', position: 'relative' }}>
+                {/* <MenuItem  style={{ padding: '0px', margin: '0px', position: 'relative' }}>
                     <div className={style.menuItem} >
                     <svg width="20" height="20" viewBox="0 0 10 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M7 10C7 11.1046 6.10457 12 5 12C3.89543 12 3 11.1046 3 10C3 8.89543 3.89543 8 5 8C6.10457 8 7 8.89543 7 10Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M1 4.99997C1 4.99997 3.94596 1.00001 5.00003 1C6.05411 0.999991 9 5 9 5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     <path d="M9 15C9 15 6.05404 19 4.99997 19C3.94589 19 1 15 1 15" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                        <p className=''>Auto scroll</p>
+                        <p className='!font-medium'>Auto scroll</p>
                         {autoScroll}                   
 
                         <label className="toggle-switch">
@@ -228,46 +230,9 @@ export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId,ac
                             />
                             <b className="slider"></b>
                         </label>
-                        {/* <input 
-                                type="checkbox" 
-                                checked={autoScroll} 
-                                onChange={handleSwitchChange} 
-                                name="autoScrollCheckbox" 
-                                id="autoScrollCheckbox" 
-                            /> */}
-
-
-
-
-                        {/* <div className={style.cards}>
-                            <FormGroup
-                            sx={{
-                                width: '100%',
-                                display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <div className={style.card}>
-                                <FormControlLabel
-                                    label={undefined}
-                                    labelPlacement="start"
-                                    control={
-                                        <IOSSwitch
-                                            sx={{ m: 1 }}
-                                            // checked={settings?.feedback || false}
-                                            onChange={(e: any) =>
-                                                handleSwitchChange(e, 'feedback')
-                                            }
-                                        />
-                                    }
-                                />
-                                </div>
-                            </FormGroup>
-                        </div> */}
+                        
                     </div>
-                </MenuItem>
+                </MenuItem> */}
 
                 {/* <MenuItem onClick={handleClose} style={{ padding: '0px', margin: '0px', position: 'relative' }}>
                     <div className={style.menuItem} >
@@ -283,19 +248,19 @@ export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId,ac
                         <p className={`${style.p} ${style.fp} ${style.black_500}`}>Save video</p>
                     </div>
                 </MenuItem> */}
-                <MenuItem onClick={()=>{ notInterestedInVideo(postMediaId),handleClose() }} style={{ padding: '0px', margin: '0px' }}>
+                {/* <MenuItem onClick={()=>{ notInterestedInVideo(postMediaId),handleClose() }} style={{ padding: '0px', margin: '0px' }}>
                     <div className={style.menuItem}>
-                        <img width="20" src={blackCrossHeart} />
-                        <p className={`${style.p} ${style.black_500}`}>Not interested</p>
+                        <img height="22" src={blackCrossHeart} />
+                        <p className= '!font-medium' style={{paddingLeft: '2px'}}>Not interested</p>
                     </div>
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem onClick={handleClose} style={{ padding: '0px', margin: '0px' }}>
                     <div className={style.menuItem} onClick={visibleReportPopup}>
-                        <svg width="20" height="16" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="16" height="16" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M1 5L1 19" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             <path d="M8.75758 1.90865C5.45236 0.224973 2.85125 1.21144 1.55426 2.2192C1.32048 2.40085 1.20358 2.49167 1.10179 2.69967C1 2.90767 1 3.10138 1 3.4888V12.7319C1.9697 11.6342 4.87879 9.9328 8.75758 11.9086C12.224 13.6744 15.1741 12.9424 16.5697 12.1795C16.7633 12.0737 16.8601 12.0207 16.9301 11.9028C17 11.7849 17 11.6569 17 11.4009V3.87389C17 3.04538 17 2.63113 16.8027 2.48106C16.6053 2.33099 16.1436 2.459 15.2202 2.71504C13.64 3.15319 11.3423 3.22532 8.75758 1.90865Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                        <p className={`${style.p} ${style.black_500} `}>Report</p>
+                        <p className='!font-medium ml-1'>Report</p>
                     </div>
                 </MenuItem>
             </StyledMenu>
