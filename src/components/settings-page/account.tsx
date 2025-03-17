@@ -1,4 +1,7 @@
 import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
     Box,
     Button,
     Checkbox,
@@ -38,6 +41,9 @@ import myReportsBlack from './svg-components/my-reports.svg';
 import contactUSBlack from './svg-components/contact-us-icon.svg';
 import redRightArrow from './svg-components/redRightArrow.svg';
 import whiteRightArrow from './svg-components/whiteRightArrow.svg';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+
 import {
     changePassIconWhite,
     contactUsIconWhite,
@@ -702,11 +708,12 @@ const Account = ({ className, openModal }: AccountProps) => {
                     </div> }
                     <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md`}>
                         <div className={styles.settingsWrapper}>
-                            <div className={`${styles.pageHeader} px-3 mb-2 mt-4`}>
-                                <h4 className={darkTheme ? 'text-white' : 'text-black'}>Manage Account</h4>
-                            </div>
+                            
                             <div className={styles.suggestedContent}>
-                                <div
+                                <div className={`${styles.pageHeader} mb-0 mt-2`}>
+                                    <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0`}>Manage Account</h4>
+                                </div>
+                                {/* <div
                                     className={styles.accountCards}
                                     onClick={handleOpenShareProfileModal}
                                 >
@@ -851,7 +858,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                         </p>
                                     </div>
                                     <img src={whiteRightArrow} alt="" />
-                                </div>
+                                </div> */}
                                 <div className='w-100 border-bottom pb-3'>
                                     <h5 className='h6 text-left'>Account control</h5>
                                     <div
@@ -861,6 +868,11 @@ const Account = ({ className, openModal }: AccountProps) => {
                                         </div>
                                         <p onClick={handleOpenDeleteAccountMainModal} style={{ color: '#FE2C55' }}>Delete</p>
                                     </div>
+                                </div>
+                            </div>
+                            <div className={styles.suggestedContent}>
+                                <div className={`${styles.pageHeader} mb-0 mt-0`}>
+                                    <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0`}>Privacy</h4>
                                 </div>
                                 <div className='w-100 border-bottom pb-3'>
                                     <h5 className='h6 text-left'>Discoverability</h5>
@@ -873,7 +885,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                             followers won’t be affected.</span>
                                             </div>
                                         </div>
-                                        <label className="toggle-switch !left-4">
+                                        <label className="toggle-switch !left-1">
                                             <input 
                                             style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
                                                 type="checkbox"
@@ -898,12 +910,372 @@ const Account = ({ className, openModal }: AccountProps) => {
                                     </div>
                                 </div>
                             </div>
+                            <div className={`${styles.suggestedContent} mb-0`}>
+                                <div className={`${styles.pageHeader} mb-0 mt-0`}>
+                                    <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0`}>Push notifications</h4>
+                                </div>
+                                <div className='w-100 border-bottom pb-3'>
+                                    <h5 className='h6 text-left'>Desktop notifications</h5>
+                                    <div
+                                        className={styles.accountCards}>
+                                        <div className={styles.settingName}>
+                                            <div className='text-left'>
+                                            <p>Allow in browser</p>
+                                            <span className='text-xs text-[#16182399]'>Stay on top of notifications for likes, comments, the latest videos, and more on desktop. You can turn</span>
+                                            </div>
+                                        </div>
+                                        <label className="toggle-switch !left-1">
+                                            <input 
+                                            style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
+                                                type="checkbox"
+                                                name="autoScrollCheckbox" 
+                                                id="autoScrollCheckbox" 
+                                            />
+                                            <b className="slider"></b>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div className='w-100 border-bottom pb-3'>
+                                    <h5 className='h6 text-left'>Your preferences</h5>
+                                    <span className='text-xs text-[#16182399] d-block text-left mb-3'>Your preferences will be synced automatically to the Seezit app.</span>
+                                    
+                                    <Accordion className='shadow-none px-0'>
+                                        <AccordionSummary
+                                        className='shadow-none px-0'
+                                        expandIcon={<ArrowDropDownIcon />}
+                                        aria-controls="panel2-content"
+                                        id="panel2-header"
+                                        >
+                                        <div className={styles.settingName}>
+                                            <div className='text-left'>
+                                                <p>Interactions </p>
+                                                <span className='text-xs text-[#16182399]'>Likes, comments, new followers, mentions and tags</span>
+                                            </div>
+                                        </div>
+                                        </AccordionSummary>
+                                        <AccordionDetails className='px-1 bg-[#f8f8f8]'>
+                                            <Typography >
+                                                <div
+                                                    className={styles.accountCards}>
+                                                    <div className={styles.settingName}>
+                                                        <div className='text-left'>
+                                                            <p className='text-base'>Likes</p>
+                                                        </div>
+                                                    </div>
+                                                    <label className="toggle-switch !left-1">
+                                                        <input 
+                                                        style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
+                                                            type="checkbox"
+                                                            name="autoScrollCheckbox" 
+                                                            id="autoScrollCheckbox" 
+                                                        />
+                                                        <b className="slider"></b>
+                                                    </label>
+                                                </div>
+                                            </Typography>
+                                            <Typography className='mt-4'>
+                                                <div
+                                                    className={styles.accountCards}>
+                                                    <div className={styles.settingName}>
+                                                        <div className='text-left'>
+                                                            <p className='text-base'>Comments</p>
+                                                        </div>
+                                                    </div>
+                                                    <label className="toggle-switch !left-1">
+                                                        <input 
+                                                        style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
+                                                            type="checkbox"
+                                                            name="autoScrollCheckbox" 
+                                                            id="autoScrollCheckbox" 
+                                                        />
+                                                        <b className="slider"></b>
+                                                    </label>
+                                                </div>
+                                            </Typography>
+                                            <Typography className='mt-4'>
+                                                <div
+                                                    className={styles.accountCards}>
+                                                    <div className={styles.settingName}>
+                                                        <div className='text-left'>
+                                                            <p className='text-base'>New followers</p>
+                                                        </div>
+                                                    </div>
+                                                    <label className="toggle-switch !left-1">
+                                                        <input 
+                                                        style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
+                                                            type="checkbox"
+                                                            name="autoScrollCheckbox" 
+                                                            id="autoScrollCheckbox" 
+                                                        />
+                                                        <b className="slider"></b>
+                                                    </label>
+                                                </div>
+                                            </Typography>
+                                            <Typography className='mt-4'>
+                                                <div
+                                                    className={styles.accountCards}>
+                                                    <div className={styles.settingName}>
+                                                        <div className='text-left'>
+                                                            <p className='text-base'>Mentions and tags</p>
+                                                        </div>
+                                                    </div>
+                                                    <label className="toggle-switch !left-1">
+                                                        <input 
+                                                        style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
+                                                            type="checkbox"
+                                                            name="autoScrollCheckbox" 
+                                                            id="autoScrollCheckbox" 
+                                                        />
+                                                        <b className="slider"></b>
+                                                    </label>
+                                                </div>
+                                            </Typography>
+                                        </AccordionDetails>
+                                    </Accordion>
+                                </div>
+                            </div>
+                            <div className={`${styles.suggestedContent} py-0`}>
+                                <div className='w-100 border-bottom pb-0'>
+                                    <Accordion className='shadow-none px-0'>
+                                        <AccordionSummary
+                                        className='shadow-none px-0'
+                                        expandIcon={<ArrowDropDownIcon />}
+                                        aria-controls="panel2-content"
+                                        id="panel2-header">
+                                         <h5 className='h6 text-left'>In-app notifications</h5>
+                                        </AccordionSummary>
+                                        <AccordionDetails className='px-1 bg-[#f8f8f8]'>
+                                            <Typography >
+                                                <div
+                                                    className={styles.accountCards}>
+                                                    <div className={styles.settingName}>
+                                                        <div className='text-left'>
+                                                            <p className='text-base'>Likes</p>
+                                                        </div>
+                                                    </div>
+                                                    <label className="toggle-switch !left-1">
+                                                        <input 
+                                                        style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
+                                                            type="checkbox"
+                                                            name="autoScrollCheckbox" 
+                                                            id="autoScrollCheckbox" 
+                                                        />
+                                                        <b className="slider"></b>
+                                                    </label>
+                                                </div>
+                                            </Typography>
+                                            <Typography className='mt-4'>
+                                                <div
+                                                    className={styles.accountCards}>
+                                                    <div className={styles.settingName}>
+                                                        <div className='text-left'>
+                                                            <p className='text-base'>Comments</p>
+                                                        </div>
+                                                    </div>
+                                                    <label className="toggle-switch !left-1">
+                                                        <input 
+                                                        style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
+                                                            type="checkbox"
+                                                            name="autoScrollCheckbox" 
+                                                            id="autoScrollCheckbox" 
+                                                        />
+                                                        <b className="slider"></b>
+                                                    </label>
+                                                </div>
+                                            </Typography>
+                                            <Typography className='mt-4'>
+                                                <div
+                                                    className={styles.accountCards}>
+                                                    <div className={styles.settingName}>
+                                                        <div className='text-left'>
+                                                            <p className='text-base'>New followers</p>
+                                                        </div>
+                                                    </div>
+                                                    <label className="toggle-switch !left-1">
+                                                        <input 
+                                                        style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
+                                                            type="checkbox"
+                                                            name="autoScrollCheckbox" 
+                                                            id="autoScrollCheckbox" 
+                                                        />
+                                                        <b className="slider"></b>
+                                                    </label>
+                                                </div>
+                                            </Typography>
+                                            <Typography className='mt-4'>
+                                                <div
+                                                    className={styles.accountCards}>
+                                                    <div className={styles.settingName}>
+                                                        <div className='text-left'>
+                                                            <p className='text-base'>Mentions and tags</p>
+                                                        </div>
+                                                    </div>
+                                                    <label className="toggle-switch !left-1">
+                                                        <input 
+                                                        style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
+                                                            type="checkbox"
+                                                            name="autoScrollCheckbox" 
+                                                            id="autoScrollCheckbox" 
+                                                        />
+                                                        <b className="slider"></b>
+                                                    </label>
+                                                </div>
+                                            </Typography>
+                                            <Typography className='mt-4'>
+                                                <div
+                                                    className={styles.accountCards}>
+                                                    <div className={styles.settingName}>
+                                                        <div className='text-left'>
+                                                            <p className='text-base'>Reposts</p>
+                                                        </div>
+                                                    </div>
+                                                    <label className="toggle-switch !left-1">
+                                                        <input 
+                                                        style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
+                                                            type="checkbox"
+                                                            name="autoScrollCheckbox" 
+                                                            id="autoScrollCheckbox" 
+                                                        />
+                                                        <b className="slider"></b>
+                                                    </label>
+                                                </div>
+                                            </Typography>
+                                        </AccordionDetails>
+                                    </Accordion>
+                                </div>
+                            </div>
+                            <div className={styles.suggestedContent}>
+                                <div className='w-100 border-bottom pb-3'>
+                                <div className={`${styles.pageHeader} mb-0 mt-0`}>
+                                    <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-3`}>Business account</h4>
+                                </div>
+                                    <div
+                                        className={styles.accountCards}>
+                                        <div className={styles.settingName}>
+                                            <div className='text-left'>
+                                            <h5 className='h6 text-left'>Business account</h5>
+                                            <span className='text-xs text-[#16182399]'>Access marketing tools & exclusive features through your business account to better connect with
+                                            viewers.</span>
+                                            </div>
+                                        </div>
+                                        <label className="toggle-switch !left-1">
+                                            <input 
+                                            style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
+                                                type="checkbox"
+                                                name="autoScrollCheckbox" 
+                                                id="autoScrollCheckbox" 
+                                            />
+                                            <b className="slider"></b>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div className={`${styles.suggestedContent} gap-0`}>
+                                <div className='w-100 border-bottom pb-3'>
+                                <div className={`${styles.pageHeader} mb-0 mt-0`}>
+                                    <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-3`}>Ads</h4>
+                                </div>
+                                    <div
+                                        className={styles.accountCards}>
+                                        <div className={styles.settingName}>
+                                            <div className='text-left'>
+                                            <h5 className='h6 text-left'>Manage the ads you see</h5>
+                                            <p className='d-flex mt-3 mb-1'>
+                                            <svg width="16" height="17" style={{ marginRight: '0.25rem' }} viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M6.6 4.97383C6.6 5.71643 6.305 6.42863 5.7799 6.95373C5.2548 7.47883 4.54261 7.77383 3.8 7.77383C3.05739 7.77383 2.3452 7.47883 1.8201 6.95373C1.295 6.42863 1 5.71643 1 4.97383C1 4.23122 1.295 3.51903 1.8201 2.99393C2.3452 2.46883 3.05739 2.17383 3.8 2.17383C4.54261 2.17383 5.2548 2.46883 5.7799 2.99393C6.305 3.51903 6.6 4.23122 6.6 4.97383ZM7.55 4.11383C7.55534 4.13614 7.5682 4.15593 7.58641 4.16989C7.60461 4.18385 7.62707 4.19113 7.65 4.1905C8.75693 4.19133 9.82699 4.58843 10.6665 5.30992C11.506 6.0314 12.0594 7.0296 12.2267 8.12383C12.2367 8.2005 12.27 8.26716 12.3233 8.32383L13.4 9.4005C13.5933 9.5905 13.9167 9.48383 13.9333 9.21383C13.9881 8.33455 13.8578 7.45356 13.5509 6.62776C13.244 5.80196 12.7673 5.0497 12.1516 4.41957C11.536 3.78944 10.795 3.29544 9.9765 2.96947C9.15804 2.64351 8.28031 2.49283 7.4 2.52716C7.14 2.53716 7.01333 2.84049 7.14333 3.06383C7.32667 3.38716 7.46667 3.74049 7.55 4.11383ZM8.40667 15.0738C8.66667 15.0405 8.76 14.7272 8.57333 14.5405L7.57333 13.5405C7.51352 13.4811 7.43412 13.4456 7.35 13.4405C6.17619 13.3643 5.07528 12.8446 4.27057 11.9866C3.46586 11.1287 3.01758 9.99678 3.01667 8.8205C3.01654 8.79813 3.00892 8.77645 2.99502 8.75893C2.98112 8.74141 2.96175 8.72905 2.94 8.72383C2.57185 8.64084 2.21801 8.5038 1.89 8.31716C1.66667 8.18716 1.36333 8.31383 1.35667 8.5705C1.35 8.65383 1.35 8.73716 1.35 8.8205C1.35015 9.7116 1.53934 10.5925 1.90508 11.4051C2.27081 12.2177 2.80478 12.9435 3.4717 13.5345C4.13863 14.1255 4.92334 14.5683 5.77403 14.8336C6.62471 15.099 7.52201 15.1809 8.40667 15.0738ZM7.85333 11.9238C7.79899 11.9782 7.76846 12.0519 7.76846 12.1288C7.76846 12.2057 7.79899 12.2794 7.85333 12.3338L10.94 15.4205C11.0533 15.5372 11.24 15.5372 11.3533 15.4205L14.44 12.3338C14.4943 12.2794 14.5249 12.2057 14.5249 12.1288C14.5249 12.0519 14.4943 11.9782 14.44 11.9238L11.3533 8.83383C11.3263 8.80642 11.2942 8.78464 11.2587 8.76978C11.2232 8.75492 11.1851 8.74727 11.1467 8.74727C11.1082 8.74727 11.0701 8.75492 11.0346 8.76978C10.9992 8.78464 10.967 8.80642 10.94 8.83383L7.85333 11.9238Z" fill="#161823"/>
+                                            </svg>
+                                                How your ads are personalized</p>
+                                            <span className='text-xs text-[#16182399]'>Access marketing tools & exclusive features through your business account to better connect with
+                                            viewers.</span>
+                                            </div>
+                                        </div>
+                                        <img src={whiteRightArrow} alt="" />
+                                    </div>
+                                </div>
+                                <div className='w-100 border-bottom pb-3'>
+                                    <div
+                                        className={styles.accountCards}>
+                                        <div className={styles.settingName}>
+                                            <div className='text-left'>
+                                            <p className='d-flex mt-3 mb-1'>
+                                            <svg width="16" height="17" viewBox="0 0 16 17" style={{ marginRight: '0.25rem' }} fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M3.00008 5.17318C3.00008 4.28912 3.35127 3.44128 3.97639 2.81615C4.60151 2.19103 5.44936 1.83984 6.33342 1.83984C7.21747 1.83984 8.06532 2.19103 8.69044 2.81615C9.31556 3.44128 9.66675 4.28912 9.66675 5.17318C9.66675 6.05723 9.31556 6.90508 8.69044 7.5302C8.06532 8.15532 7.21747 8.50651 6.33342 8.50651C5.44936 8.50651 4.60151 8.15532 3.97639 7.5302C3.35127 6.90508 3.00008 6.05723 3.00008 5.17318ZM0.666748 14.3198C0.666748 12.1465 2.68675 9.50651 6.33342 9.50651C7.47675 9.50651 8.46008 9.76651 9.27341 10.1898C9.10008 10.5165 9.00008 10.8898 9.00008 11.2832V13.2665C9.00022 13.7563 9.15451 14.2337 9.44108 14.631C9.72765 15.0282 10.132 15.3252 10.5967 15.4798C10.1801 15.5065 9.65675 15.5065 9.00008 15.5065H3.66675C1.33341 15.5065 0.666748 15.5065 0.666748 14.3198ZM15.2334 8.72651C15.2334 8.12651 14.4934 7.84651 14.0967 8.29651L12.4834 10.1265C12.411 10.2078 12.3222 10.2727 12.2227 10.3169C12.1233 10.3612 12.0156 10.3838 11.9067 10.3832H11.3334C11.0947 10.3832 10.8658 10.478 10.697 10.6468C10.5282 10.8156 10.4334 11.0445 10.4334 11.2832V13.2665C10.4334 13.7632 10.8334 14.1665 11.3334 14.1665H11.9434C12.1501 14.1665 12.3501 14.2498 12.4934 14.3998L14.1167 16.0832C14.2067 16.1759 14.3222 16.2398 14.4486 16.2666C14.575 16.2934 14.7065 16.2819 14.8264 16.2336C14.9462 16.1853 15.0489 16.1024 15.1214 15.9955C15.1939 15.8885 15.2329 15.7624 15.2334 15.6332V8.72651Z" fill="#161823"/>
+                                            </svg>
+                                            Mute advertisers</p>
+                                            <span className='text-xs text-[#16182399]'>Mute ads from specific advertisers who showed you ads recently on Seezitt.</span>
+                                            </div>
+                                        </div>
+                                        <img src={whiteRightArrow} alt="" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={`${styles.suggestedContent} gap-0`}>
+                                <div className='w-100 border-bottom pb-3'>
+                                    <div
+                                        className={styles.accountCards}>
+                                        <div className={styles.settingName}>
+                                            <div className='text-left'>
+                                            <h5 className='h6 text-left'>Manage your off-Seezitt <br /> data</h5>
+                                            <p className='d-flex mt-3 mb-1'>
+                                            <svg width="16" height="17" style={{ marginRight: '0.25rem' }} viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M6.06666 1.83984C4.30666 1.83984 2.87666 3.33318 2.87666 5.17318C2.87666 7.01318 4.30666 8.50651 6.06999 8.50651C7.83332 8.50651 9.26332 7.01318 9.26332 5.17318C9.26332 3.33318 7.82999 1.83984 6.06999 1.83984H6.06666ZM6.06666 9.50651C2.57666 9.50651 0.643324 12.1465 0.643324 14.3198C0.63999 15.5065 1.27666 15.5065 3.51332 15.5065H6.38999V12.9365C6.38999 12.1998 6.95999 11.6032 7.66666 11.6032H8.60666L9.06999 10.2932C8.16039 9.76239 7.123 9.49037 6.06999 9.50651H6.06666Z" fill="#161823"/>
+                                            <path d="M11.5367 10.6626C11.5037 10.5292 11.4291 10.4097 11.3236 10.3216C11.2181 10.2335 11.0872 10.1813 10.9501 10.1726C10.6701 10.1592 10.4167 10.3359 10.3201 10.6059L9.50008 12.9392H8.00008C7.91168 12.9392 7.82689 12.9744 7.76438 13.0369C7.70187 13.0994 7.66675 13.1842 7.66675 13.2726V13.9392C7.66675 14.0277 7.70187 14.1124 7.76438 14.175C7.82689 14.2375 7.91168 14.2726 8.00008 14.2726H9.94008C10.2067 14.2726 10.4467 14.0959 10.5401 13.8359L10.8267 13.0226L11.6134 16.0192C11.6801 16.2826 11.8967 16.4759 12.1567 16.5059C12.2854 16.5192 12.4151 16.4928 12.5283 16.4303C12.6415 16.3677 12.7329 16.272 12.7901 16.1559L13.7567 14.2726H15.0001C15.0885 14.2726 15.1733 14.2375 15.2358 14.175C15.2983 14.1124 15.3334 14.0277 15.3334 13.9392V13.2726C15.3334 13.1842 15.2983 13.0994 15.2358 13.0369C15.1733 12.9744 15.0885 12.9392 15.0001 12.9392H13.3734C13.1367 12.9392 12.9201 13.0726 12.8067 13.2892L12.4201 14.0492L11.5367 10.6659V10.6626Z" fill="#161823"/>
+                                            </svg>
+                                            Using Off-Seezitt activity for ad targeting</p>
+                                            <span className='text-xs text-[#16182399]'>
+                                                With this setting, the ads you see on Seezitt can be more tailored to your interests based on data that
+                                                advertising partners share with us about your activity on their apps and websites. You will always see ads on
+                                                Seezitt based on what you do on Seezitt or other data described in our privacy policy.
+                                            </span>
+                                            </div>
+                                        </div>
+                                        <img src={whiteRightArrow} alt="" />
+                                    </div>
+                                </div>
+                                <div className='w-100 pb-3'>
+                                    <div
+                                        className={styles.accountCards}>
+                                        <div className={styles.settingName}>
+                                            <div className='text-left'>
+                                            <p className='d-flex mt-3 mb-1'>
+                                            <svg width="16" height="17" style={{ marginRight: '0.25rem' }} viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M6.33342 1.67383C5.44936 1.67383 4.60151 2.02502 3.97639 2.65014C3.35127 3.27526 3.00008 4.12311 3.00008 5.00716C3.00008 5.89122 3.35127 6.73906 3.97639 7.36418C4.60151 7.98931 5.44936 8.3405 6.33342 8.3405C7.21747 8.3405 8.06532 7.98931 8.69044 7.36418C9.31556 6.73906 9.66675 5.89122 9.66675 5.00716C9.66675 4.12311 9.31556 3.27526 8.69044 2.65014C8.06532 2.02502 7.21747 1.67383 6.33342 1.67383ZM6.33342 9.3405C2.68675 9.3405 0.666748 11.9805 0.666748 14.1538C0.666748 15.3405 1.33341 15.3405 3.66675 15.3405H7.94008C7.22273 14.5442 6.78142 13.5377 6.68173 12.4705C6.58205 11.4034 6.8293 10.3326 7.38675 9.41716C7.05341 9.36716 6.70341 9.3405 6.33342 9.3405ZM8.00008 12.0072C7.98506 11.5166 8.06869 11.028 8.24601 10.5703C8.42333 10.1126 8.69073 9.69522 9.03236 9.34281C9.37399 8.99041 9.78289 8.71018 10.2348 8.51873C10.6868 8.32728 11.1725 8.22852 11.6634 8.2283C12.1542 8.22808 12.64 8.3264 13.0922 8.51743C13.5443 8.70846 13.9534 8.98833 14.2954 9.34042C14.6373 9.69252 14.9051 10.1097 15.0828 10.5672C15.2606 11.0247 15.3447 11.5132 15.3301 12.0038C15.3018 12.9567 14.9035 13.8611 14.2196 14.5253C13.5357 15.1895 12.62 15.5612 11.6667 15.5616C10.7134 15.5621 9.79737 15.1912 9.11288 14.5276C8.42839 13.8641 8.02925 12.96 8.00008 12.0072ZM10.6867 10.1605C10.6558 10.1293 10.6189 10.1045 10.5783 10.0875C10.5377 10.0706 10.4941 10.0619 10.4501 10.0619C10.4061 10.0619 10.3625 10.0706 10.3219 10.0875C10.2813 10.1045 10.2444 10.1293 10.2134 10.1605L9.82008 10.5538C9.758 10.6163 9.72315 10.7008 9.72315 10.7888C9.72315 10.8769 9.758 10.9614 9.82008 11.0238L10.8034 12.0072L9.82008 12.9905C9.758 13.0529 9.72315 13.1374 9.72315 13.2255C9.72315 13.3136 9.758 13.398 9.82008 13.4605L10.2134 13.8538C10.2759 13.9159 10.3604 13.9508 10.4484 13.9508C10.5365 13.9508 10.621 13.9159 10.6834 13.8538L11.6667 12.8738L12.6501 13.8538C12.7125 13.9159 12.797 13.9508 12.8851 13.9508C12.9731 13.9508 13.0576 13.9159 13.1201 13.8538L13.5134 13.4605C13.5755 13.398 13.6103 13.3136 13.6103 13.2255C13.6103 13.1374 13.5755 13.0529 13.5134 12.9905L12.5334 12.0072L13.5134 11.0272C13.5447 10.9962 13.5695 10.9593 13.5864 10.9187C13.6033 10.8781 13.612 10.8345 13.612 10.7905C13.612 10.7465 13.6033 10.7029 13.5864 10.6623C13.5695 10.6217 13.5447 10.5848 13.5134 10.5538L13.1201 10.1605C13.0576 10.0984 12.9731 10.0636 12.8851 10.0636C12.797 10.0636 12.7125 10.0984 12.6501 10.1605L11.6667 11.1438L10.6867 10.1605Z" fill="#161823"/>
+                                            </svg>
+                                            Disconnect advertisers</p>
+                                            <span className='text-xs text-[#16182399]'>
+                                                Stop tailoring ads with your off-Seezitt data from an advertiser.
+                                            </span>
+                                            </div>
+                                        </div>
+                                        <img src={whiteRightArrow} alt="" />
+                                    </div>
+                                </div>
+                                <div className='w-100 border-bottom pb-3'>
+                                    <div
+                                        className={styles.accountCards}>
+                                        <div className={styles.settingName}>
+                                            <div className='text-left'>
+                                            <p className='d-flex mt-3 mb-1'>
+                                            <svg width="16" height="17" style={{ marginRight: '0.25rem' }} viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M10.6666 2.84049V3.50716H14.3333C14.4217 3.50716 14.5064 3.54228 14.569 3.60479C14.6315 3.6673 14.6666 3.75209 14.6666 3.84049V4.50716C14.6666 4.59557 14.6315 4.68035 14.569 4.74286C14.5064 4.80538 14.4217 4.84049 14.3333 4.84049H13.4399L12.9266 13.1738C12.8599 14.2305 12.8299 14.7605 12.6033 15.1605C12.404 15.5144 12.1017 15.7993 11.7366 15.9772C11.3233 16.1772 10.7933 16.1772 9.73659 16.1772H6.26659C5.20659 16.1772 4.67659 16.1772 4.26325 15.9772C3.89814 15.7993 3.59585 15.5144 3.39659 15.1605C3.16992 14.7605 3.13659 14.2305 3.07325 13.1738L2.55992 4.84049H1.66659C1.57818 4.84049 1.4934 4.80538 1.43088 4.74286C1.36837 4.68035 1.33325 4.59557 1.33325 4.50716V3.84049C1.33325 3.75209 1.36837 3.6673 1.43088 3.60479C1.4934 3.54228 1.57818 3.50716 1.66659 3.50716H5.33325V2.84049C5.33325 2.39847 5.50885 1.97454 5.82141 1.66198C6.13397 1.34942 6.55789 1.17383 6.99992 1.17383H8.99992C9.21879 1.17383 9.43552 1.21694 9.63772 1.3007C9.83993 1.38445 10.0237 1.50722 10.1784 1.66198C10.3332 1.81675 10.456 2.00048 10.5397 2.20269C10.6235 2.4049 10.6666 2.62163 10.6666 2.84049ZM6.99992 2.50716C6.91151 2.50716 6.82673 2.54228 6.76422 2.60479C6.7017 2.6673 6.66659 2.75209 6.66659 2.84049V3.50716H9.33325V2.84049C9.33325 2.75209 9.29813 2.6673 9.23562 2.60479C9.17311 2.54228 9.08832 2.50716 8.99992 2.50716H6.99992ZM6.26992 7.00716C6.18151 7.00716 6.09673 7.04228 6.03422 7.10479C5.9717 7.1673 5.93659 7.25209 5.93659 7.3405V12.3405C5.93659 12.4289 5.9717 12.5137 6.03422 12.5762C6.09673 12.6387 6.18151 12.6738 6.26992 12.6738H6.97992C7.06832 12.6738 7.15311 12.6387 7.21562 12.5762C7.27813 12.5137 7.31325 12.4289 7.31325 12.3405V7.3405C7.31325 7.25209 7.27813 7.1673 7.21562 7.10479C7.15311 7.04228 7.06832 7.00716 6.97992 7.00716H6.26659H6.26992ZM8.68659 7.3405V12.3405C8.68659 12.4289 8.7217 12.5137 8.78422 12.5762C8.84673 12.6387 8.93151 12.6738 9.01992 12.6738H9.72992C9.81832 12.6738 9.90311 12.6387 9.96562 12.5762C10.0281 12.5137 10.0633 12.4289 10.0633 12.3405V7.3405C10.0633 7.25209 10.0281 7.1673 9.96562 7.10479C9.90311 7.04228 9.81832 7.00716 9.72992 7.00716H9.01992C8.93151 7.00716 8.84673 7.04228 8.78422 7.10479C8.7217 7.1673 8.68659 7.25209 8.68659 7.3405Z" fill="#161823"/>
+                                            </svg>
+                                            Clear off-Seezitt data</p>
+                                            <span className='text-xs text-[#16182399]'>
+                                             Clear the off-Seezitt data that advertisers have shared about you.
+                                            </span>
+                                            </div>
+                                        </div>
+                                        <img src={whiteRightArrow} alt="" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div className={styles.settingsWrapper}>
                             <div className={`${styles.pageHeader} p-3`}>
                                 <h4 className={darkTheme ? 'text-white' : 'text-black'}>Content & Activity</h4>
                             </div>
-                            <div className={styles.suggestedContent}>
+                            <div className={`${styles.suggestedContent}`}>
                                 <div className={styles.accountCards}>
                                     <div
                                         className={styles.settingName}
@@ -1036,8 +1408,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                                 gap: '25px',
                                                 justifyContent: 'center',
                                                 alignItems: 'center',
-                                            }}
-                                        >
+                                            }}>
                                             <div
                                                 style={{
                                                     marginTop: '20px',
