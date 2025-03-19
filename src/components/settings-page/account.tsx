@@ -43,6 +43,7 @@ import redRightArrow from './svg-components/redRightArrow.svg';
 import whiteRightArrow from './svg-components/whiteRightArrow.svg';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ManageAccount from './components/manageAccount'
 
 import {
     changePassIconWhite,
@@ -631,16 +632,17 @@ const Account = ({ className, openModal }: AccountProps) => {
     return (
         <>
             <div >
-                        <Navbar />            
+                 <Navbar />            
                 <div className={`${styles.container} `} style={{ maxWidth: '1140px', margin: 'auto', marginTop: '7rem' }}>
+
                     { <div className={`${sibarStyles.leftSide} ${darkTheme} shadow-md rounded-lg px-4` } style={{ width: '30rem', backgroundColor: '#fff', }}>
-                        <div className={`${sibarStyles.sideNavDiv} pt-4`}>
+                        <div className={`${sibarStyles.sideNavDiv} pt-4`} >
                             <Link to="/" reloadDocument={false} style={{ textDecoration: 'none' }}>
                             <div className='d-flex'>
                             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd" d="M12.7415 4.33984C10.8085 4.33984 9.24148 5.90684 9.24148 7.83984C9.24148 9.77284 10.8085 11.3398 12.7415 11.3398C14.6745 11.3398 16.2415 9.77284 16.2415 7.83984C16.2415 5.90684 14.6745 4.33984 12.7415 4.33984ZM7.24148 7.83984C7.24148 4.80228 9.70393 2.33984 12.7415 2.33984C15.7791 2.33984 18.2415 4.80228 18.2415 7.83984C18.2415 10.8774 15.7791 13.3398 12.7415 13.3398C9.70393 13.3398 7.24148 10.8774 7.24148 7.83984ZM12.7415 17.3398C9.77208 17.3398 7.26598 19.3319 6.48993 22.0529C6.41418 22.3185 6.15218 22.4942 5.88153 22.4393L4.90152 22.2404C4.6309 22.1854 4.45463 21.9207 4.52548 21.6538C5.49044 18.0188 8.80208 15.3398 12.7415 15.3398C16.6809 15.3398 19.9926 18.0188 20.9575 21.6538C21.0284 21.9207 20.8521 22.1854 20.5815 22.2404L19.6015 22.4393C19.3308 22.4942 19.0688 22.3185 18.9931 22.0529C18.217 19.3319 15.7109 17.3398 12.7415 17.3398Z" fill="#161823"/>
                             </svg>
-                            <p className={`${sibarStyles.linkWord} pl-2`}>Profile</p>
+                            <p className={`${sibarStyles.linkWord} pl-2`}>Manage Account  </p>
                             </div>
                             </Link>
                         </div>
@@ -707,6 +709,10 @@ const Account = ({ className, openModal }: AccountProps) => {
                         </div>
                     </div> }
                     <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md`}>
+                        <p className='p-3 text-xl font-semibold'>Download Seezitt data</p>
+                        <ManageAccount > </ManageAccount>
+                    </div>
+                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white d-none shadow-md`}>
                         <div className={styles.settingsWrapper}>
                             
                             <div className={styles.suggestedContent}>
