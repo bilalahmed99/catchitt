@@ -444,7 +444,7 @@ a.customPlayBtn::after {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #333 !important; /* Dark background */
+  background-color: #1618231F !important; /* Dark background */
   border-radius: 34px;
   transition: 0.4s;
 }
@@ -461,8 +461,8 @@ a.customPlayBtn::after {
   transition: 0.4s;
 }
 
-input:checked + .slider {
-  background-color: #4caf50; /* Green when active */
+.checkedToggle.toggle-switch .slider {
+  background-color: #0BE09B !important; 
 }
 
 input:checked + .slider::before {

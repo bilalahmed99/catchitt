@@ -217,7 +217,7 @@ export default function MORE_MENU_HOME({ visibleReportPopup, url, postMediaId,ac
                         <p className=''>Auto scroll</p>
                         {autoScroll}                   
 
-                        <label className="toggle-switch">
+                        <label className={`${autoScroll? 'checkedToggle': '' } toggle-switch`}>
                             <input 
                             style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
                                 type="checkbox" 
