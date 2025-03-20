@@ -710,14 +710,17 @@ const Account = ({ className, openModal }: AccountProps) => {
                         </div>
                     </div> }
                     <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white d-none shadow-md`}>
-                        <p className='p-3 text-xl font-semibold'>Download Seezitt data</p>
-                        <ManageAccount > </ManageAccount>
+                    <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0 font-semibold p-3 text-xl`}>Download Seezitt data</h4>
+                        <ManageAccount /> 
                     </div>
                     <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md`}>
-                        <p className='p-3 text-xl font-semibold'>Download Seezitt data</p>
-                        <ads /> 
+                            <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0 font-semibold text-xl p-3`}>How your ads are personalized</h4>
+                            <span className='text-left px-3 text-[#000000A6] text-sm'> Personalized ads can be based on inferences that Seezitt has made about you. You can manage whether your ads are based on these factors below. Any changes that you make can take up to 48 hours to go into effect. These changes will not affect whether we otherwise can use the information we collect about you to help us personalize your ads.
+                            <a href="" className='font-semibold'>Learn more</a>
+                        </span>
+                        <Ads /> 
                     </div>
-                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white d-none shadow-md`}>
+                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white  shadow-md`}>
                         <div className={styles.settingsWrapper}>
                             
                             <div className={styles.suggestedContent}>

@@ -42,101 +42,63 @@ const ads: React.FC = () => {
       <AppBar position="static" color="default"  sx={{boxShadow: 'none', borderBottom: '1px solid #16182333'}} >
         <CustomTabs value={value} onChange={handleChange} aria-label="basic tabs example"  variant="fullWidth"
         >
-           <Tab label="Request data" id="simple-tab-0" aria-controls="simple-tabpanel-0"
+           <Tab label="Topic" id="simple-tab-0" aria-controls="simple-tabpanel-0"
               sx={{ flex: 1, color: 'black', textTransform: 'none'}} 
              />
-          <Tab label="Download data" id="simple-tab-1" aria-controls="simple-tabpanel-1" 
+          <Tab label="Gender" id="simple-tab-1" aria-controls="simple-tabpanel-1" 
             sx={{ flex: 1, color: 'black',  textTransform: 'none', '&.Mui-selected': { color: 'black', borderBottom: '2px solid black' } }} 
            />
         </CustomTabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <span className='text-sm text-[#16182399]'>
-          Request a copy of your data from all the Seezitt apps you use to back up your account or export it to other services.
-        </span>
-        <span className='text-sm text-[#16182399] mt-3 d-block font-medium'>
-          Select data to download
-        </span>
-        <div className='w-100 border-bottom py-3'>
-          <FormControlLabel
-            className='flex-row-reverse  justify-between w-100 pl-3'
-              value="male"
-              label={
-                <Box onClick={(e) => e.stopPropagation()} sx={{ cursor: 'pointer' }}>
-                  <p className='font-semibold'>All data</p>
-                  <span className='text-xs text-[#16182399]'>
-                    Download all available information associated with your account. This file will include more data than if
-                    you select from the custom options.
-                  </span>
-                </Box>
-              }
-              control={<Radio />}
-           
-          />
+       
+        <div className='w-100 border-bottom py-3 mb-3'>
+          <span className='text-sm font-medium text-[#16182399]'>
+          Inferred by <br /> Seezitt
+          </span>
+          <div className='d-flex justify-between'>
+                <div >
+                    <div className='text-left'>
+                      <p>View all</p>
+                    </div>
+                </div>
+                <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.4566 8.84045L8.90329 4.28378C8.8412 4.22133 8.80636 4.13684 8.80636 4.04878C8.80636 3.96072 8.8412 3.87623 8.90329 3.81378L9.51662 3.20045C9.57907 3.13836 9.66356 3.10352 9.75162 3.10352C9.83968 3.10352 9.92417 3.13836 9.98662 3.20045L15.39 8.60045C15.4212 8.63143 15.446 8.6683 15.4629 8.70892C15.4798 8.74954 15.4886 8.79311 15.4886 8.83711C15.4886 8.88112 15.4798 8.92469 15.4629 8.96531C15.446 9.00593 15.4212 9.04279 15.39 9.07378L9.98662 14.4804C9.92417 14.5425 9.83968 14.5774 9.75162 14.5774C9.66356 14.5774 9.57907 14.5425 9.51662 14.4804L8.90329 13.8671C8.87204 13.8361 8.84725 13.7993 8.83032 13.7586C8.8134 13.718 8.80469 13.6744 8.80469 13.6304C8.80469 13.5864 8.8134 13.5429 8.83032 13.5023C8.84725 13.4616 8.87204 13.4248 8.90329 13.3938L13.4566 8.84045Z" fill="#161823"/>
+                </svg>
 
+            </div>
         </div>
-
-        <div className='w-100 border-bottom py-3'>
-          <FormControlLabel
-            className='flex-row-reverse  justify-between w-100 pl-3'
-              value="male"
-              label={
-                <Box onClick={(e) => e.stopPropagation()} sx={{ cursor: 'pointer' }}>
-                  <p className='font-semibold'>Custom</p>
-                  <span className='text-xs text-[#16182399]'>
-                    Choose which information you want to include in your file.
-                  </span>
-                </Box>
-              }
-              control={<Radio />}
-           
-          />
-
+        <div className='w-100 border-bottom py-3 mb-3'>
+          <span className='text-sm font-medium text-[#16182399]'>
+            Your choices
+          </span>
+          <div className='d-flex justify-between'>
+                <div >
+                    <div className='text-left'>
+                      <p>View all</p>
+                    </div>
+                </div>
+                <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.4566 8.84045L8.90329 4.28378C8.8412 4.22133 8.80636 4.13684 8.80636 4.04878C8.80636 3.96072 8.8412 3.87623 8.90329 3.81378L9.51662 3.20045C9.57907 3.13836 9.66356 3.10352 9.75162 3.10352C9.83968 3.10352 9.92417 3.13836 9.98662 3.20045L15.39 8.60045C15.4212 8.63143 15.446 8.6683 15.4629 8.70892C15.4798 8.74954 15.4886 8.79311 15.4886 8.83711C15.4886 8.88112 15.4798 8.92469 15.4629 8.96531C15.446 9.00593 15.4212 9.04279 15.39 9.07378L9.98662 14.4804C9.92417 14.5425 9.83968 14.5774 9.75162 14.5774C9.66356 14.5774 9.57907 14.5425 9.51662 14.4804L8.90329 13.8671C8.87204 13.8361 8.84725 13.7993 8.83032 13.7586C8.8134 13.718 8.80469 13.6744 8.80469 13.6304C8.80469 13.5864 8.8134 13.5429 8.83032 13.5023C8.84725 13.4616 8.87204 13.4248 8.90329 13.3938L13.4566 8.84045Z" fill="#161823"/>
+                </svg>
+            </div>
         </div>
+        <div className='w-100 border-bottom py-3 mb-3'>
+          <span className='text-sm font-medium text-[#16182399]'>
+            All topics
+          </span>
+          <div className='d-flex justify-between mt-3'>
+                <div >
+                    <div className='text-left'>
+                      <p>Education</p>
+                    </div>
+                </div>
+                <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.4566 8.84045L8.90329 4.28378C8.8412 4.22133 8.80636 4.13684 8.80636 4.04878C8.80636 3.96072 8.8412 3.87623 8.90329 3.81378L9.51662 3.20045C9.57907 3.13836 9.66356 3.10352 9.75162 3.10352C9.83968 3.10352 9.92417 3.13836 9.98662 3.20045L15.39 8.60045C15.4212 8.63143 15.446 8.6683 15.4629 8.70892C15.4798 8.74954 15.4886 8.79311 15.4886 8.83711C15.4886 8.88112 15.4798 8.92469 15.4629 8.96531C15.446 9.00593 15.4212 9.04279 15.39 9.07378L9.98662 14.4804C9.92417 14.5425 9.83968 14.5774 9.75162 14.5774C9.66356 14.5774 9.57907 14.5425 9.51662 14.4804L8.90329 13.8671C8.87204 13.8361 8.84725 13.7993 8.83032 13.7586C8.8134 13.718 8.80469 13.6744 8.80469 13.6304C8.80469 13.5864 8.8134 13.5429 8.83032 13.5023C8.84725 13.4616 8.87204 13.4248 8.90329 13.3938L13.4566 8.84045Z" fill="#161823"/>
+                </svg>
 
-        <span className='text-sm text-[#16182399] mt-3 d-block font-medium'>
-          Select file format
-        </span>
-        <div className='w-100 border-bottom py-3'>
-          <FormControlLabel
-            className='flex-row-reverse  justify-between w-100 pl-3'
-              value="male"
-              label={
-                <Box onClick={(e) => e.stopPropagation()} sx={{ cursor: 'pointer' }}>
-                  <p className='font-semibold'>TXT</p>
-                  <span className='text-xs text-[#16182399]'>
-                      Easy-to-read text file
-                  </span>
-                </Box>
-              }
-              control={<Radio />}
-           
-          />
-
+            </div>
         </div>
-
-        <div className='w-100 border-bottom py-3'>
-          <FormControlLabel
-            className='flex-row-reverse  justify-between w-100 pl-3'
-              value="male"
-              label={
-                <Box onClick={(e) => e.stopPropagation()} sx={{ cursor: 'pointer' }}>
-                  <p className='font-semibold'>JSON</p>
-                  <span className='text-xs text-[#16182399]'>
-                    Allows other services to import your file
-                  </span>
-                </Box>
-              }
-              control={<Radio />}
-           
-          />
-
-        </div>
-        <button
-            className="bg-[#FE2C55] text-white font-semibold px-4 rounded-md w-full"
-        >
-            <p className="text-[rgb(255, 59, 92)] font-normal">Request data</p>
-        </button>
       </TabPanel>
       <TabPanel value={value} index={1}>
         
