@@ -70,7 +70,7 @@ const FullWidthTabs: React.FC = () => {
                   </span>
                 </Box>
               }
-              control={<Radio />}
+              control={<Radio sx={{ color: '#FE2C55', '&.Mui-checked': { color: '#FE2C55' } }} />} 
            
           />
 
@@ -88,7 +88,7 @@ const FullWidthTabs: React.FC = () => {
                   </span>
                 </Box>
               }
-              control={<Radio />}
+              control={<Radio sx={{ color: '#FE2C55', '&.Mui-checked': { color: '#FE2C55' } }} />} 
            
           />
 
@@ -109,7 +109,7 @@ const FullWidthTabs: React.FC = () => {
                   </span>
                 </Box>
               }
-              control={<Radio />}
+              control={<Radio sx={{ color: '#FE2C55', '&.Mui-checked': { color: '#FE2C55' } }} />} 
            
           />
 
@@ -127,7 +127,7 @@ const FullWidthTabs: React.FC = () => {
                   </span>
                 </Box>
               }
-              control={<Radio />}
+              control={<Radio sx={{ color: '#FE2C55', '&.Mui-checked': { color: '#FE2C55' } }} />} 
            
           />
 
