@@ -660,7 +660,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                  <Navbar />            
                 <div className={`${styles.container} `} style={{ maxWidth: '1140px', margin: 'auto', marginTop: '7rem' }}>
 
-                    { <div className={`${sibarStyles.leftSide} ${darkTheme} shadow-md rounded-lg px-4` } style={{ width: '30rem', backgroundColor: '#fff', }}>
+                    { <div className={`${sibarStyles.leftSide} ${darkTheme} shadow-md rounded-lg px-4 pb-4` } style={{ width: '30rem', backgroundColor: '#fff', }}>
                         <div className={`${sibarStyles.sideNavDiv} pt-4`} >
                             <Link to="/" reloadDocument={false} style={{ textDecoration: 'none' }}>
                             <div className='d-flex'>
