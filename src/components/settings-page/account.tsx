@@ -1722,6 +1722,25 @@ const Account = ({ className, openModal }: AccountProps) => {
                                     </Accordion>
                                 </div>
                             </div>
+                            <div className={styles.suggestedContent}>
+                                <div className={`${styles.pageHeader} mb-0 mt-0`}>
+                                    <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0`}>Content preferences</h4>
+                                </div>
+                                <div className='w-100 border-bottom pb-3'>
+                                    <div
+                                        className={styles.accountCards}>
+                                        <div className={styles.settingName}>
+                                            <div className='text-left'>
+                                            <p>Filter keywords</p>
+                                            <span className='text-xs text-[#16182399]'>When you filter a keyword, you won’t see posts in your selected feeds that contain that word in any
+                                            titles, descriptions, or stickers. Certain keywords can’t be filtered.s</span>
+                                            </div>
+                                        </div>
+                                        <img src={whiteRightArrow} alt="" />
+
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div className={styles.settingsWrapper}>
                             <div className={`${styles.pageHeader} p-3`}>
