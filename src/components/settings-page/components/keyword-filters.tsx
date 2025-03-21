@@ -1,24 +1,131 @@
 import React, { useState } from "react";
-import { Box, Typography } from "@mui/material";
-import { styled } from "@mui/material";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 
-const keywordFilters: React.FC = () => {
- 
- 
+interface KeywordFiltersProps {
+  onClose: () => void;
+  onKeywordAdded: () => Promise<void>;
+}
 
- 
+const KeywordFilters: React.FC<KeywordFiltersProps> = ({ onClose, onKeywordAdded }) => {
+
+  const API_KEY = process.env.VITE_API_URL;
+  const { token } = useSelector((store: any) => store?.reducers?.profile);
+  
+  const [keyword, setKeyword] = useState("");
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const filters = [
+    { id: "for_you", label: "For You" },
+    { id: "live", label: "LIVE" },
+    { id: "following", label: "Following" },
+    { id: "friends", label: "Friends" },
+  ];
+
+  const handleCheckboxChange = (filterId: string) => {
+    setSelectedFilters((prev) =>
+      prev.includes(filterId)
+        ? prev.filter((id) => id !== filterId) // Remove if already selected
+        : [...prev, filterId] // Add if not selected
+    );
+  };
+
+  const handleSelectAll = () => {
+    if (selectedFilters.length === filters.length) {
+      setSelectedFilters([]); // Unselect all
+    } else {
+      setSelectedFilters(filters.map((filter) => filter.id)); // Select all
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!keyword.trim()) {
+      alert("Please enter a keyword!");
+      return;
+    }
+    if (selectedFilters.length === 0) {
+      alert("Please select at least one filter!");
+      return;
+    }
+
+    const requestData = { keyword, filters: selectedFilters };
+
+    try {
+      const response = await fetch(`${API_KEY}/profile/v2/keywords`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      if (!response.ok) throw new Error("Failed to save keyword and filters");
+
+      const responseData = await response.json();
+      console.log("Response:", responseData);
+      onKeywordAdded();
+      onClose();
+      // alert("Keyword and filters saved successfully!");
+    } catch (error) {
+      console.error("Error:", error);
+      // alert("Failed to save keyword and filters.");
+    }
+  };
+
   return (
-      <div className=" w-100 p-3">
-        <div className='d-flex mt-3 justify-end'>
-            <button className="bg-[#FE2C55] text-white font-semibold px-4 rounded-sm text-sm">
-                <p className="text-[rgb(255, 59, 92)] font-normal">
-                    
-                    Done</p>
-            </button>
+    <div className="w-full p-4">
+      {/* Keyword Input Field */}
+      <div className="mb-3">
+        <input
+          type="text"
+          placeholder="Enter a word or hashtag"
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          className="border rounded-sm p-2 w-full"
+        />
+      </div>
+
+      {/* Filter Selection */}
+      <div className="mb-3">
+        <div className="flex justify-between items-center">
+          <p className="font-semibold">Filter from</p>
+          <button
+            className="text-red-500 font-semibold text-sm"
+            onClick={handleSelectAll}
+          >
+            {selectedFilters.length === filters.length ? "Unselect all" : "Select all"}
+          </button>
+        </div>
+        <div className="border rounded-sm p-2 mt-2">
+          {filters.map((filter) => (
+            <label key={filter.id} className="flex justify-between items-center py-1">
+              <span>{filter.label}</span>
+              <input
+                type="checkbox"
+                checked={selectedFilters.includes(filter.id)}
+                onChange={() => handleCheckboxChange(filter.id)}
+                className="mr-2"
+              />
+            </label>
+          ))}
         </div>
       </div>
+
+      {/* Action Buttons */}
+      <div className="flex justify-end mt-3">
+        <button
+          onClick={handleSubmit}
+          className={`bg-[#FE2C55] text-white font-semibold px-6 py-2 rounded-sm text-sm ${
+            !keyword || selectedFilters.length === 0 ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          disabled={!keyword || selectedFilters.length === 0}
+        >
+          Save
+        </button>
+      </div>
+    </div>
   );
 };
 
-export default keywordFilters;
+export default KeywordFilters;

@@ -65,7 +65,7 @@ import DisconnectAdvertisers from './components/disconnect-advertisers';
 import DailyScreenTime from './components/daily-screen-time';
 import ScreenTimeBreaks from './components/screen-time-breaks';
 import SleepReminder from './components/sleep-reminders';
-import KeywordFilters from './components/keyword-filters';
+import KeywordFilters from './components/keyword-page';
 
 export interface AccountProps {
     className?: string;
@@ -1722,7 +1722,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                     </Accordion>
                                 </div>
                             </div>
-                            <div className={styles.suggestedContent}>
+                            <div className={styles.suggestedContent} onClick={() => toggleVisibility('filter_keywords')}>
                                 <div className={`${styles.pageHeader} mb-0 mt-0`}>
                                     <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0`}>Content preferences</h4>
                                 </div>
@@ -1757,9 +1757,8 @@ const Account = ({ className, openModal }: AccountProps) => {
                                     </div>
                                     <img src={whiteRightArrow} alt="" />
                                 </div>
-                                <div
+                                {/* <div
                                     className={styles.accountCards}
-                                // onClick={handleOpenChangePassMainModal}
                                 >
                                     <div
                                         className={styles.settingName}
@@ -1769,10 +1768,9 @@ const Account = ({ className, openModal }: AccountProps) => {
                                         <p>Content preference</p>
                                     </div>
                                     <img src={whiteRightArrow} alt="" />
-                                </div>
+                                </div> */}
                                 <div
                                     className={styles.accountCards}
-                                // onClick={handleOpenChangePassMainModal}
                                 >
                                     <div
                                         className={styles.settingName}
