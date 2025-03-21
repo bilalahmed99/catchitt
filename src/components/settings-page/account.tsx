@@ -65,7 +65,7 @@ import DisconnectAdvertisers from './components/disconnect-advertisers';
 import DailyScreenTime from './components/daily-screen-time';
 import ScreenTimeBreaks from './components/screen-time-breaks';
 import SleepReminder from './components/sleep-reminders';
-import KeywordFilters from './components/keyword-filters';
+import KeywordFilters from './components/keyword-page';
 
 export interface AccountProps {
     className?: string;
