@@ -57,6 +57,7 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
   };
 
   const handleDownloadChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('hhh', event.target.value);
     setSelectedDownload(event.target.value);
   };
 
@@ -106,10 +107,29 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
         <span className="text-sm text-[#16182399]">
           Request a copy of your data from all the Seezitt apps you use to back up your account or export it to other services.
         </span>
-        <span className="text-sm text-[#16182399] mt-3 d-block font-medium">Select data to download</span>
+        <span className='text-sm text-[#16182399] mt-3 d-block font-medium'>
+          Select data to download
+        </span>
+        <div className='w-100 border-bottom py-3'>
+          <FormControlLabel
+            className='flex-row-reverse  justify-between w-100 pl-3'
+              value="all_data"
+              label={
+                <Box onClick={(e) => e.stopPropagation()} sx={{ cursor: 'pointer' }}>
+                  <p className='font-semibold'>All data</p>
+                  <span className='text-xs text-[#16182399]'>
+                    Download all available information associated with your account. This file will include more data than if
+                    you select from the custom options.
+                  </span>
+                </Box>
+              }
+              control={<Radio  checked={selectedDownload === 'all_data'}
+              onChange={handleDownloadChange} sx={{ color: '#FE2C55', '&.Mui-checked': { color: '#FE2C55' } }} />} 
+          />
+        </div>
 
         {/* All Data Radio Button */}
-        <div className="w-100 border-bottom py-3">
+        {/* <div className="w-100 border-bottom py-3">
           <FormControlLabel
             className="flex-row-reverse justify-between w-100 pl-3"
             value="all_data"
@@ -129,27 +149,24 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
               />
             }
           />
-        </div>
+        </div> */}
 
         {/* Custom Radio Button */}
         <div className="w-100 border-bottom py-3">
           <FormControlLabel
-            className="flex-row-reverse justify-between w-100 pl-3"
-            value="custom"
-            label={
-              <Box onClick={(e) => e.stopPropagation()} sx={{ cursor: 'pointer' }}>
-                <p className="font-semibold">Custom</p>
-                <span className="text-xs text-[#16182399]">
-                  Choose which information you want to include in your file.
-                </span>
-              </Box>
-            }
-            control={
-              <Radio
-                checked={selectedDownload === 'custom'}
-                onChange={handleDownloadChange}
-              />
-            }
+            className='flex-row-reverse  justify-between w-100 pl-3'
+              value="custom"
+              label={
+                <Box onClick={(e) => e.stopPropagation()} sx={{ cursor: 'pointer' }}>
+                  <p className='font-semibold'>Custom</p>
+                  <span className='text-xs text-[#16182399]'>
+                    Choose which information you want to include in your file.
+                  </span>
+                </Box>
+              }
+              control={<Radio  checked={selectedDownload === 'custom'}
+              onChange={handleDownloadChange} sx={{ color: '#FE2C55', '&.Mui-checked': { color: '#FE2C55' } }} />} 
+           
           />
         </div>
 
@@ -161,6 +178,7 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
                 <Checkbox
                   checked={selectedItems.includes('activity')}
                   onChange={handleItemChange('activity')}
+                  sx={{ color: '#FE2C55', '&.Mui-checked': { color: '#FE2C55' } }}
                 />
               }
               label="Activity"
@@ -170,6 +188,7 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
                 <Checkbox
                   checked={selectedItems.includes('messages')}
                   onChange={handleItemChange('messages')}
+                  sx={{ color: '#FE2C55', '&.Mui-checked': { color: '#FE2C55' } }}
                 />
               }
               label="Messages"
@@ -179,6 +198,7 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
                 <Checkbox
                   checked={selectedItems.includes('profile_and_posts')}
                   onChange={handleItemChange('profile_and_posts')}
+                  sx={{ color: '#FE2C55', '&.Mui-checked': { color: '#FE2C55' } }}
                 />
               }
               label="Profile and Posts"
@@ -203,6 +223,7 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
               <Radio
                 checked={selectedFormat === 'txt'}
                 onChange={handleFormatChange}
+                sx={{ color: '#FE2C55', '&.Mui-checked': { color: '#FE2C55' } }}
               />
             }
           />
@@ -211,20 +232,18 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
         {/* JSON Radio Button */}
         <div className="w-100 border-bottom py-3">
           <FormControlLabel
-            className="flex-row-reverse justify-between w-100 pl-3"
-            value="json"
-            label={
-              <Box onClick={(e) => e.stopPropagation()} sx={{ cursor: 'pointer' }}>
-                <p className="font-semibold">JSON</p>
-                <span className="text-xs text-[#16182399]">Allows other services to import your file</span>
-              </Box>
-            }
-            control={
-              <Radio
-                checked={selectedFormat === 'json'}
-                onChange={handleFormatChange}
-              />
-            }
+            className='flex-row-reverse  justify-between w-100 pl-3'
+              value="json"
+              label={
+                <Box onClick={(e) => e.stopPropagation()} sx={{ cursor: 'pointer' }}>
+                  <p className='font-semibold'>JSON</p>
+                  <span className='text-xs text-[#16182399]'>
+                    Allows other services to import your file
+                  </span>
+                </Box>
+              }
+              control={<Radio  checked={selectedFormat === 'json'} onChange={handleFormatChange} sx={{ color: '#FE2C55', '&.Mui-checked': { color: '#FE2C55' } }} />} 
+           
           />
         </div>
 
