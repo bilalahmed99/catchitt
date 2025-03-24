@@ -46,6 +46,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ManageAccount from './components/manageAccount'
 import Ads from './components/ads';
 import { useLocation } from "react-router-dom";
+import TimeChart from './time-chart';
 
 
 import {
@@ -137,6 +138,7 @@ const Account = ({ className, openModal }: AccountProps) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [loadingAnimation, setLoadingAnimation] = useState(false);
     const [user, setUser] = useState(defaultUser);
+    const [addKeywordPage, setAddKeywordPage] = useState(false);
 
     const { selectedIndex, setIndex, isLoggedIn, setSettingsDropdown } = useAuthStore();
     // const token = localStorage.getItem('token');
@@ -894,6 +896,10 @@ const Account = ({ className, openModal }: AccountProps) => {
 
     }
 
+    const isAddKeywordPage = (data: any) => {
+        setAddKeywordPage(data);
+    }
+
 
     return (
         <>
@@ -1017,12 +1023,12 @@ const Account = ({ className, openModal }: AccountProps) => {
                         <SleepReminder />
                     </div>
                     <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md text-left`} style={{ display: visibleDiv === 'filter_keywords' ? 'block' : 'none' }}>
-                            <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0 font-bold text-xl p-3`}>Filter keywords</h4>
-                            <span className='text-left px-3 d-block text-[#161823] pt-1 text-sm'> 
+                    {!addKeywordPage && <><h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0 font-bold text-xl p-3`}>Filter keywords</h4><span className='text-left px-3 d-block text-[#161823] pt-1 text-sm'>
                             When you filter a keyword, you won’t see posts in your selected feeds that contain that word in any
                             titles, descriptions, or stickers. Certain keywords can’t be filtered.
-                            </span>
-                        <KeywordFilters />
+                        </span></>}
+                            
+                        <KeywordFilters isAddKeywordPage={isAddKeywordPage} />
                     </div>
                     <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md text-left`} style={{ display: visibleDiv === 'disconnect_advertisers' ? 'block' : 'none' }}>
                             <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0 font-semibold text-xl p-3`}>Disconnect advertisers</h4>
@@ -1748,7 +1754,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                         </div>
                                         </AccordionSummary>
                                         <AccordionDetails className='px-1 bg-[#f8f8f8]'>
-                                            
+                                           <TimeChart /> 
                                         </AccordionDetails>
                                     </Accordion>
                                 </div>

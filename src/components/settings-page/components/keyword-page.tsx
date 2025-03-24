@@ -4,12 +4,17 @@ import KeywordFilters from "./keyword-filters";
 
 const API_KEY = process.env.VITE_API_URL;
 
-const KeywordsPage: React.FC = () => {
+interface KeywordsPageProps {
+  isAddKeywordPage: (data: any) => void;
+}
+
+const KeywordsPage: React.FC<KeywordsPageProps> = ({ isAddKeywordPage }) => {
   const { token } = useSelector((store: any) => store?.reducers?.profile);
   const [keywords, setKeywords] = useState<any[]>([]);
   const [showAddKeyword, setShowAddKeyword] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedKeyword, setSelectedKeyword] = useState<any | null>(null);
+  const [showAddButton, setShowAddButton] = useState(true);
 
 
   // Fetch Keywords List
@@ -51,6 +56,23 @@ const KeywordsPage: React.FC = () => {
     }
   };
   
+  useEffect(() => {
+    // This effect runs when the component is unmounted or destroyed
+    return () => {
+      // Reset the states when component is destroyed or reset
+      isAddKeywordPage(false);
+      setShowAddButton(true);
+      setShowAddKeyword(true);
+    };
+  }, []); // Empty dependency array ensures this runs only when unmounted
+  
+  // For example, this function resets the states when called
+  const resetStates = () => {
+    isAddKeywordPage(false);
+    setShowAddButton(true);
+    setShowAddKeyword(true);
+  };
+  
 
   // Fetch Data on Load
   useEffect(() => {
@@ -59,20 +81,18 @@ const KeywordsPage: React.FC = () => {
 
   return (
     <div className="w-full p-6 text-left">
-
-      {/* Add Keyword Button */}
-      <button
+      {showAddButton && <button
         className="bg-[#FE2C55] text-white font-medium text-base px-4 py-2 mt-4 rounded-md"
-        onClick={() => setShowAddKeyword(true)}
+        onClick={() => {setShowAddKeyword(true); isAddKeywordPage(true); setShowAddButton(false);}}
       >
         + Add keyword
-      </button>
+      </button>}
 
       {/* Show Add Keyword Form */}
       {showAddKeyword && (
         <KeywordFilters
           keywordData={selectedKeyword}
-          onClose={() => setShowAddKeyword(false)}
+          onClose={() => {setShowAddKeyword(false); isAddKeywordPage(false); setShowAddButton(true);}}
           onKeywordAdded={fetchKeywords} // Refresh List on Add
         />
       )}

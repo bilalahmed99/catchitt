@@ -35,6 +35,14 @@ const KeywordFilters: React.FC<KeywordFiltersProps> = ({ keywordData, onClose, o
     }
   }, [keywordData]);
 
+   useEffect(() => {
+    console.log('mounted.... called')
+      return () => {
+        onClose();
+      };
+    }, []);
+    
+
   const handleCheckboxChange = (filterId: string) => {
     setSelectedFilters((prev) =>
       prev.includes(filterId)
@@ -148,6 +156,7 @@ const KeywordFilters: React.FC<KeywordFiltersProps> = ({ keywordData, onClose, o
       <div className="flex justify-start gap-2 mt-3">
             <button
             className={` font-medium border w-[8rem] py-2 rounded-md text-sm `}
+            onClick={onClose}
               >
                 Cancel
             </button>
