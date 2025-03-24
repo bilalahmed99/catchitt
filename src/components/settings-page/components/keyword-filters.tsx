@@ -87,7 +87,11 @@ const KeywordFilters: React.FC<KeywordFiltersProps> = ({ keywordData, onClose, o
   };
 
   return (
-    <div className="w-full p-4">
+    <div className="w-full p-4 text-left">
+        <p className="h5">Add Keyword</p>
+        <p className="text-sm text-[#000000A6] mb-3">
+            Enter a single word or hashtag to filter from selected feeds. Spelling isn't case-sensitive.
+        </p>
       {/* Keyword Input Field */}
       <div className="mb-3">
         <input
@@ -95,7 +99,7 @@ const KeywordFilters: React.FC<KeywordFiltersProps> = ({ keywordData, onClose, o
           placeholder="Enter a word or hashtag"
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
-          className="border rounded-sm p-2 w-full"
+          className="bg-[#F5F5F5] rounded-md p-3  w-full"
         />
       </div>
 
@@ -110,26 +114,46 @@ const KeywordFilters: React.FC<KeywordFiltersProps> = ({ keywordData, onClose, o
             {selectedFilters.length === filters.length ? "Unselect all" : "Select all"}
           </button>
         </div>
-        <div className="border rounded-sm p-2 mt-2">
-          {filters.map((filter) => (
-            <label key={filter.id} className="flex justify-between items-center py-1">
-              <span>{filter.label}</span>
-              <input
+        <div className="bg-[#F5F5F5] rounded-md p-3 w-full mt-2">
+        {filters.map((filter) => (
+            <label key={filter.id} className="flex items-center justify-between text-base py-1 cursor-pointer">
+                <span>{filter.label}</span>
+                <input
                 type="checkbox"
                 checked={selectedFilters.includes(filter.id)}
                 onChange={() => handleCheckboxChange(filter.id)}
-                className="mr-2"
-              />
+                className="hidden peer"
+                />
+                <div className="w-5 h-5 border-2 border-gray-500 rounded-md peer-checked:bg-red-500 peer-checked:border-red-500 flex items-center justify-center">
+                {/* White Check Mark */}
+                <svg
+                    className="w-4 h-4 text-white  peer-checked:block"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 12.5l4 4 9-9"></path>
+                </svg>
+                </div>
             </label>
-          ))}
+            ))}
+
         </div>
+
       </div>
 
       {/* Action Buttons */}
-      <div className="flex justify-end mt-3">
+      <div className="flex justify-start gap-2 mt-3">
+            <button
+            className={` font-medium border w-[8rem] py-2 rounded-md text-sm `}
+              >
+                Cancel
+            </button>
         <button
           onClick={handleSubmit}
-          className={`bg-[#FE2C55] text-white font-semibold px-6 py-2 rounded-sm text-sm ${
+          className={`bg-[#FE2C55] text-white font-medium w-[8rem] py-2 rounded-md text-sm ${
             !keyword || selectedFilters.length === 0 ? "opacity-50 cursor-not-allowed" : ""
           }`}
           disabled={!keyword || selectedFilters.length === 0}

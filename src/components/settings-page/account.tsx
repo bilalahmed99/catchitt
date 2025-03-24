@@ -974,18 +974,18 @@ const Account = ({ className, openModal }: AccountProps) => {
                             </Link>
                         </div>
                     </div> }
-                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md`}  style={{ display: visibleDiv === 'download_data' ? 'block' : 'none' }}>
+                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md text-left`}  style={{ display: visibleDiv === 'download_data' ? 'block' : 'none' }}>
                         <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0 font-semibold p-3 text-xl`}>Download Seezitt data</h4>
                         <ManageAccount downloadDataSettings={downloadDataSettings} updateAccountSettings={updateAccountSettings} /> 
                     </div>
-                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md`} style={{ display: visibleDiv === 'adds' ? 'block' : 'none' }}>
+                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md text-left`} style={{ display: visibleDiv === 'adds' ? 'block' : 'none' }}>
                             <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0 font-semibold text-xl p-3`}>How your ads are personalized</h4>
                             <span className='text-left px-3 text-[#000000A6] text-sm'> Personalized ads can be based on inferences that Seezitt has made about you. You can manage whether your ads are based on these factors below. Any changes that you make can take up to 48 hours to go into effect. These changes will not affect whether we otherwise can use the information we collect about you to help us personalize your ads.
                             <a href="" className='font-semibold'>Learn more</a>
                         </span>
                         <Ads /> 
                     </div>
-                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md`} style={{ display: visibleDiv === 'mute_advertisers' ? 'block' : 'none' }}>
+                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md text-left`} style={{ display: visibleDiv === 'mute_advertisers' ? 'block' : 'none' }}>
                             <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0 font-semibold text-xl p-3`}>Mute advertisers</h4>
                             <span className='text-left px-3 text-[#000000A6] text-sm'> 
                                 You can hide the ads from an advertiser who has recently shown you ads on Seezitt. You will not see ads from this advertiser for 28 days. This setting only applies to Seezitt ads, and you may continue to see this advertiser’s ads on other ad networks.
@@ -995,36 +995,36 @@ const Account = ({ className, openModal }: AccountProps) => {
                             Advertisers you have hidden
                         </span>
                     </div>
-                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md`} style={{ display: visibleDiv === 'daily_screen_time' ? 'block' : 'none' }}>
+                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md text-left`} style={{ display: visibleDiv === 'daily_screen_time' ? 'block' : 'none' }}>
                             <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0 font-bold text-xl p-3`}>Daily screen time</h4>
                             <span className='text-left px-3 text-[#161823] pt-1 text-sm'> 
                             We’ll let you know if you reach your daily time to help you balance your day.
                             </span>
                         <DailyScreenTime />
                     </div>
-                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md`} style={{ display: visibleDiv === 'screen_time_breaks' ? 'block' : 'none' }}>
+                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md text-left`} style={{ display: visibleDiv === 'screen_time_breaks' ? 'block' : 'none' }}>
                             <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0 font-bold text-xl p-3`}>Screen time breaks</h4>
                             <span className='text-left px-3 text-[#161823] pt-1 text-sm'> 
                             Break reminders help you feel more mindful and balanced on Seezitt.
                             </span>
                         <ScreenTimeBreaks />
                     </div>
-                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md`} style={{ display: visibleDiv === 'sleep_reminders' ? 'block' : 'none' }}>
+                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md text-left`} style={{ display: visibleDiv === 'sleep_reminders' ? 'block' : 'none' }}>
                             <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0 font-bold text-xl p-3`}>Sleep reminders</h4>
                             <span className='text-left px-3 text-[#161823] pt-1 text-sm'> 
                                 Sleep reminders on Seezitt can help you get ready for bed and stay asleep.
                             </span>
                         <SleepReminder />
                     </div>
-                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md`} style={{ display: visibleDiv === 'filter_keywords' ? 'block' : 'none' }}>
+                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md text-left`} style={{ display: visibleDiv === 'filter_keywords' ? 'block' : 'none' }}>
                             <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0 font-bold text-xl p-3`}>Filter keywords</h4>
-                            <span className='text-left px-3 text-[#161823] pt-1 text-sm'> 
+                            <span className='text-left px-3 d-block text-[#161823] pt-1 text-sm'> 
                             When you filter a keyword, you won’t see posts in your selected feeds that contain that word in any
                             titles, descriptions, or stickers. Certain keywords can’t be filtered.
                             </span>
                         <KeywordFilters />
                     </div>
-                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md`} style={{ display: visibleDiv === 'disconnect_advertisers' ? 'block' : 'none' }}>
+                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md text-left`} style={{ display: visibleDiv === 'disconnect_advertisers' ? 'block' : 'none' }}>
                             <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0 font-semibold text-xl p-3`}>Disconnect advertisers</h4>
                             <ul className='list-disc pl-5 ml-3 text-left px-3 text-[#000000A6] text-sm'>
                                 <li>Once disconnected, your future off-Seezitt data will not be used to serve personalized ads to you, but this data may still be used for other purposes.</li>
@@ -1036,7 +1036,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                         </span>
                     </div>
                     
-                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md`} style={{ display: visibleDiv === 'manage_account' ? 'block' : 'none' }}>
+                    <div className={` ${styles.middleSectionDiv} ${darkTheme} bg-white shadow-md text-left`} style={{ display: visibleDiv === 'manage_account' ? 'block' : 'none' }}>
                         <div className={styles.settingsWrapper}>
                             
                             <div className={styles.suggestedContent}>
@@ -1753,13 +1753,13 @@ const Account = ({ className, openModal }: AccountProps) => {
                                     </Accordion>
                                 </div>
                             </div>
-                            <div className={styles.suggestedContent} onClick={() => toggleVisibility('filter_keywords')}>
+                            <div className={styles.suggestedContent} >
                                 <div className={`${styles.pageHeader} mb-0 mt-0`}>
                                     <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0`}>Content preferences</h4>
                                 </div>
                                 <div className='w-100 border-bottom pb-3'>
                                     <div
-                                        className={styles.accountCards}>
+                                        className={styles.accountCards} onClick={() => toggleVisibility('filter_keywords')}>
                                         <div className={styles.settingName}>
                                             <div className='text-left'>
                                             <p>Filter keywords</p>
@@ -1768,7 +1768,6 @@ const Account = ({ className, openModal }: AccountProps) => {
                                             </div>
                                         </div>
                                         <img src={whiteRightArrow} alt="" />
-
                                     </div>
                                 </div>
                             </div>
@@ -1799,7 +1798,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                         <p>Content preference</p>
                                     </div>
                                     <img src={whiteRightArrow} alt="" />
-                                </div>
+                                </div> 
                                 <div
                                     className={styles.accountCards}
                                 >
