@@ -32,7 +32,7 @@ import coinsOnly from '../../../assets/gifts/coinsSingle.svg';
 import CloseIcon from '@mui/icons-material/Close';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
-const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme, data,currentReplyToMessage,closeReply }: any) => {
+const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme, data,currentReplyToMessage,closeReply, setMessagesState }: any) => {
 
   const API_KEY = process.env.VITE_API_URL;
   const loggedInUserId = localStorage.getItem('userId');
@@ -66,6 +66,17 @@ const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme, data,cu
   const isVideo = (url:any) => {
     return /\.(mp4|webm|ogg)$/i.test(url);
   };
+
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newMessage = e.target.value;
+    setMessage(newMessage);
+    setMessageType('Text')
+    setMessagesState((prev: Record<string, string>) => ({
+        ...prev,
+        [data.userId]: newMessage, // Update the message for the active user
+    }));
+};
 
   // Function to check if the message contains any attachment (image, video, etc.)
   const isAttachment = (msg:any) => {
@@ -302,7 +313,8 @@ const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme, data,cu
           </Modal>
 
           <input
-            onChange={(e: any) => { setMessage(e.target.value), setMessageType('Text') }}
+           onChange={handleChange}
+            // onChange={(e: any) => { setMessage(e.target.value), setMessageType('Text') }}
             type="text"
             placeholder="Write a message..."
             value={!!uploadedFile ? '' : msg}

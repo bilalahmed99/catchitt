@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Tabs, Tab, Box, Typography, FormControlLabel, Radio, Checkbox } from '@mui/material';
+import { AppBar, Tabs, Tab, Box, Typography, FormControlLabel, Radio, Checkbox, Stack, FormHelperText } from '@mui/material';
 import { styled } from '@mui/material';
 
 interface TabPanelProps {
@@ -87,8 +87,8 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
 
   return (
     <Box className="text-left" sx={{ width: '100%', bgcolor: 'background.paper' }}>
-      <AppBar position="static" color="default" sx={{ boxShadow: 'none', borderBottom: '1px solid #16182333' }}>
-        <CustomTabs value={value} onChange={handleChange} aria-label="basic tabs example" variant="fullWidth">
+      <AppBar  position="static" color="default" sx={{ boxShadow: 'none', backgroundColor: 'white' }}>
+        <CustomTabs className='w-[94%] m-auto' sx={{borderBottom: '1px solid #16182333'}} value={value} onChange={handleChange} aria-label="basic tabs example" variant="fullWidth">
           <Tab
             label="Request data"
             id="simple-tab-0"
@@ -172,36 +172,64 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
 
         {/* Custom Checkboxes (Visible only when "Custom" is selected) */}
         {selectedDownload === 'custom' && (
-          <div className="w-100 border-bottom py-3">
+          <div className="w-100 d-flex flex-column gap-3 border-bottom py-3">
+
+              <FormControlLabel
+                className="w-100 d-flex justify-between flex-row-reverse pl-3"
+                control={
+                  <Checkbox
+                    checked={selectedItems && selectedItems.includes('activity')}
+                    onChange={handleItemChange('activity')}
+                    sx={{ color: '#FE2C55', '&.Mui-checked': { color: '#FE2C55' } }}
+                  />
+                }
+                label={
+                  <Stack spacing={0.5}>
+                    <span>Activity</span>
+                    <FormHelperText sx={{ fontSize: '12px', color: 'gray' }}>
+                      This is a small description about activity.
+                    </FormHelperText>
+                  </Stack>
+                }
+              />
+
             <FormControlLabel
+                        className='w-100  d-flex justify-between flex-row-reverse pl-3'
+
               control={
                 <Checkbox
-                  checked={selectedItems.includes('activity')}
-                  onChange={handleItemChange('activity')}
-                  sx={{ color: '#FE2C55', '&.Mui-checked': { color: '#FE2C55' } }}
-                />
-              }
-              label="Activity"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={selectedItems.includes('messages')}
+                  checked={selectedItems && selectedItems.includes('messages')}
                   onChange={handleItemChange('messages')}
                   sx={{ color: '#FE2C55', '&.Mui-checked': { color: '#FE2C55' } }}
                 />
               }
-              label="Messages"
+              label={
+                <Stack spacing={0.5}>
+                    <span>Message</span>
+                    <FormHelperText sx={{ fontSize: '12px', color: 'gray' }}>
+                      This is a small description about activity.
+                    </FormHelperText>
+                  </Stack>
+              }
             />
             <FormControlLabel
+                        className='w-100 d-flex justify-between flex-row-reverse pl-3'
+
               control={
                 <Checkbox
-                  checked={selectedItems.includes('profile_and_posts')}
+                  checked={selectedItems && selectedItems.includes('profile_and_posts')}
                   onChange={handleItemChange('profile_and_posts')}
                   sx={{ color: '#FE2C55', '&.Mui-checked': { color: '#FE2C55' } }}
                 />
               }
-              label="Profile and Posts"
+              label={
+                <Stack spacing={0.5}>
+                    <span>Profile and Posts</span>
+                    <FormHelperText sx={{ fontSize: '12px', color: 'gray' }}>
+                      This is a small description about activity.
+                    </FormHelperText>
+                  </Stack>
+              }
             />
           </div>
         )}
