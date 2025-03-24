@@ -198,6 +198,8 @@ const Account = ({ className, openModal }: AccountProps) => {
           setVisibleDiv("download_data");
         } else if (location.pathname.includes("settings/account")) {
           setVisibleDiv("manage_account");
+        } else if(location.pathname.includes('daily-screen-time-edit')){
+            setVisibleDiv("daily_screen_time"); 
         }
       }, [location.pathname]); // Runs every time the URL changes
 
@@ -1213,7 +1215,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                             followers won’t be affected.</span>
                                             </div>
                                         </div>
-                                        <label className="toggle-switch !left-1">
+                                        <label className={`toggle-switch !left-1 ${isPrivateAccount ? 'checkedToggle' : ''}`}>
                                             <input
                                             onChange={changeCheckbox('privateAccount')} 
                                             style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
@@ -1254,7 +1256,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                             <span className='text-xs text-[#16182399]'>Stay on top of notifications for likes, comments, the latest videos, and more on desktop. You can turn</span>
                                             </div>
                                         </div>
-                                        <label className="toggle-switch !left-1">
+                                        <label className={`toggle-switch !left-1 ${allowInBrowser ? 'checkedToggle' : ''}`}>
                                             <input 
                                             style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
                                                 type="checkbox"
@@ -1294,7 +1296,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                                             <p className='text-base'>Likes</p>
                                                         </div>
                                                     </div>
-                                                    <label className="toggle-switch !left-1">
+                                                    <label className={`toggle-switch !left-1 ${profileSettings.likes ? 'checkedToggle' : ''}`}>
                                                         <input 
                                                         style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
                                                             type="checkbox"
@@ -1315,7 +1317,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                                             <p className='text-base'>Comments</p>
                                                         </div>
                                                     </div>
-                                                    <label className="toggle-switch !left-1">
+                                                    <label className={`toggle-switch !left-1 ${profileSettings.comments ? 'checkedToggle' : ''}`}>
                                                         <input 
                                                         style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
                                                             type="checkbox"
@@ -1336,7 +1338,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                                             <p className='text-base'>New followers</p>
                                                         </div>
                                                     </div>
-                                                    <label className="toggle-switch !left-1">
+                                                    <label className={`toggle-switch !left-1 ${profileSettings.newFollowers ? 'checkedToggle' : ''}`}>
                                                         <input 
                                                         style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
                                                             type="checkbox"
@@ -1357,7 +1359,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                                             <p className='text-base'>Mentions and tags</p>
                                                         </div>
                                                     </div>
-                                                    <label className="toggle-switch !left-1">
+                                                    <label className={`toggle-switch !left-1 ${profileSettings.mentionAndTags ? 'checkedToggle' : ''}`}>
                                                         <input 
                                                         style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
                                                             type="checkbox"
@@ -1393,7 +1395,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                                             <p className='text-base'>Likes</p>
                                                         </div>
                                                     </div>
-                                                    <label className="toggle-switch !left-1">
+                                                    <label className={`toggle-switch !left-1 ${notificationSettings.likes ? 'checkedToggle' : ''}`}>
                                                         <input 
                                                         style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
                                                             type="checkbox"
@@ -1414,7 +1416,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                                             <p className='text-base'>Comments</p>
                                                         </div>
                                                     </div>
-                                                    <label className="toggle-switch !left-1">
+                                                    <label className={`toggle-switch !left-1 ${notificationSettings.comments ? 'checkedToggle' : ''}`}>
                                                         <input 
                                                         style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
                                                             type="checkbox"
@@ -1435,7 +1437,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                                             <p className='text-base'>New followers</p>
                                                         </div>
                                                     </div>
-                                                    <label className="toggle-switch !left-1">
+                                                    <label className={`toggle-switch !left-1 ${notificationSettings.newFollowers ? 'checkedToggle' : ''}`}>
                                                         <input 
                                                         style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
                                                             type="checkbox"
@@ -1456,7 +1458,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                                             <p className='text-base'>Mentions and tags</p>
                                                         </div>
                                                     </div>
-                                                    <label className="toggle-switch !left-1">
+                                                    <label className={`toggle-switch !left-1 ${notificationSettings.mentionAndTags ? 'checkedToggle' : ''}`}>
                                                         <input 
                                                         style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
                                                             type="checkbox"
@@ -1477,7 +1479,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                                             <p className='text-base'>Reposts</p>
                                                         </div>
                                                     </div>
-                                                    <label className="toggle-switch !left-1">
+                                                    <label className={`toggle-switch !left-1 ${notificationSettings.reposts ? 'checkedToggle' : ''}`}>
                                                         <input 
                                                         style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
                                                             type="checkbox"
@@ -1508,7 +1510,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                             viewers.</span>
                                             </div>
                                         </div>
-                                        <label className="toggle-switch !left-1">
+                                        <label className={`toggle-switch !left-1 ${businessAccount ? 'checkedToggle' : ''}`}>
                                             <input 
                                             style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
                                                 type="checkbox"
@@ -1771,7 +1773,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                 </div>
                             </div>
                         </div>
-                        <div className={styles.settingsWrapper}>
+                        {/* <div className={styles.settingsWrapper}>
                             <div className={`${styles.pageHeader} p-3`}>
                                 <h4 className={darkTheme ? 'text-white' : 'text-black'}>Content & Activity</h4>
                             </div>
@@ -1786,7 +1788,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                     </div>
                                     <img src={whiteRightArrow} alt="" />
                                 </div>
-                                {/* <div
+                                <div
                                     className={styles.accountCards}
                                 >
                                     <div
@@ -1797,7 +1799,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                         <p>Content preference</p>
                                     </div>
                                     <img src={whiteRightArrow} alt="" />
-                                </div> */}
+                                </div>
                                 <div
                                     className={styles.accountCards}
                                 >
@@ -1812,7 +1814,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                 </div>
                                 <div
                                     className={styles.accountCards}
-                                // onClick={handleOpenChangePassMainModal}
+                                onClick={handleOpenChangePassMainModal}
                                 >
                                     <div
                                         className={styles.settingName}
@@ -1828,8 +1830,8 @@ const Account = ({ className, openModal }: AccountProps) => {
                                     <img src={whiteRightArrow} alt="" />
                                 </div>
                             </div>
-                        </div>
-                        <div className={styles.settingsWrapper}>
+                        </div> */}
+                        {/* <div className={styles.settingsWrapper}>
                             <div className={`${styles.pageHeader} p-3`}>
                                 <h4 className={darkTheme ? 'text-white' : 'text-black'}>Support</h4>
                             </div>
@@ -1856,8 +1858,8 @@ const Account = ({ className, openModal }: AccountProps) => {
                                     <img src={whiteRightArrow} alt="" />
                                 </div>
                             </div>
-                        </div>
-                        <div className={styles.settingsWrapper}>
+                        </div> */}
+                        {/* <div className={styles.settingsWrapper}>
                             <div className={`${styles.pageHeader} p-3`}>
                                 <h4 className={darkTheme ? 'text-white' : 'text-black'}>About</h4>
                             </div>
@@ -1893,7 +1895,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                     <img src={whiteRightArrow} alt="" />
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
@@ -2345,6 +2347,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                         ? contentPrefDarkModalStyle
                                         : contentPrefModalStyle
                                 }
+                                style={{ height: '90vh', border: '0px' }}
                             >
                                 <DeleteReasonPopup
                                     darkTheme={darkTheme}

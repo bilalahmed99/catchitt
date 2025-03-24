@@ -1124,6 +1124,7 @@ function App() {
                             <Route path="/settings/account" element={<Account />} />
                             <Route path="/settings/keyword-filtering" element={<Account />} />
                             <Route path="/settings/download-your-data" element={<Account />} />
+                            <Route path="/setting/daily-screen-time-edit" element={<Account />} />
                             
                             <Route
                                 path="/settings/account/activity"
