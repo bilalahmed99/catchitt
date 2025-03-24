@@ -52,6 +52,31 @@ const dailyScreenTime: React.FC = () => {
         setOpenDropdown(null);
     };
 
+    function saveChanges()
+    {
+        let times = Object.entries(selectedTimeLimitOption == 'daily' ? { everyday: selectedTimes.daily } : selectedTimes)
+        .map(([day, time]) => (
+            {  
+                day: day.toLowerCase(),  
+                time: Object.fromEntries(time.match(/\d+/g).map((v, i) => [["hours", "minutes"][i], +v]))  
+            }
+        ));
+
+        let endpoint = process.env.VITE_API_URL + '/profile/v2/screen-times'
+        let payload =
+        {
+            method: 'PATCH',
+            headers:
+            {
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + localStorage.getItem('token'),
+            },
+            body: JSON.stringify({ dailyScreenTimePayload: { type: 'daily', times } }),
+        };
+    
+        fetch(endpoint, payload)
+        .catch(error => console.error('Failed to update screen time:', error));
+    }
     
   return (
       <div className=" w-100 p-3">
@@ -195,7 +220,7 @@ const dailyScreenTime: React.FC = () => {
     </div>
 )}
         <div className='d-flex mt-3 justify-end'>
-            <button className="bg-[#FE2C55] text-white font-semibold px-4 rounded-sm text-sm">
+            <button className="bg-[#FE2C55] text-white font-semibold px-4 rounded-sm text-sm" onClick={() => saveChanges()}>
                 <p className="text-[rgb(255, 59, 92)] font-normal">Done</p>
             </button>
         </div>
