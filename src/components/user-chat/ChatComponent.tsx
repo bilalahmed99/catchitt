@@ -99,6 +99,7 @@ const ChatComponent = () => {
     const [currentReplyToMessage, setCurrentReplyToMessage] = useState<any>(null);
     const [isMuted, setIsMuted] = useState(false);
     const userAvatar = useSelector((state: any) => state?.reducers?.profile?.avatar);
+    const [messagesState, setMessagesState] = useState<Record<string, string>>({});
 
     const longPressH = (item: any, newItem=true) => {   
         const tempArr: any[] = [];
@@ -318,7 +319,17 @@ const ChatComponent = () => {
         console.log(
             "chatSwitchH"
         );
-        setMsg('');
+        // Save the current message for the active user
+        if (activeUser?.userId) {
+            setMessagesState((prev) => ({
+                ...prev,
+                [activeUser.userId]: msg, // Save the current message for the active user
+            }));
+        }
+
+        // Clear the message state for the new user
+        setMsg(messagesState[e] || ''); // Restore the message for the user being switched to
+
         setIsProfileSecVisible(false);
         users?.forEach((user, index) => {
             if (user?.userId === e) {
@@ -627,6 +638,13 @@ const ChatComponent = () => {
             accessToken: token,
         };
         (socketRef.current as any).emit('forward-message', JSON.stringify(messageData));
+
+        const activeUserIndex = tempUserArr.findIndex(user => user.userId === activeUser.userId);
+        if (activeUserIndex !== -1) {
+            const [activeUser] = tempUserArr.splice(activeUserIndex, 1); // Remove the active user from its current position
+            tempUserArr.unshift(activeUser); // Add the active user to the beginning of the array
+        }
+
         setForwardMsg(null);
         setforwardModal(false)
     }
@@ -800,6 +818,13 @@ const ChatComponent = () => {
             });
             setUsers(tempUserArr);
 
+            const activeUserIndex = tempUserArr.findIndex(user => user.userId === activeUser.userId);
+            if (activeUserIndex !== -1) {
+                const [activeUser] = tempUserArr.splice(activeUserIndex, 1); // Remove the active user from its current position
+                tempUserArr.unshift(activeUser); // Add the active user to the beginning of the array
+            }
+
+
             if (smsRef.length > 0) {
                 setActiveChat({
                     ...activeChat,
@@ -823,6 +848,13 @@ const ChatComponent = () => {
                         },
                     ],
                 });
+
+                // Clear the message for the active user in messagesState
+                setMessagesState((prev) => ({
+                    ...prev,
+                    [activeUser.userId]: '', // Clear the message for the active user
+                }));
+
                 // messageData['repliedMessageId'] = smsId;
                 // sendMessageReply();
                 console.log('messageData', messageData);
@@ -860,6 +892,12 @@ const ChatComponent = () => {
                     console.log('Callback Response:', response);
                     // You can handle the response here, e.g., show a toast or update the UI
                 });
+
+                // Clear the message for the active user in messagesState
+                setMessagesState((prev) => ({
+                    ...prev,
+                    [activeUser.userId]: '', // Clear the message for the active user
+                }));
 
                 setCurrentReplyToMessage(null);
                 console.log('all chats');
@@ -1274,6 +1312,7 @@ const ChatComponent = () => {
                             data={activeUser}
                             closeReply={closeReply}
                             currentReplyToMessage={currentReplyToMessage}
+                            setMessagesState={setMessagesState}
                         />
                     )}
                     {!groupOptions && moreOptions && (
