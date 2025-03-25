@@ -195,6 +195,7 @@ const Account = ({ className, openModal }: AccountProps) => {
     const location = useLocation();
     const [visibleDiv, setVisibleDiv] = useState("");
     const [activeSection, setActiveSection] = useState("manage_account");
+    const [activeItem, setActiveItem] = useState('manage_account');
 
 
     const sectionRefs = {
@@ -209,6 +210,7 @@ const Account = ({ className, openModal }: AccountProps) => {
 
     const navigateToSection = (sectionId: keyof typeof sectionRefs) => {
         setActiveSection(sectionId);
+        setActiveItem(sectionId);
         // console.log(sectionId);
         sectionRefs[sectionId].current?.scrollIntoView({
             behavior: 'smooth',
@@ -244,6 +246,10 @@ const Account = ({ className, openModal }: AccountProps) => {
             mode: 'dark',
         },
     });
+
+    const handleBackClick = () => {
+        navigate(-1);  // Go back to the previous page without reloading
+    };
 
     const [isPrivateAccount, setIsPrivateAccount] = useState(false);
     const [allowInBrowser, setAllowInBrowser] = useState(false);
@@ -933,10 +939,10 @@ const Account = ({ className, openModal }: AccountProps) => {
                 <div className={`${styles.container} `} style={{ maxWidth: '1140px', margin: 'auto', marginTop: '7rem' }}>
                     
                     { <div className={`${sibarStyles.leftSide} ${darkTheme} shadow-md rounded-lg px-4 pb-4 position-relative` } style={{ width: '30rem', backgroundColor: '#fff', }}>
-                    <span className='position-absolute cursor-pointer bg-gray-200 p-2 rounded-full' style={{right: '107%'}}>
+                    <span onClick={handleBackClick} className='position-absolute cursor-pointer bg-gray-200 p-2 rounded-full' style={{right: '107%'}}>
                         <svg width="1em" data-e2e="" height="1em" viewBox="0 0 48 48" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.58579 22.5858L20.8787 6.29289C21.2692 5.90237 21.9024 5.90237 22.2929 6.29289L23.7071 7.70711C24.0976 8.09763 24.0976 8.7308 23.7071 9.12132L10.8284 22H39C39.5523 22 40 22.4477 40 23V25C40 25.5523 39.5523 26 39 26H10.8284L23.7071 38.8787C24.0976 39.2692 24.0976 39.9024 23.7071 40.2929L22.2929 41.7071C21.9024 42.0976 21.2692 42.0976 20.8787 41.7071L4.58579 25.4142C3.80474 24.6332 3.80474 23.3668 4.58579 22.5858Z"></path></svg>
                     </span>
-                        <div onClick={() => navigateToSection('manage_account')} className={`${sibarStyles.sideNavDiv} pt-4`} onClick={() => toggleVisibility('manage_account')} >
+                        <div onClick={() => navigateToSection('manage_account')}  className={`${sibarStyles.sideNavDiv} pt-4 cursor-pointer ${activeItem === 'manage_account' ? sibarStyles.active : ''}`} >
                             {/* <Link to="/settings/account" reloadDocument={false} style={{ textDecoration: 'none' }}> */}
                             <div className='d-flex'>
                             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -946,7 +952,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                             </div>
                             {/* </Link> */}
                         </div>
-                        <div onClick={() => navigateToSection('download_data')} className={`${sibarStyles.sideNavDiv} pt-4`}>
+                        <div onClick={() => navigateToSection('download_data')}  className={`${sibarStyles.sideNavDiv} pt-4 cursor-pointer ${activeItem === 'download_data' ? sibarStyles.active : ''}`}>
                             {/* <Link to="/" reloadDocument={false} style={{ textDecoration: 'none' }}> */}
                             <div className='d-flex'>
                             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -957,7 +963,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                             </div>
                             {/* </Link> */}
                         </div>
-                        <div onClick={() => navigateToSection('push_notification')} className={`${sibarStyles.sideNavDiv} pt-4`}>
+                        <div onClick={() => navigateToSection('push_notification')} className={`${sibarStyles.sideNavDiv} pt-4 cursor-pointer ${activeItem === 'push_notification' ? sibarStyles.active : ''}`}>
                             {/* <Link to="/" reloadDocument={false} style={{ textDecoration: 'none' }}> */}
                             <div className='d-flex'>
                             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -967,7 +973,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                             </div>
                             {/* </Link> */}
                         </div>
-                        <div onClick={() => navigateToSection('business_account')} className={`${sibarStyles.sideNavDiv} pt-4`}>
+                        <div onClick={() => navigateToSection('business_account')}  className={`${sibarStyles.sideNavDiv} pt-4 cursor-pointer ${activeItem === 'business_account' ? sibarStyles.active : ''}`}>
                             {/* <Link to="/" reloadDocument={false} style={{ textDecoration: 'none' }}> */}
                             <div className='d-flex'>
                             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -977,7 +983,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                             </div>
                             {/* </Link> */}
                         </div>
-                        <div onClick={() => navigateToSection('ads')} className={`${sibarStyles.sideNavDiv} pt-4`}>
+                        <div onClick={() => navigateToSection('ads')} className={`${sibarStyles.sideNavDiv} pt-4 cursor-pointer ${activeItem === 'ads' ? sibarStyles.active : ''}`}>
                             {/* <Link to="/" reloadDocument={false} style={{ textDecoration: 'none' }}> */}
                             <div className='d-flex'>
                             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -987,7 +993,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                             </div>
                             {/* </Link> */}
                         </div>
-                        <div  onClick={() => navigateToSection('screen_time')} className={`${sibarStyles.sideNavDiv} pt-4`} >
+                        <div  onClick={() => navigateToSection('screen_time')}  className={`${sibarStyles.sideNavDiv} pt-4 cursor-pointer ${activeItem === 'screen_time' ? sibarStyles.active : ''}`} >
                             {/* <Link to="/" reloadDocument={false} style={{ textDecoration: 'none' }}> */}
                             <div className='d-flex'>
                             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -997,7 +1003,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                             </div>
                             {/* </Link> */}
                         </div>
-                        <div onClick={() => navigateToSection('filter_keywords')} className={`${sibarStyles.sideNavDiv} pt-4`}>
+                        <div onClick={() => navigateToSection('filter_keywords')} className={`${sibarStyles.sideNavDiv} pt-4 cursor-pointer ${activeItem === 'filter_keywords' ? sibarStyles.active : ''}`}>
                             {/* <Link to="/" reloadDocument={false} style={{ textDecoration: 'none' }}> */}
                             <div className='d-flex'>
                             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
