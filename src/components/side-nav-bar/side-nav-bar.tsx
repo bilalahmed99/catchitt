@@ -9,10 +9,10 @@ import {isUserLoggedIn, isUserLoggedInData} from '../../utils/common';
 import { logoutUser } from '../../redux/reducers/auth';
 import { openLogoutPopup } from '../../redux/reducers';
 import { SuggestedActivity } from '../../components/suggested-activity/suggested-activity';
-import { defaultAvatar } from '../../icons';
 import Notifications from './../../shared/navbar/components/Notifications'
 import PopupForGetApp from '../../shared/components/PopupForGetApp';
 import Search from '../../shared/navbar/components/Search';
+import { createIcon, defaultAvatar, logo, logoAuth, logoAuthWhite } from '../../icons';
 
 export interface SideNavBarProps {
     className?: string;
@@ -21,6 +21,20 @@ export interface SideNavBarProps {
 }
 
 export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps) => {
+
+    const [logo, setLogo] = useState(logoAuth);
+
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+
+        if (themeColor == "dark") {
+            setdarkTheme(styles.darkTheme);
+            setLogo(logoAuthWhite);
+        } else {
+            setLogo(logoAuth);
+        }
+    });
+
     const { settingsDropdown, setSettingsDropdown, selectedIndex, setIndex } = useAuthStore(); // Get selectedIndex and setIndex from the store
 
     const dispatch = useDispatch();
@@ -193,7 +207,12 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
     return (
         <div className={`${isOpenOverlay === true || isOpenOverlaySearch === true || isOpenOverlayActivity === true ? styles.OverlayOpenMain : ''} ${classNames(styles.root, className)} ${darkTheme}`}>
             <div className={isDropdownOpen === true ? styles.cardDivOpened : styles.cardDiv}>
-            <span
+                
+            <div onClick={() => navigate('/')} className={styles.sec1}>
+                <img className='w-44 px-3' src={logo} alt="" />
+            </div>
+
+                <span
                    
                    style={{ textDecoration: 'none', cursor: 'pointer' }} onClick={handleToggleOverlaySearch}>
 
