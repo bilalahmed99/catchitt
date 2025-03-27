@@ -512,3 +512,4 @@ input:checked + .slider::before {
   .darkTheme .slider{
     background-color: #595a61 !important;
   }
+  

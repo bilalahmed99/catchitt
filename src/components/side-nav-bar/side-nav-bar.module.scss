@@ -203,11 +203,6 @@ div.darkTheme .selected p{
   color:rgb(255, 59, 92) !important;
 }
 
-div.darkTheme input{
-  background: rgb(255, 255, 255) !important;
-  color:black !important;
-}
-
 .darkThemeblack {
   background: black !important;
 }
@@ -324,6 +319,7 @@ div.darkThemeblack p{
   max-width: 20rem;
   width: 100%;
   box-shadow: 0px 6px 20px 0px rgba(0, 0, 0, 0.03);
+  border-right: 1px solid #c8c8c8;
 
 }
 .OverlayOpenMain{
@@ -336,4 +332,12 @@ body:has(.OverlayOpenMain) #sideBar{
 }
 .darkTheme.main{
   background-color: #121212 !important;
+}
+div.darkTheme .searchInput{
+  background-color: transparent !important;
+  color: white !important;
+}
+div.darkTheme input{
+  background: rgb(255, 255, 255) !important;
+  color:black !important;
 }
