@@ -157,7 +157,7 @@ const Ads: React.FC = () => {
           <span className='text-sm font-medium text-[#16182399]'>
             Your choices
           </span>
-          <div className='d-flex justify-between cursor-pointer'>
+          <div className='d-flex justify-between cursor-pointer' onClick={() => navigate('/setting/ad_privacy/personalized_ads/your_choices_topics')}>
                 <div >
                     <div className='text-left'>
                       <p>View all</p>
