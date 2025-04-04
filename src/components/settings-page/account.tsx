@@ -45,6 +45,8 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ManageAccount from './components/manageAccount'
 import Ads from './components/ads';
+import AdsInferredByTopics from './components/AdsInferredByTopics';
+import AdsYourChoicesTopics from './components/AdsYourChoicesTopics';
 import { useLocation } from "react-router-dom";
 import TimeChart from './time-chart';
 
@@ -229,6 +231,10 @@ const Account = ({ className, openModal }: AccountProps) => {
           setVisibleDiv("download_data");
         } else if (location.pathname.includes("settings/account")) {
           setVisibleDiv("manage_account");
+        } else if (location.pathname.includes('/setting/ad_privacy/personalized_ads/inferred_by_topics')) {
+            setVisibleDiv("inferred_by_topics");
+        } else if (location.pathname.includes('/setting/ad_privacy/personalized_ads/your_choices_topics')) {
+            setVisibleDiv("your_choices_topics");
         } else if (location.pathname.includes('/setting/ad_privacy/personalized_ads')) {
           setVisibleDiv("adds");
         } else if (location.pathname.includes("/setting/ad_privacy/advertiser_settings")) {
@@ -1084,6 +1090,12 @@ const Account = ({ className, openModal }: AccountProps) => {
                         </span>
                         <Ads /> 
                     </div>
+                    <div className={` ${styles.middleSectionDiv}   shadow-md text-left`} style={{ display: visibleDiv === 'inferred_by_topics' ? 'block' : 'none' }}>
+                        <AdsInferredByTopics/> 
+                    </div>
+                    <div className={` ${styles.middleSectionDiv}   shadow-md text-left`} style={{ display: visibleDiv === 'your_choices_topics' ? 'block' : 'none' }}>
+                        <AdsYourChoicesTopics/> 
+                    </div>
                     <div className={` ${styles.middleSectionDiv}  shadow-md text-left`} style={{ display: visibleDiv === 'mute_advertisers' ? 'block' : 'none' }}>
                             <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0 font-semibold text-xl p-3`}>Mute advertisers</h4>
                             <span className='text-left px-3 text-[#000000A6] text-sm'> 
@@ -1860,7 +1872,7 @@ const Account = ({ className, openModal }: AccountProps) => {
                                                 type="checkbox"
                                                 name="autoScrollCheckbox" 
                                                 id="autoScrollCheckbox" 
-                                                onChange={(event) => changeScreenTimeUpdates(event)}
+                                                onChange={(event) => {changeScreenTimeUpdates(event); event.target.parentElement.classList.toggle('checkedToggle', event.target.checked);}}
                                             />
                                             <b className={`${themeColor == 'dark' ? '!bg-gray-600': ''} slider`}></b>
                                         </label>

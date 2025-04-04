@@ -143,7 +143,7 @@ const dailyScreenTime: React.FC = () => {
                         <p className='text-base'>Set daily screen time</p>
                     </div>
                 </div>
-                <label className="toggle-switch !left-1">
+                <label className={`toggle-switch !left-1 ${isDailyScreenTimeEnabled ? 'checkedToggle' : ''}`}>
                     <input 
                     style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
                         type="checkbox"
