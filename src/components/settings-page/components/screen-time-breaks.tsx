@@ -112,7 +112,7 @@ const screenTimeBreaks: React.FC = () => {
                         <p className='text-base'>Schedule screen time breaks</p>
                     </div>
                 </div>
-                <label className="toggle-switch !left-1">
+                <label className={`toggle-switch !left-1 ${isEnabled ? 'checkedToggle' : ''}`}>
                     <input 
                     style={{zIndex: '9999', height: '2.75rem', width: '4rem', position: 'relative', cursor:'pointer'}}
                         type="checkbox"
