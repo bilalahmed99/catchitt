@@ -68,7 +68,7 @@ const SleepReminder: React.FC = () => {
           <div>
             <p className='text-base'>Set up sleep reminders</p>
           </div>
-          <label className="toggle-switch !left-1">
+          <label className={`toggle-switch !left-1 ${isEnabled ? 'checkedToggle' : ''}`}>
             <input 
               type="checkbox"
               className="sr-only peer"
