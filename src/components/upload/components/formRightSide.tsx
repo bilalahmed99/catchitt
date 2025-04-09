@@ -146,6 +146,8 @@ function FormRightSide(props: any) {
         });
         setFilteredFollowers(filteredFollowersArr);
     }
+    var themeColor = window.localStorage.getItem('theme');
+
 
     useUpdateEffect(() => {
         setFilteredCountries(countries);
@@ -158,309 +160,315 @@ function FormRightSide(props: any) {
         <div className="flex-[1.7] flex flex-col mt-[8rem] items-start pl-[2.5rem] md:pl-0 pr-[2.5rem]">
             <div className="w-[100%]">
                 <div className="w-[100%] flex flex-col gap-[2rem] pb-[2rem]">
-                    <div className="w-[100%] flex flex-col gap-[1rem] relative">
-                        <div className="flex justify-between w-[100%]">
-                            <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
-                                Caption
+                    <div className='bg-white p-3 rounded-sm shadow-sm'>
+                        <div className="w-[100%] flex flex-col gap-[1rem] relative">
+                            <div className="flex justify-between w-[100%]">
+                                <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                                    Description
+                                </p>
+                                
+                            </div>
+                            {/* <BasicInput
+                                value={state?.description || ''}
+                                endAdornment={
+                                    <p className="text-custom-color-000 leading-[1.5rem] text-[1rem] font-normal">
+                                        # @
+                                    </p>
+                                }
+                                onChange={handleDescriptionChange}
+                            /> */}
+                            <textarea value={state?.description || ''} onChange={handleDescriptionChange} id="message" name="message" className="w-full  rounded bg-[#0000000D] focus:border-white focus:ring-1 focus:ring-white h-32 text-base outline-none py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" />
+                            <p className="text-gray-500 text-sm leading-[1.5rem] text-[1rem] font-normal absolute left-4 bottom-1">
+                                #hashtag @Mention
                             </p>
-                            <p className="text-[1rem] font-medium text-custom-color-999 leading-[1.1rem]">
+                            <p className="text-[1rem] text-sm text-custom-color-999 leading-[1.1rem] absolute right-4 bottom-1">
                                 {state?.description?.length || 0}/2200
                             </p>
                         </div>
-                        {/* <BasicInput
-                            value={state?.description || ''}
-                            endAdornment={
-                                <p className="text-custom-color-000 leading-[1.5rem] text-[1rem] font-normal">
-                                    # @
-                                </p>
-                            }
-                            onChange={handleDescriptionChange}
-                        /> */}
-                        <textarea value={state?.description || ''} onChange={handleDescriptionChange} id="message" name="message" className="w-full bg-transparent rounded border border-gray-300 focus:border-white focus:ring-1 focus:ring-white h-32 text-base outline-none py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" />
-                        <p className="text-gray-500 leading-[1.5rem] text-[1rem] font-normal absolute right-4 bottom-1">
-                            # @
-                        </p>
-                    </div>
-                    <div className="w-[100%] flex flex-col gap-1.5">
-                        <div className="w-full flex items-center justify-start gap-2.5 no-underline list-none h-[46px] cursor-pointer">
-                            <Tab
-                                onClick={() => setCoverTab('suggestion')}
-                                className={`${styles.coverTab} 
-                                    ${coverTab === 'suggestion'
-                                        ? `${styles.coverTabSelected} text-[var(--primary-color)]`
-                                        : ''
-                                    } 
-                                    leading-[1.7rem] text-[1.125rem] font-medium
-                                `}
-                            >
-                                Suggestions
-                            </Tab>
-                            <Tab
-                                onClick={() => setCoverTab('custom')}
-                                className={`${styles.coverTab}
-                                    ${coverTab === 'custom'
-                                        ? `${styles.coverTabSelected} text-[var(--primary-color)]`
-                                        : ''
-                                    } 
-                                    leading-[1.7rem] text-[1.125rem] font-medium
-                                `}
-                            >
-                                Upload cover
-                            </Tab>
-                        </div>
-                        {coverTab === 'suggestion' && (
-                            <>
-                                {videoThumbnails?.length > 0 ? (
-                                    <div className="flex  overflow-x-auto px-[10px] justify-start  rounded-[5px] bg-[var(--secondaty-color)] left-0 gap-[1px] h-[285px] pt-[10px] slider-container">
-                                        {videoThumbnails?.map((imageUrl: any, index: number) => (
-                                            <img
-                                                key={index}
-                                                onClick={() => {
-                                                    updateState('thumbnailUrl', imageUrl);
-                                                    setSelectedThumb(index);
-                                                }}
-                                                className={`ease-in-out duration-200 block ${imageUrl === selectedThumb ||
-                                                        index === selectedThumb
-                                                        ? 'h-[254px] opacity-100'
-                                                        : 'h-[224px] '
-                                                    } w-[124px] pointer opacity-50 my-[auto] rounded-[5px]`}
-                                                src={imageUrl}
-                                                alt=""
+                        <div className="w-[100%] flex flex-col gap-1.5">
+                            <div className="w-full flex items-center justify-start gap-2.5 no-underline list-none h-[46px] cursor-pointer">
+                                <Tab
+                                    onClick={() => setCoverTab('suggestion')}
+                                    className={`${styles.coverTab} 
+                                        ${coverTab === 'suggestion'
+                                            ? `${styles.coverTabSelected} text-[var(--primary-color)]`
+                                            : ''
+                                        } 
+                                        leading-[1.7rem] text-[1.125rem] font-medium
+                                    `}
+                                >
+                                    Suggestions
+                                </Tab>
+                                <Tab
+                                    onClick={() => setCoverTab('custom')}
+                                    className={`${styles.coverTab}
+                                        ${coverTab === 'custom'
+                                            ? `${styles.coverTabSelected} text-[var(--primary-color)]`
+                                            : ''
+                                        } 
+                                        leading-[1.7rem] text-[1.125rem] font-medium
+                                    `}
+                                >
+                                    Upload cover
+                                </Tab>
+                            </div>
+                            {coverTab === 'suggestion' && (
+                                <>
+                                    {videoThumbnails?.length > 0 ? (
+                                        <div className="flex  overflow-x-auto px-[10px] justify-start  rounded-[5px] bg-[var(--secondaty-color)] left-0 gap-[1px] h-[285px] pt-[10px] slider-container">
+                                            {videoThumbnails?.map((imageUrl: any, index: number) => (
+                                                <img
+                                                    key={index}
+                                                    onClick={() => {
+                                                        updateState('thumbnailUrl', imageUrl);
+                                                        setSelectedThumb(index);
+                                                    }}
+                                                    className={`ease-in-out duration-200 block ${imageUrl === selectedThumb ||
+                                                            index === selectedThumb
+                                                            ? 'h-[254px] opacity-100'
+                                                            : 'h-[224px] '
+                                                        } w-[124px] pointer opacity-50 my-[auto] rounded-[5px]`}
+                                                    src={imageUrl}
+                                                    alt=""
+                                                />
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="flex  overflow-x-scroll border px-[10px] justify-center  rounded-[5px] border-gray-500 mt-[16px] border-solid left-0 gap-[1px] h-[285px] pt-[10px] slider-container">
+                                            <CircularProgress
+                                                style={{ display: 'block', margin: 'auto' }}
                                             />
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="flex  overflow-x-scroll border px-[10px] justify-center  rounded-[5px] border-gray-500 mt-[16px] border-solid left-0 gap-[1px] h-[285px] pt-[10px] slider-container">
-                                        <CircularProgress
-                                            style={{ display: 'block', margin: 'auto' }}
-                                        />
-                                    </div>
-                                )}
-                            </>
-                        )}
-                        {coverTab === 'custom' && !customCover && (
-                            <div className="w-full h-[285px]">
-                                <DndContainer
-                                    aspect={62 / 127}
-                                    modalTitle="Crop cover"
-                                    onChangeFile={(file: File) => {
-                                        if (!/\.(jpg|jpeg|png|webp)$/i.test(file.name)) {
-                                            message.error('You can only upload supported file!');
-                                            return;
-                                        }
-                                        const reader = new FileReader();
-                                        reader.onload = (e: any) => {
-                                            setCustomCover(e.target.result);
-                                            updateState('thumbnailUrl', e.target.result);
-                                        };
-                                        reader.readAsDataURL(file);
-                                    }}
-                                    crop
-                                    subtitle="Suported formats: JPG, JPEG, PNG, WEBP"
-                                />
-                            </div>
-                        )}
-                        {coverTab === 'custom' && customCover && (
-                            <div className="flex px-[10px] justify-start  rounded-[5px] bg-[var(--secondaty-color)] left-0 gap-[1px] h-[285px] pt-[10px] slider-container">
-                                <div className="relative">
-                                    <img
-                                        className="ease-in-out duration-200 block h-[254px] w-[124px] pointer my-[auto] rounded-[5px]"
-                                        src={customCover}
-                                        alt=""
-                                    />
-                                    <button
-                                        className="h-[20px] w-[20px] p-0 flex items-center justify-center absolute top-1.5 right-1.5 rounded-full border border-solid !border-[var(--primary-color)]"
-                                        onClick={() => {
-                                            setCustomCover(null);
-                                            updateState('thumbnailUrl', videoThumbnails[0]);
+                                        </div>
+                                    )}
+                                </>
+                            )}
+                            {coverTab === 'custom' && !customCover && (
+                                <div className="w-full h-[285px]">
+                                    <DndContainer
+                                        aspect={62 / 127}
+                                        modalTitle="Crop cover"
+                                        onChangeFile={(file: File) => {
+                                            if (!/\.(jpg|jpeg|png|webp)$/i.test(file.name)) {
+                                                message.error('You can only upload supported file!');
+                                                return;
+                                            }
+                                            const reader = new FileReader();
+                                            reader.onload = (e: any) => {
+                                                setCustomCover(e.target.result);
+                                                updateState('thumbnailUrl', e.target.result);
+                                            };
+                                            reader.readAsDataURL(file);
                                         }}
-                                    >
-                                        <SvgIcon fontSize="small">
-                                            <CloseIcon className="text-[10px] text-[var(--primary-color)]" />
-                                        </SvgIcon>
-                                    </button>
+                                        crop
+                                        subtitle="Suported formats: JPG, JPEG, PNG, WEBP"
+                                    />
                                 </div>
-                            </div>
-                        )}
-                    </div>
-                    <div className="w-[100%] flex flex-col gap-[1rem]">
-                        <div className="flex justify-between w-[100%]">
-                            <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
-                                Category
-                            </p>
+                            )}
+                            {coverTab === 'custom' && customCover && (
+                                <div className="flex px-[10px] justify-start  rounded-[5px] bg-[var(--secondaty-color)] left-0 gap-[1px] h-[285px] pt-[10px] slider-container">
+                                    <div className="relative">
+                                        <img
+                                            className="ease-in-out duration-200 block h-[254px] w-[124px] pointer my-[auto] rounded-[5px]"
+                                            src={customCover}
+                                            alt=""
+                                        />
+                                        <button
+                                            className="h-[20px] w-[20px] p-0 flex items-center justify-center absolute top-1.5 right-1.5 rounded-full border border-solid !border-[var(--primary-color)]"
+                                            onClick={() => {
+                                                setCustomCover(null);
+                                                updateState('thumbnailUrl', videoThumbnails[0]);
+                                            }}
+                                        >
+                                            <SvgIcon fontSize="small">
+                                                <CloseIcon className="text-[10px] text-[var(--primary-color)]" />
+                                            </SvgIcon>
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                        <div className="relative flex flex-col">
+                        <div className="w-[100%] flex flex-col gap-[1rem]">
+                            <div className="flex justify-between w-[100%]">
+                                <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                                    Category
+                                </p>
+                            </div>
+                            <div className="relative flex flex-col">
+                                <BasicInput
+                                    editable={false}
+                                    onClick={() => setdropDown(!dropDown)}
+                                    value={state?.category?.name || ''}
+                                    endAdornment={
+                                        <img
+                                            src={downArrow}
+                                            alt=""
+                                            className={`cursor-pointer transition-all duration-200 transform ${dropDown ? 'rotate-180' : 'rotate-0'
+                                                }`}
+                                        />
+                                    }
+                                />
+                                {dropDown ? (
+                                    <div className="p-[1rem]  rounded-[0.3rem] flex flex-col relative  border  border-custom-gray-300 ">
+                                        <BasicInput
+                                            type="search"
+                                            onChange={dropDownH}
+                                            placeholder="Choose category"
+                                            width="100% !important"
+                                        />
+                                        <div
+                                            className="flex max-h-[200px] overflow-y-scroll flex-col pt-[1rem] justify-start items-start"
+                                            onClick={() => setdropDown(!dropDown)}
+                                        >
+                                            {postCategories?.map((category: any, i: number) => {
+                                                return (
+                                                    <p
+                                                        className="h-[2.3rem] py-[1rem] gap-2 px-[0.63rem] w-[100%] flex items-center cursor-pointer text-custom-dark-222 text-[0.87rem] text-left font-normal hover:text-custom-primary hover:bg-custom-gray-300"
+                                                        onClick={() => {
+                                                            updateState('category', category);
+                                                            setPostCategories(categories);
+                                                        }}
+                                                        key={i}
+                                                    >
+                                                        <img
+                                                            className="max-w-[14px]  max-h-[14px]"
+                                                            src={category?.icon}
+                                                            alt=""
+                                                        />
+                                                        {category?.name}
+                                                    </p>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                ) : null}
+                            </div>
+                        </div>
+                        <div className="max-w-[100%] flex flex-col gap-[1rem]">
+                            <div className="flex justify-between w-[100%]">
+                                <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                                    Tag people
+                                </p>
+                            </div>
+                            <TagsInput
+                                startAdornment={taggedUsers.map((user, index) => {
+                                    return (
+                                        <CustomChip
+                                            key={index}
+                                            onDelete={() => {
+                                                const filteredUsers = taggedUsers.filter(
+                                                    (user2: any) => user2?.id !== user?.id
+                                                );
+                                                setTaggedUser(filteredUsers);
+                                            }}
+                                            tabIndex={-1}
+                                            className="w-[200px] h-[48px] bg-custom-gray-400"
+                                            label={user?.name}
+                                        />
+                                    );
+                                })}
+                                onClick={() => setTagUsersPopup(true)}
+                                placeholder="Tag people"
+                            />
+                        </div>
+                        <div className="w-[100%] flex flex-col gap-[1rem]">
+                            <div className="flex justify-between w-[100%]">
+                                <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                                    {/* {videoInfo ? 'Edit' : 'Add'} location */} Add Location
+                                </p>
+                            </div>
                             <BasicInput
-                                editable={false}
-                                onClick={() => setdropDown(!dropDown)}
-                                value={state?.category?.name || ''}
+                                value={selectedLocation}
+                                onClick={() => setPostLocationsPopup(true)}
+                                placeholder="Search location"
                                 endAdornment={
                                     <img
                                         src={downArrow}
                                         alt=""
-                                        className={`cursor-pointer transition-all duration-200 transform ${dropDown ? 'rotate-180' : 'rotate-0'
-                                            }`}
+                                        className={`cursor-pointer transition-all duration-200 transform -rotate-90`}
                                     />
                                 }
                             />
-                            {dropDown ? (
-                                <div className="p-[1rem]  rounded-[0.3rem] flex flex-col relative  border  border-custom-gray-300 ">
-                                    <BasicInput
-                                        type="search"
-                                        onChange={dropDownH}
-                                        placeholder="Choose category"
-                                        width="100% !important"
+                        </div>
+                        
+                    </div>
+                    <div className='bg-white p-3 rounded-sm shadow-sm'>
+                        <div className="w-[100%] flex flex-col gap-[1rem]">
+                            <div className="flex justify-between w-[100%]">
+                                <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                                    Allow users to:
+                                </p>
+                            </div>
+                            <div className="flex gap-10">
+                                <div className="flex gap-2 items-center">
+                                    <BasicCheckBox
+                                        onChange={(e: any) =>
+                                            updateState('replyOnComment', e?.target?.checked)
+                                        }
+                                        checked={state?.replyOnComment || true}
                                     />
-                                    <div
-                                        className="flex max-h-[200px] overflow-y-scroll flex-col pt-[1rem] justify-start items-start"
-                                        onClick={() => setdropDown(!dropDown)}
-                                    >
-                                        {postCategories?.map((category: any, i: number) => {
-                                            return (
-                                                <p
-                                                    className="h-[2.3rem] py-[1rem] gap-2 px-[0.63rem] w-[100%] flex items-center cursor-pointer text-custom-dark-222 text-[0.87rem] text-left font-normal hover:text-custom-primary hover:bg-custom-gray-300"
-                                                    onClick={() => {
-                                                        updateState('category', category);
-                                                        setPostCategories(categories);
-                                                    }}
-                                                    key={i}
-                                                >
-                                                    <img
-                                                        className="max-w-[14px]  max-h-[14px]"
-                                                        src={category?.icon}
-                                                        alt=""
-                                                    />
-                                                    {category?.name}
-                                                </p>
-                                            );
-                                        })}
-                                    </div>
+                                    <p className="text-[1rem] font-medium text-custom-dark-222 leading-[1.1rem]">
+                                        Comment
+                                    </p>
                                 </div>
-                            ) : null}
-                        </div>
-                    </div>
-                    <div className="max-w-[100%] flex flex-col gap-[1rem]">
-                        <div className="flex justify-between w-[100%]">
-                            <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
-                                Tag people
-                            </p>
-                        </div>
-                        <TagsInput
-                            startAdornment={taggedUsers.map((user, index) => {
-                                return (
-                                    <CustomChip
-                                        key={index}
-                                        onDelete={() => {
-                                            const filteredUsers = taggedUsers.filter(
-                                                (user2: any) => user2?.id !== user?.id
-                                            );
-                                            setTaggedUser(filteredUsers);
-                                        }}
-                                        tabIndex={-1}
-                                        className="w-[200px] h-[48px] bg-custom-gray-400"
-                                        label={user?.name}
+                                <div className="flex gap-2 items-center">
+                                    <BasicCheckBox
+                                        onChange={(e: any) =>
+                                            updateState('allowDuet', e?.target?.checked)
+                                        }
+                                        checked={state?.allowDuet || true}
                                     />
-                                );
-                            })}
-                            onClick={() => setTagUsersPopup(true)}
-                            placeholder="Tag people"
-                        />
-                    </div>
-                    <div className="w-[100%] flex flex-col gap-[1rem]">
-                        <div className="flex justify-between w-[100%]">
-                            <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
-                                {/* {videoInfo ? 'Edit' : 'Add'} location */} Add Location
-                            </p>
-                        </div>
-                        <BasicInput
-                            value={selectedLocation}
-                            onClick={() => setPostLocationsPopup(true)}
-                            placeholder="Search location"
-                            endAdornment={
-                                <img
-                                    src={downArrow}
-                                    alt=""
-                                    className={`cursor-pointer transition-all duration-200 transform -rotate-90`}
-                                />
-                            }
-                        />
-                    </div>
-                    <div className="w-[100%] flex flex-col gap-[1rem]">
-                        <div className="flex justify-between w-[100%]">
-                            <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
-                                Allow users to:
-                            </p>
-                        </div>
-                        <div className="flex gap-10">
-                            <div className="flex gap-2 items-center">
-                                <BasicCheckBox
-                                    onChange={(e: any) =>
-                                        updateState('replyOnComment', e?.target?.checked)
-                                    }
-                                    checked={state?.replyOnComment || true}
-                                />
-                                <p className="text-[1rem] font-medium text-custom-dark-222 leading-[1.1rem]">
-                                    Comment
-                                </p>
+                                    <p className="text-[1rem] font-medium text-custom-dark-222 leading-[1.1rem]">
+                                        Duet
+                                    </p>
+                                </div>
+                                {/* <div className="flex gap-2 items-center">
+                                    <BasicCheckBox
+                                        onChange={(e: any) =>
+                                            updateState('allowStitch', e?.target?.checked)
+                                        }
+                                        checked={state?.allowStitch || false}
+                                    />
+                                    <p className="text-[1rem] font-medium text-custom-dark-222 leading-[1.1rem]">
+                                        Stitch
+                                    </p>
+                                </div> */}
                             </div>
-                            <div className="flex gap-2 items-center">
-                                <BasicCheckBox
-                                    onChange={(e: any) =>
-                                        updateState('allowDuet', e?.target?.checked)
-                                    }
-                                    checked={state?.allowDuet || true}
-                                />
-                                <p className="text-[1rem] font-medium text-custom-dark-222 leading-[1.1rem]">
-                                    Duet
-                                </p>
-                            </div>
-                            {/* <div className="flex gap-2 items-center">
-                                <BasicCheckBox
-                                    onChange={(e: any) =>
-                                        updateState('allowStitch', e?.target?.checked)
-                                    }
-                                    checked={state?.allowStitch || false}
-                                />
-                                <p className="text-[1rem] font-medium text-custom-dark-222 leading-[1.1rem]">
-                                    Stitch
-                                </p>
-                            </div> */}
                         </div>
-                    </div>
-                    <div className="flex justify-start items-center gap-[1rem]">
-                        <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
-                            Save video to device
-                        </p>
-                        <BasicSwitch
-                            checked={state?.saveToPhone || false}
-                            onChange={(e: any) => updateState('saveToPhone', e?.target?.checked)}
-                        />
-                    </div>
-                    <div className="flex justify-start items-center gap-[1rem]">
-                        <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
-                            Private Video
-                        </p>
-                        <BasicSwitch
-                            checked={state?.isOnlyMe || false}
-                            onChange={(e: any) => updateState('isOnlyMe', e?.target?.checked)}
-                        />
-                    </div>
-                    <div className="flex flex-col items-start justify-between">
                         <div className="flex justify-start items-center gap-[1rem]">
                             <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
-                                Video downloads
+                                Save video to device
                             </p>
                             <BasicSwitch
-                                checked={state?.allowDownload || false}
-                                onChange={(e: any) =>
-                                    updateState('allowDownload', e?.target?.checked)
-                                }
+                                checked={state?.saveToPhone || false}
+                                onChange={(e: any) => updateState('saveToPhone', e?.target?.checked)}
                             />
                         </div>
-                        <p className="text-[1rem] font-medium text-custom-color-999 leading-[1.1rem] text-start">
-                            Allow other people to download your videos and share to other platforms.
-                            If this setting is off, a link to your video can still be shared.
-                        </p>
+                        <div className="flex justify-start items-center gap-[1rem]">
+                            <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                                Private Video
+                            </p>
+                            <BasicSwitch
+                                checked={state?.isOnlyMe || false}
+                                onChange={(e: any) => updateState('isOnlyMe', e?.target?.checked)}
+                            />
+                        </div>
+                        <div className="flex flex-col items-start justify-between">
+                            <div className="flex justify-start items-center gap-[1rem]">
+                                <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                                    Video downloads
+                                </p>
+                                <BasicSwitch
+                                    checked={state?.allowDownload || false}
+                                    onChange={(e: any) =>
+                                        updateState('allowDownload', e?.target?.checked)
+                                    }
+                                />
+                            </div>
+                            <p className="text-[1rem] font-medium text-custom-color-999 leading-[1.1rem] text-start">
+                                Allow other people to download your videos and share to other platforms.
+                                If this setting is off, a link to your video can still be shared.
+                            </p>
+                        </div>
                     </div>
                     {/* <div className="flex justify-start items-center gap-[1rem]">
                         <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">

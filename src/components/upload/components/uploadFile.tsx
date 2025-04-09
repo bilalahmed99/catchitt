@@ -35,8 +35,8 @@ function UploadFile({ changeFileHandler }: any) {
    
 
     return (
-        <div className="w-full h-[100vh] flex flex-col items-center justify-center gap-2.5">
-            <div className={`w-4/5 max-w-[950px] mt-5 mb-3 pt-5 flex flex-col items-center  gap-4  justify-center cursor-pointer rounded-2xl`}>
+        <div className="w-full h-[100vh] flex flex-col items-center justify-center px-5 gap-2.5">
+            <div className={`w-[calc(100%-14rem)] ml-auto mt-5 mb-3 pt-5 flex flex-col items-center  gap-4  justify-center cursor-pointer rounded-2xl`}>
                 <div className="w-full bg-white shadow-sm rounded-md pt-4 pb-[0]">
                     <div className="flex items-center justify-between flex-wrap gap-2">
                         {/* File name and quality */}
@@ -93,7 +93,7 @@ function UploadFile({ changeFileHandler }: any) {
                     </div>
                 </div>
             </div>
-            <div className={`w-4/5 max-w-[950px] bg-white h-4/6 flex flex-col items-center px-[1rem] py-[1.5rem] gap-4 justify-center shadow-sm cursor-pointer rounded-2xl`}>
+            <div className={`w-[calc(100%-14rem)] ml-auto bg-white h-4/6 flex flex-col items-center px-[1rem] py-[1.5rem] gap-4 justify-center shadow-sm cursor-pointer rounded-2xl`}>
                 <DndContainer
                     className="w-full h-full"
                     text="Select video to upload"

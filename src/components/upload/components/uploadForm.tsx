@@ -31,15 +31,8 @@ function UploadForm(props: any) {
 
     return (
         <div
-            className={`max-w-[71.25rem] ${darkTheme} ${lightTheme} flex-col mt-[7rem] mx-auto mb-[2rem] rounded-[0.5rem] flex md:flex-row `}
+            className={`w-[calc(100%-14rem)]  flex-col mt-[5.5rem] pl-5 ml-auto mb-[2rem] rounded-[0.5rem] flex md:flex-row `}
         >
-            <FormLeftSide
-                // videoInfo={videoInfo}
-                darkTheme={darkTheme}
-                selectedVideoSrc={selectedVideoSrc}
-                selectFilesHandler={selectFilesHandler}
-                updateState={updateState}
-            />
             <FormRightSide
                 // videoInfo={videoInfo}
                 updateState={updateState}
@@ -49,6 +42,14 @@ function UploadForm(props: any) {
                 // updateMediaHandler={updateMediaHandler}
                 isPosting={isPosting}
             />
+            <FormLeftSide
+                // videoInfo={videoInfo}
+                darkTheme={darkTheme}
+                selectedVideoSrc={selectedVideoSrc}
+                selectFilesHandler={selectFilesHandler}
+                updateState={updateState}
+            />
+            
         </div>
     );
 }
