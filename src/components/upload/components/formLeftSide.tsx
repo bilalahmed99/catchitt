@@ -57,7 +57,7 @@ function FormLeftSide({ selectedVideoSrc, selectFilesHandler, darkTheme, videoIn
             },
             "& .Mui-selected": {
               backgroundColor: "#fff",
-              color: "#333",
+              color: "#333 !important",
 
             },
           }}
