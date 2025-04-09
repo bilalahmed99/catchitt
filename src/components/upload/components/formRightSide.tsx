@@ -157,13 +157,14 @@ function FormRightSide(props: any) {
         setFilteredFollowers(followers)
     },[tagUsersPopup])
     return (
-        <div className="flex-[1.7] flex flex-col mt-[8rem] items-start pl-[2.5rem] md:pl-0 pr-[2.5rem]">
+        <div className="flex-[1.7] flex flex-col items-start pl-[2.5rem] md:pl-0 pr-[2.5rem]">
             <div className="w-[100%]">
-                <div className="w-[100%] flex flex-col gap-[2rem] pb-[2rem]">
+                <div className="w-[100%] flex flex-col gap-[1rem] pb-[2rem]">
+                    <p className="text-start text-base pt-2 font-semibold leading-[1.5rem] text-custom-dark-222">Details</p>
                     <div className='bg-white p-3 rounded-sm shadow-sm'>
                         <div className="w-[100%] flex flex-col gap-[1rem] relative">
                             <div className="flex justify-between w-[100%]">
-                                <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                                <p className="text-sm font-medium text-custom-dark-222 leading-[1.7rem]">
                                     Description
                                 </p>
                                 
@@ -185,7 +186,7 @@ function FormRightSide(props: any) {
                                 {state?.description?.length || 0}/2200
                             </p>
                         </div>
-                        <div className="w-[100%] flex flex-col gap-1.5">
+                        <div className="w-[100%] flex flex-col gap-1.5 py-3">
                             <div className="w-full flex items-center justify-start gap-2.5 no-underline list-none h-[46px] cursor-pointer">
                                 <Tab
                                     onClick={() => setCoverTab('suggestion')}
@@ -194,7 +195,7 @@ function FormRightSide(props: any) {
                                             ? `${styles.coverTabSelected} text-[var(--primary-color)]`
                                             : ''
                                         } 
-                                        leading-[1.7rem] text-[1.125rem] font-medium
+                                        leading-[1.7rem] text-[0.875rem] font-medium
                                     `}
                                 >
                                     Suggestions
@@ -206,16 +207,16 @@ function FormRightSide(props: any) {
                                             ? `${styles.coverTabSelected} text-[var(--primary-color)]`
                                             : ''
                                         } 
-                                        leading-[1.7rem] text-[1.125rem] font-medium
+                                        leading-[1.7rem] text-[0.875rem] font-medium
                                     `}
                                 >
-                                    Upload cover
+                                    Cover
                                 </Tab>
                             </div>
                             {coverTab === 'suggestion' && (
                                 <>
                                     {videoThumbnails?.length > 0 ? (
-                                        <div className="flex  overflow-x-auto px-[10px] justify-start  rounded-[5px] bg-[var(--secondaty-color)] left-0 gap-[1px] h-[285px] pt-[10px] slider-container">
+                                        <div className="flex  overflow-x-auto px-[10px] justify-start  rounded-[5px] bg-[var(--secondaty-color)] left-0 gap-[1px] h-[285px] pt-[10px] w-100 slider-container">
                                             {videoThumbnails?.map((imageUrl: any, index: number) => (
                                                 <img
                                                     key={index}
@@ -265,7 +266,7 @@ function FormRightSide(props: any) {
                                 </div>
                             )}
                             {coverTab === 'custom' && customCover && (
-                                <div className="flex px-[10px] justify-start  rounded-[5px] bg-[var(--secondaty-color)] left-0 gap-[1px] h-[285px] pt-[10px] slider-container">
+                                <div className="flex px-[10px] justify-start  rounded-[5px]  left-0 gap-[1px] h-[285px] pt-[10px] w-100 slider-container">
                                     <div className="relative">
                                         <img
                                             className="ease-in-out duration-200 block h-[254px] w-[124px] pointer my-[auto] rounded-[5px]"
@@ -287,9 +288,9 @@ function FormRightSide(props: any) {
                                 </div>
                             )}
                         </div>
-                        <div className="w-[100%] flex flex-col gap-[1rem]">
+                        <div className="w-[100%] flex flex-col pt-2">
                             <div className="flex justify-between w-[100%]">
-                                <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                                <p className="text-[0.875rem]  font-medium text-custom-dark-222 leading-[1.7rem]">
                                     Category
                                 </p>
                             </div>
@@ -343,9 +344,9 @@ function FormRightSide(props: any) {
                                 ) : null}
                             </div>
                         </div>
-                        <div className="max-w-[100%] flex flex-col gap-[1rem]">
+                        <div className="max-w-[100%] flex flex-col pt-2">
                             <div className="flex justify-between w-[100%]">
-                                <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                                <p className="text-[0.875rem] font-medium text-custom-dark-222 leading-[1.7rem]">
                                     Tag people
                                 </p>
                             </div>
@@ -370,10 +371,10 @@ function FormRightSide(props: any) {
                                 placeholder="Tag people"
                             />
                         </div>
-                        <div className="w-[100%] flex flex-col gap-[1rem]">
+                        <div className="w-[100%] flex flex-col pt-2">
                             <div className="flex justify-between w-[100%]">
-                                <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
-                                    {/* {videoInfo ? 'Edit' : 'Add'} location */} Add Location
+                                <p className="text-[0.875rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                                    {/* {videoInfo ? 'Edit' : 'Add'} location */} Location
                                 </p>
                             </div>
                             <BasicInput
@@ -389,12 +390,14 @@ function FormRightSide(props: any) {
                                 }
                             />
                         </div>
-                        
                     </div>
-                    <div className='bg-white p-3 rounded-sm shadow-sm'>
+
+                    <p className="text-start text-base pt-2 font-semibold leading-[1.5rem] text-custom-dark-222">Settings</p>
+
+                    <div className='bg-white p-3 rounded-md shadow-sm'>
                         <div className="w-[100%] flex flex-col gap-[1rem]">
                             <div className="flex justify-between w-[100%]">
-                                <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                                <p className="text-sm font-medium text-custom-dark-222 leading-[1.7rem]">
                                     Allow users to:
                                 </p>
                             </div>
@@ -406,7 +409,7 @@ function FormRightSide(props: any) {
                                         }
                                         checked={state?.replyOnComment || true}
                                     />
-                                    <p className="text-[1rem] font-medium text-custom-dark-222 leading-[1.1rem]">
+                                    <p className="text-xs font-medium text-custom-dark-222 leading-[1.1rem]">
                                         Comment
                                     </p>
                                 </div>
@@ -417,7 +420,7 @@ function FormRightSide(props: any) {
                                         }
                                         checked={state?.allowDuet || true}
                                     />
-                                    <p className="text-[1rem] font-medium text-custom-dark-222 leading-[1.1rem]">
+                                    <p className="text-xs font-medium text-custom-dark-222 leading-[1.1rem]">
                                         Duet
                                     </p>
                                 </div>
@@ -435,7 +438,7 @@ function FormRightSide(props: any) {
                             </div>
                         </div>
                         <div className="flex justify-start items-center gap-[1rem]">
-                            <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                            <p className="text-xs font-medium text-custom-dark-222 leading-[1.7rem]">
                                 Save video to device
                             </p>
                             <BasicSwitch
@@ -444,7 +447,7 @@ function FormRightSide(props: any) {
                             />
                         </div>
                         <div className="flex justify-start items-center gap-[1rem]">
-                            <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                            <p className="text-xs font-medium text-custom-dark-222 leading-[1.7rem]">
                                 Private Video
                             </p>
                             <BasicSwitch
@@ -454,7 +457,7 @@ function FormRightSide(props: any) {
                         </div>
                         <div className="flex flex-col items-start justify-between">
                             <div className="flex justify-start items-center gap-[1rem]">
-                                <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                                <p className="text-xs font-medium text-custom-dark-222 leading-[1.7rem]">
                                     Video downloads
                                 </p>
                                 <BasicSwitch
@@ -464,12 +467,35 @@ function FormRightSide(props: any) {
                                     }
                                 />
                             </div>
-                            <p className="text-[1rem] font-medium text-custom-color-999 leading-[1.1rem] text-start">
+                            <p className="text-xs font-medium text-custom-color-999 leading-[1.1rem] text-start">
                                 Allow other people to download your videos and share to other platforms.
                                 If this setting is off, a link to your video can still be shared.
                             </p>
                         </div>
                     </div>
+
+
+                    <p className="text-start text-base pt-2 font-semibold leading-[1.5rem] text-custom-dark-222">Checks</p>
+
+                    <div className='bg-white p-3 rounded-md shadow-sm'>                        
+                        <div className="flex flex-col items-start justify-between">
+                            <div className="flex justify-start items-center gap-[1rem]">
+                                <p className="text-xs font-medium flex text-custom-dark-222 leading-[1.7rem]">
+                                        Run a copyright check 
+                                        <svg className='ml-1' width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path opacity="0.989" d="M6.33905 0.511719C3.11961 0.511719 0.509888 3.12144 0.509888 6.34089C0.509888 9.56033 3.11961 12.1701 6.33905 12.1701C9.5585 12.1701 12.1682 9.56033 12.1682 6.34089C12.1682 3.12144 9.5585 0.511719 6.33905 0.511719ZM6.33905 1.67755C7.57585 1.67755 8.76198 2.16887 9.63653 3.04341C10.5111 3.91796 11.0024 5.10409 11.0024 6.34089C11.0024 7.57768 10.5111 8.76382 9.63653 9.63836C8.76198 10.5129 7.57585 11.0042 6.33905 11.0042C5.10226 11.0042 3.91612 10.5129 3.04158 9.63836C2.16704 8.76382 1.67572 7.57768 1.67572 6.34089C1.67572 5.10409 2.16704 3.91796 3.04158 3.04341C3.91612 2.16887 5.10226 1.67755 6.33905 1.67755ZM6.33905 3.4263C6.18446 3.4263 6.03619 3.48772 5.92687 3.59703C5.81755 3.70635 5.75614 3.85462 5.75614 4.00922C5.75614 4.16382 5.81755 4.31208 5.92687 4.4214C6.03619 4.53072 6.18446 4.59214 6.33905 4.59214C6.49365 4.59214 6.64192 4.53072 6.75124 4.4214C6.86056 4.31208 6.92197 4.16382 6.92197 4.00922C6.92197 3.85462 6.86056 3.70635 6.75124 3.59703C6.64192 3.48772 6.49365 3.4263 6.33905 3.4263ZM5.75614 5.17505C5.60154 5.17505 5.45327 5.23647 5.34395 5.34578C5.23464 5.4551 5.17322 5.60337 5.17322 5.75797C5.17322 6.03893 5.38249 6.24878 5.64655 6.30474L5.30088 7.98005C5.16564 8.65681 5.64946 9.25547 6.33847 9.25547H6.92139C7.07599 9.25547 7.22425 9.19406 7.33357 9.08474C7.44289 8.97542 7.50431 8.82715 7.50431 8.67255C7.50431 8.51795 7.44289 8.36969 7.33357 8.26037C7.22425 8.15105 7.07599 8.08964 6.92139 8.08964H6.46671L6.9039 5.86756C6.92146 5.78366 6.92004 5.6969 6.89973 5.61363C6.87942 5.53036 6.84075 5.45268 6.78654 5.38629C6.73233 5.3199 6.66396 5.26647 6.58643 5.22992C6.5089 5.19337 6.42418 5.17462 6.33847 5.17505H5.75614Z" fill="black" fill-opacity="0.34"/>
+                                        </svg>
+                                </p>
+                                <BasicSwitch
+                                    checked={state?.allowDownload || false}
+                                    onChange={(e: any) =>
+                                        updateState('allowDownload', e?.target?.checked)
+                                    }
+                                />
+                            </div>
+                        </div>
+                    </div>
+
                     {/* <div className="flex justify-start items-center gap-[1rem]">
                         <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
                             Allow Others to Add to Story
@@ -480,22 +506,38 @@ function FormRightSide(props: any) {
                         />
                     </div> */}
                     <div className="flex gap-[1rem]">
-                        <CustomButton
-                            width="169px !important"
-                            textSize="16px "
-                            islight
-                            text="Discard"
-                            height="48px !important"
-                            onClick={() => setDiscardPostPopup(true)}
-                        />
-                        <CustomButton
+                    <CustomButton
+                            rounded="16px"
                             textSize="16px "
                             width="169px !important"
-                            height="48px !important"
+                            height="40px !important"
                             text="Post" //{videoInfo ? 'Update' : 'Post'}
                             onClick={SubmitHandler}
                             loading={isPosting}
                         />
+                        <CustomButton
+                            width="169px !important"
+                            textSize="16px "
+                            islight
+                            backgroundColor='#0000000D'
+                            border='0'
+                            color="black"
+                            text="Save draft"
+                            height="40px !important"
+                            onClick={() => setDiscardPostPopup(true)}
+                        />
+                        <CustomButton
+                            width="100px !important"
+                            textSize="16px "
+                            islight
+                            backgroundColor='#0000000D'
+                            border='0'
+                            color="black"
+                            text="Discard"
+                            height="40px !important"
+                            onClick={() => setDiscardPostPopup(true)}
+                        />
+                        
                     </div>
                 </div>
             </div>
