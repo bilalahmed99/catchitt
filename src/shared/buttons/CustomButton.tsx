@@ -8,10 +8,11 @@ function CustomButton(props: any) {
         color,
         islight,
         fontSize = 14,
-        fontWeight = 600,
+        fontWeight = 500,
         backgroundColor,
         loading,
         preference,
+        icon,
         ...restProps
     } = props;
     const BasicButton = styled(Button)(({ theme }) => ({
@@ -23,7 +24,7 @@ function CustomButton(props: any) {
             : !islight
             ? 'rgb(255, 59, 92) !important'
             : '#FFF !important',
-        border: '1px solid rgb(255, 59, 92)',
+        // border: '1px solid rgb(255, 59, 92)',
         fontSize,
         fontWeight,
         [theme.breakpoints.down(600)]: {
@@ -45,7 +46,10 @@ function CustomButton(props: any) {
                     <CircularProgress />
                 </div>
             ) : (
-                text
+                <>
+                    {icon && <span style={{ marginRight: 8 }}>{icon}</span>}
+                    {text}
+                </>
             )}
         </BasicButton>
     );

@@ -1,4 +1,4 @@
-import { CircularProgress, SvgIcon } from '@mui/material';
+import { Box, Chip, CircularProgress, FormControl, FormControlLabel, FormLabel, IconButton, InputAdornment, MenuItem, OutlinedInput, Radio, RadioGroup, Select, Stack, styled, SvgIcon, Tooltip } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { defaultAvatar, downArrow, search } from '../../../icons';
@@ -21,6 +21,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import { message } from 'antd';
 import { useUpdateEffect } from 'react-use';
 import { setSelectedFile } from '../../../redux/reducers/upload';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import RoomOutlinedIcon from '@mui/icons-material/RoomOutlined';
+
 
 function FormRightSide(props: any) {
     const {
@@ -58,7 +62,12 @@ function FormRightSide(props: any) {
         dispatch(loadFollowers(followersPage));
         // Fetch more data for the next page
     };
-
+    const LocationIcon = () => (
+        <svg  width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.97716 1.48047C8.09368 1.48047 7.24639 1.83143 6.62167 2.45614C5.99696 3.08086 5.646 3.92816 5.646 4.81164C5.646 6.41326 6.80258 7.75239 8.3096 8.07152L8.31093 11.474C8.31093 11.6507 8.38112 11.8201 8.50606 11.9451C8.63101 12.07 8.80047 12.1402 8.97716 12.1402C9.15386 12.1402 9.32332 12.07 9.44826 11.9451C9.5732 11.8201 9.6434 11.6507 9.6434 11.474L9.6354 8.06818C11.1411 7.74972 12.3083 6.41326 12.3083 4.81164C12.3083 3.92816 11.9574 3.08086 11.3327 2.45614C10.7079 1.83143 9.86064 1.48047 8.97716 1.48047ZM8.97716 2.81294C9.23964 2.81294 9.49954 2.86463 9.74203 2.96508C9.98453 3.06552 10.2049 3.21274 10.3905 3.39834C10.5761 3.58394 10.7233 3.80427 10.8237 4.04677C10.9242 4.28926 10.9759 4.54916 10.9759 4.81164C10.9759 5.07411 10.9242 5.33401 10.8237 5.57651C10.7233 5.819 10.5761 6.03933 10.3905 6.22493C10.2049 6.41053 9.98453 6.55775 9.74203 6.65819C9.49954 6.75864 9.23964 6.81034 8.97716 6.81034C8.44707 6.81034 7.9387 6.59976 7.56387 6.22493C7.18904 5.8501 6.97846 5.34172 6.97846 4.81164C6.97846 4.28155 7.18904 3.77317 7.56387 3.39834C7.9387 3.02351 8.44707 2.81294 8.97716 2.81294ZM8.97716 4.1454C8.80047 4.1454 8.63101 4.21559 8.50606 4.34054C8.38112 4.46548 8.31093 4.63494 8.31093 4.81164C8.31093 4.98833 8.38112 5.15779 8.50606 5.28273C8.63101 5.40768 8.80047 5.47787 8.97716 5.47787C9.15386 5.47787 9.32332 5.40768 9.44826 5.28273C9.5732 5.15779 9.6434 4.98833 9.6434 4.81164C9.6434 4.63494 9.5732 4.46548 9.44826 4.34054C9.32332 4.21559 9.15386 4.1454 8.97716 4.1454Z" fill="black" fillOpacity="0.34"/>
+          <path d="M6.08516 9.26714C4.60946 9.78347 3.64941 10.6869 3.64941 11.8068C3.64941 13.5883 6.08316 14.8049 8.97928 14.8049C11.8754 14.8049 14.3091 13.5883 14.3091 11.8068C14.3091 10.6842 13.3331 9.7828 11.8521 9.26714C11.505 9.14589 11.1405 9.33576 11.0193 9.68287C10.9892 9.76344 10.9757 9.84922 10.9794 9.93513C10.9831 10.021 11.004 10.1053 11.0409 10.183C11.0779 10.2607 11.13 10.3301 11.1942 10.3873C11.2585 10.4444 11.3336 10.4881 11.415 10.5157C12.4217 10.8668 12.9767 11.3844 12.9767 11.8068C12.9767 12.601 11.2345 13.4724 8.97928 13.4724C6.72408 13.4724 4.98188 12.601 4.98188 11.8068C4.98188 11.3858 5.5202 10.8668 6.52288 10.5157C6.86932 10.3944 7.06053 10.0306 6.93861 9.68287C6.87975 9.51531 6.75723 9.3777 6.59759 9.29988C6.43796 9.22206 6.25341 9.2103 6.08516 9.26714Z" fill="black" fillOpacity="0.34"/>
+        </svg>
+      );
     useMemo(() => {
         setVideoThumbnails(thumbnails);
         setSelectedThumb(0);
@@ -75,6 +84,30 @@ function FormRightSide(props: any) {
     const [loading, setLoading] = useState(true);
     const token = localStorage.getItem('token');
     const [coverTab, setCoverTab] = useState<string>('suggestion');
+
+    const StyledSelect = styled(Select)(({ theme }) => ({
+        backgroundColor: '#f3f3f3',
+        borderRadius: 12,
+        height: 48,
+        width: '100%',
+        color: '#8c8c8c',
+        fontWeight: 500,
+        fontSize: '0.95rem',
+        paddingLeft: 0,
+      
+        '& .MuiOutlinedInput-notchedOutline': {
+          border: 'none',
+        },
+        '& .MuiSelect-icon': {
+          color: '#000',
+          right: 12,
+        },
+        '& .MuiSelect-select': {
+          display: 'flex',
+          alignItems: 'center',
+          paddingLeft: 8,
+        }
+      }));
 
     const loadCountries = () => {
         setLoading(true);
@@ -256,18 +289,19 @@ function FormRightSide(props: any) {
     
 
     return (
-        <div className="flex-[1.7] flex flex-col mt-[8rem] items-start pl-[2.5rem] md:pl-0 pr-[2.5rem]">
+        <div className="flex-[1.7] flex flex-col items-start pl-[2.5rem] md:pl-0 pr-[2.5rem]">
              {uploadState.fileName && (
-                <div className={`w-[calc(100%-14rem)] ml-auto mt-5 mb-3 pt-5 flex flex-col items-center gap-4 justify-center cursor-pointer rounded-2xl`}>
+                <div className={`w-100 ml-auto mb-3 pt-5 flex flex-col items-center gap-4 justify-center cursor-pointer rounded-2xl`}>
                     {renderUploadStatus()}
                 </div>
             )}
             <div className="w-[100%]">
-                <div className="w-[100%] flex flex-col gap-[2rem] pb-[2rem]">
+                <div className="w-[100%] flex flex-col gap-[1rem] pb-[2rem]">
+                    <p className="text-start text-base pt-2 font-semibold leading-[1.5rem] text-custom-dark-222">Details</p>
                     <div className='bg-white p-3 rounded-sm shadow-sm'>
                         <div className="w-[100%] flex flex-col gap-[1rem] relative">
                             <div className="flex justify-between w-[100%]">
-                                <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                                <p className="text-sm font-medium text-custom-dark-222 leading-[1.7rem]">
                                     Description
                                 </p>
                                 
@@ -289,7 +323,7 @@ function FormRightSide(props: any) {
                                 {state?.description?.length || 0}/2200
                             </p>
                         </div>
-                        <div className="w-[100%] flex flex-col gap-1.5">
+                        <div className="w-[100%] flex flex-col gap-1.5 py-3">
                             <div className="w-full flex items-center justify-start gap-2.5 no-underline list-none h-[46px] cursor-pointer">
                                 <Tab
                                     onClick={() => setCoverTab('suggestion')}
@@ -298,7 +332,7 @@ function FormRightSide(props: any) {
                                             ? `${styles.coverTabSelected} text-[var(--primary-color)]`
                                             : ''
                                         } 
-                                        leading-[1.7rem] text-[1.125rem] font-medium
+                                        leading-[1.7rem] text-[0.875rem] font-medium
                                     `}
                                 >
                                     Suggestions
@@ -310,16 +344,16 @@ function FormRightSide(props: any) {
                                             ? `${styles.coverTabSelected} text-[var(--primary-color)]`
                                             : ''
                                         } 
-                                        leading-[1.7rem] text-[1.125rem] font-medium
+                                        leading-[1.7rem] text-[0.875rem] font-medium
                                     `}
                                 >
-                                    Upload cover
+                                    Cover
                                 </Tab>
                             </div>
                             {coverTab === 'suggestion' && (
                                 <>
                                     {videoThumbnails?.length > 0 ? (
-                                        <div className="flex  overflow-x-auto px-[10px] justify-start  rounded-[5px] bg-[var(--secondaty-color)] left-0 gap-[1px] h-[285px] pt-[10px] slider-container">
+                                        <div className="flex  overflow-x-auto px-[10px] justify-start  rounded-[5px] bg-[var(--secondaty-color)] left-0 gap-[1px] h-[285px] pt-[10px] w-100 slider-container">
                                             {videoThumbnails?.map((imageUrl: any, index: number) => (
                                                 <img
                                                     key={index}
@@ -369,7 +403,7 @@ function FormRightSide(props: any) {
                                 </div>
                             )}
                             {coverTab === 'custom' && customCover && (
-                                <div className="flex px-[10px] justify-start  rounded-[5px] bg-[var(--secondaty-color)] left-0 gap-[1px] h-[285px] pt-[10px] slider-container">
+                                <div className="flex px-[10px] justify-start  rounded-[5px]  left-0 gap-[1px] h-[285px] pt-[10px] w-100 slider-container">
                                     <div className="relative">
                                         <img
                                             className="ease-in-out duration-200 block h-[254px] w-[124px] pointer my-[auto] rounded-[5px]"
@@ -391,9 +425,9 @@ function FormRightSide(props: any) {
                                 </div>
                             )}
                         </div>
-                        <div className="w-[100%] flex flex-col gap-[1rem]">
+                        {/* <div className="w-[100%] flex flex-col pt-2">
                             <div className="flex justify-between w-[100%]">
-                                <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                                <p className="text-[0.875rem]  font-medium text-custom-dark-222 leading-[1.7rem]">
                                     Category
                                 </p>
                             </div>
@@ -447,9 +481,9 @@ function FormRightSide(props: any) {
                                 ) : null}
                             </div>
                         </div>
-                        <div className="max-w-[100%] flex flex-col gap-[1rem]">
+                        <div className="max-w-[100%] flex flex-col pt-2">
                             <div className="flex justify-between w-[100%]">
-                                <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                                <p className="text-[0.875rem] font-medium text-custom-dark-222 leading-[1.7rem]">
                                     Tag people
                                 </p>
                             </div>
@@ -473,13 +507,49 @@ function FormRightSide(props: any) {
                                 onClick={() => setTagUsersPopup(true)}
                                 placeholder="Tag people"
                             />
-                        </div>
-                        <div className="w-[100%] flex flex-col gap-[1rem]">
+                        </div> */}
+                        <div className="w-[100%] flex flex-col pt-2">
                             <div className="flex justify-between w-[100%]">
-                                <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
-                                    {/* {videoInfo ? 'Edit' : 'Add'} location */} Add Location
+                                <p className="text-[0.875rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                                    {/* {videoInfo ? 'Edit' : 'Add'} location */} Location
+                                    <Tooltip title="Set a time to publish later">
+                                    <IconButton size="small">
+                                    <svg className='ml-1' width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path opacity="0.989" d="M6.33905 0.511719C3.11961 0.511719 0.509888 3.12144 0.509888 6.34089C0.509888 9.56033 3.11961 12.1701 6.33905 12.1701C9.5585 12.1701 12.1682 9.56033 12.1682 6.34089C12.1682 3.12144 9.5585 0.511719 6.33905 0.511719ZM6.33905 1.67755C7.57585 1.67755 8.76198 2.16887 9.63653 3.04341C10.5111 3.91796 11.0024 5.10409 11.0024 6.34089C11.0024 7.57768 10.5111 8.76382 9.63653 9.63836C8.76198 10.5129 7.57585 11.0042 6.33905 11.0042C5.10226 11.0042 3.91612 10.5129 3.04158 9.63836C2.16704 8.76382 1.67572 7.57768 1.67572 6.34089C1.67572 5.10409 2.16704 3.91796 3.04158 3.04341C3.91612 2.16887 5.10226 1.67755 6.33905 1.67755ZM6.33905 3.4263C6.18446 3.4263 6.03619 3.48772 5.92687 3.59703C5.81755 3.70635 5.75614 3.85462 5.75614 4.00922C5.75614 4.16382 5.81755 4.31208 5.92687 4.4214C6.03619 4.53072 6.18446 4.59214 6.33905 4.59214C6.49365 4.59214 6.64192 4.53072 6.75124 4.4214C6.86056 4.31208 6.92197 4.16382 6.92197 4.00922C6.92197 3.85462 6.86056 3.70635 6.75124 3.59703C6.64192 3.48772 6.49365 3.4263 6.33905 3.4263ZM5.75614 5.17505C5.60154 5.17505 5.45327 5.23647 5.34395 5.34578C5.23464 5.4551 5.17322 5.60337 5.17322 5.75797C5.17322 6.03893 5.38249 6.24878 5.64655 6.30474L5.30088 7.98005C5.16564 8.65681 5.64946 9.25547 6.33847 9.25547H6.92139C7.07599 9.25547 7.22425 9.19406 7.33357 9.08474C7.44289 8.97542 7.50431 8.82715 7.50431 8.67255C7.50431 8.51795 7.44289 8.36969 7.33357 8.26037C7.22425 8.15105 7.07599 8.08964 6.92139 8.08964H6.46671L6.9039 5.86756C6.92146 5.78366 6.92004 5.6969 6.89973 5.61363C6.87942 5.53036 6.84075 5.45268 6.78654 5.38629C6.73233 5.3199 6.66396 5.26647 6.58643 5.22992C6.5089 5.19337 6.42418 5.17462 6.33847 5.17505H5.75614Z" fill="black" fill-opacity="0.34"/>
+                                        </svg>
+                                    </IconButton>
+                                    </Tooltip>
+
                                 </p>
                             </div>
+                            <FormControl sx={{ width: '18rem', marginBottom: '1rem'}}>
+                                <StyledSelect
+                                    defaultValue=""
+                                    displayEmpty
+                                    IconComponent={KeyboardArrowDownIcon}
+                                    sx={{paddingLeft: '0.75rem'}}
+                                    input={
+                                    <OutlinedInput
+                                        startAdornment={
+                                        <InputAdornment position="start">
+                                            <LocationIcon />
+                                        </InputAdornment>
+                                        }
+                                    />
+                                    }
+                                    renderValue={(selected) => {
+                                    return selected ? selected : <span style={{ color: '#999' }}>Search locations</span>;
+                                    }}
+                                >
+                                    <MenuItem value="new_york">New York</MenuItem>
+                                    <MenuItem value="los_angeles">Los Angeles</MenuItem>
+                                    <MenuItem value="chicago">Chicago</MenuItem>
+                                </StyledSelect>
+                            </FormControl>
+                            <Stack direction="row" spacing={2}>
+                                <Chip label="Lahore Fort" sx={{ borderRadius: "8px", fontWeight: 500 }}  variant="outlined" />
+                            </Stack>
+{/*                             
                             <BasicInput
                                 value={selectedLocation}
                                 onClick={() => setPostLocationsPopup(true)}
@@ -491,14 +561,94 @@ function FormRightSide(props: any) {
                                         className={`cursor-pointer transition-all duration-200 transform -rotate-90`}
                                     />
                                 }
-                            />
+                            /> */}
                         </div>
-                        
                     </div>
-                    <div className='bg-white p-3 rounded-sm shadow-sm'>
-                        <div className="w-[100%] flex flex-col gap-[1rem]">
+
+                    <p className="text-start text-base pt-2 font-semibold leading-[1.5rem] text-custom-dark-222">Settings</p>
+
+                    <div className='bg-white p-3 rounded-md shadow-sm'>
+                        <div className='text-left mb-2'>
+                        <FormControl>
+                                <p className="text-sm font-medium text-custom-dark-222 leading-[1.7rem]">
+                                    When to post
+                                </p>
+                            <RadioGroup row defaultValue="now" name="when-to-post">
+                            <FormControlLabel
+                                value="now"
+                                control={
+                                <Radio
+                                    sx={{
+                                    color: '#FF2C55',
+                                    '&.Mui-checked': {
+                                        color: '#FF2C55',
+                                    },
+                                    }}
+                                />
+                                }
+                                label="Now"
+                            />
+                            <FormControlLabel
+                                value="schedule"
+                                control={
+                                <Radio
+                                    sx={{
+                                    color: '#ccc',
+                                    '&.Mui-checked': {
+                                        color: '#FF2C55',
+                                    },
+                                    }}
+                                />
+                                }
+                                label={
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                    Schedule
+                                    <Tooltip title="Set a time to publish later">
+                                        <IconButton size="small">
+                                            <svg className='ml-1' width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path opacity="0.989" d="M6.33905 0.511719C3.11961 0.511719 0.509888 3.12144 0.509888 6.34089C0.509888 9.56033 3.11961 12.1701 6.33905 12.1701C9.5585 12.1701 12.1682 9.56033 12.1682 6.34089C12.1682 3.12144 9.5585 0.511719 6.33905 0.511719ZM6.33905 1.67755C7.57585 1.67755 8.76198 2.16887 9.63653 3.04341C10.5111 3.91796 11.0024 5.10409 11.0024 6.34089C11.0024 7.57768 10.5111 8.76382 9.63653 9.63836C8.76198 10.5129 7.57585 11.0042 6.33905 11.0042C5.10226 11.0042 3.91612 10.5129 3.04158 9.63836C2.16704 8.76382 1.67572 7.57768 1.67572 6.34089C1.67572 5.10409 2.16704 3.91796 3.04158 3.04341C3.91612 2.16887 5.10226 1.67755 6.33905 1.67755ZM6.33905 3.4263C6.18446 3.4263 6.03619 3.48772 5.92687 3.59703C5.81755 3.70635 5.75614 3.85462 5.75614 4.00922C5.75614 4.16382 5.81755 4.31208 5.92687 4.4214C6.03619 4.53072 6.18446 4.59214 6.33905 4.59214C6.49365 4.59214 6.64192 4.53072 6.75124 4.4214C6.86056 4.31208 6.92197 4.16382 6.92197 4.00922C6.92197 3.85462 6.86056 3.70635 6.75124 3.59703C6.64192 3.48772 6.49365 3.4263 6.33905 3.4263ZM5.75614 5.17505C5.60154 5.17505 5.45327 5.23647 5.34395 5.34578C5.23464 5.4551 5.17322 5.60337 5.17322 5.75797C5.17322 6.03893 5.38249 6.24878 5.64655 6.30474L5.30088 7.98005C5.16564 8.65681 5.64946 9.25547 6.33847 9.25547H6.92139C7.07599 9.25547 7.22425 9.19406 7.33357 9.08474C7.44289 8.97542 7.50431 8.82715 7.50431 8.67255C7.50431 8.51795 7.44289 8.36969 7.33357 8.26037C7.22425 8.15105 7.07599 8.08964 6.92139 8.08964H6.46671L6.9039 5.86756C6.92146 5.78366 6.92004 5.6969 6.89973 5.61363C6.87942 5.53036 6.84075 5.45268 6.78654 5.38629C6.73233 5.3199 6.66396 5.26647 6.58643 5.22992C6.5089 5.19337 6.42418 5.17462 6.33847 5.17505H5.75614Z" fill="black" fill-opacity="0.34"/>
+                                            </svg>
+                                        </IconButton>
+                                    </Tooltip>
+                                </Box>
+                                }
+                            />
+                            </RadioGroup>
+                        </FormControl>
+
+                        </div>
+                        <div className='text-left mb-2'>
+                        <FormControl fullWidth>
+                                <p className="text-sm font-medium pb-2 text-custom-dark-222 leading-[1.7rem]">
+                                Who can watch this video
+                                </p>
+                            <Select
+                            defaultValue="everyone"
+                            IconComponent={KeyboardArrowDownIcon}
+                            sx={{
+                                width: '15rem',
+                                backgroundColor: '#f3f3f3',
+                                borderRadius: 2,
+                                height: 48,
+                                boxShadow: 'none',
+                                '.MuiOutlinedInput-notchedOutline': {
+                                  border: 'none',
+                                },
+                                '.MuiSelect-icon': {
+                                color: '#000',
+                                right: 12,
+                                },
+                            }}
+                            >
+                            <MenuItem value="everyone">Everyone</MenuItem>
+                            <MenuItem value="followers">Followers</MenuItem>
+                            <MenuItem value="private">Only Me</MenuItem>
+                            </Select>
+                        </FormControl>
+                        </div>
+                        <div className="w-[100%] flex flex-col gap-[0.5rem]">
                             <div className="flex justify-between w-[100%]">
-                                <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                                <p className="text-sm font-medium text-custom-dark-222 leading-[1.7rem]">
                                     Allow users to:
                                 </p>
                             </div>
@@ -510,7 +660,7 @@ function FormRightSide(props: any) {
                                         }
                                         checked={state?.replyOnComment || true}
                                     />
-                                    <p className="text-[1rem] font-medium text-custom-dark-222 leading-[1.1rem]">
+                                    <p className="text-xs font-medium text-custom-dark-222 leading-[1.1rem]">
                                         Comment
                                     </p>
                                 </div>
@@ -521,7 +671,7 @@ function FormRightSide(props: any) {
                                         }
                                         checked={state?.allowDuet || true}
                                     />
-                                    <p className="text-[1rem] font-medium text-custom-dark-222 leading-[1.1rem]">
+                                    <p className="text-xs font-medium text-custom-dark-222 leading-[1.1rem]">
                                         Duet
                                     </p>
                                 </div>
@@ -538,8 +688,8 @@ function FormRightSide(props: any) {
                                 </div> */}
                             </div>
                         </div>
-                        <div className="flex justify-start items-center gap-[1rem]">
-                            <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                        <div className="flex justify-start items-center pt-3 gap-[1.5rem]">
+                            <p className="text-[13px] font-medium text-custom-dark-222 leading-[1.7rem]">
                                 Save video to device
                             </p>
                             <BasicSwitch
@@ -547,8 +697,8 @@ function FormRightSide(props: any) {
                                 onChange={(e: any) => updateState('saveToPhone', e?.target?.checked)}
                             />
                         </div>
-                        <div className="flex justify-start items-center gap-[1rem]">
-                            <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                        <div className="flex justify-start items-center pt-3 gap-[1.5rem]">
+                            <p className="text-[13px] font-medium text-custom-dark-222 leading-[1.7rem]">
                                 Private Video
                             </p>
                             <BasicSwitch
@@ -557,8 +707,8 @@ function FormRightSide(props: any) {
                             />
                         </div>
                         <div className="flex flex-col items-start justify-between">
-                            <div className="flex justify-start items-center gap-[1rem]">
-                                <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
+                            <div className="flex justify-start items-center pt-3 gap-[1.5rem]">
+                                <p className="text-[13px] font-medium text-custom-dark-222 leading-[1.7rem]">
                                     Video downloads
                                 </p>
                                 <BasicSwitch
@@ -568,12 +718,44 @@ function FormRightSide(props: any) {
                                     }
                                 />
                             </div>
-                            <p className="text-[1rem] font-medium text-custom-color-999 leading-[1.1rem] text-start">
+                            <p className="text-xs text-custom-color-999 leading-[1.1rem] text-start">
                                 Allow other people to download your videos and share to other platforms.
                                 If this setting is off, a link to your video can still be shared.
                             </p>
                         </div>
                     </div>
+
+
+                    <p className="text-start text-base pt-2 font-semibold leading-[1.5rem] text-custom-dark-222">Checks</p>
+
+                    <div className='bg-white p-3 rounded-md shadow-sm'>                        
+                        <div className="flex flex-col items-start justify-between">
+                            <div className="flex justify-start items-center gap-[1rem]">
+                                <p className="text-xs font-medium flex text-custom-dark-222 leading-[1.7rem]">
+                                        Run a copyright check 
+                                        <svg className='ml-1' width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path opacity="0.989" d="M6.33905 0.511719C3.11961 0.511719 0.509888 3.12144 0.509888 6.34089C0.509888 9.56033 3.11961 12.1701 6.33905 12.1701C9.5585 12.1701 12.1682 9.56033 12.1682 6.34089C12.1682 3.12144 9.5585 0.511719 6.33905 0.511719ZM6.33905 1.67755C7.57585 1.67755 8.76198 2.16887 9.63653 3.04341C10.5111 3.91796 11.0024 5.10409 11.0024 6.34089C11.0024 7.57768 10.5111 8.76382 9.63653 9.63836C8.76198 10.5129 7.57585 11.0042 6.33905 11.0042C5.10226 11.0042 3.91612 10.5129 3.04158 9.63836C2.16704 8.76382 1.67572 7.57768 1.67572 6.34089C1.67572 5.10409 2.16704 3.91796 3.04158 3.04341C3.91612 2.16887 5.10226 1.67755 6.33905 1.67755ZM6.33905 3.4263C6.18446 3.4263 6.03619 3.48772 5.92687 3.59703C5.81755 3.70635 5.75614 3.85462 5.75614 4.00922C5.75614 4.16382 5.81755 4.31208 5.92687 4.4214C6.03619 4.53072 6.18446 4.59214 6.33905 4.59214C6.49365 4.59214 6.64192 4.53072 6.75124 4.4214C6.86056 4.31208 6.92197 4.16382 6.92197 4.00922C6.92197 3.85462 6.86056 3.70635 6.75124 3.59703C6.64192 3.48772 6.49365 3.4263 6.33905 3.4263ZM5.75614 5.17505C5.60154 5.17505 5.45327 5.23647 5.34395 5.34578C5.23464 5.4551 5.17322 5.60337 5.17322 5.75797C5.17322 6.03893 5.38249 6.24878 5.64655 6.30474L5.30088 7.98005C5.16564 8.65681 5.64946 9.25547 6.33847 9.25547H6.92139C7.07599 9.25547 7.22425 9.19406 7.33357 9.08474C7.44289 8.97542 7.50431 8.82715 7.50431 8.67255C7.50431 8.51795 7.44289 8.36969 7.33357 8.26037C7.22425 8.15105 7.07599 8.08964 6.92139 8.08964H6.46671L6.9039 5.86756C6.92146 5.78366 6.92004 5.6969 6.89973 5.61363C6.87942 5.53036 6.84075 5.45268 6.78654 5.38629C6.73233 5.3199 6.66396 5.26647 6.58643 5.22992C6.5089 5.19337 6.42418 5.17462 6.33847 5.17505H5.75614Z" fill="black" fill-opacity="0.34"/>
+                                        </svg>
+                                </p>
+                                <BasicSwitch
+                                    checked={state?.allowDownload || false}
+                                    onChange={(e: any) =>
+                                        updateState('allowDownload', e?.target?.checked)
+                                    }
+                                />
+                            </div>
+                            <div className='p-2 mt-2 rounded-sm bg-[#0000000D] text-xs'>
+                                 Copyright check will begin your video is uploaded.
+                            </div>
+                            <div className='p-2 mt-2 rounded-sm bg-[#E1FBF3] flex text-xs'>
+                                 No issue detected <svg className='pl-1' width="13" height="9" viewBox="0 0 13 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M1.11768 4.41146L4.45101 7.74479L11.1177 1.07812" stroke="#1B959D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+
+                            </div>
+                        </div>
+                    </div>
+
                     {/* <div className="flex justify-start items-center gap-[1rem]">
                         <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
                             Allow Others to Add to Story
@@ -584,22 +766,38 @@ function FormRightSide(props: any) {
                         />
                     </div> */}
                     <div className="flex gap-[1rem]">
-                        <CustomButton
-                            width="169px !important"
-                            textSize="16px "
-                            islight
-                            text="Discard"
-                            height="48px !important"
-                            onClick={() => setDiscardPostPopup(true)}
-                        />
-                        <CustomButton
+                    <CustomButton
+                            rounded="16px"
                             textSize="16px "
                             width="169px !important"
-                            height="48px !important"
+                            height="40px !important"
                             text="Post" //{videoInfo ? 'Update' : 'Post'}
                             onClick={SubmitHandler}
                             loading={isPosting}
                         />
+                        <CustomButton
+                            width="169px !important"
+                            textSize="16px "
+                            islight
+                            backgroundColor='#0000000D'
+                            border='0'
+                            color="black"
+                            text="Save draft"
+                            height="40px !important"
+                            onClick={() => setDiscardPostPopup(true)}
+                        />
+                        <CustomButton
+                            width="100px !important"
+                            textSize="16px "
+                            islight
+                            backgroundColor='#0000000D'
+                            border='0'
+                            color="black"
+                            text="Discard"
+                            height="40px !important"
+                            onClick={() => setDiscardPostPopup(true)}
+                        />
+                        
                     </div>
                 </div>
             </div>

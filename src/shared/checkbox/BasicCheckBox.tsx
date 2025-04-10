@@ -11,6 +11,7 @@ function BasicCheckBox({ ...restProps }) {
             borderRadius: '4px !important',
         },
         '& svg': {
+            fontSize: '1.25rem',
             color: 'rgb(255, 59, 92)',
         },
     }));
