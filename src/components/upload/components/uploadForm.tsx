@@ -14,6 +14,8 @@ function UploadForm(props: any) {
         // updateMediaHandler,
         isPosting,
         // videoInfo,
+        uploadState,
+        onCancelUpload,
     } = props;
     const [darkTheme, setdarkTheme] = useState('');
     const [lightTheme, setlightTheme] = useState('bg-custom-light');
@@ -41,6 +43,9 @@ function UploadForm(props: any) {
                 SubmitHandler={SubmitHandler}
                 // updateMediaHandler={updateMediaHandler}
                 isPosting={isPosting}
+                uploadState={uploadState}
+                onCancelUpload={onCancelUpload}
+                onReplaceFile={selectFilesHandler}
             />
             <FormLeftSide
                 // videoInfo={videoInfo}
