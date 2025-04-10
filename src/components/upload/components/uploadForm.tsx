@@ -117,7 +117,7 @@ function UploadForm(props: any) {
     return (
         <>
             {uploadState.fileName && (
-                <div className={`w-[calc(100%-14rem)]  ml-auto mb-3 p-20 flex flex-col items-center gap-4 justify-center cursor-pointer rounded-2xl`}>
+                <div className={`w-[calc(100%-14rem)]  ml-auto mb-3 mt-5 pt-5 px-3 flex flex-col items-center gap-4 justify-center cursor-pointer rounded-2xl`}>
                     {renderUploadStatus()}
                 </div>
             )}

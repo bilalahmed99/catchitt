@@ -311,8 +311,7 @@ function FormRightSide(props: any) {
                                             };
                                             reader.readAsDataURL(file);
                                         }}
-                                        crop
-                                        subtitle="Suported formats: JPG, JPEG, PNG, WEBP"
+                                        crop subtitle="Suported formats: JPG, JPEG, PNG, WEBP"
                                     />
                                 </div>
                             )}
@@ -572,7 +571,7 @@ function FormRightSide(props: any) {
                                         onChange={(e: any) =>
                                             updateState('replyOnComment', e?.target?.checked)
                                         }
-                                        checked={state?.replyOnComment || true}
+                                        checked={state?.replyOnComment || false}
                                     />
                                     <p className="text-xs font-medium text-custom-dark-222 leading-[1.1rem]">
                                         Comment
@@ -583,7 +582,7 @@ function FormRightSide(props: any) {
                                         onChange={(e: any) =>
                                             updateState('allowDuet', e?.target?.checked)
                                         }
-                                        checked={state?.allowDuet || true}
+                                        checked={state?.allowDuet || false}
                                     />
                                     <p className="text-xs font-medium text-custom-dark-222 leading-[1.1rem]">
                                         Duet
