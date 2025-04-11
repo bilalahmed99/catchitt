@@ -76,7 +76,7 @@ function UploadPage() {
     // }, []);
 
     useEffect(() => {
-        console.log("Updated upload state:", uploadState);
+        // console.log("Updated upload state:", uploadState);
     }, [uploadState]);
 
      // Handle file selection from UploadFile component

@@ -1,5 +1,5 @@
 import { Box, Chip, CircularProgress, FormControl, FormControlLabel, FormLabel, IconButton, InputAdornment, MenuItem, OutlinedInput, Radio, RadioGroup, Select, Stack, styled, SvgIcon, Tooltip, SelectChangeEvent } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState,useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { defaultAvatar, downArrow, search } from '../../../icons';
 import CustomButton from '../../../shared/buttons/CustomButton';
@@ -25,6 +25,8 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import RoomOutlinedIcon from '@mui/icons-material/RoomOutlined';
 
+import { copyLinkHandler, facebookShareHandler, getCaretCoordinates, searchUserToAnnotate, shareToLinkedIn, shareToTwitter, whatsappShareHandler } from '../../../utils/helpers';
+
 
 function FormRightSide(props: any) {
     const {
@@ -48,13 +50,14 @@ function FormRightSide(props: any) {
     const [selectedLocation, setSelectedLocation] = useState('');
     const [taggedUsers, setTaggedUser] = useState<any[]>([]);
     const [customCover, setCustomCover] = useState<string | null>(null);
-
-    // const fileName = "855289-hd_1920_1080_25fps.mp4";
-    // const uploaded = 351.98; // in KB
-    // const total = 8.79; // in MB
-    // const duration = "0m16s";
-    // const timeLeft = "25 seconds left";
-    // const percentage = 3.91;
+    const [isMentioning, setIsMentioning] = useState<boolean>(false);
+    const [filteredUsers, setFilteredUsers] = useState<any>([]);
+    const abortController = useRef<AbortController | null>(null);
+    const [comment, setComment] = useState('');
+    const [isFetchingUsers, setIsFetchingUsers] = useState(false);
+    const [mentionIndex, setMentionIndex] = useState(0);
+    const inputRef = useRef<any>(null);
+    const popupRef = useRef<any>(null);
 
     const dispatch = useDispatch();
 
@@ -96,6 +99,41 @@ function FormRightSide(props: any) {
         const newTime = event.target.value;
         setTime(newTime);
     };
+
+     useEffect(() => {
+            if (isMentioning) {
+                // Filter users based on the current input
+                const query = comment.slice(comment.lastIndexOf('@') + 1).toLowerCase();
+                if (query.length) setIsFetchingUsers(true);
+                if (query.length > 2) {
+                    if (abortController.current) abortController.current.abort();
+                    const controller = new AbortController();
+                    abortController.current = controller;
+                    // const filtered = dummyUsers.filter((user) =>
+                    //     user.username.toLowerCase().includes(query)
+                    // );
+                    // setFilteredUsers(filtered.slice(0, 5)); // Limit to 5 users
+                    (async ()=>{
+                        const searchResultArr = await searchUserToAnnotate(query, controller.signal);
+                        console.log(searchResultArr);
+                        if (!Array.isArray(searchResultArr)) return;
+                        console.log('searchResultArr')
+                        console.log(searchResultArr)
+                        setFilteredUsers(searchResultArr);
+                        setIsFetchingUsers(false);
+                    })()
+                } else {
+                    setFilteredUsers([]);
+                }
+            } else {
+                setFilteredUsers([]);
+                setMentionIndex(0);
+            }
+            
+            return () => {
+                if (abortController.current) abortController.current.abort();
+            }
+        }, [comment, isMentioning]);
 
     const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newDate = event.target.value;
@@ -196,10 +234,38 @@ function FormRightSide(props: any) {
     };
 
     const handleDescriptionChange = (e: any) => {
+        const inputValue = e.target.value;
+        setComment(inputValue);
+
+        const mentionTrigger = inputValue.match(/@(\w*)$/);
+        if (mentionTrigger && mentionTrigger[1].length > 0) {
+            setIsMentioning(true);
+        } else {
+            setIsMentioning(false);
+        }
+
         if (e.target.value.length <= 2200) {
             updateState('description', e.target.value);
         }
     }
+
+    const handleUserSelect = (user: { username: any }) => {
+        setComment((prevComment) => {
+            const lastMentionStart = prevComment.lastIndexOf('@');
+            const newComment = `${prevComment.slice(0, lastMentionStart)}@${user.username} `;
+            return newComment;
+        });
+        setIsMentioning(false);
+    };
+
+
+    useUpdateEffect(() => {
+            if (!isMentioning) return;
+            const positionObj = getCaretCoordinates(inputRef.current, inputRef.current.selectionStart, inputRef.current.parentNode);
+            popupRef.current.style.left = `${positionObj?.left ?? 0 + window.scrollX}px`;
+        }, [isMentioning])
+
+   
 
     const filterCountries = (e: any) => {
         const filteredCountriesArr = countries.filter((country: any) => {
@@ -264,10 +330,65 @@ function FormRightSide(props: any) {
                                 }
                                 onChange={handleDescriptionChange}
                             /> */}
-                            <textarea value={state?.description || ''} onChange={handleDescriptionChange} id="message" name="message" className="w-full  rounded bg-[#0000000D] focus:border-white focus:ring-1 focus:ring-white h-32 text-base outline-none py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" />
+                            <textarea ref={inputRef} value={state?.description || ''} onChange={handleDescriptionChange} id="message" name="message" className="w-full  rounded bg-[#0000000D] focus:border-white focus:ring-1 focus:ring-white h-32 text-base outline-none py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" />
                             <p className="text-gray-500 text-sm leading-[1.5rem] text-[1rem] font-normal absolute left-4 bottom-1">
                                 #hashtag @Mention
                             </p>
+
+                            {isMentioning && (
+                                <div
+                                    ref={popupRef}
+                                    className="absolute bottom-[4.39rem] left-10 bg-black border rounded-lg shadow-lg w-max z-10 max-h-80 overflow-y-auto "
+                                >
+                                    {filteredUsers.length > 0 ? (
+                                        filteredUsers.map(
+                                            (
+                                                user: {
+                                                    id?: any;
+                                                    avatar?: any;
+                                                    name?: any;
+                                                    username: any;
+                                                },
+                                                index: number
+                                            ) => (
+                                                <div
+                                                    key={user.id}
+                                                    className={`flex flex-row justify-start items-center cursor-pointer px-2 pt-2 hover:bg-gray-800 gap-3 border-b border-gray-100 pb-2 ${index === mentionIndex
+                                                        ? 'bg-gray-700'
+                                                        : ''
+                                                        } ${index === 0 ? 'rounded-t-lg' : ''} ${filteredUsers.length - 1 === index
+                                                            ? 'rounded-b-lg'
+                                                            : ''
+                                                        }`}
+                                                    onClick={() => handleUserSelect(user)}
+                                                >
+                                                    <img
+                                                        className="object-contain w-10 h-10 rounded-full"
+                                                        src={user.avatar||defaultAvatar}
+                                                        onError={(e) => {
+                                                            (e.target as HTMLImageElement).onerror = null;  // Prevent looping in case defaultAvatar fails
+                                                            (e.target as HTMLImageElement).src = defaultAvatar;  // Set default image if there's an error
+                                                        }}
+                                                    />
+                                                    <div className="text-left text-white">
+                                                        <p className="text-base font-medium">
+                                                            {user.name}
+                                                        </p>
+                                                        <p className="text-xs font-normal">
+                                                            {user.username}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            )
+                                        )
+                                    ) : (
+                                        <div className="px-4 py-2 text-white min-w-32 text-center">
+                                            {isFetchingUsers? <CircularProgress style={{width:'20px',height:'20px',padding:'0px',marginBottom:'-4px'}}/>:'No users found'} 
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                            
                             <p className="text-[1rem] text-sm text-custom-color-999 leading-[1.1rem] absolute right-4 bottom-1">
                                 {state?.description?.length || 0}/2200
                             </p>
