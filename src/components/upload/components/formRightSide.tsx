@@ -569,12 +569,12 @@ function FormRightSide(props: any) {
       </div>
     ) : (
       <div className="w-full h-full flex items-center justify-start border-2 border-dashed border-gray-300 rounded-lg px-4">
-        <button
+        {/* <button
           onClick={() => setThumbnailModalOpen(true)}
           className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
         >
           Add Thumbnail
-        </button>
+        </button> */}
       </div>
     )}
 
