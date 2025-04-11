@@ -25,7 +25,13 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import RoomOutlinedIcon from '@mui/icons-material/RoomOutlined';
 
+import CheckIcon from '@mui/icons-material/Check';
 
+const options = [
+  { label: 'Everyone', value: 'everyone' },
+  { label: 'Followers', value: 'followers' },
+  { label: 'Only Me', value: 'onlyme' },
+];
 function FormRightSide(props: any) {
     const {
         uploadState,
@@ -566,33 +572,48 @@ function FormRightSide(props: any) {
                         </div>
                         <div className='text-left mb-2'>
                         <FormControl fullWidth>
-                                <p className="text-sm font-medium pb-2 text-custom-dark-222 leading-[1.7rem]">
+                            <p className="text-sm font-medium pb-2 text-custom-dark-222 leading-[1.7rem]">
                                 Who can watch this video
-                                </p>
+                            </p>
                             <Select
-                            value={canView}
-                            onChange={(event) => handleCanViewChange(event)}
-                            IconComponent={KeyboardArrowDownIcon}
-                            sx={{
-                                width: '15rem',
-                                backgroundColor: '#f3f3f3',
-                                borderRadius: 2,
-                                height: 48,
-                                boxShadow: 'none',
-                                '.MuiOutlinedInput-notchedOutline': {
-                                  border: 'none',
-                                },
-                                '.MuiSelect-icon': {
-                                color: '#000',
-                                right: 12,
-                                },
-                            }}
-                            >
-                            <MenuItem value="everyone">Everyone</MenuItem>
-                            <MenuItem value="followers">Followers</MenuItem>
-                            <MenuItem value="onlyme">Only Me</MenuItem>
-                            </Select>
-                        </FormControl>
+                                    value={canView}
+                                    onChange={handleCanViewChange}
+                                    IconComponent={KeyboardArrowDownIcon}
+                                    renderValue={(selected) => {
+                                    const selectedOption = options.find(opt => opt.value === selected);
+                                    return selectedOption?.label || '';
+                                    }}
+                                    sx={{
+                                    width: '15rem',
+                                    backgroundColor: '#f3f3f3',
+                                    borderRadius: 2,
+                                    height: 48,
+                                    boxShadow: 'none',
+                                    '.MuiOutlinedInput-notchedOutline': {
+                                        border: 'none',
+                                    },
+                                    '.MuiSelect-icon': {
+                                        color: '#000',
+                                        right: 12,
+                                    },
+                                    }}
+                                >
+                                    {options.map((option) => (
+                                    <MenuItem
+                                        key={option.value}
+                                        value={option.value}
+                                        sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        }}
+                                    >
+                                        <span>{option.label}</span>
+                                        {canView === option.value && <CheckIcon fontSize="small" />}
+                                    </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </div>
                         <div className="w-[100%] flex flex-col gap-[0.5rem]">
                             <div className="flex justify-between w-[100%]">
@@ -630,7 +651,7 @@ function FormRightSide(props: any) {
                                         }
                                         checked={state?.allowStitch || false}
                                     />
-                                    <p className="text-[1rem] font-medium text-custom-dark-222 leading-[1.1rem]">
+                                    <p className="text-xs font-medium text-custom-dark-222 leading-[1.1rem]">
                                         Stitch
                                     </p>
                                 </div>
