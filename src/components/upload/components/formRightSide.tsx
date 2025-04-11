@@ -1,4 +1,4 @@
-import { Box, Chip, CircularProgress, FormControl, FormControlLabel, FormLabel, IconButton, InputAdornment, MenuItem, OutlinedInput, Radio, RadioGroup, Select, Stack, styled, SvgIcon, Tooltip, SelectChangeEvent } from '@mui/material';
+import { Box, Chip, CircularProgress, FormControl, FormControlLabel, FormLabel, IconButton, InputAdornment, MenuItem, OutlinedInput, Radio, RadioGroup, Select, Stack, styled, SvgIcon, Tooltip, SelectChangeEvent, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import { useEffect, useMemo, useState,useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { defaultAvatar, downArrow, search } from '../../../icons';
@@ -27,9 +27,15 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import RoomOutlinedIcon from '@mui/icons-material/RoomOutlined';
 
+import CheckIcon from '@mui/icons-material/Check';
 import { copyLinkHandler, facebookShareHandler, getCaretCoordinates, searchUserToAnnotate, shareToLinkedIn, shareToTwitter, whatsappShareHandler } from '../../../utils/helpers';
 
 
+const options = [
+  { label: 'Everyone', value: 'everyone' },
+  { label: 'Followers', value: 'followers' },
+  { label: 'Only Me', value: 'onlyme' },
+];
 function FormRightSide(props: any) {
     const {
         uploadState,
@@ -154,16 +160,37 @@ function FormRightSide(props: any) {
     const token = localStorage.getItem('token');
     const [coverTab, setCoverTab] = useState<string>('suggestion');
 
-    const [postTimeOption, setPostTimeOption] = useState<string | undefined>(); // "now" or "schedule"
-    const [time, setTime] = useState("00:00");
-    const [date, setDate] = useState("");
+    
     const [canView, setCanView] = useState("everyone");
     // updateState('canView', "everyone");
-
-
-    const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newTime = event.target.value;
-        setTime(newTime);
+    const [postTimeOption, setPostTimeOption] = useState('now');
+    const [showSchedule, setShowSchedule] = useState(false);
+    const [permissionDialogOpen, setPermissionDialogOpen] = useState(false);
+    const [time, setTime] = useState('');
+    const [date, setDate] = useState('');
+  
+    const handleTimeChange = (e) => setTime(e.target.value);
+    const handleDateChange = (e) => setDate(e.target.value);
+  
+    const handleChange = (e) => {
+      const value = e.target.value;
+      setPostTimeOption(value);
+  
+      if (value === 'schedule') {
+        setPermissionDialogOpen(true); // Ask for permission
+      } else {
+        setShowSchedule(false); // Hide schedule section if "Now" is selected
+      }
+    };
+  
+    const handleAllowSchedule = () => {
+      setShowSchedule(true);
+      setPermissionDialogOpen(false);
+    };
+  
+    const handleDenySchedule = () => {
+      setPostTimeOption('now'); // Revert selection
+      setPermissionDialogOpen(false);
     };
 
      useEffect(() => {
@@ -201,10 +228,10 @@ function FormRightSide(props: any) {
             }
         }, [comment, isMentioning]);
 
-    const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newDate = event.target.value;
-        setDate(newDate);
-    };
+    // const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     const newDate = event.target.value;
+    //     setDate(newDate);
+    // };
 
     useEffect(() => {
         if (postTimeOption === "schedule" && date && time) {
@@ -381,7 +408,9 @@ function FormRightSide(props: any) {
             <div className="w-[100%]">
                 <div className="w-[100%] flex flex-col gap-[1rem] pb-[2rem]">
                     <p className="text-start text-base pt-2 font-semibold leading-[1.5rem] text-custom-dark-222">Details</p>
-                    <div className='bg-white p-3 rounded-sm shadow-sm'>
+                    <div className='bg-white p-3 rounded-sm shadow-sm position-relative'>
+                        <div className=''>
+                            
                         <div className="w-[100%] flex flex-col gap-[1rem] relative">
                             <div className="flex justify-between w-[100%]">
                                 <p className="text-sm font-medium text-custom-dark-222 leading-[1.7rem]">
@@ -403,10 +432,16 @@ function FormRightSide(props: any) {
                                 #hashtag @Mention
                             </p>
 
-                            {isMentioning && (
+                            
+                            
+                            <p className="text-[1rem] text-sm text-custom-color-999 leading-[1.1rem] absolute right-4 bottom-1">
+                                {state?.description?.length || 0}/2200
+                            </p>
+                        </div>
+                        {isMentioning && (
                                 <div
                                     ref={popupRef}
-                                    className="absolute bottom-[4.39rem] left-10 bg-black border rounded-lg shadow-lg w-max z-10 max-h-80 overflow-y-auto "
+                                    className="absolute w-[96%] bottom-[12.25rem]  !left-[2%] bg-white border rounded-lg shadow-lg  z-10 min-h-40 max-h-80 overflow-y-auto "
                                 >
                                     {filteredUsers.length > 0 ? (
                                         filteredUsers.map(
@@ -421,8 +456,8 @@ function FormRightSide(props: any) {
                                             ) => (
                                                 <div
                                                     key={user.id}
-                                                    className={`flex flex-row justify-start items-center cursor-pointer px-2 pt-2 hover:bg-gray-800 gap-3 border-b border-gray-100 pb-2 ${index === mentionIndex
-                                                        ? 'bg-gray-700'
+                                                    className={`flex flex-row justify-start items-center cursor-pointer px-2 pt-2 hover:bg-gray-200 gap-3 border-b border-gray-100 pb-2 ${index === mentionIndex
+                                                        ? 'bg-gray-300'
                                                         : ''
                                                         } ${index === 0 ? 'rounded-t-lg' : ''} ${filteredUsers.length - 1 === index
                                                             ? 'rounded-b-lg'
@@ -438,7 +473,7 @@ function FormRightSide(props: any) {
                                                             (e.target as HTMLImageElement).src = defaultAvatar;  // Set default image if there's an error
                                                         }}
                                                     />
-                                                    <div className="text-left text-white">
+                                                    <div className="text-left text-black">
                                                         <p className="text-base font-medium">
                                                             {user.name}
                                                         </p>
@@ -456,10 +491,6 @@ function FormRightSide(props: any) {
                                     )}
                                 </div>
                             )}
-                            
-                            <p className="text-[1rem] text-sm text-custom-color-999 leading-[1.1rem] absolute right-4 bottom-1">
-                                {state?.description?.length || 0}/2200
-                            </p>
                         </div>
                         <div className="w-[100%] flex flex-col gap-1.5 py-3">
                             {/* <div className="w-full flex items-center justify-start gap-2.5 no-underline list-none h-[46px] cursor-pointer">
@@ -585,7 +616,7 @@ function FormRightSide(props: any) {
                                 </div>
                             )}
                         </div>
-                        <div className="w-[100%] flex flex-col pt-2">
+                        {/* <div className="w-[100%] flex flex-col pt-2">
                             <div className="flex justify-between w-[100%]">
                                 <p className="text-[0.875rem]  font-medium text-custom-dark-222 leading-[1.7rem]">
                                     Category
@@ -667,7 +698,7 @@ function FormRightSide(props: any) {
                                 onClick={() => setTagUsersPopup(true)}
                                 placeholder="Tag people"
                             />
-                        </div>
+                        </div> */}
                         <div className="w-[100%] flex flex-col pt-2">
                             <div className="flex justify-between w-[100%]">
                                 <p className="text-[0.875rem] font-medium text-custom-dark-222 leading-[1.7rem]">
@@ -728,7 +759,7 @@ function FormRightSide(props: any) {
                     <p className="text-start text-base pt-2 font-semibold leading-[1.5rem] text-custom-dark-222">Settings</p>
 
                     <div className='bg-white p-3 rounded-md shadow-sm'>
-                        <div className='text-left mb-2'>
+                    <div className="text-left mb-2">
                         <FormControl>
                                 <p className="text-sm font-medium text-custom-dark-222 leading-[1.7rem]">
                                     When to post
@@ -761,52 +792,88 @@ function FormRightSide(props: any) {
                                 </RadioGroup>
 
                         </FormControl>
-                        {postTimeOption === "schedule" && (
-                            <>
-                        <input
-                            type="time"
-                            value={time}
-                            onChange={handleTimeChange}
-                            className={`w-full p-2  h-10 border border-gray-300 rounded-sm mt-2 cursor-pointer hover:border-gray-400`}
-                        />
-                         <input
-                            type="date"
-                            value={date}
-                            onChange={handleDateChange}
-                            className={`w-full p-2  h-10 border border-gray-300 rounded-sm mt-2 cursor-pointer hover:border-gray-400`}
-                        />
-                        </>
-                    )}
+
+                        {/* Schedule Section */}
+                        {showSchedule && (
+                            <div className='flex gap-2'>
+                            <input
+                                type="time"
+                                value={time}
+                                onChange={handleTimeChange}
+                                className="w-auto p-2 h-10 border bg-transparent  border-gray-300 rounded-md mt-2 cursor-pointer hover:border-gray-400"
+                            />
+                            <input
+                                type="date"
+                                value={date}
+                                onChange={handleDateChange}
+                                className="w-auto p-2 h-10 border bg-transparent border-gray-300 rounded-md mt-2 cursor-pointer hover:border-gray-400"
+                            />
+                            </div>
+                        )}
+
+                        {/* Permission Popup */}
+                        <Dialog
+                            open={permissionDialogOpen}
+                            onClose={handleDenySchedule}
+                        >
+                            <DialogTitle>Enable Scheduling</DialogTitle>
+                            <DialogContent>
+                            <DialogContentText>
+                                Scheduling posts requires permission. Would you like to allow it?
+                            </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                            <Button sx={{backgroundColor: 'lightgray', color: '#000', width: '6rem'}} onClick={handleDenySchedule}>Cancel</Button>
+                            <Button sx={{backgroundColor: '#ff3b5c',width: '6rem'}}  onClick={handleAllowSchedule} variant="contained" >
+                                Allow
+                            </Button>
+                            </DialogActions>
+                        </Dialog>
                         </div>
                         <div className='text-left mb-2'>
                         <FormControl fullWidth>
-                                <p className="text-sm font-medium pb-2 text-custom-dark-222 leading-[1.7rem]">
+                            <p className="text-sm font-medium pb-2 text-custom-dark-222 leading-[1.7rem]">
                                 Who can watch this video
-                                </p>
+                            </p>
                             <Select
-                            value={canView}
-                            onChange={(event) => handleCanViewChange(event)}
-                            IconComponent={KeyboardArrowDownIcon}
-                            sx={{
-                                width: '15rem',
-                                backgroundColor: '#f3f3f3',
-                                borderRadius: 2,
-                                height: 48,
-                                boxShadow: 'none',
-                                '.MuiOutlinedInput-notchedOutline': {
-                                  border: 'none',
-                                },
-                                '.MuiSelect-icon': {
-                                color: '#000',
-                                right: 12,
-                                },
-                            }}
-                            >
-                            <MenuItem value="everyone">Everyone</MenuItem>
-                            <MenuItem value="followers">Followers</MenuItem>
-                            <MenuItem value="onlyme">Only Me</MenuItem>
-                            </Select>
-                        </FormControl>
+                                    value={canView}
+                                    onChange={handleCanViewChange}
+                                    IconComponent={KeyboardArrowDownIcon}
+                                    renderValue={(selected) => {
+                                    const selectedOption = options.find(opt => opt.value === selected);
+                                    return selectedOption?.label || '';
+                                    }}
+                                    sx={{
+                                    width: '15rem',
+                                    backgroundColor: '#f3f3f3',
+                                    borderRadius: 2,
+                                    height: 48,
+                                    boxShadow: 'none',
+                                    '.MuiOutlinedInput-notchedOutline': {
+                                        border: 'none',
+                                    },
+                                    '.MuiSelect-icon': {
+                                        color: '#000',
+                                        right: 12,
+                                    },
+                                    }}
+                                >
+                                    {options.map((option) => (
+                                    <MenuItem
+                                        key={option.value}
+                                        value={option.value}
+                                        sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                        }}
+                                    >
+                                        <span>{option.label}</span>
+                                        {canView === option.value && <CheckIcon fontSize="small" />}
+                                    </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </div>
                         <div className="w-[100%] flex flex-col gap-[0.5rem]">
                             <div className="flex justify-between w-[100%]">
@@ -844,7 +911,7 @@ function FormRightSide(props: any) {
                                         }
                                         checked={state?.allowStitch || false}
                                     />
-                                    <p className="text-[1rem] font-medium text-custom-dark-222 leading-[1.1rem]">
+                                    <p className="text-xs font-medium text-custom-dark-222 leading-[1.1rem]">
                                         Stitch
                                     </p>
                                 </div>
