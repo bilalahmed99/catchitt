@@ -4,7 +4,10 @@ import style from '../styles.module.scss';
 import CustomPopup from '../../../shared/popups/CustomPopup';
 import React from 'react';
 import PopupForEditVideo from '../../profile/popups/popupForEditVideo';
-import { Tabs, Tab, Box, Paper, Typography } from "@mui/material";
+import { Tabs, Tab, Box, Paper, Typography, IconButton, Grid, Avatar } from "@mui/material";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 function FormLeftSide({ selectedVideoSrc, selectFilesHandler, darkTheme, videoInfo }: any) {
     const [replaceVideoPopup, setReplaceVideoPopup] = React.useState(false);
@@ -82,7 +85,119 @@ function FormLeftSide({ selectedVideoSrc, selectFilesHandler, darkTheme, videoIn
             <div
                 className={`mx-auto md:mx-0 w-[17.5rem] mt-[1.25rem] mb-[1rem] ${style.emulator}`}
             >
-                <CustomPlayer src={selectedVideoSrc ? selectedVideoSrc : videoInfo?.originalUrl} />
+
+          <Box
+                sx={{
+                  width: '100%',
+                  maxWidth: 375,
+                  mx: 'auto',
+                  bgcolor: '#fff',
+                  height: '100vh',
+                  border: '1px solid #ddd',
+                  borderRadius: 3,
+                  overflow: 'hidden',
+                  position: 'relative',
+                }}
+              >
+                {/* Header */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    px: 2,
+                    py: 1,
+                  }}
+                >
+                  <IconButton size="small">
+                    <ArrowBackIosNewIcon fontSize="small" />
+                  </IconButton>
+                  <Typography variant="body2">8:00</Typography>
+                  <IconButton>
+                    <MoreVertIcon />
+                  </IconButton>
+                </Box>
+
+                {/* Profile Section */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                    mt: 1,
+                  }}
+                >
+                  <Avatar
+                    src="https://via.placeholder.com/100"
+                    sx={{ width: 80, height: 80 }}
+                  />
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ mt: 1, fontWeight: 'bold', color: '#000' }}
+                  >
+                    muhammadasifitz
+                  </Typography>
+                  <Box sx={{ display: 'flex', gap: 2, mt: 1 }}>
+                    <Box
+                      sx={{ width: 60, height: 20, bgcolor: '#eee', borderRadius: 1 }}
+                    />
+                    <Box
+                      sx={{ width: 60, height: 20, bgcolor: '#eee', borderRadius: 1 }}
+                    />
+                  </Box>
+                </Box>
+
+                {/* Grid Posts */}
+                <Grid container spacing={0.5} sx={{ mt: 2, px: 1 }}>
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((item, index) => (
+                    <Grid item xs={4} key={index}>
+                      <Box
+                        sx={{
+                          width: '100%',
+                          aspectRatio: '1 / 1',
+                          bgcolor: index === 0 ? '#ccc' : '#f0f0f0',
+                          position: 'relative',
+                        }}
+                      >
+                        {index === 0 && (
+                          <>
+                            <Box
+                              component="img"
+                              src="https://via.placeholder.com/100x100"
+                              alt="Post"
+                              sx={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                              }}
+                            />
+                            <Box
+                              sx={{
+                                position: 'absolute',
+                                bottom: 4,
+                                left: 4,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 0.5,
+                                color: '#fff',
+                                backgroundColor: 'rgba(0,0,0,0.6)',
+                                px: 0.5,
+                                borderRadius: 1,
+                                fontSize: 12,
+                              }}
+                            >
+                              <PlayArrowIcon fontSize="inherit" />
+                              <span>1000</span>
+                            </Box>
+                          </>
+                        )}
+                      </Box>
+                    </Grid>
+                  ))}
+                </Grid>
+          </Box>
+
+
             </div>
             )}
              {value === 2 && (
