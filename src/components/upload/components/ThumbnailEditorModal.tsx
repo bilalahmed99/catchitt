@@ -1,9 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   Dialog, DialogTitle, DialogContent,
-  Tabs, Tab, Box, Button
+  Tabs, Tab, Box, Button,
+  Typography,
+  IconButton
 } from '@mui/material';
 import DndContainer from './DndContainerNew';
+import CloseIcon from '@mui/icons-material/Close';
+
 
 interface ThumbnailEditorModalProps {
   open: boolean;
@@ -115,16 +119,47 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle sx={{ px: 3, pt: 3, pb: 1 }}>Edit Thumbnail</DialogTitle>
-      <DialogContent sx={{ px: 3 }}>
-        <Tabs
-          value={tab}
-          onChange={(_, newVal) => setTab(newVal)}
-          sx={{ mb: 2 }}
-        >
-          <Tab value="select" label="Select cover" />
-          <Tab value="upload" label="Upload cover" />
-        </Tabs>
+      <DialogTitle
+      sx={{
+        px: 1,
+        pt: 1,
+        pb: 1,
+        color: 'black',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
+    >
+    <Tabs
+  value={tab}
+  onChange={(_, newVal) => setTab(newVal)}
+  sx={{
+    mb: 2,
+    '& .MuiTab-root': {
+      fontWeight: 'bold',
+      color: 'gray', // inactive color
+    },
+    '& .Mui-selected': {
+      color: 'black', // active label color
+    },
+  }}
+  TabIndicatorProps={{
+    style: {
+      backgroundColor: 'black', // underline indicator
+    },
+  }}
+>
+  <Tab value="select" label="Select cover" />
+  <Tab value="upload" label="Upload cover" />
+</Tabs>
+
+
+      <IconButton onClick={onClose} sx={{ color: 'black' }}>
+        <CloseIcon />
+      </IconButton>
+    </DialogTitle>
+      <DialogContent sx={{ backgroundColor: '#F5F5F5' }}>
+        
 
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', height: '220px', mb: 3 }}>
           {preview && (
@@ -201,25 +236,24 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
           <Box sx={{ mb: 3 }}>
             <DndContainer
               crop
-              text="Drag and drop cover image here"
-              orText="click to browse"
+              text="Drag and drop a file here"
+              orText="select a file"
               onChangeFile={handleCustomUpload}
               aspect={62 / 127}
             />
           </Box>
         )}
+      </DialogContent>
 
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+        <Box sx={{ backgroundColor: '#fff', display: 'flex', p: 3, justifyContent: 'flex-end' }}>
           <Button
             variant="contained"
-            color="error"
             onClick={onClose}
-            sx={{ px: 4, borderRadius: '8px' }}
+            sx={{backgroundColor: '#FE2C55', px: 4, borderRadius: '8px' }}
           >
             Confirm
           </Button>
         </Box>
-      </DialogContent>
     </Dialog>
   );
 };

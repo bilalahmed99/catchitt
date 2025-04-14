@@ -559,13 +559,12 @@ function FormRightSide(props: any) {
           alt="Video thumbnail"
           className="h-full w-full object-cover rounded-md"
         />
-       <button
+        <button
             onClick={() => setThumbnailModalOpen(true)}
-            style={{ fontSize: '9px' }}
-            className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-3 py-1.5 rounded-md shadow-sm hover:bg-black/70 transition-colors"
-            >
-        Edit Cover
-</button>
+            style={{ fontSize: '12px' }}
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white w-[6rem] py-1.5 rounded-md shadow-sm hover:bg-black/70 transition-colors">
+            Edit Cover
+        </button>
       </div>
     ) : (
       <div className="w-full h-full flex items-center justify-start border-2 border-dashed border-gray-300 rounded-lg px-4">
