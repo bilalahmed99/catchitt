@@ -8,110 +8,64 @@ import audioFile1 from '../../../assets/audio1.mp3';
 import audioFile2 from '../../../assets/audio2.mp3';
 
 
-const mockAudios = [
-    {
-        "_id": "638fd3c43552a4628ad08d10",
-        "createdTime": 1670368436916,
-        "lastModifiedTime": 1670368436916,
-        "isDeleted": false,
-        "artist_id": "638fd3c43552a4628ad08cfd",
-        "name": "Cinematic musical dark guitar pluck",
-        "image": "",
-        "url": audioFile1,
-        "active": true,
-        "__v": 0,
-        "artist": {
-            "_id": "638fd3c43552a4628ad08cfd",
-            "createdTime": 1670368436917,
-            "lastModifiedTime": 1670368436917,
-            "isDeleted": false,
-            "active": true,
-            "name": "Sia Records",
-            "__v": 0
-        }
-    },
-    {
-        "_id": "638fd3c43552a4628ad08d0f",
-        "createdTime": 1670368436916,
-        "lastModifiedTime": 1670368436916,
-        "isDeleted": false,
-        "artist_id": "638fd3c43552a4628ad08cfd",
-        "name": "Melody and drums",
-        "image": "",
-        "url": audioFile2,
-        "active": true,
-        "__v": 0,
-        "artist": {
-            "_id": "638fd3c43552a4628ad08cfd",
-            "createdTime": 1670368436917,
-            "lastModifiedTime": 1670368436917,
-            "isDeleted": false,
-            "active": true,
-            "name": "Sia Records",
-            "__v": 0
-        }
-    }
-]
-
 function SoundGallery({ isDarkTheme, isFavoriteSounds, selectedAudio, setSelectedAudio, searchQuery }: any) {
     const abortController = useRef<AbortController | null>(null);
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userId');
      const [gallery, setGallery] = useState<any>({ items: [], page: 1, pageSize: 5, isNextpage: true });
 
-    const fetchPaginatedSounds = async (fromStart=false) => {
+     const fetchPaginatedSounds = async (fromStart = false) => {
         try {
-            // Clear items immediately when starting a new search
-            if (fromStart) {
-                setGallery((prev: typeof gallery) => ({
-                    ...prev,
-                    items: [], // Clear existing items
-                    isNextpage: true // Reset pagination flag
-                }));
-            }
-
-            const controller = new AbortController();
-            abortController.current = controller;
-            const baseParams = {
-                pageNumber: fromStart ? 1 : gallery.page,
-                pageSize: gallery.pageSize,
-                ...(searchQuery && { q: searchQuery }) // Add search query if it exists
-              };
-        
-              const pathName = isFavoriteSounds 
-                ? `profile/v2/bookmarkedSounds`
-                : `media-content/trending/sounds`;
-              
-              const url = `${API_KEY}/${pathName}?${new URLSearchParams({
-                ...baseParams,
-                ...(!isFavoriteSounds && { page: fromStart ? 1 : gallery.page }) // Additional param for trending sounds
-              }).toString()}`;
-        
-              const response = await axios.get(url, { 
-                headers: { Authorization: 'Bearer ' + token }, 
-                signal: controller.signal 
-              });
-
-            console.log('🚀🚀🚀response of bookmark sounds', response.data);
-            console.log(response.data);
-            console.log('length of sound');
-            console.log(response.data?.data.sounds.length);
-            console.log(response.data?.data.sounds);
-            if (!response.data?.data.sounds.length) return setGallery({...gallery, isNextpage: false});
-            setGallery((prev: any) => ({
-                ...prev,
-                items: fromStart? response.data?.data?.sounds : [...prev.items, ...response.data?.data?.sounds],
-                page: fromStart? 2: prev.page + 1
-            }))
+          const controller = new AbortController();
+          abortController.current = controller;
+          
+          const baseParams = {
+            pageNumber: fromStart ? 1 : gallery.page,
+            pageSize: gallery.pageSize,
+            ...(searchQuery && { q: searchQuery })
+          };
+    
+          const pathName = isFavoriteSounds 
+            ? `profile/v2/bookmarkedSounds`
+            : `media-content/trending/sounds`;
+          
+          const url = `${API_KEY}/${pathName}?${new URLSearchParams({
+            ...baseParams,
+            ...(!isFavoriteSounds && { page: fromStart ? 1 : gallery.page })
+          }).toString()}`;
+    
+          const response = await axios.get(url, { 
+            headers: { Authorization: 'Bearer ' + token }, 
+            signal: controller.signal 
+          });
+    
+          const newItems = response.data?.data?.sounds || [];
+          
+          setGallery((prev: typeof gallery) => ({
+            ...prev,
+            items: fromStart ? newItems : [...prev.items, ...newItems],
+            page: fromStart ? 2 : prev.page + 1,
+            isNextpage: newItems.length >= gallery.pageSize
+          }));
         } catch (error) {
-            console.error(error);
+          console.error(error);
+          // Ensure we don't get stuck in a loading state
+          setGallery((prev: typeof gallery) => ({
+            ...prev,
+            isNextpage: false
+          }));
+        } finally {
+          abortController.current = null;
         }
-        finally {
-            abortController.current = null;
-        }
-    }
+      }
 
     useEffect(() => {
+        setGallery({
+            items: [],
+            page: 1,
+            pageSize: 5,
+            isNextpage: true
+          });
         fetchPaginatedSounds(true); // Reset with new search
       }, [searchQuery, isFavoriteSounds]); // Also reset when tab changes
     

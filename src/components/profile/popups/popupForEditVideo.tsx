@@ -50,9 +50,9 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
 
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handleSearch = debounce((query: string) => {
+  const handleSearch = (query: string) => {
     setSearchQuery(query);
-  }, 500);
+  };
 
 
   const lightThemePalette = createTheme({
@@ -379,7 +379,7 @@ useEffect(() => {
                   ></path>
                 </svg>
               </span>
-              <input type="text" className="bg-transparent pl-3" placeholder="Search"   onChange={(e) => handleSearch(e.target.value)} />
+              <input type="text" className="bg-transparent pl-3" placeholder="Search" value={searchQuery}  onChange={(e) => handleSearch(e.target.value)} />
               {searchQuery && (
                   <button 
                       onClick={() => {
