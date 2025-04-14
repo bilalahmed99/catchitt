@@ -184,6 +184,7 @@ function FormRightSide(props: any) {
     };
   
     const handleAllowSchedule = () => {
+        console.log('hello schedule.')
       setShowSchedule(true);
       setPermissionDialogOpen(false);
     };
@@ -772,12 +773,14 @@ function FormRightSide(props: any) {
                                     <FormControlLabel
                                         name="when-to-post1"
                                         value="now"
+                                        onClick={() => setShowSchedule(false)}
                                         control={<Radio sx={{ color: '#FF2C55', '&.Mui-checked': { color: '#FF2C55' } }} />}
                                         label="Now"
                                     />
                                     <FormControlLabel
                                         name="when-to-post1"
                                         value="schedule"
+                                        onClick={handleAllowSchedule}                                        
                                         control={<Radio sx={{ color: '#ccc', '&.Mui-checked': { color: '#FF2C55' } }} />}
                                         label={
                                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
@@ -1010,7 +1013,7 @@ function FormRightSide(props: any) {
                             onClick={SubmitHandler}
                             loading={isPosting}
                         />
-                        <CustomButton
+                        {/* <CustomButton
                             width="169px !important"
                             textSize="16px "
                             islight
@@ -1020,7 +1023,7 @@ function FormRightSide(props: any) {
                             text="Save draft"
                             height="40px !important"
                             onClick={() => setDiscardPostPopup(true)}
-                        />
+                        /> */}
                         <CustomButton
                             width="100px !important"
                             textSize="16px "
