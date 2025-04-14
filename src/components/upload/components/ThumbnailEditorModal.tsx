@@ -249,7 +249,9 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
           <Button
             variant="contained"
             onClick={onClose}
-            sx={{backgroundColor: '#FE2C55', px: 4, borderRadius: '8px' }}
+            sx={{backgroundColor: '#FE2C55', px: 4, borderRadius: '8px',  '&:hover': {
+              backgroundColor: '#FE2C40',
+            }, }}
           >
             Confirm
           </Button>
