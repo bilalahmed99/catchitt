@@ -34,6 +34,7 @@ import WithdrawalLimitPage from './components/settings-page/components/withdrawa
 import CreateStoryPage from './components/stories';
 import { SuggestedAccountsPage } from './components/suggested-accounts-page/suggested-accounts-page';
 import UploadPage from './components/upload';
+import CommentsPage from './components/studio/comments/CommentsPage';
 import { useAuthStore } from './store/authStore';
 import useApp from './useApp';
 import GoLive from './components/go-live';
@@ -1159,6 +1160,7 @@ function App() {
                             <Route path="/analytics/:tab?" element={<Analytics />} />
                             <Route path="/analytics/post/:postId" element={<PostAnalytics />} />
                             <Route path="/analytics/comment/:postId" element={<CommentAnalytics />} />
+                            <Route path="/studio/comment" element={<CommentsPage />} />
                             <Route path="/contactus" element={<ContactUs />} />
                             <Route path="/signup" element={<Signup />} />
                             <Route path="/signup/phone-or-email/email" element={<SignupEmail />} />

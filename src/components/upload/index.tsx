@@ -6,7 +6,7 @@ import UploadForm from './components/uploadForm';
 import useUpload from './hooks';
 import style from './index.module.scss';
 import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { academyOutlineDark, academyOutlineWhite, analyticsOutline, analyticsOutlineWhite, bulbOutlineDark, bulbOutlineWhite, commentOutlineDark, commentOutlineWhite, commentWhite, feedbackQuestionDark, feedbackQuestionWhite, hamburger, hamburgerDark, homeDark, homeIcon } from '../../icons';
 
 function UploadPage() {
@@ -60,6 +60,12 @@ function UploadPage() {
                     <li className='cursor-pointer flex gap-2' onClick={() => navigate('/analytics/content')}>
                         <img className='w-4 inline-block' src={darkTheme===''?hamburgerDark :hamburger} alt="" />
                         <span>&nbsp;Posts</span>
+                    </li>
+                    <li className='cursor-pointer flex gap-2'>
+                        <Link to="/studio/comment" reloadDocument={false} style={{ textDecoration: 'none' }} className='cursor-pointer flex gap-2'>
+                            <img className='w-5 inline-block' src={darkTheme===''?commentOutlineDark:commentOutlineWhite} alt="" />
+                            <span>Comments</span>
+                        </Link>
                     </li>
                     {/* <li className='cursor-pointer flex gap-2'>
                         <img className='w-5 inline-block' src={darkTheme===''?commentOutlineDark:commentOutlineWhite} alt="" />
