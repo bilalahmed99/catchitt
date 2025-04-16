@@ -28,9 +28,12 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
   onCustomThumbnail,
   currentThumbnail,
 }) => {
+  // console.log('currentThumbnail', currentThumbnail);
   const [tab, setTab] = useState<'select' | 'upload'>('select');
   const [customCover, setCustomCover] = useState<string | null>(null);
-  const [preview, setPreview] = useState<string>(currentThumbnail || '');
+  // const [preview, setPreview] = useState<string>(currentThumbnail || '');
+  const [preview, setPreview] = useState<string>('');
+
   const thumbnailsRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
 
@@ -39,6 +42,9 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
   const [scrollLeft, setScrollLeft] = useState(0);
   const [linePosition, setLinePosition] = useState(50);
   const [manualSelect, setManualSelect] = useState(false);
+  console.log('current preview');
+  console.log(preview);
+ 
 
   const handleSelectFrame = (thumbUrl: string, index: number) => {
     setPreview(thumbUrl);
@@ -46,6 +52,12 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
     setManualSelect(true);
     setTimeout(() => setManualSelect(false), 1000); // resume auto detection after 1s
   };
+
+  useEffect(() => {
+    if (currentThumbnail) {
+      setPreview(currentThumbnail);
+    }
+  }, [currentThumbnail]);
 
   const handleCustomUpload = (file: File) => {
     const reader = new FileReader();
@@ -162,12 +174,14 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
         
 
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', height: '220px', mb: 3 }}>
-          {preview && (
-            <img
+          {preview && (<>
+             <img
               src={preview}
               alt="Preview"
               style={{ height: '200px', objectFit: 'contain', borderRadius: '4px' }}
             />
+          </>
+            
           )}
         </Box>
 
