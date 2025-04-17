@@ -17,8 +17,10 @@ import {
     InputAdornment,
     Divider,
     Checkbox,
+    Tooltip,
   } from '@mui/material';
-  import { ChatBubbleOutline, Check, ExpandMore, FavoriteBorder, FilterList, Search } from '@mui/icons-material';
+  import { PlayArrow, Check, ExpandMore, FavoriteBorder, FilterList, Search } from '@mui/icons-material';
+
 import { relative } from 'path';
 
 type PostedByOptions = "all" | "followers" | "non-followers";
@@ -400,22 +402,31 @@ const handleFollowerApply = () => {
                 </Button>
 
                 <Menu
-                anchorEl={anchorElFollower}
-                open={Boolean(anchorElFollower)}
-                onClose={handleFollowerClose}
-                PaperProps={{ sx: { borderRadius: 2, mt: 1, minWidth: 200 } }}
-                >
-                {followerOptions.map((option) => (
+                    anchorEl={anchorElFollower}
+                    open={Boolean(anchorElFollower)}
+                    onClose={handleFollowerClose}
+                    PaperProps={{ sx: { borderRadius: 2, mt: 1, minWidth: 200 } }}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                    transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+                    >                
+                    {followerOptions.map((option) => (
                     <MenuItem
                     key={option}
                     onClick={() => handleFollowerSelect(option)}
-                    sx={{ justifyContent: 'space-between', gap: 1 }}
+                    sx={{ justifyContent: 'flex-start', gap: 1 }}
                     >
                     <Checkbox
-                        checked={selectedFollowerCounts.includes(option)}
-                        onChange={() => handleFollowerSelect(option)}
-                        size="small"
-                    />
+                            checked={selectedFollowerCounts.includes(option)}
+                            onChange={() => handleFollowerSelect(option)}
+                            size="small"
+                            sx={{
+                                color: '#ff2c55', // unchecked color
+                                '&.Mui-checked': {
+                                color: '#ff2c55', // checked color
+                                },
+                            }}
+                            />
+
                     {option}
                     </MenuItem>
                 ))}
@@ -560,22 +571,65 @@ const handleFollowerApply = () => {
                 </Box>
             </Box>
             {/* Thumbnail */}
-            <Box width={50} height={70} borderRadius={2} overflow="hidden">
-              <img
-                src={comment.thumbnail}
-                alt="Thumbnail"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-            </Box>
+            <Box
+                width={50}
+                height={70}
+                borderRadius={2}
+                overflow="hidden"
+                position="relative"
+                sx={{
+                    '&:hover .playOverlay': {
+                    opacity: 1,
+                    },
+                }}
+                >
+                {/* Image */}
+                <img
+                    src={comment.thumbnail}
+                    alt="Thumbnail"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+
+                {/* Play Icon Overlay */}
+                <Box
+                    className="playOverlay"
+                    sx={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    bgcolor: 'rgba(0, 0, 0, 0.4)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    opacity: 0,
+                    transition: 'opacity 0.3s ease',
+                    color: '#fff',
+                    cursor: 'pointer',
+                    }}
+                >
+                    <PlayArrow sx={{ fontSize: 30 }} />
+                </Box>
+                </Box>
+
             <Typography fontWeight={600} textAlign='left' m='auto' fontSize="0.75rem">
                 Videoplay back movie
               </Typography>
 
               <div className='w-40 m-auto'>
+              <Tooltip  componentsProps={{
+                tooltip: {
+                sx: {
+                    fontSize: '1rem', // 14px for example
+                },
+                },
+            }}title="Open all comments" placement="top" >
+
                 <Box sx={{
                     width: 30,
                     height: 30,
-                    bgcolor: 'grey.300',
+                    bgcolor: '#fff',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
@@ -587,6 +641,7 @@ const handleFollowerApply = () => {
                     }} className='hoverArrow'>
                     <svg fill="black" color="inherit" font-size="16" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"><path d="M28.74 24 15.08 10.33a1 1 0 0 1 0-1.41l1.84-1.84a1 1 0 0 1 1.41 0L34.54 23.3a1 1 0 0 1 0 1.42l-16.2 16.21a1 1 0 0 1-1.42 0l-1.84-1.84a1 1 0 0 1 0-1.41L28.74 24Z"></path></svg>
                 </Box>
+                </Tooltip>
               </div>
           </CardContent>
         </Card>
