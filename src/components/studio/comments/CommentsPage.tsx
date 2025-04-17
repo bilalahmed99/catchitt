@@ -3,6 +3,22 @@ import style from './index.module.scss';
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { academyOutlineDark, academyOutlineWhite, analyticsOutline, analyticsOutlineWhite, bulbOutlineDark, bulbOutlineWhite, commentOutlineDark, commentOutlineWhite, commentWhite, feedbackQuestionDark, feedbackQuestionWhite, hamburger, hamburgerDark, homeDark, homeIcon } from '../../../icons';
+import {
+    Box,
+    Button,
+    Menu,
+    MenuItem,
+    TextField,
+    Avatar,
+    Typography,
+    Card,
+    CardContent,
+    IconButton,
+    InputAdornment,
+    Divider,
+  } from '@mui/material';
+  import { ChatBubbleOutline, Check, ExpandMore, FavoriteBorder, FilterList, Search } from '@mui/icons-material';
+import { relative } from 'path';
 
 function CommentsPage() {
     const navigate = useNavigate();
@@ -17,6 +33,40 @@ function CommentsPage() {
         // } else {
         // }
     });
+    const filterOptions = {
+        'Posted by all': ['Posted by all', 'Posted by followers', 'Posted by non-followers'],
+      };
+    const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedFilter, setSelectedFilter] = useState('Posted by all');
+
+  const handleFilterClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleFilterSelect = (option) => {
+    setSelectedFilter(option);
+    setAnchorEl(null);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const comments = [
+    {
+      user: 'muhammadas',
+      avatar: 'https://via.placeholder.com/40',
+      comment: 'This is a sample comment here!',
+      thumbnail: 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8bmV3c3xlbnwwfHwwfHx8MA%3D%3D',
+    },
+    {
+      user: 'johndoe',
+      avatar: 'https://via.placeholder.com/40',
+      comment: 'Another comment from another user.',
+      thumbnail: 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8bmV3c3xlbnwwfHwwfHx8MA%3D%3D',
+    },
+  ];
+
 
     return (
         <div className={`flex flex-col ${darkTheme}`}>
@@ -57,7 +107,6 @@ function CommentsPage() {
                         <span>Creator Academy</span>
                     </li> */}
                 </ul>
-
                 <h5 className='text-sm font-semibold text-left text-[#00000057] mt-4'>Tools</h5>
                 <ul className='text-sm space-y-6 mt-3 text-left mx-2'>
                     <li className='cursor-pointer flex gap-2' onClick={() => navigate('/home')}>
@@ -112,18 +161,15 @@ function CommentsPage() {
                     </li> */}
 
                 </ul>
-
                 <h5 className='text-sm font-semibold text-left text-[#00000057] mt-4'>Others</h5>
-
                 <ul>
-
                 <li className='cursor-pointer flex gap-2 mt-3' onClick={() => navigate('/contactus')}>
                     <svg width="16" height="13" viewBox="0 0 16 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M3.60722 0.527344C2.81201 0.527344 2.04937 0.843239 1.48708 1.40554C0.924782 1.96783 0.608887 2.73047 0.608887 3.52568V9.52234C0.608887 10.3176 0.924782 11.0802 1.48708 11.6425C2.04937 12.2048 2.81201 12.5207 3.60722 12.5207H12.6022C13.3974 12.5207 14.1601 12.2048 14.7224 11.6425C15.2847 11.0802 15.6006 10.3176 15.6006 9.52234V3.52568C15.6006 2.73047 15.2847 1.96783 14.7224 1.40554C14.1601 0.843239 13.3974 0.527344 12.6022 0.527344H3.60722ZM3.60722 2.02651H12.6022C13.3578 2.02651 13.9822 2.5812 14.0856 3.3083C13.3675 3.97768 12.3001 4.79922 11.5948 5.30594C9.97193 6.47154 8.54398 7.27359 8.10472 7.27359C7.66546 7.27359 6.23751 6.47154 4.61466 5.30594C3.95516 4.8312 3.31428 4.3311 2.69348 3.80677C2.5163 3.65679 2.34453 3.50053 2.17851 3.33828C2.28196 2.61119 2.85164 2.02651 3.60722 2.02651ZM2.11555 5.2902C4.01799 6.82909 6.80569 8.76377 8.10472 8.77276C8.951 8.77876 10.3984 7.97071 11.8751 6.95052C12.639 6.42207 13.489 5.79467 14.1021 5.27895L14.1014 9.52234C14.1014 9.91995 13.9434 10.3013 13.6623 10.5824C13.3811 10.8636 12.9998 11.0215 12.6022 11.0215H3.60722C3.20962 11.0215 2.8283 10.8636 2.54715 10.5824C2.266 10.3013 2.10805 9.91995 2.10805 9.52234L2.11555 5.2902Z" fill="black" fill-opacity="0.65"/>
                         </svg>
 
                         <span>Feedback</span>
-                    </li>
+                </li>
                 </ul>
                 <div className='mt-auto w-full text-left'>
                     <button className='w-full ring-0 hover:border-transparent text-sm font-semibold px-0 text-left py-2 d-flex justify-start' onClick={() => navigate('/home')}><svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -138,21 +184,153 @@ function CommentsPage() {
                     </div>
                 </div>
             </div>
-            <p>comments page</p>
-            <p>comments page</p>
-            <p>comments page</p>
-            <p>comments page</p>
-            <p>comments page</p>
-            <p>comments page</p>
-            <p>comments page</p>
-            <p>comments page</p>
-            <p>comments page</p>
-            <p>comments page</p>
-            <p>comments page</p>
-            <p>comments page</p>
-            <p>comments page</p>
-            <p>comments page</p>
-            <p>comments page</p>
+            <div className='w-[calc(100%-14rem)]  ml-auto pt-20'>
+            <Box p={3}>
+      {/* Filters and Search */}
+      <Box display="flex" alignItems="center" justifyContent="space-between" flexWrap="wrap" mb={3} gap={2}>
+        <Box display="flex" gap={1.5} flexWrap="wrap">
+          <Button  startIcon={<FilterList />} sx={{backgroundColor: 'white', color: '#000', border: '1px solid #e4e6eb', borderRadius: '8px', textTransform: 'none' }}>
+            All comments
+          </Button>
+
+          <Button
+           
+            startIcon={<FilterList />}
+            endIcon={<ExpandMore />}
+            onClick={handleFilterClick}
+            sx={{backgroundColor: 'white', color: '#000', border: '1px solid #e4e6eb', borderRadius: '8px', textTransform: 'none' }}
+          >
+            {selectedFilter}
+          </Button>
+          <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+            {filterOptions['Posted by all'].map((option) => (
+              <MenuItem
+                key={option}
+                selected={option === selectedFilter}
+                onClick={() => handleFilterSelect(option)}
+                sx={{ justifyContent: 'space-between' }}
+              >
+                {option}
+                {option === selectedFilter && <Check fontSize="small" />}
+              </MenuItem>
+            ))}
+          </Menu>
+
+          <Button  startIcon={<FilterList />} sx={{backgroundColor: 'white', color: '#000', border: '1px solid #e4e6eb', borderRadius: '8px', textTransform: 'none' }}>
+            Follower count
+          </Button>
+
+          <Button  startIcon={<FilterList />} sx={{backgroundColor: 'white', color: '#000', border: '1px solid #e4e6eb', borderRadius: '8px', textTransform: 'none' }}>
+            Comment date
+          </Button>
+        </Box>
+
+        {/* Search box */}
+        <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            width: '350px',
+            backgroundColor: '#fff',
+            borderRadius: '10px',
+            padding: '8px 8px',
+            boxShadow: '0 0 0 1px #ccc inset',
+            }}>
+            <Search style={{ color: '#999', marginRight: '8px' }} />
+            <input
+                type="text"
+                placeholder="Search for comment or username"
+                style={{
+                border: 'none',
+                outline: 'none',
+                width: '100%',
+                backgroundColor: 'transparent',
+                fontSize: '14px',
+                }}
+            />
+            </div>
+
+      </Box>
+
+      {/* Comments List */}
+      {comments.map((comment, idx) => (
+        <Card key={idx} variant="outlined" sx={{
+            mb: 2,
+            borderRadius: 2,
+            position: 'relative',
+            overflow: 'hidden',
+            '&:hover .hoverArrow': {
+              opacity: 1,
+              transform: 'translateX(0)',
+            },
+          }}>
+          <CardContent sx={{ display: 'flex', gap: 2 }}>
+            <Avatar src={comment.avatar} alt={comment.user} />
+            <Box flexGrow={1}>
+                <Box display="flex" alignItems="center" >
+                    <Typography variant="body2" fontSize="0.75rem" textAlign='left' color="text.secondary" mt={0.5}>
+                        MuhammadAsifItz
+                    </Typography>
+                    <Typography variant='body2' mx={0.5} borderRadius={0.25} fontWeight={600} px={0.25} bgcolor='#E0F4F8' fontSize="0.75rem" color='#249EB2'>Creator</Typography>
+                    <Typography variant='body2' fontSize="0.75rem" >· 32m ago</Typography>
+                </Box>
+              <Typography fontWeight={600} my={0.5} textAlign='left' fontSize="0.8375rem">
+                {comment.user}
+              </Typography>
+              
+              <Box display="flex" alignItems="center" gap={1} sx={{ color: 'gray', fontSize: 10 }}>
+                {/* Like Section */}
+                <Box display="flex" alignItems="center" gap={0.5}>
+                    <FavoriteBorder  sx={{ color: 'black', fontSize: '12px'}} />
+                    <Typography variant="body2" sx={{ fontWeight: 400, fontSize: 12, color: 'black' }}>
+                    0
+                    </Typography>
+                </Box>
+
+                {/* Vertical Divider */}
+                <Divider orientation="vertical" flexItem sx={{ mx: 0.125, borderColor: '#ccc' }} />
+
+                {/* Reply */}
+                <Typography
+                    variant="body2"
+                    sx={{ fontWeight: 400, fontSize: 12, cursor: 'pointer', color: 'gray' }}
+                >
+                    Reply
+                </Typography>
+
+                {/* Vertical Divider */}
+                <Divider orientation="vertical" flexItem sx={{ mx: 0.125, borderColor: '#ccc' }} />
+
+                {/* Delete */}
+                <Typography
+                    variant="body2"
+                    sx={{ fontWeight: 400, fontSize: 12, cursor: 'pointer', color: 'gray' }}
+                >
+                    Delete
+                </Typography>
+                </Box>
+            </Box>
+            {/* Thumbnail */}
+            <Box width={50} height={70} borderRadius={2} overflow="hidden">
+              <img
+                src={comment.thumbnail}
+                alt="Thumbnail"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            </Box>
+            <Typography fontWeight={600} textAlign='left' m='auto' fontSize="0.85rem">
+                Videoplay back movie
+              </Typography>
+
+              <div className='w-40 m-auto'>
+                <div className='bg-slate-300 rounded-full h-6 w-6 flex align-items-center justify-center m-auto hoverArrow'>
+                    <svg fill="black" color="inherit" font-size="16" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"><path d="M28.74 24 15.08 10.33a1 1 0 0 1 0-1.41l1.84-1.84a1 1 0 0 1 1.41 0L34.54 23.3a1 1 0 0 1 0 1.42l-16.2 16.21a1 1 0 0 1-1.42 0l-1.84-1.84a1 1 0 0 1 0-1.41L28.74 24Z"></path></svg>
+                </div>
+              </div>
+          </CardContent>
+        </Card>
+      ))}
+    </Box>
+            </div>
         </div>
     );
 }
