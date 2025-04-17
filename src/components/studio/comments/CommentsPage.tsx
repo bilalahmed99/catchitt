@@ -4,19 +4,83 @@ import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { academyOutlineDark, academyOutlineWhite, analyticsOutline, analyticsOutlineWhite, bulbOutlineDark, bulbOutlineWhite, commentOutlineDark, commentOutlineWhite, commentWhite, feedbackQuestionDark, feedbackQuestionWhite, hamburger, hamburgerDark, homeDark, homeIcon } from '../../../icons';
 
+type PostedByOptions = "all" | "followers" | "non-followers";
+type RepliedFilterOptions = "all" | "replied" | "not-replied";
+
 function CommentsPage() {
     const navigate = useNavigate();
 
     const [darkTheme, setdarkTheme] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [postedBy, setPostedBy] = useState<PostedByOptions>("all");
+    const [repliedFilter, setRepliedFilter] = useState<RepliedFilterOptions>("all");
+    const [dateRange, setDateRange] = useState(
+        {
+            fromDate: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+            toDate: new Date()
+        }
+    );
+
+    interface CommentsInterface
+    {
+        items: object[];
+        page: number;
+        isLoading: boolean;
+        canLoadMore: boolean;
+    }
+
+    const [comments, setComments] = useState<CommentsInterface>(
+        {
+            items: [],
+            page: 1,
+            isLoading: false,
+            canLoadMore: true,
+        }
+    );
+
+    function loadComments()
+    {
+        alert(1);
+        let endpoint = `${process.env.VITE_API_URL}/media-content/comments?postedBy=${postedBy}&filter=${repliedFilter}&q=${searchQuery}&from=${dateRange.fromDate.toISOString()}&to=${dateRange.toDate.toISOString()}`;
+        let requestOptions =
+        {
+            method: 'GET',
+            headers:
+            {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+            },
+        };
+                
+        if(!comments.canLoadMore) { return; }
+
+        setComments(prev => ({ ...prev, isLoading: true, canLoadMore: false }));
+
+        fetch(endpoint, requestOptions)
+        .then((response) => response.json())
+        .then(
+            (response) =>
+            {
+                if(response.data.data.length)
+                {
+                    setComments(prev => ({ ...prev, canLoadMore: true, items: [...prev.items, ...response.data.data] }));
+                }
+
+                setComments(prev => ({ ...prev, page: prev.page + 1, isLoading: false }));
+            }
+        )
+        .catch((error) => console.error('Fetch error:', error));
+    };
 
     useEffect(() => {
+        loadComments();
         var themeColor = window.localStorage.getItem('theme');
         setdarkTheme('');
         // if (themeColor == 'dark') {
         //     setdarkTheme(style.darkTheme);
         // } else {
         // }
-    });
+    }, []);
 
     return (
         <div className={`flex flex-col ${darkTheme}`}>
