@@ -57,7 +57,7 @@ function CommentsPage() {
 
     function loadComments()
     {
-        let endpoint = `${process.env.VITE_API_URL}/media-content/comments?postedBy=${postedBy}&filter=${selectedAllComments}&q=${searchQuery}&from=${dateRange.fromDate.toISOString()}&to=${dateRange.toDate.toISOString()}`;
+        let endpoint = `${process.env.VITE_API_URL}/media-content/comments?postedBy=${selectedPostedBy}&filter=${selectedAllComments}&q=${searchQuery}&from=${dateRange.fromDate.toISOString()}&to=${dateRange.toDate.toISOString()}`;
         let requestOptions =
         {
             method: 'GET',
@@ -115,14 +115,14 @@ function CommentsPage() {
     const [anchorElPostedBy, setAnchorElPostedBy] = useState(null);
   
     const [selectedAllComments, setSelectedAllComments] = useState('all');
-    const [selectedPostedBy, setSelectedPostedBy] = useState('Posted by all');
+    const [selectedPostedBy, setSelectedPostedBy] = useState('all');
   
     const filterOptionsALLComments = {
         all: 'All comments', not_replied: 'Not replied', replied: 'Replied',
     };
   
     const filterOptionsPostedBy = {
-      'Posted by all': ['Posted by all', 'Posted by admins', 'Posted by users'],
+        all: 'Posted by all', followers: 'Posted by followers', 'non-followers': 'Posted by non-followers',
     };
   
     // --- Handlers for All Comments
@@ -152,6 +152,7 @@ function CommentsPage() {
     const handlePostedBySelect = (option) => {
       setSelectedPostedBy(option);
       handlePostedByClose();
+      reloadComments();
     };
 
     
@@ -363,7 +364,7 @@ const handleFollowerApply = () => {
             textTransform: 'none',
           }}
         >
-          {selectedPostedBy}
+          {filterOptionsPostedBy[selectedPostedBy]}
         </Button>
 
         <Menu
@@ -372,15 +373,15 @@ const handleFollowerApply = () => {
           onClose={handlePostedByClose}
           PaperProps={{ sx: { borderRadius: 2, mt: 1, minWidth: 180 } }}
         >
-          {filterOptionsPostedBy['Posted by all'].map((option) => (
+          {Object.entries(filterOptionsPostedBy).map(([key, label]) => (
             <MenuItem
-              key={option}
-              selected={option === selectedPostedBy}
-              onClick={() => handlePostedBySelect(option)}
+              key={key}
+              selected={key === selectedPostedBy}
+              onClick={() => handlePostedBySelect(key)}
               sx={{ justifyContent: 'space-between' }}
             >
-              {option}
-              {option === selectedPostedBy && <Check fontSize="small" />}
+              {label}
+              {key === selectedPostedBy && <Check fontSize="small" />}
             </MenuItem>
           ))}
         </Menu>
