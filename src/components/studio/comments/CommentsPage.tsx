@@ -413,13 +413,14 @@ const handleFollowerApply = () => {
                     <MenuItem
                     key={option}
                     onClick={() => handleFollowerSelect(option)}
-                    sx={{ justifyContent: 'flex-start', gap: 1 }}
+                    sx={{ justifyContent: 'flex-start', gap: 1,  }}
                     >
                     <Checkbox
                             checked={selectedFollowerCounts.includes(option)}
                             onChange={() => handleFollowerSelect(option)}
                             size="small"
                             sx={{
+                                padding: '1px',
                                 color: '#ff2c55', // unchecked color
                                 '&.Mui-checked': {
                                 color: '#ff2c55', // checked color
