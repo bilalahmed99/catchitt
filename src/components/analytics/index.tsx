@@ -420,7 +420,7 @@ const Analytics = () => {
                     </Grid>
                     ))}
                 </Grid>
-                <button className='w-100 bg-[#0000000D]'>View More</button>
+                <button className='w-100 my-4 bg-[#0000000D]'>View More</button>
                 </Container>
             </div>
             <div className=" w-[30%] py-6">
