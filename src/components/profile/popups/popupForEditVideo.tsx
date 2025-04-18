@@ -298,16 +298,16 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
     const blob = await res.blob();
     const file = new File([blob], 'edited-video.mp4', { type: 'video/mp4' });
     // download file
-    const url = URL.createObjectURL(file);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'edited-video.mp4';
-    a.click();
-    URL.revokeObjectURL(url);
+    // const url = URL.createObjectURL(file);
+    // const a = document.createElement('a');
+    // a.href = url;
+    // a.download = 'edited-video.mp4';
+    // a.click();
+    // URL.revokeObjectURL(url);
 
     console.log('saveEdit 🚀🚀🚀👩‍🚀', file);
     onChangeFileHandler({ target: { files: [file] } });
-    setIsInProcess(false);
+    // setIsInProcess(false);
     handleClose();
   }
 

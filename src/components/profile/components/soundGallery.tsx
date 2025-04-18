@@ -6,9 +6,13 @@ import { CircularProgress } from '@mui/material';
 import { defaultAvatar } from "../../../icons";
 import audioFile1 from '../../../assets/audio1.mp3';
 import audioFile2 from '../../../assets/audio2.mp3';
+import { useDispatch } from 'react-redux';
+
+import {setCurrentEditVideo} from '../../../redux/reducers/currentEditVideoReducer'; // Import the action
 
 
 function SoundGallery({ isDarkTheme, isFavoriteSounds, selectedAudio, setSelectedAudio, searchQuery }: any) {
+   const dispatch = useDispatch();
     const abortController = useRef<AbortController | null>(null);
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem('userId');
@@ -137,7 +141,7 @@ function SoundGallery({ isDarkTheme, isFavoriteSounds, selectedAudio, setSelecte
                         key={audio._id}
                         className={`flex items-center p-2 rounded-lg ${isDarkTheme?'hover:bg-gray-400':'hover:bg-gray-100'} cursor-pointer ${selectedAudio === audio.url ? isDarkTheme?'bg-gray-500':'bg-gray-200' : ''
                             }`}
-                        onClick={() => setSelectedAudio(audio.url)}
+                        onClick={() => {setSelectedAudio(audio.url); console.log('new audio',audio);dispatch(setCurrentEditVideo(audio));}}
                     >
                         <img className="w-10 h-10 bg-gray-200 mr-2" src={defaultAvatar} alt="soundImg" />
                         <div className="w-[15rem]">
