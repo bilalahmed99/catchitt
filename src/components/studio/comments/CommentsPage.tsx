@@ -24,7 +24,6 @@ import {
 import { relative } from 'path';
 
 type PostedByOptions = "all" | "followers" | "non-followers";
-type RepliedFilterOptions = "all" | "replied" | "not-replied";
 
 function CommentsPage() {
     const navigate = useNavigate();
@@ -32,7 +31,6 @@ function CommentsPage() {
     const [darkTheme, setdarkTheme] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [postedBy, setPostedBy] = useState<PostedByOptions>("all");
-    const [repliedFilter, setRepliedFilter] = useState<RepliedFilterOptions>("all");
     const [dateRange, setDateRange] = useState(
         {
             fromDate: new Date(new Date().setMonth(new Date().getMonth() - 1)),
@@ -59,7 +57,7 @@ function CommentsPage() {
 
     function loadComments()
     {
-        let endpoint = `${process.env.VITE_API_URL}/media-content/comments?postedBy=${postedBy}&filter=${repliedFilter}&q=${searchQuery}&from=${dateRange.fromDate.toISOString()}&to=${dateRange.toDate.toISOString()}`;
+        let endpoint = `${process.env.VITE_API_URL}/media-content/comments?postedBy=${postedBy}&filter=${selectedAllComments}&q=${searchQuery}&from=${dateRange.fromDate.toISOString()}&to=${dateRange.toDate.toISOString()}`;
         let requestOptions =
         {
             method: 'GET',
@@ -90,6 +88,20 @@ function CommentsPage() {
         .catch((error) => console.error('Fetch error:', error));
     };
 
+    function reloadComments()
+    {
+        setComments(
+            {
+                items: [],
+                page: 1,
+                isLoading: false,
+                canLoadMore: true,
+            }
+        );
+
+        loadComments();
+    };
+
     useEffect(() => {
         loadComments();
         var themeColor = window.localStorage.getItem('theme');
@@ -102,11 +114,11 @@ function CommentsPage() {
     const [anchorElAllComments, setAnchorElAllComments] = useState(null);
     const [anchorElPostedBy, setAnchorElPostedBy] = useState(null);
   
-    const [selectedAllComments, setSelectedAllComments] = useState('All comments');
+    const [selectedAllComments, setSelectedAllComments] = useState('all');
     const [selectedPostedBy, setSelectedPostedBy] = useState('Posted by all');
   
     const filterOptionsALLComments = {
-      'All comments': ['All comments', 'Not replied', 'Replied'],
+        all: 'All comments', not_replied: 'Not replied', replied: 'Replied',
     };
   
     const filterOptionsPostedBy = {
@@ -125,6 +137,7 @@ function CommentsPage() {
     const handleAllCommentsSelect = (option) => {
       setSelectedAllComments(option);
       handleAllCommentsClose();
+      reloadComments();
     };
   
     // --- Handlers for Posted By
@@ -314,7 +327,7 @@ const handleFollowerApply = () => {
             textTransform: 'none',
           }}
         >
-          {selectedAllComments}
+          {filterOptionsALLComments[selectedAllComments]}
         </Button>
 
         <Menu
@@ -323,17 +336,18 @@ const handleFollowerApply = () => {
           onClose={handleAllCommentsClose}
           PaperProps={{ sx: { borderRadius: 2, mt: 1, minWidth: 180 } }}
         >
-          {filterOptionsALLComments['All comments'].map((option) => (
+        {Object.entries(filterOptionsALLComments).map(([key, label]) => (
             <MenuItem
-              key={option}
-              selected={option === selectedAllComments}
-              onClick={() => handleAllCommentsSelect(option)}
-              sx={{ justifyContent: 'space-between' }}
+                key={key}
+                selected={key === selectedAllComments}
+                onClick={() => handleAllCommentsSelect(key)}
+                sx={{ justifyContent: 'space-between' }}
             >
-              {option}
-              {option === selectedAllComments && <Check fontSize="small" />}
+                {label}
+                {key === selectedAllComments && <Check fontSize="small" />}
             </MenuItem>
-          ))}
+        ))}
+
         </Menu>
 
         {/* Posted by filter */}
