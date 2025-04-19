@@ -191,7 +191,7 @@ export const Profile = (props: any) => {
         
         if(user.relationWithViewer == 'Follow')
         {
-            setProfileViewsContent(prev => prev.map((item, i) => i === index ? { ...item, relationWithViewer: 'Following' } : item));
+            setProfileViewsContent((prev: any) => prev.map((item: object, i: number) => i === index ? { ...item, relationWithViewer: 'Following' } : item));
 
             let endpoint = `${process.env.VITE_API_URL}/profile/follow/${user.viewerId}`;
             let requestOptions =
