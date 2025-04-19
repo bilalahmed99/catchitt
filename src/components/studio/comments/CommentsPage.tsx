@@ -387,7 +387,7 @@ const handleFollowerApply = () => {
         </Menu>
 
         {/* Other static filters */}
-        <Button
+        {/* <Button
                 onClick={handleFollowerClick}
                 startIcon={<FilterList />}
                 endIcon={<ExpandMore />}
@@ -400,7 +400,7 @@ const handleFollowerApply = () => {
                 }}
                 >
                 Follower count
-                </Button>
+                </Button> */}
 
                 <Menu
                     anchorEl={anchorElFollower}
@@ -470,7 +470,7 @@ const handleFollowerApply = () => {
                 </Box>
                 </Menu>
 
-        <Button
+        {/* <Button
           startIcon={<FilterList />}
           sx={{
             backgroundColor: 'white',
@@ -481,11 +481,11 @@ const handleFollowerApply = () => {
           }}
         >
           Comment date
-        </Button>
+        </Button> */}
       </Box>
 
         {/* Search box */}
-        <div style={{
+        {/* <div style={{
             display: 'flex',
             alignItems: 'center',
             width: '350px',
@@ -506,7 +506,7 @@ const handleFollowerApply = () => {
                 fontSize: '14px',
                 }}
             />
-            </div>
+            </div> */}
 
       </Box>
 
