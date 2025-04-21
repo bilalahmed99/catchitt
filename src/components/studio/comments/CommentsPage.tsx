@@ -206,9 +206,11 @@ const handleFollowerApply = () => {
                 </button>
                 <h5 className='text-sm font-semibold text-left text-[#00000057]'>Manage</h5>
                 <ul className='text-sm space-y-6 mt-3 text-left mx-2'>
-                    <li className='cursor-pointer flex gap-2' onClick={() => navigate('/home')}>
-                        <img className='w-5 inline-block' src={darkTheme===''?homeDark:homeIcon} alt="" />
-                        <span>Home</span>
+                    <li className='cursor-pointer flex gap-2'>
+                        <Link to="/studio" reloadDocument={false} style={{ textDecoration: 'none' }} className='cursor-pointer flex gap-2'>
+                            <img className='w-5 inline-block' src={darkTheme===''?homeDark:homeIcon} alt="" />
+                            <span>Home</span>
+                        </Link>
                     </li>
                     <li className='cursor-pointer flex gap-2' onClick={() => navigate('/analytics/content')}>
                         <img className='w-4 inline-block' src={darkTheme===''?hamburgerDark :hamburger} alt="" />

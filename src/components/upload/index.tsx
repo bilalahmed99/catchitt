@@ -53,9 +53,11 @@ function UploadPage() {
                 <button className={`${darkTheme === '' ? 'bg-gray-200 hover:bg-gray-300' : 'bg-custom-dark-222'} w-full ring-0 hover:border-transparent rounded-none my-3 opacity-80`} >Upload</button>
                 <hr />
                 <ul className='text-sm space-y-6 mt-3 text-left mx-2'>
-                    <li className='cursor-pointer flex gap-2' onClick={() => navigate('/home')}>
-                        <img className='w-5 inline-block' src={darkTheme===''?homeDark:homeIcon} alt="" />
-                        <span>Home</span>
+                    <li className='cursor-pointer flex gap-2'>
+                        <Link to="/studio" reloadDocument={false} style={{ textDecoration: 'none' }} className='cursor-pointer flex gap-2'>
+                            <img className='w-5 inline-block' src={darkTheme===''?homeDark:homeIcon} alt="" />
+                            <span>Home</span>
+                        </Link>
                     </li>
                     <li className='cursor-pointer flex gap-2' onClick={() => navigate('/analytics/content')}>
                         <img className='w-4 inline-block' src={darkTheme===''?hamburgerDark :hamburger} alt="" />
