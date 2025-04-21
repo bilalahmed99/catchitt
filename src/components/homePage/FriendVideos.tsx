@@ -28,6 +28,7 @@ import FollowUserCard from '../../shared/cards/followCard';
 import { ToastContainer } from 'react-toastify';
 import { updateHomeVideos } from '../../redux/reducers';
 import VideoNavigation from '../../shared/navigation/VideoNavigation';
+import {toggleMute} from '../../redux/reducers/volumeSlice'
 // import { Toast } from 'react-toastify/dist/components';
 
 function FriendVideos(props: any) {
@@ -52,7 +53,13 @@ function FriendVideos(props: any) {
     const isuploading = useSelector((store) => store?.reducers?.isuploading);
     // @ts-ignore
     const suggestedUsers = useSelector((store) => store.reducers.suggestedAccounts.data);
+    const { isMutedVolume } = useSelector((state: any) => state?.reducers?.volume);
+    
     const dispatch = useDispatch();
+
+    const toggleMuteClicked = () => {
+        dispatch(toggleMute()); // Dispatch the toggleMute action creator
+    };
     const userActions: any = [
         { img: moreInHome, actionType: 'more' },
         { img: shareInHome, actionType: 'share', activeImage: shareInHome },
@@ -82,14 +89,14 @@ function FriendVideos(props: any) {
     const [isMuted, setIsMuted] = useState(boolMute);
     const [isPlaying, setIsPlaying] = useState(true);
 
-    const toggleMute = () => {
-        if(isMuted){
-            localStorage.setItem('videoMuted', 'false');
-        }else{
-            localStorage.setItem('videoMuted', 'true');
-        }
-        setIsMuted(prevMuted => !prevMuted);
-    };
+    // const toggleMute = () => {
+    //     if(isMuted){
+    //         localStorage.setItem('videoMuted', 'false');
+    //     }else{
+    //         localStorage.setItem('videoMuted', 'true');
+    //     }
+    //     setIsMuted(prevMuted => !prevMuted);
+    // };
 
     const togglePlaying = () => {
         setIsPlaying(prevPlaying => !prevPlaying);
@@ -296,7 +303,7 @@ function FriendVideos(props: any) {
                                         >
                                             <CustomPlayer
                                                 isMuted={isMuted} 
-                                                onMuteToggle={toggleMute}
+                                                // onMuteToggle={toggleMute}
                                                 isPlaying={isPlaying}
                                                 togglePlayPause={togglePlaying}
                                                 videoModal={videoModal}
@@ -310,6 +317,8 @@ function FriendVideos(props: any) {
                                                 thumbnailImage={post?.thumbnailUrl}
                                                 controls={true}
                                                 post={post}
+                                                isMutedVolume={isMutedVolume}
+                                                onMuteToggle={toggleMuteClicked}
                                                 popupHandler1={() => setSendPopup(true)}
                                             />
                                         </div>
