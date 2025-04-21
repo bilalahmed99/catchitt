@@ -85,6 +85,15 @@ export const shareToLinkedIn = (userName: string, videoUrl: string, mediaDesc: s
 };
 
 
+export const copyLinkHandlerWithId = (id: any, mediaId: string, msg: string) => {
+    navigator.clipboard
+        .writeText(`${BASE_URL_FRONTEND}/${id}/video/${mediaId}`)
+        .then(() => {
+            showToast(msg);
+            // toast.success('Link Copied');
+        });
+};
+
 export const copyLinkHandler = (userName: string, mediaId: string, msg: string) => {
     navigator.clipboard
         .writeText(`${BASE_URL_FRONTEND}/${userName}/video/${mediaId}`)
@@ -110,6 +119,14 @@ export const shareProfileby = {
     copyLink: async (userName: string): Promise<boolean> => {
         try {
             await navigator.clipboard.writeText(`${BASE_URL_FRONTEND}/profile/${userName}`);
+            return true;
+        } catch {
+            return false;
+        }
+    },
+    copyLinkWithId: async (userId: any): Promise<boolean> => {
+        try {
+            await navigator.clipboard.writeText(`${BASE_URL_FRONTEND}/profile/${userId}`);
             return true;
         } catch {
             return false;

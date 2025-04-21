@@ -281,7 +281,7 @@ const handleVideoEnd = (endedMediaId: string) => {
                 scrollTop,
                 clientHeight
             );
-            if (scrollTop + clientHeight + 100 > scrollHeight && countFlag == true) {
+            if (scrollTop + clientHeight + 500 > scrollHeight && countFlag == true) {
                 setLoadingVideo(true);
                 setPage((prevPage) => prevPage + 1);
                 setCountFlag(false);

@@ -42,7 +42,7 @@ import Forwardusers from '../../../shared/popups/shareTo/Forwardusers';
 import CountUp from 'react-countup';
 import EmojiPicker, { Theme } from 'emoji-picker-react';
 import { set } from 'lodash';
-import { copyLinkHandler, facebookShareHandler, getCaretCoordinates, searchUserToAnnotate, shareToLinkedIn, shareToTwitter, whatsappShareHandler } from '../../../utils/helpers';
+import { copyLinkHandlerWithId, copyLinkHandler, facebookShareHandler, getCaretCoordinates, searchUserToAnnotate, shareToLinkedIn, shareToTwitter, whatsappShareHandler } from '../../../utils/helpers';
 import HashtagText from '../../../shared/hashTag/HashtagText';
 import PopupForPrivacySettings from './popupForPrivacySettings';
 import { useUpdateEffect } from 'react-use';
@@ -211,14 +211,16 @@ export default function PopupForVideoPlayer({
     
         const handleCopyLink = (event: any) => {
             event.stopPropagation();
-            copyLinkHandler(info?.user?.username, info?.mediaId, 'Copied successfully')
+
+            copyLinkHandlerWithId(info?.user?._id, info?.mediaId, 'Copied successfully')
             setShowContextMenu(false);
         };
     
         const handleVideoDetail = (event: any) => {
             event.stopPropagation();
             setShowContextMenu(false);
-            const url = `${BASE_URL_FRONTEND}/${info?.user?.username}/video/${info?.mediaId}`;
+            // const url = `${BASE_URL_FRONTEND}/${info?.user?.username}/video/${info?.mediaId}`;
+            const url = `${BASE_URL_FRONTEND}/${info?.user?._id}/video/${info?.mediaId}`;
             // Open the URL in a new tab
             window.open(url, '_blank');
     
@@ -800,7 +802,11 @@ export default function PopupForVideoPlayer({
 
     useEffect(() => {
         // setSelectedVideoId(info?.mediaId);
-        setTextToCopy(`${BASE_URL_FRONTEND}/${userName}/video/${info?.mediaId}`);
+        let shareLink = userName;
+        if(userId){
+            shareLink = userId;
+        }
+        setTextToCopy(`${BASE_URL_FRONTEND}/${info?.user?._id}/video/${info?.mediaId}`);
 
     }, [info]);
 
@@ -1188,7 +1194,7 @@ export default function PopupForVideoPlayer({
                                             </p>
                                         </div>
                                         <div
-                                            onClick={() => copyLinkHandler(userName, info?.mediaId, 'Copied')}
+                                            onClick={() => copyLinkHandler(info?.user?._id, info?.mediaId, 'Copied')}
                                             className="flex justify-center items-center hover:bg-[#1b1b1b] w-1/5 bg-[#252525] rounded-r-lg py-1.5 px-2 cursor-pointer"
                                         >
                                             <p className="text-white font-bold text-sm">
