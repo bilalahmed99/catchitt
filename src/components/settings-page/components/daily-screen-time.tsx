@@ -10,6 +10,21 @@ const dailyScreenTime: React.FC = () => {
         daily?: string;
         [key: string]: string | undefined;
     }
+const [CustomOpenDropdown, setCustomOpenDropdown] = useState(false);
+const [selectedTime, setSelectedTime] = useState("10m"); // Default
+const [selectedHours, setSelectedHours] = useState(1); // Default 1 hour
+const [selectedMinutes, setSelectedMinutes] = useState("00"); // Default 00 minutes
+// const [dropPositionCustom, setDropPositionCustom] = useState("bottom"); // Optional
+const [showCustomOptions, setShowCustomOptions] = useState(false);
+const [selectedButton, setSelectedButton] = useState(""); 
+const toggleCustomDropdown = () => setCustomOpenDropdown(prev => !prev);
+
+const selectCustomTime = (  minutes: any) => {
+  setSelectedMinutes(minutes);
+  setSelectedTime(` ${minutes !== "00" ? minutes + "m" : ""}`);
+  setCustomOpenDropdown(false);
+};
+
     const [selectedTimes, setSelectedTimes] = useState<SelectedTimes>({ daily: "" });
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
     const dropdownRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -28,7 +43,9 @@ const dailyScreenTime: React.FC = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+
     // Open dropdown and set position BEFORE rendering
+
     const toggleDropdown = (day: string) => {
         if (openDropdown === day) {
             setOpenDropdown(null);
@@ -157,7 +174,7 @@ const dailyScreenTime: React.FC = () => {
             </div>
         </Typography>
         {isDailyScreenTimeEnabled && (
-        <div className={`${ThemeColor === 'dark' ? 'bg-gray-100 ': 'bg-gray-600'} p-4 rounded-md mt-3`}>
+        <div className={`${ThemeColor === 'dark' ? 'bg-gray-100 ': 'bg-gray-200'} p-4 rounded-md mt-3`}>
         <label className="flex items-center space-x-2 mb-3 cursor-pointer">
             <input type="radio" name="screen_time" className="hidden peer" value="daily" checked={selectedTimeLimitOption == 'daily'} onChange={(e) => {setSelectedTimeLimitOption(e.target.value); setSelectedTimes({})}}/>
             <div className="w-5 h-5 rounded-full border-2 border-red-500 flex items-center justify-center peer-checked:bg-red-500">
@@ -166,14 +183,165 @@ const dailyScreenTime: React.FC = () => {
             <span className="text-gray-900">Set the same limit every day</span>
         </label>
         {selectedTimeLimitOption == 'daily' && (
-        <div className="grid grid-cols-5 gap-2">
-            <button className={` ${ThemeColor === 'dark' ? 'btn-color-white': 'btn-color-dark'} border p-[6px] rounded-sm  bg-white focus:text-[#FE2C55]  `} onClick={() => selectTime('daily', "0", "40")}>40m</button>
-            <button className={` ${ThemeColor === 'dark' ? 'btn-color-white': 'btn-color-dark'} border p-[6px] rounded-sm  bg-white focus:text-[#FE2C55]  `} onClick={() => selectTime('daily', "1", "00")}>1h</button>
-            <button className={` ${ThemeColor === 'dark' ? 'btn-color-white': 'btn-color-dark'} border p-[6px] rounded-sm  bg-white focus:text-[#FE2C55]  `} onClick={() => selectTime('daily', "1", "30")}>1h 30m</button>
-            <button className={` ${ThemeColor === 'dark' ? 'btn-color-white': 'btn-color-dark'} border p-[6px] rounded-sm  bg-white focus:text-[#FE2C55]  `} onClick={() => selectTime('daily', "2", "00")}>2h</button>
-            <button className={` ${ThemeColor === 'dark' ? 'btn-color-white': 'btn-color-dark'} border p-[6px] rounded-sm  bg-white focus:text-[#FE2C55]  `}>Custom</button>
+        <div>
+            <div className="grid grid-cols-5 gap-2">
+                    <button 
+                    className={` ${ThemeColor === 'dark' ? 'btn-color-white': 'btn-color-black'} 
+                        border p-[6px] rounded-sm bg-white focus:text-[#FE2C55]
+                        ${selectedButton === '40m' ? '!border-[#FE2C55] !text-[#FE2C55]' : ''}
+                    `}
+                    onClick={() => { 
+                        selectTime('daily', "0", "40"); 
+                        setShowCustomOptions(false);
+                        setSelectedButton('40m');
+                    }}
+                    >
+                    40m
+                    </button>
+
+                    <button 
+                    className={`btn ${ThemeColor === 'dark' ? 'btn-color-white': 'btn-color-black'} 
+                        border p-[6px] rounded-sm bg-white focus:text-[#FE2C55]
+                        ${selectedButton === '1h' ? '!border-[#FE2C55] !text-[#FE2C55]' : ''}
+                    `}
+                    onClick={() => { 
+                        selectTime('daily', "1", "00"); 
+                        setShowCustomOptions(false);
+                        setSelectedButton('1h');
+                    }}
+                    >
+                    1h
+                    </button>
+
+                    <button 
+                    className={` ${ThemeColor === 'dark' ? 'btn-color-white': 'btn-color-black'} 
+                        border p-[6px] rounded-sm bg-white focus:text-[#FE2C55]
+                        ${selectedButton === '1h30m' ? '!border-[#FE2C55] !text-[#FE2C55]' : ''}
+                    `}
+                    onClick={() => { 
+                        selectTime('daily', "1", "30"); 
+                        setShowCustomOptions(false);
+                        setSelectedButton('1h30m');
+                    }}
+                    >
+                    1h 30m
+                    </button>
+
+                    <button 
+                    className={` ${ThemeColor === 'dark' ? 'btn-color-white': 'btn-color-black'} 
+                        border p-[6px] rounded-sm bg-white focus:text-[#FE2C55]
+                        ${selectedButton === '2h' ? '!border-[#FE2C55] !text-[#FE2C55]' : ''}
+                    `}
+                    onClick={() => { 
+                        selectTime('daily', "2", "00"); 
+                        setShowCustomOptions(false);
+                        setSelectedButton('2h');
+                    }}
+                    >
+                    2h
+                    </button>
+
+                    <button 
+                    className={` ${ThemeColor === 'dark' ? 'btn-color-white': 'btn-color-black'} 
+                        border p-[6px] rounded-sm bg-white focus:text-[#FE2C55]
+                        ${selectedButton === 'custom' ? '!border-[#FE2C55] !text-[#FE2C55]' : ''}
+                    `}
+                    onClick={() => { 
+                        setShowCustomOptions(true); 
+                        setSelectedButton('custom');
+                    }}
+                    >
+                    Custom
+                    </button>
+
+            
+           
+             </div>
+             {showCustomOptions && (
+            <div className="relative  w-32 mt-2 ml-auto" ref={(el) => (dropdownRefs.current['custom'] = el)}>
+                
+                        <button
+                            className={`${ThemeColor === 'dark' ? 'btn-color-white' : 'btn-color-dark'} border px-3 py-2 rounded-sm w-100 bg-white cursor-pointer block text-center`}
+                            onClick={toggleCustomDropdown}
+                        >
+                            {selectedTime }
+                        </button>
+
+                        {/* Dropdown */}
+                        {CustomOpenDropdown && (
+                            <div className={`absolute w-20 bg-white shadow-lg rounded-md border z-10 `}>
+                            <div className="flex">
+                                
+                                {/* Hours List */}
+                                {/* <div className="h-40 overflow-y-auto w-1/2 border-r">
+                                <ul className="text-center">
+                                    {[...Array(6)].map((_, i) => (
+                                    <li 
+                                        key={i} 
+                                        className="p-2 cursor-pointer hover:bg-gray-200"
+                                        onClick={() => selectCustomTime(i, selectedMinutes)}
+                                    >
+                                        {i}
+                                    </li>
+                                    ))}
+                                </ul>
+                                </div> */}
+
+                                {/* Minutes List */}
+                                <div className="h-40 w-20 overflow-y-auto ">
+                                <ul className="text-center">
+                                    {[ "10", "15", "20", "25", "30", "35", "40", "45", "50", "55","60"].map((min, i) => (
+                                    <li 
+                                        key={i} 
+                                        className="p-2 cursor-pointer hover:bg-gray-200"
+                                        onClick={() => selectCustomTime( min)}
+                                    >
+                                        {min}
+                                    </li>
+                                    ))}
+                                </ul>
+                                </div>
+
+                            </div>
+                            </div>
+                        )}
+
+
+              {/* <div className="relative ml-auto w-32">
+                <button className=" btn-color-dark  border px-3 py-2 rounded-sm w-100 bg-white cursor-pointer block text-center">1h</button>
+                    <div className="absolute w-40 bg-white shadow-lg rounded-md border z-10 bottom-full mb-2">
+                        <div className="flex">
+                            <div className="h-40 overflow-y-auto w-1/2 border-r">
+                            <ul className="text-center">
+                                <li className="p-2 cursor-pointer hover:bg-gray-200">0</li>
+                                <li className="p-2 cursor-pointer hover:bg-gray-200">1</li>
+                                <li className="p-2 cursor-pointer hover:bg-gray-200">2</li>
+                                <li className="p-2 cursor-pointer hover:bg-gray-200">3</li>
+                                <li className="p-2 cursor-pointer hover:bg-gray-200">4</li>
+                                <li className="p-2 cursor-pointer hover:bg-gray-200">5</li>
+                                </ul>
+                                </div>
+                            <div className="h-40 overflow-y-auto w-1/2">
+                                <ul className="text-center">
+                                    <li className="p-2 cursor-pointer hover:bg-gray-200">00</li>
+                                    <li className="p-2 cursor-pointer hover:bg-gray-200">05</li>
+                                    <li className="p-2 cursor-pointer hover:bg-gray-200">10</li>
+                                    <li className="p-2 cursor-pointer hover:bg-gray-200">15</li>
+                                    <li className="p-2 cursor-pointer hover:bg-gray-200">20</li>
+                                    <li className="p-2 cursor-pointer hover:bg-gray-200">25</li>
+                                    <li className="p-2 cursor-pointer hover:bg-gray-200">30</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div> */}
+            </div>
+          )}
         </div>
+          
+              
         )}
+         
         <label className="flex items-center space-x-2 mt-3 cursor-pointer">
             <input type="radio" name="screen_time" className="hidden peer" value="custom" checked={selectedTimeLimitOption == 'custom'} onChange={(e) => {setSelectedTimeLimitOption(e.target.value); setSelectedTimes({})}}/>
             <div className="w-5 h-5 rounded-full border-2 border-gray-400 flex items-center justify-center peer-checked:bg-red-500">
@@ -188,23 +356,22 @@ const dailyScreenTime: React.FC = () => {
                 {days.map((day) => (
                     <div key={day} className=" items-center justify-between mb-3">
                         {/* Day Button */}
-                        <button className={ ` ${ThemeColor === 'dark' ? 'btn-color-white': 'btn-color-dark'}  border px-4 py-2 w-24 mb-3 rounded-sm bg-white focus:border-[#FE2C55]`}>
+                        <button className={ ` ${ThemeColor === 'dark' ? 'btn-color-white': 'btn-color-black'}  border px-4 py-2 w-24 mb-3 rounded-sm bg-white focus:border-[#FE2C55]`}>
                             {day}
                         </button>
 
                         {/* Time Picker */}
                         <div className="relative w-24" ref={(el) => (dropdownRefs.current[day] = el)}>
                             <button
-                                className={ ` ${ThemeColor === 'dark' ? 'btn-color-white': 'btn-color-dark'}  border px-3 py-2 rounded-sm w-100 bg-white cursor-pointer block text-center`}
+                                className={ ` ${ThemeColor === 'dark' ? 'btn-color-white': 'btn-color-black'}  border px-3 py-2 rounded-sm w-100 bg-white cursor-pointer block text-center     ${selectedButton === day ? '!border-[#FE2C55] !text-[#FE2C55]' : ''}`}
                                 onClick={() => toggleDropdown(day)}
-                            >
+                                >
                                 {selectedTimes[day] || "1h"}
                             </button>
 
                             {/* Dropdown */}
                             {openDropdown === day && (
-                                  <div className={`absolute w-40 bg-white shadow-lg rounded-md border z-10 
-                                  ${dropPosition[day] === "top" ? "bottom-full mb-2" : "top-full mt-2"}`}>
+                                  <div className={`absolute w-40 bg-white shadow-lg rounded-md border z-10 ${dropPosition[day] === "top" ? "bottom-full mb-2" : "top-full mt-2"}`}>
                                     <div className="flex">
                                         
                                         {/* Hours List */}
@@ -239,7 +406,7 @@ const dailyScreenTime: React.FC = () => {
                                         </div>
 
                                     </div>
-                                </div>
+                                  </div>
                             )}
                         </div>
                     </div>
