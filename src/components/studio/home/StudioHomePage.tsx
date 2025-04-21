@@ -1,4 +1,5 @@
 import Navbar from '../../../shared/navbar';
+import UploadsHome from '../../analytics/UploadsHome';
 import style from './index.module.scss';
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
@@ -138,7 +139,7 @@ function StudioHomePage() {
                 </div>
             </div>
             <div className='w-[calc(100%-14rem)]  ml-auto pt-20'>
-              <h1>home page</h1>
+                        <UploadsHome/>
             </div>
         </div>
     );
