@@ -328,6 +328,7 @@ const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme, data,cu
             style={{ width: '-webkit-fill-available', padding: '0.5rem' }}
             ref={inputRef} // Use the passed ref
             onKeyDown={handleKeyDown} // Handling Enter key press
+            className={isDarkTheme ? 'text-white' : 'text-dark'}
           />
           <button onClick={showGiftPopup}>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
