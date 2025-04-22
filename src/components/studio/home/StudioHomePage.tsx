@@ -138,7 +138,7 @@ function StudioHomePage() {
                     </div>
                 </div>
             </div>
-            <div className='w-[calc(100%-14rem)]  ml-auto pt-20'>
+            <div className='w-[calc(100%-14rem)] ml-auto px-4'>
                         <UploadsHome/>
             </div>
         </div>

@@ -2,13 +2,56 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Divider, MenuItem, Menu, ThemeProvider, createTheme, Box, Typography, Grid, Card, CardMedia, CardContent, Tabs, Tab, Container, Select, Chip, IconButton, Paper, Avatar } from '@mui/material';
 import OverviewTab from './OverviewTab';
-import ContentTab from './ContentTab';
+// import ContentTab from './ContentTab';
 import ViewersTab from './ViewersTab';
 import FollowersTab from './FollowersTab';
 import { ANALYTICS_OVERVIEW_TIME_PERIODS, ANALYTICSTABS } from '../../utils/constants';
 import styles from './style.module.scss';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'; 
 
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+
+const posts = [
+  {
+    thumbnail: 'https://via.placeholder.com/80', // Replace with your image
+    description: 'No description',
+    time: 'Mar 12, 4:52 AM',
+    duration: '0:11',
+    plays: 0,
+    likes: 0,
+    comments: 0,
+  },
+  {
+    thumbnail: 'https://via.placeholder.com/80', // Replace with your image
+    description: 'No description',
+    time: 'Mar 12, 4:49 AM',
+    duration: '0:11',
+    plays: 0,
+    likes: 0,
+    comments: 0,
+  },
+];
+const comments = [
+    {
+      userAvatar: 'https://via.placeholder.com/40', // Replace with user's avatar
+      username: 'numannaseernomi20',
+      timeAgo: '5d ago',
+      comment: 'hmmm nice',
+      likes: 0,
+      postThumbnail: 'https://via.placeholder.com/40', // Replace with post image
+    },
+    {
+      userAvatar: 'https://via.placeholder.com/40', // Replace with user's avatar
+      username: 'numannaseernomi20',
+      timeAgo: '5d ago',
+      comment: 'great',
+      likes: 0,
+      postThumbnail: 'https://via.placeholder.com/40', // Replace with post image
+    },
+  ];
 const articles = [
     {
       title: "Posting Sub-only videos to strengthen the bond with your",
@@ -95,6 +138,7 @@ const Analytics = () => {
   const switchTab = (event: React.MouseEvent<HTMLAnchorElement>) => {
     setCurrentTab(Number(event.currentTarget.id));
   };
+
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -193,7 +237,7 @@ const Analytics = () => {
 
   return (
     <ThemeProvider theme={darkTheme === '' ? lightTheme : darkThemePalette}>
-         <div className='homepageMain w-[calc(100%-14rem)] ml-auto px-4 pt-28'>
+         <div className='homepageMain  pt-28'>
             <Paper
                 elevation={1}
                 sx={{
@@ -202,6 +246,7 @@ const Analytics = () => {
                     alignItems: 'center',
                     borderRadius: 1,
                     mx: 'auto',
+                    boxShadow: '0px 0px 9px 0px #e4e6eb'
                 }}
                 >
                 <Avatar
@@ -219,7 +264,6 @@ const Analytics = () => {
                 </Box>
             </Paper>
                 
-                <Analytics />
             </div>
 
       <header className={`text-gray-600 body-font ${darkTheme === '' ? 'bg-transparent' : styles.header} border-b px-4 mt-10`}>
@@ -308,9 +352,129 @@ const Analytics = () => {
       <OverviewTab analyticsData={analyticsData} isDarkTheme={!!darkTheme} />
         <div className='flex gap-4'>
             <div className="w-[70%]">
-             <ContentTab isDarkTheme={darkTheme} />
+             {/* <ContentTab isDarkTheme={darkTheme} /> */}
+                <Box sx={{ p: 2 }}>
+                <Typography variant="body1" sx={{ display: 'flex'}} fontWeight="bold" mb={2}>
+                    Recent posts 
+                    <svg className='ml-1' width="5" height="10" viewBox="0 0 5 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M0.4758 8.83939C0.376032 8.75408 0.294046 8.64994 0.234525 8.53293C0.175004 8.41593 0.139114 8.28834 0.128904 8.15746C0.118694 8.02658 0.134363 7.89498 0.175018 7.77016C0.215673 7.64533 0.280516 7.52974 0.365846 7.42998L2.80783 4.58117L0.366846 1.73336C0.277126 1.63436 0.208162 1.51839 0.164027 1.39229C0.119893 1.26619 0.101485 1.13252 0.109891 0.99919C0.118297 0.865855 0.153347 0.735557 0.212969 0.615999C0.27259 0.496441 0.355574 0.390048 0.457015 0.303108C0.558456 0.216168 0.676297 0.150445 0.803571 0.109824C0.930846 0.0692029 1.06497 0.0545083 1.19802 0.066608C1.33107 0.0787077 1.46035 0.117356 1.57821 0.18027C1.69607 0.243183 1.80012 0.329086 1.88421 0.432899L4.60408 3.60657C4.83691 3.8783 4.96488 4.22434 4.96488 4.58217C4.96488 4.94 4.83691 5.28604 4.60408 5.55776L1.88521 8.73144C1.71262 8.93264 1.46717 9.05704 1.20286 9.07729C0.938552 9.09754 0.677022 9.01196 0.4758 8.83939Z" fill="black"/>
+                    </svg>
+                </Typography>
+                <Card  sx={{ p: 2, boxShadow: '0px 0px 9px 0px #e4e6eb' }}>
+                    {posts.map((post, index) => (
+                    <Box key={index}>
+                        <Box display="flex" alignItems="center" mb={2}>
+                        <Box sx={{ position: 'relative', width: 80, height: 80, mr: 2 }}>
+                            <Avatar
+                            variant="rounded"
+                            src={post.thumbnail}
+                            alt="thumbnail"
+                            sx={{ width: 80, height: 80 }}
+                            />
+                            <Box
+                            sx={{
+                                position: 'absolute',
+                                bottom: 4,
+                                left: 4,
+                                backgroundColor: 'black',
+                                color: 'white',
+                                fontSize: 10,
+                                borderRadius: 1,
+                                px: 0.5,
+                            }}
+                            >
+                            {post.duration}
+                            </Box>
+                        </Box>
 
-            <Container sx={{ mt: 4 }}>
+                        <Box flex={1} textAlign={'left'}>
+                            <Typography variant="subtitle2">{post.description}</Typography>
+                            <Typography variant="caption" color="text.secondary">
+                            {post.time}
+                            </Typography>
+                        </Box>
+
+                        <Box display="flex" alignItems="center" gap={6} mr={4}>
+                            <Box display="flex" flexDirection="column" alignItems="center">
+                            <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.94158 4.78725C10.3327 5.01376 10.5279 5.12636 10.6345 5.24362C10.7998 5.42717 10.8913 5.66546 10.8913 5.91251C10.8913 6.15957 10.7998 6.39786 10.6345 6.58141C10.5279 6.69867 10.3327 6.81193 9.94158 7.03778L2.84619 11.1344C2.45511 11.3603 2.25991 11.4729 2.10468 11.5055C1.86312 11.557 1.61106 11.5172 1.39712 11.3938C1.18318 11.2704 1.02251 11.0722 0.946096 10.8373C0.897461 10.6867 0.897461 10.4609 0.897461 10.0092V1.81518C0.897461 1.36347 0.897461 1.13762 0.946096 0.98705C1.02251 0.752189 1.18318 0.553942 1.39712 0.430547C1.61106 0.307151 1.86312 0.267349 2.10468 0.318818C2.25924 0.351464 2.45511 0.464723 2.84619 0.690576L9.94158 4.78725Z" fill="black" fill-opacity="0.17"/>
+                            </svg>
+
+                            <Typography variant="caption" color="text.secondary">
+                                {post.plays}
+                            </Typography>
+                            </Box>
+                            <Box display="flex" flexDirection="column" alignItems="center">
+                                <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3.88596 0.25C2.91413 0.25 1.98211 0.636057 1.29492 1.32324C0.607737 2.01043 0.22168 2.94246 0.22168 3.91428C0.22168 6.03557 1.42956 8.03694 3.42759 9.86908C4.10982 10.494 4.84401 11.0423 5.57287 11.5347C5.82737 11.7065 6.06588 11.8624 6.28041 11.9924C6.41099 12.0723 6.49693 12.1289 6.5509 12.1589C6.7521 12.2708 7.01593 12.2708 7.21713 12.1589C7.27109 12.1289 7.35704 12.0723 7.48762 11.9924C7.70148 11.8624 7.94066 11.7065 8.19583 11.5347C8.92402 11.0423 9.65821 10.494 10.3398 9.86908C12.3385 8.03694 13.547 6.03557 13.547 3.91428C13.547 2.94246 13.161 2.01043 12.4738 1.32324C11.7866 0.636057 10.8546 0.25 9.88273 0.25C8.73348 0.25 7.61087 0.876259 6.90533 1.79033C6.21645 0.86027 5.09851 0.25 3.88596 0.25Z" fill="black" fill-opacity="0.17"/>
+                                </svg>
+                            <Typography variant="caption" color="text.secondary">
+                                {post.likes}
+                            </Typography>
+                            </Box>
+                            <Box display="flex" flexDirection="column" alignItems="center">
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M0.202637 6.24501C0.202637 3.00912 3.30395 0.582031 6.86497 0.582031C10.426 0.582031 13.5273 3.00912 13.5273 6.24501C13.5273 8.14511 12.5759 9.71809 11.4253 10.9126C10.2741 12.1085 8.87167 12.982 7.82901 13.503C7.72746 13.5537 7.61463 13.5777 7.50123 13.5726C7.38782 13.5674 7.2776 13.5334 7.18103 13.4738C7.08445 13.4141 7.00473 13.3308 6.94941 13.2316C6.8941 13.1325 6.86503 13.0209 6.86497 12.9073V11.908C3.30395 11.908 0.202637 9.48091 0.202637 6.24501ZM4.03348 7.24436C4.25435 7.24436 4.46617 7.15662 4.62235 7.00045C4.77853 6.84427 4.86627 6.63244 4.86627 6.41157C4.86627 6.1907 4.77853 5.97888 4.62235 5.8227C4.46617 5.66652 4.25435 5.57878 4.03348 5.57878C3.81261 5.57878 3.60078 5.66652 3.44461 5.8227C3.28843 5.97888 3.20069 6.1907 3.20069 6.41157C3.20069 6.63244 3.28843 6.84427 3.44461 7.00045C3.60078 7.15662 3.81261 7.24436 4.03348 7.24436ZM6.86497 7.24436C7.08584 7.24436 7.29766 7.15662 7.45384 7.00045C7.61002 6.84427 7.69776 6.63244 7.69776 6.41157C7.69776 6.1907 7.61002 5.97888 7.45384 5.8227C7.29766 5.66652 7.08584 5.57878 6.86497 5.57878C6.6441 5.57878 6.43228 5.66652 6.2761 5.8227C6.11992 5.97888 6.03218 6.1907 6.03218 6.41157C6.03218 6.63244 6.11992 6.84427 6.2761 7.00045C6.43228 7.15662 6.6441 7.24436 6.86497 7.24436ZM9.69646 7.24436C9.91733 7.24436 10.1292 7.15662 10.2853 7.00045C10.4415 6.84427 10.5293 6.63244 10.5293 6.41157C10.5293 6.1907 10.4415 5.97888 10.2853 5.8227C10.1292 5.66652 9.91733 5.57878 9.69646 5.57878C9.47559 5.57878 9.26377 5.66652 9.10759 5.8227C8.95141 5.97888 8.86367 6.1907 8.86367 6.41157C8.86367 6.63244 8.95141 6.84427 9.10759 7.00045C9.26377 7.15662 9.47559 7.24436 9.69646 7.24436Z" fill="black" fill-opacity="0.17"/>
+                                </svg>
+                            <Typography variant="caption" color="text.secondary">
+                                {post.comments}
+                            </Typography>
+                            </Box>
+                        </Box>
+                        </Box>
+                        {index < posts.length - 1 && <Divider sx={{ my: 1 }} />}
+                    </Box>
+                    ))}
+                </Card>
+                </Box>
+                <Box sx={{ p: 2 }}>
+                    <Typography variant="body1" sx={{display: 'flex'}} fontWeight="bold" mb={2}>
+                        Latest comments
+                        <svg className='ml-1' width="5" height="10" viewBox="0 0 5 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M0.4758 8.83939C0.376032 8.75408 0.294046 8.64994 0.234525 8.53293C0.175004 8.41593 0.139114 8.28834 0.128904 8.15746C0.118694 8.02658 0.134363 7.89498 0.175018 7.77016C0.215673 7.64533 0.280516 7.52974 0.365846 7.42998L2.80783 4.58117L0.366846 1.73336C0.277126 1.63436 0.208162 1.51839 0.164027 1.39229C0.119893 1.26619 0.101485 1.13252 0.109891 0.99919C0.118297 0.865855 0.153347 0.735557 0.212969 0.615999C0.27259 0.496441 0.355574 0.390048 0.457015 0.303108C0.558456 0.216168 0.676297 0.150445 0.803571 0.109824C0.930846 0.0692029 1.06497 0.0545083 1.19802 0.066608C1.33107 0.0787077 1.46035 0.117356 1.57821 0.18027C1.69607 0.243183 1.80012 0.329086 1.88421 0.432899L4.60408 3.60657C4.83691 3.8783 4.96488 4.22434 4.96488 4.58217C4.96488 4.94 4.83691 5.28604 4.60408 5.55776L1.88521 8.73144C1.71262 8.93264 1.46717 9.05704 1.20286 9.07729C0.938552 9.09754 0.677022 9.01196 0.4758 8.83939Z" fill="black"/>
+                        </svg>
+                    </Typography>
+                    <Card sx={{ p: 2, boxShadow: '0px 0px 9px 0px #e4e6eb' }}>
+                        {comments.map((item, index) => (
+                        <Box key={index}>
+                            <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
+                            <Box display="flex" textAlign={'left'} flex={1} mr={2}>
+                                <Avatar src={item.userAvatar} alt="User" sx={{ width: 40, height: 40, mr: 2 }} />
+                                <Box>
+                                <Typography variant="caption" mr={1} color="text.secondary">
+                                    {item.username}
+                                </Typography>
+                                <Typography variant="caption" color="text.secondary">
+                                    {item.timeAgo}
+                                </Typography>
+                                <Typography variant="body2" fontWeight="bold" mt={0.5}>
+                                    {item.comment}
+                                </Typography>
+                                <Box display="flex" alignItems="center" mt={1}>
+                                    <FavoriteBorderIcon sx={{ fontSize: '15px'}} color="disabled" />
+                                    <Typography variant="caption" color="text.secondary" ml={0.5}>
+                                    {item.likes}
+                                    </Typography>
+                                </Box>
+                                </Box>
+                            </Box>
+
+                            <Box>
+                                <Avatar
+                                variant="rounded"
+                                src={item.postThumbnail}
+                                alt="Post"
+                                sx={{ width: 50, height: 50 }}
+                                />
+                            </Box>
+                            </Box>
+
+                            {index < comments.length - 1 && <Divider sx={{ my: 1 }} />}
+                        </Box>
+                        ))}
+                    </Card>
+                    </Box>
+                <Container sx={{ mt: 4 }}>
             <h5 className="text-base font-semibold mb-4 flex items-center">
                     Inspirations
                     <svg className='ml-1' width="5" height="10" viewBox="0 0 5 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -357,11 +521,24 @@ const Analytics = () => {
                             }}
                         />
                         </Tabs>
-                    <Select sx={{backgroundColor: 'white', border: 'none'}} size="small" defaultValue="all">
-                    <MenuItem value="all">All regions</MenuItem>
-                    <MenuItem value="us">United States</MenuItem>
-                    <MenuItem value="asia">Asia</MenuItem>
-                    </Select>
+                        <Select
+                            size="small"
+                            defaultValue="all"
+                            IconComponent={ExpandMoreIcon}
+                            sx={{
+                                color: '#000',
+                                backgroundColor: 'white',
+                                borderRadius: 2,
+                                boxShadow: '0 0 0 1px #e0e0e0',
+                                '.MuiOutlinedInput-notchedOutline': { border: 'none' },
+                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                            }}
+                            displayEmpty
+                            >
+                            <MenuItem value="all">All regions</MenuItem>
+                            <MenuItem value="us">United States</MenuItem>
+                            <MenuItem value="asia">Asia</MenuItem>
+                        </Select>
                 </Box>
                 {/* Filter Chips */}
                 <Box display="flex" alignItems="center" mb={3} gap={1}>
@@ -391,12 +568,12 @@ const Analytics = () => {
                 <Grid container spacing={2}>
                     {videos.map((video, index) => (
                     <Grid item xs={12} sm={6} md={3} key={index}>
-                        <Card sx={{ backgroundColor: 'transparent', boxShadow: 'none', borderRadius: 3, position: 'relative', overflow: 'hidden' }}>
+                        <Card sx={{ backgroundColor: 'transparent', boxShadow: 'none', borderRadius: 3, position: 'relative' }}>
                         <CardMedia
                             component="img"
                             image={video.thumbnail}
                             alt={video.title}
-                            sx={{ objectFit: 'cover', height: '280px' }}
+                            sx={{ objectFit: 'cover', height: '280px', borderRadius: '8px' }}
                         />
                         <Box
                             sx={{
