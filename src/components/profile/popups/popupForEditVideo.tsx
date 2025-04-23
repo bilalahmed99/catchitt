@@ -184,6 +184,14 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
     return `${cursorPosition}px`;
   };
 
+  const addSound = () => {
+    setIsGalleryHighlighted(true);
+    setTimeout(() => {
+      setIsGalleryHighlighted(false);
+    }, 1000); // Highlight for 2 seconds
+  }
+  
+
   // Handle Cursor Drag
   const handleCursorDrag = (e: MouseEvent) => {
     if (playbackTrack.current && videoRef.current && cursorRef.current) {
@@ -220,7 +228,8 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
   },[audioTabSelected])
 
   const handleAudioManipulation = async () => {
-    setIsGalleryHighlighted(true);
+   
+    
     try {
       setIsInProcess(true);
       // await ffmpeg.exec([
@@ -282,7 +291,6 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
     }
     finally {
       setIsInProcess(false);
-      setTimeout(() => setIsGalleryHighlighted(false), 1000); // Remove highlight after 1 second
     }
   }
 
@@ -360,6 +368,7 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
       count: "1/3",
     },
   ];
+
   
 
   const EDIT_VIDEO_ACTIONS = [
@@ -636,7 +645,7 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
               {/* Sound container */}
               {selectedAudio ? <AudioWaveForm audioUrl={selectedAudio} /> : <div className='w-full my-3 bg-[#0000000D] p-2.5 rounded'>
 
-                <div className='flex gap-3 cursor-pointer'>
+                <div onClick={addSound} className='flex gap-3 cursor-pointer'>
                   <img src={isDarkTheme ? music : musicBlack} alt="audio" />
                   <span className={`text-[15px] ${isDarkTheme ? 'text-gray-500' : ''}`}>Add sound</span>
                 </div>

@@ -33,6 +33,7 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
   const [customCover, setCustomCover] = useState<string | null>(null);
   // const [preview, setPreview] = useState<string>(currentThumbnail || '');
   const [preview, setPreview] = useState<string>('');
+  const [showButtons, setShowButtons] = useState(false);
 
   const thumbnailsRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
@@ -42,6 +43,9 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
   const [scrollLeft, setScrollLeft] = useState(0);
   const [linePosition, setLinePosition] = useState(50);
   const [manualSelect, setManualSelect] = useState(false);
+  const dndRef = useRef<{ triggerFileDialog: () => void }>(null);
+
+
   // console.log('current preview');
   // console.log(preview);
  
@@ -52,6 +56,14 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
     setManualSelect(true);
     setTimeout(() => setManualSelect(false), 1000); // resume auto detection after 1s
   };
+
+  const handleUploadNewClick = () => {
+    setTab('upload'); // switch to upload tab
+    setTimeout(() => {
+      fileInputRef.current?.click();
+    }, 100); // small delay to ensure the tab updates first
+  };
+
 
   useEffect(() => {
     if (currentThumbnail) {
@@ -66,6 +78,7 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
       setPreview(url);
       setCustomCover(url);
       onCustomThumbnail(file);
+      setShowButtons(true);
     };
     reader.readAsDataURL(file);
   };
@@ -129,8 +142,13 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
     };
   }, [manualSelect, videoThumbnails]);
 
+  const handleClose = () => {
+    setShowButtons(false); // Reset showButtons when closing
+    onClose(); // Call the original onClose
+  };
+
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <DialogTitle
       sx={{
         px: 1,
@@ -187,17 +205,7 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
 
         {tab === 'select' && (
           <>
-           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', height: '220px', mb: 3 }}>
-           {preview && (<>
-              <img
-               src={preview}
-               alt="Preview"
-               style={{ height: '200px', objectFit: 'contain', borderRadius: '4px' }}
-             />
-           </>
-             
-           )}
-         </Box>
+         
           <Box sx={{ position: 'relative', height: 90, mb: 4 }}>
             <Box
               ref={lineRef}
@@ -269,18 +277,20 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
               onChangeFile={handleCustomUpload}
               aspect={62 / 127}
             />
+
+            
           </Box>
         )}
       </DialogContent>
 
-        <Box sx={{ backgroundColor: '#fff', display: 'flex', p: 2, justifyContent: 'flex-end' }}>
-          <Button variant='contained'   sx={{boxShadow: 'none', textTransform: 'capitalize', backgroundColor: '#0000000D', px: 3, mx: 2, color: 'black', borderRadius: '8px', '&:hover': {
+        {showButtons && <Box sx={{ backgroundColor: '#fff', display: 'flex', p: 2, justifyContent: 'flex-end' }}>
+          <Button variant='contained' onClick={handleUploadNewClick} sx={{boxShadow: 'none', textTransform: 'capitalize', backgroundColor: '#0000000D', px: 3, mx: 2, color: 'black', borderRadius: '8px', '&:hover': {
               backgroundColor: '#0000000f',
               boxShadow: 'none'
             }, }}>Upload new</Button>
           <Button
             variant="contained"
-            onClick={onClose}
+            onClick={()=> { onClose(); setShowButtons(false); }}
             sx={{textTransform: 'capitalize', boxShadow: 'none', backgroundColor: '#FE2C55', px: 3, borderRadius: '8px',  '&:hover': {
               backgroundColor: '#FE2C40',
               boxShadow: 'none'
@@ -289,6 +299,7 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
             Confirm
           </Button>
         </Box>
+      }
     </Dialog>
   );
 };

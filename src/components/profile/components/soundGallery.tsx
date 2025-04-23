@@ -12,6 +12,7 @@ import {setCurrentEditVideo} from '../../../redux/reducers/currentEditVideoReduc
 
 
 function SoundGallery({ isDarkTheme, isFavoriteSounds, selectedAudio, setSelectedAudio, searchQuery, isHighlighted }: any) {
+    console.log('isHighlighted'+isHighlighted)
    const dispatch = useDispatch();
     const abortController = useRef<AbortController | null>(null);
     const token = localStorage.getItem('token');
