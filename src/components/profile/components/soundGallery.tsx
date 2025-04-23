@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 import {setCurrentEditVideo} from '../../../redux/reducers/currentEditVideoReducer'; // Import the action
 
 
-function SoundGallery({ isDarkTheme, isFavoriteSounds, selectedAudio, setSelectedAudio, searchQuery }: any) {
+function SoundGallery({ isDarkTheme, isFavoriteSounds, selectedAudio, setSelectedAudio, searchQuery, isHighlighted }: any) {
    const dispatch = useDispatch();
     const abortController = useRef<AbortController | null>(null);
     const token = localStorage.getItem('token');
@@ -109,61 +109,70 @@ function SoundGallery({ isDarkTheme, isFavoriteSounds, selectedAudio, setSelecte
     
 
     return (
-        <ul id="galleryScrollableDiv" className="p-2 h-64 overflow-y-auto relative">
-            <InfiniteScroll
-                dataLength={gallery.items.length}
-                next={fetchPaginatedSounds}
-                hasMore={gallery.isNextpage}
-                loader={<div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        margin: '1rem',
-                        width: 'inherit',
-                    }}
-                >
-                    <CircularProgress />
-                </div>}
-                className="mb-20"
-                // scrollThreshold={0.6}
-                scrollableTarget="galleryScrollableDiv"
-                endMessage={gallery.items.length === 0 &&
-                    <div className="flex flex-row justify-center items-center mt-3">
-                        <p className="font-bold text-xl">
-                            No sounds available.
-                        </p>
-                    </div>
-                }
-            >
-                {gallery.items.map((audio: any) => (
-                    <li
-                        key={audio._id}
-                        className={`flex items-center p-2 rounded-lg ${isDarkTheme?'hover:bg-gray-400':'hover:bg-gray-100'} cursor-pointer ${selectedAudio === audio.url ? isDarkTheme?'bg-gray-500':'bg-gray-200' : ''
-                            }`}
-                        onClick={() => {setSelectedAudio(audio.url); console.log('new audio',audio);dispatch(setCurrentEditVideo(audio));}}
+        <div 
+            className={`sound-gallery ${isHighlighted ? 'highlight-effect' : ''}`}
+            style={{
+            transition: 'all 0.3s ease',
+            border: isHighlighted ? '2px solid #20D5EC' : 'none',
+            boxShadow: isHighlighted ? '0 0 10px rgba(32, 213, 236, 0.5)' : 'none'
+            }}
+        >
+            <ul id="galleryScrollableDiv" className="p-2 h-64 overflow-y-auto relative">
+                <InfiniteScroll
+                    dataLength={gallery.items.length}
+                    next={fetchPaginatedSounds}
+                    hasMore={gallery.isNextpage}
+                    loader={<div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            margin: '1rem',
+                            width: 'inherit',
+                        }}
                     >
-                        <img className="w-10 h-10 bg-gray-200 mr-2" src={defaultAvatar} alt="soundImg" />
-                        <div className="w-[15rem]">
-                            <div className="font-medium text-sm">{Object.hasOwn(audio,'title')? audio.title: audio.name}</div>
-                            
-                            {/* <span className="text-sm text-gray-500">{audio.duration || '00:15'}</span> */}
+                        <CircularProgress />
+                    </div>}
+                    className="mb-20"
+                    // scrollThreshold={0.6}
+                    scrollableTarget="galleryScrollableDiv"
+                    endMessage={gallery.items.length === 0 &&
+                        <div className="flex flex-row justify-center items-center mt-3">
+                            <p className="font-bold text-xl">
+                                No sounds available.
+                            </p>
                         </div>
-                        <button
-                                className="btn text-xl ml-4"
-                                onClick={(e) => {
-                                    e.stopPropagation(); // Prevent playing audio on click
-                                    toggleFavorite(audio._id);
-                                }}
-                                title={audio.isBookmarked ? 'Unfavorite' : 'Favorite'}
-                            >
-                                {audio.isBookmarked ? '💖' : '🤍'}
-                            </button>
-                       {/* <img src={attachMusicInWhite} alt="attach-sound" /> */}
-                    </li>
-                ))}
-            </InfiniteScroll>
-        </ul>
+                    }
+                >
+                    {gallery.items.map((audio: any) => (
+                        <li
+                            key={audio._id}
+                            className={`flex items-center p-2 rounded-lg ${isDarkTheme?'hover:bg-gray-400':'hover:bg-gray-100'} cursor-pointer ${selectedAudio === audio.url ? isDarkTheme?'bg-gray-500':'bg-gray-200' : ''
+                                }`}
+                            onClick={() => {setSelectedAudio(audio.url); console.log('new audio',audio);dispatch(setCurrentEditVideo(audio));}}
+                        >
+                            <img className="w-10 h-10 bg-gray-200 mr-2" src={defaultAvatar} alt="soundImg" />
+                            <div className="w-[15rem]">
+                                <div className="font-medium text-sm">{Object.hasOwn(audio,'title')? audio.title: audio.name}</div>
+                                
+                                {/* <span className="text-sm text-gray-500">{audio.duration || '00:15'}</span> */}
+                            </div>
+                            <button
+                                    className="btn text-xl ml-4"
+                                    onClick={(e) => {
+                                        e.stopPropagation(); // Prevent playing audio on click
+                                        toggleFavorite(audio._id);
+                                    }}
+                                    title={audio.isBookmarked ? 'Unfavorite' : 'Favorite'}
+                                >
+                                    {audio.isBookmarked ? '💖' : '🤍'}
+                                </button>
+                        {/* <img src={attachMusicInWhite} alt="attach-sound" /> */}
+                        </li>
+                    ))}
+                </InfiniteScroll>
+            </ul>
+        </div>
     )
 }
 

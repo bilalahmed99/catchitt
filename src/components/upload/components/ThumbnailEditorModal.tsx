@@ -173,7 +173,17 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
       <DialogContent sx={{ backgroundColor: '#F5F5F5' }}>
         
 
-       
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', height: '220px', mb: 3 }}>
+          {preview && tab == 'select' && (<>
+             <img
+              src={preview}
+              alt="Preview"
+              style={{ height: '200px', objectFit: 'contain', borderRadius: '4px' }}
+            />
+          </>
+            
+          )}
+        </Box>
 
         {tab === 'select' && (
           <>
