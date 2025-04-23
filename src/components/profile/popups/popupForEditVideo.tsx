@@ -497,7 +497,7 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
           <div className={`${style.modalHeader} border-b border-gray-200 py-3`} >
             <span className={`${style.modalTitle} !text-[17px]`}>Edit Video</span>
           </div>
-          <div className={`${style.modalBody} relative`}>
+          <div className={`${style.modalBody} relative overflow-y-auto h-[calc(100vh-13rem)]`}>
             {isInProcess&&<div className={`absolute top-0 left-0 right-0 bottom-0 z-10 opacity-60 ${isDarkTheme?'bg-black':'bg-white'} flex justify-center items-center`}> <CircularProgress style={{width:'30px',height:'30px',color:'#f50057'}} /> </div>}
             <div className={`${style.content} border-b border-gray-200`}>
               {/* LEFT ACTION BAR */}
@@ -539,9 +539,10 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
                 {selectedAudio && <button onClick={handleAudioManipulation} className="bg-red-500 rounded-full w-[90%] block mx-auto p-2 absolute bottom-1 left-1/2 -translate-x-1/2 hover:bg-red-700 border-0">Add Sound</button>}
               </div> */}
               {/* RIGHT VIDEO CONTAINER */}
-              <div className={style.videoContainer}>
-                <video ref={videoRef} onLoadedMetadata={getMediaInfo} onTimeUpdate={getCurrentTime} onEnded={endedVideoHandler} src={video} style={{ width: '170px', height: '302px', borderRadius: '10px' }} />
+              <div className={` ${style.videoContainer}`}>
+                <video ref={videoRef} onLoadedMetadata={getMediaInfo} onTimeUpdate={getCurrentTime} onEnded={endedVideoHandler} src={video} style={{ width: '200px', height: '350px', backgroundColor: '#2C2C2C', borderRadius: '10px' }} />
               </div>
+
             </div>
             {/* bottom controls bar */}
             <div className={`${style.videoControlBar} border-b border-gray-200`}>
@@ -655,11 +656,12 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
                 <CircularProgress style={{ color: 'red', height: '35px', width: '35px' }} />
               </div>}
             {/* footer section */}
-            <div className="float-right px-3 mb-3">
+           
+          </div>
+          <div className="float-right px-3 mb-3">
               <button className='mx-1 border-0 py-2' style={{ color: isDarkTheme ? '#fff' : 'rgb(22, 24, 35)', backgroundColor: isDarkTheme ? '#0000000D' : '#0000000D', minWidth: '100px', }} onClick={handleClose}>Cancel</button>
               <button onClick={saveEdit} className='mx-1 py-2' style={{ color: '#fff', backgroundColor: 'rgb(255, 59, 92)', minWidth: '100px' }} autoFocus>Save edit</button>
             </div>
-          </div>
         </div>
       </BootstrapDialog>
     </ThemeProvider>
