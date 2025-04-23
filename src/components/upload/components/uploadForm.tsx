@@ -68,13 +68,13 @@ function UploadForm(props: any) {
 
                                             )}
 
-                                        
-                                        <p className='pl-1 text-[#008568] font-normal'>
+
+                                        <p className='pl-1 font-normal'>
                                             
                                             {uploadState.uploaded > 1024
                                                 ? `${(uploadState.uploaded / 1024).toFixed(2)} MB`
                                                 : `${uploadState.uploaded.toFixed(2)} KB`} 
-                                            {isUploadComplete && ` (${uploadState.total.toFixed(2)} MB)`}
+                                            {isUploadComplete && ` (${uploadState.total.toFixed(2)} MB)`} / {uploadState.total.toFixed(2)} MB
                                         </p>
                                     </span>
                                     {!isUploadComplete && (
