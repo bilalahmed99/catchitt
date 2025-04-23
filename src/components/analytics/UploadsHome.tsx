@@ -14,27 +14,16 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { formatCustomDate } from '../../utils/helpers';
 
-const posts = [
-  {
-    thumbnail: 'https://via.placeholder.com/80', // Replace with your image
-    description: 'No description',
-    time: 'Mar 12, 4:52 AM',
-    duration: '0:11',
-    plays: 0,
-    likes: 0,
-    comments: 0,
-  },
-  {
-    thumbnail: 'https://via.placeholder.com/80', // Replace with your image
-    description: 'No description',
-    time: 'Mar 12, 4:49 AM',
-    duration: '0:11',
-    plays: 0,
-    likes: 0,
-    comments: 0,
-  },
-];
+interface RecentPostsInterface
+{
+  items: object[];
+  page: number;
+  isLoading: boolean;
+  canLoadMore: boolean;
+}
+
 const creator = {
     name: "ANATOLY",
     description: "Official Anatoly Seezitt accoun",
@@ -143,6 +132,15 @@ const Analytics = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [darkTheme, setDarkTheme] = useState<string>('');
 
+  const [recentPosts, setRecentPosts] = useState<RecentPostsInterface>(
+    {
+      items: [],
+      page: 1,
+      isLoading: false,
+      canLoadMore: true,
+    }
+  );
+
   const navigate = useNavigate();
   const API_KEY = process.env.VITE_API_URL;
   const token = localStorage.getItem('token');
@@ -184,6 +182,39 @@ const Analytics = () => {
     }
   };
 
+  function loadRecentPosts()
+  {
+    let endpoint = `${process.env.VITE_API_URL}/profile/${localStorage.getItem('userId')}/videos`;
+    let requestOptions =
+    {
+      method: 'GET',
+      headers:
+      {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    };
+            
+    if(!recentPosts.canLoadMore) { return; }
+
+    setRecentPosts(prev => ({ ...prev, isLoading: true, canLoadMore: false }));
+
+    fetch(endpoint, requestOptions)
+    .then((response) => response.json())
+    .then(
+      (response) =>
+      {
+        if(response.data.data.length)
+        {
+          setRecentPosts(prev => ({ ...prev, canLoadMore: true, items: [...prev.items, ...response.data.data] }));
+        }
+
+        setRecentPosts(prev => ({ ...prev, page: prev.page + 1, isLoading: false }));
+      }
+    )
+    .catch((error) => console.error('Fetch error:', error));
+  };
+
   useEffect(() => {
     if (tab) {
       switch (tab.toLowerCase()) {
@@ -203,6 +234,8 @@ const Analytics = () => {
           break;
       }
     }
+
+    loadRecentPosts();
   }, [tab]);
 
   const chipLabels = [
@@ -381,13 +414,13 @@ const Analytics = () => {
                     </svg>
                 </Typography>
                 <Card  sx={{ p: 2, boxShadow: '0px 0px 9px 0px #e4e6eb' }}>
-                    {posts.map((post, index) => (
+                    {recentPosts.items.slice(0, 2).map((post, index) => (
                     <Box key={index}>
                         <Box display="flex" alignItems="center" mb={2}>
                         <Box sx={{ position: 'relative', width: 80, height: 80, mr: 2 }}>
                             <Avatar
                             variant="rounded"
-                            src={post.thumbnail}
+                            src={post.thumbnailUrl}
                             alt="thumbnail"
                             sx={{ width: 80, height: 80 }}
                             />
@@ -403,14 +436,14 @@ const Analytics = () => {
                                 px: 0.5,
                             }}
                             >
-                            {post.duration}
+                            {/* {post.duration} */}
                             </Box>
                         </Box>
 
                         <Box flex={1} textAlign={'left'}>
                             <Typography variant="subtitle2">{post.description}</Typography>
                             <Typography variant="caption" color="text.secondary">
-                            {post.time}
+                            {formatCustomDate(post.createdTime)}
                             </Typography>
                         </Box>
 
@@ -421,7 +454,7 @@ const Analytics = () => {
                             </svg>
 
                             <Typography variant="caption" color="text.secondary">
-                                {post.plays}
+                                {post.views}
                             </Typography>
                             </Box>
                             <Box display="flex" flexDirection="column" alignItems="center">
@@ -437,12 +470,12 @@ const Analytics = () => {
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M0.202637 6.24501C0.202637 3.00912 3.30395 0.582031 6.86497 0.582031C10.426 0.582031 13.5273 3.00912 13.5273 6.24501C13.5273 8.14511 12.5759 9.71809 11.4253 10.9126C10.2741 12.1085 8.87167 12.982 7.82901 13.503C7.72746 13.5537 7.61463 13.5777 7.50123 13.5726C7.38782 13.5674 7.2776 13.5334 7.18103 13.4738C7.08445 13.4141 7.00473 13.3308 6.94941 13.2316C6.8941 13.1325 6.86503 13.0209 6.86497 12.9073V11.908C3.30395 11.908 0.202637 9.48091 0.202637 6.24501ZM4.03348 7.24436C4.25435 7.24436 4.46617 7.15662 4.62235 7.00045C4.77853 6.84427 4.86627 6.63244 4.86627 6.41157C4.86627 6.1907 4.77853 5.97888 4.62235 5.8227C4.46617 5.66652 4.25435 5.57878 4.03348 5.57878C3.81261 5.57878 3.60078 5.66652 3.44461 5.8227C3.28843 5.97888 3.20069 6.1907 3.20069 6.41157C3.20069 6.63244 3.28843 6.84427 3.44461 7.00045C3.60078 7.15662 3.81261 7.24436 4.03348 7.24436ZM6.86497 7.24436C7.08584 7.24436 7.29766 7.15662 7.45384 7.00045C7.61002 6.84427 7.69776 6.63244 7.69776 6.41157C7.69776 6.1907 7.61002 5.97888 7.45384 5.8227C7.29766 5.66652 7.08584 5.57878 6.86497 5.57878C6.6441 5.57878 6.43228 5.66652 6.2761 5.8227C6.11992 5.97888 6.03218 6.1907 6.03218 6.41157C6.03218 6.63244 6.11992 6.84427 6.2761 7.00045C6.43228 7.15662 6.6441 7.24436 6.86497 7.24436ZM9.69646 7.24436C9.91733 7.24436 10.1292 7.15662 10.2853 7.00045C10.4415 6.84427 10.5293 6.63244 10.5293 6.41157C10.5293 6.1907 10.4415 5.97888 10.2853 5.8227C10.1292 5.66652 9.91733 5.57878 9.69646 5.57878C9.47559 5.57878 9.26377 5.66652 9.10759 5.8227C8.95141 5.97888 8.86367 6.1907 8.86367 6.41157C8.86367 6.63244 8.95141 6.84427 9.10759 7.00045C9.26377 7.15662 9.47559 7.24436 9.69646 7.24436Z" fill="black" fill-opacity="0.17"/>
                                 </svg>
                             <Typography variant="caption" color="text.secondary">
-                                {post.comments}
+                                {post.comments.length}
                             </Typography>
                             </Box>
                         </Box>
                         </Box>
-                        {index < posts.length - 1 && <Divider sx={{ my: 1 }} />}
+                        {index < recentPosts.items.length - 1 && <Divider sx={{ my: 1 }} />}
                     </Box>
                     ))}
                 </Card>
