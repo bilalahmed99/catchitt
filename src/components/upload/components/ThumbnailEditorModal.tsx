@@ -174,7 +174,7 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
         
 
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', height: '220px', mb: 3 }}>
-          {preview && (<>
+          {preview && tab == 'select' && (<>
              <img
               src={preview}
               alt="Preview"
