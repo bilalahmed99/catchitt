@@ -15,6 +15,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { formatCustomDate } from '../../utils/helpers';
+import { useDispatch, useSelector } from 'react-redux';
 
 interface RecentPostsInterface
 {
@@ -115,6 +116,7 @@ const articles = [
   ];
 
 const Analytics = () => {
+  const profile = useSelector((store) => store?.reducers?.profile);
   const { tab } = useParams();
   const [currentTab, setCurrentTab] = useState(ANALYTICSTABS.OVERVIEW);
   const [analyticsData, setAnalyticsData] = useState<any>('');
@@ -336,16 +338,16 @@ const Analytics = () => {
                 }}
                 >
                 <Avatar
-                    src="https://i.pravatar.cc/150?img=47" // replace with actual image
-                    alt="Jeniffer Lopes"
+                    src={ profile?.avatar }
+                    alt={ profile?.name }
                     sx={{ width: 48, height: 48, mr: 2 }}
                 />
                 <Box>
                     <Typography sx={{ textAlign: 'left'}} variant="subtitle1" fontWeight="bold">
-                    Jeniffer Lopes
+                    { profile?.name }
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                    Likes 0 · Followers 45 · Following 193
+                    Likes { profile?.likesNum } · Followers { profile?.followers } · Following { profile?.following }
                     </Typography>
                 </Box>
             </Paper>
