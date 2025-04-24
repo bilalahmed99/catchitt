@@ -135,8 +135,8 @@ const PostAnalytics = () => {
                     <List dense>
                     {thumbnails.map((item, idx) => (
                         <ListItem key={idx} sx={{ display: 'flex', gap: 1.5, borderRadius: 2, mb: 1, width: '90%', mx: 'auto', cursor: 'pointer','&:hover': {
-      backgroundColor: '#0000000D',
-    }, py: 1 }}>
+                        backgroundColor: '#0000000D',
+                        }, py: 1 }}>
                         <ListItemAvatar>
                             <Avatar
                             variant="rounded"
@@ -160,9 +160,11 @@ const PostAnalytics = () => {
                     case POSTANALYTICSTABS.OVERVIEW:
                         return <OverviewTab postAnalytics={postAnalytics} post={postData} isDarkTheme={darkTheme} />    
                     case POSTANALYTICSTABS.VIEWERS:
-                        return <ViewersTab />
+                        return <ViewersTab isDarkTheme={darkTheme} />
+                    // switch‑case inside PostAnalytics
                     case POSTANALYTICSTABS.ENGAGEMENT:
-                        return <EngagementTab />
+                        return <EngagementTab isDarkTheme={darkTheme} />;
+  
                     default:
                         return <OverviewTab postAnalytics={postAnalytics} />
                 }
