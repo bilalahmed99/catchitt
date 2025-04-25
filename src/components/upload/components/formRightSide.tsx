@@ -1,4 +1,4 @@
-import { Box, Chip, CircularProgress, FormControl, FormControlLabel, FormLabel, IconButton, InputAdornment, MenuItem, OutlinedInput, Radio, RadioGroup, Select, Stack, styled, SvgIcon, Tooltip, SelectChangeEvent, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Autocomplete, TextField } from '@mui/material';
+import { Box, Chip, CircularProgress, FormControl, FormControlLabel, FormLabel, IconButton, InputAdornment, MenuItem, OutlinedInput, Radio, RadioGroup, Select, Stack, styled, SvgIcon, Tooltip, SelectChangeEvent, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Autocomplete, TextField, Typography } from '@mui/material';
 import { useEffect, useMemo, useState,useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { defaultAvatar, downArrow, search } from '../../../icons';
@@ -682,8 +682,9 @@ function FormRightSide(props: any) {
                         {isMentioning && (
                                 <div
                                     ref={popupRef}
-                                    className="absolute w-[96%] top-[12.25rem]  !left-[2%] bg-white border rounded-lg shadow-lg  z-10 min-h-40 max-h-80 overflow-y-auto "
+                                    className="absolute w-[96%] top-[12.25rem]  !left-[2%] bg-white border rounded-lg shadow-lg  z-10 min-h-16 max-h-80 overflow-y-auto "
                                 >
+                                    <Typography variant='body1' sx={{ textAlign: 'left', p: 1.5, color: '#6b7280'}}>All users</Typography>
                                     {filteredUsers.length > 0 ? (
                                         filteredUsers.map(
                                             (
@@ -695,6 +696,7 @@ function FormRightSide(props: any) {
                                                 },
                                                 index: number
                                             ) => (
+                                                
                                                 <div
                                                     key={user.id}
                                                     className={`flex flex-row justify-start items-center cursor-pointer px-2 pt-2 hover:bg-gray-200 gap-3 border-b border-gray-100 pb-2 ${index === mentionIndex
@@ -726,8 +728,8 @@ function FormRightSide(props: any) {
                                             )
                                         )
                                     ) : (
-                                        <div className="px-4 py-2 text-white min-w-32 text-center">
-                                            {isFetchingUsers? <CircularProgress style={{width:'20px',height:'20px',padding:'0px',marginBottom:'-4px'}}/>:'No users found'} 
+                                        <div className="px-4 py-2 text-black min-w-32 text-left">
+                                            {isFetchingUsers? <CircularProgress style={{width:'20px',height:'20px',padding:'0px',marginBottom:'-4px'}}/>:'Following'} 
                                         </div>
                                     )}
                                 </div>
@@ -1374,7 +1376,7 @@ function FormRightSide(props: any) {
             </CustomModel>
 
             {/* Tag Users Popup */}
-            <CustomModel open={tagUsersPopup} onClose={() => setTagUsersPopup(false)}>
+            <CustomModel open={tagUsersPopup} onClose={() => setTagUsersPopup(true)}>
                 <div className="bg-custom-light p-[2rem] rounded-[8px] w-[570px]">
                     <div className="mb-[1rem]">
                         <BasicInput
