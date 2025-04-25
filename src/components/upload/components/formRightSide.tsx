@@ -1,4 +1,4 @@
-import { Box, Chip, CircularProgress, FormControl, FormControlLabel, FormLabel, IconButton, InputAdornment, MenuItem, OutlinedInput, Radio, RadioGroup, Select, Stack, styled, SvgIcon, Tooltip, SelectChangeEvent, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
+import { Box, Chip, CircularProgress, FormControl, FormControlLabel, FormLabel, IconButton, InputAdornment, MenuItem, OutlinedInput, Radio, RadioGroup, Select, Stack, styled, SvgIcon, Tooltip, SelectChangeEvent, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Autocomplete, TextField } from '@mui/material';
 import { useEffect, useMemo, useState,useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { defaultAvatar, downArrow, search } from '../../../icons';
@@ -26,9 +26,10 @@ import { setSelectedFile } from '../../../redux/reducers/upload';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import RoomOutlinedIcon from '@mui/icons-material/RoomOutlined';
+import SaveVideoPopup from './scheduleVideoPopup'
 
 import CheckIcon from '@mui/icons-material/Check';
-import { copyLinkHandler, facebookShareHandler, getCaretCoordinates, searchUserToAnnotate, shareToLinkedIn, shareToTwitter, whatsappShareHandler } from '../../../utils/helpers';
+import { copyLinkHandler, facebookShareHandler, getCaretCoordinates, searchUserToAnnotate, shareToLinkedIn, shareToTwitter, whatsappShareHandler, searchUsersAndHashes } from '../../../utils/helpers';
 
 
 const options = [
@@ -37,7 +38,36 @@ const options = [
   { label: 'Friends', value: 'friends' },
   { label: 'Only Me', value: 'onlyme' },
 ];
+
+interface Location
+{
+    value: string;
+    label: string;
+    lat?: string;
+    lon?: string;
+}
+
 function FormRightSide(props: any) {
+
+    const CustomAutocomplete = styled(Autocomplete)(({ theme }) => ({
+        '& .MuiInputBase-root': {
+          backgroundColor: '#f2f2f2',
+          borderRadius: '0.75rem',
+          paddingLeft: '0.5rem',
+          paddingRight: '0.5rem',
+          height: '3rem',
+        },
+        '& .MuiOutlinedInput-notchedOutline': {
+          border: 'none',
+        },
+        '& .MuiSvgIcon-root': {
+          color: '#000', // dark dropdown icon
+        },
+        '& input': {
+          padding: '0.75rem 0',
+        },
+      }));
+
     const {
         uploadState,
         onCancelUpload,
@@ -75,6 +105,7 @@ function FormRightSide(props: any) {
 
     const [showChecking, setShowChecking] = useState(false);
     const [showResult, setShowResult] = useState(false);
+    const [isAlreadySchedule, setIsAlreadySchedule] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -188,6 +219,8 @@ function FormRightSide(props: any) {
         console.log('hello schedule.')
       setShowSchedule(true);
       setPermissionDialogOpen(false);
+      setIsPopupOpen(false);
+      setIsAlreadySchedule(true);
     };
   
     const handleDenySchedule = () => {
@@ -195,46 +228,153 @@ function FormRightSide(props: any) {
       setPermissionDialogOpen(false);
     };
 
-     useEffect(() => {
-            if (isMentioning) {
-                // Filter users based on the current input
-                const query = comment.slice(comment.lastIndexOf('@') + 1).toLowerCase();
-                if (query.length) setIsFetchingUsers(true);
-                if (query.length > 2) {
-                    if (abortController.current) abortController.current.abort();
-                    const controller = new AbortController();
-                    abortController.current = controller;
-                    // const filtered = dummyUsers.filter((user) =>
-                    //     user.username.toLowerCase().includes(query)
-                    // );
-                    // setFilteredUsers(filtered.slice(0, 5)); // Limit to 5 users
-                    (async ()=>{
-                        const searchResultArr = await searchUserToAnnotate(query, controller.signal);
-                        console.log(searchResultArr);
-                        if (!Array.isArray(searchResultArr)) return;
-                        console.log('searchResultArr')
-                        console.log(searchResultArr)
-                        setFilteredUsers(searchResultArr);
-                        setIsFetchingUsers(false);
-                    })()
-                } else {
-                    setFilteredUsers([]);
-                }
-            } else {
-                setFilteredUsers([]);
-                setMentionIndex(0);
-            }
+    //  useEffect(() => {
+    //         if (isMentioning) {
+    //             console.log('is mentioned.. ?')
+    //             // Filter users based on the current input
+    //             const query = comment.slice(comment.lastIndexOf('@') + 1).toLowerCase();
+    //             if (query.length) setIsFetchingUsers(true);
+    //             if (query.length > 2) {
+    //                 if (abortController.current) abortController.current.abort();
+    //                 const controller = new AbortController();
+    //                 abortController.current = controller;
+    //                 // const filtered = dummyUsers.filter((user) =>
+    //                 //     user.username.toLowerCase().includes(query)
+    //                 // );
+    //                 // setFilteredUsers(filtered.slice(0, 5)); // Limit to 5 users
+    //                 (async ()=>{
+    //                     const searchResultArr = await searchUserToAnnotate(query, controller.signal);
+    //                     console.log(searchResultArr);
+    //                     if (!Array.isArray(searchResultArr)) return;
+    //                     console.log('searchResultArr')
+    //                     console.log(searchResultArr)
+    //                     setFilteredUsers(searchResultArr);
+    //                     setIsFetchingUsers(false);
+    //                 })()
+    //             } else {
+    //                 setFilteredUsers([]);
+    //             }
+    //         } else {
+    //             setFilteredUsers([]);
+    //             setMentionIndex(0);
+    //         }
             
-            return () => {
-                if (abortController.current) abortController.current.abort();
-            }
-        }, [comment, isMentioning]);
+    //         return () => {
+    //             if (abortController.current) abortController.current.abort();
+    //         }
+    //     }, [comment, isMentioning]);
 
     // const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //     const newDate = event.target.value;
     //     setDate(newDate);
     // };
 
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const handleClose = () => {
+        console.log('User canceled');
+        setIsPopupOpen(false);
+        setShowSchedule(false);
+        setPostTimeOption('now'); // Revert selection
+    };
+
+
+    useEffect(() => {
+        if (!isMentioning) {
+          setFilteredUsers([]);
+          setMentionIndex(0);
+          return;
+        }
+      
+        const lastAtIndex = comment.lastIndexOf('@');
+        const lastHashIndex = comment.lastIndexOf('#');
+        
+        // Determine if we're searching for users (@) or hashtags (#)
+        const isUserSearch = lastAtIndex > lastHashIndex;
+        const searchIndex = isUserSearch ? lastAtIndex : lastHashIndex;
+        
+        // If no trigger symbol exists, no need to continue
+        if (searchIndex === -1) {
+          setFilteredUsers([]);
+          return;
+        }
+      
+        // Get the search query (text after the trigger symbol)
+        const query = comment.slice(searchIndex + 1);
+        
+        // Only search if query has at least 1 character
+        if (query.length === 0) {
+          setFilteredUsers([]);
+          return;
+        }
+      
+        setIsFetchingUsers(true);
+        if (abortController.current) abortController.current.abort();
+        
+        const controller = new AbortController();
+        abortController.current = controller;
+        
+        (async () => {
+          try {
+            let result;
+            if (isUserSearch) {
+              // Search for users when @ is used
+              result = await searchUsersAndHashes(query, controller.signal);
+              setFilteredUsers(result.users.data);
+                
+            } else {
+              // Search for hashtags when # is used
+              result = await searchUsersAndHashes(query, controller.signal);
+              setFilteredUsers(result.hashtags.data);
+            }
+
+            console.log('Filtered Users:', filteredUsers);
+            
+            
+          } catch (error) {
+            if (error.name !== 'AbortError') {
+              console.error('Search error:', error);
+            }
+          } finally {
+            setIsFetchingUsers(false);
+          }
+        })();
+      
+        return () => {
+          if (abortController.current) abortController.current.abort();
+        };
+    }, [comment, isMentioning]);
+    
+    // Handle user/hashtag selection
+    const handleSelect = (item: { username?: string; name?: string; tag?: string }) => {
+        setComment((prevComment) => {
+            // Determine if we're inserting a user (@) or hashtag (#)
+            const isUser = item.username !== undefined;
+    
+            const triggerChar = isUser ? '@' : '#';
+            const triggerIndex = prevComment.lastIndexOf(triggerChar);
+    
+            let insertValue = '';
+    
+            if (isUser) {
+                insertValue = `${triggerChar}${item.username}`;
+            } else {
+                // Strip leading '#' if already present
+                const cleanTag = item.name?.replace(/^#/, '') ?? '';
+                insertValue = `${triggerChar}${cleanTag}`;
+            }
+    
+            const newComment = `${prevComment.slice(0, triggerIndex)}${insertValue} `;
+            updateState('description', newComment);
+            return newComment;
+        });
+    
+        setIsMentioning(false);
+    };
+    
+      
+      
+
+      
     useEffect(() => {
         if (postTimeOption === "schedule" && date && time) {
             const localDateTime = new Date(`${date}T${time}`);
@@ -242,9 +382,6 @@ function FormRightSide(props: any) {
             updateState('scheduledAt', utcDateTime);
         }
     }, [date, time]);
-
-
-      
 
     const StyledSelect = styled(Select)(({ theme }) => ({
         backgroundColor: '#f3f3f3',
@@ -328,22 +465,20 @@ function FormRightSide(props: any) {
         setPostCategories(filteredCategories);
     };
 
+    
     const handleDescriptionChange = (e: any) => {
         const inputValue = e.target.value;
         setComment(inputValue);
-
-        const mentionTrigger = inputValue.match(/@(\w*)$/);
-        if (mentionTrigger && mentionTrigger[1].length > 0) {
-            setIsMentioning(true);
-        } else {
-            setIsMentioning(false);
+    
+        if (inputValue.length <= 2200) {
+            updateState('description', inputValue);
         }
+    
+        const containsMentionOrHashtag = /[@#]/.test(inputValue);
+        setIsMentioning(containsMentionOrHashtag);
+    };
 
-        if (e.target.value.length <= 2200) {
-            updateState('description', e.target.value);
-        }
-    }
-
+    
     const handleUserSelect = (user: { username: any }) => {
         setComment((prevComment) => {
             const lastMentionStart = prevComment.lastIndexOf('@');
@@ -392,15 +527,119 @@ function FormRightSide(props: any) {
         setFilteredFollowers(followers)
     },[tagUsersPopup]);
 
-    const handleCanViewChange = (event: SelectChangeEvent) => {
-        const value = event.target.value;
-        setCanView(value);
-        updateState('canView', value);
-    };
+    // const handleDescriptionChange = (e:any) => {
+    //     updateState('description', e.target.value);
+    //   };
+      
+
+    const insertAtCursor = (symbol: string) => {
+        const input = inputRef.current;
+        const start = input.selectionStart;
+        const end = input.selectionEnd;
+      
+        const newValue =
+          (state?.description?.slice(0, start) || '') +
+          symbol +
+          (state?.description?.slice(end) || '');
+      
+        setComment(newValue);
+        console.log(symbol);
+        if (symbol === '@') {
+            console.log('inner')
+          setIsMentioning(true);
+        }
+      
+        if (newValue.length <= 2200) {
+          updateState('description', newValue);
+        }
+      
+        requestAnimationFrame(() => {
+          input.focus();
+          input.setSelectionRange(start + symbol.length, start + symbol.length);
+        });
+      };
+      
 
     // console.log('uploadState');
     // console.log(uploadState);
 
+    const [locationSearchOptions, setLocationSearchOptions] = useState<Location[]>([]);
+    const [isSearchingLocation, setIsSearchingLocation] = useState(false);
+    const [searchLocationTimer, setSearchLocationTimer] = useState<NodeJS.Timeout | null>(null);
+
+    function handleInputChange(event: React.SyntheticEvent, value: string)
+    {
+        if(searchLocationTimer)
+        {
+            clearTimeout(searchLocationTimer);
+        }
+        
+        if(value.length < 2)
+        {
+            setLocationSearchOptions([]);
+            return;
+        }
+        
+        setIsSearchingLocation(true);
+        
+        const searchLocationTimerTemp = setTimeout(() => {
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(value)}&addressdetails=1&limit=5`)
+            .then(response =>  response.json())
+            .then(data =>
+                {
+                    setLocationSearchOptions(
+                        data.map((item: any) =>
+                            (
+                                {
+                                    value: item.place_id,
+                                    label: item.display_name,
+                                    lat: item.lat,
+                                    lon: item.lon
+                                }
+                            )
+                        )
+                    );
+                }
+            )
+            .catch(error =>
+                {
+                    console.error('Error fetching locations:', error);
+                    setLocationSearchOptions([]);
+                }
+            )
+            .finally(() => { setIsSearchingLocation(false); });
+        }, 300);
+
+        setSearchLocationTimer(searchLocationTimerTemp);
+    }
+  
+    const [locationHistory, setLocationHistory] = useState<Location[]>(() =>
+        {
+            try
+            {
+                const savedHistory = localStorage.getItem('locationHistory');
+                return savedHistory ? JSON.parse(savedHistory) : [];
+            }
+            catch
+            {
+                return [];
+            }
+        }
+    );
+  
+    function handleLocationSelect(event?: React.SyntheticEvent, value?: Location | null)
+    {
+        if(!value) return;
+        
+        const updateHistory = (prev: Location[]) =>
+        {
+            const newHistory = [value, ...prev.filter((item: any) => item.value !== value.value)].slice(0, 5);
+            localStorage.setItem('locationHistory', JSON.stringify(newHistory));
+            updateState('locationPlace', value.label);
+            return newHistory;
+        };
+        setLocationHistory(updateHistory);
+    }
 
     
     
@@ -431,7 +670,7 @@ function FormRightSide(props: any) {
                             /> */}
                             <textarea ref={inputRef} value={state?.description || ''} onChange={handleDescriptionChange} id="message" name="message" className="w-full  rounded bg-[#0000000D] focus:border-white focus:ring-1 focus:ring-white h-32 text-base outline-none py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" />
                             <p className="text-gray-500 text-sm leading-[1.5rem] text-[1rem] font-normal absolute left-4 bottom-1">
-                                #hashtag @Mention
+                                <span className="cursor-pointer" onClick={() => insertAtCursor('#')}>#hashtag</span> <span className="cursor-pointer" onClick={() => insertAtCursor('@')}>@Mention</span>
                             </p>
 
                             
@@ -443,7 +682,7 @@ function FormRightSide(props: any) {
                         {isMentioning && (
                                 <div
                                     ref={popupRef}
-                                    className="absolute w-[96%] bottom-[12.25rem]  !left-[2%] bg-white border rounded-lg shadow-lg  z-10 min-h-40 max-h-80 overflow-y-auto "
+                                    className="absolute w-[96%] top-[12.25rem]  !left-[2%] bg-white border rounded-lg shadow-lg  z-10 min-h-40 max-h-80 overflow-y-auto "
                                 >
                                     {filteredUsers.length > 0 ? (
                                         filteredUsers.map(
@@ -465,7 +704,7 @@ function FormRightSide(props: any) {
                                                             ? 'rounded-b-lg'
                                                             : ''
                                                         }`}
-                                                    onClick={() => handleUserSelect(user)}
+                                                    onClick={() => handleSelect(user)}
                                                 >
                                                     <img
                                                         className="object-contain w-10 h-10 rounded-full"
@@ -553,44 +792,44 @@ function FormRightSide(props: any) {
                             )} */}
                             {/* {coverTab === 'custom' && !customCover && ( */}
                             <div className="w-full h-[285px]">
-  <div className="w-full h-full relative flex items-start">
-    {state?.thumbnailUrl ? (
-      <div className="relative h-full max-w-[20%]">
-        <img
-          src={state.thumbnailUrl}
-          alt="Video thumbnail"
-          className="h-full w-full object-cover rounded-md"
-        />
-        <button
-            onClick={() => setThumbnailModalOpen(true)}
-            style={{ fontSize: '12px' }}
-            className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white w-[6rem] py-1.5 rounded-md shadow-sm hover:bg-black/70 transition-colors">
-            Edit Cover
-        </button>
-      </div>
-    ) : (
-      <div className="w-full h-full flex items-center justify-start border-2 border-dashed border-gray-300 rounded-lg px-4">
-        {/* <button
-          onClick={() => setThumbnailModalOpen(true)}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-        >
-          Add Thumbnail
-        </button> */}
-      </div>
-    )}
+                            <div className="w-full h-full relative flex items-start">
+                                {state?.thumbnailUrl ? (
+                                <div className="relative h-full max-w-[20%]">
+                                    <img
+                                    src={state.thumbnailUrl}
+                                    alt="Video thumbnail"
+                                    className="h-full w-full object-cover rounded-md"
+                                    />
+                                    <button
+                                        onClick={() => setThumbnailModalOpen(true)}
+                                        style={{ fontSize: '12px' }}
+                                        className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white w-[6rem] py-1.5 rounded-md shadow-sm hover:bg-black/70 transition-colors">
+                                        Edit Cover
+                                    </button>
+                                </div>
+                                ) : (
+                                <div className="w-full h-full flex items-center justify-start border-2 border-dashed border-gray-300 rounded-lg px-4">
+                                    {/* <button
+                                    onClick={() => setThumbnailModalOpen(true)}
+                                    className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+                                    >
+                                    Add Thumbnail
+                                    </button> */}
+                                </div>
+                                )}
 
-    <ThumbnailEditorModal
-      open={thumbnailModalOpen}
-      onClose={() => setThumbnailModalOpen(false)}
-      videoThumbnails={videoThumbnails}
-      selectedThumb={selectedThumb}
-      onSelectThumbnail={handleSelectThumbnail}
-      onCustomThumbnail={handleCustomThumbnail}
-      currentThumbnail={state?.thumbnailUrl}
-    //   aspectRatio={62 / 127}
-    />
-  </div>
-</div>
+                                <ThumbnailEditorModal
+                                open={thumbnailModalOpen}
+                                onClose={() => setThumbnailModalOpen(false)}
+                                videoThumbnails={videoThumbnails}
+                                selectedThumb={selectedThumb}
+                                onSelectThumbnail={handleSelectThumbnail}
+                                onCustomThumbnail={handleCustomThumbnail}
+                                currentThumbnail={state?.thumbnailUrl}
+                                //   aspectRatio={62 / 127}
+                                />
+                            </div>
+                            </div>
 
 
                             {/* )} */}
@@ -714,32 +953,71 @@ function FormRightSide(props: any) {
 
                                 </p>
                             </div>
-                            <FormControl sx={{ width: '18rem', marginBottom: '1rem'}}>
-                                <StyledSelect
-                                    defaultValue=""
-                                    displayEmpty
-                                    IconComponent={KeyboardArrowDownIcon}
-                                    sx={{paddingLeft: '0.75rem'}}
-                                    input={
-                                    <OutlinedInput
-                                        startAdornment={
-                                        <InputAdornment position="start">
-                                            <LocationIcon />
-                                        </InputAdornment>
-                                        }
-                                    />
-                                    }
-                                    renderValue={(selected:any) => {
-                                        return selected ? selected : <span style={{ color: '#999' }}>Search locations</span>;
+            
+                            <FormControl
+                                    sx={{
+                                        width: '18rem',
+                                        mb: '1rem',
+                                        backgroundColor: '#f5f5f5', // very light gray
+                                        borderRadius: '8px',
                                     }}
-                                >
-                                    <MenuItem value="new_york">New York</MenuItem>
-                                    <MenuItem value="los_angeles">Los Angeles</MenuItem>
-                                    <MenuItem value="chicago">Chicago</MenuItem>
-                                </StyledSelect>
-                            </FormControl>
+                                    >
+                                    <Autocomplete
+                                        popupIcon={<KeyboardArrowDownIcon />}
+                                        options={locationSearchOptions}
+                                        getOptionLabel={(option) => option.label}
+                                        isOptionEqualToValue={(option, value) => option.value === value.value}
+                                        loading={isSearchingLocation}
+                                        onInputChange={handleInputChange}
+                                        onChange={handleLocationSelect}
+                                        sx={{
+                                        '& .MuiOutlinedInput-root': {
+                                            padding: '4px 8px', // reduce height
+                                            backgroundColor: '#0000000D',
+                                            border: 'none',
+                                            borderRadius: '8px',
+                                            fontSize: '0.9rem',
+                                            overflow: 'hidden'
+                                        },
+                                        '& .MuiOutlinedInput-notchedOutline': {
+                                            border: 'none',
+                                        },
+                                        }}
+                                        renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            placeholder="Search locations"
+                                            variant="outlined"
+                                            InputProps={{
+                                            ...params.InputProps,
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                <LocationIcon sx={{ color: '#777' }} />
+                                                </InputAdornment>
+                                            ),
+                                            }}
+                                            sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                padding: '4px 8px',
+                                                border: 'none',
+                                                borderRadius: '8px'
+                                            },
+                                            '& .MuiOutlinedInput-notchedOutline': {
+                                                border: 'none',
+                                                borderRadius: '8px'
+                                            },
+                                            }}
+                                        />
+                                        )}
+                                    />
+                                    </FormControl>
+
+
+                            
                             <Stack direction="row" spacing={2}>
-                                <Chip label="Lahore Fort" sx={{ borderRadius: "8px", fontWeight: 500 }}  variant="outlined" />
+                                {locationHistory.map((location: any) => (
+                                    <Chip label={location.label} key={location.value} onClick={() => { setLocationSearchOptions([location]); handleLocationSelect(undefined, location); }} sx={{ borderRadius: "8px", fontWeight: 500 }}  variant="outlined" />
+                                ))}
                             </Stack>
 {/*                             
                             <BasicInput
@@ -781,11 +1059,12 @@ function FormRightSide(props: any) {
                                     <FormControlLabel
                                         name="when-to-post1"
                                         value="schedule"
-                                        onClick={handleAllowSchedule}                                        
+                                        // onClick={handleAllowSchedule}       
+                                        onClick={() => isAlreadySchedule ? handleAllowSchedule(): setIsPopupOpen(true)}                                 
                                         control={<Radio sx={{ color: '#ccc', '&.Mui-checked': { color: '#FF2C55' } }} />}
                                         label={
                                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                                                Schedule
+                                                Schedule 
                                                 <Tooltip title="Set a time to publish later">
                                                     <IconButton size="small">{/* your icon */}</IconButton>
                                                 </Tooltip>
@@ -795,6 +1074,10 @@ function FormRightSide(props: any) {
                                 </RadioGroup>
 
                         </FormControl>
+
+                        <SaveVideoPopup open={isPopupOpen} onClose={handleClose} onAllow={handleAllowSchedule} />
+
+
 
                         {/* Schedule Section */}
                         {showSchedule && (
@@ -840,7 +1123,7 @@ function FormRightSide(props: any) {
                             </p>
                             <Select
                                     value={canView}
-                                    onChange={handleCanViewChange}
+                                    // onChange={handleCanViewChange}
                                     IconComponent={KeyboardArrowDownIcon}
                                     renderValue={(selected) => {
                                     const selectedOption = options.find(opt => opt.value === selected);

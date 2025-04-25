@@ -15,6 +15,10 @@ import useUpload from '../../upload/hooks';
 import { useUpdateEffect } from 'react-use';
 import { Typography } from 'antd';
 import { debounce } from 'lodash';
+import { useDispatch } from 'react-redux';
+import { setCurrentEditVideo } from '../../../redux/reducers/currentEditVideoReducer'; // Ensure correct import path
+
+
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -47,6 +51,12 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
   const videoRef = useRef<HTMLVideoElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
   const playbackTrack = useRef<HTMLDivElement>(null);
+  const [isGalleryHighlighted, setIsGalleryHighlighted] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const dispatch = useDispatch();
+  
+
+
 
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -112,6 +122,8 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
     videoElement.volume = volume / 100;
     setVideoDuration(videoElement.duration || 0);
     videoCoverHandler(videoElement.duration);
+    // setIsPlaying(!videoElement.paused);
+
   }
 
   const getCurrentTime = (event: React.SyntheticEvent<HTMLVideoElement, Event>) => {
@@ -123,6 +135,7 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
     if (playBtn) {
       playBtn.src = play;
     }
+    setIsPlaying(false);
   }
 
   const togglePlayback = (event: React.MouseEvent<HTMLImageElement>) => {
@@ -130,10 +143,14 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
     if (videoRef.current?.paused) {
       (event.target as HTMLImageElement).src = pause;
       videoRef.current?.play();
+     
     } else {
       (event.target as HTMLImageElement).src = play;
       videoRef.current?.pause();
     }
+    setIsPlaying(!isPlaying);
+    // alert(isPlaying);
+    // handleTriggerPlayPause();
   }
 
   const handleVolumeChange = (value: number) => {
@@ -182,6 +199,14 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
     return `${cursorPosition}px`;
   };
 
+  const addSound = () => {
+    setIsGalleryHighlighted(true);
+    setTimeout(() => {
+      setIsGalleryHighlighted(false);
+    }, 1000); // Highlight for 2 seconds
+  }
+  
+
   // Handle Cursor Drag
   const handleCursorDrag = (e: MouseEvent) => {
     if (playbackTrack.current && videoRef.current && cursorRef.current) {
@@ -198,6 +223,9 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
       cursorRef.current.style.left = `${boundedCursorPosition}px`;
     }
   };
+
+ 
+  
 
   useEffect(() => {
     console.log('PopupForEditVideo mounted', targetVideo);
@@ -218,6 +246,8 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
   },[audioTabSelected])
 
   const handleAudioManipulation = async () => {
+   
+    
     try {
       setIsInProcess(true);
       // await ffmpeg.exec([
@@ -291,6 +321,11 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
     }
   }
 
+  const deleteAudioSound = () => {
+    setSelectedAudio(null);
+    dispatch(setCurrentEditVideo(null));
+  }
+
   const saveEdit = async () => {
     // convert blob to file
     setIsInProcess(true);
@@ -356,6 +391,7 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
       count: "1/3",
     },
   ];
+
   
 
   const EDIT_VIDEO_ACTIONS = [
@@ -419,17 +455,19 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
             selectedAudio={selectedAudio}
             setSelectedAudio={setSelectedAudio}
             searchQuery={searchQuery}
+            isHighlighted={isGalleryHighlighted} // Pass the highlight state
+            handleAudioManipulation={handleAudioManipulation} // Add this line
           />
 
           {/* Add Sound Button */}
-          {selectedAudio && (
+          {/* {selectedAudio && (
             <button
               onClick={handleAudioManipulation}
               className="bg-red-500 rounded-full w-[90%] block mx-auto p-2 absolute bottom-1 left-1/2 -translate-x-1/2 hover:bg-red-700 border-0"
             >
               Add Sound
             </button>
-          )}
+          )} */}
         </div>
       ),
     },
@@ -464,6 +502,12 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
   ];
   const [activeTab, setActiveTab] = useState(0); // default to first tab
 
+  const handleTriggerPlayPause = () => {
+    const btn = document.getElementById('audio-play-btn');
+    console.log(btn);
+    if (btn) btn.click();
+  };
+
 
   return (
     <ThemeProvider theme={isDarkTheme ? darkThemePalette : lightThemePalette}>
@@ -483,7 +527,7 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
           <div className={`${style.modalHeader} border-b border-gray-200 py-3`} >
             <span className={`${style.modalTitle} !text-[17px]`}>Edit Video</span>
           </div>
-          <div className={`${style.modalBody} relative`}>
+          <div className={`${style.modalBody} relative overflow-y-auto h-[calc(100vh-13rem)]`}>
             {isInProcess&&<div className={`absolute top-0 left-0 right-0 bottom-0 z-10 opacity-60 ${isDarkTheme?'bg-black':'bg-white'} flex justify-center items-center`}> <CircularProgress style={{width:'30px',height:'30px',color:'#f50057'}} /> </div>}
             <div className={`${style.content} border-b border-gray-200`}>
               {/* LEFT ACTION BAR */}
@@ -525,9 +569,10 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
                 {selectedAudio && <button onClick={handleAudioManipulation} className="bg-red-500 rounded-full w-[90%] block mx-auto p-2 absolute bottom-1 left-1/2 -translate-x-1/2 hover:bg-red-700 border-0">Add Sound</button>}
               </div> */}
               {/* RIGHT VIDEO CONTAINER */}
-              <div className={style.videoContainer}>
-                <video ref={videoRef} onLoadedMetadata={getMediaInfo} onTimeUpdate={getCurrentTime} onEnded={endedVideoHandler} src={video} style={{ width: '170px', height: '302px', borderRadius: '10px' }} />
+              <div className={` ${style.videoContainer}`}>
+                <video ref={videoRef} onLoadedMetadata={getMediaInfo} onTimeUpdate={getCurrentTime} onEnded={endedVideoHandler} src={video} style={{ width: '200px', height: '350px', backgroundColor: '#2C2C2C', borderRadius: '10px' }} />
               </div>
+
             </div>
             {/* bottom controls bar */}
             <div className={`${style.videoControlBar} border-b border-gray-200`}>
@@ -537,12 +582,12 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
                 <img onClick={() => skip(true)} src={isDarkTheme ? rightArrowCurvedinWhite : rightArrowCurved} alt="left-arrow-curved" />
               </div>
               <div className='flex align-items-center justify-between ml-5 w-[3rem]'>
-                <span className='cursor-pointer'>
+                {/* <span className='cursor-pointer'>
                 <svg width="18" height="15" viewBox="0 0 18 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M8.0189 14.1212C8.0189 14.3282 8.1867 14.496 8.3937 14.496H9.14328C9.35027 14.496 9.51808 14.3282 9.51808 14.1212V0.628697C9.51808 0.421707 9.35027 0.253906 9.14328 0.253906H8.3937C8.1867 0.253906 8.0189 0.421706 8.0189 0.628697V14.1212ZM2.02224 3.62703C2.02224 3.42004 2.19004 3.25224 2.39703 3.25224H6.14495C6.35194 3.25224 6.51974 3.08444 6.51974 2.87745V2.12786C6.51974 1.92088 6.35194 1.75308 6.14495 1.75308H2.39703C1.36207 1.75308 0.523071 2.59207 0.523071 3.62703V11.1229C0.523071 12.1578 1.36207 12.9968 2.39703 12.9968H6.14495C6.35194 12.9968 6.51974 12.829 6.51974 12.622V11.8724C6.51974 11.6654 6.35194 11.4977 6.14495 11.4977H2.39703C2.19004 11.4977 2.02224 11.3299 2.02224 11.1229V3.62703ZM11.392 3.25224H15.1399C15.3469 3.25224 15.5147 3.42004 15.5147 3.62703V11.1229C15.5147 11.3299 15.3469 11.4977 15.1399 11.4977H11.392C11.1851 11.4977 11.0172 11.6654 11.0172 11.8724V12.622C11.0172 12.829 11.1851 12.9968 11.392 12.9968H15.1399C16.1749 12.9968 17.0139 12.1578 17.0139 11.1229V3.62703C17.0139 2.59207 16.1749 1.75308 15.1399 1.75308H11.392C11.1851 1.75308 11.0172 1.92088 11.0172 2.12786V2.87745C11.0172 3.08444 11.1851 3.25224 11.392 3.25224Z" fill="#161823" fill-opacity="0.6"/>
                 </svg>
-                </span>
-                <span className='cursor-pointer'>
+                </span> */}
+                <span onClick={deleteAudioSound} className='cursor-pointer'>
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M6.86086 2.30709L6.86019 3.20666H10.7152L10.7159 2.30709H6.86086ZM12.4285 3.20666L12.4292 1.66458C12.4292 1.07318 11.9498 0.59375 11.3584 0.59375H6.21836C5.62695 0.59375 5.14752 1.07318 5.14752 1.66458L5.14685 3.20666H1.07836C0.841795 3.20666 0.650024 3.39844 0.650024 3.63501V4.49166C0.650024 4.72823 0.841795 4.92001 1.07836 4.92001H2.57685L3.13436 16.0137C3.13436 16.96 3.90144 17.727 4.84769 17.727H12.729C13.6753 17.727 14.4424 16.96 14.4424 16.0137L14.9986 4.92001H16.5834C16.8199 4.92001 17.0117 4.72823 17.0117 4.49166V3.63501C17.0117 3.39844 16.8199 3.20666 16.5834 3.20666H12.4285ZM13.2852 4.92001H4.29019L4.84769 16.0137H12.729L13.2852 4.92001ZM6.54883 13.658C6.31227 13.658 6.12049 13.4661 6.12049 13.2296L6.00419 7.66125C6.00419 7.42469 6.19596 7.23292 6.43252 7.23292H7.28919C7.52576 7.23292 7.71752 7.42469 7.71752 7.66125L7.83383 13.2296C7.83383 13.4661 7.64206 13.658 7.40549 13.658H6.54883ZM10.2001 13.658C9.96352 13.658 9.77174 13.4661 9.77174 13.2296L9.85919 7.66125C9.85919 7.42469 10.051 7.23292 10.2875 7.23292H11.1442C11.3808 7.23292 11.5725 7.42469 11.5725 7.66125L11.4851 13.2296C11.4851 13.4661 11.2933 13.658 11.0567 13.658H10.2001Z" fill="#9F9F9B" fill-opacity="0.6"/>
                 </svg>
@@ -629,9 +674,9 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
                 <div className='absolute -top-[5px] -left-[5px] w-[12px] h-[12px] bg-[#20D5EC] rounded-full cursor-pointer'></div>
               </div>
               {/* Sound container */}
-              {selectedAudio ? <AudioWaveForm audioUrl={selectedAudio} /> : <div className='w-full my-3 bg-[#0000000D] p-2.5 rounded'>
+              {selectedAudio ? <AudioWaveForm audioUrl={selectedAudio}  isPlaying={isPlaying} onTogglePlay={togglePlayback} /> : <div className='w-full my-3 bg-[#0000000D] p-2.5 rounded'>
 
-                <div className='flex gap-3'>
+                <div onClick={addSound} className='flex gap-3 cursor-pointer'>
                   <img src={isDarkTheme ? music : musicBlack} alt="audio" />
                   <span className={`text-[15px] ${isDarkTheme ? 'text-gray-500' : ''}`}>Add sound</span>
                 </div>
@@ -641,11 +686,12 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
                 <CircularProgress style={{ color: 'red', height: '35px', width: '35px' }} />
               </div>}
             {/* footer section */}
-            <div className="float-right px-3 mb-3">
+           
+          </div>
+          <div className="float-right px-3 mb-3">
               <button className='mx-1 border-0 py-2' style={{ color: isDarkTheme ? '#fff' : 'rgb(22, 24, 35)', backgroundColor: isDarkTheme ? '#0000000D' : '#0000000D', minWidth: '100px', }} onClick={handleClose}>Cancel</button>
               <button onClick={saveEdit} className='mx-1 py-2' style={{ color: '#fff', backgroundColor: 'rgb(255, 59, 92)', minWidth: '100px' }} autoFocus>Save edit</button>
             </div>
-          </div>
         </div>
       </BootstrapDialog>
     </ThemeProvider>

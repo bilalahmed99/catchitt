@@ -625,7 +625,7 @@ const VideoPage = () => {
 
     const copyHandler = (msg: string) => {
         navigator.clipboard
-            .writeText(`${BASE_URL_FRONTEND}/${userName}/video/${selectedVideoId ?? videoId}`)
+            .writeText(`${BASE_URL_FRONTEND}/${userId}/video/${selectedVideoId ?? videoId}`)
             .then(() => {
                 showToast(msg);
             });
@@ -999,7 +999,7 @@ const VideoPage = () => {
     
         const handleCopyLink = async (event: any) => {
             event.stopPropagation();
-             const isCopied = await shareProfileby.copyLink(userName);
+             const isCopied = await shareProfileby.copyLinkWithId(userId);
             isCopied ? copyHandler('Copied') : showToastError('Failed to copy link');
             setShowContextMenu(false);
         };

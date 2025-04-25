@@ -33,6 +33,7 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
   const [customCover, setCustomCover] = useState<string | null>(null);
   // const [preview, setPreview] = useState<string>(currentThumbnail || '');
   const [preview, setPreview] = useState<string>('');
+  const [showButtons, setShowButtons] = useState(false);
 
   const thumbnailsRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
@@ -42,8 +43,11 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
   const [scrollLeft, setScrollLeft] = useState(0);
   const [linePosition, setLinePosition] = useState(50);
   const [manualSelect, setManualSelect] = useState(false);
-  console.log('current preview');
-  console.log(preview);
+  const dndRef = useRef<any>();
+
+
+  // console.log('current preview');
+  // console.log(preview);
  
 
   const handleSelectFrame = (thumbUrl: string, index: number) => {
@@ -52,6 +56,22 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
     setManualSelect(true);
     setTimeout(() => setManualSelect(false), 1000); // resume auto detection after 1s
   };
+
+  const handleUploadNewClick = () => {
+    setTab('upload');
+  
+    setTimeout(() => {
+      console.log(document.querySelector('#my-dnd'));
+      const fileInput = document.querySelector('#my-dnd') as HTMLInputElement;
+      if (fileInput) {
+        console.log('jj')
+        fileInput.click(); // ✅ Triggers native file dialog
+      } else {
+        console.warn('Upload input not found inside DndContainer.');
+      }
+    }, 300); // delay ensures tab switch and component render
+  };
+
 
   useEffect(() => {
     if (currentThumbnail) {
@@ -66,6 +86,7 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
       setPreview(url);
       setCustomCover(url);
       onCustomThumbnail(file);
+      setShowButtons(true);
     };
     reader.readAsDataURL(file);
   };
@@ -129,13 +150,25 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
     };
   }, [manualSelect, videoThumbnails]);
 
+  const handleClose = () => {
+    setShowButtons(false); // Reset showButtons when closing
+    onClose(); // Call the original onClose
+  };
+
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog open={open} onClose={handleClose}  PaperProps={{
+      sx: {
+        maxWidth: '800px',
+        width: '100%',
+        minHeight: '30rem',
+        margin: 'auto',
+      },
+    }} >
       <DialogTitle
       sx={{
         px: 1,
         pt: 1,
-        pb: 1,
+        pb: 0,
         color: 'black',
         display: 'flex',
         justifyContent: 'space-between',
@@ -146,7 +179,7 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
   value={tab}
   onChange={(_, newVal) => setTab(newVal)}
   sx={{
-    mb: 2,
+    mb: 0,
     '& .MuiTab-root': {
       fontWeight: 'bold',
       color: 'gray', // inactive color
@@ -173,8 +206,8 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
       <DialogContent sx={{ backgroundColor: '#F5F5F5' }}>
         
 
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', height: '220px', mb: 3 }}>
-          {preview && (<>
+        {/* <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', height: '220px', mb: 3 }}>
+          {preview && tab == 'select' && (<>
              <img
               src={preview}
               alt="Preview"
@@ -183,9 +216,21 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
           </>
             
           )}
-        </Box>
+        </Box> */}
 
         {tab === 'select' && (
+          <>
+           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', height: '220px', mb: 3 }}>
+            {preview && (<>
+                <img
+                src={preview}
+                alt="Preview"
+                style={{ height: '200px', objectFit: 'contain', borderRadius: '4px' }}
+              />
+            </>
+              
+            )}
+          </Box>
           <Box sx={{ position: 'relative', height: 90, mb: 4 }}>
             <Box
               ref={lineRef}
@@ -244,32 +289,43 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
               ))}
             </Box>
           </Box>
+          </>
         )}
 
         {tab === 'upload' && (
-          <Box sx={{ mb: 3 }}>
+          <div style={{ marginBottom: '1rem', height: '50vh', display: 'flex', alignItems: 'center' }}>
             <DndContainer
               crop
               text="Drag and drop a file here"
               orText="select a file"
+              Format='Supported formats: JPG, JPEG, and PNG.'
               onChangeFile={handleCustomUpload}
               aspect={62 / 127}
+              wrapperId="my-dnd"
+              ref={dndRef}
+              handleClose={handleClose}
             />
-          </Box>
+          </div>
         )}
       </DialogContent>
-
-        <Box sx={{ backgroundColor: '#fff', display: 'flex', p: 3, justifyContent: 'flex-end' }}>
+        {showButtons && <Box sx={{ backgroundColor: '#fff', display: 'flex', p: 2, justifyContent: 'flex-end' }}>
+          <Button variant='contained'  onClick={handleUploadNewClick}  sx={{boxShadow: 'none', textTransform: 'capitalize', backgroundColor: '#0000000D', px: 3, mx: 2, color: 'black', borderRadius: '8px', '&:hover': {
+              backgroundColor: '#0000000f',
+              boxShadow: 'none'
+            }, }}>Upload new</Button>
           <Button
             variant="contained"
-            onClick={onClose}
-            sx={{backgroundColor: '#FE2C55', px: 4, borderRadius: '8px',  '&:hover': {
+            onClick={()=> { onClose(); setShowButtons(false); }}
+            sx={{textTransform: 'capitalize', boxShadow: 'none', backgroundColor: '#FE2C55', px: 3, borderRadius: '8px',  '&:hover': {
               backgroundColor: '#FE2C40',
+              boxShadow: 'none'
             }, }}
           >
             Confirm
           </Button>
         </Box>
+        }
+      
     </Dialog>
   );
 };
