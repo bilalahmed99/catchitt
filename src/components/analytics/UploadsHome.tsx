@@ -41,6 +41,15 @@ interface MediaCategoriesInterface
   canLoadMore: boolean;
 }
 
+interface MediaByCategoryInterface
+{
+  items: object[];
+  page: number;
+  isLoading: boolean;
+  canLoadMore: boolean;
+  selectedCategory: string;
+}
+
 const creator = {
     name: "ANATOLY",
     description: "Official Anatoly Seezitt accoun",
@@ -74,36 +83,6 @@ const articles = [
       description: "At Seezit, we love building communities, and our new",
       image: "https://images.unsplash.com/photo-1546422904-90eab23c3d7e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fG5ld3N8ZW58MHx8MHx8fDA%3D",
     },
-  ];
-  const trendingVideos = [
-    {
-      title: '32kg Mop it’s not enough',
-      username: '@Anatoly',
-      views: '34M',
-      duration: '0:18',
-      thumbnail: 'https://images.pexels.com/photos/4588428/pexels-photo-4588428.jpeg?auto=compress&cs=tinysrgb&w=600',
-    },
-    {
-      title: 'Most beautiful statue in the world',
-      username: '@VerticalRio',
-      views: '39M',
-      duration: '0:15',
-      thumbnail: 'https://images.pexels.com/photos/3658663/pexels-photo-3658663.jpeg?auto=compress&cs=tinysrgb&w=600',
-    },
-    {
-        title: 'Extreme Buldak Ramen',
-        username: '@MalaysiaFoodie',
-        views: '34M',
-        duration: '0:22',
-        thumbnail: 'https://images.pexels.com/photos/4506261/pexels-photo-4506261.jpeg?auto=compress&cs=tinysrgb&w=600',
-      },
-      {
-        title: '32kg Mop it’s not enough',
-        username: '@Anatoly',
-        views: '34M',
-        duration: '0:18',
-        thumbnail: 'https://images.pexels.com/photos/4588428/pexels-photo-4588428.jpeg?auto=compress&cs=tinysrgb&w=600',
-      },
   ];
   
   const recommendedVideos = [
@@ -156,6 +135,16 @@ const Analytics = () => {
       page: 1,
       isLoading: false,
       canLoadMore: true,
+    }
+  );
+
+  const [mediaByCategory, setMediaByCategory] = useState<MediaByCategoryInterface>(
+    {
+      items: [],
+      page: 1,
+      isLoading: false,
+      canLoadMore: true,
+      selectedCategory: '',
     }
   );
 
@@ -298,6 +287,43 @@ const Analytics = () => {
     )
     .catch((error) => console.error('Fetch error:', error));
   };
+
+  function loadMediaByCategory()
+  {
+    let selectedCategoryDetails = mediaCategories.items.find(category => category.name == mediaByCategory.selectedCategory);
+    let endpoint = `${process.env.VITE_API_URL}/discover/videos-by-category?categoryId=${selectedCategoryDetails?._id}`;
+    let requestOptions =
+    {
+      method: 'GET',
+      headers:
+      {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+    };
+
+    setMediaByCategory(prev => ({ ...prev, isLoading: true, canLoadMore: false }));
+
+    fetch(endpoint, requestOptions)
+    .then((response) => response.json())
+    .then(
+      (response) =>
+      {
+        if(response.data.data.length)
+        {
+          setMediaByCategory(prev => ({ ...prev, canLoadMore: true, items: [...prev.items, ...response.data.data] }));
+        }
+
+        setMediaByCategory(prev => ({ ...prev, page: prev.page + 1, isLoading: false }));
+      }
+    )
+    .catch((error) => console.error('Fetch error:', error));
+  };
+
+  function getMediaByCategory()
+  {
+    return mediaByCategory.items.filter(item => mediaByCategory.selectedCategory === '' || item.category === mediaByCategory.selectedCategory);
+  };
   
   useEffect(() => {
     if (tab) {
@@ -322,6 +348,7 @@ const Analytics = () => {
     loadRecentPosts();
     loadLatestComments();
     loadMediaCategories();
+    loadMediaByCategory();
   }, [tab]);
 
   const chipLabels = [
@@ -369,7 +396,7 @@ const Analytics = () => {
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabIndex(newValue);
   };
-    const videos = tabIndex === 0 ? trendingVideos : recommendedVideos;
+    const videos = tabIndex === 0 ? getMediaByCategory() : recommendedVideos;
 
   const lightTheme = createTheme({ palette: { mode: 'light' } });
   const darkThemePalette = createTheme({ palette: { mode: 'dark' } });
@@ -706,8 +733,9 @@ const Analytics = () => {
                                     '&::-webkit-scrollbar': { display: 'none' }, // Chrome
                                     }}
                                 >
+                                  <Chip sx={{ border: 'none'}} label="All" clickable variant="outlined" onClick={ () => { setMediaByCategory(prev => ({ ...prev, selectedCategory: '' })); loadMediaByCategory(); }} />
                                     {mediaCategories.items.map((item, idx) => (
-                                    <Chip sx={{ border: 'none'}} key={idx} label={item.name} clickable variant="outlined" />
+                                    <Chip sx={{ border: 'none'}} key={idx} label={item.name} clickable variant="outlined" onClick={ () => { setMediaByCategory(prev => ({ ...prev, selectedCategory: item.name })); loadMediaByCategory(); }} />
                                     ))}
                                 </Box>
                                 <IconButton sx={{ backgroundColor: 'white' , boxShadow: '0px 0px 9px 0px #e4e6eb'}} onClick={() => scroll('right')}>
@@ -778,8 +806,8 @@ const Analytics = () => {
                                 <Card sx={{ backgroundColor: 'transparent', boxShadow: 'none', borderRadius: 3, position: 'relative' }}>
                                 <CardMedia
                                     component="img"
-                                    image={video.thumbnail}
-                                    alt={video.title}
+                                    image={video.thumbnailUrl}
+                                    alt={video.description}
                                     sx={{ objectFit: 'cover', height: '280px', borderRadius: '8px' }}
                                 />
                                 <Box
@@ -819,14 +847,14 @@ const Analytics = () => {
                                     {video.views}  <svg className='ml-2 mr-1' width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M7.77979 0.222656C6.96329 0.222656 6.12179 0.633156 5.54729 1.30316C4.98629 0.623656 4.14979 0.222656 3.27979 0.222656C2.51753 0.22345 1.78673 0.526606 1.24773 1.0656C0.708735 1.6046 0.405579 2.3354 0.404785 3.09766C0.404785 4.63566 1.22779 6.17016 2.85179 7.65866C3.30979 8.07816 3.84079 8.49116 4.47579 8.92016C4.66929 9.05066 4.85029 9.16866 5.01229 9.26716L5.12279 9.33566C5.16379 9.36166 5.19612 9.38132 5.21979 9.39466C5.31229 9.44616 5.41979 9.47316 5.53029 9.47316C5.64079 9.47316 5.74829 9.44616 5.84129 9.39416C5.86462 9.38082 5.89679 9.36116 5.93779 9.33516L6.04829 9.26666C6.22956 9.15524 6.40828 9.03971 6.58429 8.92016C7.21929 8.49116 7.75029 8.07816 8.20829 7.65866C9.83179 6.16966 10.6553 4.63516 10.6553 3.09766C10.6553 1.51216 9.36529 0.222656 7.77979 0.222656ZM9.40479 3.09766C9.40479 4.25516 8.71379 5.47516 7.35179 6.72466C6.89088 7.14683 6.39956 7.53454 5.88179 7.88466C5.75929 7.96766 5.64779 8.03566 5.54129 8.10016L5.52979 8.10716L5.51829 8.10016C5.41179 8.03516 5.30029 7.96716 5.17779 7.88466C4.66054 7.53383 4.16926 7.14616 3.70778 6.72466C2.34528 5.47516 1.65479 4.25516 1.65479 3.09766C1.65531 2.66684 1.82669 2.25382 2.13132 1.94919C2.43595 1.64456 2.84897 1.47319 3.27979 1.47266C3.83229 1.47266 4.36779 1.75116 4.67679 2.19966C4.70829 2.24516 4.95679 2.61116 5.00329 2.68166C5.05898 2.76729 5.13482 2.83796 5.22415 2.8875C5.31349 2.93703 5.41361 2.96391 5.51574 2.96578C5.61788 2.96766 5.71891 2.94447 5.81001 2.89825C5.90111 2.85203 5.97948 2.78419 6.03829 2.70066C6.08779 2.63016 6.34679 2.26516 6.38129 2.21816C6.70028 1.77266 7.26229 1.47316 7.77979 1.47316C8.2106 1.47369 8.62362 1.64506 8.92825 1.94969C9.23288 2.25432 9.40426 2.66734 9.40479 3.09816V3.09766Z" fill="white"/>
                                     </svg>
-                                    {video.duration}
+                                    {video.likes}
                                 </Box>
                                 <CardContent sx={{ px: 1, py: 1.5 }}>
                                     <Typography variant="body2" fontWeight={600} noWrap>
-                                    {video.title}
+                                    {video.description}
                                     </Typography>
                                     <Typography variant="caption" color="text.secondary" noWrap>
-                                    {video.username}
+                                    {video.user.username}
                                     </Typography>
                                 </CardContent>
                                 </Card>
