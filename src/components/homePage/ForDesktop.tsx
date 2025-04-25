@@ -448,6 +448,39 @@ useEffect(() => {
                                         </div>
 
                                         <div className={style.actions}>
+                                        <div className={style.DivAvatarActionItemContainer}>
+                                                    <a
+                                                        className="e1g2yhv83 css-1w9wqra-StyledLink-AvatarLink er1vbsz0"
+                                                        href="#"
+                                                        onClick={profileNavigation}>
+
+                                                        <div
+                                                            className={style.AvatarDivContainer}
+                                                            style={{ width: '48px', height: '48px' }}>
+                                                            <span
+                                                                className={style.SpanAvatarContainer}
+                                                                style={{
+                                                                    width: '48px',
+                                                                    height: '48px',
+                                                                }}
+                                                            >
+                                                                <img
+                                                                    loading="lazy"
+                                                                    alt="sherjangkhan5"
+                                                                    src={
+                                                                        profile?.avatar ||
+                                                                        defaultAvatar
+                                                                    }
+                                                                    onError={(e) => {
+                                                                        (e.target as HTMLImageElement).onerror = null;  // Prevent looping in case defaultAvatar fails
+                                                                        (e.target as HTMLImageElement).src = defaultAvatar;  // Set default image if there's an error
+                                                                    }}
+                                                                    className="css-1zpj2q-ImgAvatar e1e9er4e1"
+                                                                />
+                                                            </span>
+                                                        </div>
+                                                    </a>
+                                                </div>
                                             {isDarkTheme == true &&
                                                 userActions.map((obj: any, i: number) => {
                                                     return (
@@ -468,39 +501,7 @@ useEffect(() => {
                                                         />
                                                     );
                                                 })}
-                                                <div className={style.DivAvatarActionItemContainer}>
-                                                <a
-                                                    className="e1g2yhv83 css-1w9wqra-StyledLink-AvatarLink er1vbsz0"
-                                                    href="#"
-                                                    onClick={profileNavigation}>
-
-                                                    <div
-                                                        className={style.AvatarDivContainer}
-                                                        style={{ width: '48px', height: '48px' }}>
-                                                        <span
-                                                            className={style.SpanAvatarContainer}
-                                                            style={{
-                                                                width: '48px',
-                                                                height: '48px',
-                                                            }}
-                                                        >
-                                                            <img
-                                                                loading="lazy"
-                                                                alt="sherjangkhan5"
-                                                                src={
-                                                                    profile?.avatar ||
-                                                                    defaultAvatar
-                                                                }
-                                                                onError={(e) => {
-                                                                    (e.target as HTMLImageElement).onerror = null;  // Prevent looping in case defaultAvatar fails
-                                                                    (e.target as HTMLImageElement).src = defaultAvatar;  // Set default image if there's an error
-                                                                }}
-                                                                className="css-1zpj2q-ImgAvatar e1e9er4e1"
-                                                            />
-                                                        </span>
-                                                    </div>
-                                                </a>
-                                            </div>
+                                                
                                             {isDarkTheme == false &&
                                                 userBlackActions.map((obj: any, i: number) => {
                                                     return (
