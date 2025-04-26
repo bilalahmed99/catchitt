@@ -181,7 +181,10 @@ function SoundGallery({ isDarkTheme, isFavoriteSounds, selectedAudio, setSelecte
                             onMouseLeave={() => setHoveredSoundId(null)}
                         >
                             <div className="relative block">
-                                <img className= "min-w-11 w-11 h-11 bg-gray-200  rounded-md" src={audio?.owner?.avatar || defaultAvatar} alt="soundImg" />
+                                <img className= "min-w-11 w-11 h-11 bg-gray-200  rounded-md" src={audio?.owner?.avatar || defaultAvatar} onError={(e) => {
+                                                                            (e.target as HTMLImageElement).onerror = null;  // Prevent looping in case defaultAvatar fails
+                                                                            (e.target as HTMLImageElement).src = defaultAvatar;  // Set default image if there's an error
+                                                                        }} alt="soundImg" />
                                 {hoveredSoundId === audio._id && <button
                                     className="ml-2 absolute border-0 left-[35%] top-[45%] -translate-x-1/2 -translate-y-1/2 z-50"
                                     onClick={(e) => {
@@ -191,6 +194,9 @@ function SoundGallery({ isDarkTheme, isFavoriteSounds, selectedAudio, setSelecte
                                     title={playingAudio === audio.url ? 'Pause' : 'Play'}
                                 >
                                     {playingAudio === audio.url ? (
+                                        <PauseIcon sx={{ fontSize: 24, color: 'white' }} />
+                                        
+                                    ) : (
                                         <svg
                                         width="16"
                                         height="16"
@@ -203,8 +209,6 @@ function SoundGallery({ isDarkTheme, isFavoriteSounds, selectedAudio, setSelecte
                                         fill="white"
                                         />
                                     </svg>
-                                    ) : (
-                                        <PauseIcon sx={{ fontSize: 24, color: 'white' }} />
                                     )}
                                 </button>
                                 }

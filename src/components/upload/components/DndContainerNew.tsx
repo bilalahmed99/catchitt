@@ -201,7 +201,7 @@ id={wrapperId}
                         // You can call any callback or state update here
                         }}
                         onModalOk={() => {
-                            handleClose();
+                            // handleClose();
                             //console.log('Image cropped and confirmed');
                         }}
                 >

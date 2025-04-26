@@ -684,7 +684,7 @@ function FormRightSide(props: any) {
                                     ref={popupRef}
                                     className="absolute w-[96%] top-[12.25rem]  !left-[2%] bg-white border rounded-lg shadow-lg  z-10 min-h-16 max-h-80 overflow-y-auto "
                                 >
-                                    <Typography variant='body1' sx={{ textAlign: 'left', p: 1.5, color: '#6b7280'}}>All users</Typography>
+                                    {/* <Typography variant='body1' sx={{ textAlign: 'left', p: 1.5, color: '#6b7280'}}>All users</Typography> */}
                                     {filteredUsers.length > 0 ? (
                                         filteredUsers.map(
                                             (
