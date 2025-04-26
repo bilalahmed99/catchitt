@@ -137,7 +137,7 @@ function SoundGallery({ isDarkTheme, isFavoriteSounds, selectedAudio, setSelecte
 
     return (
         <div 
-            className={`sound-gallery ${isHighlighted ? 'highlight-effect' : ''} max-w-sm`}
+            className={`sound-gallery ${isHighlighted ? 'highlight-effect' : ''}`}
             style={{
             transition: 'all 0.3s ease',
             border: isHighlighted ? '2px solid #20D5EC' : 'none',

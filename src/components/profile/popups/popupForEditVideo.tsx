@@ -393,9 +393,9 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
       title: 'Sounds',
       icon: musicBlack,
       content: (
-        <div className={`${style.recommendedContainer} border-r border-gray-200 relative`}>
+        <div className={`${style.recommendedContainer} grid m !max-w-[90%] border-r border-gray-200 relative`}>
           {/* Search Bar */}
-          <div className="mt-2.5 mx-auto mb-1 w-11/12">
+          <div className="mt-2.5 mx-auto mb-1 w-100">
             <span
               className="rounded-sm w-100 h-10 d-flex align-items-center"
               style={{ backgroundColor: 'rgb(242, 242, 242)', color: 'rgb(0, 0, 0)' }}
@@ -469,7 +469,7 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
       title: 'Template',
       icon: svgTemplate,
       content: 
-      <div className="grid grid-cols-3 gap-2 p-4 border-r">
+      <div className="grid grid-cols-3 gap-2 w-[90%] p-4 border-r">
       {videoData.map((item, index) => (
        <Card
        key={index}
@@ -504,7 +504,7 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
         PaperProps={{
           style: {
             width: '940px',
-            maxWidth: '90%',
+            maxWidth: '100%',
             borderRadius: '10px',
           },
         }}
@@ -515,7 +515,7 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
           </div>
           <div className={`${style.modalBody} relative overflow-y-auto h-[calc(100vh-13rem)]`}>
             {isInProcess&&<div className={`absolute top-0 left-0 right-0 bottom-0 z-10 opacity-60 ${isDarkTheme?'bg-black':'bg-white'} flex justify-center items-center`}> <CircularProgress style={{width:'30px',height:'30px',color:'#f50057'}} /> </div>}
-            <div className={`${style.content} border-b border-gray-200 grid `} style={{ gridTemplateColumns: '1fr 4fr 4fr'}}>
+            <div className={`${style.content} border-b border-gray-200 grid `} style={{ gridTemplateColumns: '1fr 3fr 4fr'}}>
               {/* LEFT ACTION BAR */}
               <div className={`${style.actions} border-r border-gray-200`}>
               {EDIT_VIDEO_ACTIONS.map((action, index) => (
