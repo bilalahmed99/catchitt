@@ -356,7 +356,7 @@ function FormRightSide(props: any) {
             let insertValue = '';
     
             if (isUser) {
-                insertValue = `${triggerChar}${item.username}`;
+                insertValue = `${triggerChar}${item.name}`;
             } else {
                 // Strip leading '#' if already present
                 const cleanTag = item.name?.replace(/^#/, '') ?? '';
