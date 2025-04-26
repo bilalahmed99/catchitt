@@ -218,10 +218,10 @@ function SoundGallery({ isDarkTheme, isFavoriteSounds, selectedAudio, setSelecte
                                 
                                 {/* <span className="text-sm text-gray-500">{audio.duration || '00:15'}</span> */}
                             </div>
-                                <span className="w-[5rem]">
+                                <span className="w-[7rem] flex">
                                     {hoveredSoundId === audio._id && (
                                     <button
-                                    className="ml-2 bg-[#E0E0E0] text-black text-sm text-capitalize border-0 w-[5rem] py-1 rounded-full transition-opacity duration-200"
+                                    className="ml-2 bg-[#E0E0E0] text-black text-sm text-capitalize border-0 py-1 rounded-full transition-opacity duration-200"
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         setSelectedAudio(audio.url);
@@ -231,8 +231,7 @@ function SoundGallery({ isDarkTheme, isFavoriteSounds, selectedAudio, setSelecte
                                     Use
                                     </button>
                                     )}
-                                </span>
-                                {hoveredSoundId === audio._id && <button
+                                     {hoveredSoundId === audio._id && <button
                                     className="btn border-0 text-xl ml-4"
                                     onClick={(e) => {
                                         e.stopPropagation(); // Prevent playing audio on click
@@ -251,6 +250,8 @@ function SoundGallery({ isDarkTheme, isFavoriteSounds, selectedAudio, setSelecte
                                     )}
                                 </button>
                                 }
+                                </span>
+                               
 
                                 
                         {/* <img src={attachMusicInWhite} alt="attach-sound" /> */}
