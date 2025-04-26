@@ -213,12 +213,12 @@ function SoundGallery({ isDarkTheme, isFavoriteSounds, selectedAudio, setSelecte
                                 </button>
                                 }
                             </div>
-                            <div className="w-[15rem] pl-2">
+                            <div className="w-[12rem] pl-2">
                                 <div className="font-medium text-sm">{Object.hasOwn(audio,'title')? audio.title: audio.name}</div>
                                 
                                 {/* <span className="text-sm text-gray-500">{audio.duration || '00:15'}</span> */}
                             </div>
-                                <span className="w-[7rem] flex">
+                                <span className="w-[8rem] flex">
                                     {hoveredSoundId === audio._id && (
                                     <button
                                     className="ml-2 bg-[#E0E0E0] text-black text-sm text-capitalize border-0 py-1 rounded-full transition-opacity duration-200"

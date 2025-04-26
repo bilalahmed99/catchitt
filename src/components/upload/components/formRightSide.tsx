@@ -1018,11 +1018,21 @@ function FormRightSide(props: any) {
 
 
                             
-                            <Stack direction="row" spacing={2}>
-                                {locationHistory.map((location: any) => (
-                                    <Chip label={location.label} key={location.value} onClick={() => { setLocationSearchOptions([location]); handleLocationSelect(undefined, location); }} sx={{ borderRadius: "8px", fontWeight: 500 }}  variant="outlined" />
-                                ))}
-                            </Stack>
+                                    <Stack direction="row" gap={1} sx={{ flexWrap: 'wrap' }}>
+                                        {locationHistory.map((location: any) => (
+                                            <Chip 
+                                                label={location.label} 
+                                                key={location.value} 
+                                                onClick={() => { 
+                                                    setLocationSearchOptions([location]); 
+                                                    handleLocationSelect(undefined, location); 
+                                                }} 
+                                                sx={{ borderRadius: "8px", fontWeight: 500 }}  
+                                                variant="outlined" 
+                                            />
+                                        ))}
+                                    </Stack>
+
 {/*                             
                             <BasicInput
                                 value={selectedLocation}

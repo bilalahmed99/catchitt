@@ -598,43 +598,43 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
               </div> */}
               {/* RIGHT VIDEO CONTAINER */}
               <div className={`${style.videoContainer}`}>
-  <div 
-    className="relative" 
-    style={
-      selectedTemplate 
-        ? { 
-            backgroundImage: `url(${selectedTemplate.background})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            width: '200px',
-            height: '350px'
-          } 
-        : {}
-    }
-  >
-    <video 
-      ref={videoRef}
-      className={
-        selectedTemplate 
-          ? `h-[150px] w-full object-cover absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ${selectedTemplate.className}`
-          : 'w-[200px] h-[350px]'
-      }
-      onLoadedMetadata={getMediaInfo}
-      onTimeUpdate={getCurrentTime}
-      onEnded={endedVideoHandler}
-      src={video}
-      style={{
-        backgroundColor: '#2C2C2C',
-        borderRadius: '10px'
-      }}
-    />
-     {selectedTemplate && (
-      <div className="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
-        {selectedTemplate.position}
-      </div>
-    )}
-  </div>
-</div>
+                <div 
+                  className="relative" 
+                  style={
+                    selectedTemplate 
+                      ? { 
+                          backgroundImage: `url(${selectedTemplate.background})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                          width: '200px',
+                          height: '350px'
+                        } 
+                      : {}
+                  }
+                >
+                  <video 
+                    ref={videoRef}
+                    className={
+                      selectedTemplate 
+                        ? `h-[150px] !rounded-none w-full object-cover absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ${selectedTemplate.className}`
+                        : 'w-[200px] h-[350px]'
+                    }
+                    onLoadedMetadata={getMediaInfo}
+                    onTimeUpdate={getCurrentTime}
+                    onEnded={endedVideoHandler}
+                    src={video}
+                    style={{
+                      backgroundColor: '#2C2C2C',
+                      borderRadius: '10px'
+                    }}
+                  />
+                  {selectedTemplate && (
+                    <div className="absolute bottom-14  left-1/2 bg-black bg-opacity-50 font-semibold text-white text-xs px-2 py-1 rounded">
+                      {selectedTemplate.position}
+                    </div>
+                  )}
+                </div>
+              </div>
 
             </div>
             {/* bottom controls bar */}
