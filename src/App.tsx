@@ -36,6 +36,7 @@ import { SuggestedAccountsPage } from './components/suggested-accounts-page/sugg
 import UploadPage from './components/upload';
 import StudioHomePage from './components/studio/home/StudioHomePage';
 import CommentsPage from './components/studio/comments/CommentsPage';
+import PostsAnalytics from './components/studio/posts/PostsAnalytics';
 import { useAuthStore } from './store/authStore';
 import useApp from './useApp';
 import GoLive from './components/go-live';
@@ -1163,6 +1164,7 @@ function App() {
                             <Route path="/analytics/comment/:postId" element={<CommentAnalytics />} />
                             <Route path="/studio" element={<StudioHomePage />} />
                             <Route path="/studio/comment" element={<CommentsPage />} />
+                            <Route path="/studio/posts" element={<PostsAnalytics />} />
                             <Route path="/contactus" element={<ContactUs />} />
                             <Route path="/signup" element={<Signup />} />
                             <Route path="/signup/phone-or-email/email" element={<SignupEmail />} />
