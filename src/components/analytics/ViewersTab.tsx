@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Card, CardContent, Typography, LinearProgress, Box, Grid, Tab,Tabs, IconButton, Tooltip, Avatar, Paper, CircularProgress,
    CardHeader } from '@mui/material';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid,  ResponsiveContainer, BarChart, Bar,Cell} from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid,  ResponsiveContainer, BarChart, Bar,Cell, Area} from 'recharts';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
@@ -207,32 +207,35 @@ function ViewersTab({isDarkThemes}: any) {
 
   return (
     <div className='mt-3'>
-            <Card elevation={3} >
+            <Card elevation={3} sx={{ borderRadius: 2 }}>
                 <CardContent sx={{ p: 0 }}>
-                    <Tabs value={tabIndex} onChange={handleChange} 
+                    {/* Tabs */}
+                    <Tabs
+                    value={tabIndex}
+                    onChange={handleChange}
+                    variant="fullWidth"
                     TabIndicatorProps={{
                         sx: {
-                        top: 0,            // Move indicator to top
-                        height: 3,         // Make it a little thicker (optional)
-                        backgroundColor: '#1976d2', // Indicator color
+                        top: 0,
+                        height: 3,
+                        backgroundColor: "#1976d2",
                         },
                     }}
-                    variant="fullWidth"
                     sx={{
-                        '& .MuiTabs-flexContainer': {
-                        position: 'relative',
-                        },
-                        '& .MuiTab-root': {
-                        textTransform: 'initial',
+                        minHeight: "48px",
+                        "& .MuiTab-root": {
+                        textTransform: "none",
                         fontWeight: 500,
-                        fontSize: '1rem',
-                        color: '#4B5563', // gray-700
-                        paddingBottom: '12px',
-                        
+                        fontSize: "1rem",
+                        color: "#4B5563",
+                        minHeight: "48px",
                         },
-                        '& .Mui-selected': {
-                        color: '#000 !important',
+                        "& .Mui-selected": {
+                        color: "#000",
                         fontWeight: 700,
+                        },
+                        "& .MuiTabs-flexContainer": {
+                        borderBottom: "none",
                         },
                     }}
                     >
@@ -240,23 +243,52 @@ function ViewersTab({isDarkThemes}: any) {
                     <Tab label="New viewers" />
                     </Tabs>
 
-                    <Box sx={{ mt: 4, display: 'flex' }} >
-                    <Typography variant="body2" align="center" width={'50%'} color="primary">
+                    {/* Top Section */}
+                    <Box display="flex" sx={{ borderBottom: "1px solid #E5E7EB" }}>
+                    <Box flex={1} p={2} textAlign="center" borderRight="1px solid #E5E7EB">
+                        <Typography variant="h4" color="primary" fontWeight="bold" lineHeight={1}>
                         0
-                    </Typography>
-                    <Typography variant="body2" align="center" width={'50%'} color="textSecondary">
-                        0 (--)
-                    </Typography>
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                        0 (-- )
+                        </Typography>
+                    </Box>
+                    <Box flex={1} p={2} textAlign="center">
+                        <Typography variant="h4" color="primary" fontWeight="bold" lineHeight={1}>
+                        0
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                        0 (-- )
+                        </Typography>
+                    </Box>
                     </Box>
 
-                    <Box height={250} mt={4} mr={2}>
+                    {/* Chart */}
+                    <Box height={250} pl={5}>
                     <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={chartData} margin={{ top: 20, right: 20, left: 0, bottom: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                        <XAxis dataKey="date" />
-                        <YAxis />
+                        <LineChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
+                        <XAxis dataKey="date" fontSize={12} axisLine={false} tickLine={false} />
+                        <YAxis orientation="right" fontSize={12} axisLine={false} tickLine={false} />
                         <Tooltip />
-                        <Line type="monotone" dataKey="viewers" stroke="#1976d2" strokeWidth={2} dot={{ r: 3 }} />
+
+                        {/* Light blue Area under Line */}
+                        <Area
+                            type="monotone"
+                            dataKey="viewers"
+                            stroke="none"
+                            fill="rgba(25, 118, 210, 0.1)" // Light blue transparent
+                        />
+
+                        {/* Main Line */}
+                        <Line
+                            type="monotone"
+                            dataKey="viewers"
+                            stroke="#1976d2"
+                            strokeWidth={2}
+                            dot={{ r: 4 }}
+                            activeDot={{ r: 6 }}
+                        />
                         </LineChart>
                     </ResponsiveContainer>
                     </Box>
