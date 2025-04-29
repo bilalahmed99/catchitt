@@ -32,7 +32,9 @@ import coinsOnly from '../../../assets/gifts/coinsSingle.svg';
 import CloseIcon from '@mui/icons-material/Close';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
-const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme, data,currentReplyToMessage,closeReply, setMessagesState }: any) => {
+const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme, data,currentReplyToMessage,closeReply, setMessagesState, inputRef }: any) => {
+
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const API_KEY = process.env.VITE_API_URL;
   const loggedInUserId = localStorage.getItem('userId');
@@ -231,6 +233,11 @@ const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme, data,cu
   }
 
   useEffect(() => {
+      // Focus input on mount
+    inputRef.current?.focus();
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+
+
     return () => {
       if (abortController.current) {
         abortController.current.abort();
@@ -319,7 +326,9 @@ const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme, data,cu
             placeholder="Write a message..."
             value={!!uploadedFile ? '' : msg}
             style={{ width: '-webkit-fill-available', padding: '0.5rem' }}
+            ref={inputRef} // Use the passed ref
             onKeyDown={handleKeyDown} // Handling Enter key press
+            className={isDarkTheme ? 'text-white' : 'text-dark'}
           />
           <button onClick={showGiftPopup}>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
