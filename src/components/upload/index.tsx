@@ -59,7 +59,7 @@ function UploadPage() {
                             <span>Home</span>
                         </Link>
                     </li>
-                    <li className='cursor-pointer flex gap-2' onClick={() => navigate('/analytics/content')}>
+                    <li className='cursor-pointer flex gap-2' onClick={() => navigate('/studio/posts')}>
                         <img className='w-4 inline-block' src={darkTheme===''?hamburgerDark :hamburger} alt="" />
                         <span>&nbsp;Posts</span>
                     </li>
