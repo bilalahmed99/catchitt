@@ -32,6 +32,10 @@ import {
   import { API_KEY } from '../../../utils/constants';
   import { formatCustomDate } from '../../../utils/helpers';
   import ReactPaginate from 'react-paginate';
+  import { useNavigate } from 'react-router-dom';
+  import { TableSortLabel } from "@mui/material";
+
+  
 
   
   const posts1 = [
@@ -77,10 +81,8 @@ import {
     const [anchorElPrivacy, setAnchorElPrivacy] = useState(null);
     const userId = localStorage.getItem('userId');
     const token = localStorage.getItem('token');
-    
-    
-      
-
+    const navigate = useNavigate();  
+  
     const filterOptionsALLComments = {
         all: 'All comments', not_replied: 'Not replied', replied: 'Replied',
     };
@@ -94,15 +96,48 @@ import {
     const [selectedLikeCounts, setSelectedLikeCounts] = useState<string[]>([]);
     const [selectedPrivacyCounts, setSelectedPrivacyCounts] = useState<string[]>([]);
     const [posts, setPosts] = useState<any>({ items: [], page: 1, pageSize: 10, totalItems: 0, isLoading: true });
-    
-    
+    const [sortColumn, setSortColumn] = useState<string>(''); // e.g., 'likesCount'
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
     // Options
     const followerOptions = ['<5K', '5K-10K', '10K-100K', '>100Klikes'];
-    const viewsOptions = ['<1K', '1K-10K', '10K-100K', '>100K'];
-    const likesOptions = ['<1K', '1K-10K', '10K-100K', '>100K'];
-    const commentsOptions = ['<1K', '1K-10K', '10K-100K', '>100K'];
-    const privacyOptions = ['Everyone', 'Only me', 'Friends'];
+    const viewsOptions = [
+      { label: '<1K', value: '0-1000' },
+      { label: '1K-10K', value: '1000-10000' },
+      { label: '10K-100K', value: '10000-100000' },
+      { label: '>100K', value: '100000-99999999' }
+    ];
+    const likesOptions = viewsOptions;
+    const commentsOptions = viewsOptions;
+    const privacyOptions = [
+      { label: 'Everyone', value: 'everyone' },
+      { label: 'Only Me', value: 'onlyme' },
+      { label: 'Friends', value: 'friends' },
+      { label: 'Followers', value: 'followers' },
+    ];
+
+    const buildQueryString = () => {
+      const query = new URLSearchParams();
+    
+      if (selectedViewsCounts.length)
+        query.append('viewsCount', selectedViewsCounts.join(','));
+      if (selectedLikeCounts.length)
+        query.append('likesCount', selectedLikeCounts.join(','));
+      if (selectedCommentCounts.length)
+        query.append('commentsCount', selectedCommentCounts.join(','));
+      if (selectedPrivacyCounts.length)
+        query.append('privacy', selectedPrivacyCounts.join(','));
+    
+      query.append('page', posts.page.toString());
+      query.append('pageSize', posts.pageSize.toString());
+
+      if (sortColumn) {
+        query.append('sortBy', sortColumn);
+        query.append('sortOrder', sortOrder); // 'asc' or 'desc'
+      }
+    
+      return query.toString();
+    };
 
 
     const handleViewSelect = (option: string) => {
@@ -119,6 +154,7 @@ import {
     
     const handleViewsApply = () => {
       handleViewsClose();
+      fetchPosts();
     };
 
     const handleViewsClose = () => {
@@ -147,6 +183,7 @@ import {
     
     const handleCommentApply = () => {
       handleCommentClose();
+      fetchPosts();
     };
 
     const handleCommentClose = () => {
@@ -172,6 +209,7 @@ import {
     
     const handleLikeApply = () => {
       handleLikeClose();
+      fetchPosts();
     };
 
     const handleLikeClose = () => {
@@ -196,6 +234,7 @@ import {
     
     const handlePrivacyApply = () => {
       handlePrivacyClose();
+      fetchPosts();
     };
 
     const handlePrivacyClose = () => {
@@ -203,39 +242,37 @@ import {
     };
 
     const fetchPosts = async () => {
-        try {
-          const controller = new AbortController();
-          abortController.current = controller;
-          const response = await fetch(
-            `${API_KEY}/profile/v2/${userId}/videos?page=${posts.page}&pageSize=${posts.pageSize}`,
-            {
-              method: 'GET',
-              headers: {
-                'Content-type': 'application/json',
-                Authorization: `Bearer ${token}`,
-              },
-              signal: controller.signal,
-            })
-            .then((res) => res.json())
-            .then((data) => {
-              console.log('posts data... v2')
-              console.log(data.data.data)
-              setPosts((prev: any) => ({
-                ...prev,
-                items: [...data.data.data],
-                totalItems: data.data.total,
-                isLoading:false
-              }));
-            })
-            .catch((err) => {
-              console.log(err)
-            })
-        } catch (error) {
-          console.log(error)
-        } finally {
-          abortController.current = null;
-        }
+      try {
+        const controller = new AbortController();
+        abortController.current = controller;
+        const queryString = buildQueryString();
+    
+        const response = await fetch(
+          `${API_KEY}/profile/v2/${userId}/videos?${queryString}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            signal: controller.signal,
+          }
+        );
+        const data = await response.json();
+    
+        setPosts((prev: any) => ({
+          ...prev,
+          items: data.data.data,
+          totalItems: data.data.total,
+          isLoading: false
+        }));
+      } catch (error) {
+        console.log(error);
+      } finally {
+        abortController.current = null;
       }
+    };
+    
     
       useEffect(() => {
         fetchPosts();
@@ -245,6 +282,19 @@ import {
           }
         }
       }, [posts.page]);
+
+      const handleSort = (column: string) => {
+        if (sortColumn === column) {
+          // Toggle sort direction
+          setSortOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'));
+        } else {
+          setSortColumn(column);
+          setSortOrder('asc');
+        }
+        // Re-fetch data after sort
+        fetchPosts();
+      };
+      
     
     
     
@@ -283,15 +333,15 @@ import {
             anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
             transformOrigin={{ vertical: 'top', horizontal: 'left' }}
           >                
-            {viewsOptions.map((option) => (
+            {viewsOptions.map((option, index) => (
               <MenuItem
-                key={option}
-                onClick={() => handleViewSelect(option)}
+                key={index}
+                onClick={() => handleViewSelect(option.value)}
                 sx={{ justifyContent: 'flex-start', gap: 1 }}
               >
                 <Checkbox
-                  checked={selectedViewsCounts.includes(option)}
-                  onChange={() => handleViewSelect(option)}
+                  checked={selectedViewsCounts.includes(option.value)}
+                  onChange={() => handleViewSelect(option.value)}
                   size="small"
                   sx={{
                     padding: '1px',
@@ -301,7 +351,7 @@ import {
                     },
                   }}
                 />
-                {option}
+                {option.label}
               </MenuItem>
             ))}
     
@@ -366,15 +416,15 @@ import {
             anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
             transformOrigin={{ vertical: 'top', horizontal: 'left' }}
           >                
-            {likesOptions.map((option) => (
+            {likesOptions.map((option, index) => (
               <MenuItem
-                key={option}
-                onClick={() => handleLikeSelect(option)}
+                key={index}
+                onClick={() => handleLikeSelect(option.value)}
                 sx={{ justifyContent: 'flex-start', gap: 1 }}
               >
                 <Checkbox
-                  checked={selectedLikeCounts.includes(option)}
-                  onChange={() => handleLikeSelect(option)}
+                  checked={selectedLikeCounts.includes(option.value)}
+                  onChange={() => handleLikeSelect(option.value)}
                   size="small"
                   sx={{
                     padding: '1px',
@@ -384,7 +434,7 @@ import {
                     },
                   }}
                 />
-                {option}
+                {option.label}
               </MenuItem>
             ))}
     
@@ -449,15 +499,15 @@ import {
             anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
             transformOrigin={{ vertical: 'top', horizontal: 'left' }}
           >                
-            {privacyOptions.map((option) => (
+            {privacyOptions.map((option, index) => (
               <MenuItem
-                key={option}
-                onClick={() => handlePrivacySelect(option)}
+                key={option.value}
+                onClick={() => handlePrivacySelect(option.value)}
                 sx={{ justifyContent: 'flex-start', gap: 1 }}
               >
                 <Checkbox
-                  checked={selectedPrivacyCounts.includes(option)}
-                  onChange={() => handlePrivacySelect(option)}
+                  checked={selectedPrivacyCounts.includes(option.value)}
+                  onChange={() => handlePrivacySelect(option.value)}
                   size="small"
                   sx={{
                     padding: '1px',
@@ -467,7 +517,7 @@ import {
                     },
                   }}
                 />
-                {option}
+                {option.label}
               </MenuItem>
             ))}
     
@@ -532,15 +582,15 @@ import {
             anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
             transformOrigin={{ vertical: 'top', horizontal: 'left' }}
           >                
-            {commentsOptions.map((option) => (
+            {commentsOptions.map((option, index) => (
               <MenuItem
-                key={option}
-                onClick={() => handleCommentSelect(option)}
+                key={index}
+                onClick={() => handleCommentSelect(option.value)}
                 sx={{ justifyContent: 'flex-start', gap: 1 }}
               >
                 <Checkbox
-                  checked={selectedCommentCounts.includes(option)}
-                  onChange={() => handleCommentSelect(option)}
+                  checked={selectedCommentCounts.includes(option.value)}
+                  onChange={() => handleCommentSelect(option.value)}
                   size="small"
                   sx={{
                     padding: '1px',
@@ -550,7 +600,7 @@ import {
                     },
                   }}
                 />
-                {option}
+                {option.label}
               </MenuItem>
             ))}
     
@@ -601,17 +651,50 @@ import {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Posts (Created on)</TableCell>
+                    <TableCell>
+                    <TableSortLabel
+                        active={sortColumn === 'description'}
+                        direction={sortColumn === 'description' ? sortOrder : 'asc'}
+                        onClick={() => handleSort('description')}
+                      >
+                    Posts (Created on) 
+                    </TableSortLabel>
+                    </TableCell>
                     <TableCell>Privacy</TableCell>
-                    <TableCell align="center">Views</TableCell>
-                    <TableCell align="center">Likes</TableCell>
-                    <TableCell align="center">Comments</TableCell>
+                    <TableCell align="center">
+                    <TableSortLabel
+                        active={sortColumn === 'viewsCount'}
+                        direction={sortColumn === 'viewsCount' ? sortOrder : 'asc'}
+                        onClick={() => handleSort('viewsCount')}
+                      >
+                    Views
+                    </TableSortLabel>
+
+                    </TableCell>
+                    <TableCell align="center">
+                    <TableSortLabel
+                      active={sortColumn === 'likesCount'}
+                      direction={sortColumn === 'likesCount' ? sortOrder : 'asc'}
+                      onClick={() => handleSort('likesCount')}
+                    >
+                      Likes
+                    </TableSortLabel>
+                    </TableCell>
+                    <TableCell align="center">
+                    <TableSortLabel
+                      active={sortColumn === 'commentsCount'}
+                      direction={sortColumn === 'commentsCount' ? sortOrder : 'asc'}
+                      onClick={() => handleSort('commentsCount')}
+                    >
+                      Comments
+                    </TableSortLabel>
+                    </TableCell>
                     <TableCell align="center">Actions</TableCell>
                   </TableRow>
                 </TableHead>
     
                 <TableBody>
-                {posts.items.map((post, index) => (
+                {posts.items.map((post:any, index:any) => (
                     <TableRow
                       key={index}
                       sx={{
@@ -684,7 +767,7 @@ import {
                       </TableCell>
     
                       {/* Views */}
-                      <TableCell align="center">{post.views}</TableCell>
+                      <TableCell align="center">{post?.watched_users && post?.watched_users?.length}</TableCell>
     
                       {/* Likes */}
                       <TableCell align="center">{post?.likes && post?.likes.length}</TableCell>
@@ -701,13 +784,13 @@ import {
                             </IconButton>
                           </Tooltip>
     
-                          <Tooltip title="Change Thumbnail">
+                          <Tooltip onClick={()=>navigate(`/analytics/post/${post._id}`)} title="View Analytics">
                             <IconButton size="small" sx={{ bgcolor: "#fafafa" }}>
                               <InsertPhotoIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>
     
-                          <Tooltip title="View Comments">
+                          <Tooltip onClick={()=>navigate(`/analytics/comment/${post._id}`)} title="View Comments">
                             <IconButton size="small" sx={{ bgcolor: "#fafafa" }}>
                               <ChatBubbleOutlineIcon fontSize="small" />
                             </IconButton>
@@ -722,140 +805,34 @@ import {
                       </TableCell>
                     </TableRow>
                   ))}
-                  {/* {posts1.map((post, index) => (
-                    <TableRow
-                      key={index}
-                      sx={{
-                        backgroundColor: index === 0 ? "#f5f5f5" : "inherit",
-                        "&:hover": {
-                          backgroundColor: "#f5f5f5",
-                        },
-                      }}
-                    >
-                      <TableCell>
-                        <Box display="flex" alignItems="center">
-                          <Box position="relative" mr={2}>
-                            <Avatar
-                              variant="rounded"
-                              src={post.thumbnail}
-                              sx={{ width: 56, height: 56 }}
-                            />
-                            <Box
-                              sx={{
-                                position: "absolute",
-                                bottom: 0,
-                                left: 0,
-                                bgcolor: "rgba(0,0,0,0.7)",
-                                color: "#fff",
-                                fontSize: "10px",
-                                px: 0.5,
-                                borderRadius: "2px",
-                              }}
-                            >
-                              {post.duration}
-                            </Box>
-                          </Box>
-    
-                          <Box>
-                            <Typography
-                              variant="body2"
-                              fontWeight={600}
-                              noWrap
-                              width={200}
-                            >
-                              {post.title}
-                            </Typography>
-                            <Typography
-                              variant="caption"
-                              color="text.secondary"
-                            >
-                              {post.date}
-                            </Typography>
-                          </Box>
-                        </Box>
-                      </TableCell>
-    
-                      <TableCell>
-                        <Select
-                          size="small"
-                          value={post.privacy}
-                          IconComponent={PublicIcon}
-                          sx={{
-                            backgroundColor: "#f1f3f4",
-                            fontSize: "12px",
-                            height: "32px",
-                            ".MuiSelect-select": {
-                              pl: 4,
-                            },
-                          }}
-                        >
-                          <MenuItem value="Everyone">Everyone</MenuItem>
-                          <MenuItem value="Only Me">Only Me</MenuItem>
-                        </Select>
-                      </TableCell>
-    
-                      <TableCell align="center">{post.views}</TableCell>
-    
-                      <TableCell align="center">{post.likes}</TableCell>
-    
-                      <TableCell align="center">{post.comments}</TableCell>
-    
-                      <TableCell align="center">
-                        <Box display="flex" justifyContent="center" gap={1}>
-                          <Tooltip title="Edit">
-                            <IconButton size="small" sx={{ bgcolor: "#fafafa" }}>
-                              <EditIcon fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
-    
-                          <Tooltip title="Change Thumbnail">
-                            <IconButton size="small" sx={{ bgcolor: "#fafafa" }}>
-                              <InsertPhotoIcon fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
-    
-                          <Tooltip title="View Comments">
-                            <IconButton size="small" sx={{ bgcolor: "#fafafa" }}>
-                              <ChatBubbleOutlineIcon fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
-    
-                          <Tooltip title="More Options">
-                            <IconButton size="small" sx={{ bgcolor: "#fafafa" }}>
-                              <MoreHorizIcon fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
-                        </Box>
-                      </TableCell>
-                    </TableRow>
-                  ))} */}
+                  
                 </TableBody>
               </Table>
             </TableContainer>
 
             <div className='py-4'>
-                      <ReactPaginate
-                        previousLabel={"Previous"}
-                        nextLabel={"Next"}
-                        breakLabel={"..."}
-                        pageCount={Math.ceil(posts.totalItems / posts.pageSize)}
-                        marginPagesDisplayed={2}
-                        pageRangeDisplayed={3}
-                        onPageChange={(data) => {
-                          setPosts((prev: any) => ({ ...prev, page: data.selected + 1, isLoading: true }))
-                        }}
-                        containerClassName={"pagination justify-content-center"}
-                        pageClassName={"page-item"}
-                        pageLinkClassName={"page-link"}
-                        previousClassName={"page-item"}
-                        previousLinkClassName={"page-link"}
-                        nextClassName={"page-item"}
-                        nextLinkClassName={"page-link"}
-                        breakClassName={"page-item"}
-                        breakLinkClassName={"page-link"}
-                        activeClassName={"active"}
-                      />
-                    </div>
+              <ReactPaginate
+                previousLabel={"Previous"}
+                nextLabel={"Next"}
+                breakLabel={"..."}
+                pageCount={Math.ceil(posts.totalItems / posts.pageSize)}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={3}
+                onPageChange={(data) => {
+                  setPosts((prev: any) => ({ ...prev, page: data.selected + 1, isLoading: true }))
+                }}
+                containerClassName={"pagination justify-content-center"}
+                pageClassName={"page-item"}
+                pageLinkClassName={"page-link"}
+                previousClassName={"page-item"}
+                previousLinkClassName={"page-link"}
+                nextClassName={"page-item"}
+                nextLinkClassName={"page-link"}
+                breakClassName={"page-item"}
+                breakLinkClassName={"page-link"}
+                activeClassName={"active"}
+              />
+            </div>
                     
           </Card>
         </div>
