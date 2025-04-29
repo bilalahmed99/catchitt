@@ -56,8 +56,8 @@ h6 {
   align-items     : flex-start;
   justify-content : space-between;
   border-radius   : 8px;
-  margin          : auto;
   padding-bottom  : 1rem;
+  background-color: #FFF;
 }
 
 .container {
@@ -219,7 +219,6 @@ h6 {
   gap            : 16px;
   border-radius  : 8px;
   row-gap        : 32px;
-  background     : var(--default-white, #fff);
 }
 
 .nameText {
@@ -533,8 +532,51 @@ div.lightdarkTheme > p > h1, h2, h3, h4  {
 //   color:white !important;
 // }
 
-.darkTheme div div {
-  background: #181818 !important;
+.darkTheme, .darkTheme  {
+  background: #121212 !important;
   color:white !important;
   border-radius: 16px;
+}
+
+.scroll-section {
+  scroll-margin-top: 48px; /* Matches your navbar height */
+}
+.darkTheme{
+  .leftSide{
+    background-color: #252525;
+      svg path{
+        fill: white;
+      }
+    
+  }
+  .middleSectionDiv{
+    background-color: #252525;
+    .css-8je8zh-MuiTouchRipple-root{
+      color: #FE2C55 !important;
+    }
+    p, span, svg path{
+      color: #FFF;
+      fill: white;
+      fill-opacity: 1;
+    }
+    .suggestedContent .css-1086bdv-MuiPaper-root-MuiAccordion-root{
+      background-color: #76767630;
+    }
+  }
+  .css-mmst5v{
+    background-color: #252525;
+  }
+  button{
+    color: white !important;
+  }
+ 
+}
+.leftSide{
+  background-color: white;
+}
+.active{
+  color:rgb(254, 44, 85) !important;
+  svg path{
+    fill: rgb(254, 44, 85) !important;
+  }
 }

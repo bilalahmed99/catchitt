@@ -28,6 +28,7 @@ import FollowUserCard from '../../shared/cards/followCard';
 import { ToastContainer } from 'react-toastify';
 import { updateHomeVideos } from '../../redux/reducers';
 import VideoNavigation from '../../shared/navigation/VideoNavigation';
+import {toggleMute} from '../../redux/reducers/volumeSlice'
 // import { Toast } from 'react-toastify/dist/components';
 
 function FollowingVideos(props: any) {
@@ -52,6 +53,8 @@ function FollowingVideos(props: any) {
     const isuploading = useSelector((store) => store?.reducers?.isuploading);
     // @ts-ignore
     const suggestedUsers = useSelector((store) => store.reducers.suggestedAccounts.data);
+    const { isMutedVolume } = useSelector((state: any) => state?.reducers?.volume);
+    
     const dispatch = useDispatch();
     const userActions: any = [
         { img: moreInHome, actionType: 'more' },
@@ -79,18 +82,23 @@ function FollowingVideos(props: any) {
     const [isMuted, setIsMuted] = useState(boolMute);
     const [isPlaying, setIsPlaying] = useState(true);
 
-    const toggleMute = () => {
-        if(isMuted){
-            localStorage.setItem('videoMuted', 'false');
-        }else{
-            localStorage.setItem('videoMuted', 'true');
-        }
-        setIsMuted(prevMuted => !prevMuted);
-    };
+    // const toggleMute = () => {
+    //     if(isMuted){
+    //         localStorage.setItem('videoMuted', 'false');
+    //     }else{
+    //         localStorage.setItem('videoMuted', 'true');
+    //     }
+    //     setIsMuted(prevMuted => !prevMuted);
+    // };
 
     const togglePlaying = () => {
         setIsPlaying(prevPlaying => !prevPlaying);
       };
+
+    const toggleMuteClicked = () => {
+            dispatch(toggleMute()); // Dispatch the toggleMute action creator
+    
+        };
 
     const navigate: any = useNavigate();
 
@@ -293,7 +301,7 @@ function FollowingVideos(props: any) {
                                         >
                                             <CustomPlayer
                                                 isMuted={isMuted} 
-                                                onMuteToggle={toggleMute}
+                                                // onMuteToggle={toggleMute}
                                                 isPlaying={isPlaying}
                                                 togglePlayPause={togglePlaying}
                                                 videoModal={videoModal}
@@ -307,6 +315,8 @@ function FollowingVideos(props: any) {
                                                 thumbnailImage={post?.thumbnailUrl}
                                                 controls={true}
                                                 post={post}
+                                                isMutedVolume={isMutedVolume}
+                                                onMuteToggle={toggleMuteClicked}
                                                 popupHandler1={() => setSendPopup(true)}
                                             />
                                         </div>
@@ -401,6 +411,10 @@ function FollowingVideos(props: any) {
                                                                     defaultAvatar
                                                                 }
                                                                 className="css-1zpj2q-ImgAvatar e1e9er4e1"
+                                                                onError={(e) => {
+                                                                    (e.target as HTMLImageElement).onerror = null;  // Prevent looping in case defaultAvatar fails
+                                                                    (e.target as HTMLImageElement).src = defaultAvatar;  // Set default image if there's an error
+                                                                }}
                                                             />
                                                         </span>
                                                     </div>

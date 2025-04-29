@@ -1,4 +1,22 @@
+
+import Trecap from '../src/assets/template/Trecap.png';
+import Tvlog from '../src/assets/template/Tvlog.png';
+import Tstory from '../src/assets/template/Tstory.png';
+import TTutorial from '../src/assets/template/TTutorial.png';
+import Tcreation from '../src/assets/template/Tcreation.png';
+import Teffect from '../src/assets/template/Teffect.png';
+
+import recap from '../src/assets/template/recap.png';
+import vlog from '../src/assets/template/vlog.png';
+import story from '../src/assets/template/story.png';
+import Tutorial from '../src/assets/template/Tutorial.png';
+import creation from '../src/assets/template/creation.png';
+import effect from '../src/assets/template/effect.png';
+
+
 import logo from '../assets/assets/icons/logo.svg';
+import svgTemplate from '../public/images/icons/svgTemplate.svg';
+import logoS from './assets/logo-S.svg';
 import avatar from '../assets/icons/avatar.svg';
 import closeSvg from '../public/images/icons/Close Square.svg';
 import closeIcon from '../public/images/icons/close.svg';
@@ -192,8 +210,21 @@ import chatEmojiBgDark from './assets/chat_emoji_bg_dark.svg'
 import crossCloseDark from './assets/cross_close_dark.svg'
 import blackHeartOutline from './assets/black_heart_outline.svg'
 import blackCrossHeart from './assets/black_cross_heart.svg'
-
 export {
+    Trecap,
+    Tstory,
+    TTutorial,
+    Tvlog,
+    Tcreation,
+    Teffect,
+    recap,
+    story,
+    Tutorial,
+    vlog,
+    creation,
+    effect,
+    svgTemplate,
+    logoS,
     RepostVideo,
     blackHeartOutline,
     blackCrossHeart,

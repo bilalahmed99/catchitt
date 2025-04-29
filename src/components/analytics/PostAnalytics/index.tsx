@@ -43,6 +43,47 @@ const PostAnalytics = () => {
     const navigate = useNavigate();
     const { postId } = useParams();
 
+    const [posts, setPosts] = useState<any>(
+        {
+            items: [],
+            page: 1,
+            isLoading: false,
+            canLoadMore: true,
+        }
+    );
+
+    function loadPosts()
+    {
+        let endpoint = `${process.env.VITE_API_URL}/profile/${localStorage.getItem('userId')}/videos?page=${posts.page}`;
+        let requestOptions =
+        {
+            method: 'GET',
+            headers:
+            {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+            },
+        };
+                
+        if(!posts.canLoadMore) { return; }
+
+        setPosts(prev => ({ ...prev, isLoading: true, canLoadMore: false }));
+
+        fetch(endpoint, requestOptions)
+        .then((response) => response.json())
+        .then(
+            (response) =>
+            {
+                if(response.data.data.length)
+                {
+                    setPosts(prev => ({ ...prev, canLoadMore: true, items: [...prev.items, ...response.data.data] }));
+                }
+
+                setPosts(prev => ({ ...prev, page: prev.page + 1, isLoading: false }));
+            }
+        )
+        .catch((error) => console.error('Fetch error:', error));
+    };
 
     const switchTab = (event:React.MouseEvent<HTMLAnchorElement>) => {
         setCurrentTab(Number(event.currentTarget.id));
@@ -88,6 +129,7 @@ const PostAnalytics = () => {
         if (!isValidDocId(postId)) navigate('/');
         getPostAnalytics();
         fetchPost();
+        loadPosts();
     }, [postId]);
     const [logo, setLogo] = useState(logoAuth);
 
@@ -133,21 +175,21 @@ const PostAnalytics = () => {
                         Back
                     </Typography>
                     <List dense>
-                    {thumbnails.map((item, idx) => (
-                        <ListItem key={idx} sx={{ display: 'flex', gap: 1.5, borderRadius: 2, mb: 1, width: '90%', mx: 'auto', cursor: 'pointer','&:hover': {
+                    {posts.items.map((item, idx) => (
+                        <ListItem onClick={()=>navigate(`/analytics/post/${item.mediaId}`)} key={idx} sx={{ display: 'flex', gap: 1.5, borderRadius: 2, mb: 1, width: '90%', mx: 'auto', cursor: 'pointer','&:hover': {
                         backgroundColor: '#0000000D',
                         }, py: 1 }}>
                         <ListItemAvatar>
                             <Avatar
                             variant="rounded"
-                            src={item.image}
+                            src={item.thumbnailUrl}
                             sx={{ width: 45, height: 50, mb: 0.5 }}
                             />
                         </ListItemAvatar>
                         <ListItemText
                             primary={
                             <Typography variant="caption" color="text.secondary" textAlign="center">
-                                {item.description}
+                                {item.description ? item.description : 'No description'}
                             </Typography>
                             }
                         />

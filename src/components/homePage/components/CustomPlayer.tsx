@@ -10,7 +10,7 @@ import { setVolume, toggleMute } from '../../../redux/reducers/volumeSlice';
 import ReactSlider from "react-slider";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { copyLinkHandler, facebookShareHandler, getCaretCoordinates, searchUserToAnnotate, shareToLinkedIn, shareToTwitter, whatsappShareHandler } from '../../../utils/helpers';
+import { copyLinkHandlerWithId, copyLinkHandler, facebookShareHandler, getCaretCoordinates, searchUserToAnnotate, shareToLinkedIn, shareToTwitter, whatsappShareHandler } from '../../../utils/helpers';
 
 
 import {
@@ -208,15 +208,17 @@ function CustomPlayer({ isMuted, src, videoModal, post, thumbnailImage, controls
     };
 
     const handleCopyLink = (event: any) => {
+        console.log(post?.user?._id);
         event.stopPropagation();
-        copyLinkHandler(post?.user?.username, post?.mediaId, 'Copied successfully')
+        copyLinkHandlerWithId(post?.user?._id, post?.mediaId, 'Copied successfully')
         setShowContextMenu(false);
     };
 
     const handleVideoDetail = (event: any) => {
         event.stopPropagation();
         setShowContextMenu(false);
-        const url = `${BASE_URL_FRONTEND}/${post?.user?.username}/video/${post?.mediaId}`;
+        // const url = `${BASE_URL_FRONTEND}/${post?.user?.username}/video/${post?.mediaId}`;
+        const url = `${BASE_URL_FRONTEND}/${post?.user?._id}/video/${post?.mediaId}`;
         // Open the URL in a new tab
         window.open(url, '_blank');
 
@@ -344,7 +346,7 @@ function CustomPlayer({ isMuted, src, videoModal, post, thumbnailImage, controls
                         backgroundImage:`url(${thumbnailImage})`,
                         backgroundPosition: 'center',
                         backgroundRepeat: 'no-repeat',
-                        height: 'var(--media-post-height, 85vh )',
+                        height: '97vh',
                         backgroundSize: 'cover',
                         width: 'var(--media-post-width, 48vh)',
                     }}
@@ -371,7 +373,7 @@ function CustomPlayer({ isMuted, src, videoModal, post, thumbnailImage, controls
                         loop={isEnabled ? false : true}
                         autoPlay={videoModal ? false : inView}
                         controls={false} //{controls}
-                        style={{ height: 'var(--media-post-height, 85vh )', position: 'relative', zIndex: 1, }}
+                        style={{ height: '97vh', position: 'relative', zIndex: 1, }}
                         src={src}
                         ref={videoRef}
                         className={style.video}

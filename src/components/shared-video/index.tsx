@@ -625,7 +625,7 @@ const VideoPage = () => {
 
     const copyHandler = (msg: string) => {
         navigator.clipboard
-            .writeText(`${BASE_URL_FRONTEND}/${userName}/video/${selectedVideoId ?? videoId}`)
+            .writeText(`${BASE_URL_FRONTEND}/${userId}/video/${selectedVideoId ?? videoId}`)
             .then(() => {
                 showToast(msg);
             });
@@ -999,7 +999,7 @@ const VideoPage = () => {
     
         const handleCopyLink = async (event: any) => {
             event.stopPropagation();
-             const isCopied = await shareProfileby.copyLink(userName);
+             const isCopied = await shareProfileby.copyLinkWithId(userId);
             isCopied ? copyHandler('Copied') : showToastError('Failed to copy link');
             setShowContextMenu(false);
         };
@@ -1463,6 +1463,10 @@ const VideoPage = () => {
                                     className={`w-12 h-12 object-cover rounded-full cursor-pointer`}
                                     src={userAvatar}
                                     alt="avatar"
+                                    onError={(e) => {
+                                        (e.target as HTMLImageElement).onerror = null;  // Prevent looping in case defaultAvatar fails
+                                        (e.target as HTMLImageElement).src = defaultAvatar;  // Set default image if there's an error
+                                    }}
                                 />
                             ) : (
                                 <div
@@ -1642,6 +1646,10 @@ const VideoPage = () => {
                                                         <img
                                                             className="object-contain w-10 h-10 rounded-full"
                                                             src={user.avatar||defaultAvatar}
+                                                            onError={(e) => {
+                                                                (e.target as HTMLImageElement).onerror = null;  // Prevent looping in case defaultAvatar fails
+                                                                (e.target as HTMLImageElement).src = defaultAvatar;  // Set default image if there's an error
+                                                            }}
                                                         />
                                                         <div className="text-left text-white">
                                                             <p className="text-base font-medium">

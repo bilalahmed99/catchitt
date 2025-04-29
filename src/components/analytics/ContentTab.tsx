@@ -201,34 +201,39 @@ function ContentTab({ isDarkTheme }: any) {
       {/* Posts Table */}
       <div className={`${isDarkTheme?'bg-[#181818]':'bg-white'} shadow rounded-lg`}>
         <table className="w-full text-left">
-          <thead className="border-b text-gray-400">
+          {/* <thead className="border-b text-gray-400">
             <tr>
               <th className="p-4">Posts</th>
               <th className="p-4">Time posted</th>
               <th className="p-4">Privacy</th>
               <th className="p-4">Actions</th>
             </tr>
-          </thead>
+          </thead> */}
           <tbody>
             {posts.isLoading === false ? posts.items.map((post: any, index: number) => (
               <tr key={index} className={`border-b ${isDarkTheme?'hover:bg-gray-900':'hover:bg-gray-50'}`}>
+                
                 <td className="p-4 flex items-center space-x-4">
-                  <div className="w-14 h-24 bg-gray-200 rounded overflow-hidden">
+                  <div className="w-24 h-24 bg-gray-200 rounded overflow-hidden">
                     <img src={post.thumbnailUrl||'https://placehold.co/67x67'} className='w-full h-full' alt="post-thumbnail" />
+                  </div>
+                  <div className="p-4 w-full">
+                    <p>No description</p>
+                    <span>{formatCustomDate(post.createdTime)}</span>
                   </div>
                   <div>
                     <span>{post.description.length > 30 ? post.description.slice(0, 30) + '...' : ''}</span>
-                    <div className='flex gap-4'>
-                      <div className="text-gray-400 inline-flex"><img src={isDarkTheme ? playOutlineWhite : playOutline} alt="like" /> &nbsp; {post.views}</div>
-                      <div className="text-gray-400 inline-flex"><img src={isDarkTheme ? heartOutlineWhite : heartOutline} alt="like" /> &nbsp; {post.likes}</div>
-                      <div className="text-gray-400 inline-flex"><img src={isDarkTheme ? commentOutlineWhite : commentOutline} alt="like" /> &nbsp; {post.comments.length}</div>
+                    <div className='flex justify-between gap-4 w-60 pr-10'>
+                      <div className="text-gray-400 flex flex-column align-items-center "><img src={isDarkTheme ? playOutlineWhite : playOutline} alt="like" /> {post.views}</div>
+                      <div className="text-gray-400 flex flex-column align-items-center"><img src={isDarkTheme ? heartOutlineWhite : heartOutline} alt="like" /> {post.likes}</div>
+                      <div className="text-gray-400 flex flex-column align-items-center"><img src={isDarkTheme ? commentOutlineWhite : commentOutline} alt="like" /> {post.comments.length}</div>
                     </div>
                   </div>
                 </td>
                 {/* <td className="p-4">Nov 3, 2024, 9:57 PM</td> */}
                 {/* write down td in with post createdTime in above time format */}
-                <td className="p-4">{formatCustomDate(post.createdTime)}</td>
-                <td className="p-4">
+                
+                {/* <td className="p-4">
                   <span className="flex items-center space-x-2">
                     <span className="w-4 h-4 rounded-full bg-gray-300 flex items-center justify-center">
                       <svg
@@ -255,7 +260,7 @@ function ContentTab({ isDarkTheme }: any) {
                     <img onClick={()=>navigate(`/analytics/post/${post.mediaId}`)} className='cursor-pointer' src={isDarkTheme ? analyticsOutlineWhite : analyticsOutline} alt="analytics" />
                     <img onClick={()=>navigate(`/analytics/comment/${post.mediaId}`)} className='cursor-pointer w-5' src={isDarkTheme ? commentOutlineWhite : commentOutlineDark} alt="comments" />
                   </div>
-                </td>
+                </td> */}
               </tr>
             )):
             <tr>

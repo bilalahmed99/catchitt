@@ -1004,7 +1004,7 @@ import {
                               noWrap
                               width={200}
                             >
-                              {post?.category?.name}
+                              {post?.description || post?.category?.name}
                             </Typography>
                             <Typography
                               variant="caption"
