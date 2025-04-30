@@ -539,6 +539,7 @@ const Analytics = () => {
                 <Card  sx={{ p: 2, boxShadow: '0px 0px 9px 0px #e4e6eb' }}>
                     {recentPosts.items.slice(0, 2).map((post, index) => (
                     <Box key={index}>
+                      <Link to={`/analytics/post/${post.mediaId}`} reloadDocument={false} style={{ textDecoration: 'none' }}>
                         <Box display="flex" alignItems="center" mb={2}>
                         <Box sx={{ position: 'relative', width: 80, height: 80, mr: 2 }}>
                             <Avatar
@@ -599,6 +600,7 @@ const Analytics = () => {
                         </Box>
                         </Box>
                         {index < recentPosts.items.length - 1 && <Divider sx={{ my: 1 }} />}
+                    </Link>
                     </Box>
                     ))}
                 </Card>
