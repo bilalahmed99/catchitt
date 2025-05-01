@@ -135,7 +135,7 @@ export const Profile = (props: any) => {
         setFollowModal(null);
     };
 
-    function logStats(post: any)
+    function logPostStats(post: any)
     {
         let payload =
         {
@@ -149,7 +149,7 @@ export const Profile = (props: any) => {
     };
 
     const onVideoModal = (video: any) => {
-        logStats(video);
+        logPostStats(video);
         setVideoModal(!videoModal);
         setVideoModalInfo(video);
         markVideoDisplayed(video?.mediaId);

@@ -206,7 +206,7 @@ const handleVideoEnd = (endedMediaId: string) => {
         // }
     }, [videoes, activeMediaId]); // This will run on initial load or when `videoes` changes
 
-    function logStats(postId: string)
+    function logPostStats(postId: string)
     {
         let payload =
         {
@@ -220,7 +220,7 @@ const handleVideoEnd = (endedMediaId: string) => {
     };
 
     const handleMediaPlay = (mediaId: string) => {
-        logStats(mediaId);
+        logPostStats(mediaId);
         console.log("Playing media with ID:", mediaId);
         setActiveMediaId(mediaId);
         setTotalPostComments(0);

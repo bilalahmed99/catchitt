@@ -327,7 +327,7 @@ export const SearchPage = () => {
         }
     };
 
-    function logStats(postId: string)
+    function logPostStats(postId: string)
     {
         let payload =
         {
@@ -381,7 +381,7 @@ export const SearchPage = () => {
                                     onClick={() => {
                                         setVideoModalInfo(video);
                                         setVideoModal(true);
-                                        logStats(video.mediaId);
+                                        logPostStats(video.mediaId);
                                     }}
                                 />
                                 <p className={styles.videoDescription}>{video.description}</p>
