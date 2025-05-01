@@ -615,6 +615,7 @@ const Analytics = () => {
                     <Card sx={{ p: 2, boxShadow: '0px 0px 9px 0px #e4e6eb' }}>
                         {latestComments.items.slice(0, 2).map((item, index) => (
                         <Box key={index}>
+                            <Link to={`/analytics/comment/${item.media._id}`} reloadDocument={false} style={{ textDecoration: 'none' }}>
                             <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
                             <Box display="flex" textAlign={'left'} flex={1} mr={2}>
                                 <Avatar src={item.user.avatar} alt="User" sx={{ width: 40, height: 40, mr: 2 }} />
@@ -648,6 +649,7 @@ const Analytics = () => {
                             </Box>
 
                             {index < latestComments.items.length - 1 && <Divider sx={{ my: 1 }} />}
+                            </Link>
                         </Box>
                         ))}
                     </Card>
