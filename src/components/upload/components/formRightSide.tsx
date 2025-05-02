@@ -116,6 +116,17 @@ function FormRightSide(props: any) {
 
     const dispatch = useDispatch();
 
+    const isEditExpired = useMemo(() => {
+        if (!state?.createdTime) return false;
+        
+        const createdDate = new Date(state.createdTime);
+        const currentDate = new Date();
+        const timeDifference = currentDate.getTime() - createdDate.getTime();
+        const daysDifference = timeDifference / (1000 * 3600 * 24);
+        
+        return daysDifference > 7;
+    }, [state?.createdTime]);
+
     const handleSelectThumbnail = (index: number) => {
         setSelectedThumb(index);
         updateState('thumbnailUrl', videoThumbnails[index]);
@@ -153,6 +164,8 @@ function FormRightSide(props: any) {
     };
     reader.readAsDataURL(file);
     };
+
+    console.log('my current state in rightside component',state)
 
     const loadMoreFollowers = () => {
         dispatch(loadFollowers(followersPage));
@@ -675,7 +688,15 @@ function FormRightSide(props: any) {
                                 }
                                 onChange={handleDescriptionChange}
                             /> */}
-                            <textarea ref={inputRef} value={state?.description || ''} onChange={handleDescriptionChange} id="message" name="message" className="w-full  rounded bg-[#0000000D] focus:border-white focus:ring-1 focus:ring-white h-32 text-base outline-none py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" />
+                            <Tooltip 
+                                title={isEditExpired ? "Captions and covers can only be edited within the first 7 days of posting" : ""}
+                                placement="top"
+                                >
+                                <div className="relative">
+                                    <textarea disabled={isEditExpired} ref={inputRef} value={state?.description || ''} onChange={handleDescriptionChange} id="message" name="message" className="w-full  rounded bg-[#0000000D] focus:border-white focus:ring-1 focus:ring-white h-32 text-base outline-none py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out" />
+                                </div>
+                            </Tooltip>
+                           
                             <p className="text-gray-500 text-sm leading-[1.5rem] text-[1rem] font-normal absolute left-4 bottom-1">
                                 <span className="cursor-pointer" onClick={() => insertAtCursor('#')}>#hashtag</span> <span className="cursor-pointer" onClick={() => insertAtCursor('@')}>@Mention</span>
                             </p>
@@ -809,13 +830,17 @@ function FormRightSide(props: any) {
                                     alt="Video thumbnail"
                                     className="h-full w-full object-cover rounded-md"
                                     />
+                                    {!isEditExpired && (
                                     <button
                                         onClick={() => setThumbnailModalOpen(true)}
                                         style={{ fontSize: '12px' }}
                                         className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white w-[6rem] py-1.5 rounded-md shadow-sm hover:bg-black/70 transition-colors">
                                         Edit Cover
                                     </button>
-                                </div>
+                                       
+                                    )};
+                                     </div>
+                                    
                                 ) : (
                                 <div className="w-full h-full flex items-center justify-start border-2 border-dashed border-gray-300 rounded-lg px-4">
                                     {/* <button
@@ -951,7 +976,7 @@ function FormRightSide(props: any) {
                         <div className="w-[100%] flex flex-col pt-2">
                             <div className="flex justify-between w-[100%]">
                                 <p className="text-[0.875rem] font-medium text-custom-dark-222 leading-[1.7rem]">
-                                    {/* {videoInfo ? 'Edit' : 'Add'} location */} Location
+                                    {/* {videoInfo ? 'Edit' : 'Add'} location */} Location {state.createdTime}
                                     <Tooltip title="Set a time to publish later">
                                     <IconButton size="small">
                                     <svg className='ml-1' width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1306,6 +1331,13 @@ function FormRightSide(props: any) {
                     </>
                     )}
 
+{isEditExpired && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    Captions and covers can only be edited within the first 7 days of posting
+                                </p>
+                            )}
+
+
 
                     {/* <div className="flex justify-start items-center gap-[1rem]">
                         <p className="text-[1.125rem] font-medium text-custom-dark-222 leading-[1.7rem]">
@@ -1352,6 +1384,8 @@ function FormRightSide(props: any) {
                     </div>
                 </div>
             </div>
+
+            
             <CustomPopup
                 open={discardPostPopup}
                 title="Discard this post?"

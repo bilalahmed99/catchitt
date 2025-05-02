@@ -23,7 +23,8 @@ interface StateInterface {
     allowAddStory?: boolean;
     taggedUsers?: any;
     replyOnComment?: boolean;
-    scheduledAt?: string; // Added property
+    scheduledAt?: string;
+    createdTime?: string;
 }
 
 function useUpload() {
@@ -61,6 +62,7 @@ function useUpload() {
         canView: info?.canView,
         thumbnailUrl: info?.thumbnailUrl || '',
         locationPlace: info?.locationPlace || '',
+        createdTime: info?.createdTime || '',
     });
     // const [selectedVideoSrc, setSelectedVideoSrc] = useState('');
     const token = useSelector((store: any) => store?.reducers?.profile?.token);
@@ -122,6 +124,7 @@ function useUpload() {
                     videoId: responseData.data.mediaId || '',
                     originalUrl: responseData.data.originalUrl || '',
                     category: responseData.data.category || {},
+                    createdTime: responseData.data.createdTime || '',
                 }));
 
                 // Set the selected file (though we won't actually upload it again)
@@ -245,7 +248,7 @@ function useUpload() {
             return false;
         }
 
-        if(isEditMode){
+        if(isEditMode && !postId) {
             SubmitHandlerWhenEditVideoCase();
             return false;
         }
@@ -286,7 +289,8 @@ function useUpload() {
             console.log(state?.scheduledAt);
             postPayload.append('scheduledAt', state?.scheduledAt || '');
         }
-        
+
+       
         // postPayload.append('taggedUsers', state?.taggedUsers || []);
         // postPayload.append('replyOnComment', '');
 

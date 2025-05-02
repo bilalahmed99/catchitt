@@ -1221,6 +1221,7 @@ const handleMoreOptionsClose = (post:any = null) => {
                             noWrap
                             width={200}>
                               {post?.description || post?.category?.name}
+                              {post.isPinned ? 'Unpin from top' : 'Pin to top'}
                             {/* {post?._id} */}
                           </Typography>
                           <Typography
