@@ -83,6 +83,7 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
               const file = new File([blob], 'thumbnail.jpg', { type: 'image/jpeg' });
               onCustomThumbnail(file);
               const imageUrl = URL.createObjectURL(blob);
+              console.log('Cropped image URL:', imageUrl);
               setPreview(imageUrl);
               setTab('select');
               setShowButtons(false);

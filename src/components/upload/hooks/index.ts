@@ -94,10 +94,10 @@ function useUpload() {
     };
 
     useEffect(() => {
-        if (isEditMode && postId) {
+        if (postId) {
             fetchPost();
         }
-    }, [isEditMode, postId]);
+    }, [postId]);
 
     const fetchPost = async () => {
         try {
@@ -242,16 +242,73 @@ function useUpload() {
         }
     }, [selectedFile]);
 
+    const SubmitHandlerWhenUpdateVideoCase = async () => {
+        if (!postId) return;
+      
+        const updatePayload = new FormData();
+        // updatePayload.append('category', state?.category?._id || '');
+        // updatePayload.append('privacy', `${state?.isOnlyMe || false}`);
+        // updatePayload.append('isOnlyMe', `${state?.isOnlyMe || false}`);
+
+        console.log(state);
+        console.log('full state...')
+        if(state?.description)
+            updatePayload.append('description', state?.description || '');
+        if (state?.canView) {
+            const privacyOptions = {
+              canView: state.canView
+            };
+            updatePayload.append('privacyOptions', JSON.stringify(privacyOptions));
+        }
+        // if(state?.allowDuet)
+            updatePayload.append('allowDuet', `${state?.allowDuet || false}`);
+        // if(state?.allowDownload)
+            updatePayload.append('allowDownload', `${state?.allowDownload || false}`);
+        // if(state?.allowStitch)
+            updatePayload.append('allowStitch', `${state?.allowStitch || false}`);
+        if(state?.place)
+            updatePayload.append('place', state?.place || '');
+        if(state?.locationPlace)
+            updatePayload.append('locationPlace', state?.locationPlace || '');
+
+        if(state?.thumbnailUrl) 
+            updatePayload.append('thumbnailUrl', state?.thumbnailUrl || '');
+        // if (state?.scheduledAt) {
+        //   updatePayload.append('scheduledAt', state?.scheduledAt || '');
+        // }
+      
+        try {
+          await fetch(`${API_KEY}/media-content/${postId}`, {
+            method: 'PATCH', // Or 'PUT' depending on your API design
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: updatePayload,
+          });
+      
+        //   navigate('/home');
+        } catch (error) {
+          console.error('Error updating video:', error);
+        }
+      };
+
+      
     const SubmitHandler = async () => {
+        if (postId) { //calling only whne we're updating the video
+            await SubmitHandlerWhenUpdateVideoCase();
+            return;
+        }
+
         if(currentEditVideo && currentEditVideo?._id) {
             SubmitHandlerWhenEditVideoCase();
             return false;
         }
 
-        if(isEditMode && !postId) {
+        if(isEditMode) {
             SubmitHandlerWhenEditVideoCase();
             return false;
         }
+        
     
         setIsPosting(true);
         let getLinks: any = {};
@@ -290,7 +347,13 @@ function useUpload() {
             postPayload.append('scheduledAt', state?.scheduledAt || '');
         }
 
-       
+        // console.log(getLinks?.data?.data?.thumbnailUrl?.split('?')[0]);
+        // console.log(state?.canView);
+        // console.log(state?.description)
+        // console.log(state.thumbnailUrl);
+        // console.log('submit file output')
+        // return false;
+        
         // postPayload.append('taggedUsers', state?.taggedUsers || []);
         // postPayload.append('replyOnComment', '');
 
@@ -442,7 +505,7 @@ function useUpload() {
         }
         mergeFormData.append('videoId', videoId);
         mergeFormData.append('presignedUrl', videoUrl);
-        navigate('/home');
+        // navigate('/home');
         dispatch(
             updateUploadingStatus({
                 videos: 0,

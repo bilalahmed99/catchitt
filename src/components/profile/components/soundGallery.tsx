@@ -226,6 +226,7 @@ function SoundGallery({ isDarkTheme, isFavoriteSounds, selectedAudio, setSelecte
                                         e.stopPropagation();
                                         setSelectedAudio(audio.url);
                                         handleAudioManipulation();
+                                        dispatch(setCurrentEditVideo(audio));
                                     }}
                                     title="Use this sound">
                                     Use

@@ -587,6 +587,12 @@ function FormRightSide(props: any) {
     const [isSearchingLocation, setIsSearchingLocation] = useState(false);
     const [searchLocationTimer, setSearchLocationTimer] = useState<NodeJS.Timeout | null>(null);
 
+    const handleCanViewChange = (event: SelectChangeEvent) => {
+        const value = event.target.value;
+        setCanView(value);
+        updateState('canView', value);
+      };
+
     function handleInputChange(event: React.SyntheticEvent, value: string)
     {
         if(searchLocationTimer)
@@ -838,7 +844,7 @@ function FormRightSide(props: any) {
                                         Edit Cover
                                     </button>
                                        
-                                    )};
+                                    )}
                                      </div>
                                     
                                 ) : (
@@ -976,7 +982,7 @@ function FormRightSide(props: any) {
                         <div className="w-[100%] flex flex-col pt-2">
                             <div className="flex justify-between w-[100%]">
                                 <p className="text-[0.875rem] font-medium text-custom-dark-222 leading-[1.7rem]">
-                                    {/* {videoInfo ? 'Edit' : 'Add'} location */} Location {state.createdTime}
+                                    {/* {videoInfo ? 'Edit' : 'Add'} location */} Location
                                     <Tooltip title="Set a time to publish later">
                                     <IconButton size="small">
                                     <svg className='ml-1' width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1171,7 +1177,7 @@ function FormRightSide(props: any) {
                             </p>
                             <Select
                                     value={canView}
-                                    // onChange={handleCanViewChange}
+                                    onChange={handleCanViewChange}
                                     IconComponent={KeyboardArrowDownIcon}
                                     renderValue={(selected) => {
                                     const selectedOption = options.find(opt => opt.value === selected);
@@ -1218,7 +1224,7 @@ function FormRightSide(props: any) {
                             <div className="flex gap-10">
                                 <div className="flex gap-2 items-center">
                                     <BasicCheckBox
-                                        disabled={isEditMode}
+                                        // disabled={isEditMode}
                                         onChange={(e: any) =>
                                             updateState('replyOnComment', e?.target?.checked)
                                         }
@@ -1230,7 +1236,7 @@ function FormRightSide(props: any) {
                                 </div>
                                 <div className="flex gap-2 items-center">
                                     <BasicCheckBox
-                                        disabled={isEditMode}
+                                        // disabled={isEditMode}
                                         onChange={(e: any) =>
                                             updateState('allowDuet', e?.target?.checked)
                                         }
@@ -1242,7 +1248,7 @@ function FormRightSide(props: any) {
                                 </div>
                                 <div className="flex gap-2 items-center">
                                     <BasicCheckBox
-                                        disabled={isEditMode}
+                                        // disabled={isEditMode}
                                         onChange={(e: any) =>
                                             updateState('allowStitch', e?.target?.checked)
                                         }
