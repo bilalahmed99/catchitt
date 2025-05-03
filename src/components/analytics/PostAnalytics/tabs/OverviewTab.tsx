@@ -28,7 +28,13 @@ import { Box, LinearProgress } from '@mui/material';
 function OverviewTab({ postAnalyticsDetails, postAnalytics, post, isDarkTheme }: any) {
 
     const [activeTab, setActiveTab] = useState(POSTSTATISTICSTABS.VIDEO_VIEWS);
-    const [chartData, setChartData] = useState<any>([])
+    const [chartData, setChartData] = useState<any>(
+        [...Array(7)].map((_, i) => ({
+            date: new Date(Date.now() - (6 - i) * 864e5)
+              .toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+            viewers: 0
+          }))
+    )
     const [totalPlayTime, setTotalPlayTime] = useState('0s')
     const switchTab = (event: React.MouseEvent<HTMLDivElement>) => {
         setActiveTab(Number(event.currentTarget.id));
@@ -114,7 +120,7 @@ function OverviewTab({ postAnalyticsDetails, postAnalytics, post, isDarkTheme }:
                     <div onClick={switchTab} id={POSTSTATISTICSTABS.NEW_FOLLOWERS.toString()} className={`cursor-pointer w-1/5 py-16 font-semibold ${activeTab === POSTSTATISTICSTABS.NEW_FOLLOWERS ? 'border-t-blue-500 border-t-4' : 'border-t border-b rounded-br-md'} rounded-tr-md`}>New followers <br /> <span className={`${activeTab === POSTSTATISTICSTABS.NEW_FOLLOWERS ? 'text-blue-500' : ''}  text-2xl font-semibold`}>{postAnalyticsDetails?.details?.newFollowers || 0}</span></div>
                 </div>
                 {/* Chart Section */}
-                {/* <div className="m-4 border-t pt-6 mb-6 ">
+                <div className="m-4 border-t pt-6 mb-6 ">
                     <div className={`${chartData.length ? 'h-64' : 'h-32'} flex items-center justify-center text-gray-400`}>
                         <ResponsiveContainer width="100%" height="100%">
                             <LineChart
@@ -150,7 +156,7 @@ function OverviewTab({ postAnalyticsDetails, postAnalytics, post, isDarkTheme }:
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
-                </div> */}
+                </div>
 
             </div>
             {/* Bottom Metrics Section */}
