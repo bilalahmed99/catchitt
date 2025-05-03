@@ -231,7 +231,7 @@ const PostAnalytics = () => {
                     case POSTANALYTICSTABS.OVERVIEW:
                         return <OverviewTab postAnalyticsDetails={postAnalyticsDetails} postAnalytics={postAnalytics} post={postData} isDarkTheme={darkTheme} />    
                     case POSTANALYTICSTABS.VIEWERS:
-                        return <ViewersTab isDarkTheme={darkTheme} />
+                        return <ViewersTab postAnalyticsDetails={postAnalyticsDetails} isDarkTheme={darkTheme} />
                     // switch‑case inside PostAnalytics
                     case POSTANALYTICSTABS.ENGAGEMENT:
                         return <EngagementTab isDarkTheme={darkTheme} />;

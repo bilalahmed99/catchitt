@@ -132,7 +132,7 @@ const CardHeader = ({ title }: { title: string }) => (
   </Box>
 );
 
-const ViewersTab = ({isDarkTheme}: any) => {
+const ViewersTab = ({postAnalyticsDetails, isDarkTheme}: any) => {
   return (
     <Box sx={{ width: 'calc(100% - 14rem)', textAlign: 'left', px: 3, mt: 4 }}>
       <Grid container spacing={3}>
@@ -163,10 +163,10 @@ const ViewersTab = ({isDarkTheme}: any) => {
               {/* Returning vs new */}
               <Box mb={3}>
                 <Box display="flex" justifyContent="space-between">
-                  <Typography>{dash}</Typography>
-                  <Typography>{value}%</Typography>
+                  <Typography>{postAnalyticsDetails?.details?.viewerTypePercentages?.returning_viewer}</Typography>
+                  <Typography>{postAnalyticsDetails?.details?.viewerTypePercentages?.new_viewer}</Typography>
                 </Box>
-                <PlaceholderLinear value={value} />
+                <PlaceholderLinear value={parseInt(postAnalyticsDetails?.details?.viewerTypePercentages?.returning_viewer)} />
                 <Box display="flex" justifyContent="space-between" mt={0.5}>
                   <Typography fontSize={13}>Returning viewers</Typography>
                   <Typography fontSize={13}>New viewers</Typography>
@@ -176,10 +176,10 @@ const ViewersTab = ({isDarkTheme}: any) => {
               {/* Followers vs non‑followers */}
               <Box>
                 <Box display="flex" justifyContent="space-between">
-                  <Typography>{dash}</Typography>
-                  <Typography>0%</Typography>
+                  <Typography>{postAnalyticsDetails?.details?.viewerTypePercentages?.follower}</Typography>
+                  <Typography>{postAnalyticsDetails?.details?.viewerTypePercentages?.non_follower}</Typography>
                 </Box>
-                <PlaceholderLinear value={0} />
+                <PlaceholderLinear value={parseInt(postAnalyticsDetails?.details?.viewerTypePercentages?.follower)} />
                 <Box display="flex" justifyContent="space-between" mt={0.5}>
                   <Typography fontSize={13}>Followers</Typography>
                   <Typography fontSize={13}>Non‑followers</Typography>
