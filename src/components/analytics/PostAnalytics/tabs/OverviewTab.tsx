@@ -159,12 +159,13 @@ function OverviewTab({ postAnalyticsDetails, postAnalytics, post, isDarkTheme }:
                     <div className='py-2 px-4 border-b mb-4 text-left'>
                         <span className={`${isDarkTheme?'text-gray-300':'text-black'} text-[15px] font-semibold`}>Retention rate</span>
                     </div>
+                    <p className="text-gray-400 text-sm text-left px-4">You’ll be able to see this information once there’s enough data for analysis.</p>
                     {/* <p className="text-gray-400 text-sm">
                         Most viewers stopped watching at 0:04. play the video below to see when they lost interest.
                     </p> */}
-                    <div className="mt-4 space-y-2 px-4 pb-4 ">
+                    {/* <div className="mt-4 space-y-2 px-4 pb-4 ">
                         <video onLoadedMetadata={getMediaInfo} className='w-44 h-80 m-auto' controls src={post?.reducedVideoUrl?.length > 0? post?.reducedVideoUrl: post?.originalUrl} />
-                    </div>
+                    </div> */}
                 </div>
                 <div className={`${isDarkTheme?'bg-[#181818]':'bg-white'} shadow-sm text-left rounded`}>
                     <div className='py-2 px-3 border-b mb-4 '>
