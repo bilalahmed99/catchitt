@@ -59,33 +59,33 @@ const totalViewersData = [
 
   
 const creators = [
-    {
-      name: "Paityn Saris",
-      followers: "983k followers",
-      avatar: "https://via.placeholder.com/64", 
-    },
-    {
-      name: "Kaylynn",
-      followers: "983k followers",
-      avatar: "https://via.placeholder.com/64", 
-    },
-    {
-      name: "Ahmad Stanton",
-      followers: "983k followers",
-      avatar: "https://via.placeholder.com/64", 
-    },
+    // {
+    //   name: "Paityn Saris",
+    //   followers: "983k followers",
+    //   avatar: "https://via.placeholder.com/64", 
+    // },
+    // {
+    //   name: "Kaylynn",
+    //   followers: "983k followers",
+    //   avatar: "https://via.placeholder.com/64", 
+    // },
+    // {
+    //   name: "Ahmad Stanton",
+    //   followers: "983k followers",
+    //   avatar: "https://via.placeholder.com/64", 
+    // },
   ];
 
   const posts = [
-    {
-      id: 1,
-      thumbnail: "https://via.placeholder.com/60x100", // Replace with your actual image URL
-      duration: "00:11",
-      title: "Gym_workout_Bellyfat",
-      code: "9ad564vd_6d",
-      creatorName: "Al Hilal",
-      creatorAvatar: "https://via.placeholder.com/24", // Replace with actual creator avatar URL
-    },
+    // {
+    //   id: 1,
+    //   thumbnail: "https://via.placeholder.com/60x100", // Replace with your actual image URL
+    //   duration: "00:11",
+    //   title: "Gym_workout_Bellyfat",
+    //   code: "9ad564vd_6d",
+    //   creatorName: "Al Hilal",
+    //   creatorAvatar: "https://via.placeholder.com/24", // Replace with actual creator avatar URL
+    // },
   ];
 
 function ViewersTab({analyticsDetails, isDarkThemes}: any) {
