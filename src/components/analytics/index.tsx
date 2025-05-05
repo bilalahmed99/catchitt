@@ -410,7 +410,7 @@ const Analytics = () => {
                                     case ANALYTICSTABS.VIEWERS:
                                         return <ViewersTab analyticsDetails={analyticsDetails} />
                                     case ANALYTICSTABS.FOLLOWERS:
-                                        return <FollowersTab />
+                                        return <FollowersTab analyticsDetails={analyticsDetails} />
                                     default:
                                         return <OverviewTab analyticsDetails={analyticsDetails} analyticsData={analyticsData} isDarkTheme={!!darkTheme} />
                                 }
