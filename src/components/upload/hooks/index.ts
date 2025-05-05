@@ -293,7 +293,7 @@ function useUpload() {
       };
 
       
-    const SubmitHandler = async () => {
+    const SubmitHandler = async (isDraft = false) => {
         if (postId) { //calling only whne we're updating the video
             await SubmitHandlerWhenUpdateVideoCase();
             return;
@@ -313,10 +313,14 @@ function useUpload() {
         setIsPosting(true);
         let getLinks: any = {};
         let postPayload = new FormData();
-        let postURL = '/media-content/request-video-upload';
+        let postURL = '/media-content/v2/request-video-upload';
         if(state?.scheduledAt){
             console.log(state?.scheduledAt);
             postURL+= '?scheduledAt=' + state?.scheduledAt;
+        }
+
+        if (isDraft) {
+            postURL += (postURL.includes('?') ? '&' : '?') + 'isDraft=true';
         }
 
         // Do get request for video urls
@@ -505,7 +509,7 @@ function useUpload() {
         }
         mergeFormData.append('videoId', videoId);
         mergeFormData.append('presignedUrl', videoUrl);
-        // navigate('/home');
+        navigate('/home');
         dispatch(
             updateUploadingStatus({
                 videos: 0,

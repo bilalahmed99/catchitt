@@ -62,8 +62,7 @@ const handleMoreOptionsClick = (event: React.MouseEvent<HTMLButtonElement>) => {
 
 const handleMoreOptionsClose = (post:any = null) => {
   setAnchorElMoreOptions(null);
-  if(post)
-    deletePost(post);
+    
 };
 
 
@@ -1362,7 +1361,7 @@ const handleMoreOptionsClose = (post:any = null) => {
                                 {post.isPinned ? 'Unpin from top' : 'Pin to top'}
                               </Typography>
                             </MenuItem>
-                            <MenuItem onClick={()=> handleMoreOptionsClose(post)}>
+                            <MenuItem onClick={()=> deletePost(post)}>
                               <DeleteIcon sx={{ fontSize: 18, mr: 1, color: '#f44336' }} />
                               <Typography variant="body2" sx={{ color: '#f44336' }}>
                                 Delete

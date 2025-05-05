@@ -113,6 +113,8 @@ function FormRightSide(props: any) {
     const [showChecking, setShowChecking] = useState(false);
     const [showResult, setShowResult] = useState(false);
     const [isAlreadySchedule, setIsAlreadySchedule] = useState(false);
+    const [showDraftPopup, setShowDraftPopup] = useState(false);
+
 
     const dispatch = useDispatch();
 
@@ -1386,6 +1388,19 @@ function FormRightSide(props: any) {
                             height="40px !important"
                             onClick={() => setDiscardPostPopup(true)}
                         />
+
+                        
+                            <CustomButton
+                                width="100px !important"
+                                textSize="16px "
+                                islight
+                                backgroundColor='#0000000D'
+                                border='0'
+                                color="black"
+                                text="Cancel"
+                                height="40px !important"
+                                onClick={() => setShowDraftPopup(true)}
+                            />
                         
                     </div>
                 </div>
@@ -1526,6 +1541,24 @@ function FormRightSide(props: any) {
                     </div>
                 </div>
             </CustomModel>
+
+            <CustomPopup
+                open={showDraftPopup}
+                title="Save as draft?"
+                description="You can continue editing this video later from your drafts."
+                primaryBtnText="Save as draft"
+                btnText="Discard"
+                onClose={() => setShowDraftPopup(false)}
+                onPrimaryBtnClick={() => {
+                    setShowDraftPopup(false);
+                    SubmitHandler(true);
+                }}
+                onBtnClick={() => {
+                    setShowDraftPopup(false);
+                    dispatch(setSelectedFile({ file: null }));
+                }}
+            />
+
             {/* <CustomPopup
                 open={leaveSitePopup}
                 title="Leave site?"
