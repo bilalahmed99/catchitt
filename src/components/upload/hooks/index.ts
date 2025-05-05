@@ -25,6 +25,7 @@ interface StateInterface {
     allowAddStory?: boolean;
     taggedUsers?: any;
     replyOnComment?: boolean;
+    allowComments?:boolean;
     scheduledAt?: string;
     createdTime?: string;
 }
@@ -63,7 +64,8 @@ function useUpload() {
         isOnlyMe: info?.privacyOptions?.isOnlyMe,
         allowDownload: info?.privacyOptions?.allowDownload,
         allowAddStory: info?.privacyOptions?.allowAddStory,
-        canView: info?.canView,
+        allowComments: info?.privacyOptions?.allowComments,
+        canView: info?.privacyOptions?.canView,
         thumbnailUrl: info?.thumbnailUrl || '',
         locationPlace: info?.locationPlace || '',
         createdTime: info?.createdTime || '',
@@ -121,6 +123,7 @@ function useUpload() {
                     thumbnailUrl: responseData.data.thumbnailUrl || '',
                     isOnlyMe: responseData.data.privacyOptions?.isOnlyMe || false,
                     allowDownload: responseData.data.privacyOptions?.allowDownload || true,
+                    allowComments: responseData.data.privacyOptions?.allowComments || false,
                     canView: responseData.data.privacyOptions?.canView || 'everyone',
                     allowDuet: responseData.data.allowDuet || false,
                     allowStitch: responseData.data.allowStitch || false,
@@ -275,40 +278,65 @@ function useUpload() {
         if (!postId) return;
       
         const updatePayload = new FormData();
+
+        // Build the JSON payload instead of FormData
+        const payload: any = {};
+
+        if (state?.description) payload.description = state.description;
+
+        payload.privacyOptions = {
+            canView: state?.canView || 'everyone',
+            allowComments: !!state?.allowComments,
+            allowDownload: !!state?.allowDownload,
+
+        };
+
+        payload.allowDuet = !!state?.allowDuet;
+        payload.allowStitch = !!state?.allowStitch;
+
+        if (state?.place) payload.place = state.place;
+        if (state?.locationPlace) payload.locationPlace = state.locationPlace;
+
+
         // updatePayload.append('category', state?.category?._id || '');
         // updatePayload.append('privacy', `${state?.isOnlyMe || false}`);
         // updatePayload.append('isOnlyMe', `${state?.isOnlyMe || false}`);
 
         console.log(state);
         console.log('full state...')
-        if(state?.description)
-            updatePayload.append('description', state?.description || '');
-        if (state?.canView) {
-            const privacyOptions = {
-              canView: state.canView
-            };
-            updatePayload.append('privacyOptions', JSON.stringify(privacyOptions));
-        }
-        // if(state?.allowDuet)
-            updatePayload.append('allowDuet', `${state?.allowDuet || false}`);
-        // if(state?.allowDownload)
-            updatePayload.append('allowDownload', `${state?.allowDownload || false}`);
-        // if(state?.allowStitch)
-            updatePayload.append('allowStitch', `${state?.allowStitch || false}`);
-        if(state?.place)
-            updatePayload.append('place', state?.place || '');
-        if(state?.locationPlace)
-            updatePayload.append('locationPlace', state?.locationPlace || '');
+        // if(state?.description)
+        //     updatePayload.append('description', state?.description || '');
+        // if (state?.canView) {
+        //     const privacyOptions = {
+        //       canView: state.canView,
+        //       allowComments: state.allowComments,
+        //     };
+        //     updatePayload.append('privacyOptions', JSON.stringify(privacyOptions));
+        // }
+        // // if(state?.allowDuet)
+        //     updatePayload.append('allowDuet', `${state?.allowDuet || false}`);
+        // // if(state?.allowDownload)
+        //     // updatePayload.append('allowDownload', `${state?.allowDownload || false}`);
+        //     updatePayload.append('allowComments', `${state?.allowComments || false}`);
+        // // if(state?.allowStitch)
+        //     updatePayload.append('allowStitch', `${state?.allowStitch || false}`);
+        // if(state?.place)
+        //     updatePayload.append('place', state?.place || '');
+        // if(state?.locationPlace)
+        //     updatePayload.append('locationPlace', state?.locationPlace || '');
 
        
         // if (state?.scheduledAt) {
         //   updatePayload.append('scheduledAt', state?.scheduledAt || '');
         // }
         let messageURL = '';
-        if (state?.thumbnailUrl) {
+        if (
+            typeof state?.thumbnailUrl === 'string' &&
+            state.thumbnailUrl.startsWith('data:image/')
+          ) {
             console.log('state?.thumbnailUrl', state?.thumbnailUrl);
           
-            const file = base64ToFile(state.thumbnailUrl, 'thumbnail.png'); // Convert base64 to File
+            const file = base64ToFile(state.thumbnailUrl, 'thumbnail.png');
             const formData = new FormData();
             formData.append('file', file); // append File object
             const controller = new AbortController();
@@ -353,21 +381,27 @@ function useUpload() {
 
         console.log('messageURL', messageURL);
 
-        if(messageURL !='') 
-            updatePayload.append('thumbnailUrl', messageURL);
+        // if(messageURL !='') 
+        //     updatePayload.append('thumbnailUrl', messageURL);
+
+         if (messageURL) {
+            payload.thumbnailUrl = messageURL;
+        }
+
+console.log('PATCH payload being sent:', JSON.stringify(payload, null, 2));
 
         try {
-          await fetch(`${API_KEY}/media-content/${postId}`, {
-            method: 'PATCH', // Or 'PUT' depending on your API design
+            const response = await axios.patch(`${API_KEY}/media-content/${postId}`, payload, {
             headers: {
-              Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
             },
-            body: updatePayload,
-          });
-      
-          navigate('/studio/posts');
-        } catch (error) {
-          console.error('Error updating video:', error);
+            });
+        
+            console.log('PATCH response:', response.data);
+            navigate('/studio/posts');
+        } catch (error: any) {
+            console.error('PATCH error:', error.response?.data || error);
         }
       };
 

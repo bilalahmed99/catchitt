@@ -13,11 +13,19 @@ import WifiIcon from '@mui/icons-material/Wifi';
 import BatteryFullIcon from '@mui/icons-material/BatteryFull';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+
 
 function FormLeftSide({ selectedVideoSrc, selectFilesHandler, darkTheme, videoInfo,state }: any) {
     const [replaceVideoPopup, setReplaceVideoPopup] = React.useState(false);
     const [openEditModal, setOpenEditModal] = React.useState(false);
     const [value, setValue] = React.useState(1); // Default: Profile
+
+     let isEditMode = false;
+      const { id: postId } = useParams(); 
+      if(postId) {
+          isEditMode = true;
+      }
 
     const profileImg = useSelector((state: any) => state?.reducers?.profile?.avatar);
     const name = useSelector((state: any) => state?.reducers?.profile?.name);
@@ -237,7 +245,7 @@ function FormLeftSide({ selectedVideoSrc, selectFilesHandler, darkTheme, videoIn
                 <CustomPlayer src={selectedVideoSrc ? selectedVideoSrc : videoInfo?.originalUrl} />
             </div>
             )}
-            <CustomButton
+            {!isEditMode && <CustomButton
                 onClick={() => setOpenEditModal(true)}
                 textSize="14px"
                 islight
@@ -246,7 +254,7 @@ function FormLeftSide({ selectedVideoSrc, selectFilesHandler, darkTheme, videoIn
                 color="black"
                 icon={MyIcon}
 
-            />
+            />}
             {/* <CustomButton
                 onClick={() => setReplaceVideoPopup(true)}
                 textSize="14px"

@@ -38,7 +38,7 @@ const options = [
   { label: 'Everyone', value: 'everyone' },
   { label: 'Followers', value: 'followers' },
   { label: 'Friends', value: 'friends' },
-  { label: 'Only Me', value: 'onlyme' },
+  { label: 'Only Me', value: 'only_me' },
 ];
 
 interface Location
@@ -215,7 +215,7 @@ function FormRightSide(props: any) {
     const [coverTab, setCoverTab] = useState<string>('suggestion');
 
     
-    const [canView, setCanView] = useState("everyone");
+    const [canView, setCanView] = useState<string | undefined>(undefined);
     // updateState('canView', "everyone");
     const [postTimeOption, setPostTimeOption] = useState('now');
     const [showSchedule, setShowSchedule] = useState(false);
@@ -465,7 +465,7 @@ function FormRightSide(props: any) {
     useEffect(() => {
         loadCountries();
         if (totalFollowers === null) dispatch(loadFollowers(1));
-        updateState('canView', "everyone");
+        // updateState('canView', "everyone");
     }, []);
 
     useEffect(() => {
@@ -1116,7 +1116,10 @@ function FormRightSide(props: any) {
                                         name="when-to-post1"
                                         value="schedule"
                                         // onClick={handleAllowSchedule}       
-                                        onClick={() => isAlreadySchedule ? handleAllowSchedule(): setIsPopupOpen(true)}                                 
+                                        onClick={() => {
+                                            if (isEditMode) return;
+                                            isAlreadySchedule ? handleAllowSchedule() : setIsPopupOpen(true);
+                                          }}                                 
                                         control={<Radio sx={{ color: '#ccc', '&.Mui-checked': { color: '#FF2C55' } }} />}
                                         label={
                                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
@@ -1178,12 +1181,12 @@ function FormRightSide(props: any) {
                                 Who can watch this video
                             </p>
                             <Select
-                                    value={canView}
+                                    value={state?.canView || ''}
                                     onChange={handleCanViewChange}
                                     IconComponent={KeyboardArrowDownIcon}
                                     renderValue={(selected) => {
-                                    const selectedOption = options.find(opt => opt.value === selected);
-                                    return selectedOption?.label || '';
+                                        const selectedOption = options.find(opt => {return opt.value === selected});
+                                        return selectedOption?.label || '';
                                     }}
                                     sx={{
                                     width: '15rem',
@@ -1228,9 +1231,9 @@ function FormRightSide(props: any) {
                                     <BasicCheckBox
                                         // disabled={isEditMode}
                                         onChange={(e: any) =>
-                                            updateState('replyOnComment', e?.target?.checked)
+                                            updateState('allowComments', e?.target?.checked)
                                         }
-                                        checked={state?.replyOnComment}
+                                        checked={state?.allowComments}
                                     />
                                     <p className="text-xs font-medium text-custom-dark-222 leading-[1.1rem]">
                                         Comment
