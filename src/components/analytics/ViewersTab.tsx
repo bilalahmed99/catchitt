@@ -406,16 +406,16 @@ function ViewersTab({analyticsDetails, selectedPeriod, isDarkThemes}: any) {
                         </Tooltip>
                     </Box>
 
-                {posts.map((post) => (
-                    <Box key={post.id} display="flex" alignItems="center" py={1} borderBottom="1px solid #eee">
+                {analyticsDetails?.details?.watchedPostsByMyPostViewers?.map((post) => (
+                    <Box key={post._id} display="flex" alignItems="center" py={1} borderBottom="1px solid #eee">
                     <Typography variant="body1" sx={{ width: 24, mr: 2 }}>
-                        {post.id}
+                        {post._id}
                     </Typography>
 
                     <Box position="relative" mr={2}>
                         <img
-                        src={post.thumbnail}
-                        alt={post.title}
+                        src={post.thumbnailUrl}
+                        alt={post.description}
                         style={{
                             width: 60,
                             height: 100,
@@ -442,11 +442,11 @@ function ViewersTab({analyticsDetails, selectedPeriod, isDarkThemes}: any) {
 
                     <Box>
                         <Typography variant="body2" fontWeight="bold" noWrap>
-                        {post.title}
+                        {post.description}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary" noWrap>
+                        {/* <Typography variant="body2" color="text.secondary" noWrap>
                         {post.code}
-                        </Typography>
+                        </Typography> */}
                         <Box display="flex" alignItems="center" mt={0.5}>
                         <Avatar src={post.creatorAvatar} alt={post.creatorName} sx={{ width: 16, height: 16, mr: 0.5 }} />
                         <Typography variant="caption" color="text.secondary">
