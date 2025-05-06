@@ -102,7 +102,7 @@ const articles = [
     },
   ];
 
-const Analytics = () => {
+const UploadsHome = () => {
   const profile = useSelector((store: any) => store?.reducers?.profile);
   const { tab } = useParams();
   const [currentTab, setCurrentTab] = useState(ANALYTICSTABS.OVERVIEW);
@@ -997,4 +997,4 @@ const Analytics = () => {
   );
 };
 
-export default Analytics;
+export default UploadsHome;
