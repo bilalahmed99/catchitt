@@ -64,7 +64,7 @@ function FollowersTab({analyticsDetails, selectedPeriod}: any) {
   const handleChange = (event, newValue) => {
     setTabIndex(newValue);
   }
-  const chartData = tabIndex === 0 ? analyticsDetails.details.netFollowersGraph : newViewersData;
+  const chartData = tabIndex === 0 ? newViewersData: analyticsDetails.details.netFollowersGraph;
   const [monthIndex, setMonthIndex] = useState(3); // April is index 3
 
   const [dayData, setDayData] = useState<any>(
