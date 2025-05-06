@@ -111,6 +111,13 @@ const UploadsHome = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [darkTheme, setDarkTheme] = useState<string>('');
 
+  const [analyticsDetails, setAnalyticsDetails] = useState<any>(
+    {
+      details: [],
+      isLoading: false,
+    }
+  );
+  
   const [recentPosts, setRecentPosts] = useState<RecentPostsInterface>(
     {
       items: [],
@@ -187,6 +194,27 @@ const UploadsHome = () => {
     } catch (error) {
       console.log('Error fetching analytics data:', error);
     }
+  };
+
+  function loadAnalyticsDetails()
+  {
+    let endpoint = `${process.env.VITE_API_URL}/profile/v2/media-analytics?day=${selectedPeriod}`;
+    let requestOptions =
+    {
+      method: 'GET',
+      headers:
+      {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+    };
+
+    setAnalyticsDetails((prev: any) => ({ ...prev, isLoading: true }));
+
+    fetch(endpoint, requestOptions)
+    .then((response) => response.json())
+    .then((response) => setAnalyticsDetails((prev: any) => ({ ...prev, details: response.data, isLoading: false })))
+    .catch((error) => console.error('Fetch error:', error));
   };
 
   function loadRecentPosts()
@@ -376,6 +404,7 @@ const UploadsHome = () => {
 
   useEffect(() => {
     getUserAnalytics(selectedPeriod);
+    loadAnalyticsDetails();
   }, [selectedPeriod]);
 
   useEffect(() => {
