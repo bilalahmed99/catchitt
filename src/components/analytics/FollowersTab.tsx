@@ -224,7 +224,7 @@ function FollowersTab({analyticsDetails, selectedPeriod}: any) {
             <Box flex={1} px={2} pb={2} textAlign="center" borderRight="1px solid #E5E7EB">
                 <Typography variant="body1" fontSize={'1.5rem'} 
                         color={tabIndex === 0 ? "#1976d2" : "inherit"} fontWeight="bold" lineHeight={1}>
-                0
+                {analyticsDetails.details.allFollowers}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                 0 (-- )
@@ -233,7 +233,7 @@ function FollowersTab({analyticsDetails, selectedPeriod}: any) {
             <Box flex={1} p={2} textAlign="center">
                 <Typography variant="body1" fontSize={'1.5rem'} 
                         color={tabIndex === 0 ? "#1976d2" : "inherit"} fontWeight="bold" lineHeight={1}>
-                0
+                {analyticsDetails.details.netFollowers}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                 0 (-- )
