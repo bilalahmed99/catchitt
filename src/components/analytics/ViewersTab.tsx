@@ -21,25 +21,6 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
     "July", "August", "September", "October", "November", "December"
   ];
 
-  
-const creators = [
-    // {
-    //   name: "Paityn Saris",
-    //   followers: "983k followers",
-    //   avatar: "https://via.placeholder.com/64", 
-    // },
-    // {
-    //   name: "Kaylynn",
-    //   followers: "983k followers",
-    //   avatar: "https://via.placeholder.com/64", 
-    // },
-    // {
-    //   name: "Ahmad Stanton",
-    //   followers: "983k followers",
-    //   avatar: "https://via.placeholder.com/64", 
-    // },
-  ];
-
   const posts = [
     // {
     //   id: 1,
@@ -493,7 +474,7 @@ function ViewersTab({analyticsDetails, selectedPeriod, isDarkThemes}: any) {
                     </Box>
 
                     <Box display="flex" gap={4} justifyContent="center">
-                        {creators.map((creator, index) => (
+                        {analyticsDetails?.details?.othersPostsViewers?.map((creator, index) => (
                         <Box key={index} display="flex" flexDirection="column" alignItems="center">
                             <Avatar
                             src={creator.avatar}
