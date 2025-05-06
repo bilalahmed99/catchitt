@@ -192,20 +192,16 @@ function ViewersTab({analyticsDetails, selectedPeriod, isDarkThemes}: any) {
                     {/* Top Section */}
                     <Box display="flex" sx={{ borderBottom: "1px solid #E5E7EB" }}>
                     <Box flex={1} p={2} textAlign="center" borderRight="1px solid #E5E7EB">
-                        <Typography variant="h4" color="primary" fontWeight="bold" lineHeight={1}>
-                        0
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="h5" color="primary" fontWeight="bold" lineHeight={1}>{analyticsDetails.details.totalViewers}</Typography>
+                        {/* <Typography variant="body2" color="text.secondary">
                         0 (-- )
-                        </Typography>
+                        </Typography> */}
                     </Box>
                     <Box flex={1} p={2} textAlign="center">
-                        <Typography variant="h4" color="primary" fontWeight="bold" lineHeight={1}>
-                        0
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="h4" color="primary" fontWeight="bold" lineHeight={1}>{analyticsDetails.details.newViewers}</Typography>
+                        {/* <Typography variant="body2" color="text.secondary">
                         0 (-- )
-                        </Typography>
+                        </Typography> */}
                     </Box>
                     </Box>
 
