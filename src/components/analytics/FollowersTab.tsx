@@ -251,7 +251,7 @@ function FollowersTab({analyticsDetails, selectedPeriod}: any) {
                 {/* Light blue Area under Line */}
                 <Area
                     type="monotone"
-                    dataKey="viewers"
+                    dataKey="value"
                     stroke="none"
                     fill="rgba(25, 118, 210, 0.1)" // Light blue transparent
                 />
@@ -259,7 +259,7 @@ function FollowersTab({analyticsDetails, selectedPeriod}: any) {
                 {/* Main Line */}
                 <Line
                     type="monotone"
-                    dataKey="viewers"
+                    dataKey="value"
                     stroke="#1976d2"
                     strokeWidth={2}
                     dot={{ r: 4 }}
