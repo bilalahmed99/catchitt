@@ -96,7 +96,12 @@ const isDark = Boolean(isDarkTheme); // optional if using inside helper
 function OverviewTab({ analyticsDetails, analyticsData, isDarkTheme }: any) {
 
     const [activeTab, setActiveTab] = useState(STATISTICSTABS.VIDEO_VIEWS)
-    const [chartData, setChartData] = useState<any>([])
+    const [chartData, setChartData] = useState<any>(
+      [...Array(7)].map((_, i) => ({
+        date: new Date(Date.now() - (6 - i) * 864e5).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        value: 0
+      }))
+    );
 
     const switchTab = (event: React.MouseEvent<HTMLDivElement>) => {
         setActiveTab(Number(event.currentTarget.id));
@@ -122,19 +127,20 @@ function OverviewTab({ analyticsDetails, analyticsData, isDarkTheme }: any) {
     }
 
     useEffect(() => {
-        if (analyticsData && activeTab) setChartData(prepareData(analyticsData[possibleGraphs[activeTab]]));
-    }, [analyticsData, activeTab])
+      const selectedChartData = analyticsDetails?.details?.[['dailyViewsGraph','dailyProfileViewsGraph','dailyLikesGraph','dailyCommentsGraph','dailyRepostsGraph'][activeTab]];
+      selectedChartData && setChartData(selectedChartData);
+    }, [analyticsData, activeTab, analyticsDetails])
 
     return (
         <div className=' mx-auto mt-8  overflow-hidden'>
             {/* statistics card */}
             <div className={`${isDarkTheme ? 'bg-[#181818]' : 'bg-white'} rounded shadow-sm`}>
                 <div className='inline-flex w-full ' >
-                    <div onClick={switchTab} id={STATISTICSTABS.VIDEO_VIEWS.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.VIDEO_VIEWS ? 'border-t-blue-500 border-t-4' : 'border-t border-b'} rounded-tl-md`}>Video views <br /><span className={`${activeTab === STATISTICSTABS.VIDEO_VIEWS ? 'text-blue-500' : ''} text-2xl font-semibold`}>{analyticsData.videoViews || 0}</span></div>
-                    <div onClick={switchTab} id={STATISTICSTABS.PROFILE_VIEWS.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.PROFILE_VIEWS ? 'border-t-blue-500 border-t-4' : 'border-t border-b'} border-x`}>Profile views <br /> <span className={`${activeTab === STATISTICSTABS.PROFILE_VIEWS ? 'text-blue-500' : ''} text-2xl font-semibold`}>{analyticsData.profileViews || 0}</span></div>
-                    <div onClick={switchTab} id={STATISTICSTABS.LIKES.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.LIKES ? 'border-t-blue-500 border-t-4' : 'border-t border-b'} border-x`}>Likes <br /> <span className={`${activeTab === STATISTICSTABS.LIKES ? 'text-blue-500' : ''} text-2xl font-semibold`}>{analyticsData.likes || 0}</span></div>
-                    <div onClick={switchTab} id={STATISTICSTABS.COMMENTS.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.COMMENTS ? 'border-t-blue-500 border-t-4' : 'border-t border-b'} border-x`}>Comments <br /> <span className={`${activeTab === STATISTICSTABS.COMMENTS ? 'text-blue-500' : ''} text-2xl font-semibold`}>{analyticsData.comments || 0}</span></div>
-                    <div onClick={switchTab} id={STATISTICSTABS.SHARES.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.SHARES ? 'border-t-blue-500 border-t-4' : 'border-t border-b'} rounded-tr-md`}>Shares <br /> <span className={`${activeTab === STATISTICSTABS.SHARES ? 'text-blue-500' : ''} text-2xl font-semibold`}>{analyticsData.shares || 0}</span></div>
+                    <div onClick={switchTab} id={STATISTICSTABS.VIDEO_VIEWS.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.VIDEO_VIEWS ? 'border-t-blue-500 border-t-4' : 'border-t border-b'} rounded-tl-md`}>Video views <br /><span className={`${activeTab === STATISTICSTABS.VIDEO_VIEWS ? 'text-blue-500' : ''} text-2xl font-semibold`}>{analyticsDetails?.details?.totalViewers || 0}</span></div>
+                    <div onClick={switchTab} id={STATISTICSTABS.PROFILE_VIEWS.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.PROFILE_VIEWS ? 'border-t-blue-500 border-t-4' : 'border-t border-b'} border-x`}>Profile views <br /> <span className={`${activeTab === STATISTICSTABS.PROFILE_VIEWS ? 'text-blue-500' : ''} text-2xl font-semibold`}>{analyticsDetails?.details?.profileViews || 0}</span></div>
+                    <div onClick={switchTab} id={STATISTICSTABS.LIKES.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.LIKES ? 'border-t-blue-500 border-t-4' : 'border-t border-b'} border-x`}>Likes <br /> <span className={`${activeTab === STATISTICSTABS.LIKES ? 'text-blue-500' : ''} text-2xl font-semibold`}>{analyticsDetails?.details?.totalLikes || 0}</span></div>
+                    <div onClick={switchTab} id={STATISTICSTABS.COMMENTS.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.COMMENTS ? 'border-t-blue-500 border-t-4' : 'border-t border-b'} border-x`}>Comments <br /> <span className={`${activeTab === STATISTICSTABS.COMMENTS ? 'text-blue-500' : ''} text-2xl font-semibold`}>{analyticsDetails?.details?.totalComments || 0}</span></div>
+                    <div onClick={switchTab} id={STATISTICSTABS.SHARES.toString()} className={`cursor-pointer w-1/5 py-16 ${activeTab === STATISTICSTABS.SHARES ? 'border-t-blue-500 border-t-4' : 'border-t border-b'} rounded-tr-md`}>Shares <br /> <span className={`${activeTab === STATISTICSTABS.SHARES ? 'text-blue-500' : ''} text-2xl font-semibold`}>{analyticsDetails?.details?.repostCounts || 0}</span></div>
                 </div>
                 {/* Chart Section */}
                 <div className="m-4 border-t pt-6 mb-6 ">
@@ -154,22 +160,7 @@ function OverviewTab({ analyticsDetails, analyticsData, isDarkTheme }: any) {
                                 <YAxis />
                                 <Tooltip />
                                 <Legend />
-                                {(() => {
-                                    switch (activeTab) {
-                                        case STATISTICSTABS.VIDEO_VIEWS:
-                                            return <Line type="monotone" dataKey="views" stroke="#82ca9d" activeDot={{ r: 8 }} />
-                                        case STATISTICSTABS.PROFILE_VIEWS:
-                                            return <Line type="monotone" dataKey="profileViews" stroke="#82ca9d" activeDot={{ r: 8 }} />
-                                        case STATISTICSTABS.LIKES:
-                                            return <Line type="monotone" dataKey="likes" stroke="#82ca9d" activeDot={{ r: 8 }} />
-                                        case STATISTICSTABS.COMMENTS:
-                                            return <Line type="monotone" dataKey="comments" stroke="#82ca9d" activeDot={{ r: 8 }} />
-                                        case STATISTICSTABS.SHARES:
-                                            return <Line type="monotone" dataKey="shares" stroke="#82ca9d" activeDot={{ r: 8 }} />
-                                        default:
-                                            return <Line type="monotone" dataKey="views" stroke="#82ca9d" activeDot={{ r: 8 }} />
-                                    }
-                                })()}
+                                <Line type="monotone" dataKey="value" stroke="#82ca9d" activeDot={{ r: 8 }} />
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
