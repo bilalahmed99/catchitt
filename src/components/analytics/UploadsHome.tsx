@@ -554,7 +554,7 @@ const UploadsHome = () => {
         </div>
       </header>
 
-      <OverviewTab analyticsData={analyticsData} isDarkTheme={!!darkTheme} />
+      <OverviewTab analyticsDetails={analyticsDetails} analyticsData={analyticsData} isDarkTheme={!!darkTheme} />
         <div className='flex gap-4'>
             <div className="w-[70%]">
              {/* <ContentTab isDarkTheme={darkTheme} /> */}
