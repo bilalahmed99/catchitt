@@ -34,6 +34,7 @@ import {
   import { formatCustomDate } from '../../../utils/helpers';
   import ReactPaginate from 'react-paginate';
   import { useNavigate } from 'react-router-dom';
+  import { useDispatch, useSelector } from 'react-redux';
   import { TableSortLabel } from "@mui/material";
   import GroupIcon from '@mui/icons-material/Group';
   import LockIcon from '@mui/icons-material/Lock';
@@ -47,9 +48,10 @@ import {
   import CheckIcon from '@mui/icons-material/Check';
   import ChevronUpIcon from '@mui/icons-material/ExpandLess';
   import ChevronDownIcon from '@mui/icons-material/ExpandMore';
+  // import { setSelectedTemplate } from "../../../redux/reducers/upload";
 
-  
   export default function PostsAnalytics() {
+    const dispatch = useDispatch();
 
 
     // For the 3-dot "More Options" menu
@@ -122,6 +124,9 @@ const handleMoreOptionsClose = () => {
     const [sortColumn, setSortColumn] = useState<string | null>(null);
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
     const [videoModal, setVideoModal] = useState<boolean>(false);
+
+        const selectedTemplate = useSelector((store: any) => store?.reducers?.isuploading?.selectedTemplate);
+    
 
     // Options
     const followerOptions = ['<5K', '5K-10K', '10K-100K', '>100Klikes'];
@@ -1164,6 +1169,8 @@ const handleMoreOptionsClose = () => {
                               src={post.thumbnailUrl}
                               sx={{ width: 56, height: 56 }}
                             /> */}
+                                      <img src={post.templateImage} />
+
                              <VideoThumbnail 
                                 src={post.thumbnailUrl} 
                                 originalUrl={post.originalUrl}
@@ -1307,7 +1314,7 @@ const handleMoreOptionsClose = () => {
                     {/* Actions */}
                     <TableCell align="center">
                       <Box display="flex" justifyContent="center" gap={1}>
-                        <Tooltip title="Edit" onClick={()=>navigate(`/upload/${post._id}`)}>
+                        <Tooltip title="Edit" onClick={()=>{dispatch(setSelectedTemplate(post.templateImage)); navigate(`/upload/${post._id}`)}}>
                           <IconButton size="small" sx={{ border: "1px solid #00000014", p: 1 }}>
                           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path fill-rule="evenodd" clip-rule="evenodd" d="M1.3335 14.0339C1.3335 13.857 1.40373 13.6875 1.52876 13.5624C1.65378 13.4374 1.82335 13.3672 2.00016 13.3672H11.3335C11.5103 13.3672 11.6799 13.4374 11.8049 13.5624C11.9299 13.6875 12.0002 13.857 12.0002 14.0339C12.0002 14.2107 11.9299 14.3802 11.8049 14.5053C11.6799 14.6303 11.5103 14.7005 11.3335 14.7005H2.00016C1.82335 14.7005 1.65378 14.6303 1.52876 14.5053C1.40373 14.3802 1.3335 14.2107 1.3335 14.0339Z" fill="black"/>

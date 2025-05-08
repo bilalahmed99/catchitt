@@ -128,7 +128,6 @@ function FormRightSide(props: any) {
     const [showResult, setShowResult] = useState(false);
     const [isAlreadySchedule, setIsAlreadySchedule] = useState(false);
     const [showDraftPopup, setShowDraftPopup] = useState(false);
-
     // updateState('description', fileName);
     const dispatch = useDispatch();
 
@@ -345,8 +344,12 @@ function FormRightSide(props: any) {
         }
       
         // Get the search query (text after the trigger symbol)
-        const query = comment.slice(searchIndex + 1);
-        
+        let query = comment.slice(searchIndex + 1);
+        // If only "@" is present at the end, assign default 'a'
+        if (isUserSearch && query.trim() === "" && comment.endsWith("@")) {
+            query = "a";
+        }
+                
         // Only search if query has at least 1 character
         if (query.length === 0) {
           setFilteredUsers([]);

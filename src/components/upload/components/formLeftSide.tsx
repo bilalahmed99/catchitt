@@ -32,6 +32,8 @@ function FormLeftSide({ selectedVideoSrc, selectFilesHandler, darkTheme, videoIn
     const [replaceVideoPopup, setReplaceVideoPopup] = React.useState(false);
     const [openEditModal, setOpenEditModal] = React.useState(false);
     const [value, setValue] = React.useState(1); // Default: Profile
+    const selectedTemplate = useSelector((store: any) => store?.reducers?.isuploading?.selectedTemplate);
+
 
      let isEditMode = false;
       const { id: postId } = useParams(); 
