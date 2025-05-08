@@ -208,6 +208,8 @@ function OverviewTab({ analyticsDetails, analyticsData, isDarkTheme }: any) {
 </div>
 
             </div>
+            {location.pathname.startsWith('/analytics') &&
+              <>
             {/* Bottom Metrics Section */}
             <Box sx={{ my: 4 }}>
                 <Grid container spacing={3}>
@@ -288,6 +290,8 @@ function OverviewTab({ analyticsDetails, analyticsData, isDarkTheme }: any) {
                     </Grid>
                 </Grid>
                 </Box>
+              </>
+            }
 
         </div>
     )
