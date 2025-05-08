@@ -22,6 +22,8 @@ function FormLeftSide({ selectedVideoSrc, selectFilesHandler, darkTheme, videoIn
     const [replaceVideoPopup, setReplaceVideoPopup] = React.useState(false);
     const [openEditModal, setOpenEditModal] = React.useState(false);
     const [value, setValue] = React.useState(1); // Default: Profile
+    const selectedTemplate = useSelector((store: any) => store?.reducers?.isuploading?.selectedTemplate);
+
 
      let isEditMode = false;
       const { id: postId } = useParams(); 
@@ -204,6 +206,7 @@ const handleSeek = (e) => {
          
 
             </div>
+            <img src={selectedTemplate} />
                 <video
                     className="h-[350px] w-full rounded-t-md object-cover"
                     loop={true}
@@ -230,7 +233,7 @@ const handleSeek = (e) => {
                     style={{ width: `${progress}%` }}
                 ></div>
             </div>
-            
+
                 <div className="text-left px-1 py-2">
                     <p className="font-medium text-[0.8rem]">@{name}</p>
                     <p className="font-medium text-[0.6rem] mt-[0.2rem]">
