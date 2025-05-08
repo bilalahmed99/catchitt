@@ -109,6 +109,7 @@ const handleMoreOptionsClose = () => {
       privacyOptions?: { canView: string };
       isPinned?: boolean;
       description?: string;
+      templateImage?: string; // Added property
     }
     
     const [posts, setPosts] = useState<{ items: Post[]; page: number; pageSize: number; totalItems: number; isLoading: boolean }>({
@@ -1202,6 +1203,7 @@ const handleMoreOptionsClose = () => {
                                     commentsCount: post.commentsCount,
                                     privacyOptions: post.privacyOptions,
                                     description: post.description,
+                                    templateImage: post.templateImage,
                                     user: { username: post.user_id?.username || '', _id: post.user_id?._id || '', avatar: post.user_id?.avatar || '' },
                                     
                                   };
