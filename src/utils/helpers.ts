@@ -349,8 +349,11 @@ export function logPostStats(params: any)
         "media_id": params.postId,
         "user_id": localStorage.getItem('userId'),
         "clientUTCTime": new Date().toISOString(),
-        "trafficSource": allowedTrafficSource.includes(params.trafficSource) ? params.trafficSource : 'others',
     };
+
+    params.trafficSource && (payload.trafficSource = allowedTrafficSource.includes(params.trafficSource) ? params.trafficSource : 'others');
+    params.videoWatchTime && (payload.videoWatchTime =  params.videoWatchTime);
+
     let requestOptions =
     {
         method: 'POST',
