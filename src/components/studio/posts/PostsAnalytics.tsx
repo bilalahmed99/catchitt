@@ -48,6 +48,7 @@ import {
   import CheckIcon from '@mui/icons-material/Check';
   import ChevronUpIcon from '@mui/icons-material/ExpandLess';
   import ChevronDownIcon from '@mui/icons-material/ExpandMore';
+import { setSelectedTemplate } from "../../../redux/reducers/upload";
   // import { setSelectedTemplate } from "../../../redux/reducers/upload";
 
   export default function PostsAnalytics() {
@@ -1167,14 +1168,24 @@ const handleMoreOptionsClose = () => {
                             {/* <Avatar
                               variant="rounded"
                               src={post.thumbnailUrl}
-                              sx={{ width: 56, height: 56 }}
+                              sx={{ width: 56, height: 56 }}'
                             /> */}
                                       <img src={post.templateImage} />
 
-                             <VideoThumbnail 
-                                src={post.thumbnailUrl} 
-                                originalUrl={post.originalUrl}
+                             <div
+                                className={`w-fit ${post.templateImage ? 'relative h-[200%] bg-cover bg-center' : ''}`}
+                                style={
+                                  post.templateImage
+                                    ? { backgroundImage: `url(${post.templateImage})` }
+                                    : {}
+                                }
+                              >
+                                <VideoThumbnail 
+                                  src={post.thumbnailUrl} 
+                                  originalUrl={post.originalUrl}
                                 />
+                              </div>
+
                               <Box
                                 onClick={() => {
                                   // console.log('new post...');
