@@ -264,13 +264,13 @@ const ThumbnailEditorModal: React.FC<ThumbnailEditorModalProps> = ({
                       width: '80px',
                       height: '80px',
                       cursor: 'pointer',
-                      border:
-                        selectedThumb === idx
-                          ? '2px solid #00BCD4'
-                          : '2px solid transparent',
+                      // border:
+                      //   selectedThumb === idx
+                      //     ? '2px solid #00BCD4'
+                      //     : '2px solid transparent',
                       borderRadius: '4px',
                       overflow: 'hidden',
-                      mr: 1,
+                      mr: 0,
                     }}
                   >
                     <img

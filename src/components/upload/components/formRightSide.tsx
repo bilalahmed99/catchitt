@@ -34,6 +34,8 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import CheckIcon from '@mui/icons-material/Check';
 import { copyLinkHandler, facebookShareHandler, getCaretCoordinates, searchUserToAnnotate, shareToLinkedIn, shareToTwitter, whatsappShareHandler, searchUsersAndHashes } from '../../../utils/helpers';
 
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 const options = [
   { label: 'Everyone', value: 'everyone' },
@@ -57,7 +59,7 @@ function FormRightSide(props: any) {
         isEditMode = true;
     }
 
-
+    const [showMore, setShowMore] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
 
     const scroll = (direction: 'left' | 'right') => {
@@ -1354,7 +1356,7 @@ function FormRightSide(props: any) {
                                 </Select>
                             </FormControl>
                         </div>
-                        <div className="w-[100%] flex flex-col gap-[0.5rem]">
+                        {showMore && (<><div className="w-[100%] flex flex-col gap-[0.5rem]">
                             <div className="flex justify-between w-[100%]">
                                 <p className="text-sm font-medium text-custom-dark-222 leading-[1.7rem]">
                                     Allow users to:
@@ -1399,15 +1401,25 @@ function FormRightSide(props: any) {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex justify-start items-center pt-3 gap-[1.5rem]">
+                        
+                            <div className="flex justify-start items-center pt-3 gap-[1.5rem]">
                             <p className="text-[13px] font-medium text-custom-dark-222 leading-[1.7rem]">
                                 Disclose post content
                             </p>
                             <BasicSwitch
                                 checked={state?.disclosePost || false}
-                                onChange={(e: any) => updateState('disclosePost', e?.target?.checked)}
+                                onChange={(e) => updateState('disclosePost', e.target.checked)}
                             />
-                        </div>
+                            </div></>
+                        )}
+
+                        <button
+                            onClick={() => setShowMore(!showMore)}
+                            className="w-100 border-t text-blue-600 text-sm mt-2"
+                        >
+                            {showMore ? 'Show Less' : 'Show More'}
+                            {showMore ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon fontSize="small" />}
+                        </button>
                         {/* {!isEditMode && ( <><div className="flex justify-start items-center pt-3 gap-[1.5rem]">
                             <p className="text-[13px] font-medium text-custom-dark-222 leading-[1.7rem]">
                                 Save video to device

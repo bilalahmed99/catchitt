@@ -1171,7 +1171,7 @@ const handleMoreOptionsClose = () => {
                               src={post.thumbnailUrl}
                               sx={{ width: 56, height: 56 }}'
                             /> */}
-                                      <img src={post.templateImage} />
+                                      {/* <img src={post.templateImage} /> */}
 
                              <div
                                 className={`w-fit ${post.templateImage ? 'relative h-[200%] bg-cover bg-center' : ''}`}

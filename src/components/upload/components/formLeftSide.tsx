@@ -46,13 +46,20 @@ function FormLeftSide({ selectedVideoSrc, selectFilesHandler, darkTheme, videoIn
     const userName = useSelector((state: any) => state?.reducers?.profile?.username);
     const coverImg = useSelector((state: any) => state?.reducers?.profile?.cover);
 
-    const videoRef = useRef(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const videoRefWeb = useRef<HTMLVideoElement>(null);
     const [isPlaying, setIsPlaying] = useState(true);
+    const [isPlayingWeb, setIsPlayingWeb] = useState(true);
 
-    const [isMuted, setIsMuted] = useState(true);
+    const [isMuted, setIsMuted] = useState(false);
+    const [isMutedWeb, setIsMutedWeb] = useState(false);
     const [progress, setProgress] = useState(0);
     const [duration, setDuration] = useState(0);
     const [isSeeking, setIsSeeking] = useState(false);
+
+    const [progressWeb, setProgressWeb] = useState(0);
+    const [durationWeb, setDurationWeb] = useState(0);
+    const [isSeekingWeb, setIsSeekingWeb] = useState(false);
 
 
     const handleVideoClick = () => {
@@ -67,6 +74,18 @@ function FormLeftSide({ selectedVideoSrc, selectFilesHandler, darkTheme, videoIn
         }
     };
 
+    const handleVideoClickWeb = () => {
+      if (!videoRefWeb.current) return;
+
+      if (videoRefWeb.current.paused) {
+          videoRefWeb.current.play();
+          setIsPlayingWeb(true);
+      } else {
+          videoRefWeb.current.pause();
+          setIsPlayingWeb(false);
+      }
+  };
+
     const togglePlayPause = () => {
       if (videoRef.current) {
           if (videoRef.current.paused) {
@@ -79,22 +98,49 @@ function FormLeftSide({ selectedVideoSrc, selectFilesHandler, darkTheme, videoIn
       }
   };
 
+  const togglePlayPauseWeb = () => {
+    if (videoRefWeb.current) {
+        if (videoRefWeb.current.paused) {
+          videoRefWeb.current.play();
+            setIsPlayingWeb(true);
+        } else {
+          videoRefWeb.current.pause();
+            setIsPlayingWeb(false);
+        }
+    }
+};
+
   const enterFullscreen = () => {
     if (videoRef.current) {
         if (videoRef.current.requestFullscreen) {
             videoRef.current.requestFullscreen();
-        } else if (videoRef.current.webkitRequestFullscreen) {
-            videoRef.current.webkitRequestFullscreen();
-        } else if (videoRef.current.msRequestFullscreen) {
-            videoRef.current.msRequestFullscreen();
+        } else if ((videoRef.current as any).webkitRequestFullscreen) {
+            (videoRef.current as any).webkitRequestFullscreen();
         }
     }
+};
+
+const enterFullscreenWeb = () => {
+  if (videoRefWeb.current) {
+      if (videoRefWeb.current.requestFullscreen) {
+        videoRefWeb.current.requestFullscreen();
+      } else if ((videoRefWeb.current as any).webkitRequestFullscreen) {
+          (videoRefWeb.current as any).webkitRequestFullscreen();
+      }
+  }
 };
 
 const toggleMute = () => {
   if (videoRef.current) {
       videoRef.current.muted = !videoRef.current.muted;
       setIsMuted(videoRef.current.muted);
+  }
+};
+
+const toggleMuteWeb = () => {
+  if (videoRefWeb.current) {
+      videoRefWeb.current.muted = !videoRefWeb.current.muted;
+      setIsMutedWeb(videoRefWeb.current.muted);
   }
 };
 
@@ -106,13 +152,27 @@ const handleTimeUpdate = () => {
   }
 };
 
+const handleTimeUpdateWeb = () => {
+  const video = videoRefWeb.current;
+  if (video && video.duration) {
+      const currentProgress = (video.currentTime / video.duration) * 100;
+      setProgressWeb(currentProgress);
+  }
+};
+
 const handleLoadedMetadata = () => {
   if (videoRef.current) {
       setDuration(videoRef.current.duration);
   }
 };
 
-const handleSeek = (e) => {
+const handleLoadedMetadataWeb = () => {
+  if (videoRefWeb.current) {
+      setDuration(videoRefWeb.current.duration);
+  }
+};
+
+const handleSeek = (e: any) => {
   if (!videoRef.current) return;
 
   const rect = e.currentTarget.getBoundingClientRect();
@@ -123,7 +183,20 @@ const handleSeek = (e) => {
   setProgress((seekTime / videoRef.current.duration) * 100);
 };
 
+const handleSeekWeb = (e: any) => {
+  if (!videoRefWeb.current) return;
+
+  const rect = e.currentTarget.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
+  const seekTime = (clickX / rect.width) * videoRefWeb.current.duration;
+
+  videoRefWeb.current.currentTime = seekTime;
+  setProgressWeb((seekTime / videoRefWeb.current.duration) * 100);
+};
+
   const handleChange = (event: any, newValue: any) => {
+    setIsPlaying(true);
+    setIsPlayingWeb(true);
     setValue(newValue);
   };
     const MyIcon = (
@@ -134,7 +207,7 @@ const handleSeek = (e) => {
       );
     return (
         // <div className="flex-[0.6] p-[2.5rem] flex flex-col gap-[1rem]">
-           <div className="flex-[0.6] pt-[2.85rem] flex flex-col gap-[1rem]">
+           <div className="flex-[0.6] pt-[2.85rem] flex flex-col gap-[1rem]"  style={isEditMode ? { marginTop: '6rem' } : {}}>
             {/* <p className="text-start text-[1.25rem] font-semibold leading-[1.5rem] text-custom-dark-222">
                 Upload video
             </p>
@@ -143,17 +216,17 @@ const handleSeek = (e) => {
             </p> */}
 
         <Paper
-        elevation={0}
-        sx={{
-          display: "flex",
-          backgroundColor: "#0000000D",
-          borderRadius: "8px",
-          overflow: "hidden",
-          width: "fit-content",
-           height: '2.21rem',
-          mx: "auto", // center horizontally
-        }}
-      >
+          elevation={0}
+          sx={{
+            display: "flex",
+            backgroundColor: "#0000000D",
+            borderRadius: "8px",
+            overflow: "hidden",
+            width: "fit-content",
+            height: '2.21rem',
+            mx: "auto", // center horizontally
+          }}
+        >
         <Tabs
           value={value}
           onChange={handleChange}
@@ -191,7 +264,7 @@ const handleSeek = (e) => {
             //     <CustomPlayer src={selectedVideoSrc ? selectedVideoSrc : videoInfo?.originalUrl} />
             // </div>
 
-             <div className={`mx-auto relative md:mx-0 h-[36rem] w-[18rem] mt-[1.25rem] mb-[1rem]   ${style.emulator}`} 
+             <div onClick={handleVideoClick} className={`relative group mx-auto relative md:mx-0 h-[36rem] w-[18rem] mt-[1.25rem] mb-[1rem]   ${style.emulator}`} 
                 style={{
                   background: selectedTemplate
                     ? `url(${selectedTemplate}) center/cover no-repeat`
@@ -296,13 +369,13 @@ const handleSeek = (e) => {
                     preload="auto"
                     playsInline
                     ref={videoRef}
-                    onClick={handleVideoClick}
+                    
                     onTimeUpdate={handleTimeUpdate}
                     onLoadedMetadata={handleLoadedMetadata}    
                     src={selectedVideoSrc ? selectedVideoSrc : videoInfo?.originalUrl}
                 />
 
-                <div className='absolute bottom-1 px-3 w-full left-0 z-10'>
+                <div className='absolute bottom-1 px-3 w-full left-0 z-10  group-hover:block hidden'>
                   {/* Fading overlay: black at bottom → transparent upward */}
                   <div className="absolute bottom-0 left-0 w-full h-[200%] bg-gradient-to-t from-black/75 to-transparent z-[-1]" />
 
@@ -315,7 +388,7 @@ const handleSeek = (e) => {
                   >
                     <div
                       className="h-full bg-white"
-                      style={{ width: `${progress}%` }}
+                      style={{ width: `${progressWeb}%` }}
                     ></div>
                   </div>
 
@@ -589,7 +662,7 @@ const handleSeek = (e) => {
             //     className={`mx-auto md:mx-0 w-[17.5rem] h-[15rem] mt-[1.25rem] mb-[1rem] bg-[#2C2C2C] ${style.emulator}`}>
             //     <CustomPlayer src={selectedVideoSrc ? selectedVideoSrc : videoInfo?.originalUrl} />
             // </div>
-            <div className={`mx-auto relative rounded-none md:mx-0 h-[12rem] w-[18rem] mt-[1.25rem] mb-[1rem]   ${style.emulator}`} 
+            <div onClick={handleVideoClickWeb} className={`relative group mx-auto relative rounded-none md:mx-0 h-[12rem] w-[18rem] mt-[1.25rem] mb-[1rem]   ${style.emulator}`} 
             style={{
               background: selectedTemplate
                 ? `url(${selectedTemplate}) center/cover no-repeat`
@@ -607,48 +680,48 @@ const handleSeek = (e) => {
                 autoPlay={true}
                 preload="auto"
                 playsInline
-                ref={videoRef}
-                onClick={handleVideoClick}
-                onTimeUpdate={handleTimeUpdate}
-                onLoadedMetadata={handleLoadedMetadata}    
+                ref={videoRefWeb}
+                
+                onTimeUpdate={handleTimeUpdateWeb}
+                onLoadedMetadata={handleLoadedMetadataWeb}    
                 src={selectedVideoSrc ? selectedVideoSrc : videoInfo?.originalUrl}
             />
 
-            <div className='absolute bottom-0 px-3 w-full left-0 z-10'>
+            <div className='group-hover:block hidden absolute bottom-0 px-3 w-full left-0 z-10'>
               {/* Fading overlay: black at bottom → transparent upward */}
               <div className="absolute bottom-0 left-0 w-full h-[200%] bg-gradient-to-t from-black/75 to-transparent z-[-1]" />
 
               {/* Controls */}
               <div
                 className="w-full h-[2px] bg-gray-400 cursor-pointer"
-                onClick={handleSeek}
-                onMouseDown={() => setIsSeeking(true)}
-                onMouseUp={() => setIsSeeking(false)}
+                onClick={handleSeekWeb}
+                onMouseDown={() => setIsSeekingWeb(true)}
+                onMouseUp={() => setIsSeekingWeb(false)}
               >
                 <div
                   className="h-full bg-white"
-                  style={{ width: `${progress}%` }}
+                  style={{ width: `${progressWeb}%` }}
                 ></div>
               </div>
 
               <div className="z-10 flex justify-between my-1">
                 <div className='flex'>
                   <button
-                    onClick={togglePlayPause}
+                    onClick={togglePlayPauseWeb}
                     className="btn p-0.5 rounded flex items-center hover:bg-gray-500"
                   >
-                    {isPlaying ? <PauseIcon sx={{ color: '#fff' }} fontSize="small" /> : <PlayArrowIcon sx={{ color: '#fff' }} fontSize="small" />}
+                    {isPlayingWeb ? <PauseIcon sx={{ color: '#fff' }} fontSize="small" /> : <PlayArrowIcon sx={{ color: '#fff' }} fontSize="small" />}
                   </button>
                 </div>
                 <div className='flex gap-2'>
                   <button
-                    onClick={toggleMute}
+                    onClick={toggleMuteWeb}
                     className="btn p-0.5 rounded flex items-center gap-1 hover:bg-gray-500"
                   >
-                    {isMuted ? <VolumeOffIcon sx={{ color: '#fff' }} fontSize="small" /> : <VolumeUpIcon sx={{ color: '#fff' }} fontSize="small" />}
+                    {isMutedWeb ? <VolumeOffIcon sx={{ color: '#fff' }} fontSize="small" /> : <VolumeUpIcon sx={{ color: '#fff' }} fontSize="small" />}
                   </button>
                   <button
-                    onClick={enterFullscreen}
+                    onClick={enterFullscreenWeb}
                     className="btn p-0.5 rounded flex items-center hover:bg-gray-500"
                   >
                     <FullscreenIcon sx={{ color: '#fff' }} fontSize="small" />

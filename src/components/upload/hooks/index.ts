@@ -53,9 +53,16 @@ function useUpload() {
     const [template, setTemplate] = useState<Template | null>(null);
 
     const updateTemplate = (tpl: any) => {
-        setTemplate(tpl);
-        updateState('templateImage', tpl.background);
-        dispatch(setSelectedTemplate(tpl.background));
+        if(tpl && tpl.background){
+            setTemplate(tpl);
+            updateState('templateImage', tpl.background);
+            dispatch(setSelectedTemplate(tpl.background));
+        }else{
+            setTemplate(null);
+            updateState('templateImage', null);
+            dispatch(setSelectedTemplate(null));
+        }
+        
       };
 
 

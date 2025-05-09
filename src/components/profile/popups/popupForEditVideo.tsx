@@ -72,8 +72,15 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
   const dispatch = useDispatch();
 
   const handleTemplateSelect = (template: any) => {
-    updateTemplate(template);
-    setSelectedTemplate(template); // optional, if you want local state too
+   
+    if(selectedTemplate && selectedTemplate.image == template.image){
+      updateTemplate(null);
+      setSelectedTemplate(null); 
+    }else{
+      updateTemplate(template);
+      setSelectedTemplate(template); // optional, if you want local state too
+    }
+   
   };
   
   const [searchQuery, setSearchQuery] = useState('');
@@ -95,35 +102,35 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
     },
   });
 
-  const load = async () => {
-    try {
-      const baseURL = "https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/esm";
-      const ffmpeg = ffmpegRef.current;
-      console.log('check first this is called or note')
-      ffmpeg.on("log", ({ message }) => {
-        console.log(message);
-        if (messageRef.current) messageRef.current.innerHTML = message;
-      });
-      // toBlobURL is used to bypass CORS issue, urls with the same
-      // domain can be used directly.
-      const isLoaded = await ffmpeg.load({
-        coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, "text/javascript"),
-        wasmURL: await toBlobURL(
-          `${baseURL}/ffmpeg-core.wasm`,
-          "application/wasm"
-        ),
-        workerURL: await toBlobURL(
-          `${baseURL}/ffmpeg-core.worker.js`,
-          "text/javascript"
-        ),
-      });
-      // await ffmpeg.load();
-      console.log('loadded 👩‍🦳💖🤑', isLoaded)
-      setLoaded(true);
-    } catch (error) {
-      console.log('check ffmpeg load error', error);
-    }
-  }
+  // const load = async () => {
+  //   try {
+  //     const baseURL = "https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/esm";
+  //     const ffmpeg = ffmpegRef.current;
+  //     console.log('check first this is called or note')
+  //     ffmpeg.on("log", ({ message }) => {
+  //       console.log(message);
+  //       if (messageRef.current) messageRef.current.innerHTML = message;
+  //     });
+  //     // toBlobURL is used to bypass CORS issue, urls with the same
+  //     // domain can be used directly.
+  //     const isLoaded = await ffmpeg.load({
+  //       coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, "text/javascript"),
+  //       wasmURL: await toBlobURL(
+  //         `${baseURL}/ffmpeg-core.wasm`,
+  //         "application/wasm"
+  //       ),
+  //       workerURL: await toBlobURL(
+  //         `${baseURL}/ffmpeg-core.worker.js`,
+  //         "text/javascript"
+  //       ),
+  //     });
+  //     // await ffmpeg.load();
+  //     console.log('loadded 👩‍🦳💖🤑', isLoaded)
+  //     setLoaded(true);
+  //   } catch (error) {
+  //     console.log('check ffmpeg load error', error);
+  //   }
+  // }
 
   function formatTime(seconds: number) {
     const date = new Date(0);
@@ -251,13 +258,13 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
     // if (targetVideo) videoCoverHandler();
   }, [targetVideo])
 
-  useEffect(() => {
-    load();
-  }, []);
+  // useEffect(() => {
+  //   load();
+  // }, []);
 
-  useEffect(() => {
-    console.log(loaded);
-  }, [loaded]);
+  // useEffect(() => {
+  //   console.log(loaded);
+  // }, [loaded]);
   
   useUpdateEffect(()=>{
     setSelectedAudio(null);
@@ -267,7 +274,7 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
    
     
     try {
-      setIsInProcess(true);
+      //setIsInProcess(true);
       // await ffmpeg.exec([
       //   '-i', 'input.mp4', // Input video
       //   '-stream_loop', '-1', // Loop video
@@ -361,7 +368,7 @@ function PopupForEditVideo({ isDarkTheme, open, targetVideo, handleClose }: any)
     console.log('saveEdit 🚀🚀🚀👩‍🚀', file);
     onChangeFileHandler({ target: { files: [file] } });
     updateTemplate(selectedTemplate);
-    // setIsInProcess(false);
+    setIsInProcess(false);
     handleClose();
   }
 
