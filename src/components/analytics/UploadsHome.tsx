@@ -103,13 +103,19 @@ const articles = [
   ];
 
 const UploadsHome = () => {
-  const profile = useSelector((store: any) => store?.reducers?.profile);
   const { tab } = useParams();
   const [currentTab, setCurrentTab] = useState(ANALYTICSTABS.OVERVIEW);
   const [analyticsData, setAnalyticsData] = useState<any>('');
   const [selectedPeriod, setSelectedPeriod] = useState(7);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [darkTheme, setDarkTheme] = useState<string>('');
+
+  const [profileDetails, setProfileDetails] = useState<any>(
+    {
+      details: [],
+      isLoading: false,
+    }
+  );
 
   const [analyticsDetails, setAnalyticsDetails] = useState<any>(
     {
@@ -194,6 +200,27 @@ const UploadsHome = () => {
     } catch (error) {
       console.log('Error fetching analytics data:', error);
     }
+  };
+
+  function loadProfileDetails()
+  {
+    let endpoint = `${process.env.VITE_API_URL}/profile`;
+    let requestOptions =
+    {
+      method: 'GET',
+      headers:
+      {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+    };
+
+    setProfileDetails((prev: any) => ({ ...prev, isLoading: true }));
+
+    fetch(endpoint, requestOptions)
+    .then((response) => response.json())
+    .then((response) => setProfileDetails((prev: any) => ({ ...prev, details: response.data, isLoading: false })))
+    .catch((error) => console.error('Fetch error:', error));
   };
 
   function loadAnalyticsDetails()
@@ -403,6 +430,7 @@ const UploadsHome = () => {
   };
 
   useEffect(() => {
+    loadProfileDetails();
     getUserAnalytics(selectedPeriod);
     loadAnalyticsDetails();
   }, [selectedPeriod]);
@@ -445,16 +473,16 @@ const UploadsHome = () => {
                 }}
                 >
                 <Avatar
-                    src={ profile?.avatar }
-                    alt={ profile?.name }
+                    src={ profileDetails?.details?.avatar }
+                    alt={ profileDetails?.details?.name }
                     sx={{ width: 48, height: 48, mr: 2 }}
                 />
                 <Box>
                     <Typography sx={{ textAlign: 'left'}} variant="subtitle1" fontWeight="bold">
-                    { profile?.name }
+                    { profileDetails?.details?.name }
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                    Likes { profile?.likesNum } · Followers { profile?.followers } · Following { profile?.following }
+                    Likes { profileDetails?.details?.likesNum } · Followers { profileDetails?.details?.followersNumber } · Following { profileDetails?.details?.followingNumber }
                     </Typography>
                 </Box>
             </Paper>
