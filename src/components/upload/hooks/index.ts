@@ -320,6 +320,7 @@ function useUpload() {
 
         payload.allowDuet = !!state?.allowDuet;
         payload.allowStitch = !!state?.allowStitch;
+        payload.disclosePost = !!state?.disclosePost;
 
         if (state?.place) payload.place = state.place;
         if (state?.locationPlace) payload.locationPlace = state.locationPlace;
@@ -862,6 +863,7 @@ console.log('PATCH payload being sent:', JSON.stringify(payload, null, 2));
                         isOnlyMe: state?.isOnlyMe,
                         disclosePost: state?.disclosePost,
                     },
+                    disclosePost: state?.disclosePost,
                     lat: info?.location?.coordinates[0],
                     lng: info?.location?.coordinates[1],
                     place: '',
