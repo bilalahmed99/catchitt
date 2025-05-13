@@ -197,7 +197,7 @@ const renderGiftRow = (gifts) => (
           </AppBar> */}
 
           {/* Main Content Grid */}
-          <Grid container sx={{ flex: 1, overflow: 'hidden' }}>
+          <Grid container sx={{ flex: 1,}}>
             
             {/* Video Section */}
             <Grid item xs={9} sx={{ position: 'relative', bgcolor: '#000' }}>
@@ -270,9 +270,9 @@ const renderGiftRow = (gifts) => (
                       </Button>
                     </Stack>
                 </Box>
-                <Box sx={{ width: '100%', height: '100%' }}>
+                <Box sx={{ width: '100%', height: '95%' }}>
                     {/* Placeholder for Video */}
-                    <Typography color="white" align="center" sx={{ mt: 5 }}>
+                    <Typography color="white" align="center" >
                     Video Player Area
                     </Typography>
 
@@ -365,9 +365,24 @@ const renderGiftRow = (gifts) => (
                                     Get Coins
                                     </Button>
                                 </Box>
-                                </Box>
+                         </Box>
                     </Box>
                 </Box>
+                <Box sx={{px: 2}}>
+                    <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                        <Typography variant="h6" fontSize={'22px'} color={'#161823'} fontWeight={600}>
+                        Recommended LIVE videos
+                        </Typography>
+                    
+                    </Box>
+                    <Grid container spacing={2}>
+                        {dummyData.map((stream) => (
+                            <Grid item xs={12} sm={6} key={stream.id}>
+                                <LiveStreamCard stream={stream} />
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Box> 
             </Grid>
 
             {/* Right Sidebar */}
@@ -738,8 +753,8 @@ const renderGiftRow = (gifts) => (
                             }}
                             />
                         </Box>
-                        </Box>
-            </Box>
+                  </Box>
+             </Box>
 
              
             </Grid>
