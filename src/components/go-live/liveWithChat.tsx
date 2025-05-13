@@ -1,9 +1,13 @@
 import { SideNavBar } from './goLiveSidebar';
 import { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
-import { Box, IconButton, Chip, AppBar, Typography, Collapse, CardMedia, Stack, Avatar, Grid, CardContent, Button, Toolbar, Paper, Divider } from '@mui/material';
+import { Box, IconButton, Chip, AppBar, Typography, Collapse, CardMedia, Stack, Avatar, Grid, CardContent, Button, Toolbar, Paper, Divider, TextField, InputAdornment } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import SendIcon from '@mui/icons-material/Send';
+import CloseIcon from '@mui/icons-material/Close';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 function LiveWithChat() {
 
@@ -138,8 +142,7 @@ const renderGiftRow = (gifts) => (
       sx={{
         display: 'flex',
         overflowX: 'auto',
-        pb: 1,
-        mt: 1,
+        pb: 2,
       }}
     >
       {gifts.map((gift, index) => (
@@ -179,7 +182,7 @@ const renderGiftRow = (gifts) => (
   return (
     
         
-        <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <Box sx={{display: 'flex', flexDirection: 'column' }}>
       
           {/* Top Navigation Bar */}
           {/* <AppBar position="static" color="default" elevation={1}>
@@ -197,7 +200,7 @@ const renderGiftRow = (gifts) => (
           <Grid container sx={{ flex: 1, overflow: 'hidden' }}>
             
             {/* Video Section */}
-            <Grid item xs={8} sx={{ position: 'relative', bgcolor: '#000' }}>
+            <Grid item xs={9} sx={{ position: 'relative', bgcolor: '#000' }}>
                 <Box
                     sx={{
                       display: 'flex',
@@ -294,15 +297,17 @@ const renderGiftRow = (gifts) => (
                                     <IconButton
                                     onClick={() => setExpanded((prev) => !prev)}
                                     sx={{
-                                        transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                                        position: 'absolute',
+                                        top: '1.5rem',
                                         transition: 'transform 0.2s ease',
                                         color: '#fff',
                                         border: '1px solid #555',
                                         borderRadius: 1,
                                         mt: -1,
+                                        height: '7rem'
                                     }}
                                     >
-                                    <ExpandMoreIcon />
+                                    <ExpandMoreIcon sx={{transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',}} />
                                     </IconButton>
                                 </Box>
 
@@ -366,29 +371,381 @@ const renderGiftRow = (gifts) => (
             </Grid>
 
             {/* Right Sidebar */}
-            <Grid item xs={4} sx={{ bgcolor: '#fafafa', borderLeft: '1px solid #ddd', p: 2 }}>
-              {/* Top Viewers */}
-              <Paper elevation={2} sx={{ p: 1, mb: 2 }}>
-                <Typography variant="subtitle1">Top Viewers</Typography>
-              </Paper>
+            <Grid item xs={3} sx={{ bgcolor: '#fafafa', borderLeft: '1px solid #ddd', p: 0 }}>
+              <Box
+                sx={{
+                    bgcolor: '#fff',
+                    borderRadius: 1,
+                    boxShadow: 1,
+                    position: 'relative'
+                }}>
+                <Box sx={{ display: 'flex', justifyContent: 'center',position: 'relative', p: 1, borderBottom: '1px solid rgba(22, 24, 35, 0.2)' }}>
+                     <span className='absolute left-3 top-3.5'>
+                        <svg width="18" height="15" viewBox="0 0 18 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M4.5005 8.62453H13.4095L8.84513 13.1889C8.6987 13.3353 8.6987 13.5728 8.84513 13.7192L9.90578 14.7799C10.0523 14.9263 10.2897 14.9263 10.4361 14.7799L16.921 8.29505C17.3603 7.8557 17.3603 7.14339 16.921 6.70404L10.4361 0.219212C10.2897 0.0727628 10.0523 0.0727628 9.90578 0.219212L8.84513 1.27987C8.6987 1.42632 8.6987 1.66375 8.84513 1.8102L13.4094 6.37453H4.5005C4.29338 6.37453 4.1255 6.54242 4.1255 6.74953V8.24953C4.1255 8.4566 4.29338 8.62453 4.5005 8.62453ZM3.00049 1.49951C3.00049 1.29241 2.83259 1.12451 2.62549 1.12451H1.12549C0.91838 1.12451 0.750488 1.29241 0.750488 1.49951V13.4995C0.750488 13.7066 0.91838 13.8745 1.12549 13.8745H2.62549C2.83259 13.8745 3.00049 13.7066 3.00049 13.4995V1.49951Z" fill="#161823"/>
+                        </svg>
+                    </span>
+                    <Typography fontWeight={700} fontSize={18}>
+                    LIVE chat
+                    </Typography>
+                </Box>
+                <Box
+                    sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    mt: 1.5,
+                    mb: 1,
+                    p: 1,
+                    }}
+                >
+                    <Typography fontWeight={500} fontSize={16}>
+                    Top viewers
+                    </Typography>
+                    <ArrowForwardIosIcon sx={{ fontSize: 13 }} />
+                </Box>
 
-              {/* Chat Feed */}
-              <Box sx={{ flex: 1, height: '60vh', overflowY: 'auto', mb: 2 }}>
-                <Typography variant="body2">💬 Live Chat Messages</Typography>
-              </Box>
+                 <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1 }}>
+                    {/* Viewer 1 */}
+                        <Box textAlign="center" sx={{display: 'flex' , alignItems: 'center', gap: 2}}>
+                            <Typography
+                            sx={{
+                                pl: 2,
+                            }}
+                            >
+                                <svg width="36" height="46" viewBox="0 0 36 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4.854 7.03912C13.931 6.58712 16.2 3.45913 16.797 1.95312H26.052V44.9061H16.632V13.2561C13.048 14.6691 9.332 15.2341 4.854 15.2341V7.03912Z" fill="url(#paint0_linear_2018_18436)"/>
+                                    <mask id="mask0_2018_18436"  maskUnits="userSpaceOnUse" x="4" y="1" width="23" height="44">
+                                    <path d="M4.854 6.69412C13.931 6.21912 16.2 3.53813 16.797 1.95312H26.052V44.9861H16.632V13.1091C13.048 14.5961 9.332 15.3151 4.854 15.3151V6.69412Z" fill="url(#paint1_linear_2018_18436)"/>
+                                    </mask>
+                                    <g mask="url(#mask0_2018_18436)">
+                                    <path d="M16.0239 30.7789L25.6969 10.2109L35.2399 48.6629L18.3329 50.7469L16.0239 30.7789Z" fill="url(#paint2_linear_2018_18436)"/>
+                                    <path opacity="0.7" d="M21.5439 10.6244C19.6419 11.9704 17.3829 12.7744 16.4909 13.1474C15.4009 16.2304 13.2209 22.8454 13.2209 23.5174C13.2209 24.1904 21.7419 23.2374 26.0029 22.6774L27.1929 5.85938C25.4089 7.54138 23.4469 9.27938 21.5439 10.6244Z" fill="url(#paint3_linear_2018_18436)"/>
+                                    </g>
+                                    <defs>
+                                    <linearGradient id="paint0_linear_2018_18436" x1="15.453" y1="-0.836875" x2="34.42" y2="58.2941" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#FCF4D6"/>
+                                    <stop offset="0.469" stop-color="#F2CC83"/>
+                                    <stop offset="1" stop-color="#EEB865"/>
+                                    </linearGradient>
+                                    <linearGradient id="paint1_linear_2018_18436" x1="20.119" y1="72.4851" x2="-3.785" y2="24.1631" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#FF88C1"/>
+                                    <stop offset="1" stop-color="white"/>
+                                    </linearGradient>
+                                    <linearGradient id="paint2_linear_2018_18436" x1="21.1489" y1="20.6129" x2="27.5279" y2="38.8819" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#FBE0AE"/>
+                                    <stop offset="1" stop-color="#F6DBA8" stop-opacity="0"/>
+                                    </linearGradient>
+                                    <linearGradient id="paint3_linear_2018_18436" x1="16.7879" y1="12.8674" x2="20.3649" y2="15.3684" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#DFA874"/>
+                                    <stop offset="1" stop-color="#F4D7A2" stop-opacity="0"/>
+                                    </linearGradient>
+                                    </defs>
+                                </svg>
 
-              {/* Floating Profile Box */}
-              <Paper sx={{ p: 2, position: 'relative' }}>
-                <Typography>Hi Jannifer</Typography>
-                <Button variant="contained" fullWidth sx={{ mt: 1 }}>+ Follow</Button>
-              </Paper>
+                            </Typography>
+                            <Box >
+                                    <Avatar
+                                        src="https://i.pravatar.cc/50?img=1"
+                                        alt="Alinuska"
+                                        sx={{
+                                        width: 48,
+                                        height: 48,
+                                        mx: 'auto',
+                                        border: '2px solid rgba(245, 214, 151, 1)',
+                                        }}
+                                    />
+                                    <Typography fontSize={13} fontWeight={600} mt={0.5}>
+                                        Alinuska
+                                    </Typography>
+                                    <Box display="flex" justifyContent="center" alignItems="center" mt={0.2}>
+                                        <Box component="span" sx={{ color: 'gold', fontSize: 16, mr: 0.5 }}>
+                                            <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M7.29997 13.9193C10.8438 13.9193 13.7166 11.0464 13.7166 7.5026C13.7166 3.95878 10.8438 1.08594 7.29997 1.08594C3.75614 1.08594 0.883301 3.95878 0.883301 7.5026C0.883301 11.0464 3.75614 13.9193 7.29997 13.9193Z" fill="#FFEC9B"/>
+                                                <path d="M7.30013 12.4557C10.0385 12.4557 12.2585 10.2358 12.2585 7.4974C12.2585 4.75898 10.0385 2.53906 7.30013 2.53906C4.56172 2.53906 2.3418 4.75898 2.3418 7.4974C2.3418 10.2358 4.56172 12.4557 7.30013 12.4557Z" fill="#FACE15"/>
+                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12.2394 7.9349C12.252 7.79075 12.2585 7.64483 12.2585 7.4974C12.2585 4.759 10.0385 2.53906 7.30013 2.53906C4.56173 2.53906 2.3418 4.759 2.3418 7.4974C2.3418 7.64483 2.34823 7.79075 2.36083 7.9349C2.58232 5.40139 4.70914 3.41406 7.30013 3.41406C9.89112 3.41406 12.0179 5.40139 12.2394 7.9349Z" fill="#FABC15"/>
+                                            </svg>
+                                        </Box>
+                                        <Typography fontSize={13}>1</Typography>
+                                    </Box>
+                            </Box>
+                        </Box>
+
+                        <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: 2}}>
+                            <Box textAlign="center" sx={{display: 'flex' , alignItems: 'center', gap: 2}}>
+                                <Typography
+                                sx={{
+                                    px: 0
+                                }}
+                                >
+                                <svg width="19" height="25" viewBox="0 0 19 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1.06 9.91016H5.823C5.823 9.25683 5.88133 8.6035 5.998 7.95017C6.138 7.27217 6.35967 6.66483 6.663 6.12817C6.96633 5.56817 7.36333 5.12483 7.854 4.79817C8.36733 4.44817 8.986 4.27283 9.71 4.27217C10.784 4.27217 11.6597 4.61083 12.337 5.28817C13.037 5.94217 13.387 6.86416 13.387 8.05416C13.387 8.8015 13.212 9.46716 12.862 10.0512C12.5294 10.6408 12.1039 11.1729 11.602 11.6272C11.1113 12.0938 10.5623 12.5255 9.955 12.9222C9.37277 13.2796 8.80055 13.6531 8.239 14.0422C7.22527 14.7402 6.2215 15.4526 5.228 16.1792C4.29467 16.8792 3.47733 17.6495 2.776 18.4902C2.06618 19.3258 1.49861 20.2724 1.096 21.2922C0.698667 22.3422 0.5 23.5795 0.5 25.0042H18.5V20.7302H6.909C7.50332 19.901 8.21009 19.1586 9.009 18.5242C9.803 17.8942 10.6203 17.3108 11.461 16.7742C12.3017 16.2135 13.1303 15.6528 13.947 15.0922C14.787 14.5322 15.5343 13.9135 16.189 13.2362C16.8433 12.5359 17.376 11.7311 17.765 10.8552C18.1617 9.96783 18.36 8.9055 18.36 7.66817C18.36 6.47817 18.1267 5.40417 17.66 4.44617C17.2361 3.51762 16.6142 2.69303 15.838 2.03017C15.043 1.36242 14.1285 0.851703 13.143 0.525165C12.1176 0.171314 11.0397 -0.00619922 9.955 0.000165257C8.485 0.000165257 7.17767 0.256832 6.033 0.770165C4.9446 1.23663 3.98404 1.95748 3.232 2.87217C2.484 3.75883 1.92333 4.80917 1.55 6.02317C1.17667 7.2145 1.01333 8.5105 1.06 9.91117" fill="url(#paint0_linear_2018_18458)"/>
+                                    <defs>
+                                    <linearGradient id="paint0_linear_2018_18458" x1="3.412" y1="1.59617" x2="10.969" y2="25.0042" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#ECEFF1"/>
+                                    <stop offset="1" stop-color="#BDC5CC"/>
+                                    </linearGradient>
+                                    </defs>
+                                    </svg>
+
+
+                                </Typography>
+                                <Box display={'flex'}>
+                                        
+                                            <Avatar
+                                                src="https://i.pravatar.cc/50?img=1"
+                                                alt="Alinuska"
+                                                sx={{
+                                                width: 48,
+                                                height: 48,
+                                                mx: 'auto',
+                                                border: '2px solid rgba(245, 214, 151, 1)',
+                                                }}
+                                            />
+                                        <Box pl={1}>
+                                            <Typography fontSize={13} fontWeight={600} mt={0.5}>
+                                                MK6
+                                            </Typography>
+                                        
+                                            <Box display="flex" justifyContent="center" alignItems="center" mt={0.2}>
+                                                <Box component="span" sx={{ color: 'gold', fontSize: 16, mr: 0.5 }}>
+                                                    <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M7.29997 13.9193C10.8438 13.9193 13.7166 11.0464 13.7166 7.5026C13.7166 3.95878 10.8438 1.08594 7.29997 1.08594C3.75614 1.08594 0.883301 3.95878 0.883301 7.5026C0.883301 11.0464 3.75614 13.9193 7.29997 13.9193Z" fill="#FFEC9B"/>
+                                                        <path d="M7.30013 12.4557C10.0385 12.4557 12.2585 10.2358 12.2585 7.4974C12.2585 4.75898 10.0385 2.53906 7.30013 2.53906C4.56172 2.53906 2.3418 4.75898 2.3418 7.4974C2.3418 10.2358 4.56172 12.4557 7.30013 12.4557Z" fill="#FACE15"/>
+                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.2394 7.9349C12.252 7.79075 12.2585 7.64483 12.2585 7.4974C12.2585 4.759 10.0385 2.53906 7.30013 2.53906C4.56173 2.53906 2.3418 4.759 2.3418 7.4974C2.3418 7.64483 2.34823 7.79075 2.36083 7.9349C2.58232 5.40139 4.70914 3.41406 7.30013 3.41406C9.89112 3.41406 12.0179 5.40139 12.2394 7.9349Z" fill="#FABC15"/>
+                                                    </svg>
+                                                </Box>
+                                                <Typography fontSize={13}>1</Typography>
+                                            </Box>
+                                        </Box>
+                                </Box>
+                            </Box>
+
+                            <Box textAlign="center" sx={{display: 'flex' , alignItems: 'center', gap: 2}}>
+                                <Typography
+                                sx={{
+                                    px: 0
+                                }}
+                                >
+                                <svg width="19" height="26" viewBox="0 0 19 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M7.76986 10.28V13.74C8.36986 13.74 8.9932 13.7633 9.63986 13.81C10.3085 13.8333 10.9199 13.96 11.4739 14.19C12.0191 14.3914 12.49 14.7542 12.8239 15.23C13.1925 15.714 13.3769 16.4173 13.3769 17.34C13.3769 18.5173 12.9962 19.452 12.2349 20.144C11.4735 20.814 10.5392 21.1487 9.43186 21.148C8.71586 21.148 8.09253 21.0213 7.56186 20.768C7.06927 20.5267 6.63311 20.1843 6.28186 19.763C5.92707 19.3074 5.65742 18.7914 5.48586 18.24C5.29998 17.6335 5.19507 17.005 5.17386 16.371H0.501862C0.478528 17.779 0.674528 19.0253 1.08986 20.11C1.52853 21.194 2.1402 22.1167 2.92486 22.878C3.70886 23.6167 4.65486 24.182 5.76286 24.574C6.89353 24.9673 8.13953 25.1637 9.50086 25.163C10.6775 25.163 11.8082 24.9897 12.8929 24.643C13.9367 24.3185 14.911 23.8024 15.7659 23.121C16.5965 22.451 17.2539 21.6203 17.7379 20.629C18.2459 19.6363 18.4999 18.5057 18.4999 17.237C18.4999 15.8523 18.1192 14.664 17.3579 13.672C16.5959 12.68 15.5459 12.0337 14.2079 11.733V11.664C15.3385 11.3413 16.1809 10.73 16.7349 9.83C17.3115 8.93 17.5999 7.89167 17.5999 6.715C17.5999 5.63033 17.3575 4.67267 16.8729 3.842C16.392 3.01354 15.7439 2.29428 14.9699 1.73C14.192 1.14511 13.3115 0.710971 12.3739 0.45C11.4039 0.15 10.4345 0 9.46586 0C8.22053 0 7.08986 0.207667 6.07386 0.623C5.08769 0.997112 4.19152 1.57502 3.44386 2.319C2.7292 3.05767 2.16386 3.946 1.74786 4.984C1.35586 5.99933 1.13653 7.13 1.08986 8.376H5.76286C5.73953 7.12933 6.03953 6.10267 6.66286 5.296C7.30886 4.46533 8.25453 4.05 9.49986 4.05C10.3999 4.05 11.1959 4.32667 11.8879 4.88C12.5799 5.43333 12.9262 6.22967 12.9269 7.269C12.9269 7.96167 12.7535 8.515 12.4069 8.929C12.0835 9.345 11.6569 9.66833 11.1269 9.899C10.596 10.1113 10.0352 10.2395 9.46486 10.279C8.86486 10.3257 8.29953 10.3257 7.76886 10.279" fill="url(#paint0_linear_2018_18473)"/>
+                                    <defs>
+                                    <linearGradient id="paint0_linear_2018_18473" x1="9.49486" y1="25.442" x2="9.49486" y2="2.306" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#D7B5A2"/>
+                                    <stop offset="1" stop-color="#FBDFCC"/>
+                                    </linearGradient>
+                                    </defs>
+                                </svg>
+
+
+
+                                </Typography>
+                                <Box display={'flex'}>
+                                        
+                                            <Avatar
+                                                src="https://i.pravatar.cc/50?img=1"
+                                                alt="Alinuska"
+                                                sx={{
+                                                width: 48,
+                                                height: 48,
+                                                mx: 'auto',
+                                                border: '2px solid rgba(245, 214, 151, 1)',
+                                                }}
+                                            />
+                                        <Box pl={1}>
+                                            <Typography fontSize={11} fontWeight={600} mt={0.5}>
+                                                Timus Marina
+                                            </Typography>
+                                        
+                                            <Box display="flex" justifyContent="center" alignItems="center" mt={0.2}>
+                                                <Box component="span" sx={{ color: 'gold', fontSize: 16, mr: 0.5 }}>
+                                                    <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M7.29997 13.9193C10.8438 13.9193 13.7166 11.0464 13.7166 7.5026C13.7166 3.95878 10.8438 1.08594 7.29997 1.08594C3.75614 1.08594 0.883301 3.95878 0.883301 7.5026C0.883301 11.0464 3.75614 13.9193 7.29997 13.9193Z" fill="#FFEC9B"/>
+                                                        <path d="M7.30013 12.4557C10.0385 12.4557 12.2585 10.2358 12.2585 7.4974C12.2585 4.75898 10.0385 2.53906 7.30013 2.53906C4.56172 2.53906 2.3418 4.75898 2.3418 7.4974C2.3418 10.2358 4.56172 12.4557 7.30013 12.4557Z" fill="#FACE15"/>
+                                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.2394 7.9349C12.252 7.79075 12.2585 7.64483 12.2585 7.4974C12.2585 4.759 10.0385 2.53906 7.30013 2.53906C4.56173 2.53906 2.3418 4.759 2.3418 7.4974C2.3418 7.64483 2.34823 7.79075 2.36083 7.9349C2.58232 5.40139 4.70914 3.41406 7.30013 3.41406C9.89112 3.41406 12.0179 5.40139 12.2394 7.9349Z" fill="#FABC15"/>
+                                                    </svg>
+                                                </Box>
+                                                <Typography fontSize={12}>2</Typography>
+                                            </Box>
+                                        </Box>
+                                </Box>
+                            </Box>
+                        </Box>
+
+                        
+                 </Box>
+
+                  <Box sx={{ bgcolor: '#fff', height: '100%', fontFamily: 'sans-serif' }}>
+                        {/* Chat Messages */}
+                        <Box sx={{ px: 2, pt: 1, maxHeight: 360, overflowY: 'auto' }}>
+                            {/* Message 1 */}
+                            <Typography fontSize={13} mb={0.5} color="text.secondary">
+                            Ap uitetė
+                            </Typography>
+
+                            <Box display="flex" alignItems="flex-start" mb={1}>
+                            <Avatar src="https://i.pravatar.cc/50?img=2" sx={{ width: 24, height: 24, mr: 1 }} />
+                            <Box>
+                                <Typography fontSize={13} fontWeight={600}>Mk6</Typography>
+                                <Typography fontSize={13}>Uai</Typography>
+                            </Box>
+                            </Box>
+
+                            {/* Message 2 with badges */}
+                            <Box display="flex" alignItems="flex-start" mb={1}>
+                            <Avatar src="https://i.pravatar.cc/50?img=4" sx={{ width: 24, height: 24, mr: 1 }} />
+                            <Box>
+                                <Box display="flex" alignItems="center" gap={0.5}>
+                                <Typography fontSize={13} fontWeight={600}>arthouseconstruct1</Typography>
+                                <Chip label="10" size="small" sx={{ height: 18, fontSize: 10 }} />
+                                <Chip label="1" size="small" color="error" sx={{ height: 18, fontSize: 10 }} />
+                                </Box>
+                                <Typography fontSize={13}>
+                                Ca alina mio trimis laifu si imi spune ca nui si nu pot sa intru nici sa ma uit in laiw la tine
+                                </Typography>
+                            </Box>
+                            </Box>
+
+                            {/* Message 3 with badge */}
+                            <Box display="flex" alignItems="flex-start" mb={1}>
+                            <Avatar src="https://i.pravatar.cc/50?img=5" sx={{ width: 24, height: 24, mr: 1 }} />
+                            <Box>
+                                <Box display="flex" alignItems="center" gap={0.5}>
+                                <Typography fontSize={13} fontWeight={600}>arthouseconstruct1</Typography>
+                                <Chip label="10" size="small" sx={{ height: 18, fontSize: 10 }} />
+                                <Chip label="No. 2" size="small" color="error" sx={{ height: 18, fontSize: 10 }} />
+                                </Box>
+                                <Typography fontSize={13}>Teai uitat</Typography>
+                            </Box>
+                            </Box>
+
+                            {/* Message 4 */}
+                            <Box display="flex" alignItems="flex-start" mb={1}>
+                            <Avatar src="https://i.pravatar.cc/50?img=6" sx={{ width: 24, height: 24, mr: 1 }} />
+                            <Box>
+                                <Box display="flex" alignItems="center" gap={0.5}>
+                                <Typography fontSize={13} fontWeight={600}>💎 Dorina</Typography>
+                                <Chip label="16" size="small" color="primary" sx={{ height: 18, fontSize: 10 }} />
+                                </Box>
+                                <Typography fontSize={13}>Privetik</Typography>
+                            </Box>
+                            </Box>
+
+                            {/* Message 5 */}
+                            <Box display="flex" alignItems="flex-start" mb={2}>
+                            <Avatar src="https://i.pravatar.cc/50?img=4" sx={{ width: 24, height: 24, mr: 1 }} />
+                            <Box>
+                                <Box display="flex" alignItems="center" gap={0.5}>
+                                <Typography fontSize={13} fontWeight={600}>arthouseconstruct1</Typography>
+                                <Chip label="10" size="small" sx={{ height: 18, fontSize: 10 }} />
+                                <Chip label="1" size="small" color="error" sx={{ height: 18, fontSize: 10 }} />
+                                </Box>
+                                <Typography fontSize={13}>Da da</Typography>
+                            </Box>
+                            </Box>
+
+                            {/* New Divider */}
+                            <Divider textAlign="center" sx={{ fontSize: 12, mb: 1 }}>
+                            New
+                            </Divider>
+
+                            {/* System Message */}
+                            <Box
+                            sx={{
+                                bgcolor: '#f8f8f8',
+                                px: 2,
+                                py: 1,
+                                borderRadius: 1,
+                                mb: 2,
+                            }}
+                            >
+                            <Typography fontSize={12} fontWeight={500}>
+                                💲 Welcome to Seezitt LIVE! Have fun interacting with others in real time. Creators must be 18 or older to go LIVE. Viewers must be 18 or older to recharge and send Gifts. Remember to follow our Community Guidelines.
+                            </Typography>
+                            </Box>
+
+                            {/* Joined message */}
+                            <Typography fontSize={12} color="text.secondary">🌿 truwhofacer213 joined</Typography>
+                        </Box>
+
+                        {/* Floating Banner */}
+                        <Paper
+                            elevation={3}
+                            sx={{
+                            position: 'relative',
+                            mx: 2,
+                            mt: 2,
+                            p: 1,
+                            display: 'flex',
+                            alignItems: 'center',
+                            borderRadius: 2,
+                            border: '1px solid #eee',
+                            mb: 1,
+                            flexDirection: 'column',
+                            }}
+                        >
+                            <Box display={'flex'} alignItems={'center'} justifyContent={'flex-start'} mb={1}>
+                                <Avatar src="https://i.pravatar.cc/50?img=7" sx={{ width: 40, height: 40, mr: 1 }} />
+                                <Box flexGrow={1}>
+                                <Typography fontSize={13} fontWeight={600}>Hi Jannifer</Typography>
+                                <Typography fontSize={12} color="text.secondary">
+                                    Stay tuned for my LIVE!
+                                </Typography>
+                                </Box>
+                                <IconButton size="small" sx={{position: 'absolute', top: 8, right: 4}}>
+                                <CloseIcon fontSize="small" />
+                                </IconButton>
+                            </Box>
+
+                            <Box px={2} mb={1} width={'100%'} m={'auto'}>
+                                <Box
+                                sx={{
+                                    bgcolor: '#ff2e63',
+                                    color: '#fff',
+                                    py: 1,
+                                    borderRadius: 1.5,
+                                    textAlign: 'center',
+                                    fontWeight: 600,
+                                    cursor: 'pointer',
+                                    width: '100%',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                }}
+                                >
+                                + Follow
+                                </Box>
+                            </Box>
+                        </Paper>
+
+                        {/* Follow Button */}
+                        
+
+                        {/* Chat Input */}
+                        <Box px={2} pb={2}>
+                            <TextField
+                            fullWidth
+                            placeholder="Say something nice"
+                            variant="outlined"
+                            size="small"
+                            InputProps={{
+                                endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton>
+                                    <SendIcon />
+                                    </IconButton>
+                                </InputAdornment>
+                                ),
+                                sx: { borderRadius: 2 },
+                            }}
+                            />
+                        </Box>
+                        </Box>
+            </Box>
+
+             
             </Grid>
           </Grid>
 
-          {/* Recommended Videos (Footer) */}
-          <Box sx={{ bgcolor: '#eee', p: 2 }}>
-            <Typography variant="subtitle1">Recommended LIVE Videos</Typography>
-          </Box>
+          
         </Box>
 
 
