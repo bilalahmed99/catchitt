@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useLayoutEffect, useState } from 'react';
 import { IntlProvider } from 'react-intl';
-import { Navigate, Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
+import { Navigate, Route, BrowserRouter as Router, Routes, useNavigate, Link } from 'react-router-dom';
 import messages from '../src/languages-intl';
 import styles from './App.module.scss';
 import CommunityPage from './components/about-pages/community-guidelines';
@@ -1896,17 +1896,10 @@ function App() {
                                                             {country_name}
                                                         </span>
                                                         , you agree to our{' '}
-                                                        <span
-                                                            className={` ${textColor} cursor-pointer hover:underline`}
-                                                        >
-                                                            Terms of Service
-                                                        </span>{' '}
+                                                        <Link to="/about/terms-conditions" className={`${textColor} hover:underline`} target="_blank">Terms of Service</Link>
+                                                        {' '}
                                                         and acknowledge that you have read our{' '}
-                                                        <span
-                                                            className={` ${textColor}  cursor-pointer hover:underline`}
-                                                        >
-                                                            Privacy Policy.
-                                                        </span>
+                                                        <Link to="/about/privacy-policy" className={`${textColor} hover:underline`} target="_blank">Privacy policy.</Link>
                                                     </p>
                                                 </div>
                                             )}
