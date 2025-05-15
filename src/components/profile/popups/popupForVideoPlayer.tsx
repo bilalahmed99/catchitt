@@ -342,6 +342,9 @@ export default function PopupForVideoPlayer({
     const saveVideoToggler = async () => {
         if (isUserLoggedIn()) {
             try {
+                isSaved ? setVideoSaves(videoSaves - 1) : setVideoSaves(videoSaves + 1);
+                setIsSaved(!isSaved);
+                
                 const likeUnlikeVideo = await fetch(
                     `${API_KEY}/media-content/collections/${info?.mediaId}`,
                     {
