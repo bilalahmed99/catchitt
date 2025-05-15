@@ -1274,7 +1274,7 @@ function App() {
                                                     color: 'white',
                                                 }}
                                             />
-                                        ) : "Login to Worldnoor"}
+                                        ) : "Login to WN Social"}
                                     </p>
                                 </div>
                             </div>
