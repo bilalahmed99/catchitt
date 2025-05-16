@@ -258,12 +258,12 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
     let endpoint = `${process.env.VITE_API_URL}/gift`;
     let requestOptions =
     {
-        method: 'GET',
-        headers:
-        {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json',
-        },
+      method: 'GET',
+      headers:
+      {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
     };
 
     setGiftsDetails((prev: any) => ({ ...prev, isLoading: true }));
@@ -277,25 +277,6 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
   useEffect(() => {
     loadGiftsDetails();
   }, []);
-
-
-const firstRowGifts = [
-  { label: 'Star', emoji: '🌟', price: 99 },
-  { label: 'Rose', emoji: '🌹', price: 1 },
-  { label: 'Gold Boxing Glove', emoji: '🥊', price: 10 },
-  { label: 'May 1', emoji: '👂', price: 1 },
-  { label: 'Rosa', emoji: '🌹', price: 10 },
-  { label: 'Cheer For You', emoji: '🎉', price: 1499 },
-];
-
-const secondRowGifts = [
-  { label: 'Boom', emoji: '💥', price: 20 },
-  { label: 'Fire', emoji: '🔥', price: 15 },
-  { label: 'Love', emoji: '💖', price: 30 },
-  { label: 'Clap', emoji: '👏', price: 7 },
-  { label: 'Crown', emoji: '👑', price: 50 },
-  { label: 'Smile', emoji: '😊', price: 5 },
-];
 const [expanded, setExpanded] = useState(false);
 
 const renderGiftRow = (gifts) => (
