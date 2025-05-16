@@ -1,5 +1,5 @@
 import { SideNavBar } from './goLiveSidebar';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { Box,  Radio,
   RadioGroup,
@@ -246,6 +246,38 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
     </Box>
   );
 
+  const [giftsDetails, setGiftsDetails] = useState<any>(
+    {
+      details: [],
+      isLoading: false,
+    }
+  );
+
+  function loadGiftsDetails()
+  {
+    let endpoint = `${process.env.VITE_API_URL}/gift`;
+    let requestOptions =
+    {
+        method: 'GET',
+        headers:
+        {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+        },
+    };
+
+    setGiftsDetails((prev: any) => ({ ...prev, isLoading: true }));
+
+    fetch(endpoint, requestOptions)
+    .then((response) => response.json())
+    .then((response) => setGiftsDetails((prev: any) => ({ ...prev, details: response.data, isLoading: false })))
+    .catch((error) => console.error('Fetch error:', error));
+  };
+
+  useEffect(() => {
+    loadGiftsDetails();
+  }, []);
+
 
 const firstRowGifts = [
   { label: 'Star', emoji: '🌟', price: 99 },
@@ -295,9 +327,11 @@ const renderGiftRow = (gifts) => (
           '&:hover .send-button': { visibility: 'visible', position: 'relative' },
         }}
       >
-        <Box sx={{ fontSize: 32 }}>{gift.emoji}</Box>
+        <Box sx={{ fontSize: 32, justifyItems: 'center' }}>
+          { gift.imageUrl.endsWith(".mp4") ? <video src={gift.imageUrl} autoPlay loop muted style={{ width: "50px", height: "50px" }}/> : <img src={gift.imageUrl} alt={gift.name} style={{ width: "50px", height: "50px" }}/> }
+        </Box>
         <Typography className="coin-info"  sx={{ fontSize: 14, mt: 0.5, whiteSpace: 'nowrap' }}>
-          {gift.label}
+          {gift.name}
         </Typography>
 
         {/* Coin Info */}
@@ -543,7 +577,7 @@ const renderGiftRow = (gifts) => (
                                 }}
                                 >
                                 {/* First Row */}
-                                {renderGiftRow(firstRowGifts)}
+                                {renderGiftRow(giftsDetails.details.slice(0, 6))}
 
                                 {/* Arrow Toggle */}
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', px: 1 }}>
@@ -566,7 +600,7 @@ const renderGiftRow = (gifts) => (
 
                                 {/* Second Row (Expandable) */}
                                 <Collapse in={expanded}>
-                                    {renderGiftRow(secondRowGifts)}
+                                    {renderGiftRow(giftsDetails.details.slice(6, 12))}
                                 </Collapse>
 
 
