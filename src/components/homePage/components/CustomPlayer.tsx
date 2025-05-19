@@ -365,6 +365,7 @@ function CustomPlayer({ isMuted, src, videoModal, post, thumbnailImage, controls
                     <CustomContextMenu
                         x={contextMenuPosition.x}
                         y={contextMenuPosition.y}
+                        post={post}
                         onClose={handleCloseContextMenu}
                         onDownload={handleDownload}
                         onCopyLink={handleCopyLink}
