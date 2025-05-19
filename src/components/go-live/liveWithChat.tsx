@@ -324,7 +324,7 @@ function LiveWithChat() {
       .catch((error) => console.error('Fetch error:', error));
   };
 
-  const [selectedLiveVideo, setSelectedLiveVideo] = useState<any>({});
+  const [selectedLiveVideo, setSelectedLiveVideo] = useState<any>(null);
 
   useEffect(() => {
     loadGiftsDetails();
@@ -448,9 +448,11 @@ const [openFaq, setOpenFaq] = useState(false);
           <Grid container sx={{ display: 'flex',}}>
             
             {/* Video Section */}
-            <Grid item sx={{ position: 'relative', bgcolor: '#000',
+            <Grid item sx={{ position: 'relative',
                 width: showSidebar ? "calc(100% - 20rem)" : "100%",
                 transition: "width 0.4s ease", }}>
+                {selectedLiveVideo && (
+                <>
                 <Box
                     sx={{
                       display: 'flex',
@@ -732,6 +734,8 @@ const [openFaq, setOpenFaq] = useState(false);
                          </Box>
                     </Box>
                 </Box>
+                </>
+                )}
                 <Box sx={{px: 2}}>
                     <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                         <Typography variant="h6" fontSize={'22px'} color={'#161823'} fontWeight={600}>
