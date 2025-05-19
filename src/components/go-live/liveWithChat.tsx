@@ -1,5 +1,6 @@
 import { SideNavBar } from './goLiveSidebar';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { Box,  Radio,
   RadioGroup,
@@ -115,10 +116,114 @@ function LiveWithChat() {
         setShowSidebar(true);
     };
 
+    interface Message {
+      id: string;
+      name: string;
+      userName: string;
+      userImage: string;
+      text: string;
+      timestamp: Date;
+    }
+    
+
     const [openRating, setOpenRating] = useState(false);
     const [unfollowAnchorEl, setUnfollowAnchorEl] = useState(null);
-    const [currentStream, setCurrentStream] = useState(null);
+    interface Stream {
+        _id: string;
+        [key: string]: any; // Add other properties as needed
+    }
+    const [currentStream, setCurrentStream] = useState<Stream | null>(null);
     const [isSwitchingStreams, setIsSwitchingStreams] = useState(false);
+    const [message, setMessage] = useState('');
+    const [messages, setMessages] = useState<Message[]>([]);
+    const [profileData, setProfileData] = useState<any>('');
+    const API_KEY = process.env.VITE_API_URL;
+    const token = localStorage.getItem('token') ? localStorage.getItem('token') : '';
+
+
+    const loadProfile = async () => {
+      try {
+          const response = await fetch(`${API_KEY}/profile/`, {
+              method: 'GET',
+              headers: {
+                  'Content-type': 'application/json',
+                  Authorization: `Bearer ${token}`,
+              },
+          });
+
+          if (response.ok) {
+              const { data } = await response.json();
+              setProfileData(data);
+          } else {
+              console.log(response);
+          }
+      } catch (error) {
+          console.error();
+      }
+    };
+
+    const location = useLocation();
+
+    const streamIdFromUrl = useMemo(() => {
+      const params = new URLSearchParams(location.search);
+      return params.get('streamId');
+    }, [location.search]);
+
+    const handleSendMessage = () => {
+      if (!message.trim()) return; // Don't send empty messages
+      console.log('handle send message')
+      console.log(localStorage.getItem('token'));
+      const userData = {
+        name: profileData?.name,
+        userName: profileData?.username, 
+        email: profileData?.email,
+        userImage: profileData?.avatar || profileData?.cover,
+        accessToken: localStorage.getItem('token')
+      };
+    
+      if (socketRef.current && isConnected) {
+        const liveStreamRoomId = currentStream?._id || streamIdFromUrl;
+        (socketRef.current as any).emit('messageToliveStreamRoom', { 
+          liveStreamRoomId: liveStreamRoomId, 
+          data: {
+            ...userData,
+            text: message
+          }
+        }, (response:any) => {
+          console.log('Callback Response:', response);
+        });
+
+        // socketRef.on('liveStreamMessage', (data) => {
+        //   console.log(${data});
+        // });
+        
+        // Clear the input after sending
+        setMessage('');
+        setMessages(prev => [...prev, {
+          id: Date.now().toString(),
+          name: profileData.name,
+          userName: profileData.userName,
+          userImage: profileData?.avatar || profileData?.cover,
+          text: message,
+          timestamp: new Date()
+        }]);
+      } else {
+        console.error('Socket not connected');
+      }
+
+      (socketRef.current as any).on('liveStreamMessage', (data: any) => {
+        console.log(`Received message: ${JSON.stringify(data)}`);
+        // handleNewMessage(data); // Handle the incoming message
+      });
+
+    };
+    
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        handleSendMessage();
+      }
+    };
+
 
 
   const handleUnfollowClick = (event) => {
@@ -239,11 +344,16 @@ function LiveWithChat() {
         console.log('Connected to socket server.', (socketRef.current as any));
         // let addUserObject = { userId: sender, accessToken: token };
         // let newAddUserObject = JSON.stringify(addUserObject);
+
+        (socketRef.current as any).on('liveStreamMessage', (data: any) => {
+          console.log(`Received message: ${JSON.stringify(data)}`);
+          // handleNewMessage(data); // Handle the incoming message
+        });
            
         // (socketRef.current as any).emit('joinRoom', '651c880a8ac697cffc082dbf');
-        (socketRef.current as any).emit('joinRoom', '651c880a8ac697cffc082dbf', (response:any) => {
-          console.log('Callback Response:', response);
-        });
+        // (socketRef.current as any).emit('joinRoom', '651c880a8ac697cffc082dbf', (response:any) => {
+        //   console.log('Callback Response:', response);
+        // });
         // (socketRef.current as any).emit('leaveRoom', '651c880a8ac697cffc082dbf', (response:any) => {
         //   console.log('Callback Response:', response);
         // });
@@ -262,12 +372,35 @@ function LiveWithChat() {
         console.error('WebSocket closed:', event);
     };
 
+    (socketRef.current as any).on('newMessage', (data: any) => {
+      setMessages(prev => [...prev, {
+        id: Date.now().toString(),
+        name: data.name,
+        userName: data.userName,
+        userImage: data.userImage,
+        text: data.text,
+        timestamp: new Date()
+      }]);
+    });
+
   }
 
   useEffect(() => {
+    loadProfile();
     startSocket();
   }, []);
       
+  useEffect(() => {
+    // Your existing socket setup code...
+  
+    return () => {
+      if (socketRef.current) {
+        (socketRef.current as any).off('newMessage');
+        (socketRef.current as any).off('messageError');
+        (socketRef.current as any).disconnect();
+      }
+    };
+  }, []);
   const LiveStreamCard = ({ stream, onClick }: { stream: any, onClick: (streamId: string) => void }) => (
     <Box sx={{ borderRadius: 2, width: "100%", position: 'relative', mr: 2, textAlign: 'left' }}>
       <Box sx={{ position: 'relative' }}  onClick={() => onClick(stream._id)}>
@@ -816,12 +949,15 @@ const [openFaq, setOpenFaq] = useState(false);
                                       console.log('Left room response:', response);
                                     });
 
-                                    (socketRef.current as any).emit('joinRoom', streamId, (response: any) => {
+                                    let joinRoomInput: { liveStreamRoomId: string; accesstoken: string } = {
+                                      liveStreamRoomId: streamId,
+                                      accesstoken: token ?? '',
+                                    };
+
+                                    setCurrentStream(stream);
+                                    (socketRef.current as any).emit('joinRoom', joinRoomInput, (response: any) => {
                                       console.log('Joined new room response:', response);
-                                      // Update the current stream
-                                      setCurrentStream(stream);
-                                      // You might want to update your UI state here to reflect the new stream
-                                      // For example, update the current stream being displayed
+                                      
                                     });
 
                                     // Navigate to the new stream page
@@ -1200,62 +1336,70 @@ const [openFaq, setOpenFaq] = useState(false);
 
                             <Box sx={{ bgcolor: '#fff', height: '100%', fontFamily: 'sans-serif' }}>
                                     {/* Chat Messages */}
+                                    
+                                      {/* Your existing messages can stay or be converted */}
+                                    </Box>
                                     <Box sx={{ px: 2, py: 1, maxHeight: 'calc(100vh - 17.5rem)', overflowY: 'auto' }}>
-                                        {/* Message 1 */}
-                                        <Typography fontSize={13} mb={0.5} color="text.secondary">
+                                       <Box sx={{ px: 2, py: 1, maxHeight: 'calc(100vh - 17.5rem)', overflowY: 'auto' }}>
+                                      {messages.map((msg) => (
+                                        <Box key={msg.id} display="flex" alignItems="flex-start" mb={1}>
+                                          <Avatar src={msg.userImage} sx={{ width: 24, height: 24, mr: 1 }} />
+                                          <Box>
+                                            <Typography fontSize={13} fontWeight={600}>{msg.userName}</Typography>
+                                            <Typography fontSize={13}>{msg.text}</Typography>
+                                          </Box>
+                                        </Box>
+                                      ))}
+                                        {/* <Typography fontSize={13} mb={0.5} color="text.secondary">
                                         Ap uitetė
-                                        </Typography>
-
+                                        </Typography> */}
+{/* 
                                         <Box display="flex" alignItems="flex-start" mb={1}>
-                                        <Avatar src="https://i.pravatar.cc/50?img=2" sx={{ width: 24, height: 24, mr: 1 }} />
-                                        <Box>
-                                            <Typography fontSize={13} fontWeight={600}>Mk6</Typography>
-                                            <Typography fontSize={13}>Uai</Typography>
-                                        </Box>
-                                        </Box>
+                                          <Avatar src="https://i.pravatar.cc/50?img=2" sx={{ width: 24, height: 24, mr: 1 }} />
+                                          <Box>
+                                              <Typography fontSize={13} fontWeight={600}>Mk6</Typography>
+                                              <Typography fontSize={13}>Uai</Typography>
+                                          </Box>
+                                        </Box> */}
 
-                                        {/* Message 2 with badges */}
-                                        <Box display="flex" alignItems="flex-start" mb={1}>
-                                        <Avatar src="https://i.pravatar.cc/50?img=4" sx={{ width: 24, height: 24, mr: 1 }} />
-                                        <Box>
-                                            <Box display="flex" alignItems="center" gap={0.5}>
-                                            <Typography fontSize={13} fontWeight={600}>arthouseconstruct1</Typography>
-                                            <Chip label="10" size="small" sx={{ height: 18, fontSize: 10 }} />
-                                            <Chip label="1" size="small" color="error" sx={{ height: 18, fontSize: 10 }} />
-                                            </Box>
-                                            <Typography fontSize={13}>
-                                            Ca alina mio trimis laifu si imi spune ca nui si nu pot sa intru nici sa ma uit in laiw la tine
-                                            </Typography>
-                                        </Box>
-                                        </Box>
+                                        {/* <Box display="flex" alignItems="flex-start" mb={1}>
+                                          <Avatar src="https://i.pravatar.cc/50?img=4" sx={{ width: 24, height: 24, mr: 1 }} />
+                                          <Box>
+                                              <Box display="flex" alignItems="center" gap={0.5}>
+                                              <Typography fontSize={13} fontWeight={600}>arthouseconstruct1</Typography>
+                                              <Chip label="10" size="small" sx={{ height: 18, fontSize: 10 }} />
+                                              <Chip label="1" size="small" color="error" sx={{ height: 18, fontSize: 10 }} />
+                                              </Box>
+                                              <Typography fontSize={13}>
+                                              Ca alina mio trimis laifu si imi spune ca nui si nu pot sa intru nici sa ma uit in laiw la tine
+                                              </Typography>
+                                          </Box>
+                                        </Box> */}
 
-                                        {/* Message 3 with badge */}
-                                        <Box display="flex" alignItems="flex-start" mb={1}>
-                                        <Avatar src="https://i.pravatar.cc/50?img=5" sx={{ width: 24, height: 24, mr: 1 }} />
-                                        <Box>
-                                            <Box display="flex" alignItems="center" gap={0.5}>
-                                            <Typography fontSize={13} fontWeight={600}>arthouseconstruct1</Typography>
-                                            <Chip label="10" size="small" sx={{ height: 18, fontSize: 10 }} />
-                                            <Chip label="No. 2" size="small" color="error" sx={{ height: 18, fontSize: 10 }} />
-                                            </Box>
-                                            <Typography fontSize={13}>Teai uitat</Typography>
-                                        </Box>
-                                        </Box>
+                                        {/* <Box display="flex" alignItems="flex-start" mb={1}>
+                                          <Avatar src="https://i.pravatar.cc/50?img=5" sx={{ width: 24, height: 24, mr: 1 }} />
+                                          <Box>
+                                              <Box display="flex" alignItems="center" gap={0.5}>
+                                              <Typography fontSize={13} fontWeight={600}>arthouseconstruct1</Typography>
+                                              <Chip label="10" size="small" sx={{ height: 18, fontSize: 10 }} />
+                                              <Chip label="No. 2" size="small" color="error" sx={{ height: 18, fontSize: 10 }} />
+                                              </Box>
+                                              <Typography fontSize={13}>Teai uitat</Typography>
+                                          </Box>
+                                        </Box> */}
 
-                                        {/* Message 4 */}
-                                        <Box display="flex" alignItems="flex-start" mb={1}>
-                                        <Avatar src="https://i.pravatar.cc/50?img=6" sx={{ width: 24, height: 24, mr: 1 }} />
-                                        <Box>
-                                            <Box display="flex" alignItems="center" gap={0.5}>
-                                            <Typography fontSize={13} fontWeight={600}>💎 Dorina</Typography>
-                                            <Chip label="16" size="small" color="primary" sx={{ height: 18, fontSize: 10 }} />
-                                            </Box>
-                                            <Typography fontSize={13}>Privetik</Typography>
-                                        </Box>
-                                        </Box>
+                                        {/* <Box display="flex" alignItems="flex-start" mb={1}>
+                                          <Avatar src="https://i.pravatar.cc/50?img=6" sx={{ width: 24, height: 24, mr: 1 }} />
+                                          <Box>
+                                              <Box display="flex" alignItems="center" gap={0.5}>
+                                              <Typography fontSize={13} fontWeight={600}>💎 Dorina</Typography>
+                                              <Chip label="16" size="small" color="primary" sx={{ height: 18, fontSize: 10 }} />
+                                              </Box>
+                                              <Typography fontSize={13}>Privetik</Typography>
+                                          </Box>
+                                        </Box> */}
 
-                                        {/* Message 5 */}
-                                        <Box display="flex" alignItems="flex-start" mb={2}>
+                                        {/* <Box display="flex" alignItems="flex-start" mb={2}>
                                         <Avatar src="https://i.pravatar.cc/50?img=4" sx={{ width: 24, height: 24, mr: 1 }} />
                                         <Box>
                                             <Box display="flex" alignItems="center" gap={0.5}>
@@ -1265,29 +1409,27 @@ const [openFaq, setOpenFaq] = useState(false);
                                             </Box>
                                             <Typography fontSize={13}>Da da</Typography>
                                         </Box>
-                                        </Box>
+                                        </Box> */}
 
-                                        {/* New Divider */}
-                                        <Divider textAlign="center" sx={{ fontSize: 12, mb: 1 }}>
+                                         {currentStream?._id && <Divider textAlign="center" sx={{ fontSize: 12, mb: 1 }}>
                                         New
                                         </Divider>
+                                        }
 
-                                        {/* System Message */}
-                                        <Box
-                                        sx={{
-                                            bgcolor: '#f8f8f8',
-                                            px: 2,
-                                            py: 1,
-                                            borderRadius: 1,
-                                            mb: 2,
-                                        }}
+                                        {currentStream?._id && <Box
+                                          sx={{
+                                              bgcolor: '#f8f8f8',
+                                              px: 2,
+                                              py: 1,
+                                              borderRadius: 1,
+                                              mb: 2,
+                                          }}
                                         >
                                         <Typography fontSize={12} fontWeight={500}>
                                             💲 Welcome to Seezitt LIVE! Have fun interacting with others in real time. Creators must be 18 or older to go LIVE. Viewers must be 18 or older to recharge and send Gifts. Remember to follow our Community Guidelines.
                                         </Typography>
-                                        </Box>
-
-                                        {/* Joined message */}
+                                        
+                                        </Box>}
                                         <Typography fontSize={12} color="text.secondary">🌿 truwhofacer213 joined</Typography>
                                     </Box>
 
@@ -1309,7 +1451,7 @@ const [openFaq, setOpenFaq] = useState(false);
                                         flexDirection: 'column',
                                         }}
                                     >
-                                        <Box display={'flex'} alignItems={'center'} justifyContent={'flex-start'} mb={1}>
+                                        <Box display={'none'} alignItems={'center'} justifyContent={'flex-start'} mb={1}>
                                             <Avatar src="https://i.pravatar.cc/50?img=7" sx={{ width: 40, height: 40, mr: 1 }} />
                                             <Box flexGrow={1}>
                                             <Typography fontSize={13} fontWeight={600}>Hi Jannifer</Typography>
@@ -1352,15 +1494,18 @@ const [openFaq, setOpenFaq] = useState(false);
                                         placeholder="Say something nice"
                                         variant="outlined"
                                         size="small"
+                                        value={message}
+                                        onChange={(e) => setMessage(e.target.value)}
+                                        onKeyPress={handleKeyPress}
                                         InputProps={{
-                                            endAdornment: (
+                                          endAdornment: (
                                             <InputAdornment position="end">
-                                                <IconButton>
-                                                    <SendIcon />
-                                                </IconButton>
+                                              <IconButton onClick={handleSendMessage}>
+                                                <SendIcon />
+                                              </IconButton>
                                             </InputAdornment>
-                                            ),
-                                            sx: { borderRadius: 2 },
+                                          ),
+                                          sx: { borderRadius: 2 },
                                         }}
                                         /> 
                                         <IconButton>
