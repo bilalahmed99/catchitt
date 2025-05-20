@@ -590,7 +590,7 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                     </Link>
                 ):null }
                 { isUserLoggedIn() ? (
-                    <Link to="/live" reloadDocument={false} style={{ textDecoration: 'none' }}>
+                    <Link to="/live/discover" reloadDocument={false} style={{ textDecoration: 'none' }}>
 
                         <div
                             className={classNames(
