@@ -11,24 +11,6 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { Link } from 'react-router-dom';
 
 function DiscoverLive() {
-  const chipLabels = [
-    'All',
-    'Entertainment',
-    'Beauty & Style',
-    'Performance',
-    'Sports & Outdoors',
-    'Talent',
-    'Nature',
-    'Comedy',
-    'Vlogs',
-    'Tech',
-    'Talent',
-    'Nature',
-    'Comedy',
-    'Vlogs',
-    'Tech',
-  ];
-
   const scrollRef = useRef<HTMLDivElement>(null);
   const [mediaByCategory, setMediaByCategory] = useState({
     selectedCategory: 'all',
@@ -84,6 +66,8 @@ function DiscoverLive() {
   useEffect(() => {
     loadRecommendedLiveVideos();
   }, []);
+  
+  const chipLabels = ['All', ...Array.from(new Set(recommendedLiveVideos.items.map((stream) => stream.topic.topicName)))];
 
   type LiveStream = {
     id: string;
