@@ -1,5 +1,5 @@
 import { SideNavBar } from './goLiveSidebar';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { Box, IconButton, Chip, AppBar, Typography, Card, CardMedia, Stack, Avatar, Grid, CardContent, Button, Toolbar, Paper } from '@mui/material';
 import LiveStreaming from './liveStream';
@@ -8,6 +8,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ShareIcon from '../profile/svg-components/ShareIcon';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { Link } from 'react-router-dom';
 
 function DiscoverLive() {
   const chipLabels = [
@@ -43,6 +44,47 @@ function DiscoverLive() {
     }
   };
 
+  const [recommendedLiveVideos, setRecommendedLiveVideos] = useState<any>(
+    {
+      items: [],
+      isLoading: false,
+    }
+  );
+
+  function loadRecommendedLiveVideos()
+  {
+    let endpoint = `${process.env.VITE_API_URL}/live-stream`;
+    let requestOptions =
+    {
+      method: 'GET',
+      headers:
+      {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+    };
+
+    setRecommendedLiveVideos((prev: any) => ({ ...prev, isLoading: true }));
+
+    fetch(endpoint, requestOptions)
+    .then((response) => response.json())
+    .then((response) => setRecommendedLiveVideos((prev: any) => ({ ...prev, items: response.data, isLoading: false })))
+    .catch((error) => console.error('Fetch error:', error));
+  };
+
+  const groupedStreams = recommendedLiveVideos.items.reduce((acc: any, stream: any) => {
+  const topicName = stream.topic.topicName;
+  if (!acc[topicName]) {
+    acc[topicName] = [];
+  }
+  acc[topicName].push(stream);
+  return acc;
+}, {});
+
+  useEffect(() => {
+    loadRecommendedLiveVideos();
+  }, []);
+
   type LiveStream = {
     id: string;
     title: string;
@@ -51,33 +93,6 @@ function DiscoverLive() {
     imageUrl: string;
     userAvatar: string;
   };
-  
-  const dummyData: LiveStream[] = [
-    {
-      id: '1',
-      title: 'Watch now and interact with others in real time!',
-      username: '🔥G u j  ج ﻟ آ r x S I M B 🔺🔥',
-      viewers: 9,
-      imageUrl: 'https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      userAvatar: 'https://images.unsplash.com/profile-1533004581829-aab5b0d67147?w=32&dpr=2&crop=faces&bg=%23fff&h=32&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    },
-    {
-      id: '2',
-      title: 'lag ke',
-      username: 'jia ( ͡° ͜ʖ ͡°)',
-      viewers: 4,
-      imageUrl: 'https://images.unsplash.com/photo-1542640244-7e672d6cef4e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      userAvatar: 'https://images.unsplash.com/profile-fb-1492571002-e2c96d7a6823.jpg?w=32&dpr=2&crop=faces&bg=%23fff&h=32&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    },
-    {
-      id: '3',
-      title: 'Event ws 9.50k',
-      username: 'ROOM TARKAM MAS R',
-      viewers: 7,
-      imageUrl: 'https://images.unsplash.com/photo-1543946207-39bd91e70ca7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      userAvatar: 'https://images.unsplash.com/profile-1611689283666-173278c4384eimage?w=32&dpr=2&crop=faces&bg=%23fff&h=32&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    },
-  ];
 
   const dummyData2: LiveStream[] = [
     {
@@ -106,40 +121,14 @@ function DiscoverLive() {
     },
   ];
   
-  const Esports: LiveStream[] = [
-    {
-      id: '1',
-      title: 'Watch now and interact ',
-      username: '🔥G u j  ج ﻟ آ r x S I M B 🔺🔥',
-      viewers: 9,
-      imageUrl: '  https://plus.unsplash.com/premium_photo-1671379041175-782d15092945?q=80&w=1920&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      userAvatar: 'https://images.unsplash.com/profile-1619365647820-cf41703f74faimage?w=32&dpr=2&crop=faces&bg=%23fff&h=32&auto=format&fit=crop&q=60&ixlib=rb-4.1.0',
-    },
-    {
-      id: '2',
-      title: 'lag ke',
-      username: 'jia ( ͡° ͜ʖ ͡°)',
-      viewers: 4,
-      imageUrl: 'https://images.unsplash.com/photo-1509909756405-be0199881695?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      userAvatar: 'https://images.unsplash.com/profile-1550087903695-7c004a4e6a85?w=32&dpr=2&crop=faces&bg=%23fff&h=32&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    },
-    {
-      id: '3',
-      title: 'Event ws 9.50k',
-      username: 'ROOM TARKAM MAS R',
-      viewers: 7,
-      imageUrl: 'https://images.unsplash.com/photo-1543946207-39bd91e70ca7?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      userAvatar: 'https://images.unsplash.com/profile-1611689283666-173278c4384eimage?w=32&dpr=2&crop=faces&bg=%23fff&h=32&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
-    },
-  ];
-  const LiveStreamCard = ({ stream }: { stream: LiveStream }) => (
+  const LiveStreamCard = ({ stream }: { stream: any }) => (
     <Box sx={{ borderRadius: 2, width: "100%", position: 'relative', mr: 2, textAlign: 'left' }}>
       <Box sx={{ position: 'relative' }}>
         <CardMedia
           component="img"
-          image={stream.imageUrl}
+          image={stream.thumbnail}
           height="160"
-          alt={stream.title}
+          alt={stream.streamTitle}
           sx={{ borderRadius: 2, maxHeight: 260 }}
         />
         <Box sx={{ position: 'absolute', top: 8, left: 8, display: 'flex', alignItems: 'center', gap: 0 }}>
@@ -158,13 +147,13 @@ function DiscoverLive() {
       </Box>
       <Box sx={{ mt: 1, px: 0.5, pb: 1.5 }}>
       <Stack direction="row" spacing={1} mt={0.5}>
-        <Avatar src={stream.userAvatar} sx={{ width: 24, height: 24 }} />
+        <Avatar src={stream.owner.photo} sx={{ width: 24, height: 24 }} />
         <Box>
             <Typography variant="body2" fontWeight={500} noWrap>
-            {stream.title}
+            {stream.streamTitle}
             </Typography>
             <Typography variant="caption" color="text.secondary" noWrap>
-            {stream.username}
+            {stream.owner.name}
             </Typography>
         </Box>
         </Stack>
@@ -248,23 +237,27 @@ function DiscoverLive() {
 
           <LiveStreaming  />
           <hr className='my-4'/>
-          <Box>
+          {Object.entries(groupedStreams).map(([topicName, streams]) => (
+          <Box key={topicName}>
               <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                   <Typography variant="h6" fontSize={'22px'} color={'#161823'} fontWeight={600}>
-                  Gaming
+                  {topicName}
                   </Typography>
-                  <Typography fontWeight={400} variant="body2" color="#16182399" sx={{ cursor: 'pointer' }}>
+                  {/* <Typography fontWeight={400} variant="body2" color="#16182399" sx={{ cursor: 'pointer' }}>
                   View all
-                  </Typography>
+                  </Typography> */}
               </Box>
               <Grid container spacing={2}>
-                  {dummyData.map((stream) => (
-                      <Grid item xs={12} sm={6} md={4} key={stream.id}>
+                  {streams.map((stream) => (
+                      <Grid item xs={12} sm={6} md={4} key={stream._id}>
+                        <Link to={`/golive?streamId=${stream.id}`} reloadDocument={false} style={{ textDecoration: 'none' }}>
                           <LiveStreamCard stream={stream} />
+                        </Link>
                       </Grid>
                   ))}
               </Grid>
           </Box>
+          ))}
           {/* recommended streams */}
           <Box  sx={{ mt: 4 }}>
               <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
@@ -341,44 +334,6 @@ function DiscoverLive() {
                     </CardContent>
                   </Card>
                 </Grid>
-              </Grid>
-          </Box>
-
-          {/* Esports streams */}
-          <Box  sx={{ mt: 4 }}>
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                  <Typography variant="h6" fontSize={'22px'} color={'#161823'} fontWeight={600}>
-                  Esports
-                  </Typography>
-                  <Typography fontWeight={400} variant="body2" color="#16182399" sx={{ cursor: 'pointer' }}>
-                  View all
-                  </Typography>
-              </Box>
-              <Grid container spacing={2}>
-                  {Esports.map((stream) => (
-                      <Grid item xs={12} sm={6} md={4} key={stream.id}>
-                          <LiveStreamCard stream={stream} />
-                      </Grid>
-                  ))}
-              </Grid>
-          </Box>
-
-          {/* mobile legends streams */}
-          <Box  sx={{ mt: 4 }}>
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                  <Typography variant="h6" fontSize={'22px'} color={'#161823'} fontWeight={600}>
-                  Esports
-                  </Typography>
-                  <Typography fontWeight={400} variant="body2" color="#16182399" sx={{ cursor: 'pointer' }}>
-                  View all
-                  </Typography>
-              </Box>
-              <Grid container spacing={2}>
-                  {Esports.map((stream) => (
-                      <Grid item xs={12} sm={6} md={4} key={stream.id}>
-                          <LiveStreamCard stream={stream} />
-                      </Grid>
-                  ))}
               </Grid>
           </Box>
         </div>
