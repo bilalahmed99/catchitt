@@ -5,6 +5,7 @@ import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import LiveTvIcon from '@mui/icons-material/LiveTv';
+import { Link } from 'react-router-dom';
 
 const LiveStreaming = ({posts}: any) => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
@@ -20,7 +21,7 @@ const LiveStreaming = ({posts}: any) => {
   };
 
   const currentVideo = posts[currentVideoIndex];
-  
+
   return (
     <Box
       sx={{
@@ -73,6 +74,7 @@ const LiveStreaming = ({posts}: any) => {
       </Box>
 
       {/* Center button overlay */}
+      <Link to={`/golive?streamId=${currentVideo?.id}`} reloadDocument={false} style={{ textDecoration: 'none' }}>
       <Button
         variant="contained"
         sx={{
@@ -99,6 +101,7 @@ const LiveStreaming = ({posts}: any) => {
 
         Click to watch LIVE
       </Button>
+      </Link>
 
       {/* Bottom-left Play icon */}
       <IconButton
