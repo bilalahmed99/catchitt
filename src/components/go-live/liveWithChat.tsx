@@ -31,6 +31,8 @@ import RankingSettingsModal from './popuprating';
 import EmojiPicker, { Emoji } from 'emoji-picker-react';
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { shareProfileby } from '../../utils/helpers';
+import FlagIcon from '@mui/icons-material/Flag';
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 
@@ -367,8 +369,7 @@ const renderGiftRow = (gifts) => (
   <Box
     sx={{
       display: 'flex',
-      overflowX: 'hidden',
-      pb: 2,
+      pb: 0.5,
     }}
   >
     {gifts.map((gift, index) => (
@@ -395,7 +396,7 @@ const renderGiftRow = (gifts) => (
         <Box sx={{ fontSize: 32, justifyItems: 'center' }}>
           { gift.imageUrl.endsWith(".mp4") ? <video src={gift.imageUrl} autoPlay loop muted style={{ width: "50px", height: "50px" }}/> : <img src={gift.imageUrl} alt={gift.name} style={{ width: "50px", height: "50px" }}/> }
         </Box>
-        <Typography className="coin-info"  sx={{ fontSize: 14, mt: 0.5, whiteSpace: 'nowrap' }}>
+        <Typography className="coin-info"  sx={{ fontSize: 13, mt: 0.5, whiteSpace: 'nowrap' }}>
           {gift.name}
         </Typography>
 
@@ -411,7 +412,7 @@ const renderGiftRow = (gifts) => (
         >
           <Box
             component="span"
-            sx={{ color: 'gold', fontSize: 16, mr: 0.5 }}
+            sx={{ color: 'gold', fontSize: 13, mr: 0.5 }}
           >
             <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M7.77006 13.4193C11.3139 13.4193 14.1867 10.5464 14.1867 7.0026C14.1867 3.45878 11.3139 0.585938 7.77006 0.585938C4.22623 0.585938 1.35339 3.45878 1.35339 7.0026C1.35339 10.5464 4.22623 13.4193 7.77006 13.4193Z" fill="#FFEC9B"/>
@@ -419,7 +420,7 @@ const renderGiftRow = (gifts) => (
               <path fillRule="evenodd" clipRule="evenodd" d="M12.7093 7.4349C12.7219 7.29075 12.7283 7.14483 12.7283 6.9974C12.7283 4.259 10.5084 2.03906 7.76998 2.03906C5.03158 2.03906 2.81165 4.259 2.81165 6.9974C2.81165 7.14483 2.81808 7.29075 2.83068 7.4349C3.05217 4.90139 5.17899 2.91406 7.76998 2.91406C10.361 2.91406 12.4878 4.90139 12.7093 7.4349Z" fill="#FABC15"/>
             </svg>
           </Box>
-          <Typography  sx={{ fontSize: 14 }}>{gift.price}</Typography>
+          <Typography  sx={{ fontSize: 13 }}>{gift.price}</Typography>
         </Box>
 
         {/* Send Button on Hover */}
@@ -458,23 +459,31 @@ const [openFaq, setOpenFaq] = useState(false);
   const handleClickOpenFaq = () => setOpenFaq(true);
   const handleCloseFaq = () => setOpenFaq(false);
 
-  return (
-    
-        
-        <Box sx={{display: 'flex', flexDirection: 'column' }}>
-      
-          {/* Top Navigation Bar */}
-          {/* <AppBar position="static" color="default" elevation={1}>
-            <Toolbar>
-              <Avatar src="/profile.jpg" sx={{ mr: 2 }} />
-              <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                p.21.frankfut
-              </Typography>
-              <Button variant="outlined">Subscribe</Button>
-              <Button variant="contained" color="error" sx={{ ml: 2 }}>Follow</Button>
-            </Toolbar>
-          </AppBar> */}
+// drpdown chat details
+  const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
+  const isMenuOpen = Boolean(menuAnchorEl);
 
+  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setMenuAnchorEl(null);
+  };
+
+// gift up menu
+  const [menuGiftAnchorEl, setGiftMenuAnchorEl] = useState<null | HTMLElement>(null);
+const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
+
+ const OpenGiftPopup = (event: React.MouseEvent<HTMLElement>) => {
+    setGiftMenuAnchorEl(event.currentTarget);
+  };
+   const closeGiftMenu = () => {
+    setGiftMenuAnchorEl(null);
+  };
+
+  return (
+        <Box sx={{display: 'flex', flexDirection: 'column' }}>
           {/* Main Content Grid */}
           <Grid container sx={{ display: 'flex',}}>
             
@@ -494,8 +503,7 @@ const [openFaq, setOpenFaq] = useState(false);
                       bgcolor: '#fff',
                       borderBottom: '1px solid #eee',
                       margin: '0 auto',
-                    }}
-                  >
+                    }}>
                     {/* Left Side: Avatar and Info */}
                     <Stack direction="row" spacing={2} alignItems="center">
                       <Avatar
@@ -682,36 +690,68 @@ const [openFaq, setOpenFaq] = useState(false);
                                     bgcolor: '#1c1c1c',
                                     color: '#fff',
                                     borderRadius: 2,
-                                    p: 2,
+                                    p: 0.5,
                                     width: '100%',
                                     maxWidth: 1100,
                                     mx: 'auto',
                                 }}
                                 >
-                                {/* First Row */}
-                                {renderGiftRow(giftsDetails.details.slice(0, 6))}
-
-                                {/* Arrow Toggle */}
-                                <Box sx={{ display: 'flex', justifyContent: 'flex-end', px: 1 }}>
-                                    <IconButton
-                                    onClick={() => setExpanded((prev) => !prev)}
-                                    sx={{
-                                        transition: 'transform 0.2s ease',
-                                        color: '#fff',
-                                        border: '1px solid #555',
-                                        borderRadius: 1,
-                                        mt: -1,
-                                        height: '7rem'
-                                    }}
-                                    >
-                                    <ExpandMoreIcon sx={{transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',}} />
-                                    </IconButton>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 1 }}>
+                                    {renderGiftRow(giftsDetails.details.slice(0, 6))}
+                                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', px: 1 }}>
+                                        <IconButton
+                                        onClick={OpenGiftPopup}
+                                        sx={{
+                                            transition: 'transform 0.2s ease',
+                                            color: '#fff',
+                                            border: '1px solid #555',
+                                            borderRadius: 1,
+                                            mt: -1,
+                                            height: '7rem',
+                                            px: 0.75
+                                        }}
+                                        >
+                                        <ExpandMoreIcon sx={{transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',}} />
+                                        </IconButton>
+                                    </Box>
+                                        <Menu
+                                            anchorEl={menuGiftAnchorEl}
+                                            open={isGiftOpenMenu}
+                                            onClose={closeGiftMenu}
+                                            PaperProps={{
+                                            elevation: 4,
+                                            sx: {
+                                                pt: 1,
+                                                mt: 1,
+                                                borderRadius: 2,
+                                                minWidth: 350,
+                                                maxHeight: 300,
+                                                overflowY: 'auto',
+                                                boxShadow: '0px 4px 20px rgba(0,0,0,0.1)',
+                                                backgroundColor: '#1c1c1c', 
+                                                color: '#fff'
+                                            },
+                                            }}
+                                            anchorOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'right',
+                                            }}
+                                            transformOrigin={{
+                                            vertical: 'bottom',
+                                            horizontal: 'right',
+                                            }}
+                                        >
+                                            {renderGiftRow(giftsDetails.details.slice(6))}
+                                        </Menu>
                                 </Box>
+                                
 
-                                {/* Second Row (Expandable) */}
-                                <Collapse in={expanded}>
-                                    {renderGiftRow(giftsDetails.details.slice(6, 12))}
-                                </Collapse>
+                                {/* {expanded && (
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 1 }}>
+                                        {renderGiftRow(giftsDetails.details.slice(6))}
+                                    </Box>
+                                )} */}
+                               
 
 
                             {/* Bottom: Coin Balance and Get Coins */}
@@ -752,6 +792,7 @@ const [openFaq, setOpenFaq] = useState(false);
                                     fontWeight: 'bold',
                                     textTransform: 'none',
                                     px: 2,
+                                    py: 0,
                                     mx: 1,
                                     '&:hover': {
                                     borderColor: '#d62949',
@@ -1089,6 +1130,7 @@ const [openFaq, setOpenFaq] = useState(false);
                                                         </Box>
                                                     </Box>
                                             </Box>
+                                            
                                         </Box>
 
                                         <Box textAlign="center" sx={{display: 'flex' , alignItems: 'center', gap: 2}}>
@@ -1140,9 +1182,7 @@ const [openFaq, setOpenFaq] = useState(false);
                                                     </Box>
                                             </Box>
                                         </Box>
-                                    </Box>
-
-                                    
+                                    </Box>        
                             </Box>
 
                             <Box sx={{ bgcolor: '#fff', height: '100%', fontFamily: 'sans-serif' }}>
@@ -1154,11 +1194,57 @@ const [openFaq, setOpenFaq] = useState(false);
                                         </Typography>
 
                                         <Box display="flex" alignItems="flex-start" mb={1}>
-                                        <Avatar src="https://i.pravatar.cc/50?img=2" sx={{ width: 24, height: 24, mr: 1 }} />
-                                        <Box>
-                                            <Typography fontSize={13} fontWeight={600}>Mk6</Typography>
-                                            <Typography fontSize={13}>Uai</Typography>
-                                        </Box>
+                                            <Avatar src="https://i.pravatar.cc/50?img=2" sx={{ width: 24, height: 24, mr: 1 }} />
+                                            <Box>
+                                                <Typography fontSize={13} fontWeight={600}>Mk6</Typography>
+                                                <Typography fontSize={13}>Uai</Typography>
+                                            </Box>
+                                            <Box ml="auto" sx={{cursor: 'pointer'}}  onClick={handleOpenMenu}>
+                                                <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M2.66016 12C2.66016 10.8954 3.55559 10 4.66016 10C5.76471 10 6.66016 10.8954 6.66016 12C6.66016 13.1045 5.76471 14 4.66016 14C3.55559 14 2.66016 13.1045 2.66016 12ZM10.6602 12C10.6602 10.8954 11.5556 10 12.6602 10C13.7647 10 14.6602 10.8954 14.6602 12C14.6602 13.1045 13.7647 14 12.6602 14C11.5556 14 10.6602 13.1045 10.6602 12ZM18.6602 12C18.6602 10.8954 19.5556 10 20.6602 10C21.7647 10 22.6602 10.8954 22.6602 12C22.6602 13.1045 21.7647 14 20.6602 14C19.5556 14 18.6602 13.1045 18.6602 12Z" fill="#161823"/>
+                                                </svg>
+                                            </Box>
+
+                                            <Menu
+                                                    anchorEl={menuAnchorEl}
+                                                    open={isMenuOpen}
+                                                    onClose={handleCloseMenu}
+                                                    PaperProps={{
+                                                    elevation: 4,
+                                                    sx: {
+                                                        mt: 1,
+                                                        borderRadius: 2,
+                                                        minWidth: 250,
+                                                        boxShadow: '0px 4px 20px rgba(0,0,0,0.1)',
+                                                    },
+                                                    }}
+                                                    anchorOrigin={{
+                                                    vertical: 'bottom',
+                                                    horizontal: 'right',
+                                                    }}
+                                                    transformOrigin={{
+                                                    vertical: 'top',
+                                                    horizontal: 'right',
+                                                    }}
+                                                >
+                                                    <MenuItem sx={{ py: 1.25 , '&:hover': { bgcolor: '#f5f5f5'}}} onClick={handleCloseMenu}>
+                                                        <ListItemIcon>
+                                                        <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M4.40592 4.1924V11.5882C6.60176 10.8674 9.17676 10.7341 11.1393 12.1341C12.8184 13.3341 15.1059 12.9716 16.9059 12.2674V4.87156C14.7101 5.59239 12.1351 5.72573 10.1726 4.32573C8.50592 3.13406 6.20176 3.48823 4.40592 4.1924ZM18.5726 3.64656V12.8132C18.5729 12.9678 18.5302 13.1195 18.4492 13.2512C18.3683 13.3829 18.2523 13.4895 18.1143 13.5591C15.6851 14.7674 12.4893 15.1507 10.1726 13.4924C8.48926 12.2924 6.20592 12.6466 4.40592 13.3549V18.6466C4.40592 18.7571 4.36203 18.863 4.28389 18.9412C4.20575 19.0193 4.09976 19.0632 3.98926 19.0632H3.15592C3.04542 19.0632 2.93944 19.0193 2.8613 18.9412C2.78316 18.863 2.73926 18.7571 2.73926 18.6466V3.64656C2.73926 3.33406 2.92259 3.0424 3.19759 2.90073C5.59342 1.7049 8.87259 1.34656 11.1393 2.9674C12.9601 4.27156 15.4851 3.8174 17.3684 2.90073C17.9059 2.6299 18.5726 3.03823 18.5726 3.64656Z" fill="#161823"/>
+                                                            </svg>
+                                                        </ListItemIcon>
+                                                        <ListItemText primary="Report" />
+                                                    </MenuItem>
+
+                                                    <MenuItem sx={{ py: 1.25 , '&:hover': { bgcolor: '#f5f5f5'}}} onClick={handleCloseMenu}>
+                                                        <ListItemIcon>
+                                                            <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M10.7727 18.8672C8.97271 18.8672 7.39771 18.5047 6.05188 17.7839C4.74007 17.1113 3.65482 16.0681 2.93104 14.7839C2.18855 13.3963 1.81683 11.8405 1.85188 10.2672C1.85188 8.58385 2.21438 7.11302 2.93521 5.84635C3.65857 4.57576 4.73362 3.54123 6.03104 2.86719C7.36438 2.15885 8.89771 1.80469 10.631 1.80469C12.3144 1.80469 13.7935 2.12552 15.0727 2.76302C16.3644 3.39219 17.3644 4.29219 18.0727 5.46719C18.8128 6.69691 19.1884 8.11149 19.156 9.54635C19.156 11.013 18.8144 12.213 18.131 13.1464C17.4519 14.063 16.4935 14.5255 15.256 14.5255C14.481 14.5255 13.8644 14.3589 13.4144 14.0255C13.1836 13.8414 12.9985 13.6065 12.8735 13.3391C12.7484 13.0717 12.6869 12.779 12.6935 12.4839L12.9727 12.6089C12.78 13.1936 12.3915 13.694 11.8727 14.0255C11.3012 14.3728 10.6411 14.5465 9.97271 14.5255C9.28713 14.5518 8.60862 14.3789 8.01926 14.0276C7.42991 13.6764 6.95496 13.1619 6.65188 12.5464C6.32154 11.8742 6.15723 11.1326 6.17271 10.3839C6.17271 9.57135 6.32688 8.85885 6.63104 8.24635C6.93266 7.63416 7.40435 7.12188 7.98962 6.77087C8.5749 6.41985 9.24894 6.24498 9.93104 6.26719C10.681 6.26719 11.306 6.43802 11.8144 6.78385C12.331 7.11719 12.6894 7.59219 12.8727 8.20469L12.5935 8.54635V6.86302C12.5935 6.75251 12.6374 6.64653 12.7156 6.56839C12.7937 6.49025 12.8997 6.44635 13.0102 6.44635H13.956C14.0666 6.44635 14.1725 6.49025 14.2507 6.56839C14.3288 6.64653 14.3727 6.75251 14.3727 6.86302V11.8839C14.3727 12.2464 14.4644 12.5089 14.6519 12.6839C14.8519 12.8464 15.1185 12.9255 15.4519 12.9255C16.0269 12.9255 16.4727 12.613 16.7935 11.9839C17.1269 11.3464 17.2935 10.5505 17.2935 9.60885C17.2935 8.33802 17.0144 7.23802 16.4519 6.30469C15.9135 5.38042 15.1131 4.63656 14.1519 4.16719C13.0768 3.63967 11.8908 3.37817 10.6935 3.40469C9.31854 3.40469 8.09771 3.69219 7.03104 4.26719C6.00107 4.81853 5.14863 5.65075 4.57271 6.66719C3.96934 7.76191 3.66604 8.99667 3.69354 10.2464C3.69354 11.6589 3.98521 12.8922 4.57271 13.9464C5.15604 14.988 5.98938 15.7839 7.07271 16.3464C8.26001 16.93 9.57099 17.2173 10.8935 17.1839H15.0977C15.2082 17.1839 15.3142 17.2278 15.3923 17.3059C15.4705 17.384 15.5144 17.49 15.5144 17.6005V18.4505C15.5144 18.561 15.4705 18.667 15.3923 18.7451C15.3142 18.8233 15.2082 18.8672 15.0977 18.8672H10.7727ZM10.356 12.9839C11.0727 12.9839 11.6394 12.7505 12.0519 12.2839C12.481 11.8172 12.6935 11.1839 12.6935 10.3839C12.6935 9.58385 12.481 8.95052 12.0519 8.48385C11.8377 8.24898 11.5742 8.06441 11.2803 7.94339C10.9864 7.82237 10.6693 7.76788 10.3519 7.78385C9.64354 7.78385 9.08104 8.01719 8.65188 8.48385C8.23938 8.95052 8.03104 9.58385 8.03104 10.3839C8.03104 11.1839 8.23938 11.8172 8.65604 12.2839C8.87135 12.5161 9.13443 12.699 9.42719 12.8198C9.71995 12.9407 10.0354 12.9966 10.3519 12.9839H10.356Z" fill="#161823"/>
+                                                            </svg>
+                                                        </ListItemIcon>
+                                                        <ListItemText primary="Reply" />
+                                                    </MenuItem>
+                                                </Menu>
                                         </Box>
 
                                         {/* Message 2 with badges */}
@@ -1179,26 +1265,26 @@ const [openFaq, setOpenFaq] = useState(false);
                                         {/* Message 3 with badge */}
                                         <Box display="flex" alignItems="flex-start" mb={1}>
                                         <Avatar src="https://i.pravatar.cc/50?img=5" sx={{ width: 24, height: 24, mr: 1 }} />
-                                        <Box>
-                                            <Box display="flex" alignItems="center" gap={0.5}>
-                                            <Typography fontSize={13} fontWeight={600}>arthouseconstruct1</Typography>
-                                            <Chip label="10" size="small" sx={{ height: 18, fontSize: 10 }} />
-                                            <Chip label="No. 2" size="small" color="error" sx={{ height: 18, fontSize: 10 }} />
+                                            <Box>
+                                                <Box display="flex" alignItems="center" gap={0.5}>
+                                                <Typography fontSize={13} fontWeight={600}>arthouseconstruct1</Typography>
+                                                <Chip label="10" size="small" sx={{ height: 18, fontSize: 10 }} />
+                                                <Chip label="No. 2" size="small" color="error" sx={{ height: 18, fontSize: 10 }} />
+                                                </Box>
+                                                <Typography fontSize={13}>Teai uitat</Typography>
                                             </Box>
-                                            <Typography fontSize={13}>Teai uitat</Typography>
-                                        </Box>
                                         </Box>
 
                                         {/* Message 4 */}
                                         <Box display="flex" alignItems="flex-start" mb={1}>
                                         <Avatar src="https://i.pravatar.cc/50?img=6" sx={{ width: 24, height: 24, mr: 1 }} />
-                                        <Box>
-                                            <Box display="flex" alignItems="center" gap={0.5}>
-                                            <Typography fontSize={13} fontWeight={600}>💎 Dorina</Typography>
-                                            <Chip label="16" size="small" color="primary" sx={{ height: 18, fontSize: 10 }} />
+                                            <Box>
+                                                <Box display="flex" alignItems="center" gap={0.5}>
+                                                <Typography fontSize={13} fontWeight={600}>💎 Dorina</Typography>
+                                                <Chip label="16" size="small" color="primary" sx={{ height: 18, fontSize: 10 }} />
+                                                </Box>
+                                                <Typography fontSize={13}>Privetik</Typography>
                                             </Box>
-                                            <Typography fontSize={13}>Privetik</Typography>
-                                        </Box>
                                         </Box>
 
                                         {/* Message 5 */}
@@ -1291,7 +1377,6 @@ const [openFaq, setOpenFaq] = useState(false);
 
                                     {/* Follow Button */}
                                     
-
                                     {/* Chat Input */}
                                     <Box px={2} pb={2} sx={{display: 'flex', alignItems: 'center', gap: 1 }}>
                                         <TextField
@@ -1380,7 +1465,7 @@ const [openFaq, setOpenFaq] = useState(false);
                 </Box>
                 </Box>
            </Modal>
-        {/* Modal Dialog */}
+            {/* Modal Dialog */}
             <Dialog open={openFaq} onClose={handleCloseFaq} maxWidth="sm" fullWidth>
                 <DialogTitle sx={{ m: 0, p: 2, position: 'relative',  }}>
                     <Typography variant="h6" sx={{color: '#000', fontSize: '1.75rem'}}>FAQ</Typography>
@@ -1423,9 +1508,6 @@ const [openFaq, setOpenFaq] = useState(false);
             </Dialog>
            <RankingSettingsModal open={openRating} onClose={() => setOpenRating(false)} />
         </Box>
-
-
-     
   );
 }
 
