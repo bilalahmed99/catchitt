@@ -66,6 +66,12 @@ function DiscoverLive() {
   useEffect(() => {
     loadRecommendedLiveVideos();
   }, []);
+
+  let postsBySelectedCategory = recommendedLiveVideos.items;
+
+  useEffect(() => {
+    postsBySelectedCategory = mediaByCategory.selectedCategory == 'all' ? recommendedLiveVideos.items : recommendedLiveVideos.items.filter(item => item.topic.topicName == mediaByCategory.selectedCategory);
+  }, [mediaByCategory.selectedCategory]);
   
   const chipLabels = ['All', ...Array.from(new Set(recommendedLiveVideos.items.map((stream) => stream.topic.topicName)))];
 
@@ -219,7 +225,7 @@ function DiscoverLive() {
             </Box>
           </div>
 
-          <LiveStreaming  />
+          <LiveStreaming posts={postsBySelectedCategory} />
           <hr className='my-4'/>
           {Object.entries(groupedStreams).map(([topicName, streams]) => (
           <Box key={topicName}>
