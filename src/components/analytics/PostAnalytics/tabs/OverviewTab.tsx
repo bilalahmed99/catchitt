@@ -87,7 +87,9 @@ function OverviewTab({ postAnalyticsDetails, postAnalytics, post, isDarkTheme }:
 
     useEffect(() => {
         // if(postAnalytics && activeTab) setChartData(prepareData(postAnalytics[possibleGraphs[activeTab]]));
-    }, [activeTab])
+        const selectedChartData = postAnalyticsDetails?.details?.[['dailyViewsGraph','dailyWatchTimeGraph','averageDailyWatchTimeGraph','watchedFullVideoDailyGraph','dailyFollowersGraph'][activeTab]];
+      selectedChartData && setChartData(Object.keys(selectedChartData).map(date => ({date, value: selectedChartData[date]})));
+    }, [activeTab, postAnalyticsDetails])
 
     return (
         <div className='w-[calc(100%-14rem)] px-3 mt-8  overflow-hidden'>
@@ -103,11 +105,11 @@ function OverviewTab({ postAnalyticsDetails, postAnalytics, post, isDarkTheme }:
                     </div>
                 </div>
                 <div className='flex gap-12 mr-3'>
-                    <div className="text-gray-400 flex-col text-sm"><img className='w-5 invert' src={isDarkTheme ? playOutlineWhite : play} alt="like" /> <span>{postAnalytics?.views || 0}</span></div>
-                    <div className="text-gray-400 flex-col text-sm"><img className='w-5 invert' src={isDarkTheme ? filledHeartWhite : filledHeart} alt="like" /> <span>{postAnalytics?.likes || 0}</span></div>
-                    <div className="text-gray-400 flex-col text-sm"><img className='w-5 invert' src={isDarkTheme ? filledCommentWhite : filledComment} alt="like" /> <span>{postAnalytics?.comments || 0}</span></div>
-                    <div className="text-gray-400 flex-col text-sm"><img className='w-5 invert' src={isDarkTheme ? filledShareWhite : filledShare} alt="like" /> <span>{postAnalytics?.shares || 0}</span></div>
-                    <div className="text-gray-400 flex-col text-sm"><img className='w-5 invert' src={isDarkTheme ? filledSaveWhite : filledSave} alt="like" /> <span>{postAnalytics?.saves || 0}</span></div>
+                    <div className="text-gray-400 flex-col text-sm"><img className='w-5 invert' src={isDarkTheme ? playOutlineWhite : play} alt="like" /> <span>{postAnalyticsDetails?.details?.videoViews || 0}</span></div>
+                    <div className="text-gray-400 flex-col text-sm"><img className='w-5 invert' src={isDarkTheme ? filledHeartWhite : filledHeart} alt="like" /> <span>{postAnalyticsDetails?.details?.likesCount || 0}</span></div>
+                    <div className="text-gray-400 flex-col text-sm"><img className='w-5 invert' src={isDarkTheme ? filledCommentWhite : filledComment} alt="like" /> <span>{postAnalyticsDetails?.details?.commentsCount || 0}</span></div>
+                    <div className="text-gray-400 flex-col text-sm"><img className='w-5 invert' src={isDarkTheme ? filledShareWhite : filledShare} alt="like" /> <span>{postAnalyticsDetails?.details?.sharesCount || 0}</span></div>
+                    <div className="text-gray-400 flex-col text-sm"><img className='w-5 invert' src={isDarkTheme ? filledSaveWhite : filledSave} alt="like" /> <span>{postAnalyticsDetails?.details?.savesCount || 0}</span></div>
                 </div>
             </div>
             {/* statistics card */}
@@ -137,22 +139,7 @@ function OverviewTab({ postAnalyticsDetails, postAnalytics, post, isDarkTheme }:
                                 <YAxis />
                                 <Tooltip />
                                 <Legend />
-                                {(() => {
-                                    switch (activeTab) {
-                                        case POSTSTATISTICSTABS.VIDEO_VIEWS:
-                                            return <Line type="monotone" dataKey="views" stroke="#82ca9d" activeDot={{ r: 8 }} />
-                                        case POSTSTATISTICSTABS.TOTAL_PLAY_TIME:
-                                            return <Line type="monotone" dataKey="playtime" stroke="#82ca9d" activeDot={{ r: 8 }} />
-                                        case POSTSTATISTICSTABS.AVERAGE_WATCH_TIME:
-                                            return <Line type="monotone" dataKey="watchtime" stroke="#82ca9d" activeDot={{ r: 8 }} />
-                                        case POSTSTATISTICSTABS.FULL_WATCH_PERCENTAGE:
-                                            return <Line type="monotone" dataKey="fullwatched" stroke="#82ca9d" activeDot={{ r: 8 }} />
-                                        case POSTSTATISTICSTABS.NEW_FOLLOWERS:
-                                            return <Line type="monotone" dataKey="newfollowers" stroke="#82ca9d" activeDot={{ r: 8 }} />
-                                        default:
-                                            return <Line type="monotone" dataKey="views" stroke="#82ca9d" activeDot={{ r: 8 }} />
-                                    }
-                                })()}
+                                <Line type="monotone" dataKey="value" stroke="#82ca9d" activeDot={{ r: 8 }} />
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
@@ -185,7 +172,7 @@ function OverviewTab({ postAnalyticsDetails, postAnalytics, post, isDarkTheme }:
                         <li className=" text-black text-sm">
                             <Box sx={{ display: 'flex', justifyContent: 'space-between'}}>
                                 <span>{key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</span>
-                                <span>{value as React.ReactNode}%</span>
+                                <span>{value as React.ReactNode}</span>
                             </Box>
                             <Box sx={{ width: '100%', position: 'relative', py: 1 }}>
                                 <LinearProgress
@@ -198,7 +185,7 @@ function OverviewTab({ postAnalyticsDetails, postAnalytics, post, isDarkTheme }:
                                       backgroundColor: '#3B82F6',
                                     },
                                   }}
-                                variant="determinate" value={value as number} />
+                                variant="determinate" value={Math.round(parseFloat((value as string).replace('%', '') || '0'))} />
                             </Box>
                         </li>
                         ))}

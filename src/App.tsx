@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useLayoutEffect, useState } from 'react';
 import { IntlProvider } from 'react-intl';
-import { Navigate, Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
+import { Navigate, Route, BrowserRouter as Router, Routes, useNavigate, Link } from 'react-router-dom';
 import messages from '../src/languages-intl';
 import styles from './App.module.scss';
 import CommunityPage from './components/about-pages/community-guidelines';

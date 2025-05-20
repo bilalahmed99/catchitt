@@ -230,7 +230,7 @@ function ContentTab({ isDarkTheme, selectedPeriod }: any) {
               </Typography>
             </Box>
           </TableCell>
-          <TableCell align="center"  sx={{fontWeight: '600'}} >{post.viewsLast7Days}</TableCell>
+          <TableCell align="center"  sx={{fontWeight: '600'}} >{post.viewsLast7Days ?? 0}</TableCell>
           <TableCell align="center"  sx={{fontWeight: '600'}} >{post.views}</TableCell>
           <TableCell align="center" sx={{fontWeight: '600'}} >{post.postedOn}{moment(post.createdTime).format('D-MM')}</TableCell>
           <TableCell align="center">

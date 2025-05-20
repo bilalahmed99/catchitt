@@ -159,7 +159,7 @@ export default function COPY_AND_SEND_MENU({ setIsEmbedModalOpen, copyHandler, B
         >
             <ThemeProvider theme={isDarkTheme ? darkThemePalette : lightThemePalette}>
 
-                <List component="nav" aria-label="Device settings" sx={{ bgcolor: 'background.paper' }}>
+                <List component="nav" aria-label="Device settings" sx={{ bgcolor: 'background.paper', width: '100%', height: '100%' }}>
                     <ListItemButton
                         id="lock-button"
                         aria-haspopup="listbox"
@@ -167,7 +167,7 @@ export default function COPY_AND_SEND_MENU({ setIsEmbedModalOpen, copyHandler, B
                         //   aria-label="when device is locked"
                         aria-expanded={open ? 'true' : undefined}
                         onClick={handleClickListItem}
-                        style={{ background: 'transparent' }}
+                        style={{ background: 'transparent', width: '100%', height: '100%' }}
                     ></ListItemButton>
                 </List>
                 <StyledMenu
