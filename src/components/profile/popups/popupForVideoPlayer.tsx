@@ -356,7 +356,8 @@ export default function PopupForVideoPlayer({
                     }
                 );
                 const resp = await likeUnlikeVideo.json();
-                if (resp.message === "Success") {
+                console.log(resp.message);
+                if (resp.status === 200) {
                     fetchMediaById(info?.mediaId);
                 }
                 // fetchMediaById(selectedVideoId);
@@ -475,6 +476,7 @@ export default function PopupForVideoPlayer({
                 }
             );
             const { data } = await fetchMediaResponse.json();
+            console.log('data info',data);
             setIsVideoLoaded(false);
             setUserId(data?.user?._id);
             setName(data?.user?.name);
@@ -1274,9 +1276,28 @@ export default function PopupForVideoPlayer({
                                     <div className={style.gifts}>
                                         <p className={style.receivedGifftsText}>Gifts received</p>
                                         <div>
-                                            {giftsDetails.details.map((item: any, index: number) => (
-                                                <img src={item.imageUrl} alt={item.name} key={item._id} onClick={() => addGiftComment(item._id)}/>
-                                            ))}
+                                        {giftsDetails.details.map((item: any) => {
+                                            const isVideo = item.imageUrl?.endsWith('.mp4') || item.imageUrl?.endsWith('.webm') || item.imageUrl?.endsWith('.ogg');
+
+                                            return isVideo ? (
+                                                <video
+                                                key={item._id}
+                                                src={item.imageUrl + '#t=0.1'}
+                                                muted
+                                                controls={false}
+                                                onClick={() => addGiftComment(item._id)}
+                                                />
+                                            ) : (
+                                                <img
+                                                src={item.imageUrl}
+                                                alt={item.name}
+                                                key={item._id}
+                                                onClick={() => addGiftComment(item._id)}
+                                                />
+                                            );
+                                            })}
+
+
                                         </div>
                                     </div>
                                     {/* Comment and creator video tab */}

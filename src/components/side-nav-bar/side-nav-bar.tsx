@@ -44,7 +44,9 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
     const [searchHistory, setSearchHistory] = useState<string[]>([]);
     const profile = useSelector((store: any) => store?.reducers?.profile);
 
-    const { pathname } = useLocation()
+    const { pathname } = useLocation();
+    let userToken = localStorage.getItem("token");
+    console.log('user token..',userToken);
 
     const [isRotated, setRotated] = useState(false);
     const [isDropdownOpen, setDropdownOpen] = useState(settingsDropdownState);
@@ -883,13 +885,13 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                                 </svg>                                  
                                 </button>
                             </div>
-                            <div
+                            {userToken && (<div
                             className='d-flex mt-2 p-2 cursor-pointer rounded-full' onClick={handleGetCoins} 
                              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f2f3f4")}
                              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                             >
                                 <p className='font-medium'>Get Coins </p>
-                            </div>
+                            </div> )}
                             {/* <div className='d-flex mt-4 cursor-pointer '>
                                 <p className='font-medium'>Create Seezitt effects </p>
                             </div> */}
@@ -938,15 +940,15 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}>
                                 <p className='font-medium'>Get app </p>
                             </div>
-                            <div 
+                            {userToken && (<div 
                                                         className='d-flex mt-2 p-2 cursor-pointer rounded-full 'onClick={() => {
                                                             dispatch(openLogoutPopup());
                                                         }} 
                             onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f2f3f4")}
                             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}>
                                 <p className='font-medium'>Logout </p>
-                            </div>
-                        </div>
+                            </div> )}
+                        </div> 
                     </div>
                  )
                 )}
