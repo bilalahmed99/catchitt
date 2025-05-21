@@ -199,6 +199,7 @@ function LiveWithChat() {
         
         // Clear the input after sending
         setMessage('');
+        setCurrentStream(null);
         setMessages(prev => [...prev, {
           id: Date.now().toString(),
           name: profileData.name,
@@ -347,6 +348,11 @@ function LiveWithChat() {
 
         (socketRef.current as any).on('liveStreamMessage', (data: any) => {
           console.log(`Received message: ${JSON.stringify(data)}`);
+          // handleNewMessage(data); // Handle the incoming message
+        });
+
+        (socketRef.current as any).on(' joinedliveStreamRoom', (data: any) => {
+          console.log(`Received message of joinedLiveStreamRoom: ${JSON.stringify(data)}`);
           // handleNewMessage(data); // Handle the incoming message
         });
            
@@ -1552,9 +1558,9 @@ const [openFaq, setOpenFaq] = useState(false);
                                           sx: { borderRadius: 2 },
                                         }}
                                         /> 
-                                        <IconButton>
+                                        {/* <IconButton>
                                             <SendIcon />
-                                        </IconButton>
+                                        </IconButton> */}
                                     </Box>
                             </Box>
                         </Box>  
