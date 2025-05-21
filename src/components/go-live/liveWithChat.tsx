@@ -35,7 +35,7 @@ import EmojiPicker, { Emoji } from 'emoji-picker-react';
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { shareProfileby } from '../../utils/helpers';
 import { useNavigate } from 'react-router-dom';
-
+// import { ClickAwayListener, Modal } from '@mui/material';
 
 const reasons = [
   'Violent extremism',
@@ -137,9 +137,45 @@ function LiveWithChat() {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState<Message[]>([]);
     const [profileData, setProfileData] = useState<any>('');
+    const [inSuceedCase, setInSuceedCase] = useState(false);
     const API_KEY = process.env.VITE_API_URL;
     const token = localStorage.getItem('token') ? localStorage.getItem('token') : '';
 
+    const submitReport = async () => {
+      if (selectedReason) {
+          try {
+              const response: any = await fetch(
+                  `${API_KEY}/media-content/reports/63d0a04dbf17138077e2cdbe`,
+                  {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json',
+                          Authorization: `Bearer ${token}`,
+                      },
+                      body: JSON.stringify({ reason: selectedReason }),
+                  }
+              );
+              if (response.status === 200) {
+                  setOpenReport(false);
+                  setInSuceedCase(true);
+                  setSelectedReason('');
+              } else {
+                setOpenReport(false);
+                setInSuceedCase(true);
+                setSelectedReason('');
+              }
+              // if (response?.data) {
+              //     const responseData = await response.json();
+
+              // }
+          } catch (error) {
+              console.error(error);
+              setOpenReport(false);  
+              setSelectedReason('');
+              setInSuceedCase(true);
+          }
+      }
+  };
 
     const loadProfile = async () => {
       try {
@@ -351,8 +387,8 @@ function LiveWithChat() {
           // handleNewMessage(data); // Handle the incoming message
         });
 
-        (socketRef.current as any).on(' joinedliveStreamRoom', (data: any) => {
-          console.log(`Received message of joinedLiveStreamRoom: ${JSON.stringify(data)}`);
+        (socketRef.current as any).on('joinedliveStreamRoom', (data: any) => {
+          console.log(`Received message of joinedliveStreamRoom: ${JSON.stringify(data)}`);
           // handleNewMessage(data); // Handle the incoming message
         });
            
@@ -995,9 +1031,9 @@ const [openFaq, setOpenFaq] = useState(false);
                                       console.log('Joined new room response:', response);
                                     });
 
-                                    let joinLiveStreamRoom: { liveStreamRoomId: string; accesstoken: string; name?: string; userName?: string; email?: string; userImage?: string } = {
+                                    let joinLiveStreamRoom: { liveStreamRoomId: string; accessToken: string; name?: string; userName?: string; email?: string; userImage?: string } = {
                                       liveStreamRoomId: streamId,
-                                      accesstoken: token ?? '',
+                                      accessToken: token ?? '',
                                       name: profileData?.name,
                                       userName: profileData?.username, 
                                       email: profileData?.email,
@@ -1569,6 +1605,19 @@ const [openFaq, setOpenFaq] = useState(false);
             </Grid>
             )}
           </Grid>
+
+           {/* <Modal open={inSuceedCase}>
+                <ClickAwayListener
+                    onClickAway={() => {
+                        setInSuceedCase(false);
+                    }}
+                >
+                    <div>
+                        <ThanksForReport onclose={() => setInSuceedCase(false)} />
+                    </div>
+                </ClickAwayListener>
+            </Modal> */}
+
             {/* model popup report */}
            <Modal open={openReport} onClose={handleCloseReport}>
                 <Box
@@ -1622,8 +1671,8 @@ const [openFaq, setOpenFaq] = useState(false);
                     <Button variant="outlined" sx={{color: '#000',width: '50%', borderRadius: 0, border: 'none', py: 2, '&:hover': { backgroundColor: 'rgba(22, 24, 35, 0.12)', border: 'none'}}} onClick={handleCloseReport}>
                     Cancel
                     </Button>
-                    <Button variant="contained"  sx={{width: '50%', borderRadius: 0, backgroundColor: 'rgba(22, 24, 35, 0.12)', color: '#000', fontWeight: '600', height: '100%', py: 2, '&:hover': { backgroundColor: 'rgba(22, 24, 35, 0.12)', border: 'none'}}} disabled={!selectedReason}>
-                    Next
+                    <Button variant="contained" onClick={()=> submitReport()} sx={{width: '50%', borderRadius: 0, backgroundColor: 'rgba(22, 24, 35, 0.12)', color: '#000', fontWeight: '600', height: '100%', py: 2, '&:hover': { backgroundColor: 'rgba(22, 24, 35, 0.12)', border: 'none'}}} disabled={!selectedReason}>
+                    Submit
                     </Button>
                 </Box>
                 </Box>
