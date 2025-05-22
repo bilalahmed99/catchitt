@@ -31,11 +31,15 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import RankingSettingsModal from './popuprating';
 import { io } from 'socket.io-client';
 
+import { emoji, mic, paperClip } from '../../icons';
 import EmojiPicker, { Emoji } from 'emoji-picker-react';
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { shareProfileby } from '../../utils/helpers';
 import { useNavigate } from 'react-router-dom';
+import CustomMediaPicker from '../user-chat/components/CustomMediaPicker';
 // import { ClickAwayListener, Modal } from '@mui/material';
+import { get, post } from '../../axios/axiosClient';
+
 
 const reasons = [
   'Violent extremism',
@@ -116,6 +120,23 @@ function LiveWithChat() {
         setShowSidebar(true);
     };
 
+    const [isFollowed, setIsFollowed] = useState(false);
+    const [showFollowDiv, setShowFollowDiv] = useState(true);
+
+      const handleFollow = async () => {
+        let userId = currentStream?.owner?.id;
+        try {
+          const res = await post(`/profile/follow/${userId}`);
+          console.log("handleFollow", res);
+          if (res?.data) {
+            setIsFollowed(true);
+            console.log("handleFollow", res?.data)
+          }                
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     interface Message {
       id: string;
       name: string;
@@ -140,6 +161,15 @@ function LiveWithChat() {
     const [inSuceedCase, setInSuceedCase] = useState(false);
     const API_KEY = process.env.VITE_API_URL;
     const token = localStorage.getItem('token') ? localStorage.getItem('token') : '';
+
+    const [uploadedFile, setUploadedFile] = useState<string>('');
+    const [openUploadPic, setOpenUploadPic] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0);
+    const [filePreview, setFilePreview] = useState<string>('');
+    const [isPickerVisible, setIsPickerVisible] = useState(false);
+    const [isImageModalOpen, setIsImageModalOpen] = useState(false); 
+    const [isDivVisible, setIsDivVisible] = useState(false);
+    const [messageType, setMessageType] = useState('text');
 
     const submitReport = async () => {
       if (selectedReason) {
@@ -301,9 +331,14 @@ function LiveWithChat() {
 
     const [moreAnchorEl, setMoreAnchorEl] = useState(null);
     const isMoreMenuOpen = Boolean(moreAnchorEl);
+    const [newJoiner, setNewJoiner] = useState(null);
 
   const handleMoreClick = (event: React.MouseEvent<HTMLElement>) => {
-    setMoreAnchorEl(event.currentTarget);
+    if(moreAnchorEl == null) {
+      setMoreAnchorEl(event.currentTarget);
+    }else{
+      setMoreAnchorEl(null);
+    }
   };
 
   const handleMoreClose = () => {
@@ -382,12 +417,21 @@ function LiveWithChat() {
         // let addUserObject = { userId: sender, accessToken: token };
         // let newAddUserObject = JSON.stringify(addUserObject);
 
+        // let addUserObject = { userId: profileData?._id, accessToken: token };
+        // console.log('addUserObject',addUserObject)
+        // let newAddUserObject = JSON.stringify(addUserObject);
+        // (socketRef.current as any).emit('add-user', newAddUserObject);
+
         (socketRef.current as any).on('liveStreamMessage', (data: any) => {
           console.log(`Received message: ${JSON.stringify(data)}`);
           // handleNewMessage(data); // Handle the incoming message
         });
 
         (socketRef.current as any).on('joinedliveStreamRoom', (data: any) => {
+          setNewJoiner(data);
+          setTimeout(()=>{
+            setNewJoiner(null);
+          },5000)
           console.log(`Received message of joinedliveStreamRoom: ${JSON.stringify(data)}`);
           // handleNewMessage(data); // Handle the incoming message
         });
@@ -798,7 +842,8 @@ const [openFaq, setOpenFaq] = useState(false);
                             ))}
                         </Menu>
                       <IconButton
-                              onClick={handleMoreClick}
+                              onMouseEnter={handleMoreClick}
+                              onMouseLeave={handleMoreClick}
                                 sx={{borderRadius: '4px', color: '#000', border: '1px solid #1618231F', padding: '7.5px 6px'}}>
                           <svg width="25" height="20" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path fill-rule="evenodd" clip-rule="evenodd" d="M2.65991 12C2.65991 10.8954 3.55534 10 4.65991 10C5.76446 10 6.65991 10.8954 6.65991 12C6.65991 13.1045 5.76446 14 4.65991 14C3.55534 14 2.65991 13.1045 2.65991 12ZM10.6599 12C10.6599 10.8954 11.5554 10 12.6599 10C13.7645 10 14.6599 10.8954 14.6599 12C14.6599 13.1045 13.7645 14 12.6599 14C11.5554 14 10.6599 13.1045 10.6599 12ZM18.6599 12C18.6599 10.8954 19.5554 10 20.6599 10C21.7645 10 22.6599 10.8954 22.6599 12C22.6599 13.1045 21.7645 14 20.6599 14C19.5554 14 18.6599 13.1045 18.6599 12Z" fill="#161823"/>
@@ -848,8 +893,9 @@ const [openFaq, setOpenFaq] = useState(false);
                             </Menu>
                       </IconButton>
                       <Button variant="outlined" sx={{color: '#000', borderColor: '#1618231F', textTransform : 'capitalize'}}>Subscribe</Button>
-                      <Button variant="contained" sx={{ background: '#FE2C55',  boxShadow: 'none', color: '#fff' , textTransform : 'capitalize'}} >
-                        Follow&nbsp;
+                      <Button onClick={handleFollow} variant="contained" sx={{ background: '#FE2C55',  boxShadow: 'none', color: '#fff' , textTransform : 'capitalize'}} >
+                        {isFollowed ? 'Followed': 'Follow'}
+                        &nbsp;
                         <Box component="span" sx={{ bgcolor: '#fff', color: '#000', borderRadius: '50%', px: 0.5,py: 0.5, fontSize: 12, ml: 0.5 }}>
                           <svg width="12" height="13" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M8.45422 4.32C8.25155 3.94667 7.95822 3.664 7.57422 3.472C7.20089 3.26933 6.75822 3.168 6.24622 3.168C5.36089 3.168 4.65155 3.46133 4.11822 4.048C3.58489 4.624 3.31822 5.39733 3.31822 6.368C3.31822 7.40267 3.59555 8.21333 4.15022 8.8C4.71555 9.376 5.48889 9.664 6.47022 9.664C7.14222 9.664 7.70755 9.49333 8.16622 9.152C8.63555 8.81067 8.97689 8.32 9.19022 7.68H5.71822V5.664H11.6702V8.208C11.4676 8.89067 11.1209 9.52533 10.6302 10.112C10.1502 10.6987 9.53689 11.1733 8.79022 11.536C8.04355 11.8987 7.20089 12.08 6.26222 12.08C5.15289 12.08 4.16089 11.84 3.28622 11.36C2.42222 10.8693 1.74489 10.192 1.25422 9.328C0.774221 8.464 0.534221 7.47733 0.534221 6.368C0.534221 5.25867 0.774221 4.272 1.25422 3.408C1.74489 2.53333 2.42222 1.856 3.28622 1.376C4.15022 0.885333 5.13689 0.639999 6.24622 0.639999C7.59022 0.639999 8.72089 0.965333 9.63822 1.616C10.5662 2.26667 11.1796 3.168 11.4782 4.32H8.45422Z" fill="#323442" fill-opacity="0.8"/>
@@ -1497,7 +1543,7 @@ const [openFaq, setOpenFaq] = useState(false);
                                         </Box>
                                         </Box> */}
 
-                                         {currentStream?._id && <Divider textAlign="center" sx={{ fontSize: 12, mb: 1 }}>
+                                         {currentStream?._id && newJoiner && <Divider textAlign="center" sx={{ fontSize: 12, mb: 1 }}>
                                         New
                                         </Divider>
                                         }
@@ -1511,16 +1557,17 @@ const [openFaq, setOpenFaq] = useState(false);
                                               mb: 2,
                                           }}
                                         >
+                                          {newJoiner && <Typography fontSize={12} color="text.secondary">🌿 {newJoiner.name} joined</Typography>}
                                         <Typography fontSize={12} fontWeight={500}>
-                                            💲 Welcome to Seezitt LIVE! Have fun interacting with others in real time. Creators must be 18 or older to go LIVE. Viewers must be 18 or older to recharge and send Gifts. Remember to follow our Community Guidelines.
+                                        {newJoiner && <>💲 Welcome to Seezitt LIVE! Have fun interacting with others in real time. Creators must be 18 or older to go LIVE. Viewers must be 18 or older to recharge and send Gifts. Remember to follow our Community Guidelines.</>}
                                         </Typography>
                                         
                                         </Box>}
-                                        <Typography fontSize={12} color="text.secondary">🌿 truwhofacer213 joined</Typography>
+                                        
                                     </Box>
 
                                     {/* Floating Banner */}
-                                    <Paper
+                                    {!isFollowed && showFollowDiv && <Paper
                                         elevation={3}
                                         sx={{
                                         position: 'absolute',
@@ -1537,20 +1584,20 @@ const [openFaq, setOpenFaq] = useState(false);
                                         flexDirection: 'column',
                                         }}
                                     >
-                                        <Box display={'none'} alignItems={'center'} justifyContent={'flex-start'} mb={1}>
-                                            <Avatar src="https://i.pravatar.cc/50?img=7" sx={{ width: 40, height: 40, mr: 1 }} />
+                                        <Box display={'flex'} alignItems={'center'} justifyContent={'flex-start'} mb={1}>
+                                            <Avatar src={profileData?.avatar || profileData?.cover} sx={{ width: 40, height: 40, mr: 1 }} />
                                             <Box flexGrow={1}>
-                                            <Typography fontSize={13} fontWeight={600}>Hi Jannifer</Typography>
+                                            <Typography fontSize={13} fontWeight={600}>Hi {profileData?.username},</Typography>
                                             <Typography fontSize={12} color="text.secondary">
                                                 Stay tuned for my LIVE!
                                             </Typography>
                                             </Box>
-                                            <IconButton size="small" sx={{position: 'absolute', top: 8, right: 4}}>
+                                            <IconButton onClick={() => setShowFollowDiv(false)} size="small" sx={{position: 'absolute', top: 8, right: 4}}>
                                             <CloseIcon fontSize="small" />
                                             </IconButton>
                                         </Box>
 
-                                        <Box px={2} mb={1} width={'100%'} m={'auto'}>
+                                         <Box px={2} mb={1} width={'100%'} m={'auto'} onClick={handleFollow}>
                                             <Box
                                             sx={{
                                                 bgcolor: '#ff2e63',
@@ -1568,12 +1615,13 @@ const [openFaq, setOpenFaq] = useState(false);
                                             + Follow
                                             </Box>
                                         </Box>
-                                    </Paper>
+                                    </Paper>}
 
                                     {/* Follow Button */}
-                                    
+                                    <CustomMediaPicker isDarkTheme={false} isPickerVisible={isPickerVisible} setIsPickerVisible={setIsPickerVisible} setMessageType={setMessageType} setMessage={setMessage} setUploadedFile={setUploadedFile} setOpenUploadPic={setOpenUploadPic} setFilePreview={setFilePreview} />
 
                                     {/* Chat Input */}
+                                  
                                     <Box px={2} pb={2} sx={{display: 'flex', alignItems: 'center', gap: 1 }}>
                                         <TextField
                                         fullWidth
@@ -1594,6 +1642,13 @@ const [openFaq, setOpenFaq] = useState(false);
                                           sx: { borderRadius: 2 },
                                         }}
                                         /> 
+                                          <div onClick={() => setIsPickerVisible(!isPickerVisible)} className="rounded-lg cursor-pointer hover:bg-[#1618230f] p-[0.313rem] mx-[0.5rem]">
+                                                      <img
+                                                        className={`w-6 h-6 object-contain rounded-full`}
+                                                        src={emoji}
+                                                        alt="comment-icon"
+                                                      />
+                                                    </div>
                                         {/* <IconButton>
                                             <SendIcon />
                                         </IconButton> */}
