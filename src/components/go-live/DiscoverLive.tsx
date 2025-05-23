@@ -288,7 +288,7 @@ function DiscoverLive() {
                   </Typography>
               </Box>
               <Box display="flex" flexWrap="wrap" gap={3}>
-                {postCategories.items.map((item) => (
+                {postCategories.items.map((item: any) => (
                   <Box key={item._id} sx={{ width: 'calc((100% - 144px) / 7)' }}>
                     <RecommendedCard stream={item} />
                   </Box>
