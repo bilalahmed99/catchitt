@@ -127,7 +127,7 @@ function LiveWithChat({ darkTheme }) {
     const [showFollowDiv, setShowFollowDiv] = useState(true);
 
       const handleFollow = async () => {
-        let userId = currentStream?.owner?.id;
+        let userId = selectedLiveVideo?.details?.owner?.id;
         try {
           const res = await post(`/profile/follow/${userId}`);
           console.log("handleFollow", res);
