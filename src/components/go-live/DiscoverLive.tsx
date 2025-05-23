@@ -99,10 +99,10 @@ function DiscoverLive() {
   let postsBySelectedCategory = recommendedLiveVideos.items;
 
   useEffect(() => {
-    postsBySelectedCategory = mediaByCategory.selectedCategory == 'all' ? recommendedLiveVideos.items : recommendedLiveVideos.items.filter(item => item.topic.topicName == mediaByCategory.selectedCategory);
+    postsBySelectedCategory = mediaByCategory.selectedCategory == 'all' ? recommendedLiveVideos.items : recommendedLiveVideos.items.filter((item: any) => item.topic.topicName == mediaByCategory.selectedCategory);
   }, [mediaByCategory.selectedCategory]);
   
-  const chipLabels = ['All', ...Array.from(new Set(recommendedLiveVideos.items.map((stream) => stream.topic.topicName)))];
+  const chipLabels = ['All', ...Array.from(new Set(recommendedLiveVideos.items.map((stream: any) => stream.topic.topicName)))];
 
   type LiveStream = {
     id: string;
@@ -228,7 +228,7 @@ function DiscoverLive() {
                   '&::-webkit-scrollbar': { display: 'none' },
                 }}
               >
-                {postCategories.items.map((item) => (
+                {postCategories.items.map((item: any) => (
                   <Chip
                     sx={{ border: 'none', borderRadius: '8px', backgroundColor: '#1618230F', fontSize: '14px' }}
                     key={item._id}
@@ -267,7 +267,7 @@ function DiscoverLive() {
                   </Typography> */}
               </Box>
               <Grid container spacing={2}>
-                  {streams.map((stream) => (
+                  {streams.map((stream: any) => (
                       <Grid item xs={12} sm={6} md={4} key={stream._id}>
                         <Link to={`/golive?streamId=${stream.id}`} reloadDocument={false} style={{ textDecoration: 'none' }}>
                           <LiveStreamCard stream={stream} />
