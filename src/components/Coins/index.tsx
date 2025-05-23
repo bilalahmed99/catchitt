@@ -3,12 +3,18 @@ import {
   Box,
   Button,
   Card,
+  IconButton,
   Paper,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import { logoS } from '../../icons';
 import CashbackCard from './cashBack';
 import CashBackWaveCard from './cashBackWave';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import InvitationCodeModal from './inviteModel';
+import CashBackWaveDialog from './cashbackModelDetails';
+import CashBackWaveDialogDetails from './cashbackModelDetails';
 
 const coinOptions = [
   { coins: '30', price: '$0.37' },
@@ -23,6 +29,11 @@ const coinOptions = [
 
 export default function Coins() {
   const [selected, setSelected] = useState(coinOptions[0]);
+  const [openInviteModel, setOpenInviteModel] = useState(false);
+  const handleOpenInvitationCodeModal = () => setOpenInviteModel(true);
+  const handleCloseInviteModel = () => setOpenInviteModel(false);
+  const [opencashInviteModel, setOpencashInviteModel] = useState(false);
+
 
   return (
     <Box maxWidth="1200px" mx="auto" textAlign={'left'} p={6} position="relative">
@@ -57,9 +68,42 @@ export default function Coins() {
 
         {/* Note */}
         <Typography fontSize="0.875rem" fontWeight="bold" mb={4}>
-          Recharge: <Box component="span" sx={{ color: 'rgba(254, 44, 85, 1)' }}>Save around 25% with a lower third-party service fee.</Box>
+          Recharge: 
+          <Box component="span" sx={{ color: 'rgba(254, 44, 85, 1)' }}>Save around 25% with a lower third-party service fee.
+            <Tooltip
+              title="Recharging on seezitt.com/coin will save you on third-party service fees compared to recharging on the Seezitt app"
+              placement="top"
+              PopperProps={{
+                modifiers: [
+                  {
+                    name: 'offset',
+                    options: {
+                      offset: [0, 0], // offset from the icon
+                    },
+                  },
+                ],
+              }}
+              componentsProps={{
+                tooltip: {
+                  sx: {
+                    bgcolor: 'black',
+                    color: 'white',
+                    fontSize: '1rem',
+                    borderRadius: 1,
+                    p: 1.5,
+                  },
+                },
+              }}
+            >
+              <IconButton
+                size="small"
+                sx={{ padding: '2px', verticalAlign: 'middle', marginLeft: '4px' }}
+              >
+                <InfoOutlinedIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>.
+          </Box>
         </Typography>
-
         {/* Coin options grid */}
         <Box
           display="grid"
@@ -138,11 +182,12 @@ export default function Coins() {
 
         <Button
           variant="contained"
-          
+           onClick={handleOpenInvitationCodeModal}
           sx={{ py: 1.25,  px: 7,fontSize: '1rem', textTransform: 'none', borderRadius: 2, bgcolor: 'rgba(254, 44, 85, 1)', '&:hover': { bgcolor: 'rgba(254, 44, 85, 0.9)' } }}
         >
           Recharge
         </Button>
+
           <Box display={'flex'} justifyContent="flex-end" gap={1}>
             <svg width="65" height="28" viewBox="0 0 65 28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M51.2871 1H14.2871C7.10741 1 1.28711 6.8203 1.28711 14C1.28711 21.1797 7.10741 27 14.2871 27H51.2871C58.4668 27 64.2871 21.1797 64.2871 14C64.2871 6.8203 58.4668 1 51.2871 1Z" fill="#60A901" fill-opacity="0.1"/>
@@ -177,6 +222,11 @@ export default function Coins() {
         </Box>
       </Card>
       <CashBackWaveCard />
+       <Button variant="outlined" onClick={() => setOpencashInviteModel(true)}>
+        Open Campaign
+      </Button>
+      <InvitationCodeModal open={openInviteModel} onClose={handleCloseInviteModel} />
+      <CashBackWaveDialogDetails open={opencashInviteModel} onClose={() => setOpencashInviteModel(false)} />
     </Box>
   );
 }
