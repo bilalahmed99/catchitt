@@ -63,7 +63,7 @@ function DiscoverLive() {
 
   function loadPostCategories()
   {
-    let endpoint = `${process.env.VITE_API_URL}/category`;
+    let endpoint = `${process.env.VITE_API_URL}/live-stream/v2/categories`;
     let requestOptions =
     {
       method: 'GET',
@@ -198,7 +198,7 @@ function DiscoverLive() {
             {stream.name}
             </Typography>
             <Typography variant="caption" color="text.secondary" >
-            {stream.consumers?.length || 0} watching
+            {stream.watching} watching
             </Typography>
         </Box>
         </Stack>
