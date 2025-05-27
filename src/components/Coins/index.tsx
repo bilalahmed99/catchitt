@@ -23,14 +23,14 @@ import CoinsCartModal from '../../components/settings-page/components/coins-cart
 import PaymentMethodModal from '../../components/settings-page/components/payment-method-modal';
 
 const coinOptions = [
-  { coins: '30', price: '0.37' },
-  { coins: '350', price: '4.45' },
-  { coins: '700', price: '8.85' },
-  { coins: '1,400', price: '17.69' },
-  { coins: '3,500', price: '44.25' },
-  { coins: '7,000', price: '88.45' },
-  { coins: '17,500', price: '221.05' },
-  { coins: 'Custom', price: 'Large amount supported', isCustom: true },
+  { coins: '30', price: '0.37', unit: '$' },
+  { coins: '350', price: '4.45', unit: '$' },
+  { coins: '700', price: '8.85', unit: '$' },
+  { coins: '1,400', price: '17.69', unit: '$' },
+  { coins: '3,500', price: '44.25', unit: '$' },
+  { coins: '7,000', price: '88.45', unit: '$' },
+  { coins: '17,500', price: '221.05', unit: '$' },
+  { coins: 'Custom', price: 'Large amount supported', unit: '$', isCustom: true },
 ];
 
 export default function Coins() {
@@ -200,7 +200,7 @@ export default function Coins() {
                   </svg>
                   <Typography fontWeight="semibold" fontSize="1.125rem">{option.coins}</Typography>
                 </Box>
-                <Typography color="text.secondary" fontSize="0.875rem">{option.price}</Typography>
+                <Typography color="text.secondary" fontSize="0.875rem">{selected.unit}{option.price}</Typography>
               </Paper>
             );
           })}
@@ -228,7 +228,7 @@ export default function Coins() {
         {/* Total & button */}
         <Box mb={4}>
           <Typography fontSize="1rem">
-            Total <Box component="span" fontWeight="bold">{selected.price}</Box>
+            Total {selected.unit}<Box component="span" fontWeight="bold">{selected.price}</Box>
           </Typography>
         </Box>
 
