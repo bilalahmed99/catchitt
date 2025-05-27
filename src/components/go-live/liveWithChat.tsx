@@ -1521,7 +1521,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                     </Box>
                                     <Box sx={{ px: 2, py: 1, maxHeight: 'calc(100vh - 17.5rem)', overflowY: 'auto' }}>
                                        <Box sx={{ px: 2, py: 1, maxHeight: 'calc(100vh - 17.5rem)', overflowY: 'auto' }}>
-                                      {messages.map((msg) => (
+                                      {messages?.map((msg) => (
                                         <Box key={msg.id} display="flex" alignItems="flex-start" mb={1}>
                                           <Avatar src={msg.userImage} sx={{ width: 24, height: 24, mr: 1 }} />
                                           <Box>
