@@ -1174,7 +1174,7 @@ function App() {
                             <Route path="/create-story" element={<CreateStoryPage />} />
                             <Route path="/golive" element={<GoLive />} />
                             <Route path="/live/discover" element={<DiscoverLive />} />
-                            <Route path="/coins" element={<Coins />} />
+                            <Route path="/coins/recharge" element={<Coins />} />
                             {/* <Route path="/live/discover" element={<DiscoverLive />} /> */}
                             <Route path="/myreports" element={<MyReports />} />
                             <Route path="/analytics/:tab?" element={<Analytics />} />
