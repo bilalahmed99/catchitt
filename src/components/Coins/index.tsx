@@ -19,24 +19,69 @@ import CashBackWaveDialog from './cashbackModelDetails';
 import CashBackWaveDialogDetails from './cashbackModelDetails';
 import Navbar from '../../shared/navbar';
 import { useAuthStore } from '../../store/authStore';
+import CoinsCartModal from '../../components/settings-page/components/coins-cart-modal';
+import PaymentMethodModal from '../../components/settings-page/components/payment-method-modal';
 
 const coinOptions = [
-  { coins: '30', price: '$0.37' },
-  { coins: '350', price: '$4.45' },
-  { coins: '700', price: '$8.85' },
-  { coins: '1,400', price: '$17.69' },
-  { coins: '3,500', price: '$44.25' },
-  { coins: '7,000', price: '$88.45' },
-  { coins: '17,500', price: '$221.05' },
+  { coins: '30', price: '0.37' },
+  { coins: '350', price: '4.45' },
+  { coins: '700', price: '8.85' },
+  { coins: '1,400', price: '17.69' },
+  { coins: '3,500', price: '44.25' },
+  { coins: '7,000', price: '88.45' },
+  { coins: '17,500', price: '221.05' },
   { coins: 'Custom', price: 'Large amount supported', isCustom: true },
 ];
 
 export default function Coins() {
   const [selected, setSelected] = useState(coinOptions[0]);
   const [opencashInviteModel, setOpencashInviteModel] = useState(false);
+  const [openCartModal, setOpenCartModal] = useState(false);
+  const [openPaymentModal, setOpenPaymentModal] = useState(false);
+  const API_KEY = process.env.VITE_API_URL;
+  const token = localStorage.getItem('token');
 
   const userProfile = useSelector((state: any) => state?.reducers?.profile);
   const { balance } = useAuthStore();
+
+  const rechargeClick = () => {
+    setOpenCartModal(true);
+  };
+
+  const handleCloseCartModal = () => {
+    setOpenCartModal(false);
+  };
+
+  const handleOpenPaymentModal = () => {
+    handleCloseCartModal();
+    setOpenPaymentModal(true);
+  };
+
+  const handleClosePaymentModal = () => {
+    setOpenPaymentModal(false);
+  };
+
+  const handleMethodSelection = (method: string) => {
+    buyCoin();
+    setOpenPaymentModal(false);
+  };
+
+  const buyCoin = async () => {
+    try {
+      const response = await fetch(`${API_KEY}/payment/web/coins/${selected.price}`, {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      const { url } = data.data;
+      window.location.href = url;
+    } catch (error) {
+      console.error('Error fetching profile data:', error);
+    }
+  };
 
   return (
     <>
@@ -188,6 +233,7 @@ export default function Coins() {
         </Box>
 
         <Button
+          onClick={rechargeClick}
           variant="contained"
           sx={{ py: 1.25,  px: 7,fontSize: '1rem', textTransform: 'none', borderRadius: 2, bgcolor: 'rgba(254, 44, 85, 1)', '&:hover': { bgcolor: 'rgba(254, 44, 85, 0.9)' } }}
         >
@@ -233,6 +279,22 @@ export default function Coins() {
       </Button>
       <CashBackWaveDialogDetails open={opencashInviteModel} onClose={() => setOpencashInviteModel(false)} />
     </Box>
+    {openCartModal && (
+      <CoinsCartModal
+        coinData={{coinsAmount: selected.coins, coinsPrice: selected.price}}
+        openCartModal={openCartModal}
+        onCloseCartModal={handleCloseCartModal}
+        next={handleOpenPaymentModal}
+      />
+    )}
+    {openPaymentModal && (
+      <PaymentMethodModal
+        coinData={{coinsAmount: selected.coins, coinsPrice: selected.price}}
+        openPaymentModal={openPaymentModal}
+        onClosePaymentModal={handleClosePaymentModal}
+        next={handleMethodSelection}
+      />
+    )}
     </>
   );
 }

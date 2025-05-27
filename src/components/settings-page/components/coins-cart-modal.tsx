@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import styles from './coins-cart-modal.module.scss';
-import { Modal, ThemeProvider } from "@mui/material";
+import { Modal, ThemeProvider, createTheme } from "@mui/material";
 import { Box, IconButton } from '@mui/material';
 import closeIcon from '../../../assets/closeIcon.png';
 import coin from '../svg-components/coin.svg';
-const CoinsCartModal = ({ coinData:{coinsAmount, coinsPrice}, darkTheme, palette, openCartModal, onCloseCartModal, next }: any) => {
+const CoinsCartModal = ({ coinData:{coinsAmount, coinsPrice}, darkTheme = '', palette = createTheme({palette: {mode: 'light'}}), openCartModal, onCloseCartModal, next }: any) => {
 
     return (
         <ThemeProvider theme={palette}>

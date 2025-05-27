@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './payment-method-modal.module.scss';
-import { Box, CircularProgress, IconButton, Modal, ThemeProvider } from '@mui/material';
+import { Box, CircularProgress, IconButton, Modal, ThemeProvider, createTheme } from '@mui/material';
 
 import paypal from '../../../assets/paypal.svg';
 import squarePay from '../../../assets/square-pay.svg';
@@ -8,7 +8,7 @@ import cc from '../../../assets/cc.png';
 import stripe from '../../../assets/stripe.svg';
 import PaymentMethod from './payment-method';
 
-const PaymentMethodModal = ({ darkTheme, palette, openPaymentModal, onClosePaymentModal, next, coinData:{coinsPrice} }: any) => {
+const PaymentMethodModal = ({ darkTheme = '', palette = createTheme({palette: {mode: 'light'}}), openPaymentModal, onClosePaymentModal, next, coinData:{coinsPrice} }: any) => {
 
 
 
