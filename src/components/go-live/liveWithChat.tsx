@@ -2,6 +2,8 @@ import { SideNavBar } from './goLiveSidebar';
 import { useRef, useState, useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Box,  Radio,
   RadioGroup,
   FormControlLabel,
@@ -43,6 +45,9 @@ import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import  styles  from './GoLive.module.scss';
 import { caesium } from '../../icons';
+
+
+
 
 const reasons = [
   'Violent extremism',
@@ -125,6 +130,7 @@ function LiveWithChat({ darkTheme }) {
 
     const [isFollowed, setIsFollowed] = useState(false);
     const [showFollowDiv, setShowFollowDiv] = useState(true);
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
       const handleFollow = async () => {
         let userId = selectedLiveVideo?.details?.owner?.id;
@@ -173,6 +179,11 @@ function LiveWithChat({ darkTheme }) {
     const [isImageModalOpen, setIsImageModalOpen] = useState(false); 
     const [isDivVisible, setIsDivVisible] = useState(false);
     const [messageType, setMessageType] = useState('text');
+
+    useEffect(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      console.log('Messages updated:', messages);
+    }, [messages]);
 
     const submitReport = async () => {
       if (selectedReason) {
@@ -256,7 +267,7 @@ function LiveWithChat({ darkTheme }) {
           liveStreamRoomId: liveStreamRoomId, 
           data: {
             ...userData,
-            text: message
+            message
           }
         }, (response:any) => {
           console.log('Callback Response:', response);
@@ -269,22 +280,21 @@ function LiveWithChat({ darkTheme }) {
         // Clear the input after sending
         setMessage('');
         setCurrentStream(null);
-        setMessages(prev => [...prev, {
-          id: Date.now().toString(),
-          name: profileData.name,
-          userName: profileData.userName,
-          userImage: profileData?.avatar || profileData?.cover,
-          text: message,
-          timestamp: new Date()
-        }]);
+        // setMessages(prev => [...prev, {
+        //   id: Date.now().toString(),
+        //   name: profileData.name,
+        //   userName: profileData.userName,
+        //   userImage: profileData?.avatar || profileData?.cover,
+        //   text: message,
+        //   timestamp: new Date()
+        // }]);
       } else {
         console.error('Socket not connected');
       }
 
-      (socketRef.current as any).on('liveStreamMessage', (data: any) => {
-        console.log(`Received message: ${JSON.stringify(data)}`);
-        // handleNewMessage(data); // Handle the incoming message
-      });
+      // (socketRef.current as any).on('liveStreamMessage', (data: any) => {
+      //   console.log(`Received message: ${JSON.stringify(data)}`);
+      // });
 
     };
     
@@ -324,6 +334,34 @@ const handleReasonChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
+  const [menuMsgId, setMenuMsgId] = useState<null | string>(null);
+  const [hoveredMsgId, setHoveredMsgId] = useState<null | string>(null);
+
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>, msgId: string) => {
+    setMenuAnchor(event.currentTarget);
+    setMenuMsgId(msgId);
+  };
+
+  const handleReport = (msgId: string) => {
+    console.log('Reported message ID:', msgId);
+    handleMenuClose();
+  };
+
+  const handleReply = (msgId: string) => {
+    setMessage(prev => prev + `@${msgId} `);
+    console.log('Reply to message ID:', msgId);
+    handleMenuClose();
+  };
+
+  const handleMenuClose = () => {
+    setMenuAnchor(null);
+    setMenuMsgId(null);
+  };
+
+
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -401,6 +439,30 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
   const SERVER_URL = 'https://prodapi.seezitt.com';
   const [isConnected, setIsConnected] = useState(false);
 
+  useEffect(() => {
+    const joinRoom = () => {
+      if (!profileData) return;
+  
+      const joinLiveStreamRoom = {
+        liveStreamRoomId: streamIdFromUrl || '',
+        accessToken: token ?? '',
+        name: profileData?.name,
+        userName: profileData?.username,
+        email: profileData?.email,
+        userImage: profileData?.avatar || profileData?.cover,
+      };
+  
+      console.log('joinLiveStreamRoom', joinLiveStreamRoom);
+  
+      (socketRef.current as any).emit('joinLiveStreamRoom', joinLiveStreamRoom, (response: any) => {
+        console.log('Joined live stream room response:', response);
+      });
+    };
+  
+    joinRoom();
+  }, [profileData]); 
+
+  
   function startSocket() {
     if ((socketRef.current as any) && (socketRef.current as any).connected) {
         console.log('Socket already connected.');
@@ -425,10 +487,31 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
         // console.log('addUserObject',addUserObject)
         // let newAddUserObject = JSON.stringify(addUserObject);
         // (socketRef.current as any).emit('add-user', newAddUserObject);
+        
+        
 
         (socketRef.current as any).on('liveStreamMessage', (data: any) => {
           console.log(`Received message: ${JSON.stringify(data)}`);
-          // handleNewMessage(data); // Handle the incoming message
+          setMessages(prev => [...prev, {
+            id: Date.now().toString(),
+            name: data?.name,
+            userName: data?.userName,
+            userImage: data?.userImage,
+            text: data.message,
+            timestamp: new Date()
+          }]);
+        });
+
+        (socketRef.current as any).on('sent-gift', (data: any) => {
+          console.log(`Received message: ${JSON.stringify(data)}`);
+          // setMessages(prev => [...prev, {
+          //   id: Date.now().toString(),
+          //   name: profileData.name,
+          //   userName: profileData.userName,
+          //   userImage: profileData?.avatar || profileData?.cover,
+          //   text: data.message,
+          //   timestamp: new Date()
+          // }]);
         });
 
         (socketRef.current as any).on('joinedliveStreamRoom', (data: any) => {
@@ -575,8 +658,10 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
   fetch(endpoint, requestOptions)
     .then((response) => response.json())
     .then((response) => { 
-      console.log('response from live-stream get rooms', response);
-      setMessages(response.data.data);
+      if(response.data && response.data.data) {
+        console.log('response from live-stream get rooms', response);
+        setMessages(response.data.data);
+      }
     })
     .catch((error) => console.error('Fetch error:', error));
   }
@@ -1515,21 +1600,62 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                             </Box>
 
                             <Box sx={{ bgcolor: '#fff', height: '100%', fontFamily: 'sans-serif' }}>
-                                    {/* Chat Messages */}
-                                    
-                                      {/* Your existing messages can stay or be converted */}
                                     </Box>
+                                    
                                     <Box sx={{ px: 2, py: 1, maxHeight: 'calc(100vh - 17.5rem)', overflowY: 'auto' }}>
-                                       <Box sx={{ px: 2, py: 1, maxHeight: 'calc(100vh - 17.5rem)', overflowY: 'auto' }}>
-                                      {messages.map((msg) => (
-                                        <Box key={msg.id} display="flex" alignItems="flex-start" mb={1}>
-                                          <Avatar src={msg.userImage} sx={{ width: 24, height: 24, mr: 1 }} />
-                                          <Box>
-                                            <Typography fontSize={13} fontWeight={600}>{msg.userName}</Typography>
-                                            <Typography fontSize={13}>{msg.text}</Typography>
-                                          </Box>
-                                        </Box>
-                                      ))}
+                                      <Box sx={{ px: 2, py: 1, maxHeight: 'calc(100vh - 17.5rem)', overflowY: 'auto' }}>
+                                        <>
+                                          {messages && messages.map((msg: any) => (
+                                            <Box
+                                              key={msg.id}
+                                              display="flex"
+                                              alignItems="flex-start"
+                                              mb={1}
+                                              position="relative"
+                                              sx={{
+                                                '&:hover .options-button': {
+                                                  visibility: 'visible',
+                                                },
+                                              }}
+                                            >
+                                              <Avatar src={msg.userImage} sx={{ width: 24, height: 24, mr: 1 }} />
+                                              <Box flex="1">
+                                                <Typography fontSize={13} fontWeight={600}>{msg.name}</Typography>
+                                                <Typography fontSize={13}>{msg.text}</Typography>
+                                              </Box>
+
+                                              {/* Always mounted, just hidden unless hovered */}
+                                              <IconButton
+                                                className="options-button"
+                                                size="small"
+                                                onClick={(e) => handleMenuOpen(e, msg.name)}
+                                                sx={{
+                                                  ml: 1,
+                                                  visibility: 'hidden', // hidden by default
+                                                }}
+                                              >
+                                                <MoreVertIcon fontSize="small" />
+                                              </IconButton>
+                                            </Box>
+                                          ))}
+                                          <div ref={messagesEndRef} />
+                                          <Menu
+                                            anchorEl={menuAnchor}
+                                            open={Boolean(menuAnchor)}
+                                            onClose={handleMenuClose}
+                                            anchorOrigin={{
+                                              vertical: 'top',
+                                              horizontal: 'right',
+                                            }}
+                                            transformOrigin={{
+                                              vertical: 'top',
+                                              horizontal: 'right',
+                                            }}
+                                          >
+                                            {/* <MenuItem onClick={() => handleReport(menuMsgId!)}>Report</MenuItem> */}
+                                            <MenuItem onClick={() => handleReply(menuMsgId!)}>Reply</MenuItem>
+                                          </Menu>
+                                        </>
                                         {/* <Typography fontSize={13} mb={0.5} color="text.secondary">
                                         Ap uitetė
                                         </Typography> */}
@@ -1664,7 +1790,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                         </Box> */}
 
                                         {/* Message 3 with badge */}
-                                        <Box display="flex" alignItems="flex-start" mb={1}>
+                                        {/* <Box display="flex" alignItems="flex-start" mb={1}>
                                         <Avatar src="https://i.pravatar.cc/50?img=5" sx={{ width: 24, height: 24, mr: 1 }} />
                                             <Box>
                                                 <Box display="flex" alignItems="center" gap={0.5}>
@@ -1674,10 +1800,10 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                                 </Box>
                                                 <Typography fontSize={13}>Teai uitat</Typography>
                                             </Box>
-                                        </Box>
+                                        </Box> */}
 
                                         {/* Message 4 */}
-                                        <Box display="flex" alignItems="flex-start" mb={1}>
+                                        {/* <Box display="flex" alignItems="flex-start" mb={1}>
                                         <Avatar src="https://i.pravatar.cc/50?img=6" sx={{ width: 24, height: 24, mr: 1 }} />
                                             <Box>
                                                 <Box display="flex" alignItems="center" gap={0.5}>
@@ -1686,7 +1812,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                                 </Box>
                                                 <Typography fontSize={13}>Privetik</Typography>
                                             </Box>
-                                        </Box>
+                                        </Box> */}
 
                                         {/* <Box display="flex" alignItems="flex-start" mb={2}>
                                         <Avatar src="https://i.pravatar.cc/50?img=4" sx={{ width: 24, height: 24, mr: 1 }} />
@@ -1781,23 +1907,23 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                   
                                     <Box px={2} pb={2} sx={{display: 'flex', alignItems: 'center', gap: 1 }}>
                                         <TextField
-                                        fullWidth
-                                        placeholder="Say something nice"
-                                        variant="outlined"
-                                        size="small"
-                                        value={message}
-                                        onChange={(e) => setMessage(e.target.value)}
-                                        onKeyPress={handleKeyPress}
-                                        InputProps={{
-                                          endAdornment: (
-                                            <InputAdornment position="end">
-                                              <IconButton onClick={handleSendMessage}>
-                                                <SendIcon />
-                                              </IconButton>
-                                            </InputAdornment>
-                                          ),
-                                          sx: { borderRadius: 2 },
-                                        }}
+                                          fullWidth
+                                          placeholder="Say something nice"
+                                          variant="outlined"
+                                          size="small"
+                                          value={message}
+                                          onChange={(e) => setMessage(e.target.value)}
+                                          onKeyPress={handleKeyPress}
+                                          InputProps={{
+                                            endAdornment: (
+                                              <InputAdornment position="end">
+                                                <IconButton onClick={handleSendMessage}>
+                                                  <SendIcon />
+                                                </IconButton>
+                                              </InputAdornment>
+                                            ),
+                                            sx: { borderRadius: 2 },
+                                          }}
                                         /> 
                                           <div onClick={() => setIsPickerVisible(!isPickerVisible)} className="rounded-lg cursor-pointer hover:bg-[#1618230f] p-[0.313rem] mx-[0.5rem]">
                                                       <img
