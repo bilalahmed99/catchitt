@@ -342,11 +342,13 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                     </div>
                 </span>
                 <span className='mb-4'>
+                    <Link to="/coins/recharge" reloadDocument={false} style={{ textDecoration: 'none' }}>
                     <CustomButton
                         text="Get Coin"
                         width="90% !important"
                         rounded="0.5rem"
                     />
+                    </Link>
                 </span>
                 <PopupForGetApp openAppPopup={appPopup} closeAppPopup={closeAppPopup} />
                 
