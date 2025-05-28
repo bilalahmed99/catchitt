@@ -9,6 +9,7 @@ import {
   Paper,
   Tooltip,
   Typography,
+  Avatar,
 } from '@mui/material';
 import { logoS } from '../../icons';
 import CashbackCard from './cashBack';
@@ -104,14 +105,7 @@ export default function Coins() {
             borderRadius: 2
           }}
         >
-          <Box
-            component="img"
-            src={userProfile?.avatar}
-            alt={userProfile?.username}
-            width={40}
-            height={40}
-            sx={{ borderRadius: '50%' }}
-          />
+          <Avatar src={userProfile?.avatar} alt={userProfile?.username} sx={{ width: 40, height: 40 }}/>
           <Box>
             <Typography fontWeight="medium">{userProfile?.username}</Typography>
             <Typography color="text.secondary" fontSize="0.875rem">🪙 {balance}</Typography>
