@@ -14,7 +14,7 @@ import story from '../src/assets/template/story.png';
 import Tutorial from '../src/assets/template/Tutorial.png';
 import creation from '../src/assets/template/creation.png';
 import effect from '../src/assets/template/effect.png';
-
+import defaultGreyBackground from '../src/assets/Gray-Background.png';
 
 import logo from '../assets/assets/icons/logo.svg';
 import svgTemplate from '../public/images/icons/svgTemplate.svg';
@@ -227,6 +227,7 @@ export {
     vlog,
     creation,
     effect,
+    defaultGreyBackground,
     svgTemplate,
     logoS,
     RepostVideo,

@@ -44,7 +44,7 @@ import FlagIcon from '@mui/icons-material/Flag';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import  styles  from './GoLive.module.scss';
-import { caesium } from '../../icons';
+import { caesium,defaultGreyBackground } from '../../icons';
 
 
 
@@ -118,6 +118,7 @@ const shareOptions = [
 function LiveWithChat({ darkTheme }: { darkTheme?: any }) {
   const navigate = useNavigate();
   const [showTopViewers, setShowTopViewers] = useState(false);
+
 
     const [showSidebar, setShowSidebar] = useState(true);
 
@@ -578,13 +579,17 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
   const LiveStreamCard = ({ stream, onClick }: { stream: any, onClick: (streamId: string) => void }) => (
     <Box sx={{ borderRadius: 2, width: "100%", position: 'relative', mr: 2, textAlign: 'left' }}>
       <Box sx={{ position: 'relative' }}  onClick={() => onClick(stream._id)}>
-        <CardMedia
-          component="img"
-          image={stream.thumbnail}
-          height="160"
-          alt={stream.streamTitle}
-          sx={{ borderRadius: 2, maxHeight: 260 }}
-        />
+      <CardMedia
+        component="img"
+        image={stream.thumbnail || defaultGreyBackground} // fallback if null/undefined
+        height="160"
+        alt={stream.streamTitle}
+        sx={{ borderRadius: 2, maxHeight: 260, height: 260 }}
+        onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+          const target = e.target as HTMLImageElement;
+          target.src = defaultGreyBackground; // fallback if broken URL
+        }}
+      />
         <Box sx={{ position: 'absolute', top: 8, left: 8, display: 'flex', alignItems: 'center', gap: 0 }}>
             <span   className='w-9 rounded-sm text-sm ml-3 text-center text-white ' style={{ background: 'linear-gradient(113.02deg, #FF1764 0%, #ED3495 94.15%)'}}>
                 Live
@@ -759,87 +764,116 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
 
 const [expanded, setExpanded] = useState(false);
 
+const [flyingGifts, setFlyingGifts] = useState<any[]>([]);
+
+  const sendGift1 = (giftId: string, gift: any) => {
+    // Send gift logic (e.g. emit via socket or API)
+    const flyingId = `${giftId}-${Date.now()}`;
+    setFlyingGifts(prev => [...prev, { ...gift, flyingId }]);
+
+    // Remove the animated gift after 5 seconds
+    setTimeout(() => {
+      setFlyingGifts(prev => prev.filter(g => g.flyingId !== flyingId));
+    }, 50000);
+  };
+
 const renderGiftRow = (gifts: any[]) => (
-  <Box
-    sx={{
-      display: 'flex',
-      pb: 0.5,
-    }}
-  >
-    {gifts.map((gift, index) => (
-      <Box
-        key={index}
-        sx={{
-          minWidth: 100,
-          mx: 1,
-          textAlign: 'center',
-          flexShrink: 0,
-          position: 'relative',
-          bgcolor: '#1c1c1c',
-          borderRadius: 2,
-          height: '7.8rem',
-          overflow: 'hidden',
-          cursor: 'pointer',
-          pt: 1,
-          pb: 0,
-          '&:hover': { background:'rgba(59, 59, 59, 1)' },
-          '&:hover .coin-info': { display: 'none' },
-          '&:hover .send-button': { visibility: 'visible', position: 'relative' },
-        }}
-      >
-        <Box sx={{ fontSize: 32, justifyItems: 'center' }}>
-          { gift.imageUrl.endsWith(".mp4") ? <video src={gift.imageUrl} autoPlay loop muted style={{ width: "50px", height: "50px" }}/> : <img src={gift.imageUrl} alt={gift.name} style={{ width: "50px", height: "50px" }}/> }
-        </Box>
-        <Typography className="coin-info"  sx={{ fontSize: 13, mt: 0.5, whiteSpace: 'nowrap' }}>
-          {gift.name}
-        </Typography>
-        {/* Coin Info */}
+    <Box
+      sx={{
+        display: 'flex',
+        pb: 0.5,
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      {gifts.map((gift, index) => (
         <Box
-          
+          key={index}
           sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            mt: 0.5,
-          }}>
-          <Box
-            component="span"
-            sx={{ color: 'gold', fontSize: 13, mr: 0.5 }}>
-            <img style={{height: '15px'}} src={caesium} alt="Coin Icon" />
+            minWidth: 100,
+            mx: 1,
+            textAlign: 'center',
+            flexShrink: 0,
+            position: 'relative',
+            bgcolor: '#1c1c1c',
+            borderRadius: 2,
+            height: '7.8rem',
+            overflow: 'hidden',
+            cursor: 'pointer',
+            pt: 1,
+            pb: 0,
+            '&:hover': { background: 'rgba(59, 59, 59, 1)' },
+            '&:hover .coin-info': { display: 'none' },
+            '&:hover .send-button': { visibility: 'visible', position: 'relative' },
+          }}
+        >
+          <Box sx={{ fontSize: 32, justifyItems: 'center' }}>
+            {gift.imageUrl.endsWith('.mp4') ? (
+              <video src={gift.imageUrl} autoPlay loop muted style={{ width: 50, height: 50 }} />
+            ) : (
+              <img src={gift.imageUrl} alt={gift.name} style={{ width: 50, height: 50 }} />
+            )}
           </Box>
-          <Typography  sx={{ fontSize: 13 }}>{gift.price}</Typography>
-        </Box>
-        {/* Send Button on Hover */}
-            <Button
+          <Typography className="coin-info" sx={{ fontSize: 13, mt: 0.5, whiteSpace: 'nowrap' }}>
+            {gift.name}
+          </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              mt: 0.5,
+            }}
+          >
+            <Box component="span" sx={{ color: 'gold', fontSize: 13, mr: 0.5 }}>
+              <img style={{ height: '15px' }} src={caesium} alt="Coin Icon" />
+            </Box>
+            <Typography sx={{ fontSize: 13 }}>{gift.price}</Typography>
+          </Box>
+          <Button
             className="send-button"
             variant="contained"
             sx={{
-                position: 'absolute',
-                visibility: 'hidden',
-                bottom: '-9%',
-                bgcolor: '#FE2C55',
-                color: '#fff',
-                fontSize: 12,
-                borderRadius: 0,
-                width: '100%',
-                px: 2,
-                textTransform: 'none',
-                minHeight: 28,
-                '&:hover': {
+              position: 'absolute',
+              visibility: 'hidden',
+              bottom: '-9%',
+              bgcolor: '#FE2C55',
+              color: '#fff',
+              fontSize: 12,
+              borderRadius: 0,
+              width: '100%',
+              px: 2,
+              textTransform: 'none',
+              minHeight: 28,
+              '&:hover': {
                 bgcolor: '#d62949',
-
-                },
+              },
             }}
-            onClick={() => sendGift(gift._id)}
-            >
+            onClick={() => sendGift1(gift._id, gift)}
+          >
             Send
-            </Button>
-      </Box>
-    ))}
-  </Box>
+          </Button>
+        </Box>
+      ))}
 
+      {/* Animated Flying Gifts */}
+      {/* {flyingGifts.map(gift => (
+        <Box
+          key={gift.flyingId}
+          className={`${styles.floatingGift}`}
+          
+        >
+          {gift.imageUrl.endsWith('.mp4') ? (
+            <video src={gift.imageUrl} autoPlay loop muted style={{ width: 40, height: 40 }} />
+          ) : (
+            <img src={gift.imageUrl} alt={gift.name} style={{ width: 40, height: 40 }} />
+          )}
+        </Box>
+      ))} */}
+    </Box>
   );
 
+ 
 const [openFaq, setOpenFaq] = useState(false);
 
   const handleClickOpenFaq = () => setOpenFaq(true);
@@ -1077,7 +1111,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                     )}
                     </Stack>
                 </Box>
-                <Box sx={{ width: '100%', height: '95%' }}>
+                <Box sx={{ width: '100%', height: '95%', background:'grey' }}>
                     {/* Placeholder for Video */}
                     <Typography color="white" align="center" >
                     Video Player Area
@@ -1097,6 +1131,20 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                 }}
                                 >
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', px: 1 }}>
+                                {flyingGifts.map(gift => (
+                                  <Box
+                                    key={gift.flyingId}
+                                    className={`${styles.floatingGift}`}
+                                    
+                                  >
+                                    {gift.imageUrl.endsWith('.mp4') ? (
+                                      <video src={gift.imageUrl} autoPlay loop muted style={{ width: 60, height: 60 }} />
+                                    ) : (
+                                      <img src={gift.imageUrl} alt={gift.name} style={{ width: 60, height: 60 }} />
+                                    )}
+                                  </Box>
+                                ))}
+                                    {/* {renderGiftRow(giftsDetails.details.slice(0, 7))} */}
                                     {renderGiftRow(giftsDetails.details.slice(0, 7))}
                                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', px: 1 }}>
                                         <IconButton

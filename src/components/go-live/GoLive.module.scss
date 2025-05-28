@@ -156,3 +156,24 @@ background-color: #000 !important;
     color: white !important;
     border-color: white !important;
 }
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-190px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-500px);
+  }
+}
+
+.floatingGift {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: floatUp 5s ease-in-out forwards;
+  z-index: 99999;
+  pointer-events: none;
+}
