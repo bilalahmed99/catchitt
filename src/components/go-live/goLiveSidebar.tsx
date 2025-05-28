@@ -288,7 +288,7 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                 <Link to="/discover" reloadDocument={false} style={{ textDecoration: 'none' }}>
                     <div
                         className={classNames(
-                            `${pathname.includes('/discover') ? styles.selected : styles.navLink}`
+                            `${styles.navLink}`
                         )}
                         onClick={() => {
                             handleLinkClick(2)
