@@ -16,7 +16,6 @@ function DiscoverLive() {
   const [mediaByCategory, setMediaByCategory] = useState({
     selectedCategory: 'all',
     items: [],
-    page: 1,
   });
 
   const scroll = (direction: 'left' | 'right') => {
@@ -51,7 +50,12 @@ function DiscoverLive() {
 
     fetch(endpoint, requestOptions)
     .then((response) => response.json())
-    .then((response) => setRecommendedLiveVideos((prev: any) => ({ ...prev, items: response.data, isLoading: false })))
+    .then((response) =>
+      {
+        setRecommendedLiveVideos((prev: any) => ({ ...prev, items: response.data, isLoading: false }));
+        setMediaByCategory({selectedCategory: 'all', items: response.data});
+      }
+    )
     .catch((error) => console.error('Fetch error:', error));
   };
 
@@ -88,6 +92,16 @@ function DiscoverLive() {
     document.querySelectorAll('*').forEach(el => el.scrollTo({ top: 0, behavior: 'smooth' }));
   };
 
+  function filterPostsByCategory(category: any)
+  {
+    setMediaByCategory(
+      {
+        selectedCategory: category.name,
+        items: category.name == 'all' ? recommendedLiveVideos.items : recommendedLiveVideos.items.filter((item: any) => item.topic.topicName == category.name),
+      }
+    );
+  };
+
   const groupedStreams = recommendedLiveVideos.items.reduce((acc: any, stream: any) => {
   const topicName = stream.topic.topicName;
   if (!acc[topicName]) {
@@ -101,14 +115,6 @@ function DiscoverLive() {
     loadRecommendedLiveVideos();
     loadPostCategories();
   }, []);
-
-  let postsBySelectedCategory = recommendedLiveVideos.items;
-
-  useEffect(() => {
-    postsBySelectedCategory = mediaByCategory.selectedCategory == 'all' ? recommendedLiveVideos.items : recommendedLiveVideos.items.filter((item: any) => item.topic.topicName == mediaByCategory.selectedCategory);
-  }, [mediaByCategory.selectedCategory]);
-  
-  const chipLabels = ['All', ...Array.from(new Set(recommendedLiveVideos.items.map((stream: any) => stream.topic.topicName)))];
 
   type LiveStream = {
     id: string;
@@ -242,13 +248,7 @@ function DiscoverLive() {
                     label={item.name}
                     clickable
                     variant="outlined"
-                    onClick={() => {
-                      setMediaByCategory({
-                        selectedCategory: item.name.toLowerCase(),
-                        items: [],
-                        page: 1,
-                      });
-                    }}
+                    onClick={() => filterPostsByCategory(item)}
                   />
                 ))}
               </Box>
@@ -261,7 +261,7 @@ function DiscoverLive() {
             </Box>
           </div>
 
-          <LiveStreaming posts={postsBySelectedCategory} />
+          <LiveStreaming posts={mediaByCategory.items}/>
           <hr className='my-4'/>
           {Object.entries(groupedStreams).map(([topicName, streams]) => (
           <Box key={topicName}>
