@@ -290,9 +290,11 @@ function DiscoverLive() {
                   <Typography variant="h6" fontSize={'22px'} color={'#161823'} fontWeight={600}>
                   Recommended categories
                   </Typography>
+                  <Link to="/live/category" reloadDocument={false} style={{ textDecoration: 'none' }}>
                   <Typography fontWeight={400} variant="body2" color="#16182399" sx={{ cursor: 'pointer' }}>
                   View all
                   </Typography>
+                  </Link>
               </Box>
               <Box display="flex" flexWrap="wrap" gap={3}>
                 {postCategories.items.map((item: any) => (
