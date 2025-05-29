@@ -46,7 +46,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import  styles  from './GoLive.module.scss';
 import { caesium,defaultGreyBackground } from '../../icons';
 import { abs } from 'mathjs';
-
+import  GamingLiveUI  from './categories';
 
 
 
@@ -944,7 +944,9 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
 
 
   return (
+
         <Box className={`${darkTheme}`} sx={{display: 'flex', flexDirection: 'column' }}>
+          <GamingLiveUI />
           {/* Main Content Grid */}
           <Grid container sx={{ display: 'flex',}}>
             
