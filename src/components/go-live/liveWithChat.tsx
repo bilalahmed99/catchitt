@@ -148,7 +148,7 @@ function LiveWithChat({ darkTheme }: { darkTheme?: any }) {
           const res = await post(`/profile/follow/${userId}`);
           console.log("handleFollow", res);
           if (res?.data) {
-            setIsFollowed(true);
+            setIsFollowed(!isFollowed);
             console.log("handleFollow", res?.data)
           }                
         } catch (error) {
@@ -265,10 +265,12 @@ function LiveWithChat({ darkTheme }: { darkTheme?: any }) {
       if (!message.trim()) return; // Don't send empty messages
       console.log('handle send message')
       console.log(localStorage.getItem('token'));
+      console.log('profileData', profileData);
       const userData = {
+        userFullName: profileData?.name || '',
         name: profileData?.name,
         userName: profileData?.username, 
-        email: profileData?.email,
+        userEmail: profileData?.email,
         userImage: profileData?.avatar || profileData?.cover,
         accessToken: localStorage.getItem('token')
       };
@@ -458,14 +460,14 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
       const joinLiveStreamRoom = {
         liveStreamRoomId: streamIdFromUrl || '',
         accessToken: token ?? '',
+        userFullName: profileData?.name || '',
         name: profileData?.name,
         userName: profileData?.username,
-        email: profileData?.email,
+        userEmail: profileData?.email,
         userImage: profileData?.avatar || profileData?.cover,
       };
   
       console.log('joinLiveStreamRoom', joinLiveStreamRoom);
-  
       (socketRef.current as any).emit('joinLiveStreamRoom', joinLiveStreamRoom, (response: any) => {
         console.log('Joined live stream room response:', response);
       });
@@ -527,6 +529,8 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
         });
 
         (socketRef.current as any).on('joinedliveStreamRoom', (data: any) => {
+          console.log('joined listner called..')
+          setTotalMembers(totalMembers+1);
           setNewJoiner(data);
           setTimeout(()=>{
             setNewJoiner(null);
@@ -705,6 +709,8 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
 
   function sendGift(giftId: string)
   {
+    console.log('selectedLiveVideo')
+    console.log(selectedLiveVideo);
       let endpoint = `${process.env.VITE_API_URL}/gift/live-stream/send`;
       let requestOptions =
       {
@@ -714,7 +720,7 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
           Authorization: `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ giftId, roomId:  selectedLiveVideo?.details?._id}),
+        body: JSON.stringify({ giftId, roomId:  selectedLiveVideo?.details?.id}),
       };
       
       fetch(endpoint, requestOptions)
@@ -746,10 +752,9 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
     };
 
     setSelectedLiveVideo((prev: any) => ({ ...prev, isLoading: true }));
-
     fetch(endpoint, requestOptions)
     .then((response) => response.json())
-    .then((response) => { setSelectedLiveVideo((prev: any) => ({...prev, details: response.data, isLoading: false})); })
+    .then((response) => { setSelectedLiveVideo((prev: any) => ({...prev, details: response.data, isLoading: false}));setTotalMembers(0) })
     .catch((error) => { console.error('Fetch error:', error); });
   };
 
@@ -776,6 +781,24 @@ const [flyingGifts, setFlyingGifts] = useState<any[]>([]);
     // Remove the animated gift after 5 seconds
     setTimeout(() => {
       setFlyingGifts(prev => prev.filter(g => g.flyingId !== flyingId));
+    }, 5000);
+  };
+
+  const [showHeart, setShowHeart] = useState(false);
+  const [coords, setCoords] = useState({ x: 0, y: 0 });
+  const [totalHearts, setTotalHearts] = useState(0);
+  const [totalMembers, setTotalMembers] = useState(0);
+
+
+  const handleClickHeart = (e: React.MouseEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setCoords({ x: rect.left + rect.width / 2, y: rect.top });
+    setShowHeart(true);
+    setTotalHearts(totalHearts + 1);
+
+    // Hide after 5 seconds
+    setTimeout(() => {
+      setShowHeart(false);
     }, 5000);
   };
 
@@ -851,7 +874,7 @@ const renderGiftRow = (gifts: any[]) => (
                 bgcolor: '#d62949',
               },
             }}
-            onClick={() => sendGift1(gift._id, gift)}
+            onClick={() => {sendGift1(gift._id, gift); sendGift(gift._id);}}
           >
             Send
           </Button>
@@ -957,11 +980,12 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                           <path fill-rule="evenodd" clip-rule="evenodd" d="M5.72998 2.9974C4.57841 2.9974 3.64155 3.9342 3.64155 5.0939C3.64155 6.2536 4.57841 7.19036 5.72998 7.19036C6.88158 7.19036 7.81845 6.2536 7.81845 5.0939C7.81845 3.9342 6.88158 2.9974 5.72998 2.9974ZM2.30821 5.0939C2.30821 3.20148 3.83835 1.66406 5.72998 1.66406C7.62161 1.66406 9.15178 3.20148 9.15178 5.0939C9.15178 6.9863 7.62161 8.5237 5.72998 8.5237C3.83835 8.5237 2.30821 6.9863 2.30821 5.0939ZM12.0633 5.33073C11.3719 5.33073 10.7912 5.90463 10.7912 6.63776C10.7912 7.37086 11.3719 7.94476 12.0633 7.94476C12.7547 7.94476 13.3354 7.37086 13.3354 6.63776C13.3354 5.90463 12.7547 5.33073 12.0633 5.33073ZM9.45788 6.63776C9.45788 5.1908 10.6132 3.9974 12.0633 3.9974C13.5134 3.9974 14.6688 5.1908 14.6688 6.63776C14.6688 8.0847 13.5134 9.2781 12.0633 9.2781C10.6132 9.2781 9.45788 8.0847 9.45788 6.63776ZM5.72998 10.9799C3.94881 10.9799 2.44182 12.1714 1.96334 13.8061C1.91162 13.9828 1.73713 14.1 1.55669 14.0635L0.903278 13.9313C0.722841 13.8948 0.605161 13.7183 0.653061 13.5406C1.25727 11.2984 3.29959 9.64653 5.72998 9.64653C8.16038 9.64653 10.2027 11.2984 10.8069 13.5406C10.8548 13.7183 10.7371 13.8948 10.5567 13.9313L9.90328 14.0635C9.72285 14.1 9.54835 13.9828 9.49665 13.8061C9.01815 12.1714 7.51118 10.9799 5.72998 10.9799ZM11.73 11.6992C11.3781 11.6992 11.0859 11.7467 10.8415 11.8254C10.6663 11.8819 10.4656 11.8192 10.3818 11.6553L10.0782 11.0618C9.99435 10.8979 10.0588 10.6955 10.2302 10.6284C10.6702 10.4561 11.1693 10.3658 11.73 10.3658C12.9603 10.3658 13.8643 10.8023 14.4912 11.5098C15.0137 12.0994 15.3057 12.8343 15.4785 13.5416C15.5221 13.7205 15.4041 13.8962 15.2235 13.9322L14.5697 14.0626C14.3892 14.0986 14.2148 13.9811 14.1694 13.8027C14.0261 13.2403 13.8113 12.7528 13.4933 12.394C13.1392 11.9944 12.6096 11.6992 11.73 11.6992Z" fill="#161823"/>
                           </svg>
 
-                           {selectedLiveVideo?.details?.consumers?.length} &nbsp;&nbsp;
+                           {totalMembers} &nbsp;&nbsp;
                           <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M4.95659 2.89709C4.24213 3.09789 3.62277 3.54704 3.20993 4.16376C2.71659 4.89042 2.42326 5.99042 3.02326 7.55709C3.48993 8.78376 4.55659 10.0338 5.75659 11.1038C6.6603 11.91 7.64178 12.6246 8.68659 13.2371C9.73141 12.6246 10.7129 11.91 11.6166 11.1038C12.8166 10.0338 13.8833 8.78376 14.3499 7.55709C14.9499 5.99042 14.6599 4.89042 14.1666 4.16376C13.7546 3.54768 13.1365 3.0986 12.4233 2.89709C10.5999 2.52709 9.57659 3.69709 8.68659 4.95709C7.79659 3.69709 6.76326 2.53042 4.95326 2.89709H4.95659ZM8.68993 3.14709C9.75659 1.80709 11.2266 1.29376 12.6899 1.59042C13.4599 1.74376 14.5533 2.35042 15.2733 3.41709C16.0266 4.52376 16.3433 6.08042 15.5999 8.03376C15.0166 9.55709 13.7666 10.9771 12.5066 12.1004C11.4364 13.0614 10.2599 13.8968 8.99993 14.5904L8.68993 14.7538L8.37993 14.5904C7.11995 13.8968 5.94342 13.0614 4.87326 12.1004C3.61326 10.9771 2.36326 9.55709 1.77993 8.03376C1.03659 6.08042 1.35326 4.52376 2.10659 3.41709C2.82326 2.35042 3.91993 1.74376 4.68993 1.59042C6.15326 1.29042 7.62326 1.80709 8.68993 3.14709Z" fill="#161823"/>
                           </svg>
-                           0
+                           {totalHearts}
+                           {/* Heart sum */}
                         </Typography>
                       </Box>
                     </Stack>
@@ -1071,11 +1095,11 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                 </svg>
                                 </Box>
                             </Button>
-                            <Button onClick={handleUnfollowClick} sx={{borderRadius: '4px', color: '#000', border: '1px solid #1618231F', padding: '7.5px 0px'}}>
+                            {isFollowed && <Button onClick={handleUnfollowClick} sx={{borderRadius: '4px', color: '#000', border: '1px solid #1618231F', padding: '7.5px 0px'}}>
                                 <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M6.07713 5.41667C6.07713 4.03595 7.19642 2.91667 8.57713 2.91667C9.95788 2.91667 11.0771 4.03595 11.0771 5.41667C11.0771 6.79738 9.95788 7.91667 8.57713 7.91667C7.19642 7.91667 6.07713 6.79738 6.07713 5.41667ZM8.57713 1.25C6.27596 1.25 4.41048 3.11548 4.41048 5.41667C4.41048 7.71783 6.27596 9.58333 8.57713 9.58333C10.8783 9.58333 12.7438 7.71783 12.7438 5.41667C12.7438 3.11548 10.8783 1.25 8.57713 1.25ZM2.82473 17.07C3.45272 14.7977 4.864 13.4313 6.45884 12.8075C8.04063 12.1888 9.842 12.2847 11.3298 13.0203C11.536 13.1223 11.7909 13.0575 11.9075 12.8591L12.3301 12.1409C12.4468 11.9425 12.381 11.686 12.1764 11.5807C10.2503 10.5891 7.91184 10.4495 5.85171 11.2554C3.73303 12.0841 1.94933 13.896 1.19721 16.7036C1.13767 16.9259 1.27947 17.1497 1.50398 17.2002L2.31698 17.3831C2.54149 17.4337 2.76344 17.2918 2.82473 17.07ZM19.2885 12.5505C19.4512 12.3878 19.4512 12.124 19.2885 11.9613L18.6993 11.372C18.5365 11.2093 18.2727 11.2093 18.11 11.372L13.1605 16.3215L11.1278 14.2887C10.965 14.126 10.7012 14.126 10.5385 14.2887L9.94925 14.8779C9.7865 15.0406 9.7865 15.3045 9.94925 15.4672L12.5713 18.0892C12.8967 18.4147 13.4243 18.4147 13.7498 18.0892L19.2885 12.5505Z" fill="#161823"/>
                             </svg>
-                            </Button>
+                            </Button> }
                                 
                             <Popover
                                     id={id}
@@ -1094,11 +1118,11 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                     sx: { borderRadius: 2, p: 2, boxShadow: 3, mt: 1.5 },
                                     }}
                                 >
-                                    <Typography sx={{ mb: 1 }}>Unfollow kalean__x777?</Typography>
+                                    <Typography sx={{ mb: 1 }}>Unfollow {currentStream?.owner?.name}?</Typography>
                                     <Button 
                                     variant="outlined" 
                                     fullWidth 
-                                    onClick={handleUnfollowClose}
+                                    onClick={()=> {handleUnfollowClose(); handleFollow()}}
                                     sx={{ textTransform: "none", borderRadius: 2, color: "#000", fontWeight: 500 }}
                                     >
                                     Unfollow
@@ -1275,31 +1299,36 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                       console.log('Left room response:', response);
                                     });
 
-                                    let joinRoomInput: { liveStreamRoomId: string; accesstoken: string } = {
-                                      liveStreamRoomId: streamId,
-                                      accesstoken: token ?? '',
-                                    };
+                                    // let joinRoomInput: { liveStreamRoomId: string; accesstoken: string } = {
+                                    //   liveStreamRoomId: streamId,
+                                    //   accesstoken: token ?? '',
+                                    // };
 
-                                    setCurrentStream(stream);
-                                    (socketRef.current as any).emit('joinRoom', joinRoomInput, (response: any) => {
-                                      console.log('Joined new room response:', response);
-                                    });
+                                    // setCurrentStream(stream);
+                                    // (socketRef.current as any).emit('joinRoom', joinRoomInput, (response: any) => {
+                                    //   console.log('Joined new room response:', response);
+                                    // });
 
-                                    let joinLiveStreamRoom: { liveStreamRoomId: string; accessToken: string; name?: string; userName?: string; email?: string; userImage?: string } = {
+                                    let joinLiveStreamRoom: { id: string, userFullName:string, userEmail:string, liveStreamRoomId: string; accessToken: string; name?: string; userName?: string; email?: string; userImage?: string } = {
+                                       id: stream.id,
                                       liveStreamRoomId: streamId,
                                       accessToken: token ?? '',
+                                      userFullName: profileData?.name || '',
                                       name: profileData?.name,
                                       userName: profileData?.username, 
-                                      email: profileData?.email,
+                                      userEmail: profileData?.email,
                                       userImage: profileData?.avatar || profileData?.cover,
                                     };
 
                                     (socketRef.current as any).emit('joinLiveStreamRoom', joinLiveStreamRoom, (response: any) => {
                                       console.log('Joined live stream room response:', response);
                                     });
+                                    console.log('current stream');
+                                    console.log(stream);
+                                    setTotalMembers(stream.consumers?.length || 0);
                                     setSelectedLiveVideo((prev: any) => ({ ...prev, details: stream }));
                                     // Navigate to the new stream page
-                                    navigate(`/golive?streamId=${streamId}`);
+                                    navigate(`/golive?streamId=${stream.id}`);
 
                                     setIsSwitchingStreams(false);
 
@@ -1657,7 +1686,59 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
 
                             <Box sx={{ bgcolor: '#fff', height: '100%', fontFamily: 'sans-serif' }}>
                             </Box>
-                              <Box className='cursor-pointer absolute bottom-20 bg-white h-16 flex items-center justify-center w-16 shadow-xl rounded-full right-3 '>
+                            <>
+                            {/* Heart Button */}
+                            <Box
+                              onClick={handleClickHeart}
+                              className="cursor-pointer absolute bottom-20 bg-white h-16 flex items-center justify-center w-16 shadow-xl rounded-full right-3 z-50"
+                            >
+                              <svg
+                                style={{ transform: 'scale(1.25)' }}
+                                width="80"
+                                height="80"
+                                viewBox="0 0 80 80"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <defs>
+                                  <linearGradient id="paint0_linear" x1="40" y1="25" x2="40" y2="55" gradientUnits="userSpaceOnUse">
+                                    <stop stopColor="#CF4C49" />
+                                    <stop offset="1" stopColor="#CE201B" />
+                                  </linearGradient>
+                                </defs>
+                                <path
+                                  d="M40.6499 54.7851C40.458 54.9149 40.2316 54.9843 39.9999 54.9843C39.7682 54.9843 39.5418 54.9149 39.3499 54.7851C36.2733 52.7301 23.3333 43.5851 23.3333 34.9567C23.3333 23.8234 36.4166 22.04 39.9999 29.5401C43.5833 22.04 56.6666 23.8234 56.6666 34.9567C56.6666 43.5867 43.7266 52.7301 40.6499 54.7817V54.7851Z"
+                                  fill="url(#paint0_linear)"
+                                />
+                              </svg>
+                            </Box>
+
+                            {/* Floating Heart Animation */}
+                            {showHeart && (
+                              <Box className={styles.floatingGift} sx={{ fontSize: 40 }}>
+                                <svg
+                                style={{ transform: 'scale(1.25)' }}
+                                width="80"
+                                height="80"
+                                viewBox="0 0 80 80"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <defs>
+                                  <linearGradient id="paint0_linear" x1="40" y1="25" x2="40" y2="55" gradientUnits="userSpaceOnUse">
+                                    <stop stopColor="#CF4C49" />
+                                    <stop offset="1" stopColor="#CE201B" />
+                                  </linearGradient>
+                                </defs>
+                                <path
+                                  d="M40.6499 54.7851C40.458 54.9149 40.2316 54.9843 39.9999 54.9843C39.7682 54.9843 39.5418 54.9149 39.3499 54.7851C36.2733 52.7301 23.3333 43.5851 23.3333 34.9567C23.3333 23.8234 36.4166 22.04 39.9999 29.5401C43.5833 22.04 56.6666 23.8234 56.6666 34.9567C56.6666 43.5867 43.7266 52.7301 40.6499 54.7817V54.7851Z"
+                                  fill="url(#paint0_linear)"
+                                />
+                              </svg>
+                              </Box>
+                            )}
+                            </>
+                              {/* <Box className='cursor-pointer absolute bottom-20 bg-white h-16 flex items-center justify-center w-16 shadow-xl rounded-full right-3 '>
                                   <svg style={{ transform:' scale(1.25)'}} width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                                       <defs>
                                         <filter id="filter0_d_2018_18602" x="0" y="0" width="80" height="80" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
@@ -1682,7 +1763,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                         <path d="M40.6499 54.7851C40.458 54.9149 40.2316 54.9843 39.9999 54.9843C39.7682 54.9843 39.5418 54.9149 39.3499 54.7851C36.2733 52.7301 23.3333 43.5851 23.3333 34.9567C23.3333 23.8234 36.4166 22.04 39.9999 29.5401C43.5833 22.04 56.6666 23.8234 56.6666 34.9567C56.6666 43.5867 43.7266 52.7301 40.6499 54.7817V54.7851Z" fill="url(#paint0_linear_2018_18602)"/>
                                       </g>
                                     </svg>
-                              </Box>      
+                              </Box>       */}
                             <Box sx={{ px: 2, py: 1, height: 'calc(100vh - 14.5rem)', overflowY: 'auto' }}>
                                       <Box sx={{ px: 2, py: 1, height: 'calc(100vh - 14.5rem)', overflowY: 'auto' }}>
                                         <>
