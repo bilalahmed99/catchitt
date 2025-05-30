@@ -1772,10 +1772,10 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                             <Box sx={{ bgcolor: '#fff', height: '100%', fontFamily: 'sans-serif' }}>
                             </Box>
                             <>
-                            {/* Heart Button */}
                             <Box
                               onClick={handleClickHeart}
-                              className="cursor-pointer absolute bottom-20 bg-white h-16 flex items-center justify-center w-16 shadow-xl rounded-full right-3 z-50"
+                              sx={{bottom:'12rem'}}
+                              className="cursor-pointer absolute bottom-40 bg-white h-16 flex items-center justify-center w-16 shadow-xl rounded-full right-3 z-50"
                             >
                               <svg
                                 style={{ transform: 'scale(1.25)' }}

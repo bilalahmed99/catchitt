@@ -95,50 +95,7 @@ const [recommendedLiveVideos, setRecommendedLiveVideos] = useState<any>(
         </Box>
       </Box>
     );
-     const LiveStreamCard = ({ stream, onClick }: { stream: any, onClick: (streamId: string) => void }) => (
-        <Box sx={{ borderRadius: 2, width: "100%", position: 'relative', mr: 2, textAlign: 'left' }}>
-          <Box sx={{ position: 'relative' }}  onClick={() => onClick(stream._id)}>
-          <CardMedia
-            component="img"
-            image={stream.thumbnail || defaultGreyBackground} // fallback if null/undefined
-            height="160"
-            alt={stream.streamTitle}
-            sx={{ borderRadius: 2, maxHeight: 260, height: 260 }}
-            onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-              const target = e.target as HTMLImageElement;
-              target.src = defaultGreyBackground; // fallback if broken URL
-            }}
-          />
-            <Box sx={{ position: 'absolute', top: 8, left: 8, display: 'flex', alignItems: 'center', gap: 0 }}>
-                <span   className='w-9 rounded-sm text-sm ml-3 text-center text-white ' style={{ background: 'linear-gradient(113.02deg, #FF1764 0%, #ED3495 94.15%)'}}>
-                    Live
-                </span>
-              
-              <span
-              className='px-2'
-                style={{borderRadius: 'none', background: '#00000080', fontSize: '13px', color: 'white', height: 20, display: 'flex', alignItems: 'center' }}
-              >
-                <PersonIcon sx={{ fontSize: 14 }} />
-                {stream.consumers.length}
-                </span>
-            </Box>
-          </Box>
-          <Box sx={{ mt: 1, px: 0.5, pb: 1.5 }}>
-          <Stack direction="row" spacing={1} mt={0.5}>
-            <Avatar src={stream.owner.photo} sx={{ width: 24, height: 24 }} />
-            <Box>
-                <Typography variant="body2" fontWeight={500} noWrap>
-                {stream.streamTitle}
-                </Typography>
-                <Typography variant="caption" color="text.secondary" noWrap>
-                {stream.owner.name}
-                </Typography>
-            </Box>
-            </Stack>
-          </Box>
-        </Box>
-      );
-
+    
   return (
     <div className="p-6">
           <div>
@@ -195,67 +152,6 @@ const [recommendedLiveVideos, setRecommendedLiveVideos] = useState<any>(
               </Box>
 
           </Box>
-         {/* live video */}
-
-         <Box sx={{px: 2}}>
-                    <Box display="flex" justifyContent="space-between" alignItems="center" mt={3} mb={2}>
-                        <Typography variant="h6" fontSize={'22px'} color={'#161823'} fontWeight={600}>
-                        Recommended LIVE videos
-                        </Typography>
-                    </Box>
-                    <Grid container spacing={2}>
-                        {recommendedLiveVideos.items.map((stream: any) => (
-                            <Grid item xs={12} sm={6} key={stream.id}>
-                                <LiveStreamCard 
-                                  stream={stream} 
-                                  onClick={(streamId: any) => {
-                                    setIsSwitchingStreams(true);
-  
-                                    if (!socketRef.current || !isConnected) {
-                                      console.log('Socket not connected, reconnecting...');
-                                      startSocket();
-                                      setIsSwitchingStreams(false);
-                                      return;
-                                    }
-                                    // First leave the current room
-                                    (socketRef.current as any).emit('leaveRoom', currentStream?._id || '651c880a8ac697cffc082dbf', (response: any) => {
-                                      console.log('Left room response:', response);
-                                    });
-
-                                    let joinRoomInput: { liveStreamRoomId: string; accesstoken: string } = {
-                                      liveStreamRoomId: streamId,
-                                      accesstoken: token ?? '',
-                                    };
-
-                                    setCurrentStream(stream);
-                                    (socketRef.current as any).emit('joinRoom', joinRoomInput, (response: any) => {
-                                      console.log('Joined new room response:', response);
-                                    });
-
-                                    let joinLiveStreamRoom: { liveStreamRoomId: string; accessToken: string; name?: string; userName?: string; email?: string; userImage?: string } = {
-                                      liveStreamRoomId: streamId,
-                                      accessToken: token ?? '',
-                                      name: profileData?.name,
-                                      userName: profileData?.username, 
-                                      email: profileData?.email,
-                                      userImage: profileData?.avatar || profileData?.cover,
-                                    };
-
-                                    (socketRef.current as any).emit('joinLiveStreamRoom', joinLiveStreamRoom, (response: any) => {
-                                      console.log('Joined live stream room response:', response);
-                                    });
-                                    setSelectedLiveVideo((prev: any) => ({ ...prev, details: stream }));
-                                    // Navigate to the new stream page
-                                    navigate(`/golive?streamId=${streamId}`);
-
-                                    setIsSwitchingStreams(false);
-
-                                  }}
-                                />
-                            </Grid>
-                        ))}
-                    </Grid>
-                </Box>
     </div>
   );
 }
