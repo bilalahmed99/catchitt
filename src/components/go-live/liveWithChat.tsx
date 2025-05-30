@@ -1056,7 +1056,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                     }}
                                 >
                                     {shareOptions.map((option, index) => (
-                                    <MenuItem key={index} onClick={() => { socialShareText[option.action as keyof typeof socialShareText](selectedLiveVideo?.details?.owner?.username); handleClose(); }}>
+                                    <MenuItem key={index} onClick={() => { socialShareText[option.action as keyof typeof socialShareText](`${window.location.origin}/golive?streamId=${selectedLiveVideo?.details?.id}`); handleClose(); }}>
                                         <ListItemIcon>{option.icon}</ListItemIcon>
                                         <ListItemText>{option.label}</ListItemText>
                                     </MenuItem>
