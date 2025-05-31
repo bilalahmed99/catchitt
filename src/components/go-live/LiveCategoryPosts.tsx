@@ -1,11 +1,12 @@
 import { SideNavBar } from './goLiveSidebar';
 import { useRef, useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from '@mui/icons-material';
-import { Box, IconButton, Chip, Typography, CardMedia, Stack } from '@mui/material';
+import { Box, Typography, CardMedia, Stack, Avatar, Grid } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
+import { Link, useParams } from 'react-router-dom';
 import { defaultGreyBackground } from '../../icons';
-import { Link } from 'react-router-dom';
 
-function LiveCategories() {
+function LiveCategoryPosts() {
+  const { categoryName } = useParams();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -14,6 +15,38 @@ function LiveCategories() {
       const scrollAmount = direction === 'left' ? -200 : 200;
       current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
+  };
+
+  const [recommendedLiveVideos, setRecommendedLiveVideos] = useState<any>(
+    {
+      items: [],
+      isLoading: false,
+    }
+  );
+
+  function loadRecommendedLiveVideos()
+  {
+    let endpoint = `${process.env.VITE_API_URL}/live-stream`;
+    let requestOptions =
+    {
+      method: 'GET',
+      headers:
+      {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+    };
+
+    setRecommendedLiveVideos((prev: any) => ({ ...prev, isLoading: true }));
+
+    fetch(endpoint, requestOptions)
+    .then((response) => response.json())
+    .then((response) =>
+      {
+        setRecommendedLiveVideos((prev: any) => ({ ...prev, items: response.data, isLoading: false }));
+      }
+    )
+    .catch((error) => console.error('Fetch error:', error));
   };
 
   const [postCategories, setPostCategories] = useState<any>(
@@ -49,9 +82,61 @@ function LiveCategories() {
     document.querySelectorAll('*').forEach(el => el.scrollTo({ top: 0, behavior: 'smooth' }));
   };
 
+  const groupedStreams = recommendedLiveVideos.items.reduce((acc: any, stream: any) => {
+  const topicName = stream.topic.topicName;
+  if (!acc[topicName]) {
+    acc[topicName] = [];
+  }
+  acc[topicName].push(stream);
+  return acc;
+}, {});
+
+  const filteredStreams = categoryName ? { [categoryName]: groupedStreams[categoryName] || [] } : groupedStreams; 
+  
   useEffect(() => {
+    loadRecommendedLiveVideos();
     loadPostCategories();
   }, []);
+
+  const LiveStreamCard = ({ stream }: { stream: any }) => (
+    <Box sx={{ borderRadius: 2, width: "100%", position: 'relative', mr: 2, textAlign: 'left' }}>
+      <Box sx={{ position: 'relative' }}>
+        <CardMedia
+          component="img"
+          image={stream.thumbnail || defaultGreyBackground}
+          height="160"
+          alt={stream.streamTitle}
+          sx={{ borderRadius: 2, maxHeight: 260 }}
+          onError={(event: any) => event.target.src != defaultGreyBackground && (event.target.src = defaultGreyBackground)}
+        />
+        <Box sx={{ position: 'absolute', top: 8, left: 8, display: 'flex', alignItems: 'center', gap: 0 }}>
+            <span   className='w-9 rounded-sm text-sm ml-3 text-center text-white ' style={{ background: 'linear-gradient(113.02deg, #FF1764 0%, #ED3495 94.15%)'}}>
+                Live
+            </span>
+          <span
+          className='px-2'
+            style={{borderRadius: 'none', background: '#00000080', fontSize: '13px', color: 'white', height: 20, display: 'flex', alignItems: 'center' }}
+          >
+            <PersonIcon sx={{ fontSize: 14 }} />
+            {stream?.consumers?.length}
+            </span>
+        </Box>
+      </Box>
+      <Box sx={{ mt: 1, px: 0.5, pb: 1.5 }}>
+      <Stack direction="row" spacing={1} mt={0.5}>
+        <Avatar src={stream.owner.photo} sx={{ width: 24, height: 24 }} />
+        <Box>
+            <Typography variant="body2" fontWeight={500} noWrap>
+            {stream.streamTitle}
+            </Typography>
+            <Typography variant="caption" color="text.secondary" noWrap>
+            {stream.owner.name}
+            </Typography>
+        </Box>
+        </Stack>
+      </Box>
+    </Box>
+  );
 
   const RecommendedCard = ({ stream }: { stream: any }) => (
     <Box sx={{ borderRadius: 2, width: "100%", position: 'relative', mr: 2, textAlign: 'left' }}>
@@ -83,55 +168,29 @@ function LiveCategories() {
     <div className='flex' style={{ background: '#000' }}>
       <SideNavBar />
       <div className='w-[calc(100%-16rem)] ml-auto bg-white '>
-        <div className='py-3 px-10'> 
-          <div>
-            <Box display="flex" alignItems="center" mb={3} gap={1}>
-              <IconButton
-                sx={{ backgroundColor: 'white', boxShadow: '0px 0px 9px 0px #e4e6eb' }}
-                onClick={() => scroll('left')}
-              >
-                <ChevronLeft />
-              </IconButton>
-              <Box
-                ref={scrollRef}
-                sx={{
-                  display: 'flex',
-                  overflowX: 'auto',
-                  gap: 1,
-                  scrollbarWidth: 'none',
-                  '&::-webkit-scrollbar': { display: 'none' },
-                }}
-              >
-                {postCategories.items.map((item: any) => (
-                  <Chip
-                    sx={{ border: 'none', borderRadius: '8px', backgroundColor: '#1618230F', fontSize: '14px' }}
-                    key={item._id}
-                    label={item.name}
-                    clickable
-                    variant="outlined"
-                  />
-                ))}
-              </Box>
-              <IconButton
-                sx={{ backgroundColor: 'white', boxShadow: '0px 0px 9px 0px #e4e6eb' }}
-                onClick={() => scroll('right')}
-              >
-                <ChevronRight />
-              </IconButton>
-            </Box>
-          </div>
+        <div className='py-3 px-10'>
           <Box  sx={{ mt: 4 }}>
               <Box display="flex" flexWrap="wrap" gap={3}>
-                {postCategories.items.map((item: any) => (
+                {postCategories.items.slice(0, 1).map((item: any) => (
                   <Box key={item._id} sx={{ width: 'calc((100% - 144px) / 7)' }}>
-                  <Link to={`/live/category/${item.name}`} reloadDocument={false} style={{ textDecoration: 'none' }}>
                     <RecommendedCard stream={item} />
-                  </Link>
                   </Box>
                 ))}
               </Box>
-
           </Box>
+          {Object.entries(filteredStreams).map(([topicName, streams]) => (
+          <Box key={topicName}>
+              <Grid container spacing={2}>
+                  {(streams as any[]).map((stream: any) => (
+                      <Grid item xs={12} sm={6} md={4} key={stream._id}>
+                        <Link to={`/golive?streamId=${stream.id}`} reloadDocument={false} style={{ textDecoration: 'none' }}>
+                          <LiveStreamCard stream={stream} />
+                        </Link>
+                      </Grid>
+                  ))}
+              </Grid>
+          </Box>
+          ))}
         </div>
 
       </div>
@@ -144,4 +203,4 @@ function LiveCategories() {
   );
 }
 
-export default LiveCategories;
+export default LiveCategoryPosts;
