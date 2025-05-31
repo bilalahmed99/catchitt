@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styles from './payment-method-modal.module.scss';
-import { Box, Card, Checkbox, CircularProgress, Grid, IconButton, InputAdornment, Modal, TextField, ThemeProvider, createTheme } from '@mui/material';
+import { Box, Card, Checkbox, CircularProgress, Grid, IconButton, InputAdornment, Modal, TextField, ThemeProvider, createTheme, Avatar } from '@mui/material';
 
 import paypal from '../../../assets/paypal.svg';
 import squarePay from '../../../assets/square-pay.svg';
@@ -10,8 +10,10 @@ import PaymentMethod from './payment-method';
 import CloseIcon from "@mui/icons-material/Close";
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import SecurityIcon from '@mui/icons-material/Security'
+import { useSelector } from 'react-redux';
 
-const PaymentMethodModal = ({ darkTheme = '', palette = createTheme({palette: {mode: 'light'}}), openPaymentModal, onClosePaymentModal, next, coinData:{coinsPrice} }: any) => {
+const PaymentMethodModal = ({ darkTheme = '', palette = createTheme({palette: {mode: 'light'}}), openPaymentModal, onClosePaymentModal, next, coinData: {coinsAmount, coinsPrice, coinsUnit} }: any) => {
+    const userProfile = useSelector((state: any) => state?.reducers?.profile);
     const [selectedMethod, setSelectedMethod] = React.useState('PayPal');
     const [isProceedToBuy, setIsProceedToBuy] = React.useState(false);
       const [showCardFields, setShowCardFields] = useState(false);
@@ -67,33 +69,27 @@ const PaymentMethodModal = ({ darkTheme = '', palette = createTheme({palette: {m
                                 </svg>
                                 Your info is private and secure.</p>
                             </div>
-                            <button className="p-0 border-0" >
+                            <IconButton onClick={onClosePaymentModal}>
                                 <CloseIcon className="w-8 h-8 text-black" />
-                            </button>
+                            </IconButton>
                         </div>
 
                         <div className="flex justify-between items-center border-b">
                             <h2 className="text-sm font-semibold text-black">Account</h2>
                             <div className="flex justify-between items-center mt-1">
-                            <img
-                                src="/user-avatar.jpg"
-                                alt="Avatar"
-                                width={20}
-                                height={20}
-                                className="rounded-full ml-1"
-                            />
-                            <span className="text-sm font-medium">Jeniffer.Williams</span>
+                            <Avatar src={userProfile?.avatar} alt={userProfile?.username} sx={{ width: 20, height: 20 }}/>
+                            <span className="text-sm font-medium">{userProfile?.username}</span>
                             </div>
                         </div>
 
                         <div className="mb-4 border-b pb-2">
                             <div className="flex justify-between mt-1">
                             <span className="text-sm font-semibold ">Total</span>
-                            <span className="text-sm font-medium">$0.37</span>
+                            <span className="text-sm font-medium">{coinsUnit}{coinsPrice}</span>
                             </div>
                             <div className="flex justify-between mt-1">
-                            <span className="text-sm">30 Coins</span>
-                            <span className="text-sm font-medium">$0.37</span>
+                            <span className="text-sm">{coinsAmount} Coins</span>
+                            <span className="text-sm font-medium">{coinsUnit}{coinsPrice}</span>
                             </div>
                         </div>
 
@@ -119,7 +115,7 @@ const PaymentMethodModal = ({ darkTheme = '', palette = createTheme({palette: {m
                     </div>
                     {/* card debit */}
 
-                    <Card className="p-4 border border-gray-300 cursor-pointer mt-2" onClick={() => setShowCardFields(true)}>
+                    <Card className="p-4 border border-gray-300 cursor-pointer mt-2 d-none" onClick={() => setShowCardFields(true)}>
                         <div className="flex items-center gap-2 mb-3">
                             <div className={`w-3 h-3 rounded-full ${showCardFields ? "bg-red-600" : "border border-gray-400"}`} />
                             <span className="text-sm font-semibold">Add Credit Or Debit Card</span>
@@ -244,7 +240,7 @@ const PaymentMethodModal = ({ darkTheme = '', palette = createTheme({palette: {m
                 {/* footer */}
                 <div style={{ display: 'flex', gap: '16px', flexDirection: 'column',  borderTop: '1px solid rgb(229, 231, 235)', width: '100%',  alignItems: 'center', paddingTop: '10px' }}>
                     <button onClick={paymentMethodSelected} className={`${styles.btnFullWidth} } w-28 ml-auto`}>
-                      {isProceedToBuy?<CircularProgress style={{width:'1.5rem',height:'1.5rem',color:'white',margin:'0 0.5rem'}} />:<p>Pay ${coinsPrice}</p>}
+                      {isProceedToBuy?<CircularProgress style={{width:'1.5rem',height:'1.5rem',color:'white',margin:'0 0.5rem'}} />:<p>Pay now</p>}
                     </button>
                 </div>
             </Box>

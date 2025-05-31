@@ -95,7 +95,7 @@ export default function Coins() {
   };
 
   const handleOpenPaymentModal = () => {
-    handleCloseCartModal();
+    // handleCloseCartModal();
     setOpenPaymentModal(true);
   };
 
@@ -265,7 +265,7 @@ export default function Coins() {
         </Box>
 
         <Button
-          onClick={rechargeClick}
+          onClick={handleOpenPaymentModal}
           variant="contained"
           sx={{ py: 1.25,  px: 7,fontSize: '1rem', textTransform: 'none', borderRadius: 2, bgcolor: 'rgba(254, 44, 85, 1)', '&:hover': { bgcolor: 'rgba(254, 44, 85, 0.9)' } }}
         >
@@ -380,7 +380,7 @@ export default function Coins() {
     )}
     {openPaymentModal && (
       <PaymentMethodModal
-        coinData={{coinsAmount: selected.coins, coinsPrice: selected.price}}
+        coinData={{coinsAmount: selected.coins, coinsPrice: selected.price, coinsUnit: selected.unit}}
         openPaymentModal={openPaymentModal}
         onClosePaymentModal={handleClosePaymentModal}
         next={handleMethodSelection}
