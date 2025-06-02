@@ -299,7 +299,7 @@ function LiveWithChat({ darkTheme }: { darkTheme?: any }) {
     
       if (socketRef.current && isConnected) {
         const liveStreamRoomId = currentStream?._id || streamIdFromUrl;
-        (socketRef.current as any).emit('messageToliveStreamRoom', { 
+        (socketRef.current as any).emit('sendMessageToliveStreamRoom', { 
           liveStreamRoomId: liveStreamRoomId, 
           data: {
             ...userData,
@@ -531,7 +531,7 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
         
         
 
-        (socketRef.current as any).on('liveStreamMessage', (data: any) => {
+        (socketRef.current as any).on('getMessageFromLiveStreamRoom', (data: any) => {
           console.log(`Received message: ${JSON.stringify(data)}`);
           setMessages(prev => [...prev, {
             id: Date.now().toString(),
@@ -1664,7 +1664,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                       </Typography>
                                       <Box>
                                         <Avatar
-                                          src={selectedLiveVideo.details.topViewersGifts[0].photo || "https://i.pravatar.cc/50"}
+                                          src={selectedLiveVideo.details.topViewersGifts[0].avatar || "https://i.pravatar.cc/50"}
                                           alt={selectedLiveVideo.details.topViewersGifts[0].name}
                                           sx={{
                                             width: 48,
@@ -1702,7 +1702,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                           </Typography>
                                           <Box display={'flex'}>
                                             <Avatar
-                                              src={selectedLiveVideo.details.topViewersGifts[1].photo || "https://i.pravatar.cc/50"}
+                                              src={selectedLiveVideo.details.topViewersGifts[1].avatar || "https://i.pravatar.cc/50"}
                                               alt={selectedLiveVideo.details.topViewersGifts[1].name}
                                               sx={{
                                                 width: 48,
@@ -1742,7 +1742,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                           </Typography>
                                           <Box display={'flex'}>
                                             <Avatar
-                                              src={selectedLiveVideo.details.topViewersGifts[2].photo || "https://i.pravatar.cc/50"}
+                                              src={selectedLiveVideo.details.topViewersGifts[2].avatar || "https://i.pravatar.cc/50"}
                                               alt={selectedLiveVideo.details.topViewersGifts[2].name}
                                               sx={{
                                                 width: 48,
