@@ -42,6 +42,7 @@ import useApp from './useApp';
 import GoLive from './components/go-live';
 import DiscoverLive from './components/go-live/DiscoverLive';
 import LiveCategories from './components/go-live/LiveCategories';
+import LiveCategoryPosts from './components/go-live/LiveCategoryPosts';
 import { LastPageRounded, Visibility, VisibilityOff } from '@mui/icons-material';
 import { CircularProgress } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -1175,6 +1176,7 @@ function App() {
                             <Route path="/golive" element={<GoLive />} />
                             <Route path="/live/discover" element={<DiscoverLive />} />
                             <Route path="/live/category" element={<LiveCategories />} />
+                            <Route path="/live/category/:categoryName" element={<LiveCategoryPosts />} />
                             <Route path="/myreports" element={<MyReports />} />
                             <Route path="/analytics/:tab?" element={<Analytics />} />
                             <Route path="/analytics/post/:postId" element={<PostAnalytics />} />
