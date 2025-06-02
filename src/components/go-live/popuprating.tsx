@@ -17,9 +17,11 @@ import { useState } from 'react';
 interface RankingSettingsModalProps {
   open: boolean;
   onClose: () => void;
+  rankingClick: () => void;
+  isShowRanking: boolean;
 }
-export default function RankingSettingsModal({ open, onClose }: RankingSettingsModalProps) {
-  const [value, setValue] = useState('show');
+export default function RankingSettingsModal({ open, onClose, rankingClick, isShowRanking }: RankingSettingsModalProps) {
+  const [value, setValue] = useState(isShowRanking ? 'show' : 'hide');
 
   return (
     <Dialog
@@ -71,7 +73,7 @@ export default function RankingSettingsModal({ open, onClose }: RankingSettingsM
         <Button onClick={onClose} variant="outlined"  color="inherit" sx={{ textTransform: 'capitalize', px: 3, borderColor: '#ccc' }}>
           Cancel
         </Button>
-        <Button variant="contained"   sx={{px:4, backgroundColor: '#F9184C', textTransform: 'capitalize' }}>
+        <Button variant="contained" onClick={() => { onClose(); rankingClick(); }}   sx={{px:4, backgroundColor: '#F9184C', textTransform: 'capitalize' }}>
           Save
         </Button>
       </DialogActions>

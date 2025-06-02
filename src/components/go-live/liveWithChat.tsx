@@ -374,6 +374,11 @@ const handleReasonChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null);
   const [menuMsgId, setMenuMsgId] = useState<null | string>(null);
   const [hoveredMsgId, setHoveredMsgId] = useState<null | string>(null);
+  const [isShowRanking, setIsShowRanking] = useState(true);
+  
+  const rankingClick = () => {
+    setIsShowRanking(prev => !prev);
+  };
 
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>, msgId: string) => {
@@ -396,8 +401,6 @@ const handleReasonChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMenuAnchor(null);
     setMenuMsgId(null);
   };
-
-
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -1405,7 +1408,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                     </Typography>
                 </Box>
                      {
-                    showTopViewers ? (
+                    showTopViewers && isShowRanking ? (
                         <Box sx={{ width: '20.5rem', bgcolor: "#fff", height: "100vh", borderLeft: "1px solid #ddd" }}>
                             {/* Header */}
                             <Box
@@ -1604,7 +1607,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                       
                      ): (                       
                         <Box>
-                            <Box
+                            {isShowRanking && <Box
                                 sx={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -1620,6 +1623,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                 </Typography>
                                 <ArrowForwardIosIcon sx={{ fontSize: 13 }} />
                             </Box>
+                          } 
 
                             {/* Top Viewers Section */}
                            
@@ -2613,7 +2617,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                 </Accordion>
                 </DialogContent>
             </Dialog>
-           <RankingSettingsModal open={openRating} onClose={() => setOpenRating(false)} />
+           <RankingSettingsModal rankingClick={rankingClick} isShowRanking={isShowRanking} open={openRating} onClose={() => setOpenRating(false)} />
         </Box>
   );
 }
