@@ -46,7 +46,7 @@ const CashbackCard = () => {
 
         <Typography variant="body2" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center', mt: 0.5 }}>
           Code auto-filled,&nbsp;
-          <Link onClick={handleOpenInvitationCodeModal} underline="none" sx={{ display: 'flex', alignItems: 'center', color: 'inherit' }}>
+          <Link onClick={handleOpenInvitationCodeModal} underline="none" sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center', color: 'inherit' }}>
             Change code <EditOutlinedIcon sx={{ fontSize: 16, ml: 0.5 }} />
           </Link>
         </Typography>

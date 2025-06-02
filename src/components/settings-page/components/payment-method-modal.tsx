@@ -74,7 +74,7 @@ const PaymentMethodModal = ({ darkTheme = '', palette = createTheme({palette: {m
                             </IconButton>
                         </div>
 
-                        <div className="flex justify-between items-center border-b">
+                        <div className="flex justify-between items-center border-b py-3">
                             <h2 className="text-sm font-semibold text-black">Account</h2>
                             <div className="flex justify-between items-center mt-1">
                             <Avatar src={userProfile?.avatar} alt={userProfile?.username} sx={{ width: 20, height: 20 }}/>
@@ -82,7 +82,7 @@ const PaymentMethodModal = ({ darkTheme = '', palette = createTheme({palette: {m
                             </div>
                         </div>
 
-                        <div className="mb-4 border-b pb-2">
+                        <div className="mb-4 border-b py-3">
                             <div className="flex justify-between mt-1">
                             <span className="text-sm font-semibold ">Total</span>
                             <span className="text-sm font-medium">{coinsUnit}{coinsPrice}</span>
