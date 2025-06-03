@@ -61,7 +61,7 @@ export default function COPY_AND_SEND_MENU({ setIsEmbedModalOpen, copyHandler, B
       useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
           if (anchorEl && !anchorEl.contains(event.target as Node)) {
-            setAnchorEl(null);
+            // setAnchorEl(null);
           }
         };
       
