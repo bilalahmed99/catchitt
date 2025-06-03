@@ -32,7 +32,7 @@ import crossLightIcon from '../svg-components/cross-light-icon.svg';
 import { useDispatch } from 'react-redux';
 import { openLoginPopup } from '../../../redux/reducers';
 import EmbedSharePopup from '../../../shared/components/EmbedSharePopup';
-import { BASE_URL_FRONTEND, showToast, showToastSuccess } from '../../../utils/constants';
+import { BASE_URL_FRONTEND, showToast, showToastSuccess, showToastError } from '../../../utils/constants';
 import { useNavigate, Link } from 'react-router-dom';
 import PopupForReport from './PopupForReport';
 import { defaultAvatar, linkedInShare, more, moreInWhite, twitterShare } from '../../../icons';
@@ -51,6 +51,7 @@ import MORE_MENU_HOME from '../../../shared/Menu/more';
 import { EmojiObjects } from '@mui/icons-material';
 
 // import PopupForDeleteMedia from './popupForDeleteMedia';
+import { useAuthStore } from '../../../store/authStore';
 
 
 export default function PopupForVideoPlayer({
@@ -64,7 +65,7 @@ export default function PopupForVideoPlayer({
     deleteVideoPopup,
     editVideoHandler,
 }: any) {
-    console.log('INFO', info);
+    const { balance } = useAuthStore();
     const token = localStorage.getItem('token');
     const loggedUserId = localStorage.getItem('userId');
     const API_KEY = process.env.VITE_API_URL;
@@ -789,6 +790,12 @@ export default function PopupForVideoPlayer({
             body: JSON.stringify({ giftId, mediaId: info?.mediaId }),
         };
 
+        if(balance == 0)
+        {
+            showToastError('Do not have enough balance.');
+            return;
+        }
+
         if (addCommentLoading) return;
         setAddCommentLoading(true);
 
@@ -1346,7 +1353,7 @@ export default function PopupForVideoPlayer({
                                                     </g>
                                                 </svg>
 
-                                                <Typography>0</Typography>
+                                                <Typography>{ balance }</Typography>
                                             </Box>
                                             </Box>
 
