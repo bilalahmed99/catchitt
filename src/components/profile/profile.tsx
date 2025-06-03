@@ -594,7 +594,7 @@ export const Profile = (props: any) => {
                                             `}
                                             onClick={() => {setActiveSort('latest'); sortData('latest')}}
                                         >
-                                            <span className={`${style.button} ${style.radiusLeft}`}>latest</span>
+                                            <span className={`${style.button} ${style.radiusLeft}`}>Latest</span>
                                         </div>
 
                                         {/* 'Popular' tab */}
