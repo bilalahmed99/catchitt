@@ -777,7 +777,7 @@ export default function PopupForVideoPlayer({
 
     function addGiftComment(giftId: string)
     {
-        let endpoint = `${process.env.VITE_API_URL}/media-content/comment/${info?.mediaId}`;
+        let endpoint = `${process.env.VITE_API_URL}/gift/send`;
         let requestOptions =
         {
             method: 'POST',
@@ -786,7 +786,7 @@ export default function PopupForVideoPlayer({
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ giftId }),
+            body: JSON.stringify({ giftId, mediaId: info?.mediaId }),
         };
 
         if (addCommentLoading) return;
@@ -798,7 +798,7 @@ export default function PopupForVideoPlayer({
             (response) =>
                 {
                     setComment('');
-                    showToastSuccess('Comment posted');
+                    showToastSuccess('Gift sent');
                     setAddCommentLoading(false);
                     paginateComments(true);
                     setCommentEmojiIndex(-1);
