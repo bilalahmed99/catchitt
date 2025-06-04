@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './user.module.scss';
 import { defaultAvatar } from '../../../icons';
 import { Link } from 'react-router-dom';
 import UnfollowPopup from './unfollow-popup';
 import { get, post } from '../../../axios/axiosClient';
+import { useDispatch, useSelector } from 'react-redux';
+import { followingsMethod, refreshFollowing, loadFollowing, loadFollowers } from '../../../redux/AsyncFuncs';
+
+
+
 
 const API_KEY = process.env.VITE_API_URL;
 
@@ -14,13 +19,25 @@ const FollowerUser: React.FC<{ user: any; onRemoveClick: any; popupClose: any, r
     removeCurrentUser
 }) => {
     console.log('ny user', user);
+    console.log('ny user follower', user?.follower_userID?.isFollower);
+    const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const [text, setText] = useState('Remove');
-    const [followBackText, setFollowBackText] = useState('Follow Back');
+    const [isFollower, setIsFollower] = useState( user?.follower_userID?.isFollower   ? true : false);
+    const [followBackText, setFollowBackText] = useState( user?.follower_userID?.isFollower ? 'Requested' : 'Follow Back');
 
     const [unfollowPopup, setUnfollowPopup] = useState(false);
     const [clickedUser, setClickedUser] = useState({});
+    const [isDarkTheme, setIsDarkTheme] = useState<boolean>(false);
 
+
+      useEffect(() => {
+            var themeColor = window.localStorage.getItem('theme');
+    
+            if (themeColor == 'dark') {
+                setIsDarkTheme(true);
+            }
+        });
 
     const openUnfollowPopup = (user: any) => {
         setClickedUser(user);
@@ -47,6 +64,11 @@ const FollowerUser: React.FC<{ user: any; onRemoveClick: any; popupClose: any, r
                 // if (responseData.isFollowed == false) {
                     const res = await post(`/profile/follow/${userId}`);
                     console.log("handleFollowBack", res);
+                    dispatch(followingsMethod(userId)).then(() => {
+                        dispatch(refreshFollowing());
+                        // dispatch(loadFollowing(1));
+                        // dispatch(loadFollowers(1));
+                    });
                     if (res?.data) {
                         console.log("handleFollowBack", res?.data)
                     }
@@ -139,17 +161,20 @@ const FollowerUser: React.FC<{ user: any; onRemoveClick: any; popupClose: any, r
             <div className={`${styles.user} user-class-${user?._id}`}>
                 <div className={styles['div-18']}>
                     <div className={styles['div-19']}>
-                        <img
-                            style={{
-                                borderRadius: '50%',
-                            }}
-                            loading="lazy"
-                            srcSet={user?.follower_userID?.avatar || defaultAvatar}
-                            className={styles['img-2']}
-                            onError={(e) => {
-                                (e.target as HTMLImageElement).onerror = null;  // Prevent looping in case defaultAvatar fails
-                                (e.target as HTMLImageElement).src = defaultAvatar;  // Set default image if there's an error
-                            }}
+                    <img
+                        style={{
+                            borderRadius: '50%',
+                        }}
+                        loading="lazy"
+                        src={user?.follower_userID?.avatar?.trim() ? user.follower_userID.avatar : defaultAvatar}
+                        className={styles['img-2']}
+                        onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            if (target.src !== defaultAvatar) {
+                            target.onerror = null; // prevent infinite loop
+                            target.src = defaultAvatar;
+                            }
+                        }}
                         />
                         <Link onClick={popupClose} to={'/profile/' + user?.follower_userID?.username}>
                             <span className={styles['div-20']}>{user?.follower_userID?.name}</span>
@@ -159,11 +184,11 @@ const FollowerUser: React.FC<{ user: any; onRemoveClick: any; popupClose: any, r
                         {followBackText == 'Follow Back' && <div onClick={()=> handleFollowBack(user?.follower_userID?._id)}  style={button}>
                             {followBackText}
                         </div>}
-                        {followBackText != 'Follow Back' && <div onClick={()=> handleFollowBack(user?.follower_userID?._id)}  style={{padding:'10px 20px', background:'#ededed',marginLeft: '0.25rem',height: '2.65rem',position: 'relative',top: '3px',borderRadius: '6px',display: 'flex', cursor:'pointer', fontWeight: '600'}}>    
-                            {followBackText} 
+                        {followBackText != 'Follow Back' && <div onClick={()=> handleFollowBack(user?.follower_userID?._id)}  style={{padding:'10px 20px', background:'#ededed',marginLeft: '0.25rem',height: '2.65rem',position: 'relative',top: '3px',borderRadius: '6px',display: 'flex', cursor:'pointer', fontWeight: '600', color: isDarkTheme ? 'black' : 'black'}}>    
+                            {followBackText}
                         </div>}
 
-                        <div className='border ml-1' style={{padding:'15px 20px', background:'#ededed',marginLeft: '0.25rem',height: '2.65rem',position: 'relative',top: '3px',borderRadius: '6px',display: 'flex', cursor:'pointer'}} onClick={()=> openUnfollowPopup(user)}>
+                        <div className='border ml-1' style={{padding:'15px 20px', background:'#ededed',marginLeft: '0.25rem',height: '2.65rem',position: 'relative',top: '3px',borderRadius: '6px',display: 'flex', cursor:'pointer', color: isDarkTheme ? 'black' : 'white'}} onClick={()=> openUnfollowPopup(user)}>
                             <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M1.66248 16.5089C1.2702 16.5317 0.884413 16.4013 0.586463 16.1452C-0.00115176 15.5541 -0.00115176 14.5994 0.586463 14.0083L13.4533 1.14138C14.0645 0.569481 15.0235 0.601273 15.5954 1.21244C16.1125 1.76512 16.1427 2.6146 15.666 3.20252L2.72332 16.1452C2.42921 16.3976 2.04961 16.5278 1.66248 16.5089Z" fill="black"/>
                                 <path d="M14.5141 16.5089C14.1166 16.5072 13.7355 16.3494 13.4532 16.0694L0.586341 3.2025C0.0419461 2.56678 0.115959 1.61004 0.751685 1.0656C1.31909 0.579696 2.15589 0.579696 2.72324 1.0656L15.6659 13.9325C16.2769 14.5045 16.3085 15.4636 15.7365 16.0746C15.7137 16.0989 15.6902 16.1224 15.6659 16.1452C15.349 16.4208 14.9319 16.5525 14.5141 16.5089Z" fill="black"/>
@@ -181,6 +206,11 @@ const FollowerUser: React.FC<{ user: any; onRemoveClick: any; popupClose: any, r
 };
 
 export default FollowerUser;
+
+var themeColor = window.localStorage.getItem('theme');
+    
+
+
 
 const button: any = {
     color: 'white',

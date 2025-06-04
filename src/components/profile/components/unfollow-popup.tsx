@@ -3,13 +3,15 @@ import styles from './unfollow-popup-module.scss';
 import { Box, Modal, Button } from '@mui/material';
 import { defaultAvatar } from '../../../icons';
 import { useDispatch, useSelector } from 'react-redux';
+import { followingsMethod, refreshFollowing, loadFollowing, loadFollowers, getProfileData } from '../../../redux/AsyncFuncs';
+
 
 const API_KEY = process.env.VITE_API_URL;
 const UnfollowPopup = ({ openUnfollowPopup, onUnfollow, onCancel, user, description, heading, btnText,IsFollowerTab, removeCurrentUser }: any) => {
     console.log('UnfollowPopup');
     console.log('selectd user', user);
     console.log(user?.follower_userID);
-
+    const dispatch = useDispatch();
     const profile = useSelector((state: any) => state?.reducers?.profile);
     console.log('profile', profile);
     const loggedInUserId = localStorage.getItem('userId');
@@ -37,6 +39,14 @@ const UnfollowPopup = ({ openUnfollowPopup, onUnfollow, onCancel, user, descript
             });
             const res = await response.json();
             setLoading(false);
+            dispatch(refreshFollowing());
+            dispatch(getProfileData());
+            onCancel();
+            //  dispatch(followingsMethod(accountId)).then(() => {
+            //     dispatch(refreshFollowing());
+            //     dispatch(loadFollowing(1));
+            //     dispatch(loadFollowers(1));
+            // });
             removeCurrentUser();
         } catch (error) {
             setLoading(false);
@@ -68,6 +78,14 @@ const UnfollowPopup = ({ openUnfollowPopup, onUnfollow, onCancel, user, descript
                     // Update the followedAccounts state
                     text == 'Unfollow' ? setText('Follow') : setText('Unfollow');
                     setLoading(false);
+                    dispatch(refreshFollowing());
+                    dispatch(getProfileData());
+                    onCancel();
+                    // dispatch(followingsMethod(accountId)).then(() => {
+                    //     dispatch(refreshFollowing());
+                    //     dispatch(loadFollowing(1));
+                    //     dispatch(loadFollowers(1));
+                    // });
                 } else {
                     setLoading(false);
                 }

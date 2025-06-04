@@ -158,7 +158,13 @@ function PopupForPrivacySettings({ fetchUpdatedMedia, isPrivacyModalOpened, setI
     return (
         <Modal
             open={isPrivacyModalOpened}
-            onClose={handleClose}
+            onClose={(event, reason) => {
+                if (reason === 'backdropClick' || reason === 'escapeKeyDown') {
+                    // Do nothing to prevent closing
+                    return;
+                }
+                handleClose();
+            }}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
             className={styles.darkTheme}
@@ -176,9 +182,9 @@ function PopupForPrivacySettings({ fetchUpdatedMedia, isPrivacyModalOpened, setI
                             value={privacyPrivilege.privacyOptions.canView}
                             onChange={(e: any) => handleSwitchChange(e, true, 'canView', false)}
                         >
-                            <MenuItem value='everyone' defaultChecked>everyone</MenuItem>
-                            <MenuItem value='onlyme'>only me</MenuItem>
-                            <MenuItem value='followers'>friends</MenuItem>
+                            <MenuItem value='everyone' defaultChecked>Everyone</MenuItem>
+                            <MenuItem value='onlyme'>Only Me</MenuItem>
+                            <MenuItem value='followers'>Friends</MenuItem>
                         </Select>
                     </FormControl>
                     <div className='flex justify-between items-center mb-1 mt-2'>

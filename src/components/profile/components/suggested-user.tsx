@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import styles from './user.module.scss';
 import { defaultAvatar } from '../../../icons';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { followingsMethod, refreshFollowing, loadFollowing, loadFollowers, getProfileData } from '../../../redux/AsyncFuncs';
+
 
 const API_KEY = process.env.VITE_API_URL;
 const SuggestedUser: React.FC<{ user: any; onfollowClick: any; popupClose: any }> = ({
@@ -9,6 +12,7 @@ const SuggestedUser: React.FC<{ user: any; onfollowClick: any; popupClose: any }
     onfollowClick,
     popupClose,
 }) => {
+    const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const [text, setText] = useState('Follow');
 
@@ -20,7 +24,6 @@ const SuggestedUser: React.FC<{ user: any; onfollowClick: any; popupClose: any }
 
     const handleFollowClick = async () => {
         setLoading(true);
-
         const accountId = user?._id;
         const token = localStorage.getItem('token');
 
@@ -33,6 +36,11 @@ const SuggestedUser: React.FC<{ user: any; onfollowClick: any; popupClose: any }
                         Authorization: `Bearer ${token}`,
                     },
                 });
+
+                dispatch(refreshFollowing());
+                dispatch(getProfileData());
+                // dispatch(loadFollowing(1));
+                // dispatch(loadFollowers(1));
 
                 if (response.ok) {
                     // Handle success as needed

@@ -888,7 +888,7 @@ const renderGiftRow = (gifts: any[]) => (
         >
           <Box sx={{ fontSize: 32, justifyItems: 'center' }}>
             {gift.imageUrl.endsWith('.mp4') ? (
-              <video src={gift.imageUrl} autoPlay loop muted style={{ width: f50, height: 50 }} />
+              <video src={gift.imageUrl} autoPlay loop muted style={{ width: 50, height: 50 }} />
             ) : (
               <img src={gift.imageUrl} alt={gift.name} style={{ width: 50, height: 50 }} />
             )}
@@ -1628,7 +1628,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                             {/* Top Viewers Section */}
                            
                             
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1, borderBottom: '1px solid rgba(22, 24, 35, 0.2)' }}>
+                            {isShowRanking &&  (<Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1, borderBottom: '1px solid rgba(22, 24, 35, 0.2)' }}>
                             {selectedLiveVideo?.details?.topViewersGifts?.[0] && (
                                     <Box textAlign="center" sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                                       <Typography sx={{ pl: 2 }}>
@@ -1767,6 +1767,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                       )}
                                     </Box>        
                             </Box>
+                      )}      
 
                             {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1, borderBottom: '1px solid rgba(22, 24, 35, 0.2)' }}>
                                     <Box textAlign="center" sx={{display: 'flex' , alignItems: 'center', gap: 2}}>

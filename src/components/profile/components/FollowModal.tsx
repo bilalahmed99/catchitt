@@ -66,6 +66,7 @@ const FollowModal: React.FC<{ openTab: string | null, onClose: () => void; isPub
         }) || [];
     }, [publicFollowing, searchQuery]);
 
+
     // Filtered Followers
     const filteredFollowers = useMemo(() => {
         if (!searchQuery.trim()) return followers || [];

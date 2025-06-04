@@ -141,7 +141,13 @@ export default function PopupForVideoPlayer({
     const [privacyPrivilege, setPrivacyPrivilege] = useState<any>(null);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [isFetchingUsers, setIsFetchingUsers] = useState(false);
+    const [commentsAllowed, setCommentsAllowed] = useState(info?.privacyOptions?.allowComments);
 
+    useEffect(() => {
+        if (privacyPrivilege) {
+            setCommentsAllowed(privacyPrivilege.privacyOptions.allowComments);
+        }
+    }, [privacyPrivilege]);
 
     const handleContextMenu = (e: React.MouseEvent<HTMLVideoElement>) => {
             e.preventDefault();
@@ -1277,7 +1283,7 @@ export default function PopupForVideoPlayer({
                                         </div>
                                     </div>
                                     {/* recieved gifts section */}
-                                    <div className={style.gifts}>
+                                    {commentsAllowed ? <div className={style.gifts}>
                                         <p className={style.receivedGifftsText}>Gifts received</p>
                                         <div>
                                         {giftsDetails.details.map((item: any) => {
@@ -1303,7 +1309,7 @@ export default function PopupForVideoPlayer({
 
 
                                         </div>
-                                    </div>
+                                    </div>:''}
                                     {/* Comment and creator video tab */}
                                     <div className="flex flex-row justify-center items-center mt-2.5 w-full px-3">
                                         <div
@@ -1333,7 +1339,7 @@ export default function PopupForVideoPlayer({
                                     </div>
 
                                     {/* All comments section */}
-                                    {Boolean(info)? info?.privacyOptions?.allowComments?<InfiniteScroll
+                                    {commentsAllowed ? <InfiniteScroll
                                         dataLength={videoComments?.items?.length}
                                         next={paginateComments}
                                         hasMore={videoComments.items.length < videoComments?.totalItems || videoComments?.totalItems === null}
@@ -1916,7 +1922,7 @@ export default function PopupForVideoPlayer({
                                 <p className="font-bold text-xl text-white">
                                     Comments are disabled
                                 </p>
-                            </div>:''}
+                            </div>}
 
                                     {/* {isCommentsLoading && (
                                         <div
@@ -1932,7 +1938,7 @@ export default function PopupForVideoPlayer({
                                         </div>
                                     )} */}
                                     {/* Add comment section */}
-                                    {info?.privacyOptions?.allowComments && <div className="py-3 border-t border-t-[#252525] cursor-pointer gap-2.5 w-[37%] px-6   bottom-0 fixed right-0 bg-[#121212]" style={{ zIndex: 99 }}>
+                                    {commentsAllowed && <div className="py-3 border-t border-t-[#252525] cursor-pointer gap-2.5 w-[37%] px-6   bottom-0 fixed right-0 bg-[#121212]" style={{ zIndex: 99 }}>
                                          <div className="flex flex-row items-center">
                                             <div
                                                 className={`bg-[#FFFFFF1F] flex flex-row items-center justify-between border-[0.063rem] border-transparent ${isUserLoggedIn()

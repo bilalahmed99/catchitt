@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './user.module.scss';
 import { defaultAvatar } from '../../../icons';
 import { Link } from 'react-router-dom';
@@ -21,6 +21,16 @@ const PbulicFollowerUser: React.FC<{ user: any; onRemoveClick: any; popupClose: 
 
     const [unfollowPopup, setUnfollowPopup] = useState(false);
     const [clickedUser, setClickedUser] = useState({});
+
+    const [isDarkTheme, setIsDarkTheme] = useState<boolean>(false);
+
+    useEffect(() => {
+        var themeColor = window.localStorage.getItem('theme');
+
+        if (themeColor == 'dark') {
+            setIsDarkTheme(true);
+        }
+    });
     
     const openUnfollowPopup = (user: any) => {
         setClickedUser(user);
@@ -185,7 +195,7 @@ const PbulicFollowerUser: React.FC<{ user: any; onRemoveClick: any; popupClose: 
                             {followBackText}
                         </div>}
 
-                        <div className='border ml-1' style={{padding:'15px 20px', background:'#ededed',marginLeft: '0.25rem',height: '2.65rem',position: 'relative',top: '3px',borderRadius: '6px',display: 'flex', cursor:'pointer'}} onClick={()=> openUnfollowPopup(user)}>
+                        <div className='border ml-1' style={{padding:'15px 20px', background:'#ededed',marginLeft: '0.25rem',height: '2.65rem',position: 'relative',top: '3px',borderRadius: '6px',display: 'flex', cursor:'pointer', color: isDarkTheme ? 'black' : 'black'}} onClick={()=> openUnfollowPopup(user)}>
                             <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M1.66248 16.5089C1.2702 16.5317 0.884413 16.4013 0.586463 16.1452C-0.00115176 15.5541 -0.00115176 14.5994 0.586463 14.0083L13.4533 1.14138C14.0645 0.569481 15.0235 0.601273 15.5954 1.21244C16.1125 1.76512 16.1427 2.6146 15.666 3.20252L2.72332 16.1452C2.42921 16.3976 2.04961 16.5278 1.66248 16.5089Z" fill="black"/>
                                 <path d="M14.5141 16.5089C14.1166 16.5072 13.7355 16.3494 13.4532 16.0694L0.586341 3.2025C0.0419461 2.56678 0.115959 1.61004 0.751685 1.0656C1.31909 0.579696 2.15589 0.579696 2.72324 1.0656L15.6659 13.9325C16.2769 14.5045 16.3085 15.4636 15.7365 16.0746C15.7137 16.0989 15.6902 16.1224 15.6659 16.1452C15.349 16.4208 14.9319 16.5525 14.5141 16.5089Z" fill="black"/>
@@ -204,10 +214,10 @@ const PbulicFollowerUser: React.FC<{ user: any; onRemoveClick: any; popupClose: 
 
 
 export default PbulicFollowerUser
-
+var themeColor = window.localStorage.getItem('theme');
 
 const button:any = {
-  color: 'white',
+  color:  'white',
   whiteSpace: "nowrap",
   justifyContent: "center",
   alignItems: "center",
@@ -226,6 +236,7 @@ const button:any = {
 
 
 const buttonDefault: any = {
+    color:'black',
     whiteSpace: 'nowrap',
     justifyContent: 'center',
     alignItems: 'center',
