@@ -291,7 +291,7 @@ export const Profile = (props: any) => {
                         if (STATUS_CODE.OK !== data.status) { return setUserLikedVideos((prev: any) => ({...prev, totalItems: -2})) }
                         setUserLikedVideos((prev: any) => ({
                             ...prev,
-                            items: [...prev.items, ...data.data.data],
+                            items: [...new Map([...prev.items, ...data.data.data].map(item => [item.mediaId, item])).values()],
                             totalItems: data.data.total,
                         }));
                     })
@@ -440,6 +440,36 @@ export const Profile = (props: any) => {
         setProfileViewsContent(newProfileViewsContent);
     };
 
+    const sortData = (criteria: string) =>
+    {
+        const sortVideos = (videos) =>
+        {
+            switch (criteria)
+            {
+                case 'latest':
+                    return [...videos].sort((a, b) => new Date(b.createdTime) - new Date(a.createdTime));
+                case 'oldest':
+                    return [...videos].sort((a, b) => new Date(a.createdTime) - new Date(b.createdTime));
+                case 'popular':
+                    return [...videos].sort((a, b) => b.likes - a.likes);
+                default:
+                    return videos;
+            }
+        };
+      
+        setUserVideos((prev: any) => ({ ...prev, items: sortVideos(userVideos.items) }));
+        setPrivateVideos((prev: any) => ({ ...prev, items: sortVideos(privateVideos.items) }));
+        setBookmarkVideos((prev: any) => ({ ...prev, items: sortVideos(bookmarkVideos.items) }));
+        setUserLikedVideos((prev: any) => ({ ...prev, items: sortVideos(userlikedVideos.items) }));
+        setUserTaggedVideos((prev: any) => ({ ...prev, items: sortVideos(usertaggedVideos.items) }));
+        setRepostsVideos((prev: any) => ({ ...prev, items: sortVideos(repostVideos.items) }));
+    };
+
+    function togglePostLike(post: any, isLiked: boolean)
+    {
+        setUserLikedVideos((prev: any) => ({ ...prev, items: isLiked ? [...prev.items.filter((item: any) => item.mediaId != post.mediaId), post] : prev.items.filter((item: any) => item.mediaId != post.mediaId) }));
+    };
+
     useEffect(() => {
         if (copyPopup) {
             setTimeout(() => {
@@ -567,9 +597,9 @@ export const Profile = (props: any) => {
                                             className={`
                                             ${activeSort === 'latest' ? style.activeButton : ''}
                                             `}
-                                            onClick={() => setActiveSort('latest')}
+                                            onClick={() => {setActiveSort('latest'); sortData('latest')}}
                                         >
-                                            <span className={`${style.button} ${style.radiusLeft}`}>latest</span>
+                                            <span className={`${style.button} ${style.radiusLeft}`}>Latest</span>
                                         </div>
 
                                         {/* 'Popular' tab */}
@@ -578,7 +608,7 @@ export const Profile = (props: any) => {
                                         
                                             ${activeSort === 'popular' ? style.activeButton : ''}
                                             `}
-                                            onClick={() => setActiveSort('popular')}
+                                            onClick={() => {setActiveSort('popular'); sortData('popular')}}
                                         >
                                             <span className={style.button}>Popular</span>
                                         </div>
@@ -589,7 +619,7 @@ export const Profile = (props: any) => {
                                             
                                             ${activeSort === 'oldest' ? style.activeButton : ''}
                                             `}
-                                            onClick={() => setActiveSort('oldest')}
+                                            onClick={() => {setActiveSort('oldest'); sortData('oldest')}}
                                         >
                                             <span className={`${style.button} ${style.radiusRight}`}>Oldest</span>
                                         </div>
@@ -635,6 +665,7 @@ export const Profile = (props: any) => {
                     }
                     videoModal={videoModal}
                     onclose={() => setVideoModal(false)}
+                    onToggleLikePost={(post: any, isLiked: boolean) => togglePostLike(post, isLiked)}
                     info={videoModalInfo}
                 />
                 <PopupForReport
