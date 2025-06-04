@@ -399,7 +399,7 @@ export default function EditProfile({ onCancel, onSave }: Props) {
                 {!loading && (
                     <div className={styles.div}>
                         <div
-                        onClick={() => (false)}
+                        onClick={onCancel}
                         className={`absolute top-8 right-4 p-1.5 cursor-pointer rounded-full ${
                             darkTheme == 'dark' ? '!bg-slate-500' : '!bg-white'
                         }`}

@@ -210,7 +210,7 @@ export const PublicProfile = (props: any) => {
                 <Modal open={likesModal} className={styles.likesModal}>
                     <ClickAwayListener onClickAway={() => setLikesModal(false)}>
                         <div className={styles.likesModalContainer}>
-                            <LikesModal isPublic={true} name={profileData?.name} totalLikes={profileData?.likesNum} />
+                            <LikesModal closeLikes={() => setLikesModal(false)}  isPublic={true} name={profileData?.name} totalLikes={profileData?.likesNum} />
                         </div>
                     </ClickAwayListener>
                 </Modal>
