@@ -102,7 +102,7 @@ import {
 
     return (
       <>
-        <div className={`w-56 h-[100vh] fixed top-20 border-r left-0 ${darkTheme === '' ? 'bg-white' : 'bg-[#181818a8]'}  flex flex-col`}>
+        <div className={`w-56 h-[100vh] fixed top-20 border-r left-0 bg-white flex flex-col`}>
                         {/* <div onClick={() => navigate('/')} className='border-bottom flex align-items-center px-3 h-14 '>
                             <img className='w-[90px] h-[36px]' src={logo} alt="" />
                         </div> */}

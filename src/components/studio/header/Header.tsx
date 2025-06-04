@@ -44,19 +44,19 @@ function Header() {
         console.log('<Menu Item> : ', menuItem?.menuOption);
     };
 
-    useEffect(() => {
-        var themeColor = window.localStorage.getItem('theme');
+    // useEffect(() => {
+    //     var themeColor = window.localStorage.getItem('theme');
 
-        if (themeColor == "dark") {
-            setdarkTheme(style.darkTheme);
-            setLogo(logoAuthWhite);
-        } else {
-            setLogo(logoAuth);
-        }
-    });
+    //     if (themeColor == "dark") {
+    //         setdarkTheme(style.darkTheme);
+    //         setLogo(logoAuthWhite);
+    //     } else {
+    //         setLogo(logoAuth);
+    //     }
+    // });
 
     return (
-        <div className={` ${style.parent}  ${darkTheme}`}>
+        <div className={` ${style.parent} `}>
             <div onClick={() => navigate('/')} className={style.sec1}>
                 <img src={logo} alt="" />
             </div>
