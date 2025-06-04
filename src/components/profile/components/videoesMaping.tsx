@@ -59,41 +59,37 @@ export default function VideoesMaping({ videos, fetchMore, openVideoModal, setEd
                     onMouseLeave={() => setHoveredIndex(null)}
                     key={i}
                     onClick={() => openVideoModal(item)}
-                    className={`${styles.post} cursor-pointer`}
+                    className={`${styles.post} cursor-pointer ${styles.mediaWrapper}`}
                 >
-                    <img src={item.templateImage} />
-                    <video
-                        className={`${styles.thumbnail} ${hoveredIndex === i ? 'block' : 'hidden'
-                            }`}
-                        src={
-                            item?.reducedVideoUrl.length > 0
-                                ? item?.reducedVideoUrl
-                                : item?.originalUrl
-                        }
-                        muted={isMuted}
-                        loop
-                        autoPlay={true}
-                        preload="auto"
-                        playsInline
-                    />
-                    <img
-                        className={`${styles.thumbnail} ${hoveredIndex === i ? 'hidden' : 'block'
-                            }`}
-                        src={item?.thumbnailUrl}
-                        alt=""
-                    />
+                    {/* <div className={styles.mediaWrapper}> */}
+                        <img src={item.templateImage} />
+                        <video
+                            className={`${styles.thumbnail} ${hoveredIndex === i ? 'block' : 'hidden'
+                                }`}
+                            src={
+                                item?.reducedVideoUrl.length > 0
+                                    ? item?.reducedVideoUrl
+                                    : item?.originalUrl
+                            }
+                            muted={isMuted}
+                            loop
+                            autoPlay={true}
+                            preload="auto"
+                            playsInline
+                        />
+                        <img
+                            className={`${styles.thumbnail} ${hoveredIndex === i ? 'hidden' : 'block'
+                                }`}
+                            src={item?.thumbnailUrl}
+                            alt=""
+                        />
+                    {/* </div> */}
+
                     <div className={styles.views}>
                         <img src="../../../../public/images/icons/views.svg" alt="" />
                         <p className={styles.viewsText}>{item.views}</p>
                     </div>
-                    {/* {isOwnVideo && <img onClick={(e:any)=>{ e.stopPropagation();setEditVideo(item)}} className={styles.editVideoIcon} src={editVideoIcon} alt="editVideo" />} */}
-                    {/* Commented until given advise */}
-                    {/* <img
-                            onClick={unmuteHandler}
-                            className="object-contain h-6 w-6 absolute bottom-3 right-3"
-                            src={isMuted ? muteIcon : unmuteIcon}
-                            alt=""
-                        /> */}
+                    
                 </div>
             ))}
         </InfiniteScroll>

@@ -34,6 +34,8 @@ import EmbedSharePopup from '../../shared/components/EmbedSharePopup';
 import { activeLike, commentWhite, likeWhite, musicBlack, shareWhite } from '../../icons';
 import { showToastSuccess, STATUS_CODE } from '../../utils/constants';
 import { logPostStats } from '../../utils/helpers';
+import Tooltip from '@mui/material/Tooltip';
+
 
 export const Profile = (props: any) => {
     const [activeSort, setActiveSort] = useState('latest');
@@ -470,6 +472,21 @@ export const Profile = (props: any) => {
         setUserLikedVideos((prev: any) => ({ ...prev, items: isLiked ? [...prev.items.filter((item: any) => item.mediaId != post.mediaId), post] : prev.items.filter((item: any) => item.mediaId != post.mediaId) }));
     };
 
+    
+    useEffect(() => {
+        const handleEsc = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') {
+            onCancel();
+        }
+        };
+
+        window.addEventListener('keydown', handleEsc);
+
+        return () => {
+        window.removeEventListener('keydown', handleEsc);
+        };
+    }, []);
+
     useEffect(() => {
         if (copyPopup) {
             setTimeout(() => {
@@ -527,6 +544,22 @@ export const Profile = (props: any) => {
         }
     }, [userVideos.page, userlikedVideos.page, usertaggedVideos.page, bookmarkVideos.page, repostVideos.page]);
 
+    
+    useEffect(() => {
+        const handleEsc = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                closeFollowModal();
+                setLikesModal(false);
+            }
+        };
+
+        window.addEventListener('keydown', handleEsc);
+
+        return () => {
+            window.removeEventListener('keydown', handleEsc);
+        };
+    }, []);
+
     const name = useSelector((state: any) => state?.reducers?.profile?.name);
     const totalLikes = useSelector((state: any) => state?.reducers?.profile?.likesNum);
 
@@ -579,8 +612,11 @@ export const Profile = (props: any) => {
                     />
                     <div className={styles.tabs}>
                         {tabs.map((item) => (
+                              <Tooltip title={item.title} arrow key={item.key}>
+
                             <div
                                 onClick={() => tabChangeHandler(item?.title)}
+                                title={item.title}
                                 className={`${styles.tab} ${activeTab === item.title
                                     ? 'border-liveSelected'
                                     : 'border-inactive'
@@ -589,6 +625,7 @@ export const Profile = (props: any) => {
                             >
                                 <div className="mb-2">{item.icon}</div>
                             </div>
+                            </Tooltip>
                         ))}
                              {/* 'latest' tab */}
                                 <div  className={`${style.tab} ` } >

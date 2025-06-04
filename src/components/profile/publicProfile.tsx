@@ -190,6 +190,20 @@ export const PublicProfile = (props: any) => {
         }
     });
 
+    useEffect(() => {
+        const handleEsc = (event: KeyboardEvent) => {
+          if (event.key === 'Escape') {
+            setFollowModal(null);
+          }
+        };
+    
+        window.addEventListener('keydown', handleEsc);
+    
+        return () => {
+          window.removeEventListener('keydown', handleEsc);
+        };
+      }, []);
+
     return (
         <Layout showCopyPopup={copyPopup}>
             <div className={styles.container}>

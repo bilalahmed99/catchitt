@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getProfileData } from '../../../redux/AsyncFuncs';
 import COPY_AND_SEND_MENU from '../../../shared/Menu/copyAndSend';
-import { showToast } from '../../../utils/constants';
+import { showToast, showToastError } from '../../../utils/constants';
 import AddIcon from '../svg-components/AddIcon';
 import EditButtonIcon from '../svg-components/EditButtonIcon';
 import EditIcon from '../svg-components/EditIcon';
@@ -282,9 +282,14 @@ const ProfileHeader: FunctionComponent<Props> = ({
                     <div className={styles.links}>
                         <div
                             onClick={() => {
-                                navigator.clipboard.writeText(profileData?.website).then(() => {
-                                    showToast('Website Link Copied.');
-                                });
+                                if (profileData?.website =='') {
+                                    showToastError('No Website Link Available.');
+                                }else{
+                                    navigator.clipboard.writeText(profileData?.website).then(() => {
+                                        showToast('Website Link Copied.');
+                                    });
+                                }
+                                
                             }}
                             className={styles.linkContainer}
                         >

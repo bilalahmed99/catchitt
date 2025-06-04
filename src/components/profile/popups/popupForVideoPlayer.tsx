@@ -165,6 +165,7 @@ export default function PopupForVideoPlayer({
         }
     }, [privacyPrivilege]);
 
+    
     const handleContextMenu = (e: React.MouseEvent<HTMLVideoElement>) => {
             e.preventDefault();
         
@@ -974,6 +975,21 @@ export default function PopupForVideoPlayer({
             if (abortController.current) abortController.current.abort();
         }
     }, [comment, isMentioning]);
+
+    useEffect(() => {
+        const handleEsc = (event: KeyboardEvent) => {
+          if (event.key === 'Escape') {
+            onCloseCleanUp();
+          }
+        };
+    
+        window.addEventListener('keydown', handleEsc);
+    
+        return () => {
+          window.removeEventListener('keydown', handleEsc);
+        };
+      }, []);
+
 
     return (
         <ThemeProvider theme={darkThemePalette}>
