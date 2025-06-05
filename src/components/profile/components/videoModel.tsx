@@ -203,7 +203,7 @@ function VideoModel({
                             style={{ width: '60px !important' }}
                             className={
                                 followings?.data?.some(
-                                    (user: any) => user.followed_userID._id === info?.user?._id
+                                    (user: any) => user.follower_userID._id === info?.user?._id
                                 )
                                     ? style.abc
                                     : style.btn
@@ -214,7 +214,7 @@ function VideoModel({
                             {followBtnLoading ? (
                                 <CircularProgress style={{ width: 20, height: 20 }} />
                             ) : followings?.data?.some(
-                                  (user: any) => user.followed_userID._id === info?.user?._id
+                                  (user: any) => user.follower_userID._id === info?.user?._id
                               ) ? (
                                 'Friends'
                             ) : (

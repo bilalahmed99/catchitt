@@ -64,6 +64,7 @@ function ForDesktop(props: any) {
     const [totalPostComments, setTotalPostComments] = useState<number>(0);
     // @ts-ignore
     const followers = useSelector((store) => store.reducers.followings);
+    console.log('followers', followers);
     // @ts-ignore
     const isuploading = useSelector((store) => store?.reducers?.isuploading);
     // @ts-ignore
@@ -574,7 +575,7 @@ useEffect(() => {
                                                             />
                                                         ) : followers?.data?.some(
                                                               (user: any) =>
-                                                                  user.followed_userID._id ===
+                                                                  user.follower_userID._id ===
                                                                   post?.user?._id
                                                           ) ? (
                                                             <svg

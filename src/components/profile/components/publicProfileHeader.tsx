@@ -158,8 +158,9 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
                     <p className={styles.text}>{profileData?.name}</p>
                 </div>
                 <div className={styles.userStats}>
+                {/* onClick={() => onFollowModalActive('followers')} */}
                     <div
-                        onClick={() => onFollowModalActive('followers')}
+                        
                         className={styles.statContainer}
                     >
                         <p className={styles.boldText}>{profileData?.followingNumber}</p>
@@ -169,8 +170,9 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
                         <p className={styles.boldText}> {profileData?.likesNum}</p>
                         <p className={styles.text}>Likes</p>
                     </div>
+                    {/* onClick={() => onFollowModalActive('following')} */}
                     <div
-                        onClick={() => onFollowModalActive('following')}
+                        
                         className={styles.statContainer}
                     >
                         <p className={styles.boldText}>{profileData?.followersNumber}</p>
@@ -199,7 +201,7 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
                     }
                     {followings?.data?.length > 0 &&
                         followings?.data?.some(
-                            (user: any) => user.followed_userID._id === params?.id
+                            (user: any) => user.follower_userID._id === params?.id
                         ) ? (
                         <button
                             style={{ width: 116 }}

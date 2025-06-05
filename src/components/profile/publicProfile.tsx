@@ -20,6 +20,7 @@ import { VideoIcon } from './svg-components/VideoIcon';
 import { useUpdateEffect } from 'react-use';
 import EmbedSharePopup from '../../shared/components/EmbedSharePopup';
 import { showToastSuccess } from '../../utils/constants';
+import Tooltip from '@mui/material/Tooltip';
 
 export const PublicProfile = (props: any) => {
     const [storyPopup, setStoryPopup] = useState(false);
@@ -259,6 +260,7 @@ export const PublicProfile = (props: any) => {
                     />
                     <div className={styles.tabs}>
                         {tabs.map((item) => (
+                            <Tooltip title={item.title} arrow key={item.key}>
                             <div
                                 onClick={() => setActiveTab(item.title)}
                                 style={{
@@ -270,6 +272,7 @@ export const PublicProfile = (props: any) => {
                             >
                                 {item.icon}
                             </div>
+                            </Tooltip>
                         ))}
                     </div>
                     <div className={`${styles.contentContainer}`}>

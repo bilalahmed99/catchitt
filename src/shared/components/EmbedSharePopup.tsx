@@ -193,7 +193,7 @@ const EmbedSharePopup: React.FC<EmbedSharePopupProps> = ({
                                                     />
                                                 ) : followers?.data?.some(
                                                     (user: any) =>
-                                                        user.followed_userID._id ===
+                                                        user.follower_userID._id ===
                                                     videoOwnerId
                                                 ) ? (
                                                     <svg
