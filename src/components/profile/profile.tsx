@@ -444,14 +444,14 @@ export const Profile = (props: any) => {
 
     const sortData = (criteria: string) =>
     {
-        const sortVideos = (videos) =>
+        const sortVideos = (videos: any) =>
         {
             switch (criteria)
             {
                 case 'latest':
-                    return [...videos].sort((a, b) => new Date(b.createdTime) - new Date(a.createdTime));
+                    return [...videos].sort((a, b) => (new Date(b.createdTime) as any) - (new Date(a.createdTime) as any));
                 case 'oldest':
-                    return [...videos].sort((a, b) => new Date(a.createdTime) - new Date(b.createdTime));
+                    return [...videos].sort((a, b) => (new Date(a.createdTime) as any) - (new Date(b.createdTime) as any));
                 case 'popular':
                     return [...videos].sort((a, b) => b.likes - a.likes);
                 default:

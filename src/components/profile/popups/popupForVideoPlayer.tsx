@@ -149,7 +149,7 @@ export default function PopupForVideoPlayer({
 
     const [giftAnchor, setGiftAnchor] = useState(null);
 
-  const handleGiftClick = (event) => {
+  const handleGiftClick = (event: any) => {
     setGiftAnchor(giftAnchor ? null : event.currentTarget);
   };
 
