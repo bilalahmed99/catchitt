@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import styles from './coins-cart-modal.module.scss';
-import { Modal, ThemeProvider } from "@mui/material";
+import { Modal, ThemeProvider, createTheme } from "@mui/material";
 import { Box, IconButton } from '@mui/material';
 import closeIcon from '../../../assets/closeIcon.png';
 import coin from '../svg-components/coin.svg';
-const CoinsCartModal = ({ coinData:{coinsAmount, coinsPrice}, darkTheme, palette, openCartModal, onCloseCartModal, next }: any) => {
+const CoinsCartModal = ({ coinData:{coinsAmount, coinsPrice}, darkTheme = '', palette = createTheme({palette: {mode: 'light'}}), openCartModal, onCloseCartModal, next }: any) => {
 
     return (
         <ThemeProvider theme={palette}>
@@ -52,7 +52,7 @@ const CoinsCartModal = ({ coinData:{coinsAmount, coinsPrice}, darkTheme, palette
                                     <p className={darkTheme ? 'text-white' : ''}>{coinsAmount} Cesium</p>
                                 </div>
                                 <div className={styles.itemPrice}>
-                                    <p className={darkTheme ? 'text-white' : ''}>QAR {coinsPrice}</p>
+                                    <p className={darkTheme ? 'text-white' : ''}>${coinsPrice}</p>
                                 </div>
                             </div>
 
@@ -79,7 +79,8 @@ const CoinsCartModal = ({ coinData:{coinsAmount, coinsPrice}, darkTheme, palette
                                     <p className={darkTheme? 'text-white':''}>Subtotal</p>
                                 </div>
                                 <div className={styles.itemPrice}>
-                                    <p className={darkTheme? 'text-white':''}>QAR {coinsPrice}</p>
+                                    <p className={darkTheme? 'text-white':''}>${coinsPrice
+                                }</p>
                                 </div>
                             </div>
 
@@ -89,7 +90,7 @@ const CoinsCartModal = ({ coinData:{coinsAmount, coinsPrice}, darkTheme, palette
                                     <p className={darkTheme? 'text-white':''}>Tax</p>
                                 </div>
                                 <div className={styles.itemPrice}>
-                                    <p className={darkTheme? 'text-white':''}>QAR 0</p>
+                                    <p className={darkTheme? 'text-white':''}>$0</p>
                                 </div>
                             </div>
 
@@ -105,7 +106,7 @@ const CoinsCartModal = ({ coinData:{coinsAmount, coinsPrice}, darkTheme, palette
                                     <p className={darkTheme? 'text-white':''}>Subtotal</p>
                                 </div>
                                 <div className={styles.itemPrice}>
-                                    <p className={darkTheme? 'text-white':''}>QAR {coinsPrice}</p>
+                                    <p className={darkTheme? 'text-white':''}>${coinsPrice}</p>
                                 </div>
                             </div>
 

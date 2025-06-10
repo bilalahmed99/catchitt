@@ -96,6 +96,7 @@ import { db } from './utils/db';
 import { useUpdateEffect } from 'react-use';
 import SoundPage from './components/sound-module/SoundPage';
 import { getCountryPhoneLengthFromIso } from './utils/helpers';
+import Coins from './components/Coins';
 
 interface localStorageUser {
     name: string;
@@ -1177,6 +1178,8 @@ function App() {
                             <Route path="/live/discover" element={<DiscoverLive />} />
                             <Route path="/live/category" element={<LiveCategories />} />
                             <Route path="/live/category/:categoryName" element={<LiveCategoryPosts />} />
+                            <Route path="/coins/recharge" element={<Coins />} />
+                            {/* <Route path="/live/discover" element={<DiscoverLive />} /> */}
                             <Route path="/myreports" element={<MyReports />} />
                             <Route path="/analytics/:tab?" element={<Analytics />} />
                             <Route path="/analytics/post/:postId" element={<PostAnalytics />} />
@@ -1188,15 +1191,12 @@ function App() {
                             <Route path="/signup" element={<Signup />} />
                             <Route path="/signup/phone-or-email/email" element={<SignupEmail />} />
                             <Route path="*" element={<Navigate to="/home" replace />} /> {/* Catch-all */}
-
                             {/* <Route path="/signup/phone-or-email/phone" element={<SignupPhone />} /> */}
                         </Routes>
-
                         {isLoginPopup && (
                             <div className="w-full z-50 h-full bg-black/50 fixed top-0 flex justify-center items-center">
                                 <div
-                                    className={`w-[30.688rem] mx-auto mt-3 bg-white py-4 rounded-lg relative h-[42.125rem]  ${lightDarkTheme} `}
-                                >
+                                    className={`w-[30.688rem] mx-auto mt-3 bg-white py-4 rounded-lg relative h-[42.125rem]  ${lightDarkTheme} `}>
 {/* start wn social modal */}
 {/* {style.wnSocialModal} */}
 

@@ -432,7 +432,7 @@ const TransactionHistoryPage = ({ className }: TransactionHistoryPageProps) => {
     const [darkTheme, setdarkTheme] = useState('');
 
     const handleGoBack = () => {
-        navigate('/settings/account/balance'); // Navigate back to the previous page
+        navigate(-1); // Navigate back to the previous page
         setSettingsDropdown(true);
     };
 

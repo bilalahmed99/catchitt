@@ -1,6 +1,6 @@
 import { SideNavBar } from './goLiveSidebar';
 import { useRef, useState, useEffect, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -1293,7 +1293,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                     0
                                 </Typography>
                                 </Box>
-
+                                <Link to="/coins/recharge" reloadDocument={false} style={{ textDecoration: 'none' }}>
                                 <Button
                                 variant="outlined"
                                 sx={{
@@ -1312,6 +1312,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                 >
                                 Get Coins
                                 </Button>
+                                </Link>
                             </Box>
                          </Box>
                     </Box>
