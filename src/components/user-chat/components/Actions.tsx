@@ -360,14 +360,14 @@ function Actions(props: any) {
                                                 }
                                                 {['Gift'].some(type => type === item?.type) && (
                                                     <div className="p-2 relative">
-                                                        <span className='w-32 h-14 rounded-3xl pl-4 font-medium d-flex items-center text-black  ' style={{ background: 'linear-gradient(90deg, #F3A4C0 0%, #FFFFFF 100%)' }}>
+                                                        <span className='w-40 h-14 rounded-3xl pl-4 font-medium d-flex items-center text-black  ' style={{ background: 'linear-gradient(90deg, #F3A4C0 0%, #FFFFFF 100%)' }}>
                                                             Sent Gift
                                                         </span>
                                                         {/\.(jpe?g|png|gif|svg|webp)$/i.test(item?.gift?.imageUrl) ? (
                                                         <img
                                                             src={item?.gift?.imageUrl}
                                                             alt="Gift"
-                                                            style={{ height: '4rem', objectFit: 'contain', position: 'absolute', top: '50%', right: '50%', transform: 'translate(50%, -50%)' }}
+                                                            style={{ height: '3.25rem', objectFit: 'contain', position: 'absolute', top: '0.6rem', right: '10%', }}
                                                         />
                                                         ) : /\.(mp4|webm|ogg)$/i.test(item?.gift?.imageUrl) ? (
                                                         <video
@@ -375,7 +375,7 @@ function Actions(props: any) {
                                                             muted
                                                             playsInline
                                                             preload="metadata"
-                                                            style={{ height: '4rem', objectFit: 'contain' }}
+                                                            style={{ height: '3.25rem', objectFit: 'contain', position: 'absolute', top: '0.6rem', right: '10%', }}
                                                             onContextMenu={(e) => e.preventDefault()}
                                                             onClick={(e) => e.preventDefault()}
                                                         />
@@ -383,11 +383,11 @@ function Actions(props: any) {
                                                         <span>Unsupported media format</span>
                                                         )}
 
-                                                        <Box component="span" sx={{ color: 'gold', fontSize: 9, mr: 0.5, mt:1, display: 'inline-block' }}>
+                                                        {/* <Box component="span" sx={{ color: 'gold', fontSize: 9, mr: 0.5, mt:1, display: 'inline-block' }}>
                                                             <img style={{ height: '13px' }} src={caesium} alt="Coin Icon" />
-                                                        </Box>
-                                                        {item?.gift?.price}
-                                                        <svg
+                                                        </Box> */}
+                                                        {/* {item?.gift?.price} */}
+                                                        {/* <svg
                                                         style={{ float: 'right', marginTop: '20px' }}
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         width="24"
@@ -402,7 +402,7 @@ function Actions(props: any) {
                                                             strokeLinecap="round"
                                                             strokeLinejoin="round"
                                                         />
-                                                        </svg>
+                                                        </svg> */}
                                                     </div>
                                                     )}
 
