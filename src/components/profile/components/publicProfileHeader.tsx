@@ -2,7 +2,7 @@ import { Avatar, CircularProgress } from '@mui/material';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { followingsMethod, refreshFollowing } from '../../../redux/AsyncFuncs';
+import { followingsMethod, refreshFollowing, loadAllFollowers1 } from '../../../redux/AsyncFuncs';
 import COPY_AND_SEND_MENU from '../../../shared/Menu/copyAndSend';
 import LinkIcon from '../svg-components/LinkIcon';
 import MailIcon from '../svg-components/MailIcon';
@@ -52,24 +52,28 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
 
     const userId = profileData?._id;
     //@ts-ignore
-    const followings = useSelector((store) => store.reducers.followings);
+    // const followings = useSelector((store) => store.reducers.followings);
+
+    const followings1 = useSelector((store) => store.reducers.loadAllFollowers);
+    console.log('all followers');
+    console.log(followings1);
+    
+    const [followings, setFollowings] = useState(followings1);
 
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(followingsMethod());
-        // fetch(`${API_KEY}/media-content/stories`, {
-        //     method: 'GET',
-        //     headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
-        // })
-        //     .then((res) => res.json())
-        //     .then((data) => {
-        //         setStories(data.data[0].stories);
-        //     })
-        //     .catch((err) => {
-        //         console.log('collectons error', err);
-        //     });
         handleProfileData(params?.id);
     }, []);
+
+    useEffect(() => {
+            const fetchFollowers = async () => {
+                let returnResp = await dispatch(loadAllFollowers1());
+                console.log('return response', returnResp);
+                setFollowings(returnResp?.payload);
+            };
+            fetchFollowers();
+        }, [dispatch]);
 
     const handleProfileData = async (userId: any) => {
         console.log("handleProfileData", userId)
@@ -119,9 +123,14 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
 
     const manageFollowBtn = async () => {
         setfollowBtnLoading(true);
-        dispatch(followingsMethod(userId)).then(() => {
-            dispatch(refreshFollowing());
+        // dispatch(followingsMethod(userId)).then(() => {
+        //     dispatch(refreshFollowing());
+        //     setfollowBtnLoading(false);
+        // });
+
+        dispatch(followingsMethod(userId)).then((resp: any) => {
             setfollowBtnLoading(false);
+            setFollowings(resp?.payload);
         });
     };
 
@@ -201,7 +210,7 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
                     }
                     {followings?.data?.length > 0 &&
                         followings?.data?.some(
-                            (user: any) => user.follower_userID._id === params?.id
+                            (user: any) => user.followed_userID._id === params?.id
                         ) ? (
                         <button
                             style={{ width: 116 }}
