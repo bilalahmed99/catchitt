@@ -359,12 +359,15 @@ function Actions(props: any) {
                                                     </div>
                                                 }
                                                 {['Gift'].some(type => type === item?.type) && (
-                                                    <div className="p-2">
+                                                    <div className="p-2 relative">
+                                                        <span className='w-32 h-14 rounded-3xl pl-4 font-medium d-flex items-center text-black  ' style={{ background: 'linear-gradient(90deg, #F3A4C0 0%, #FFFFFF 100%)' }}>
+                                                            Sent Gift
+                                                        </span>
                                                         {/\.(jpe?g|png|gif|svg|webp)$/i.test(item?.gift?.imageUrl) ? (
                                                         <img
                                                             src={item?.gift?.imageUrl}
                                                             alt="Gift"
-                                                            style={{ height: '6rem', objectFit: 'contain' }}
+                                                            style={{ height: '4rem', objectFit: 'contain', position: 'absolute', top: '50%', right: '50%', transform: 'translate(50%, -50%)' }}
                                                         />
                                                         ) : /\.(mp4|webm|ogg)$/i.test(item?.gift?.imageUrl) ? (
                                                         <video
@@ -372,7 +375,7 @@ function Actions(props: any) {
                                                             muted
                                                             playsInline
                                                             preload="metadata"
-                                                            style={{ height: '6rem', objectFit: 'contain' }}
+                                                            style={{ height: '4rem', objectFit: 'contain' }}
                                                             onContextMenu={(e) => e.preventDefault()}
                                                             onClick={(e) => e.preventDefault()}
                                                         />

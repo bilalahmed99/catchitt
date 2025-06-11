@@ -10,20 +10,20 @@
 }
 .videoContainer::before  {
   content: '';
-    background: linear-gradient(to bottom, lightgray 0%, rgba(211, 211, 211, 0) 100%);
+    background: linear-gradient(to bottom, #444444 0%, rgb(185 185 185 / 0%) 100%);
     position: absolute  ;
     top: 0;
-    height: 130px;
+    height: 70px;
     width: 100%;
     z-index: 2;
     display: block;
 }
 .videoContainer::after{
   content: '';
-    background: linear-gradient(to top, lightgray 0%, rgba(211, 211, 211, 0) 100%);
+    background: linear-gradient(to top, #444444 0%, rgba(185, 185, 185, 0) 100%);
     position: absolute  ;
     bottom: 0;
-    height: 130px;
+    height: 100px;
     width: 100%;
     z-index: 2;
     display: block;
