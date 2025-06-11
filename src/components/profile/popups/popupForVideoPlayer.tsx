@@ -1360,8 +1360,10 @@ export default function PopupForVideoPlayer({
                                         borderRadius={2}
                                         >
                                         <Paper elevation={3} sx={{ width: '100%', p: 2, height: '20rem', overflowY: 'auto' }}>
-                                            <Box display="flex"  alignItems="center" mb={2} sx={{cursor: 'pointer'}}>
+                                            <Box display="flex"  alignItems="center" mb={2}>
+                                                <Link to="/coins/recharge" reloadDocument={false}>
                                                 <Typography variant="h6" color="error">Recharge</Typography>
+                                                </Link>
                                                 <Box display="flex" alignItems="center">
                                                     <svg style={{padding: '0.25rem'}} width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <mask id="mask0_2454_21248"  x="0" y="0" width="25" height="25">
