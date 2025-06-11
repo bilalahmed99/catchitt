@@ -359,12 +359,12 @@ function Actions(props: any) {
                                                     </div>
                                                 }
                                                 {['Gift'].some(type => type === item?.type) && (
-                                                    <div className="bg-white p-2">
+                                                    <div className="p-2">
                                                         {/\.(jpe?g|png|gif|svg|webp)$/i.test(item?.gift?.imageUrl) ? (
                                                         <img
                                                             src={item?.gift?.imageUrl}
                                                             alt="Gift"
-                                                            style={{ height: '14rem', objectFit: 'contain' }}
+                                                            style={{ height: '6rem', objectFit: 'contain' }}
                                                         />
                                                         ) : /\.(mp4|webm|ogg)$/i.test(item?.gift?.imageUrl) ? (
                                                         <video
@@ -372,7 +372,7 @@ function Actions(props: any) {
                                                             muted
                                                             playsInline
                                                             preload="metadata"
-                                                            style={{ height: '14rem', objectFit: 'contain' }}
+                                                            style={{ height: '6rem', objectFit: 'contain' }}
                                                             onContextMenu={(e) => e.preventDefault()}
                                                             onClick={(e) => e.preventDefault()}
                                                         />

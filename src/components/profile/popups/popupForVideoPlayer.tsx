@@ -2240,7 +2240,6 @@ export default function PopupForVideoPlayer({
             )}
             <Forwardusers videoLink={info?.mediaId} onOpen={sendPopup} onClose={() => setSendPopup(false)} />
             <ToastContainer />
-
         </div>
         </ThemeProvider>
     );
