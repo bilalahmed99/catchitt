@@ -15,6 +15,7 @@ import {
     videoRepostHandle,
     getUpdatedVideoState,
     refreshFollowing,
+    loadAllFollowers1,
 } from './AsyncFuncs';
 import loginSlice from './reducers/auth';
 import isuploading from './reducers/upload';
@@ -99,6 +100,26 @@ const popupLogoutSlice: any = createSlice({
             state.isLogoutPopup = !state.isLogoutPopup;
         },
     },
+});
+
+const loadAllFollowers: any = createSlice({
+  name: 'loadAllFollowers',
+  initialState: {
+    total: null,
+    page: 1,
+    data: [],
+  },
+  reducers: {},
+  extraReducers: (builder: any) => {
+    builder.addCase(loadAllFollowers1.fulfilled, (state: any, action: any) => {
+      if (action.payload) {
+        state.data = action.payload.data || [];
+        state.total = action.payload.total || null;
+        state.page = state.page + 1;
+      }
+      return state;
+    });
+  },
 });
 
 const followers: any = createSlice({
@@ -265,6 +286,7 @@ type profileInitialState = {
     followingPage: number;
     friendsTotal: number | null;
     friendsPage: number;
+    loadAllFollowers: any[];
 };
 
 const profileSlice = createSlice({
@@ -278,6 +300,7 @@ const profileSlice = createSlice({
         followingPage: 1,
         friendsTotal: null,
         friendsPage: 1,
+        loadAllFollowers: []
     } as profileInitialState,
     reducers: {},
     extraReducers: (builder: any) => {
@@ -336,6 +359,7 @@ export default combineReducers({
     videoCategories,
     popupSlice: popupSlice.reducer,
     popupLogoutSlice:popupLogoutSlice.reducer,
+    loadAllFollowers: loadAllFollowers.reducer,
     geo: geoSlice,
     notifications: notifications.reducer,
     videoUrl,

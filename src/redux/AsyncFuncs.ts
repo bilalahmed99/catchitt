@@ -10,15 +10,39 @@ export const followingsMethod: any = createAsyncThunk(
         try {
             if (id) {
                 let res = await post(`/profile/follow/${id}/`);
-            }
-            const response = await get(`/profile/v2/${userId}/followers`);
+                const userId = localStorage.getItem('userId');
+                const token = localStorage.getItem('token');
+                if (token) {
+                    try {
+                        const response = await fetch(`${API_KEY}/profile/v2/${userId}/following?page=1&pageSize=1000`, {
+                            method: 'GET',
+                            headers: {
+                                'Content-type': 'application/json',
+                                Authorization: `Bearer ${token}`,
+                            },
+                        });
 
-            if (response?.data?.data) {
-                const responseData = response?.data;
-                return responseData?.data;
-            } else {
-                return {};
+                        if (response.ok) {
+                            const responseData = await response.json();
+                            return responseData.data;
+                        } else {
+                            console.log(response);
+                        }
+                    } catch (error) {
+                        console.error();
+                    }
+                }
+            }else{
+                const response = await get(`/profile/v2/${userId}/followers`);
+
+                if (response?.data?.data) {
+                    const responseData = response?.data;
+                    return responseData?.data;
+                } else {
+                    return {};
+                }
             }
+            
         } catch (error) {
             alert('Somthing went wrong');
             console.log(error);
@@ -271,6 +295,45 @@ export const loadFollowers: any = createAsyncThunk('get/profileSlice/followers',
         }
     }
 });
+
+export const loadAllFollowers1: any = createAsyncThunk(
+  'get/profileSlice/followers', 
+  async () => {
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const response = await fetch(
+          `${API_KEY}/profile/v2/${userId}/following?page=1&pageSize=1000`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+            const responseData = await response.json();
+            return responseData.data;
+        //   const responseData = await response.json();
+        //   return {
+        //     data: responseData.data || responseData,
+        //     total: responseData.total || responseData.length,
+        //   };
+        } else {
+          throw new Error('Failed to fetch followers');
+        }
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    }
+  }
+);
+
+
 
 export const loadLikes: any = createAsyncThunk('get/profile/likes', async () => {
     const userId = localStorage.getItem('userId');

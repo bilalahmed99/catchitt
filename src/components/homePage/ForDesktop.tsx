@@ -21,7 +21,7 @@ import {
     moreInWhite
 } from '../../icons';
 import debounce from 'lodash/debounce';
-import { followingsMethod, getHomeVideos, addMoreVideos } from '../../redux/AsyncFuncs';
+import { followingsMethod, getHomeVideos, addMoreVideos, loadAllFollowers1 } from '../../redux/AsyncFuncs';
 import Layout from '../../shared/layout';
 import Action from './components/Action';
 import CustomPlayer from './components/CustomPlayer';
@@ -63,8 +63,11 @@ function ForDesktop(props: any) {
     const [commentModal, setCommentModal] = useState(false);
     const [totalPostComments, setTotalPostComments] = useState<number>(0);
     // @ts-ignore
-    const followers = useSelector((store) => store.reducers.followings);
-    console.log('followers', followers);
+    const followers1 = useSelector((store) => store.reducers.loadAllFollowers);
+    console.log('all followers');
+    console.log(followers1);
+    
+    const [followers, setFollowers] = useState(followers1);
     // @ts-ignore
     const isuploading = useSelector((store) => store?.reducers?.isuploading);
     // @ts-ignore
@@ -142,7 +145,10 @@ function ForDesktop(props: any) {
         setFollowimgbtnId(id);
         setfollowBtnLoading(true);
         try {
-            dispatch(followingsMethod(id)).then(() => setfollowBtnLoading(false));
+            dispatch(followingsMethod(id)).then((resp: any) => {
+                setfollowBtnLoading(false);
+                setFollowers(resp?.payload);
+            });
         } catch (error) {
             alert('Somthing went wrong');
             console.log(error);
@@ -206,6 +212,10 @@ const handleVideoEnd = (endedMediaId: string) => {
         //     setActiveMediaId(lastPlayedVideo);
         // }
     }, [videoes, activeMediaId]); // This will run on initial load or when `videoes` changes
+
+    useEffect(() => {
+        dispatch(loadAllFollowers1());
+    }, [dispatch]);
 
     const handleMediaPlay = (mediaId: string) => {
         logPostStats({postId: mediaId, trafficSource: 'for_you'});
@@ -575,9 +585,10 @@ useEffect(() => {
                                                             />
                                                         ) : followers?.data?.some(
                                                               (user: any) =>
-                                                                  user.follower_userID._id ===
+                                                                  user.followed_userID._id ===
                                                                   post?.user?._id
                                                           ) ? (
+                                                            <>
                                                             <svg
                                                                 fill="white"
                                                                 viewBox="0 0 48 48"
@@ -587,7 +598,10 @@ useEffect(() => {
                                                             >
                                                                 <path d="m19.71 36.03 19.73-30.5a1 1 0 0 1 1.39-.3l2.35 1.53c.46.3.6.92.3 1.38L22.01 41.3a2.4 2.4 0 0 1-3.83.28L4.85 26.33a1 1 0 0 1 .1-1.4l2.1-1.85a1 1 0 0 1 1.42.1L19.7 36.02Z"></path>
                                                             </svg>
+                                                            </>
                                                         ) : (
+                                                            <>
+                                                            {/* {post?.user?._id} */}
                                                             <svg
                                                                 fill="white"
                                                                 viewBox="0 0 48 48"
@@ -597,6 +611,8 @@ useEffect(() => {
                                                             >
                                                                 <path d="M26 7a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v15H7a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h15v15a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V26h15a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H26V7Z"></path>
                                                             </svg>
+                                                            </>
+                                                            
                                                         )}
                                                     </span>
                                                 </button>

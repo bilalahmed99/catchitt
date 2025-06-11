@@ -19,7 +19,7 @@ import {
     moreBlack,
     savedBlack,
 } from '../../icons';
-import { followingsMethod, getHomeVideos, addMoreVideos } from '../../redux/AsyncFuncs';
+import { followingsMethod, getHomeVideos, addMoreVideos, loadAllFollowers1 } from '../../redux/AsyncFuncs';
 import Layout from '../../shared/layout';
 import Action from './components/Action';
 import CustomPlayer from './components/CustomPlayer';
@@ -48,7 +48,11 @@ function FollowingVideos(props: any) {
     const [darkTheme, setdarkTheme] = useState('');
     const [isDarkTheme, setIsDarkTheme] = useState(false);
     // @ts-ignore
-    const followers = useSelector((store) => store.reducers.followings);
+    const followers1 = useSelector((store) => store.reducers.loadAllFollowers);
+    console.log('all followers');
+    console.log(followers1);
+    
+    const [followers, setFollowers] = useState(followers1);
     // @ts-ignore
     const isuploading = useSelector((store) => store?.reducers?.isuploading);
     // @ts-ignore
@@ -106,7 +110,10 @@ function FollowingVideos(props: any) {
         setFollowimgbtnId(id);
         setfollowBtnLoading(true);
         try {
-            dispatch(followingsMethod(id)).then(() => setfollowBtnLoading(false));
+            dispatch(followingsMethod(id)).then((resp: any) => {
+                setfollowBtnLoading(false);
+                setFollowers(resp?.payload);
+            });
         } catch (error) {
             alert('Somthing went wrong');
             console.log(error);
@@ -171,6 +178,9 @@ function FollowingVideos(props: any) {
             fetchVideos();
         }
     }, [page]);
+    useEffect(() => {
+        dispatch(loadAllFollowers1());
+    }, [dispatch]);
 
     const handleVideoEnd = (endedMediaId: string) => {
     const currentIndex = videoes.findIndex((post: any) => post.mediaId === endedMediaId);
@@ -482,7 +492,7 @@ function FollowingVideos(props: any) {
                                                             />
                                                         ) : followers?.data?.some(
                                                               (user: any) =>
-                                                                  user.follower_userID._id ===
+                                                                  user.followed_userID._id ===
                                                                   post?.user?._id
                                                           ) ? (
                                                             <svg
