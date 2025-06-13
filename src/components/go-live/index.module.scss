@@ -150,8 +150,10 @@
   background: #181818 !important;
   color: white !important;
 }
-.darkTheme span, h6, p{
+.darkTheme {
+  span, h6, p{
   color: white !important;
+}
 }
 .darkTheme .liveEvents{
   svg, path{
