@@ -304,7 +304,8 @@ function LiveWithChat({ darkTheme }: { darkTheme?: any }) {
           liveStreamRoomId: liveStreamRoomId, 
           data: {
             ...userData,
-            message
+            message,
+            liveStreamRoomId: liveStreamRoomId, 
           }
         }, (response:any) => {
           console.log('Callback Response:', response);
