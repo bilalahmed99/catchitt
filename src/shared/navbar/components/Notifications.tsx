@@ -561,7 +561,10 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                     <div className={`${style.inboxListItem}`}>
                                         <div className={`${style.inboxListInner}`}>
                                             <div className={`${style.avatar}`}>
-                                                <img src={noti?.triggeredUser?.avatar ? noti?.triggeredUser?.avatar : defaultProfileIcon} alt="Profile image" />
+                                                <img src={noti?.triggeredUser?.avatar ? noti?.triggeredUser?.avatar : defaultProfileIcon} onError={(e) => {
+                                                                                                                                    (e.target as HTMLImageElement).onerror = null;  // Prevent looping in case defaultAvatar fails
+                                                                                                                                    (e.target as HTMLImageElement).src = defaultProfileIcon;  // Set default image if there's an error
+                                                                                                                                }} alt="Profile image" />
                                             </div>
                                             <div className={`${style.gridLine}`}>
                                                 {/* <p className={`${style.notificationUsername}`}>{noti?.triggeredUser?.name}</p> */}
@@ -585,7 +588,10 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                     <div className={`${style.inboxListItem}`}>
                                         <div className={`${style.inboxListInner}`}>
                                             <div className={`${style.avatar}`}>
-                                                <img src={noti?.triggeredUser?.avatar ? noti?.triggeredUser?.avatar : defaultProfileIcon} alt="Profile image" />
+                                                <img src={noti?.triggeredUser?.avatar ? noti?.triggeredUser?.avatar : defaultProfileIcon} onError={(e) => {
+                                                                                                                                    (e.target as HTMLImageElement).onerror = null;  // Prevent looping in case defaultAvatar fails
+                                                                                                                                    (e.target as HTMLImageElement).src = defaultProfileIcon;  // Set default image if there's an error
+                                                                                                                                }} alt="Profile image" />
                                             </div>
                                             <div className={`${style.gridLine}`}>
                                                 {/* <p className={`${style.notificationUsername}`}>{noti?.triggeredUser?.name}</p> */}
@@ -609,7 +615,10 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                     <div className={`${style.inboxListItem}`}>
                                         <div className={`${style.inboxListInner}`}>
                                             <div className={`${style.avatar}`}>
-                                                <img src={noti?.triggeredUser?.avatar ? noti?.triggeredUser?.avatar : defaultProfileIcon} alt="Profile image" />
+                                                <img src={noti?.triggeredUser?.avatar ? noti?.triggeredUser?.avatar : defaultProfileIcon} onError={(e) => {
+                                                                                                                                    (e.target as HTMLImageElement).onerror = null;  // Prevent looping in case defaultAvatar fails
+                                                                                                                                    (e.target as HTMLImageElement).src = defaultProfileIcon;  // Set default image if there's an error
+                                                                                                                                }} alt="Profile image" />
                                             </div>
                                             <div className={`${style.gridLine}`}>
                                                 {/* <p className={`${style.notificationUsername}`}>{noti?.triggeredUser?.name}</p> */}
@@ -634,7 +643,10 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                     <div className={`${style.inboxListItem}`}>
                                         <div className={`${style.inboxListInner}`}>
                                             <div className={`${style.avatar}`}>
-                                                <img src={noti?.triggeredUser?.avatar ? noti?.triggeredUser?.avatar : defaultProfileIcon} alt="Profile image" />
+                                                <img src={noti?.triggeredUser?.avatar ? noti?.triggeredUser?.avatar : defaultProfileIcon} onError={(e) => {
+                                                                                                                                    (e.target as HTMLImageElement).onerror = null;  // Prevent looping in case defaultAvatar fails
+                                                                                                                                    (e.target as HTMLImageElement).src = defaultProfileIcon;  // Set default image if there's an error
+                                                                                                                                }} alt="Profile image" />
                                             </div>
                                             <div className={`${style.gridLine}`}>
                                                 {/* <p className={`${style.notificationUsername}`}>{noti?.triggeredUser?.name}</p> */}
@@ -666,7 +678,10 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                                 <div className={`${style.inboxListItem}`}>
                                                     <div className={`${style.inboxListInner}`}>
                                                         <div className={`${style.avatar}`}>
-                                                            <img src={userAvatar} alt="Profile image" />
+                                                            <img src={userAvatar} onError={(e) => {
+                                                                                                                                    (e.target as HTMLImageElement).onerror = null;  // Prevent looping in case defaultAvatar fails
+                                                                                                                                    (e.target as HTMLImageElement).src = defaultProfileIcon;  // Set default image if there's an error
+                                                                                                                                }} alt="Profile image" />
                                                         </div>
                                                         <div className={`${style.gridLine}`}>
                                                             <p className={`${style.notificationContent}`}>{userName}</p>
@@ -700,7 +715,7 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                 return (
 
                                     <div key={number}>
-                                        <div className={`${style.inboxList} no-scrollbar`}>
+                                        <div className={`${style.inboxList}`}>
                                             {/* <p className={`${style.inboxListDuration}`}>Today</p> */}
                                             {(noti.type == "like") ?
                                                 (
@@ -709,7 +724,10 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                                         <div className={`${style.inboxListItem}`}>
                                                             <div className={`${style.inboxListInner}`}>
                                                                 <div className={`${style.avatar}`}>
-                                                                    <img src={noti?.triggeredUser?.avatar ? noti?.triggeredUser?.avatar : defaultProfileIcon} alt="Profile image" />
+                                                                    <img src={noti?.triggeredUser?.avatar ? noti?.triggeredUser?.avatar : defaultProfileIcon} onError={(e) => {
+                                                                                                                                    (e.target as HTMLImageElement).onerror = null;  // Prevent looping in case defaultAvatar fails
+                                                                                                                                    (e.target as HTMLImageElement).src = defaultProfileIcon;  // Set default image if there's an error
+                                                                                                                                }} alt="Profile image" />
                                                                 </div>
                                                                 <div className={`${style.gridLine}`}>
                                                                     {/* <p className={`${style.notificationUsername}`}>{noti?.triggeredUser?.name}</p> */}
@@ -731,7 +749,10 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                                         <div className={`${style.inboxListItem}`}>
                                                             <div className={`${style.inboxListInner}`}>
                                                                 <div className={`${style.avatar}`}>
-                                                                    <img src={noti?.triggeredUser?.avatar ? noti?.triggeredUser?.avatar : defaultProfileIcon} alt="Profile image" />
+                                                                    <img src={noti?.triggeredUser?.avatar ? noti?.triggeredUser?.avatar : defaultProfileIcon} onError={(e) => {
+                                                                                                                                    (e.target as HTMLImageElement).onerror = null;  // Prevent looping in case defaultAvatar fails
+                                                                                                                                    (e.target as HTMLImageElement).src = defaultProfileIcon;  // Set default image if there's an error
+                                                                                                                                }} alt="Profile image" />
                                                                 </div>
                                                                 <div className={`${style.gridLine}`}>
                                                                     {/* <p className={`${style.notificationUsername}`}>{noti?.triggeredUser?.name}</p> */}
@@ -752,7 +773,10 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                                         <div className={`${style.inboxListItem}`}>
                                                             <div className={`${style.inboxListInner}`}>
                                                                 <div className={`${style.avatar}`}>
-                                                                    <img src={noti?.triggeredUser?.avatar ? noti?.triggeredUser?.avatar : defaultProfileIcon} alt="Profile image" />
+                                                                    <img src={noti?.triggeredUser?.avatar ? noti?.triggeredUser?.avatar : defaultProfileIcon} onError={(e) => {
+                                                                                                                                    (e.target as HTMLImageElement).onerror = null;  // Prevent looping in case defaultAvatar fails
+                                                                                                                                    (e.target as HTMLImageElement).src = defaultProfileIcon;  // Set default image if there's an error
+                                                                                                                                }} alt="Profile image" />
                                                                 </div>
                                                                 <div className={`${style.gridLine}`}>
                                                                     {/* <p className={`${style.notificationUsername}`}>{noti?.triggeredUser?.name}</p> */}
@@ -773,7 +797,10 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                                         <div className={`${style.inboxListItem}`}>
                                                             <div className={`${style.inboxListInner}`}>
                                                                 <div className={`${style.avatar}`}>
-                                                                    <img src={noti?.triggeredUser?.avatar ? noti?.triggeredUser?.avatar : defaultProfileIcon} alt="Profile image" />
+                                                                    <img src={noti?.triggeredUser?.avatar ? noti?.triggeredUser?.avatar : defaultProfileIcon} onError={(e) => {
+                                                                                                                                    (e.target as HTMLImageElement).onerror = null;  // Prevent looping in case defaultAvatar fails
+                                                                                                                                    (e.target as HTMLImageElement).src = defaultProfileIcon;  // Set default image if there's an error
+                                                                                                                                }} alt="Profile image" />
                                                                 </div>
                                                                 <div className={`${style.gridLine}`}>
                                                                     {/* <p className={`${style.notificationUsername}`}>{noti?.triggeredUser?.name}</p> */}
@@ -795,7 +822,10 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                                         <div className={`${style.inboxListItem}`}>
                                                             <div className={`${style.inboxListInner}`}>
                                                                 <div className={`${style.avatar}`}>
-                                                                    <img src={noti?.triggeredUser?.avatar ? noti?.triggeredUser?.avatar : defaultProfileIcon} alt="Profile image" />
+                                                                    <img src={noti?.triggeredUser?.avatar ? noti?.triggeredUser?.avatar : defaultProfileIcon} onError={(e) => {
+                                                                                                                                    (e.target as HTMLImageElement).onerror = null;  // Prevent looping in case defaultAvatar fails
+                                                                                                                                    (e.target as HTMLImageElement).src = defaultProfileIcon;  // Set default image if there's an error
+                                                                                                                                }} alt="Profile image" />
                                                                 </div>
                                                                 <div className={`${style.gridLine}`}>
                                                                     {/* <p className={`${style.notificationUsername}`}>{noti?.triggeredUser?.name}</p> */}
@@ -816,7 +846,10 @@ export default function NavbarMunu({ onViewProfile, Onlogout, onSettings }: any)
                                                         <div className={`${style.inboxListItem}`}>
                                                             <div className={`${style.inboxListInner}`}>
                                                                 <div className={`${style.avatar}`}>
-                                                                    <img src={noti?.triggeredUser?.avatar ? noti?.triggeredUser?.avatar : defaultProfileIcon} alt="Profile image" />
+                                                                    <img src={noti?.triggeredUser?.avatar ? noti?.triggeredUser?.avatar : defaultProfileIcon} onError={(e) => {
+                                                                                                                                    (e.target as HTMLImageElement).onerror = null;  // Prevent looping in case defaultAvatar fails
+                                                                                                                                    (e.target as HTMLImageElement).src = defaultProfileIcon;  // Set default image if there's an error
+                                                                                                                                }} alt="Profile image" />
                                                                 </div>
                                                                 <div className={`${style.gridLine}`}>
                                                                     {/* <p className={`${style.notificationUsername}`}>{noti?.triggeredUser?.name}</p> */}
