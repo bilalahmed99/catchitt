@@ -1387,7 +1387,7 @@ export default function PopupForVideoPlayer({
                                                     const isVideo = item.imageUrl?.endsWith('.mp4') || item.imageUrl?.endsWith('.webm') || item.imageUrl?.endsWith('.ogg');
 
                                                     return isVideo ? (
-                                                        <span>
+                                                        <span className='d-flex flex-column align-items-center'>
                                                         <video
                                                         key={item._id}
                                                         src={item.imageUrl + '#t=0.1'}
@@ -1396,10 +1396,11 @@ export default function PopupForVideoPlayer({
                                                         onClick={() => addGiftComment(item._id)}
                                                         style={{ width: '3rem', height: 'auto', borderRadius: '50%', cursor: 'pointer' }}   
                                                         />
-                                                        <span>${item.price?.toFixed(1) || 0}</span>
+                                                        <span className='text-[12px] text-center d-block'> {item.name}</span> 
+                                                        <span className='text-[11px]'>{item.price?.toFixed(1) || 0} Coins</span>
                                                         </span>
                                                     ) : (
-                                                        <span>
+                                                        <span className='d-flex flex-column align-items-center'>
                                                         <img
                                                         src={item.imageUrl}
                                                         alt={item.name}
@@ -1407,7 +1408,8 @@ export default function PopupForVideoPlayer({
                                                         onClick={() => addGiftComment(item._id)}
                                                         style={{ width: '3rem', height: 'auto', borderRadius: '50%', cursor: 'pointer' }}
                                                         />
-                                                         <span >${item.price?.toFixed(1) || 0}</span>
+                                                        <span className='text-[12px] text-center d-block'> {item.name}</span> 
+                                                         <span className='text-[11px]'>{item.price?.toFixed(1) || 0} Coins</span>
                                                         </span>
                                                     );
                                                     

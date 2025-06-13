@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { Box, IconButton, Chip, Typography, CardMedia, Stack } from '@mui/material';
 import { defaultGreyBackground } from '../../icons';
 import { Link } from 'react-router-dom';
-import style from 'index.module.scss';
+import  style  from './GoLive.module.scss';
 
 function LiveCategories() {
  const [isDarkTheme, setIsDarkTheme] = useState('');
@@ -96,7 +96,7 @@ function LiveCategories() {
   return (
     <div className={`${isDarkTheme} flex`} style={{ background: '#000' }}>
       <SideNavBar />
-      <div className='w-[calc(100%-16rem)] ml-auto bg-white '>
+      <div className='w-[calc(100%-16rem)] ml-auto '>
         <div className='py-3 px-10'> 
           <div>
             <Box display="flex" alignItems="center" mb={3} gap={1}>

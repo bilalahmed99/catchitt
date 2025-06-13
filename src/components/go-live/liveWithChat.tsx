@@ -47,6 +47,7 @@ import  styles  from './GoLive.module.scss';
 import { caesium,defaultGreyBackground } from '../../icons';
 import { abs } from 'mathjs';
 import  GamingLiveUI  from './categories';
+import { dark } from '@mui/material/styles/createPalette';
 
 
 
@@ -1463,6 +1464,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                 px: 2,
                                 py: 1.5,
                                 borderBottom: "1px solid #eee",
+                                height: "100%",
                                 }}
                             >
                                 <IconButton size="small" onClick={() => setShowTopViewers(!showTopViewers)}>   
@@ -2533,7 +2535,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                                 </IconButton>
                                               </InputAdornment>
                                             ),
-                                            sx: { borderRadius: 2 },
+                                            sx: { borderRadius: 2, color: darkTheme ? '#fff' : '#000', },
                                           }}
                                         />
 
