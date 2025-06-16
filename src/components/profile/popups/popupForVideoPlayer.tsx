@@ -35,7 +35,7 @@ import EmbedSharePopup from '../../../shared/components/EmbedSharePopup';
 import { BASE_URL_FRONTEND, showToast, showToastSuccess, showToastError } from '../../../utils/constants';
 import { useNavigate, Link } from 'react-router-dom';
 import PopupForReport from './PopupForReport';
-import { defaultAvatar, linkedInShare, more, moreInWhite, twitterShare } from '../../../icons';
+import { defaultAvatar, linkedInShare, more, moreInWhite, twitterShare, caesium } from '../../../icons';
 import { toast, ToastContainer } from 'react-toastify';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Forwardusers from '../../../shared/popups/shareTo/Forwardusers';
@@ -1398,7 +1398,12 @@ export default function PopupForVideoPlayer({
                                                         onClick={() => addGiftComment(item._id)}
                                                         style={{ width: '3rem', height: 'auto', borderRadius: '50%', cursor: 'pointer' }}   
                                                         />
-                                                        <span>${item.price?.toFixed(1) || 0}</span>
+                                                        <span>
+                                                            <Box component="span" sx={{ color: 'gold', fontSize: 9, mr: 0.5, mt:1, display: 'inline-block' }}>
+                                                                <img style={{ height: '13px' }} src={caesium} alt="Coin Icon" />
+                                                            </Box>
+                                                            {(item.price ?? 0).toLocaleString()}
+                                                        </span>
                                                         </span>
                                                     ) : (
                                                         <span>
@@ -1409,7 +1414,12 @@ export default function PopupForVideoPlayer({
                                                         onClick={() => addGiftComment(item._id)}
                                                         style={{ width: '3rem', height: 'auto', borderRadius: '50%', cursor: 'pointer' }}
                                                         />
-                                                         <span >${item.price?.toFixed(1) || 0}</span>
+                                                         <span>
+                                                            <Box component="span" sx={{ color: 'gold', fontSize: 9, mr: 0.5, mt:1, display: 'inline-block' }}>
+                                                                <img style={{ height: '13px' }} src={caesium} alt="Coin Icon" />
+                                                            </Box>
+                                                            {(item.price ?? 0).toLocaleString()}
+                                                        </span>
                                                         </span>
                                                     );
                                                     
