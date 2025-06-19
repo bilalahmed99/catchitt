@@ -68,6 +68,7 @@ const LiveGoalModal = () => {
     const [showAddGiftCard, setShowAddGiftCard] = useState(false);
 
   const handleToggle = () => setShowAddGiftCard(!showAddGiftCard);
+  const [showLiveGoalAutomatically, setShowLiveGoalAutomatically] = useState(false);
 
 
 const [goalDescription, setGoalDescription] = useState(
@@ -77,6 +78,7 @@ const [goalDescription, setGoalDescription] = useState(
 
   return (
     <>
+    {!showLiveGoalAutomatically  && <>
      {!showAddGiftCard ? (
     <Box
       sx={{
@@ -220,6 +222,7 @@ const [goalDescription, setGoalDescription] = useState(
           fontWeight: 'bold',
           py: 1.2,
         }}
+        onClick={()=> setShowLiveGoalAutomatically(true) }
       >
         Confirm
       </Button>
@@ -302,12 +305,13 @@ const [goalDescription, setGoalDescription] = useState(
           "&:hover": { backgroundColor: "#ff1e52" },
           textTransform: "none",
         }}
+        onClick={()=> setShowLiveGoalAutomatically(true) }
       >
         Confirm
       </Button>
     </Card>
-     )}
-     <Card
+     )} </> }
+    {showLiveGoalAutomatically && <Card
       sx={{
         width: 400,
         bgcolor: "#1e1e1e",
@@ -470,7 +474,8 @@ const [goalDescription, setGoalDescription] = useState(
       >
         Confirm
       </Button>
-    </Card>
+      </Card>
+    }
     </>
   );
 };

@@ -61,6 +61,8 @@ export default function LiveStreamUI() {
         const [showMore, setShowMore] = useState(false);
         const toggleMore = () => setShowMore((prev) => !prev);
         const slideRef = useRef(null);
+        const [showEditLiveGoal, setShowEditLiveGoal] = useState(false);
+        const [showFaqs, setShowFaqs] = useState(false);
 
         // Detect click outside
         useEffect(() => {
@@ -379,7 +381,8 @@ export default function LiveStreamUI() {
                 </Slide>
                 <ExploreFilters show={showExplore} setShow={setShowExplore} />
                 </Box>
-                <Card sx={{ width: 400, overflow: "hidden", p:  2, display: 'none' }}>
+                
+                {!showEditLiveGoal && !showFaqs && <Card sx={{ width: 400, overflow: "hidden", p:  2 }}>
                     <Box sx={{ position: "absolute" }}>
                         <CardMedia
                         sx={{
@@ -450,6 +453,7 @@ export default function LiveStreamUI() {
                             </svg>
                         Add topic
                         </Button>
+                        
                         <Button
                         fullWidth
                         
@@ -463,6 +467,7 @@ export default function LiveStreamUI() {
                             backgroundColor: "#F1F1F2",
                             borderRadius: "8px",
                         }}
+                        onClick={()=> setShowEditLiveGoal(!showEditLiveGoal) }
                         >
                             <svg className="pr-1" width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M20.0019 4.84011C19.9759 4.68445 19.9134 4.53716 19.8195 4.41028C19.7257 4.28341 19.6031 4.18054 19.4619 4.11011L17.7619 3.25011L16.9019 1.55011C16.8317 1.40578 16.7279 1.28046 16.5991 1.18473C16.4703 1.08901 16.3203 1.02568 16.1619 1.00011C16.0051 0.97428 15.8443 0.986208 15.693 1.0349C15.5417 1.0836 15.4042 1.16765 15.2919 1.28011L13.2919 3.28011C13.198 3.37473 13.124 3.48718 13.0742 3.61082C13.0244 3.73447 12.9998 3.86682 13.0019 4.00011V6.59011L9.29189 10.2901C9.19816 10.3831 9.12377 10.4937 9.073 10.6155C9.02223 10.7374 8.99609 10.8681 8.99609 11.0001C8.99609 11.1321 9.02223 11.2628 9.073 11.3847C9.12377 11.5065 9.19816 11.6171 9.29189 11.7101C9.38486 11.8038 9.49546 11.8782 9.61732 11.929C9.73917 11.9798 9.86988 12.0059 10.0019 12.0059C10.1339 12.0059 10.2646 11.9798 10.3865 11.929C10.5083 11.8782 10.6189 11.8038 10.7119 11.7101L14.4119 8.00011H17.0019C17.1335 8.00087 17.264 7.97564 17.3858 7.92588C17.5076 7.87611 17.6185 7.80279 17.7119 7.71011L19.7119 5.71011C19.8261 5.59874 19.9121 5.46166 19.9625 5.31031C20.013 5.15896 20.0265 4.99774 20.0019 4.84011Z" fill="#2CA9BC"/>
@@ -470,10 +475,32 @@ export default function LiveStreamUI() {
                             </svg>
                         Edit your LIVE Goal
                         </Button>
+                        <Button
+                        fullWidth
+                        
+                        sx={{
+                            mt: 1,
+                            justifyContent: "flex-start",
+                            textTransform: "none",
+                            fontSize: 14,
+                            color: "#333",
+                            padding: "6px 10px",
+                            backgroundColor: "#F1F1F2",
+                            borderRadius: "8px",
+                        }}
+                        onClick={()=> setShowFaqs(!showFaqs)}
+                        >
+                            <svg className="pr-1" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 13.5997 2.37562 15.1116 3.04346 16.4525C3.22094 16.8088 3.28001 17.2161 3.17712 17.6006L2.58151 19.8267C2.32295 20.793 3.20701 21.677 4.17335 21.4185L6.39939 20.8229C6.78393 20.72 7.19121 20.7791 7.54753 20.9565C8.88837 21.6244 10.4003 22 12 22Z" fill="#FFBE3C"/>
+                            <path d="M15.944 10.816L15.416 13.28H17.448V15.28H14.984L14.408 18H12.28L12.856 15.28H9.944L9.368 18H7.256L7.832 15.28H5.416V13.28H8.264L8.792 10.816H6.392V8.816H9.224L9.784 6.16H11.896L11.336 8.816H14.248L14.808 6.16H16.936L16.376 8.816H18.424V10.816H15.944ZM13.816 10.816H10.904L10.376 13.28H13.288L13.816 10.816Z" fill="white"/>
+                            </svg>
+                        Faqs
+                        </Button>
                     </CardContent>
-                </Card>
-                <EditLiveGoal />
-                {/* <LiveGoalFAQ onBack={() => console.log('Back pressed')} /> */}
+                </Card> 
+                }
+                {showEditLiveGoal && <EditLiveGoal /> }
+                {showFaqs && <LiveGoalFAQ onBack={() => console.log('Back pressed')} /> }
             </div>
           </div>
     </div>
