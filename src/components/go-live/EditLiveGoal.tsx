@@ -74,7 +74,7 @@ const LiveGoalModal = ({liveGoals, onConfirm, onLiveGoalAdded}: {liveGoals: any,
 const [goalDescription, setGoalDescription] = useState(
     "Help me achieve my first goal and I’ll sing a song"
   );
-  const [autoAdd, setAutoAdd] = useState(true);
+  const [autoAdd, setAutoAdd] = useState(false);
 
   const [gifts, setGifts] = useState<any>(
     {
@@ -126,14 +126,16 @@ const [goalDescription, setGoalDescription] = useState(
 
   useEffect(() => {
     loadGifts();
+
+    let futureLiveGoals = localStorage.getItem('futureLiveGoals');
+    futureLiveGoals && setAutoAdd(true);
+
     if(liveGoals.length > 0)
     {
       setSelectedGifts(liveGoals);
     }
     else
     {
-      let futureLiveGoals = localStorage.getItem('futureLiveGoals');
-
       if(futureLiveGoals)
       {
         futureLiveGoals = JSON.parse(futureLiveGoals)
