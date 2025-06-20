@@ -175,7 +175,7 @@ const [goalDescription, setGoalDescription] = useState(
       </Typography>
 
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={1} pt={2} borderTop="1px solid #444">
-        <Typography>Total Gifts: 2</Typography>
+        <Typography>Total Gifts: { selectedGifts.length }</Typography>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
