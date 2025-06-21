@@ -296,15 +296,7 @@ const Promote = () => (
             allowGifts: true,
             allowComments: true,
             coverImage: "",
-            liveGoal: [
-            {
-                giftId: "",
-                giftName: "",
-                giftImageUrl: "",
-                giftCoins: "",
-                count: ""
-            }
-            ],
+            liveGoal: liveGoals.map((gift: any) => ({ giftId: gift._id, giftName: gift.name, giftImageUrl: gift.imageUrl, giftCoins: gift.price, count: gift.count })),
             addLiveGoalAutomatically: true,
             hearYourVoice: true,
             moderators: [],
