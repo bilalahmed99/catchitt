@@ -445,7 +445,7 @@ const [goalDescription, setGoalDescription] = useState(
           "&:hover": { backgroundColor: "#ff1e52" },
           textTransform: "none",
         }}
-        onClick={() => { onLiveGoalAdded(selectedGifts); }}
+        onClick={() => { onLiveGoalAdded(selectedGifts, autoAdd); }}
       >
         Confirm
       </Button>
