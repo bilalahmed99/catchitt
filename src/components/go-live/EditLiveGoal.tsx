@@ -210,6 +210,11 @@ const [goalDescription, setGoalDescription] = useState(
             </Grid>
           )
         )}
+        {selectedGifts.length < 1 &&
+          <Typography fontWeight={700} sx={{ cursor: 'pointer'}} onClick={handleToggle}>
+            + Add a gift goal
+          </Typography>
+        }
       </Grid>
 
       <Typography mt={2} mb={2} fontSize={14} textAlign={'left'}>
@@ -416,6 +421,11 @@ const [goalDescription, setGoalDescription] = useState(
             </Grid>
           )
         )}
+        {selectedGifts.length < 1 &&
+          <Typography fontWeight={700} sx={{ cursor: 'pointer'}} onClick={() => { handleToggle; setShowLiveGoalAutomatically(false); } }>
+            + Add a gift goal
+          </Typography>
+        }
        
       </Grid>
 
