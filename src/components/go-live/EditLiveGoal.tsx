@@ -221,7 +221,6 @@ const [goalDescription, setGoalDescription] = useState(
       <Typography mt={2} mb={2} fontSize={14} textAlign={'left'}>
         Add this LIVE goal automatically
       </Typography>
-      {selectedGifts.length > 0 &&
       <Button
         fullWidth
         sx={{
@@ -236,7 +235,6 @@ const [goalDescription, setGoalDescription] = useState(
       >
         Confirm
       </Button>
-      }
     </Box>
      ) : (
     <Card
@@ -445,7 +443,6 @@ const [goalDescription, setGoalDescription] = useState(
       </Box>
 
       {/* Confirm button */}
-      {selectedGifts.length > 0 &&
       <Button
         variant="contained"
         fullWidth
@@ -460,7 +457,6 @@ const [goalDescription, setGoalDescription] = useState(
       >
         Confirm
       </Button>
-      }
       </Card>
     }
     </>
