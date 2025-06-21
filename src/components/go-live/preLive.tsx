@@ -891,7 +891,7 @@ const Promote = () => (
                         </CardContent>
                     </Card> 
                     }
-                    {showEditLiveGoal && <EditLiveGoal liveGoals={liveGoals} onConfirm={()=> setShowEditLiveGoal(!showEditLiveGoal) } onLiveGoalAdded={(goals: any, addLiveGoalAutomatically: any) => { setShowEditLiveGoal(!showEditLiveGoal); setLiveGoals(goals); setAddLiveGoalAutomatically(addLiveGoalAutomatically) }} /> }
+                    {showEditLiveGoal && <EditLiveGoal liveGoals={liveGoals} addLiveGoalAutomatically={addLiveGoalAutomatically} onConfirm={()=> setShowEditLiveGoal(!showEditLiveGoal) } onLiveGoalAdded={(goals: any, addLiveGoalAutomatically: any) => { setShowEditLiveGoal(!showEditLiveGoal); setLiveGoals(goals); setAddLiveGoalAutomatically(addLiveGoalAutomatically) }} /> }
                     {showFaqs && <LiveGoalFAQ onBack={() => console.log('Back pressed')} /> }
                     {openSettings &&
                         <SettingsPanel />

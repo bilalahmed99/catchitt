@@ -64,7 +64,7 @@ const CustomSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-const LiveGoalModal = ({liveGoals, onConfirm, onLiveGoalAdded}: {liveGoals: any, onConfirm: any, onLiveGoalAdded: any}) => {
+const LiveGoalModal = ({liveGoals, addLiveGoalAutomatically, onConfirm, onLiveGoalAdded}: {liveGoals: any, addLiveGoalAutomatically: any, onConfirm: any, onLiveGoalAdded: any}) => {
     const [showAddGiftCard, setShowAddGiftCard] = useState(false);
 
   const handleToggle = () => setShowAddGiftCard(!showAddGiftCard);
@@ -115,6 +115,7 @@ const [goalDescription, setGoalDescription] = useState(
   useEffect(() => {
     loadGifts();
     setSelectedGifts(liveGoals);
+    setAutoAdd(addLiveGoalAutomatically);
   }, []);
 
   return (
