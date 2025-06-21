@@ -250,9 +250,29 @@ const Promote = () => (
             });   
     };
 
+    function loadLiveGoals()
+    {
+        let endpoint = `${process.env.VITE_API_URL}/v2/get-latest-live-goal`;
+        let requestOptions =
+        {
+            method: 'GET',
+            headers:
+            {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+            },
+        };
+
+        fetch(endpoint, requestOptions)
+        .then((response) => response.json())
+        .then((response) => setLiveGoals(response.data))
+        .catch((error) => console.error('Fetch error:', error));
+    };
+
      useEffect(() => {
         loadProfileDetails();
         loadPostCategories();
+        loadLiveGoals()
       }, []);
 
     function loadProfileDetails()
