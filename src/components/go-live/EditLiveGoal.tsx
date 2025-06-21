@@ -232,7 +232,7 @@ const [goalDescription, setGoalDescription] = useState(
           fontWeight: 'bold',
           py: 1.2,
         }}
-        onClick={() => { onConfirm() }}
+        onClick={() => { onLiveGoalAdded(selectedGifts, autoAdd); onConfirm() }}
       >
         Confirm
       </Button>
