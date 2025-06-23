@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Component, useState } from 'react';
 import {
   Box,
   Typography,
@@ -14,6 +14,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { styled } from '@mui/material/styles';
 
 import ModeratorsList from './ModeratorSettings'; // your moderators component
+import AboutMe from './AboutSettings'; // your moderators component
 
 // Custom Switch styling
 const CustomSwitch = styled(Switch)(({ theme }) => ({
@@ -48,7 +49,7 @@ const CustomSwitch = styled(Switch)(({ theme }) => ({
 const settingsData = [
   { title: 'Moderators', type: 'link', component: 'moderators' },
   { title: 'Practice mode', description: 'This pre-LIVE session is only visible to you.', type: 'link' },
-  { title: 'About me', description: 'Introduce yourself and your LIVE.', type: 'link' },
+  { title: 'About me', description: 'Introduce yourself and your LIVE.', type: 'link', component: 'AboutMe' },
   { title: 'LIVE setup for client acquisition', type: 'link' },
   { title: 'Multi-guest fun kit', description: 'Explore interactive features and playbooks for your multi-guest LIVE.', type: 'link' },
   { title: 'Video quality', type: 'link' },
@@ -61,17 +62,18 @@ const settingsData = [
 ];
 
 const SettingsPanel = () => {
-const [activeView, setActiveView] = useState<null | 'moderators'>(null);
+const [activeView, setActiveView] = useState<null | 'moderators' | 'faqs' | 'AboutMe'>(null);
 
   const renderContent = () => {
-    switch (activeView) {
-      case 'moderators':
-        return <ModeratorsList onBack={() => setActiveView(null)} />;
-      // Future components can go here
-      default:
-        return null;
-    }
-  };
+  switch (activeView) {
+    case 'moderators':
+      return <ModeratorsList onBack={() => setActiveView(null)} />;
+    case 'AboutMe':
+      return <AboutMe onBack={() => setActiveView(null)} />;
+    default:
+      return null;
+  }
+};
 
   return (
     <>

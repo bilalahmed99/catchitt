@@ -44,6 +44,7 @@ import axios from 'axios';
 
 
 import { getExtension, file_type } from '../../utils/common';
+import AddTopic from "./AddTopic";
 
 export default function LiveStreamUI() {
     const API_KEY = process.env.VITE_API_URL;
@@ -881,8 +882,10 @@ const Promote = () => (
                     {showEditLiveGoal && <EditLiveGoal liveGoals={liveGoals} onConfirm={()=> setShowEditLiveGoal(!showEditLiveGoal) } onLiveGoalAdded={(goals: any) => { setShowEditLiveGoal(!showEditLiveGoal); setLiveGoals(goals)}} /> }
                     {showFaqs && <LiveGoalFAQ onBack={() => console.log('Back pressed')} /> }
                     {openSettings &&
-                        <SettingsPanel />
+                        // <SettingsPanel />
+                        <AddTopic onBack={() => console.log('Back pressed')}  />
                     }
+
                 </Box>
             </div>
           </div>

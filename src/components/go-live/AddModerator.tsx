@@ -48,7 +48,7 @@ export default function AddModerators({ onBack }: Props) {
   );
 
   return (
-    <Box sx={{ maxWidth: 400, mx: 'auto', bgcolor: '#fff', height: '100vh' }}>
+    <Box sx={{ maxWidth: 360, mx: 'auto', position: 'fixed', right: 0, top: 0, height: '100vh', bgcolor: '#fff', zIndex: 2 }}>
       <AppBar position="static" color="inherit" elevation={0} sx={{ borderBottom: '1px solid #EFEFEF' }}>
         <Toolbar>
           <IconButton edge="start" onClick={onBack}>

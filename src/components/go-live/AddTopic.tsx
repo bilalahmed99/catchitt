@@ -1,0 +1,79 @@
+import React from 'react';
+import {
+  Box,
+  Typography,
+  IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  Avatar,
+  ListItemText,
+  Divider
+} from '@mui/material';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+
+interface Topic {
+  title: string;
+  image: string;
+}
+
+interface AddTopicProps {
+  onBack: () => void;
+}
+
+const topics: Topic[] = [
+  { title: 'None', image: 'https://via.placeholder.com/48?text=🚫' },
+  { title: 'Music', image: 'https://via.placeholder.com/48?text=M' },
+  { title: 'Dance', image: 'https://via.placeholder.com/48?text=D' },
+  { title: 'Beauty & Fashion', image: 'https://via.placeholder.com/48?text=B' },
+  { title: 'Fitness & Sports', image: 'https://via.placeholder.com/48?text=F' },
+  { title: 'LIVE Match', image: 'https://via.placeholder.com/48?text=L' },
+  { title: 'Outdoors', image: 'https://via.placeholder.com/48?text=O' },
+  { title: 'Daily Life', image: 'https://via.placeholder.com/48?text=DL' },
+  { title: 'Fitness & Sports', image: 'https://via.placeholder.com/48?text=F2' },
+  { title: 'Dance', image: 'https://via.placeholder.com/48?text=D2' },
+];
+
+const AddTopic: React.FC<AddTopicProps> = ({ onBack }) => {
+  return (
+    <Box sx={{ maxWidth: 360, mx: 'auto', position: 'relative' }}>
+      {/* Header */}
+      <Box display="flex" pb={1} alignItems="center" justifyContent={'center'} mb={2} borderBottom={'1px solid #E6E6E6'}>
+        <IconButton onClick={onBack} sx={{position: 'absolute', left: 1, }}>
+          <ArrowBackIosNewIcon fontSize="small" />
+        </IconButton>
+        <Typography variant="h6" fontWeight={600} ml={1}>
+          Add topic
+        </Typography>
+      </Box>
+
+      {/* Subtext */}
+      <Typography textAlign={'left'} variant="body2" color="text.secondary" mb={2}>
+        Topics will help your LIVE videos reach more viewers and the viewers can use topics to find your LIVE videos, more easily.
+      </Typography>
+
+      {/* List of topics */}
+      <List disablePadding sx={{ maxWidth: 360,position: 'sticky', left: -1, top: 0, height: 'calc(100vh - 9rem) !important', bgcolor: '#fff', zIndex: 2, overflow: "auto"}}>
+        {topics.map((topic, index) => (
+          <React.Fragment key={index}>
+            <ListItem button sx={{ py: 1.5 }}>
+              <ListItemAvatar>
+                <Avatar
+                  variant="rounded"
+                  src={topic.image}
+                  sx={{ width: 48, height: 48 }}
+                />
+              </ListItemAvatar>
+              <ListItemText
+                primary={<Typography fontWeight={500}>{topic.title}</Typography>}
+              />
+            </ListItem>
+            {index < topics.length - 1 && <Divider />}
+          </React.Fragment>
+        ))}
+      </List>
+    </Box>
+  );
+};
+
+export default AddTopic;
