@@ -84,10 +84,7 @@ const FilterComments: React.FC<FilterCommentsProps> = ({ onBack }) => {
   ];
 
   return (
-    <>
-            {filteredComments?.length === 0 ? (
-        <NoFilteredComments />
-        ) : (
+           
     <Box
       sx={{
         maxHeight: "calc(100vh - 9rem)",
@@ -117,7 +114,9 @@ const FilterComments: React.FC<FilterCommentsProps> = ({ onBack }) => {
           Filter comments
         </Typography>
       </Box>
-
+        {filteredComments?.length === 0 ? (
+        <NoFilteredComments />
+        ) : (
       <List dense>
         {filters.map(({ label, description }) => (
         <ListItem
@@ -205,9 +204,9 @@ const FilterComments: React.FC<FilterCommentsProps> = ({ onBack }) => {
           </ListItemSecondaryAction>
         </ListItem>
       </List>
+      )}
     </Box>
-  )}
-  </>
+  
   );
 };
 
