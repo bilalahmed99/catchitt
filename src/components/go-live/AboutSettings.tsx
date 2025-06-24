@@ -41,9 +41,14 @@ const CustomSwitch = styled(Switch)(({ theme }) => ({
     opacity: 1,
   },
 }));
+interface SettingsPanelProps {
+  profileDetails: any;
+}
 
-const AboutMeSettings: React.FC<AboutMeSettingsProps> = ({ onBack }) => {
+
+const AboutMeSettings: React.FC<AboutMeSettingsProps> = ({ onBack, profileDetails }) => {
   const [enabled, setEnabled] = useState(false);
+  console.log('profile Details in aboutSettings', profileDetails);
 
   return (
     <Box sx={{ maxWidth: 360, mx: 'auto',  position: 'fixed', right: 0, top: 0, height: '100vh', bgcolor: '#fff', zIndex: 2 }}>
@@ -90,17 +95,20 @@ const AboutMeSettings: React.FC<AboutMeSettingsProps> = ({ onBack }) => {
         }}
         mx={2} textAlign={'left'}
       >
+
         <Avatar
-          src="https://via.placeholder.com/40"
-          alt="MBY"
-          sx={{ width: 40, height: 40 }}
+            src={ profileDetails?.details?.avatar }
+            alt={ profileDetails?.details?.name }
+            sx={{ width: 40, height: 40 }}
         />
+
         <Box>
           <Typography fontWeight={600} fontSize={14} mb={0.5}>
-            MBY
+            {profileDetails?.details?.name || ''}
           </Typography>
           <Typography fontSize={14} lineHeight="1.5">
-            Welcome to my LIVE! Leave a comment to interact with me and other viewers. Follow my account if you enjoy today's video!
+            {profileDetails?.details?.bio || "Welcome to my LIVE! Leave a comment to interact with me and other viewers. Follow my account if you enjoy today's video!"}
+            
           </Typography>
         </Box>
       </Box>

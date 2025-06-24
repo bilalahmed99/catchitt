@@ -902,7 +902,7 @@ const Promote = () => (
                     {showEditLiveGoal && <EditLiveGoal liveGoals={liveGoals} addLiveGoalAutomatically={addLiveGoalAutomatically} onConfirm={()=> setShowEditLiveGoal(!showEditLiveGoal) } onLiveGoalAdded={(goals: any, addLiveGoalAutomatically: any) => { setShowEditLiveGoal(!showEditLiveGoal); setLiveGoals(goals); setAddLiveGoalAutomatically(addLiveGoalAutomatically) }} /> }
                     {showFaqs && <LiveGoalFAQ onBack={() => console.log('Back pressed')} /> }
                     {openSettings &&
-                        <SettingsPanel />
+                        <SettingsPanel profileDetails={profileDetails} />
                     }
                     {showTopics &&
                         <AddTopic postCategories={postCategories} addToRoom={addToRoom} onBack={() => setShowTopics(!showTopics)}  />

@@ -44,10 +44,15 @@ const StyledSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-const Comments: React.FC = () => {
+interface CommentsProps {
+  updateSettings: (id: string, settings: { allowComments?: boolean; showMostSent?: boolean }) => void;
+}
+
+const Comments: React.FC<CommentsProps> = ({ updateSettings }) => {
   const [showFilterScreen, setShowFilterScreen] = useState(false);
   const [allowComments, setAllowComments] = useState(true);
   const [showMostSent, setShowMostSent] = useState(true);
+  const id = 'a9a18957-e378-4dae-bbf8-90359f0e7838';
 
   if (showFilterScreen) {
     return <FilterComments onBack={() => setShowFilterScreen(false)} />;
@@ -98,7 +103,11 @@ const Comments: React.FC = () => {
             <StyledSwitch
               edge="end"
               checked={allowComments}
-              onChange={() => setAllowComments(!allowComments)}
+              onChange={() => {
+                const newAllowComments = !allowComments;
+                setAllowComments(newAllowComments);
+                updateSettings(id, { allowComments: newAllowComments });
+              }}
             />
           </ListItemSecondaryAction>
         </ListItem>
@@ -136,7 +145,11 @@ const Comments: React.FC = () => {
             <StyledSwitch
               edge="end"
               checked={showMostSent}
-              onChange={() => setShowMostSent(!showMostSent)}
+              onChange={() => {
+                const newShowMostSent = !showMostSent;
+                setShowMostSent(newShowMostSent);
+                updateSettings(id, { showMostSent: newShowMostSent });
+              }}
             />
           </ListItemSecondaryAction>
         </ListItem>

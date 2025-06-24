@@ -16,6 +16,8 @@ import { styled } from '@mui/material/styles';
 import ModeratorsList from './ModeratorSettings'; // your moderators component
 import AboutMe from './AboutSettings'; // your moderators component
 import Comments from './commentsSetting'; // your moderators component
+import axios from 'axios';
+
 
 // Custom Switch styling
 const CustomSwitch = styled(Switch)(({ theme }) => ({
@@ -62,17 +64,78 @@ const settingsData = [
   { title: 'Content disclosure', type: 'link' },
 ];
 
-const SettingsPanel = () => {
-const [activeView, setActiveView] = useState<null | 'moderators' | 'comments' | 'AboutMe'>(null);
+interface SettingsPanelProps {
+  profileDetails: any;
+}
+
+const SettingsPanel: React.FC<SettingsPanelProps> = ({ profileDetails }) => {
+  const [activeView, setActiveView] = useState<null | 'moderators' | 'comments' | 'AboutMe'>(null);
+
+
+const updateSettings = async (id, settings = {}) => {
+  // Destructure incoming settings with default values
+  const { allowComments = true, showMostSent = true } = settings;
+
+  const API_KEY = process.env.VITE_API_URL;
+  const token = localStorage.getItem('token');  
+  const API_URL = `${API_KEY}/live-stream/v2/settings/${id}`;
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json", // Use application/json for PATCH
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const data = {
+    hearYourVoice: true,
+    moderators: [""],  // default empty string
+    commentSettings: {
+      allowComments: allowComments,
+      duration: 0,
+      filterComments: {
+        spamComments: true,
+        unkindComments: true,
+        communityFlaggedComments: true,
+        showInFeed: true,
+      },
+      showMostSentComments: showMostSent,
+      blockedKeyworkds: [
+        {
+          keyword: "", // empty string
+          blockSimilarVersion: true,
+        },
+      ],
+    },
+    muteRules: [
+      {
+        comment: "", // empty string
+        duration: 0,
+      },
+    ],
+    mutedUsers: [""],
+    blockedUsers: [""],
+  };
+
+  try {
+    const response = await axios.patch(API_URL, data, config);
+    console.log(response.data, "response data");
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
 
   const renderContent = () => {
   switch (activeView) {
     case 'moderators':
       return <ModeratorsList onBack={() => setActiveView(null)} />;
     case 'AboutMe':
-      return <AboutMe onBack={() => setActiveView(null)} />;
+      return <AboutMe profileDetails={profileDetails} onBack={() => setActiveView(null)} />;
       case 'comments':
-      return <Comments onBack={() => setActiveView(null)} />;
+      return <Comments updateSettings={updateSettings} onBack={() => setActiveView(null)} />;
     default:
       return null;
   }
