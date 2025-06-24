@@ -45,6 +45,7 @@ import axios from 'axios';
 
 import { getExtension, file_type } from '../../utils/common';
 import AddTopic from "./AddTopic";
+import { set } from "lodash";
 
 export default function LiveStreamUI() {
     const API_KEY = process.env.VITE_API_URL;
@@ -303,14 +304,19 @@ const Promote = () => (
         let topicName = item.name;
         setCurrentTopicId(id);
         setCurrentTopicName(topicName);
+        setShowTopics(false);
+        console.log()
+       
     }
     useEffect(() => {
         if (currentTopicId && currentTopicName) {
+            console.log('in useEffect...', currentTopicId, currentTopicName);
             updateStream();
         }
     }, [currentTopicId, currentTopicName]);
 
     const updateStream = async () => {
+        console.log('updateStream...', currentTopicId, currentTopicName);
         const defaultPayload = {
             streamTitle: "",
             topicId: "",
@@ -381,6 +387,7 @@ const Promote = () => (
 
 
     const [openSettings, setOpenSettings] = useState(false);
+    const [showTopics, setShowTopics] = useState(false);
 
   const toggleSettings = () => {
     setOpenSettings((prev) => !prev);
@@ -729,7 +736,7 @@ const Promote = () => (
                 <ExploreFilters show={showExplore} setShow={setShowExplore} />
                 </Box>
                 <Box >
-                    {!showEditLiveGoal && !showFaqs && !openSettings && <Card sx={{ width: 400, overflow: "hidden", p:  1, boxShadow: "none" }}>
+                    {!showEditLiveGoal && !showFaqs && !openSettings && !showTopics && <Card sx={{ width: 400, overflow: "hidden", p:  1, boxShadow: "none" }}>
                         <Box onClick={handleClick} sx={{ position: "absolute" }}>
                             <CardMedia
                             sx={{
@@ -790,7 +797,7 @@ const Promote = () => (
                           
                       
                             <Divider />
-                            <Button fullWidth sx={{
+                            <Button onClick={()=> setShowTopics(!showTopics)} fullWidth sx={{
                                 mt: 1,
                                 justifyContent: "flex-start",
                                 textTransform: "none",
@@ -851,7 +858,7 @@ const Promote = () => (
                             Faqs
                             </Button>
 
-                            <div>
+                            {/* <div>
                                         <Box display="flex" alignItems="center" mb={3} gap={1}>
                                           <IconButton
                                             sx={{ backgroundColor: 'white', boxShadow: '0px 0px 9px 0px #e4e6eb' }}
@@ -887,7 +894,7 @@ const Promote = () => (
                                             <ChevronRight />
                                           </IconButton>
                                         </Box>
-                                      </div>
+                                      </div> */}
 
                         </CardContent>
                     </Card> 
@@ -895,8 +902,10 @@ const Promote = () => (
                     {showEditLiveGoal && <EditLiveGoal liveGoals={liveGoals} addLiveGoalAutomatically={addLiveGoalAutomatically} onConfirm={()=> setShowEditLiveGoal(!showEditLiveGoal) } onLiveGoalAdded={(goals: any, addLiveGoalAutomatically: any) => { setShowEditLiveGoal(!showEditLiveGoal); setLiveGoals(goals); setAddLiveGoalAutomatically(addLiveGoalAutomatically) }} /> }
                     {showFaqs && <LiveGoalFAQ onBack={() => console.log('Back pressed')} /> }
                     {openSettings &&
-                        // <SettingsPanel />
-                        <AddTopic onBack={() => console.log('Back pressed')}  />
+                        <SettingsPanel />
+                    }
+                    {showTopics &&
+                        <AddTopic postCategories={postCategories} addToRoom={addToRoom} onBack={() => setShowTopics(!showTopics)}  />
                     }
 
                 </Box>

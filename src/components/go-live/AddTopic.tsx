@@ -19,6 +19,12 @@ interface Topic {
 
 interface AddTopicProps {
   onBack: () => void;
+  postCategories: {
+    name: string;
+    image: string;
+    _id: string;
+  }[];
+  addToRoom: (item: any) => void | Promise<void>;
 }
 
 const topics: Topic[] = [
@@ -34,7 +40,7 @@ const topics: Topic[] = [
   { title: 'Dance', image: 'https://via.placeholder.com/48?text=D2' },
 ];
 
-const AddTopic: React.FC<AddTopicProps> = ({ onBack }) => {
+const AddTopic: React.FC<AddTopicProps> = ({ onBack, postCategories,addToRoom }) => {
   return (
     <Box sx={{ maxWidth: 360, mx: 'auto', position: 'relative' }}>
       {/* Header */}
@@ -54,21 +60,21 @@ const AddTopic: React.FC<AddTopicProps> = ({ onBack }) => {
 
       {/* List of topics */}
       <List disablePadding sx={{ maxWidth: 360,position: 'sticky', left: -1, top: 0, height: 'calc(100vh - 9rem) !important', bgcolor: '#fff', zIndex: 2, overflow: "auto"}}>
-        {topics.map((topic, index) => (
+        {postCategories.items.map((topic: any, index: any) => (
           <React.Fragment key={index}>
-            <ListItem button sx={{ py: 1.5 }}>
+            <ListItem button sx={{ py: 1.5 }} onClick={() => addToRoom(topic)}>
               <ListItemAvatar>
                 <Avatar
                   variant="rounded"
-                  src={topic.image}
+                  src={topic.icon || 'https://via.placeholder.com/48?text=D2'}
                   sx={{ width: 48, height: 48 }}
                 />
               </ListItemAvatar>
               <ListItemText
-                primary={<Typography fontWeight={500}>{topic.title}</Typography>}
+                primary={<Typography fontWeight={500}>{topic.name}</Typography>}
               />
             </ListItem>
-            {index < topics.length - 1 && <Divider />}
+            {index < postCategories.length - 1 && <Divider />}
           </React.Fragment>
         ))}
       </List>
