@@ -8,7 +8,11 @@ import {
 } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
-const LiveGoalFAQ = ({ onBack }) => {
+interface LiveGoalFAQProps {
+  onBack: () => void;
+}
+
+const LiveGoalFAQ = ({ onBack }: LiveGoalFAQProps) => {
   const commentBoxes = [
     {
       text: "Help me achieve my first goal and I’ll sing a song.",

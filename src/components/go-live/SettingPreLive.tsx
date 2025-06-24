@@ -72,7 +72,10 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ profileDetails }) => {
   const [activeView, setActiveView] = useState<null | 'moderators' | 'comments' | 'AboutMe'>(null);
 
 
-const updateSettings = async (id, settings = {}) => {
+const updateSettings = async (
+  id: string,
+  settings: { allowComments?: boolean; showMostSent?: boolean } = {}
+) => {
   // Destructure incoming settings with default values
   const { allowComments = true, showMostSent = true } = settings;
 
@@ -135,7 +138,7 @@ const updateSettings = async (id, settings = {}) => {
     case 'AboutMe':
       return <AboutMe profileDetails={profileDetails} onBack={() => setActiveView(null)} />;
       case 'comments':
-      return <Comments updateSettings={updateSettings} onBack={() => setActiveView(null)} />;
+      return <Comments updateSettings={updateSettings}  />;
     default:
       return null;
   }
@@ -156,7 +159,7 @@ const updateSettings = async (id, settings = {}) => {
             {settingsData.map((item, index) => (
               <React.Fragment key={index}>
                 <ListItem
-                  onClick={() => item.type === 'link' && item.component && setActiveView(item.component)}
+                  onClick={() => item.type === 'link' && item.component && setActiveView(item.component as 'moderators' | 'comments' | 'AboutMe')}
                   sx={{ py: 1.5, cursor: item.type === 'link' ? 'pointer' : 'default', alignItems: 'flex-start' }}
                   secondaryAction={
                     item.type === 'switch' ? (
