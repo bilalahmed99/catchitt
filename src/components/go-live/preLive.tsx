@@ -158,10 +158,16 @@ const Promote = () => (
         const toggleMoreExpenstion = () => setExpanded(prev => !prev);
         const [showMore, setShowMore] = useState(false);
         const toggleMore = () => setShowMore((prev) => !prev);
-        const slideRef = useRef(null);
-        const fileInputRef = useRef(null);
+        const slideRef = useRef<HTMLDivElement>(null);
+        const fileInputRef = useRef<HTMLInputElement>(null);
         const handleClick = () => {
-            fileInputRef.current.click(); // Trigger the hidden input
+<<<<<<< HEAD
+            if (fileInputRef.current) {
+                fileInputRef.current.click(); // Trigger the hidden input
+            }
+=======
+            fileInputRef.current && fileInputRef.current.click(); // Trigger the hidden input
+>>>>>>> a6ca4a6bf052bbc696e94bb3706598e61c389a49
         };
         const [showEditLiveGoal, setShowEditLiveGoal] = useState(false);
         const [showFaqs, setShowFaqs] = useState(false);
@@ -170,7 +176,7 @@ const Promote = () => (
 
         // Detect click outside
         useEffect(() => {
-            const handleClickOutside = (event) => {
+            const handleClickOutside = (event: any) => {
             if (slideRef.current && !slideRef.current.contains(event.target)) {
                 setShowMore(false);
             }
@@ -379,8 +385,18 @@ const Promote = () => (
             config
             );
             console.log("API response:", response.data);
+<<<<<<< HEAD
         } catch (error) {
+            if (typeof error === "object" && error !== null && "response" in error) {
+                // @ts-ignore
+                console.error("Upload failed:", (error as any).response?.data || (error as any).message);
+            } else {
+                console.error("Upload failed:", error);
+            }
+=======
+        } catch (error: any) {
             console.error("Upload failed:", error.response?.data || error.message);
+>>>>>>> a6ca4a6bf052bbc696e94bb3706598e61c389a49
         }
     };
 
@@ -902,10 +918,10 @@ const Promote = () => (
                     {showEditLiveGoal && <EditLiveGoal liveGoals={liveGoals} addLiveGoalAutomatically={addLiveGoalAutomatically} onConfirm={()=> setShowEditLiveGoal(!showEditLiveGoal) } onLiveGoalAdded={(goals: any, addLiveGoalAutomatically: any) => { setShowEditLiveGoal(!showEditLiveGoal); setLiveGoals(goals); setAddLiveGoalAutomatically(addLiveGoalAutomatically) }} /> }
                     {showFaqs && <LiveGoalFAQ onBack={() => console.log('Back pressed')} /> }
                     {openSettings &&
-                        <SettingsPanel />
+                        <SettingsPanel profileDetails={profileDetails} />
                     }
                     {showTopics &&
-                        <AddTopic postCategories={postCategories} addToRoom={addToRoom} onBack={() => setShowTopics(!showTopics)}  />
+                        <AddTopic postCategories={postCategories.items} addToRoom={addToRoom} onBack={() => setShowTopics(!showTopics)}  />
                     }
 
                 </Box>

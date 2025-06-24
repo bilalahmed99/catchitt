@@ -47,13 +47,19 @@ const StyledSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-const Comments: React.FC = () => {
- const [showFilterScreen, setShowFilterScreen] = useState(false);
+interface CommentsProps {
+  updateSettings: (id: string, settings: { allowComments?: boolean; showMostSent?: boolean }) => void;
+  onBack: () => void;
+}
+
+const Comments: React.FC<CommentsProps> = ({ updateSettings, onBack }) => {
+  const [showFilterScreen, setShowFilterScreen] = useState(false);
   const [showBlockedKeywords, setShowBlockedKeywords] = useState(false); // NEW STATE
   const [allowComments, setAllowComments] = useState(true);
   const [showMostSent, setShowMostSent] = useState(true);
     const [showStarComment, setShowStarComment] = useState(false);
     const [showMuteRules, setShowMuteRules] = useState(false);
+  const id = 'a9a18957-e378-4dae-bbf8-90359f0e7838';
 
     if (showMuteRules) {
   return <CommentsMuteRules onBack={() => setShowMuteRules(false)} />;
@@ -118,7 +124,11 @@ if (showStarComment) {
             <StyledSwitch
               edge="end"
               checked={allowComments}
-              onChange={() => setAllowComments(!allowComments)}
+              onChange={() => {
+                const newAllowComments = !allowComments;
+                setAllowComments(newAllowComments);
+                updateSettings(id, { allowComments: newAllowComments });
+              }}
             />
           </ListItemSecondaryAction>
         </ListItem>
@@ -156,7 +166,11 @@ if (showStarComment) {
             <StyledSwitch
               edge="end"
               checked={showMostSent}
-              onChange={() => setShowMostSent(!showMostSent)}
+              onChange={() => {
+                const newShowMostSent = !showMostSent;
+                setShowMostSent(newShowMostSent);
+                updateSettings(id, { showMostSent: newShowMostSent });
+              }}
             />
           </ListItemSecondaryAction>
         </ListItem>

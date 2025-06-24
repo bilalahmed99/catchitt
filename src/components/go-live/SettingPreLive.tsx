@@ -16,6 +16,8 @@ import { styled } from '@mui/material/styles';
 import ModeratorsList from './ModeratorSettings'; // your moderators component
 import AboutMe from './AboutSettings'; // your moderators component
 import Comments from './commentsSetting'; // your moderators component
+import axios from 'axios';
+
 
 // Custom Switch styling
 const CustomSwitch = styled(Switch)(({ theme }) => ({
@@ -48,9 +50,9 @@ const CustomSwitch = styled(Switch)(({ theme }) => ({
 
 // Settings data
 const settingsData = [
-  { title: 'Moderators', type: 'link', component: 'moderators' },
+  { title: 'Moderators', type: 'link', component: 'moderators'  as const },
   { title: 'Practice mode', description: 'This pre-LIVE session is only visible to you.', type: 'link' },
-  { title: 'About me', description: 'Introduce yourself and your LIVE.', type: 'link', component: 'AboutMe' },
+  { title: 'About me', description: 'Introduce yourself and your LIVE.', type: 'link', component: 'AboutMe'  as const },
   { title: 'LIVE setup for client acquisition', type: 'link' },
   { title: 'Multi-guest fun kit', description: 'Explore interactive features and playbooks for your multi-guest LIVE.', type: 'link' },
   { title: 'Video quality', type: 'link' },
@@ -58,21 +60,89 @@ const settingsData = [
   { title: 'LIVE Gifts', type: 'switch', value: false },
   { title: 'Gift Gallery', description: 'Enable Gift Gallery to allow viewers to light up the Gifts in your Gift Gallery and become title gifters during your LIVE.', type: 'switch', value: true },
   { title: 'Rankings', type: 'link' },
-  { title: 'Comment settings', type: 'link', component: 'comments' },
+  { title: 'Comment settings', type: 'link', component: 'comments'  as const },
   { title: 'Content disclosure', type: 'link' },
 ];
 
-const SettingsPanel = () => {
-const [activeView, setActiveView] = useState<null | 'moderators' | 'comments' | 'AboutMe'>(null);
+interface SettingsPanelProps {
+  profileDetails: any;
+}
+
+const SettingsPanel: React.FC<SettingsPanelProps> = ({ profileDetails }) => {
+  const [activeView, setActiveView] = useState<null | 'moderators' | 'comments' | 'AboutMe'>(null);
+
+
+<<<<<<< HEAD
+const updateSettings = async (
+  id: string,
+  settings: { allowComments?: boolean; showMostSent?: boolean } = {}
+) => {
+=======
+const updateSettings = async (id: any, settings = {}) => {
+>>>>>>> a6ca4a6bf052bbc696e94bb3706598e61c389a49
+  // Destructure incoming settings with default values
+  const { allowComments = true, showMostSent = true } = settings;
+
+  const API_KEY = process.env.VITE_API_URL;
+  const token = localStorage.getItem('token');  
+  const API_URL = `${API_KEY}/live-stream/v2/settings/${id}`;
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json", // Use application/json for PATCH
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const data = {
+    hearYourVoice: true,
+    moderators: [""],  // default empty string
+    commentSettings: {
+      allowComments: allowComments,
+      duration: 0,
+      filterComments: {
+        spamComments: true,
+        unkindComments: true,
+        communityFlaggedComments: true,
+        showInFeed: true,
+      },
+      showMostSentComments: showMostSent,
+      blockedKeyworkds: [
+        {
+          keyword: "", // empty string
+          blockSimilarVersion: true,
+        },
+      ],
+    },
+    muteRules: [
+      {
+        comment: "", // empty string
+        duration: 0,
+      },
+    ],
+    mutedUsers: [""],
+    blockedUsers: [""],
+  };
+
+  try {
+    const response = await axios.patch(API_URL, data, config);
+    console.log(response.data, "response data");
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
 
   const renderContent = () => {
   switch (activeView) {
     case 'moderators':
       return <ModeratorsList onBack={() => setActiveView(null)} />;
     case 'AboutMe':
-      return <AboutMe onBack={() => setActiveView(null)} />;
+      return <AboutMe profileDetails={profileDetails} onBack={() => setActiveView(null)} />;
       case 'comments':
-      return <Comments onBack={() => setActiveView(null)} />;
+      return <Comments updateSettings={updateSettings}  />;
     default:
       return null;
   }
@@ -93,7 +163,7 @@ const [activeView, setActiveView] = useState<null | 'moderators' | 'comments' | 
             {settingsData.map((item, index) => (
               <React.Fragment key={index}>
                 <ListItem
-                  onClick={() => item.type === 'link' && item.component && setActiveView(item.component)}
+                  onClick={() => item.type === 'link' && item.component && setActiveView(item.component as 'moderators' | 'comments' | 'AboutMe')}
                   sx={{ py: 1.5, cursor: item.type === 'link' ? 'pointer' : 'default', alignItems: 'flex-start' }}
                   secondaryAction={
                     item.type === 'switch' ? (
