@@ -17,7 +17,9 @@ const FAQs: React.FC<FAQsProps> = ({ onBack }) => {
       {/* Header */}
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
         <IconButton size="small" aria-label="back" onClick={onBack}>
-          <ArrowBackIosNewIcon fontSize="small" />
+          <svg width="9" height="15" viewBox="0 0 9 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.69141 1.25L1.69141 7.25L7.69141 13.25" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg> 
         </IconButton>
         <Typography variant="h6" sx={{ flexGrow: 1, textAlign: 'center', ml: -4 }}>
           FAQs

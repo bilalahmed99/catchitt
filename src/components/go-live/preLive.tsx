@@ -161,13 +161,7 @@ const Promote = () => (
         const slideRef = useRef<HTMLDivElement>(null);
         const fileInputRef = useRef<HTMLInputElement>(null);
         const handleClick = () => {
-<<<<<<< HEAD
-            if (fileInputRef.current) {
-                fileInputRef.current.click(); // Trigger the hidden input
-            }
-=======
             fileInputRef.current && fileInputRef.current.click(); // Trigger the hidden input
->>>>>>> a6ca4a6bf052bbc696e94bb3706598e61c389a49
         };
         const [showEditLiveGoal, setShowEditLiveGoal] = useState(false);
         const [showFaqs, setShowFaqs] = useState(false);
@@ -385,18 +379,8 @@ const Promote = () => (
             config
             );
             console.log("API response:", response.data);
-<<<<<<< HEAD
-        } catch (error) {
-            if (typeof error === "object" && error !== null && "response" in error) {
-                // @ts-ignore
-                console.error("Upload failed:", (error as any).response?.data || (error as any).message);
-            } else {
-                console.error("Upload failed:", error);
-            }
-=======
         } catch (error: any) {
             console.error("Upload failed:", error.response?.data || error.message);
->>>>>>> a6ca4a6bf052bbc696e94bb3706598e61c389a49
         }
     };
 
@@ -752,7 +736,7 @@ const Promote = () => (
                 <ExploreFilters show={showExplore} setShow={setShowExplore} />
                 </Box>
                 <Box >
-                    {!showEditLiveGoal && !showFaqs && !openSettings && !showTopics && <Card sx={{ width: 400, overflow: "hidden", p:  1, boxShadow: "none" }}>
+                    {!showEditLiveGoal && !showFaqs && !openSettings && !showTopics && <Card sx={{ width: 360, overflow: "hidden", p:  1, boxShadow: "none" }}>
                         <Box onClick={handleClick} sx={{ position: "absolute" }}>
                             <CardMedia
                             sx={{
@@ -895,7 +879,7 @@ const Promote = () => (
                                             {postCategories.items.map((item: any) => (
                                               <Chip
                                                 sx={{ border: 'none', borderRadius: '8px', backgroundColor: '#1618230F', fontSize: '14px' }}
-                                                key={item._id}
+                                         s       key={item._id}
                                                 label={item.name}
                                                 clickable
                                                 variant="outlined"
