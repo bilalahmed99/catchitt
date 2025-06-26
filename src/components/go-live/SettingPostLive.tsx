@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Box,
   Typography,
@@ -13,6 +13,7 @@ import {
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import { styled } from '@mui/material/styles';
+import CommentsSetting from './CommentsSetting'
 
 const CustomSwitch = styled(Switch)(({ theme }) => ({
   width: 36,
@@ -95,6 +96,7 @@ const settingsData = [
     title: 'Comment settings',
     description: '',
     type: 'link',
+    onClick: (setShowCommentSettings) => setShowCommentSettings(true),
   },
    {
     title: 'Moderators',
@@ -114,6 +116,11 @@ const settingsData = [
 ];
 
 const SettingsPanel = () => {
+  const [showCommentSettings, setShowCommentSettings] = useState(false);
+  if (showCommentSettings) {
+    return <CommentsSetting onBack={() => setShowCommentSettings(false)} />;
+  }
+
   return (
     <Box sx={{ maxWidth: 400, mx: 'auto', right: 0, top: 0 }}>
       <Typography variant="h6" fontWeight={600} borderBottom={'1px solid #EFEFEF'} pb={1}>
@@ -123,22 +130,27 @@ const SettingsPanel = () => {
         These settings apply to all LIVE videos.
       </Typography> */}
 
+      
+
+
       <List disablePadding sx={{ height: 'calc(100vh - 5.5rem) !important', overflowY: 'auto' }}>
         {settingsData.map((item, index) => (
           <React.Fragment key={index}>
             <ListItem
-                    secondaryAction={
-                        item.type === 'switch' ? (
-                        <CustomSwitch edge="end" checked={item.value} />
-                        ) : (
-                        <IconButton edge="end">
-                            <ChevronRightIcon />
-                        </IconButton>
-                        )
-                    }
-                    alignItems="flex-start"
-                    sx={{ py: 1.5 }}
-                    >
+                button={item.type === 'link'}
+                onClick={() => item.onClick?.(setShowCommentSettings)} // 👈 Use function from object
+                secondaryAction={
+                  item.type === 'switch' ? (
+                    <CustomSwitch edge="end" checked={item.value} />
+                  ) : (
+                    <IconButton edge="end">
+                      <ChevronRightIcon />
+                    </IconButton>
+                  )
+                }
+                alignItems="flex-start"
+                sx={{ py: 1.5 }}
+              >
 
               <ListItemText
                 primary={
