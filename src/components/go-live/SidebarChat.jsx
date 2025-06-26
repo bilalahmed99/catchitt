@@ -95,7 +95,7 @@ const staticOwner = {
   photo: 'https://i.pravatar.cc/50?img=10'
 };
 
-const SidebarChat = ({ selectedLiveVideo, showSidebar, onHideSidebar, profileDetails }) => {
+const SidebarChat = ({ selectedLiveVideo, showSidebar, onHideSidebar, profileDetails, showFaqsSidebar }) => {
   const [showTopViewers, setShowTopViewers] = useState(false);
   const [isShowRanking, setIsShowRanking] = useState(true);
   const [message, setMessage] = useState('');
@@ -444,7 +444,7 @@ const SidebarChat = ({ selectedLiveVideo, showSidebar, onHideSidebar, profileDet
                                 Top viewers
                               </Typography>
                               <Box>
-                                <Tooltip title="Help" arrow 
+                                <Tooltip onClick={() => showFaqsSidebar()} title="Help" arrow
                                   slotProps={{
                                     tooltip: {
                                       sx: {
