@@ -16,6 +16,7 @@ import FilterComments from "./Comments/FilterComments";
 import BlockedKeywords from "./Comments/BlockedKeywords";
 import StarComment from "./Comments/StarComments";
 import CommentsMuteRules from "./Comments/CommentsMuteRules";
+import MutedAccounts from "./Comments/MutedAccounts";
 
 // Styled switch (same as before)
 const StyledSwitch = styled(Switch)(({ theme }) => ({
@@ -59,6 +60,7 @@ const Comments: React.FC<CommentsProps> = ({ updateSettings, onBack }) => {
   const [showMostSent, setShowMostSent] = useState(true);
     const [showStarComment, setShowStarComment] = useState(false);
     const [showMuteRules, setShowMuteRules] = useState(false);
+    const [showMutedAccounts, setShowMutedAccounts] = useState(false);
   const id = 'a9a18957-e378-4dae-bbf8-90359f0e7838';
 
     if (showMuteRules) {
@@ -76,14 +78,13 @@ if (showStarComment) {
   if (showBlockedKeywords) {
     return <BlockedKeywords onBack={() => setShowBlockedKeywords(false)} />;
   }
-
+if (showMutedAccounts) {
+    return <MutedAccounts onBack={() => setShowMutedAccounts(false)} />;
+  }
   return (
     <Box
       sx={{
-        maxHeight: "calc(100vh - 9rem)",
-        overflowY: "auto",
-        bgcolor: "white",
-        borderRadius: 2,
+       
         mx: "auto",
         width: "100%",
         maxWidth: 360,
@@ -111,7 +112,8 @@ if (showStarComment) {
       </Box>
 
       {/* Content */}
-      <List dense>
+      <List dense sx={{ maxHeight: "calc(100vh - 7rem)",
+        overflowY: "auto",}}>
         <Box textAlign="left" px={2} pt={2} pb={1}>
           <Typography fontWeight={600} variant="caption" color="text.secondary">
             Manage comments
@@ -176,12 +178,12 @@ if (showStarComment) {
         </ListItem>
 
         <Box textAlign="left" px={2} pt={3} pb={1}>
-          <Typography fontWeight={600} variant="caption" color="text.secondary">
+          <Typography fontWeight={600} variant="caption" color="text.secondary" >
             Manage viewers
           </Typography>
         </Box>
 
-        <ListItem button>
+        <ListItem button >
           <ListItemText primary="Mute duration" secondary="Entire LIVE" />
           <ListItemSecondaryAction>
             <IconButton edge="end">
@@ -190,6 +192,22 @@ if (showStarComment) {
           </ListItemSecondaryAction>
         </ListItem>
 
+      <ListItem button onClick={() => setShowMutedAccounts(true)}>
+          <ListItemText primary="Muted Accounts" secondary="These accounts are muted for the rest of the LIVE" />
+          <ListItemSecondaryAction>
+            <IconButton edge="end">
+              <ArrowForwardIosIcon sx={{ fontSize: 16 }} />
+            </IconButton>
+          </ListItemSecondaryAction>
+        </ListItem>
+        <ListItem button onClick={() => setShowMutedAccounts(true)}>
+          <ListItemText primary="Blocked Accounts"  />
+          <ListItemSecondaryAction>
+            <IconButton edge="end">
+              <ArrowForwardIosIcon sx={{ fontSize: 16 }} />
+            </IconButton>
+          </ListItemSecondaryAction>
+        </ListItem>
         <ListItem button onClick={() => setShowMuteRules(true)}>
           <ListItemText
             primary="Mute rules"

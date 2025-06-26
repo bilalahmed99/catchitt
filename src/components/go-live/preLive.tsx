@@ -753,7 +753,7 @@ const Promote = () => (
                 <ExploreFilters show={showExplore} setShow={setShowExplore} />
                 </Box>
                 <Box >
-                    {!showEditLiveGoal && !showFaqs && !openSettings && !showTopics && <Card sx={{ width: 400, overflow: "hidden", p:  1, boxShadow: "none" }}>
+                    {!showEditLiveGoal && !showFaqs && !openSettings && !showTopics && <Card sx={{ width: 360, overflow: "hidden", p:  1, boxShadow: "none" }}>
                         <Box onClick={handleClick} sx={{ position: "absolute" }}>
                             <CardMedia
                             sx={{
@@ -896,7 +896,7 @@ const Promote = () => (
                                             {postCategories.items.map((item: any) => (
                                               <Chip
                                                 sx={{ border: 'none', borderRadius: '8px', backgroundColor: '#1618230F', fontSize: '14px' }}
-                                                key={item._id}
+                                         s       key={item._id}
                                                 label={item.name}
                                                 clickable
                                                 variant="outlined"
