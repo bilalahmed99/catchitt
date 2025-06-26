@@ -103,7 +103,7 @@ if (showMutedAccounts) {
           justifyContent: 'center'
         }}
       >
-        <IconButton sx={{ position: "absolute", left: 1 }} size="small">
+        <IconButton sx={{ position: "absolute", left: 1 }} size="small" onClick={onBack}>
           <svg width="9" height="15" viewBox="0 0 9 15" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M7.69141 1.25L1.69141 7.25L7.69141 13.25" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -194,14 +194,6 @@ if (showMutedAccounts) {
           </ListItemSecondaryAction>
         </ListItem>
 
-      <ListItem button onClick={() => setShowMutedAccounts(true)}>
-          <ListItemText primary="Muted Accounts" secondary="These accounts are muted for the rest of the LIVE" />
-          <ListItemSecondaryAction>
-            <IconButton edge="end">
-              <ArrowForwardIosIcon sx={{ fontSize: 16 }} />
-            </IconButton>
-          </ListItemSecondaryAction>
-        </ListItem>
         <ListItem button onClick={() => setShowMutedAccounts(true)}>
           <ListItemText primary="Blocked Accounts"  />
           <ListItemSecondaryAction>

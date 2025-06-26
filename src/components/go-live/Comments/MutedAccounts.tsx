@@ -15,31 +15,13 @@ import {
 } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import SearchIcon from '@mui/icons-material/Search';
-
-// const mutedUsers = [
-//   {
-//     _id: '655fc1f193289d9edfaea217',
-//     name: 'Giana Workman 1',
-//     username: 'Giann34 1',
-//     avatar: 'https://randomuser.me/api/portraits/women/4.jpg',
-//   },
-//   {
-//     _id: '655fc1f193289d9edfaea217',
-//     name: 'Giana Workman 2',
-//     username: 'Giann34 2',
-//     avatar: 'https://randomuser.me/api/portraits/women/4.jpg',
-//   },
-//   {
-//     _id: '655fc1f193289d9edfaea217',
-//     name: 'Giana Workman 3',
-//     username: 'Giann34 3',
-//     avatar: 'https://randomuser.me/api/portraits/women/4.jpg',
-//   },
-// ];
+import UnMuteButton from "./UnmuteButton";
 
 export default function MutedAccounts({ onBack }: { onBack: () => void }) {
   const [mutedUsers, setMutedUsers] = useState<any>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [showAddMuteButton, setShowAddMuteButton] = useState(false);
 
   const filteredUsers = mutedUsers.filter(user => user.name.toLowerCase().includes(searchTerm.toLowerCase()) || user.username.toLowerCase().includes(searchTerm.toLowerCase()));
 
@@ -62,9 +44,33 @@ export default function MutedAccounts({ onBack }: { onBack: () => void }) {
     .catch((error) => console.error('Fetch error:', error));
   };
 
+  function toggleMuteUser()
+  {
+    let endpoint = `${process.env.VITE_API_URL}/live-stream/roomId/mute/${selectedUser._id}`;
+    let requestOptions =
+    {
+      method: 'POST',
+      headers:
+      {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+    };
+
+    fetch(endpoint, requestOptions)
+    .catch((error) => console.error('Fetch error:', error));
+
+    setMutedUsers((prev: any) => prev.filter((item: any) => item._id !== selectedUser._id));
+  };
+
   useEffect(() => {
     loadMutedUsers()
   }, []);
+
+  if(showAddMuteButton)
+  {
+    return <UnMuteButton user={selectedUser} onBack={() => { setSelectedUser(null); setShowAddMuteButton(false); }} onConfirm={() => { toggleMuteUser(); setShowAddMuteButton(false); }} />;
+  }
 
   return (
     <Box sx={{ maxWidth: 360, mx: 'auto', bgcolor: '#fff', position: 'fixed', right: 0, top: 0, zIndex: 3 }}>

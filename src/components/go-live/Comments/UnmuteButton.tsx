@@ -3,7 +3,7 @@ import React from "react";
 import { Box, Button, Container, IconButton, Typography } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
-const UnMuteButton: React.FC<{ onBack: () => void }> = ({ onBack }) => {
+const UnMuteButton: React.FC<{ user: any, onBack: () => void, onConfirm: () => void }> = ({ user, onBack, onConfirm }) => {
   return (
     <Container
       maxWidth="xs"
@@ -32,8 +32,8 @@ const UnMuteButton: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         <Typography variant="body1" fontSize="1rem">
           Can watch your LIVE after 
           <Typography component="span" fontWeight="bold" display="inline">
-            Lincoln Torff 
-          </Typography>{" "}
+            { " " + user?.name + " " }
+          </Typography>
           revoke
         </Typography>
       </Box>
@@ -69,6 +69,7 @@ const UnMuteButton: React.FC<{ onBack: () => void }> = ({ onBack }) => {
         </Button>
         <Button
           variant="contained"
+          onClick={onConfirm}
           fullWidth
           sx={{
             backgroundColor: "#ff2d55",
