@@ -38,6 +38,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import ExploreFilters from "./ExploreFilters";
 import LiveGoalFAQ from "./TopViewersFaqs";
 import SettingsPanel from "./SettingPostLive";
+import GiftsPostLive from "./GiftsPostLive";
 import PostliveBg from '../../assets/postLive/postlive-bg.png'
 import LiveGoal from '../../assets/postLive/liveGoal.png'
 import HorizontalLine from '../../assets/postLive/horizontal-line.png'
@@ -132,6 +133,7 @@ export default function PostLive() {
     const [showFaqs, setShowFaqs] = useState(false);
 
     const [openSettings, setOpenSettings] = useState(false);
+    const [openGiftsPanel, setOpenGiftsPanel] = useState(false);
 
     const [profileDetails, setProfileDetails] = useState<any>(
         {
@@ -141,7 +143,8 @@ export default function PostLive() {
     );
 
     const toggleSettings = () => {
-        setOpenSettings((prev) => !prev);
+        // setOpenSettings((prev) => !prev);
+        setOpenGiftsPanel((prev) => !prev);
     };
 
     useEffect(() => {
@@ -533,8 +536,8 @@ export default function PostLive() {
                     </Box>
                     {profileDetails && <SidebarChat selectedLiveVideo={selectedLiveVideo} profileDetails={profileDetails} /> }
                     {/* Right Sidebar */}
-                    {/* <Box sx={{ width: 400, }}>
-                        {!showEditLiveGoal && !showFaqs && !openSettings && <Card sx={{ p: 1, boxShadow: "none" }}>
+                    <Box sx={{ width: 400, }}>
+                        {!showEditLiveGoal && !showFaqs && !openSettings && !openGiftsPanel && <Card sx={{ p: 1, boxShadow: "none" }}>
                             <Box sx={{ position: "absolute" }}>
                                 <CardMedia
                                     sx={{
@@ -656,7 +659,10 @@ export default function PostLive() {
                         {openSettings &&
                             <SettingsPanel />
                         }
-                    </Box> */}
+                        {openGiftsPanel && 
+                        <GiftsPostLive />
+                        }
+                    </Box>
                 </div>
             </div>
         </div>
