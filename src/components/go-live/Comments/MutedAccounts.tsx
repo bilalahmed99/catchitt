@@ -80,6 +80,8 @@ export default function MutedAccounts({ onBack }: { onBack: () => void }) {
 
     fetch(endpoint, requestOptions)
     .catch((error) => console.error('Fetch error:', error));
+
+    setMutedUsers((prev: any) => prev.filter((item: any) => item._id !== selectedUser._id));
   };
 
   useEffect(() => {
