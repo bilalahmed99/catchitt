@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import SearchIcon from '@mui/icons-material/Search';
+import UnMuteButton from "./UnmuteButton";
 
 // const mutedUsers = [
 //   {
@@ -40,6 +41,8 @@ import SearchIcon from '@mui/icons-material/Search';
 export default function MutedAccounts({ onBack }: { onBack: () => void }) {
   const [mutedUsers, setMutedUsers] = useState<any>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [unmuteUser, setUnmuteUser] = useState<any>(null);
+  const [showAddMuteButton, setShowAddMuteButton] = useState(false);
 
   const filteredUsers = mutedUsers.filter(user => user.name.toLowerCase().includes(searchTerm.toLowerCase()) || user.username.toLowerCase().includes(searchTerm.toLowerCase()));
 
@@ -65,6 +68,11 @@ export default function MutedAccounts({ onBack }: { onBack: () => void }) {
   useEffect(() => {
     loadMutedUsers()
   }, []);
+
+  if(showAddMuteButton)
+  {
+    return <UnMuteButton user={unmuteUser} onBack={() => { setUnmuteUser(null); setShowAddMuteButton(false); }} />;
+  }
 
   return (
     <Box sx={{ maxWidth: 360, mx: 'auto', bgcolor: '#fff', position: 'fixed', right: 0, top: 0, zIndex: 3 }}>
@@ -129,6 +137,7 @@ export default function MutedAccounts({ onBack }: { onBack: () => void }) {
           {filteredUsers.map((user, index) => (
             <ListItem key={index} disableGutters secondaryAction={
               <Button
+                onClick={() => { setUnmuteUser(user); setShowAddMuteButton(true); }}
                 variant="outlined"
                 size="small"
                 sx={{
