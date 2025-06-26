@@ -139,7 +139,7 @@ const updateSettings = async (
     case 'AboutMe':
       return <AboutMe profileDetails={profileDetails} onBack={() => setActiveView(null)} />;
       case 'comments':
-      return <Comments updateSettings={updateSettings}  />;
+      return <Comments updateSettings={updateSettings} onBack={() => setActiveView(null)} />;
     case 'MutedAccounts':
       return <MutedAccounts onBack={() => setActiveView(null)} />;
     default:
