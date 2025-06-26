@@ -14,6 +14,8 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import { styled } from '@mui/material/styles';
 import CommentsSetting from './CommentsSetting'
+import axios from 'axios';
+
 
 const CustomSwitch = styled(Switch)(({ theme }) => ({
   width: 36,
@@ -116,9 +118,133 @@ const settingsData = [
 ];
 
 const SettingsPanel = () => {
+
+  const updateSettings1 = async (
+    id: string,
+    settings: { allowComments?: boolean; showMostSent?: boolean } = {}
+  ) => {
+    // Destructure incoming settings with default values
+    const { allowComments = true, showMostSent = true } = settings;
+  
+    const API_KEY = process.env.VITE_API_URL;
+    const token = localStorage.getItem('token');  
+    const API_URL = `${API_KEY}/live-stream/v2/settings/${id}`;
+  
+    const config = {
+      headers: {
+        "Content-Type": "application/json", // Use application/json for PATCH
+        Authorization: `Bearer ${token}`,
+      },
+    };
+  
+    const data = {
+      hearYourVoice: true,
+      moderators: [""],  // default empty string
+      commentSettings: {
+        allowComments: allowComments,
+        duration: 0,
+        filterComments: {
+          spamComments: true,
+          unkindComments: true,
+          communityFlaggedComments: true,
+          showInFeed: true,
+        },
+        showMostSentComments: showMostSent,
+        blockedKeyworkds: [
+          {
+            keyword: "", // empty string
+            blockSimilarVersion: true,
+          },
+        ],
+      },
+      muteRules: [
+        {
+          comment: "", // empty string
+          duration: 0,
+        },
+      ],
+      mutedUsers: [""],
+      blockedUsers: [""],
+    };
+  
+    try {
+      const response = await axios.patch(API_URL, data, config);
+      console.log(response.data, "response data");
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updateSettings = async (
+  id: string,
+  settings: {
+    allowComments?: boolean;
+    showMostSent?: boolean;
+    filterComments?: {
+      spamComments?: boolean;
+      unkindComments?: boolean;
+      communityFlaggedComments?: boolean;
+      showInFeed?: boolean;
+    };
+  } = {}
+) => {
+  const API_KEY = process.env.VITE_API_URL;
+  const token = localStorage.getItem("token");
+  const API_URL = `${API_KEY}/live-stream/v2/settings/${id}`;
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const data: any = {};
+
+  // Set allowComments
+  if (typeof settings.allowComments === "boolean") {
+    data.commentSettings = data.commentSettings || {};
+    data.commentSettings.allowComments = settings.allowComments;
+  }
+
+  // Set showMostSentComments
+  if (typeof settings.showMostSent === "boolean") {
+    data.commentSettings = data.commentSettings || {};
+    data.commentSettings.showMostSentComments = settings.showMostSent;
+  }
+
+  // Set filterComments flags
+  if (settings.filterComments) {
+    data.commentSettings = data.commentSettings || {};
+    data.commentSettings.filterComments = data.commentSettings.filterComments || {};
+
+    Object.entries(settings.filterComments).forEach(([key, value]) => {
+      if (typeof value === 'boolean') {
+        data.commentSettings.filterComments[key] = value;
+      }
+    });
+  }
+
+  if (Object.keys(data).length === 0) {
+    console.warn("No update fields provided.");
+    return;
+  }
+
+  try {
+    const response = await axios.patch(API_URL, data, config);
+    console.log("Updated settings:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Update failed:", error);
+  }
+};
+
+
+
   const [showCommentSettings, setShowCommentSettings] = useState(false);
   if (showCommentSettings) {
-    return <CommentsSetting onBack={() => setShowCommentSettings(false)} />;
+    return <CommentsSetting updateSettings={updateSettings} onBack={() => setShowCommentSettings(false)} />;
   }
 
   return (

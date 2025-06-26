@@ -44,12 +44,12 @@ const StyledSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-
 interface FilterCommentsProps {
   onBack: () => void;
+  onUpdate: (filterComments: UpdateSettingsPayload["filterComments"]) => void;
 }
 
-const FilterComments: React.FC<FilterCommentsProps> = ({ onBack }) => {
+const FilterComments: React.FC<FilterCommentsProps> = ({ onBack, onUpdate }) => {
   const [selectedFilters, setSelectedFilters] = useState<string[]>([
     "Spam comments",
     "Potentially unkind comments",
@@ -59,12 +59,28 @@ const FilterComments: React.FC<FilterCommentsProps> = ({ onBack }) => {
   const [showInFeed, setShowInFeed] = useState(false);
 
   const toggleFilter = (label: string) => {
-    setSelectedFilters((prev) =>
-      prev.includes(label)
-        ? prev.filter((item) => item !== label)
-        : [...prev, label]
-    );
+    const updatedFilters = selectedFilters.includes(label)
+      ? selectedFilters.filter((item) => item !== label)
+      : [...selectedFilters, label];
+
+    setSelectedFilters(updatedFilters);
+
+    // Map selected filters to boolean values
+    onUpdate({
+      spamComments: updatedFilters.includes("Spam comments"),
+      unkindComments: updatedFilters.includes("Potentially unkind comments"),
+      communityFlaggedComments: updatedFilters.includes("Community-flagged comments"),
+    });
   };
+
+  const handleToggleShowInFeed = () => {
+  setShowInFeed((prev) => {
+    const newValue = !prev;
+    onUpdate({ showInFeed: newValue });
+    return newValue;
+  });
+};
+
 
   const filters = [
     {
@@ -201,7 +217,7 @@ const FilterComments: React.FC<FilterCommentsProps> = ({ onBack }) => {
             <StyledSwitch
               edge="end"
               checked={showInFeed}
-              onChange={() => setShowInFeed((prev) => !prev)}
+              onChange={handleToggleShowInFeed}
             />
           </ListItemSecondaryAction>
         </ListItem>

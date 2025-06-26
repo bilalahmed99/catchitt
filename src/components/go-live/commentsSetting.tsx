@@ -17,6 +17,7 @@ import BlockedKeywords from "./Comments/BlockedKeywords";
 import StarComment from "./Comments/StarComments";
 import CommentsMuteRules from "./Comments/CommentsMuteRules";
 import MutedAccounts from "./Comments/MutedAccounts";
+import { useSearchParams } from 'react-router-dom';
 
 // Styled switch (same as before)
 const StyledSwitch = styled(Switch)(({ theme }) => ({
@@ -58,10 +59,11 @@ const Comments: React.FC<CommentsProps> = ({ updateSettings, onBack }) => {
   const [showBlockedKeywords, setShowBlockedKeywords] = useState(false); // NEW STATE
   const [allowComments, setAllowComments] = useState(true);
   const [showMostSent, setShowMostSent] = useState(true);
-    const [showStarComment, setShowStarComment] = useState(false);
-    const [showMuteRules, setShowMuteRules] = useState(false);
-    const [showMutedAccounts, setShowMutedAccounts] = useState(false);
-  const id = 'a9a18957-e378-4dae-bbf8-90359f0e7838';
+  const [showStarComment, setShowStarComment] = useState(false);
+  const [showMuteRules, setShowMuteRules] = useState(false);
+  const [showMutedAccounts, setShowMutedAccounts] = useState(false);
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get('streamId');
 
     if (showMuteRules) {
   return <CommentsMuteRules onBack={() => setShowMuteRules(false)} />;
@@ -71,7 +73,7 @@ if (showStarComment) {
 }
   // Show Filter Screen
   if (showFilterScreen) {
-    return <FilterComments onBack={() => setShowFilterScreen(false)} />;
+    return <FilterComments onUpdate={(data) => updateSettings(id, { filterComments: data })} onBack={() => setShowFilterScreen(false)} />;
   }
 
   // Show Blocked Keywords Screen
