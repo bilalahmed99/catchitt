@@ -17,27 +17,6 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import SearchIcon from '@mui/icons-material/Search';
 import UnMuteButton from "./UnmuteButton";
 
-// const mutedUsers = [
-//   {
-//     _id: '655fc1f193289d9edfaea217',
-//     name: 'Giana Workman 1',
-//     username: 'Giann34 1',
-//     avatar: 'https://randomuser.me/api/portraits/women/4.jpg',
-//   },
-//   {
-//     _id: '655fc1f193289d9edfaea217',
-//     name: 'Giana Workman 2',
-//     username: 'Giann34 2',
-//     avatar: 'https://randomuser.me/api/portraits/women/4.jpg',
-//   },
-//   {
-//     _id: '655fc1f193289d9edfaea217',
-//     name: 'Giana Workman 3',
-//     username: 'Giann34 3',
-//     avatar: 'https://randomuser.me/api/portraits/women/4.jpg',
-//   },
-// ];
-
 export default function MutedAccounts({ onBack }: { onBack: () => void }) {
   const [mutedUsers, setMutedUsers] = useState<any>([]);
   const [searchTerm, setSearchTerm] = useState('');
