@@ -41,6 +41,8 @@ import { useAuthStore } from './store/authStore';
 import useApp from './useApp';
 import GoLive from './components/go-live';
 import PreLive from './components/go-live/preLive';
+import PostLive from './components/go-live/postLive';
+import LiveGuest from './components/go-live/GuestLive';
 import DiscoverLive from './components/go-live/DiscoverLive';
 import LiveCategories from './components/go-live/LiveCategories';
 import LiveCategoryPosts from './components/go-live/LiveCategoryPosts';
@@ -1177,6 +1179,8 @@ function App() {
                             <Route path="/create-story" element={<CreateStoryPage />} />
                             <Route path="/golive" element={<GoLive />} />
                             <Route path="/prelive" element={<PreLive />} />
+                            <Route path="/postlive" element={<PostLive />} />
+                            <Route path="/liveguest" element={<LiveGuest />} />
                             <Route path="/live/discover" element={<DiscoverLive />} />
                             <Route path="/live/category" element={<LiveCategories />} />
                             <Route path="/live/category/:categoryName" element={<LiveCategoryPosts />} />
