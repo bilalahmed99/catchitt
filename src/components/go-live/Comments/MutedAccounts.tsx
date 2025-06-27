@@ -40,7 +40,7 @@ export default function MutedAccounts({ onBack }: { onBack: () => void }) {
 
     fetch(endpoint, requestOptions)
     .then((response) => response.json())
-    .then((response) => response.data.mutedUsers && setMutedUsers(response.data.mutedUsers))
+    .then((response) => response.data && setMutedUsers(response.data))
     .catch((error) => console.error('Fetch error:', error));
   };
 
