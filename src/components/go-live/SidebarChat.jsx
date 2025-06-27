@@ -28,6 +28,7 @@ import { io } from 'socket.io-client';
 import { useSearchParams } from 'react-router-dom';
 import CustomMediaPicker from '../user-chat/components/CustomMediaPicker';
 import  styles  from './GoLive.module.scss';
+import TopViewersImage from '../../assets/postLive/TopViewers.png';
 
 
 
@@ -556,7 +557,9 @@ const SidebarChat = ({ selectedLiveVideo, showSidebar, onHideSidebar, profileDet
                           
                          ): (                       
                             <Box>
-                                {<Box
+                                {
+                                  <>
+                                <Box
                                     sx={{
                                     display: 'flex',
                                     alignItems: 'center',
@@ -564,14 +567,36 @@ const SidebarChat = ({ selectedLiveVideo, showSidebar, onHideSidebar, profileDet
                                     mt: 1.5,
                                     mb: 1,
                                     p: 1,
-                                    }}
+                                }}
                                 onClick={() => setShowTopViewers(true)}
-                                >
-                                    <Typography fontWeight={500} fontSize={16}>
+                            >
+                                <Typography fontWeight={500} fontSize={16}>
                                     Top viewers
-                                    </Typography>
-                                    <ArrowForwardIosIcon sx={{ fontSize: 13 }} />
-                                </Box>
+                                </Typography>
+                                <ArrowForwardIosIcon sx={{ fontSize: 13 }} />
+                            </Box>
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    pb: 2, 
+                                    borderBottom: "1px solid rgba(22, 24, 35, 0.2)"                               }}
+                            >
+                                <Typography variant="body1" fontWeight="600" sx={{ flexGrow: 1, textAlign: 'center' }}>
+                                    Top viewers
+                                </Typography>
+                                <IconButton sx={{ color: '#666', padding: 0 }}>
+                                    <HelpOutlineIcon fontSize="small" />
+                                </IconButton>
+                            </Box>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 2 }}>
+                                <img src={TopViewersImage} alt="" />
+                                <Typography fontSize={13} fontWeight={600} mt={0.5}>
+                                    Viewers
+                                </Typography>
+                            </Box>
+                                    </>
                               } 
     
 
