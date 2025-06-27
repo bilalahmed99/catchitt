@@ -181,7 +181,7 @@ export default function PostLive() {
 
     function loadBlockedUsers()
     {
-        let endpoint = `${process.env.VITE_API_URL}/live-stream/v2/get-muted-users`;
+        let endpoint = `${process.env.VITE_API_URL}/profile/blocked-users`;
         let requestOptions =
         {
             method: 'GET',

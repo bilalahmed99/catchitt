@@ -26,7 +26,7 @@ export default function BlockedAccounts({ customProps, onBack }: { customProps: 
 
   function toggleBlockedUser()
   {
-    let endpoint = `${process.env.VITE_API_URL}/live-stream/roomId/mute/${selectedUser._id}`;
+    let endpoint = `${process.env.VITE_API_URL}/profile/${selectedUser._id}/block`;
     let requestOptions =
     {
       method: 'POST',
