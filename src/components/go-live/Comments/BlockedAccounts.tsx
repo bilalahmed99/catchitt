@@ -15,18 +15,18 @@ import {
 } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import SearchIcon from '@mui/icons-material/Search';
-import UnMuteButton from "./UnmuteButton";
+import UnblockButton from "./UnblockButton";
 
-export default function MutedAccounts({ customProps, onBack }: { customProps: any, onBack: () => void }) {
+export default function BlockedAccounts({ customProps, onBack }: { customProps: any, onBack: () => void }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedUser, setSelectedUser] = useState<any>(null);
-  const [showAddMuteButton, setShowAddMuteButton] = useState(false);
+  const [showConfirmUnblock, setShowConfirmUnblock] = useState(false);
 
-  const filteredUsers = customProps.mutedUsers.items.filter(user => user.name.toLowerCase().includes(searchTerm.toLowerCase()) || user.username.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredUsers = customProps.blockedUsers.items.filter(user => user.name.toLowerCase().includes(searchTerm.toLowerCase()) || user.username.toLowerCase().includes(searchTerm.toLowerCase()));
 
-  function toggleMuteUser()
+  function toggleBlockedUser()
   {
-    let endpoint = `${process.env.VITE_API_URL}/live-stream/roomId/mute/${selectedUser._id}`;
+    let endpoint = `${process.env.VITE_API_URL}/profile/${selectedUser._id}/block`;
     let requestOptions =
     {
       method: 'POST',
@@ -40,12 +40,12 @@ export default function MutedAccounts({ customProps, onBack }: { customProps: an
     fetch(endpoint, requestOptions)
     .catch((error) => console.error('Fetch error:', error));
 
-    customProps.setMutedUsers((prev: any) => ({ ...prev, items: prev.items.filter((item: any) => item._id !== selectedUser._id) }));
+    customProps.setBlockedUsers((prev: any) => ({ ...prev, items: prev.items.filter((item: any) => item._id !== selectedUser._id) }));
   };
 
-  if(showAddMuteButton)
+  if(showConfirmUnblock)
   {
-    return <UnMuteButton user={selectedUser} onBack={() => { setSelectedUser(null); setShowAddMuteButton(false); }} onConfirm={() => { toggleMuteUser(); setShowAddMuteButton(false); }} />;
+    return <UnblockButton user={selectedUser} onBack={() => { setSelectedUser(null); setShowConfirmUnblock(false); }} onConfirm={() => { toggleBlockedUser(); setShowConfirmUnblock(false); }} />;
   }
 
   return (
@@ -69,7 +69,7 @@ export default function MutedAccounts({ customProps, onBack }: { customProps: an
                           <path d="M7.69141 1.25L1.69141 7.25L7.69141 13.25" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                           </svg>        </IconButton>
               <Typography fontWeight="bold" variant="body1">
-                Muted Account
+                Blocked Account
               </Typography>
       </Box>
 
@@ -104,7 +104,7 @@ export default function MutedAccounts({ customProps, onBack }: { customProps: an
 
 
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          These accounts are muted for the rest of the LIVE
+          These accounts are Blocked for the rest of the LIVE
         </Typography>
 
         <List>
@@ -112,7 +112,7 @@ export default function MutedAccounts({ customProps, onBack }: { customProps: an
             <ListItem key={index} disableGutters secondaryAction={
               <Button
                 variant="outlined"
-                onClick={() => { setSelectedUser(user); setShowAddMuteButton(true); }}
+                onClick={() => { setSelectedUser(user); setShowConfirmUnblock(true); }}
                 size="small"
                 sx={{
                   borderRadius: 2,
@@ -125,7 +125,7 @@ export default function MutedAccounts({ customProps, onBack }: { customProps: an
                   borderColor: '#000'
                 }}
               >
-                Unmute
+                Unblock
               </Button>
             }>
               <ListItemAvatar>
@@ -139,7 +139,7 @@ export default function MutedAccounts({ customProps, onBack }: { customProps: an
           ))}
         </List>
       </Box>
-      {customProps.mutedUsers.items.length < 1 && (
+      {customProps.blockedUsers.items.length < 1 && (
       <Box
               sx={{
                 flexGrow: 1,
@@ -150,11 +150,11 @@ export default function MutedAccounts({ customProps, onBack }: { customProps: an
               }}
             >
               <Typography variant="subtitle1" fontWeight="bold">
-                No mute accounts
+                No blocked accounts
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 1, maxWidth: 280, px: 2 }}>
+              {/* <Typography variant="body2" color="text.secondary" sx={{ mt: 1, maxWidth: 280, px: 2 }}>
                 Edit this list by tapping "Manage" on a viewer's personal card
-              </Typography>
+              </Typography> */}
             </Box>
       )}
       

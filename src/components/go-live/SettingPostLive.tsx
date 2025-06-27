@@ -14,6 +14,8 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import { styled } from '@mui/material/styles';
 import CommentsSetting from './CommentsSetting'
+import MutedAccounts from './Comments/MutedAccounts';
+import BlockedAccounts from './Comments/BlockedAccounts';
 
 const CustomSwitch = styled(Switch)(({ theme }) => ({
   width: 36,
@@ -96,7 +98,7 @@ const settingsData = [
     title: 'Comment settings',
     description: '',
     type: 'link',
-    onClick: (setShowCommentSettings) => setShowCommentSettings(true),
+    view: 'CommentsSetting',
   },
    {
     title: 'Moderators',
@@ -107,18 +109,29 @@ const settingsData = [
     title: 'Muted Accounts',
     description: 'These accounts are muted for the rest of the LIVE',
     type: 'link',
+    view: 'MutedAccounts',
   },
    {
     title: 'Blocked Accounts',
     description: '',
     type: 'link',
+    view: 'BlockedAccounts',
   },
 ];
 
-const SettingsPanel = () => {
-  const [showCommentSettings, setShowCommentSettings] = useState(false);
-  if (showCommentSettings) {
-    return <CommentsSetting onBack={() => setShowCommentSettings(false)} />;
+const SettingsPanel = ({customProps}: {customProps: any}) => {
+  const [activeView, setActiveView] = useState<any>(null);
+  
+  if (activeView == 'CommentsSetting') {
+    return <CommentsSetting onBack={() => setActiveView(null)} />;
+  }
+  else if(activeView == 'MutedAccounts')
+  {
+    return <MutedAccounts customProps={customProps} onBack={() => setActiveView(null)} />;
+  }
+  else if(activeView == 'BlockedAccounts')
+  {
+    return <BlockedAccounts customProps={customProps} onBack={() => setActiveView(null)} />;
   }
 
   return (
@@ -138,7 +151,7 @@ const SettingsPanel = () => {
           <React.Fragment key={index}>
             <ListItem
                 button={item.type === 'link'}
-                onClick={() => item.onClick?.(setShowCommentSettings)} // 👈 Use function from object
+                onClick={() => setActiveView(item.view)} // 👈 Use function from object
                 secondaryAction={
                   item.type === 'switch' ? (
                     <CustomSwitch edge="end" checked={item.value} />
