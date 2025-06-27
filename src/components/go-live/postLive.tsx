@@ -132,7 +132,8 @@ export default function PostLive() {
     const [showEditLiveGoal, setShowEditLiveGoal] = useState(false);
     const [showFaqs, setShowFaqs] = useState(false);
     const [showChatSideBar, setShowChatSideBar] = useState(true);
-
+    const [liveGoals, setLiveGoals] = useState<any>([]);
+    const [addLiveGoalAutomatically, setAddLiveGoalAutomatically] = useState<any>(true);
     const [openSettings, setOpenSettings] = useState(false);
     const [openGiftsPanel, setOpenGiftsPanel] = useState(false);
      const [righSideEnable, setRighSideEnable] = useState(false);
@@ -157,6 +158,25 @@ export default function PostLive() {
             isLoading: false,
         }
     );
+
+    function loadLiveGoals()
+    {
+        let endpoint = `${process.env.VITE_API_URL}/v2/get-latest-live-goal`;
+        let requestOptions =
+        {
+            method: 'GET',
+            headers:
+            {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+            },
+        };
+
+        fetch(endpoint, requestOptions)
+        .then((response) => response.json())
+        .then((response) => response.data && setLiveGoals(response.data))
+        .catch((error) => console.error('Fetch error:', error));
+    };
 
     function loadMutedUsers()
     {
@@ -208,6 +228,7 @@ export default function PostLive() {
     useEffect(() => {
         loadRoomDetails();
          loadProfileDetails();
+        loadLiveGoals();
         loadMutedUsers();
         loadBlockedUsers();
     }, []);
@@ -427,6 +448,7 @@ export default function PostLive() {
                                         <ChevronRight />
                                     </Box>
                                     <Box
+                                        onClick={()=> setShowEditLiveGoal(!showEditLiveGoal) }
                                         sx={{
                                             backgroundColor: "#03002BCC",
                                             borderTopLeftRadius: '7px',
@@ -721,7 +743,7 @@ export default function PostLive() {
                             </CardContent> */}
                         </Card>
                         }
-                        {showEditLiveGoal && <EditLiveGoal onConfirm={() => setShowEditLiveGoal(!showEditLiveGoal)} onLiveGoalAdded={(goals) => setShowEditLiveGoal(!showEditLiveGoal)} />}
+                        {showEditLiveGoal && <EditLiveGoal liveGoals={liveGoals} addLiveGoalAutomatically={addLiveGoalAutomatically} onConfirm={()=> setShowEditLiveGoal(!showEditLiveGoal) } onLiveGoalAdded={(goals: any, addLiveGoalAutomatically: any) => { setShowEditLiveGoal(!showEditLiveGoal); setLiveGoals(goals); setAddLiveGoalAutomatically(addLiveGoalAutomatically) }} /> }
                         {showFaqs && <LiveGoalFAQ onBack={() => console.log('Back pressed')} />}
                         {openSettings &&
                             <SettingsPanel />
