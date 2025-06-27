@@ -543,11 +543,11 @@ export default function PostLive() {
                     </Box>
                     
                     {/* Right Sidebar */}
-                                            {/* {profileDetails && showChatSideBar && <SidebarChat selectedLiveVideo={selectedLiveVideo} profileDetails={profileDetails} showFaqsSidebar={()=> {setShowFaqs(!showFaqs); setShowChatSideBar(false); console.log("back button clicked...")}} /> } */}
+                                            {profileDetails && showChatSideBar && <SidebarChat selectedLiveVideo={selectedLiveVideo} profileDetails={profileDetails} showFaqsSidebar={()=> {setShowFaqs(!showFaqs); setShowChatSideBar(false); console.log("back button clicked...")}} /> }
 
-                    {showFaqs && <Box sx={{ width: 400, }}>
+                    {/* {showFaqs && <Box sx={{ width: 400, }}>
                         <LiveGoalFAQ onBack={() => {setShowFaqs(false); setShowChatSideBar(true)}} />
-                    </Box>}
+                    </Box>} */}
                     
 
                      <Box sx={{ width: '20rem', }}>

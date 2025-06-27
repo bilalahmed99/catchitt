@@ -67,7 +67,7 @@ const GiftsData = [
     rightdescription: 'New Gift series',
     type: 'link',
     image: <img src={LiveGiftLive} alt="Live Gifts" style={{ width: 24, height: 24 }} />,
-    id: 'live-gifts', // Added ID
+    id: 'live-gifts', // Added ID,
   },
   {
     title: 'Flip Camera',

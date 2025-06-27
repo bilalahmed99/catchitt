@@ -23,7 +23,7 @@ import CircleIcon from "@mui/icons-material/Circle";
 import AddLiveGoal from '../../assets/postLive/AddLiveGoal.png';
 import HelpIcon from '../../assets/postLive/Help-icon.png';
 import VerticalLine from '../../assets/postLive/VerticalLine.png';
-
+import LifeGiftsPost from './LiveGiftsPost';
 
 const CustomSwitch = styled(Switch)(({ theme }) => ({
   width: 42,
