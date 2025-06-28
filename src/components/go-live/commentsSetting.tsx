@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -18,6 +18,7 @@ import StarComment from "./Comments/StarComments";
 import CommentsMuteRules from "./Comments/CommentsMuteRules";
 import MutedAccounts from "./Comments/MutedAccounts";
 import { useSearchParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 // Styled switch (same as before)
 const StyledSwitch = styled(Switch)(({ theme }) => ({
@@ -65,16 +66,33 @@ const Comments: React.FC<CommentsProps> = ({ updateSettings, onBack }) => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get('streamId');
 
+  const roomDetails = useSelector((state: any) => state?.reducers?.roomDetails?.data);
+  const commentSettings = roomDetails?.settings?.commentSettings;
+
+  useEffect(() => {
+    if (commentSettings) {
+      setAllowComments(commentSettings.allowComments ?? true);
+      setShowMostSent(commentSettings.showMostSentComments ?? true);
+    }
+  }, [commentSettings]);
+
+
+  console.log('roomDetails in comments', roomDetails);
     if (showMuteRules) {
-  return <CommentsMuteRules onBack={() => setShowMuteRules(false)} updateSettings={updateSettings} streamId={id} />;
-}
-if (showStarComment) {
-  return <StarComment onBack={() => setShowStarComment(false)} />;
-}
-  // Show Filter Screen
-  if (showFilterScreen) {
-    return <FilterComments onUpdate={(data) => updateSettings(id, { filterComments: data })} onBack={() => setShowFilterScreen(false)} />;
-  }
+      return <CommentsMuteRules onBack={() => setShowMuteRules(false)} updateSettings={updateSettings} streamId={id} />;
+    }
+    if (showStarComment) {
+      return <StarComment onBack={() => setShowStarComment(false)} />;
+    }
+    // Show Filter Screen
+    if (showFilterScreen) {
+      return <FilterComments onUpdate={(data) => updateSettings(id, { filterComments: data })} onBack={() => setShowFilterScreen(false)}  filterSettings={commentSettings?.filterComments || {
+        spamComments: false,
+        unkindComments: false,
+        communityFlaggedComments: false,
+        showInFeed: false
+      }} />;
+    }
 
   // Show Blocked Keywords Screen
   if (showBlockedKeywords) {

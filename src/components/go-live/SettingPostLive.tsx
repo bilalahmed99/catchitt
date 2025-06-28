@@ -18,6 +18,13 @@ import axios from 'axios';
 
 import MutedAccounts from './Comments/MutedAccounts';
 import BlockedAccounts from './Comments/BlockedAccounts';
+import { useSearchParams } from 'react-router-dom';
+import {
+  fetchRoomDetailsStart,
+  fetchRoomDetailsSuccess,
+  fetchRoomDetailsFailure,
+} from '../../redux/reducers/roomDetailsSlice';
+import { useDispatch } from 'react-redux';
 
 const CustomSwitch = styled(Switch)(({ theme }) => ({
   width: 36,
@@ -204,11 +211,43 @@ const updateSettings = async (
   try {
     const response = await axios.patch(API_URL, data, config);
     console.log("Updated settings:", response.data);
+    loadRoomDetails();
     return response.data;
   } catch (error) {
     console.error("Update failed:", error);
   }
 };
+
+const dispatch = useDispatch();
+const [searchParams] = useSearchParams();
+    const streamId = searchParams.get('streamId');
+
+ const loadRoomDetails = () => {
+        let endpoint = `${process.env.VITE_API_URL}/live-stream/${streamId}`;
+        let requestOptions =
+        {
+            method: 'GET',
+            headers:
+            {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+            },
+        };
+        dispatch(fetchRoomDetailsStart());
+
+        console.log('endpoint', endpoint);
+        console.log('requestOptions', requestOptions);  
+        fetch(endpoint, requestOptions)
+        .then((response) => response.json())
+        .then((response) => { 
+            console.log('response data of prelive', response.data);
+            dispatch(fetchRoomDetailsSuccess(response.data));
+        })
+        .catch((error) => {
+            console.error('Fetch error:', error);
+            dispatch(fetchRoomDetailsFailure(error.message || 'Failed to load room details'));
+        });
+    }
 
 
   if(activeView == 'MutedAccounts')

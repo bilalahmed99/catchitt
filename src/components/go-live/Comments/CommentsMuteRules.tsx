@@ -12,6 +12,8 @@ import {
 import CommentsMuteRuleHelp from "./CommentsMuteRuleHelp"; // ← Import your FAQ screen
 import AddMuteRulesComment from "./AddMuteRules";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useSelector } from 'react-redux';
+
 
 
 interface CommentsMuteRulesProps {
@@ -24,11 +26,19 @@ const MuteRules: React.FC<CommentsMuteRulesProps> = ({ onBack, updateSettings, s
   const [showAddMuteRule, setShowAddMuteRule] = useState(false);
   const [showMuteHelp, setShowMuteHelp] = useState(false);
   const [muteRules, setMuteRules] = useState<any[]>([]);
+  const roomDetails = useSelector((state: any) => state?.reducers?.roomDetails?.data);
+
 
   const handleDeleteRule = (indexToDelete: number) => {
   const updatedRules = muteRules.filter((_, index) => index !== indexToDelete);
     setMuteRules(updatedRules);
   };
+
+  useEffect(() => {
+    if (roomDetails?.settings?.muteRules?.length > 0) {
+      setMuteRules(roomDetails.settings.muteRules);
+    }
+  }, [roomDetails?.settings?.muteRules]);
 
   useEffect(() => {
         saveAll();

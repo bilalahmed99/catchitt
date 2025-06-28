@@ -233,6 +233,7 @@ export default function PostLive() {
         fetch(endpoint, requestOptions)
         .then((response) => response.json())
         .then((response) => { 
+            console.log('response data of prelive', response.data);
             dispatch(fetchRoomDetailsSuccess(response.data));
             setSelectedLiveVideo((prev: any) => ({...prev, details: response.data, isLoading: false})); 
         })
@@ -713,6 +714,7 @@ export default function PostLive() {
                             </CardContent> */}
                         </Card>
                         }
+                        {/* {profileDetails && showChatSideBar && <SidebarChat selectedLiveVideo={selectedLiveVideo} profileDetails={profileDetails} showFaqsSidebar={()=> {setShowFaqs(!showFaqs); setShowChatSideBar(false); console.log("back button clicked...")}} /> } */}
                         {showEditLiveGoal && <EditLiveGoal liveGoals={liveGoals} addLiveGoalAutomatically={addLiveGoalAutomatically} onConfirm={()=> setShowEditLiveGoal(!showEditLiveGoal) } onLiveGoalAdded={(goals: any, addLiveGoalAutomatically: any) => { setShowEditLiveGoal(!showEditLiveGoal); setLiveGoals(goals); setAddLiveGoalAutomatically(addLiveGoalAutomatically) }} /> }
                         {showFaqs && <LiveGoalFAQ onBack={() => console.log('Back pressed')} />}
                         {openSettings &&
