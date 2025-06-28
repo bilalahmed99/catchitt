@@ -180,6 +180,24 @@ export default function PostLive() {
         .catch((error) => console.error('Fetch error:', error));
     };
 
+    function updateSettings(payload: any)
+    {
+        let endpoint = `${process.env.VITE_API_URL}/live-stream/v2/settings/${streamId}`;
+        let requestOptions =
+        {
+            method: 'PATCH',
+            headers:
+            {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        };
+
+        fetch(endpoint, requestOptions)
+        .catch((error) => console.error('Fetch error:', error));
+    };
+
     const toggleSettings = () => {
         // setOpenSettings((prev) => !prev);
         setOpenGiftsPanel((prev) => !prev);
@@ -192,6 +210,16 @@ export default function PostLive() {
         loadMutedUsers();
         loadBlockedUsers();
     }, []);
+
+    useEffect(() => {
+        let payload =
+        {
+            liveGoal: liveGoals.map((gift: any) => ({ giftId: gift._id, giftName: gift.name, giftImageUrl: gift.imageUrl, giftCoins: gift.price, count: gift.count })),
+            addLiveGoalAutomatically,
+        };
+
+        updateSettings(payload);
+    }, [liveGoals]);
 
     function loadProfileDetails()
     {
