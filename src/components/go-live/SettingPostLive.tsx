@@ -16,6 +16,8 @@ import { styled } from '@mui/material/styles';
 import CommentsSetting from './CommentsSetting'
 import axios from 'axios';
 
+import MutedAccounts from './Comments/MutedAccounts';
+import BlockedAccounts from './Comments/BlockedAccounts';
 
 const CustomSwitch = styled(Switch)(({ theme }) => ({
   width: 36,
@@ -98,7 +100,7 @@ const settingsData = [
     title: 'Comment settings',
     description: '',
     type: 'link',
-    onClick: (setShowCommentSettings) => setShowCommentSettings(true),
+    view: 'CommentsSetting',
   },
    {
     title: 'Moderators',
@@ -109,72 +111,22 @@ const settingsData = [
     title: 'Muted Accounts',
     description: 'These accounts are muted for the rest of the LIVE',
     type: 'link',
+    view: 'MutedAccounts',
   },
    {
     title: 'Blocked Accounts',
     description: '',
     type: 'link',
+    view: 'BlockedAccounts',
   },
 ];
 
-const SettingsPanel = () => {
+const SettingsPanel = ({customProps}: {customProps: any}) => {
+const [activeView, setActiveView] = useState<any>(null);
+const [showCommentSettings, setShowCommentSettings] = useState(false);
+  
 
-  const updateSettings1 = async (
-    id: string,
-    settings: { allowComments?: boolean; showMostSent?: boolean } = {}
-  ) => {
-    // Destructure incoming settings with default values
-    const { allowComments = true, showMostSent = true } = settings;
-  
-    const API_KEY = process.env.VITE_API_URL;
-    const token = localStorage.getItem('token');  
-    const API_URL = `${API_KEY}/live-stream/v2/settings/${id}`;
-  
-    const config = {
-      headers: {
-        "Content-Type": "application/json", // Use application/json for PATCH
-        Authorization: `Bearer ${token}`,
-      },
-    };
-  
-    const data = {
-      hearYourVoice: true,
-      moderators: [""],  // default empty string
-      commentSettings: {
-        allowComments: allowComments,
-        duration: 0,
-        filterComments: {
-          spamComments: true,
-          unkindComments: true,
-          communityFlaggedComments: true,
-          showInFeed: true,
-        },
-        showMostSentComments: showMostSent,
-        blockedKeyworkds: [
-          {
-            keyword: "", // empty string
-            blockSimilarVersion: true,
-          },
-        ],
-      },
-      muteRules: [
-        {
-          comment: "", // empty string
-          duration: 0,
-        },
-      ],
-      mutedUsers: [""],
-      blockedUsers: [""],
-    };
-  
-    try {
-      const response = await axios.patch(API_URL, data, config);
-      console.log(response.data, "response data");
-      return response.data;
-    } catch (error) {
-      console.error(error);
-    }
-  };
+
 
 const updateSettings = async (
   id: string,
@@ -259,12 +211,29 @@ const updateSettings = async (
 };
 
 
-
-
-  const [showCommentSettings, setShowCommentSettings] = useState(false);
-  if (showCommentSettings) {
-    return <CommentsSetting updateSettings={updateSettings} onBack={() => setShowCommentSettings(false)} />;
+  if(activeView == 'MutedAccounts')
+  {
+    return <MutedAccounts customProps={customProps} onBack={() => setActiveView(null)} />;
   }
+  else if(activeView == 'BlockedAccounts')
+  {
+    return <BlockedAccounts customProps={customProps} onBack={() => setActiveView(null)} />;
+  }
+  
+  else if(activeView == 'CommentsSetting')
+  {
+    return <CommentsSetting updateSettings={updateSettings} onBack={() => setShowCommentSettings(false)} />;
+    // return <CommentsSetting customProps={customProps} onBack={() => setActiveView(null)} />;
+  }
+
+
+
+
+
+  // const [showCommentSettings, setShowCommentSettings] = useState(false);
+  // if (showCommentSettings) {
+  //   return <CommentsSetting updateSettings={updateSettings} onBack={() => setShowCommentSettings(false)} />;
+  // }
 
   return (
     <Box sx={{ maxWidth: 400, mx: 'auto', right: 0, top: 0 }}>
@@ -283,7 +252,7 @@ const updateSettings = async (
           <React.Fragment key={index}>
             <ListItem
                 button={item.type === 'link'}
-                onClick={() => item.onClick?.(setShowCommentSettings)} // 👈 Use function from object
+                onClick={() => setActiveView(item.view)} // 👈 Use function from object
                 secondaryAction={
                   item.type === 'switch' ? (
                     <CustomSwitch edge="end" checked={item.value} />

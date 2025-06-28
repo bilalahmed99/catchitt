@@ -154,7 +154,7 @@ const GiftsData = [
 
     
 
-const GiftsPanel = () => {
+const GiftsPanel = ({customProps}: {customProps: any}) => {
 
   const [profileDetails, setProfileDetails] = useState<any>({
       details: [],
@@ -274,7 +274,7 @@ const GiftsPanel = () => {
       )}
 
       {activePanel === 'settings' && (
-        <SettingsPanel onClose={handleClosePanel} />
+        <SettingsPanel onClose={handleClosePanel} customProps={customProps} />
       )}
       {activePanel === 'about-me' && (
         <AboutMe onBack={handleClosePanel}  profileDetails={profileDetails} />

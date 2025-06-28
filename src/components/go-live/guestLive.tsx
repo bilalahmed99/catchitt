@@ -1,8 +1,10 @@
 import { SideNavBar } from './goLiveSidebar';
 import { useRef, useState, useEffect, useMemo } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { ChevronLeft, ChevronRight } from '@mui/icons-material';
-
+import { ChevronLeft, ChevronRight, FlipCameraAndroid, Videocam } from '@mui/icons-material';
+import PauseCircleIcon from '@mui/icons-material/PauseCircle';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Box,  Radio,
   RadioGroup,
@@ -48,9 +50,16 @@ import { caesium,defaultGreyBackground } from '../../icons';
 import { abs } from 'mathjs';
 import  GamingLiveUI  from './categories';
 import { dark } from '@mui/material/styles/createPalette';
+import GuestRequestCard from './GuestRequestCard';
+import LiveInviteCard from './InviteGuestLive';
+
+ function scrollToTop()
+  {
+    document.querySelectorAll('*').forEach(el => el.scrollTo({ top: 0, behavior: 'smooth' }));
+  };
 
 
-
+  
 const reasons = [
   'Violent extremism',
   'Hateful behavior',
@@ -117,7 +126,21 @@ const shareOptions = [
  },
 ];
 
-function LiveWithChat({ darkTheme }: { darkTheme?: any }) {
+function GuestLive({ darkTheme }: { darkTheme?: any }) {
+
+    const [showOverlay, setShowOverlay] = useState(false);
+
+  const handlePauseClick = () => {
+    setShowOverlay(true);
+  };
+
+  const handleGoLive = () => {
+    setShowOverlay(false);
+  };
+
+
+
+
   const navigate = useNavigate();
   const [showTopViewers, setShowTopViewers] = useState(false);
 
@@ -987,7 +1010,9 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
 
 
   return (
-
+    <div className='flex' style={{ background: '#000' }}>
+      <SideNavBar />
+      <div className={`${darkTheme} w-[calc(100%-16rem)] ml-auto bg-white `}>
         <Box className={`${darkTheme}`} sx={{display: 'flex', flexDirection: 'column' }}>
           {/* Main Content Grid */}
           <Grid container sx={{ display: 'flex',}}>
@@ -1225,15 +1250,106 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                     )}
                     </Stack>
                 </Box>
-                <Box sx={{ width: '100%', height: '95%', background:'black' }}>
-                    {/* Placeholder for Video */}
-                    <Typography color="white" align="center" height="100%" >
-                      Video Player Area
-                    </Typography>
-                    
+                <Box sx={{ width: '100%', height: '95%', background: 'black', position: 'relative' }}>
+      {/* Pause Button */}
+      <IconButton
+        onClick={handlePauseClick}
+        sx={{ position: 'absolute', top: 10, right: 10, color: 'white', zIndex: 10 }}
+      >
+        <PauseCircleIcon fontSize="large" />
+      </IconButton>
 
-                    {/* Gift Bar */}
-                    <Box sx={{ position: 'absolute', bottom: 0, width: '100%', bgcolor: '#111', p: 1, display: 'flex', justifyContent: 'space-around' }}>
+      {/* Main Video Area */}
+      <Typography color="white" align="center" height="100%">
+        Video Player Area
+      </Typography>
+
+      {/* === OVERLAY ON PAUSE === */}
+      {showOverlay && (
+        <Box
+      sx={{
+        position: 'absolute',
+        inset: 0,
+        zIndex: 10,
+        bgcolor: 'rgba(0, 0, 0, 0.85)',
+        backdropFilter: 'blur(8px)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      {/* Center Card with Avatar */}
+      <Box
+        sx={{
+          bgcolor: '#1c1c1c',
+          p: 2,
+          borderRadius: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 2,
+          boxShadow: 3,
+          width: '15rem',
+          height: '20rem',
+          position: 'relative',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1528475422887-f47817e10712?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8ZHVtbXl8ZW58MHx8MHx8fDA%3D)',
+          
+        }}
+      >
+        <Box></Box>
+
+        {/* Icons */}
+        <Box sx={{ display: 'flex', gap: 1, position: 'absolute', left: 2, top: 2 }}>
+          <IconButton sx={{ color: 'white' }}>
+            <Videocam />
+          </IconButton>
+          <IconButton sx={{ color: 'white' }}>
+            <FlipCameraAndroid />
+          </IconButton>
+        </Box>
+
+        {/* Avatar with ring */}
+        <Box
+          sx={{
+            borderRadius: '50%',
+            border: '4px solid white',
+            padding: 1,
+          }}
+        >
+          <Avatar src='https://images.unsplash.com/profile-1670919679768-80394c137330image?w=32&dpr=2&crop=faces&bg=%23fff&h=32&auto=format&fit=crop&q=60&ixlib=rb-4.1.0' sx={{ width: 80, height: 80 }} />
+        </Box>
+
+        {/* Text */}
+        
+      </Box>
+          <Typography variant="body2" sx={{mt: 1, color: '#fff'}}>
+            You will connect using audio
+            </Typography>
+      {/* Bottom Button */}
+      <Box sx={{ position: 'absolute', bottom: 20, width: '20rem', px: 3 }}>
+        <Button
+          fullWidth
+          variant="contained"
+          sx={{
+            backgroundColor: '#FE2C55',
+            fontWeight: 'bold',
+            textTransform: 'none',
+            fontSize: 16,
+            py: 1.25,
+            '&:hover': {
+              backgroundColor: '#d62949',
+            },
+          }}
+        >
+          Go LIVE (5s)
+        </Button>
+      </Box>
+    </Box>
+      )}
+
+     <Box sx={{ position: 'absolute', bottom: 0, width: '100%', bgcolor: '#111', p: 1, display: 'flex', justifyContent: 'space-around' }}>
                          <Box
                                 sx={{
                                     bgcolor: '#1c1c1c',
@@ -1360,8 +1476,9 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                                 </Link>
                             </Box>
                          </Box>
-                    </Box>
-                </Box>
+    </Box>
+    </Box>
+                
                 </>
                 )}
                 <Box sx={{px: 2}}>
@@ -1434,7 +1551,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                 </Box> 
             </Grid>
             {/* Right Sidebar */}
-            {showSidebar &&(
+            {!showSidebar &&(
             <Grid item  sx={{ position: 'fixed', top: 0, right: 0, height: '100vh', width: '20.5rem', bgcolor: '#fafafa', transform: showSidebar ? "translateX(0)" : "translateX(100%)", borderLeft: '1px solid #ddd', p: 0 }}>
               <Box
                 sx={{
@@ -1460,12 +1577,12 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                             <Box
                                 sx={{
                                 display: "flex",
-                                alignItems: "center",
                                 justifyContent: "space-between",
+                                alignItems: 'center',
                                 px: 2,
                                 py: 1.5,
                                 borderBottom: "1px solid #eee",
-                                height: "100%",
+                                height: "3rem",
                                 }}
                             >
                                 <IconButton size="small" onClick={() => setShowTopViewers(!showTopViewers)}>   
@@ -2551,6 +2668,9 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
               </Box>
             </Grid>
             )}
+            {/* <GuestRequestCard />
+             */}
+             <LiveInviteCard />
           </Grid>
 
            {/* <Modal open={inSuceedCase}>
@@ -2671,7 +2791,17 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
             </Dialog>
            <RankingSettingsModal rankingClick={rankingClick} isShowRanking={isShowRanking} open={openRating} onClose={() => setOpenRating(false)} />
         </Box>
+
+      </div>
+      <button className='bg-[#FE2C55] rounded-full p-1 fixed right-2 bottom-2' onClick={scrollToTop}>
+        <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M13.1367 6.77725C13.168 6.74626 13.1927 6.70939 13.2097 6.66877C13.2266 6.62815 13.2353 6.58458 13.2353 6.54058C13.2353 6.49657 13.2266 6.45301 13.2097 6.41239C13.1927 6.37177 13.168 6.3349 13.1367 6.30391L8.70671 1.87058C8.51921 1.68331 8.26504 1.57812 8.00004 1.57812C7.73504 1.57812 7.48087 1.68331 7.29337 1.87058L2.86004 6.30391C2.8288 6.3349 2.804 6.37177 2.78708 6.41239C2.77015 6.45301 2.76144 6.49657 2.76144 6.54058C2.76144 6.58458 2.77015 6.62815 2.78708 6.66877C2.804 6.70939 2.8288 6.74626 2.86004 6.77725L3.79671 7.71058C3.82825 7.74241 3.86588 7.76756 3.90736 7.78451C3.94884 7.80147 3.99332 7.80989 4.03812 7.80927C4.08293 7.80865 4.12715 7.799 4.16815 7.78089C4.20914 7.76279 4.24606 7.73661 4.27671 7.70391L7.00004 4.83058V11.5806C7.00004 11.669 7.03516 11.7538 7.09767 11.8163C7.16018 11.8788 7.24497 11.9139 7.33337 11.9139H8.66671C8.75511 11.9139 8.8399 11.8788 8.90241 11.8163C8.96492 11.7538 9.00004 11.669 9.00004 11.5806V4.82725L11.7234 7.70724C11.7542 7.73972 11.7913 7.76564 11.8325 7.78346C11.8736 7.80127 11.9179 7.81061 11.9627 7.81092C12.0075 7.81124 12.0519 7.80251 12.0932 7.78527C12.1346 7.76803 12.1721 7.74262 12.2034 7.71058L13.1367 6.77725ZM2.66671 12.9139C2.5783 12.9139 2.49352 12.949 2.43101 13.0115C2.36849 13.0741 2.33337 13.1588 2.33337 13.2472V14.5806C2.33337 14.669 2.36849 14.7538 2.43101 14.8163C2.49352 14.8788 2.5783 14.9139 2.66671 14.9139H13.3334C13.4218 14.9139 13.5066 14.8788 13.5691 14.8163C13.6316 14.7538 13.6667 14.669 13.6667 14.5806V13.2472C13.6667 13.1588 13.6316 13.0741 13.5691 13.0115C13.5066 12.949 13.4218 12.9139 13.3334 12.9139H2.66671Z" fill="white"/>
+        </svg>
+      </button>
+    </div>
+
+        
   );
 }
 
-export default LiveWithChat;
+export default GuestLive;
