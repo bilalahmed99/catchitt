@@ -196,6 +196,9 @@ function LiveWithChat({ darkTheme }: { darkTheme?: any }) {
     const loggedInUserId = localStorage.getItem('userId');
     const [isUserMuted, setIsUserMuted] = useState(false);
 
+    const [searchParams] = useSearchParams();
+    const streamId = searchParams.get('streamId');
+
     useEffect(() => {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
       console.log('Messages updated:', messages);
@@ -571,10 +574,35 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
     );
   };
 
+  function leaveLiveStreamRoom(streamId: any)
+  {
+    const Payload =
+    {
+      accessToken: token ?? '',
+      liveStreamRoomId: streamId || '',
+      userId: authUser?._id || '',
+      userFullName: authUser?.name || '',
+      name: authUser?.name,
+      userName: authUser?.username,
+      userEmail: authUser?.email,
+      userImage: authUser?.avatar || authUser?.cover,
+    };
+
+    socket.emit('leaveLiveStreamRoom', Payload);
+  };
+
   useEffect(() => {
-    joinLiveStreamRoom(streamIdFromUrl);
     joinedLiveStreamRoom();
   }, []);
+
+  useEffect(() => {
+    streamId && joinLiveStreamRoom(streamId);
+    
+    return () =>
+    {
+      streamId && leaveLiveStreamRoom(streamId);
+    };
+  }, [streamId]);
 
   
   function startSocket() {
@@ -860,8 +888,6 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
       isLoading: false,
     }
   );
-  const [searchParams] = useSearchParams();
-  const streamId = searchParams.get('streamId');
 
   function loadLiveVideo()
   {
