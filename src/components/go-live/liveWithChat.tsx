@@ -546,13 +546,18 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
         // let addUserObject = { userId: sender, accessToken: token };
         // let newAddUserObject = JSON.stringify(addUserObject);
 
-        // let addUserObject = { userId: profileData?._id, accessToken: token };
-        // console.log('addUserObject',addUserObject)
-        // let newAddUserObject = JSON.stringify(addUserObject);
-        // (socketRef.current as any).emit('add-user', newAddUserObject);
-        
-        
+          const profileInfo1 = localStorage.getItem('profile');
+          const profileParsed = JSON.parse(profileInfo1);
+           let addUserObject = { userId: profileParsed?._id || '', accessToken: token };
+          // console.log('addUserObject',addUserObject)
+          // let newAddUserObject = JSON.stringify(addUserObject);
+          (socketRef.current as any).emit('add-user', addUserObject);
+        // },5000);
 
+        (socketRef.current as any).on('sendJoinRequestLiveStreamUserAsGuest', (response: any) => {
+            alert()
+          console.log('sendJoinRequestLiveStreamUserAsGuest response:', response);
+        });
         (socketRef.current as any).on('user-muted', (data: any) => {
           setIsUserMuted(true);
         });

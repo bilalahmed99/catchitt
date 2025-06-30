@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState,useCallback } from "react";
 import {
     Card,
     CardContent,
@@ -102,6 +102,17 @@ export default function PostLive() {
     const socketRef = useRef();
     const SERVER_URL = 'https://prodapi.seezitt.com';
     const [isConnected, setIsConnected] = useState(false);
+    const [profileData, setProfileData] = useState<any>([]);
+         const API_KEY = process.env.VITE_API_URL;
+        const token = localStorage.getItem('token') ? localStorage.getItem('token') : '';
+    
+        useEffect(() => {
+            const profileInfo = localStorage.getItem('profile');
+            if (profileInfo) {
+            setProfileData(JSON.parse(profileInfo));
+            }
+        }, []); // ✅ empty array = only runs once
+    
 
     const [profileDetails, setProfileDetails] = useState<any>(
         {
@@ -189,6 +200,8 @@ export default function PostLive() {
       useEffect(() => {
         startSocket();
       }, []);
+
+      
           
 
      function startSocket() {
@@ -204,16 +217,49 @@ export default function PostLive() {
             reconnectionAttempts: 5, // Number of reconnection attempts before giving up
             reconnectionDelay: 1000, // Time (ms) to wait before trying to reconnect
         });
+
+    
+
     
         (socketRef.current as any).on('connect', () => {
             setIsConnected(true);
             console.log('Connected to socket server.', (socketRef.current as any));
+            const profileInfo1 = localStorage.getItem('profile');
+            const profileParsed = JSON.parse(profileInfo1);
+            if (profileInfo1) {
+                setProfileData(JSON.parse(profileInfo1));
+            }
+
+            if(profileParsed){
+                console.log('profile data info', profileParsed);
+                console.log(profileParsed._id);
+                  let addUserObject = { userId: profileParsed._id, accessToken: token };
+                (socketRef.current as any).emit('add-user', addUserObject);
+
+                let joinLiveStreamRoom: { userId: string, id: string, userFullName:string, userEmail:string, liveStreamRoomId: string; accessToken: string; name?: string; userName?: string; email?: string; userImage?: string } = {
+                    id: streamId,
+                    userId: profileParsed?._id || '',
+                    liveStreamRoomId: streamId,
+                    accessToken: token ?? '',
+                    userFullName: profileParsed?.name || '',
+                    name: profileParsed?.name,
+                    userName: profileParsed?.username, 
+                    userEmail: profileParsed?.email,
+                    userImage: profileParsed?.avatar || profileParsed?.cover,
+                };
+                
+                (socketRef.current as any).emit('joinLiveStreamRoom', joinLiveStreamRoom, (response: any) => {
+                    console.log('Joined live stream room response:', response);
+                });
+            }
+          
+
+
             (socketRef.current as any).on('joinedliveStreamRoom', (data: any) => {
              
             });
 
             (socketRef.current as any).on('sendJoinRequestLiveStreamUserAsGuest', (response: any) => {
-                alert()
               console.log('sendJoinRequestLiveStreamUserAsGuest response:', response);
             });
     
@@ -681,7 +727,7 @@ export default function PostLive() {
                     </Box>
                     
                     {/* Right Sidebar */}
-                                            {profileDetails && showChatSideBar && <SidebarChat selectedLiveVideo={selectedLiveVideo} profileDetails={profileDetails} showFaqsSidebar={()=> {setShowFaqs(!showFaqs); setShowChatSideBar(false); console.log("back button clicked...")}} /> }
+                                            {/* {profileDetails && showChatSideBar && <SidebarChat selectedLiveVideo={selectedLiveVideo} profileDetails={profileDetails} showFaqsSidebar={()=> {setShowFaqs(!showFaqs); setShowChatSideBar(false); console.log("back button clicked...")}} /> } */}
 
                     {/* {showFaqs && <Box sx={{ width: 400, }}>
                         <LiveGoalFAQ onBack={() => {setShowFaqs(false); setShowChatSideBar(true)}} />
