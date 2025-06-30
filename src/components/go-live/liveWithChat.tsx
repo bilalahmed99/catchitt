@@ -550,8 +550,8 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
           const profileParsed = JSON.parse(profileInfo1);
            let addUserObject = { userId: profileParsed?._id || '', accessToken: token };
           // console.log('addUserObject',addUserObject)
-          // let newAddUserObject = JSON.stringify(addUserObject);
-          (socketRef.current as any).emit('add-user', addUserObject);
+          let newAddUserObject = JSON.stringify(addUserObject);
+          (socketRef.current as any).emit('add-user', newAddUserObject);
         // },5000);
 
         (socketRef.current as any).on('sendJoinRequestLiveStreamUserAsGuest', (response: any) => {

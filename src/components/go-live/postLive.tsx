@@ -234,7 +234,8 @@ export default function PostLive() {
                 console.log('profile data info', profileParsed);
                 console.log(profileParsed._id);
                   let addUserObject = { userId: profileParsed._id, accessToken: token };
-                (socketRef.current as any).emit('add-user', addUserObject);
+                  let newAddUserObject = JSON.stringify(addUserObject);
+                  (socketRef.current as any).emit('add-user', newAddUserObject);
 
                 let joinLiveStreamRoom: { userId: string, id: string, userFullName:string, userEmail:string, liveStreamRoomId: string; accessToken: string; name?: string; userName?: string; email?: string; userImage?: string } = {
                     id: streamId,
