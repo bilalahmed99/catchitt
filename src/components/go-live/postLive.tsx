@@ -227,7 +227,7 @@ export default function PostLive() {
                     photo: data.userImage
                 };
 
-                selectedLiveVideo?.details?.consumers && setSelectedLiveVideo((prev: any) => ({
+                selectedLiveVideo.details?.id === data.liveStreamRoomId && selectedLiveVideo.details?.consumers && setSelectedLiveVideo((prev: any) => ({
                     ...prev,
                     details:
                     {
@@ -243,9 +243,27 @@ export default function PostLive() {
         );
     };
 
+    function leftLiveStreamRoom()
+    {
+        socket.on('leftliveStreamRoom',
+            (data: any) =>
+            {
+                selectedLiveVideo.details?.id === data.liveStreamRoomId && selectedLiveVideo.details?.consumers && setSelectedLiveVideo((prev: any) => ({
+                    ...prev,
+                    details:
+                    {
+                        ...prev.details,
+                        consumers: [...prev.details.consumers.filter((item: any) => item.id !== data.userId)]
+                    }
+                }));
+            }
+        );
+    };
+
     useEffect(() => {
         joinedLiveStreamRoom();
         joinLiveStreamRoom(streamId);
+        leftLiveStreamRoom();
     }, []);
 
     

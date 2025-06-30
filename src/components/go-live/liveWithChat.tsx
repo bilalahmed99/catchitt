@@ -591,8 +591,26 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
     socket.emit('leaveLiveStreamRoom', Payload);
   };
 
+  function leftLiveStreamRoom()
+  {
+    socket.on('leftliveStreamRoom',
+      (data: any) =>
+      {
+        selectedLiveVideo.details?.consumers && setSelectedLiveVideo((prev: any) => ({
+          ...prev,
+          details:
+          {
+            ...prev.details,
+            consumers: [...prev.details.consumers.filter((item: any) => item.id !== data.userId)]
+          }
+        }));
+      }
+    );
+  };
+
   useEffect(() => {
     joinedLiveStreamRoom();
+    leftLiveStreamRoom()
   }, []);
 
   useEffect(() => {
