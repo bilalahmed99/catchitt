@@ -272,10 +272,28 @@ export default function PostLive() {
         socket.emit('removeUserFromLiveStreamRoom', payload);
     };
 
+    function removedUserFromLiveStreamRoom()
+    {
+        socket.on('user-removed',
+            (data: any) =>
+            {
+                selectedLiveVideo.details?.consumers && setSelectedLiveVideo((prev: any) => ({
+                    ...prev,
+                    details:
+                    {
+                        ...prev.details,
+                        consumers: [...prev.details.consumers.filter((item: any) => item.id !== data.userId)]
+                    }
+                }));
+            }
+        );
+    };
+
     useEffect(() => {
         joinedLiveStreamRoom();
         joinLiveStreamRoom(streamId);
         leftLiveStreamRoom();
+        removedUserFromLiveStreamRoom();
     }, []);
 
     
