@@ -608,9 +608,29 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
     );
   };
 
+  function removedUserFromLiveStreamRoom()
+  {
+    socket.on('user-removed',
+      (data: any) =>
+      {
+        selectedLiveVideo.details?.consumers && setSelectedLiveVideo((prev: any) => ({
+          ...prev,
+          details:
+          {
+            ...prev.details,
+            consumers: [...prev.details.consumers.filter((item: any) => item.id !== data.userId)]
+          }
+        }));
+
+        authUser?._id === data.userId && navigate('/live/discover');
+      }
+    );
+  };
+
   useEffect(() => {
     joinedLiveStreamRoom();
-    leftLiveStreamRoom()
+    leftLiveStreamRoom();
+    removedUserFromLiveStreamRoom();
   }, []);
 
   useEffect(() => {
