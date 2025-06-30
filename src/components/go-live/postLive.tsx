@@ -50,7 +50,7 @@ import ShareIcon from '../../assets/postLive/Share.png'
 import EnhanceIcon from '../../assets/postLive/Enhance.png'
 import MoreIcon from '../../assets/postLive/More.png'
 import AvatarPostLive from '../../assets/postLive/Avatar.png'
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import SidebarChat from './SidebarChat';
 import AddLiveGoalModal from "./AddLiveGoalPost";
 import {
@@ -64,7 +64,7 @@ import { socket } from '../../src/lib/socket';
 import GoLiveTogetherPanel from "./HostGoLiveTogather";
 
 export default function PostLive() {
-
+    const navigate = useNavigate();
     const dispatch = useDispatch();
  
     const [searchParams] = useSearchParams();
@@ -287,6 +287,18 @@ export default function PostLive() {
                 }));
             }
         );
+    };
+
+    function endLiveStreamRoom()
+    {
+        const payload =
+        {
+            accessToken: token,
+            liveStreamRoomId: streamId,
+        };
+
+        socket.emit('endLiveStreamRoom', payload);
+        navigate('/live/discover');
     };
 
     useEffect(() => {
@@ -613,7 +625,7 @@ export default function PostLive() {
                                         1
                                     </Box>
                                     <span>
-                                        <PowerSettingsNew />
+                                        <PowerSettingsNew onClick={() => endLiveStreamRoom()} />
                                     </span>
                                 </Box>
                                 <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
