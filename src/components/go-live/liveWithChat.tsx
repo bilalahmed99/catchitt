@@ -627,10 +627,21 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
     );
   };
 
+  function liveStreamRoomEnded()
+  {
+    socket.on('liveStreamRoomEnded',
+      (data: any) =>
+      {
+        navigate('/live/discover');
+      }
+    );
+  };
+
   useEffect(() => {
     joinedLiveStreamRoom();
     leftLiveStreamRoom();
     removedUserFromLiveStreamRoom();
+    liveStreamRoomEnded();
   }, []);
 
   useEffect(() => {
