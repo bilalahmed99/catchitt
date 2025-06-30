@@ -260,6 +260,18 @@ export default function PostLive() {
         );
     };
 
+    function removeUserFromLiveStreamRoom(streamId: string, userId: string)
+    {
+        const payload =
+        {
+            accessToken: token,
+            liveStreamRoomId: streamId,
+            userId: userId,
+        };
+
+        socket.emit('removeUserFromLiveStreamRoom', payload);
+    };
+
     useEffect(() => {
         joinedLiveStreamRoom();
         joinLiveStreamRoom(streamId);
@@ -941,7 +953,7 @@ export default function PostLive() {
                             onPinGoal={(goal: any) => setPinLiveGoal(goal)}
                         />
                         }
-                        { showGoLiveTogetherPanel && <GoLiveTogetherPanel post={selectedLiveVideo} /> }
+                        { showGoLiveTogetherPanel && <GoLiveTogetherPanel post={selectedLiveVideo} onRemoveUser={(streamId: string, userId: string) => removeUserFromLiveStreamRoom(streamId, userId)} /> }
                     </Box> 
                 </div>
             </div>

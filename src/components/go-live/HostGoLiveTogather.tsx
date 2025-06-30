@@ -69,7 +69,7 @@ const peopleData = {
   ],
 };
 
-const PersonRow: React.FC = ({ name, role, button, photo }) => (
+const PersonRow: React.FC = ({ name, role, button, photo, onRemove }) => (
   <Box
     display="flex"
     alignItems="center"
@@ -106,14 +106,14 @@ const PersonRow: React.FC = ({ name, role, button, photo }) => (
           Invite
         </Button>
       {/* )} */}
-      <IconButton size="small">
+      <IconButton size="small" onClick={onRemove}>
         <Close fontSize="small" />
       </IconButton>
     </Box>
   </Box>
 );
 
-const GoLiveTogetherPanel: React.FC = ({post}) => {
+const GoLiveTogetherPanel: React.FC = ({post, onRemoveUser}) => {
   return (
     <Box
       maxWidth={360}
@@ -295,7 +295,7 @@ const GoLiveTogetherPanel: React.FC = ({post}) => {
         Viewers
       </Typography>
       {post?.details?.consumers?.map((person, i) => (
-        <PersonRow key={i} {...person} />
+        <PersonRow key={i} {...person} onRemove={() => onRemoveUser(post.details.id, person.id)} />
       ))}
     </Box>
   );
