@@ -654,6 +654,16 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
     );
   };
 
+  function onSendGift()
+  {
+    socket.on('send-gift',
+      (data: any) =>
+      {
+        data.sender.id !== authUser?._id && sendGift1(data.id, data);
+      }
+    );
+  };
+
   useEffect(() => {
     joinedLiveStreamRoom();
     leftLiveStreamRoom();
@@ -661,6 +671,7 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
     liveStreamRoomEnded();
     onUserMuted();
     onUserBlocked();
+    onSendGift()
   }, []);
 
   useEffect(() => {
