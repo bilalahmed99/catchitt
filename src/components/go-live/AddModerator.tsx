@@ -54,7 +54,7 @@ export default function AddModerators({ onBack }: Props) {
           <IconButton edge="start" onClick={onBack}>
             <ArrowBackIosNewIcon />
           </IconButton>
-          <Typography variant="h6" fontWeight="bold" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" fontWeight="600" sx={{ flexGrow: 1 }}>
             Add Moderators
           </Typography>
         </Toolbar>
