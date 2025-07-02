@@ -97,7 +97,7 @@ const staticOwner = {
 
 
 
-const SidebarChat = ({ selectedLiveVideo, showSidebar, onHideSidebar, profileDetails, showFaqsSidebar,  socket }) => {
+const SidebarChat = ({ selectedLiveVideo, showSidebar, onHideSidebar, profileDetails, showFaqsSidebar }) => {
   const [showTopViewers, setShowTopViewers] = useState(false);
   const [isShowRanking, setIsShowRanking] = useState(true);
   const [message, setMessage] = useState('');
@@ -202,8 +202,7 @@ const SidebarChat = ({ selectedLiveVideo, showSidebar, onHideSidebar, profileDet
 
   const handleSendMessage = () => {
     if (!message.trim()) return;
-    
-    if (socket) {  // Use the passed socket instead of socketRef.current
+    // if (socket) {  // Use the passed socket instead of socketRef.current
       const messageData = {
         userId: profileData?._id || '',
         userFullName: profileData?.name || '',
@@ -223,9 +222,9 @@ const SidebarChat = ({ selectedLiveVideo, showSidebar, onHideSidebar, profileDet
       });
       
       setMessage('');
-    } else {
-      console.error('Socket not available');
-    }
+    // } else {
+    //   console.error('Socket not available');
+    // }
   };
 
   const handleKeyPress = (e) => {

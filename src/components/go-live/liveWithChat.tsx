@@ -756,7 +756,7 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
 
   const socketListeners = () => {
       socket.on('rejectJoinRequestLiveStreamUserAsGuest', (response: any) => {
-          console.log('sendJoinRequestLiveStreamUserAsGuest response:', response);
+          console.log('rejectJoinRequestLiveStreamUserAsGuest response:', response);
       });
       socket.on('acceptJoinRequestLiveStreamUserAsGuest', (response: any) => {
           console.log('sendJoinRequestLiveStreamUserAsGuest response:', response);
@@ -773,7 +773,6 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
           console.log('sendJoinRequestLiveStreamUserAsGuest response:', response);
           setReceiveHostRequest(false);
       });
-
       
   }
 
@@ -823,6 +822,12 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
 
         (socketRef.current as any).on('inviteRemovedByLiveStreamUserAsGuest', (response: any) => {
             console.log('sendJoinRequestLiveStreamUserAsGuest response:', response);
+            setReceiveHostRequest(false);
+        });
+
+        (socketRef.current as any).on('rejectJoinRequestLiveStreamUserAsGuest ', (response: any) => {
+          alert()
+            console.log('rejectJoinRequestLiveStreamUserAsGuest response:', response);
             setReceiveHostRequest(false);
         });
 

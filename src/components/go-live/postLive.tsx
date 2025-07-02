@@ -313,12 +313,11 @@ export default function PostLive() {
        const payload = {
             accessToken: token,
             liveStreamRoomId: streamId,
-            userId: user.id,
+            id: user.id,
             name: user.name,
             username: user.username,
             avatar: user.avatar
         };
-
          socket.emit('rejectJoinLiveStreamUserAsGuest', payload);
          loadRoomDetails();
     }
