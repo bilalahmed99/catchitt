@@ -49,6 +49,7 @@ import { abs } from 'mathjs';
 import  GamingLiveUI  from './categories';
 import { dark } from '@mui/material/styles/createPalette';
 import { socket } from '../../src/lib/socket';
+import GuestRequestCard from './GuestRequestCard';
 
 
 const reasons = [
@@ -123,6 +124,7 @@ function LiveWithChat({ darkTheme }: { darkTheme?: any }) {
 
 
     const [showSidebar, setShowSidebar] = useState(true);
+    const [sentGuestRequest, setSentGuestRequest] = useState(false);
 
     const handleHideSidebar = () => {
         setShowSidebar(false);
@@ -302,7 +304,7 @@ function LiveWithChat({ darkTheme }: { darkTheme?: any }) {
         liveStreamRoomId
       };
       console.log('joinLiveStreamUserAsGuest', userData);
-      (socketRef.current as any).emit('joinLiveStreamUserAsGuest', userData, (response: any) => {
+      socket.emit('joinLiveStreamUserAsGuest', userData, (response: any) => {
         console.log('Joined live stream room response:', response);
       });
     }
@@ -642,6 +644,7 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
     leftLiveStreamRoom();
     removedUserFromLiveStreamRoom();
     liveStreamRoomEnded();
+    socketListeners();
   }, []);
 
   useEffect(() => {
@@ -652,6 +655,22 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
       streamId && leaveLiveStreamRoom(streamId);
     };
   }, [streamId]);
+
+  const socketListeners = () => {
+      socket.on('rejectJoinRequestLiveStreamUserAsGuest', (response: any) => {
+          console.log('sendJoinRequestLiveStreamUserAsGuest response:', response);
+      });
+      socket.on('acceptJoinRequestLiveStreamUserAsGuest', (response: any) => {
+          console.log('sendJoinRequestLiveStreamUserAsGuest response:', response);
+      });
+
+      socket.on('invitedLiveStreamUserAsGuest', (data: any) => {
+          // setSentGuestRequest(true);
+          console.log(`Received message admin invited..: ${JSON.stringify(data)}`);
+          // const OwnerData = data?.OwnerData;
+          // const accessToken = data?.accessToken;
+      });
+  }
 
   
   function startSocket() {
@@ -683,7 +702,6 @@ const [moreAnchorEl, setMoreAnchorEl] = useState<null | HTMLElement>(null);
         // },5000);
 
         (socketRef.current as any).on('sendJoinRequestLiveStreamUserAsGuest', (response: any) => {
-            alert()
           console.log('sendJoinRequestLiveStreamUserAsGuest response:', response);
         });
         (socketRef.current as any).on('user-muted', (data: any) => {
@@ -1329,7 +1347,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                             </IconButton>
 
                             <Button className={`${styles.SUBSCRIBEbTN}`} variant="outlined" sx={{color: '#000', borderColor: '#1618231F', textTransform : 'capitalize'}}>Subscribe</Button>
-                             <Button onClick={()=> joinAsGuest()} variant="contained" sx={{ background: '#FE2C55',  boxShadow: 'none', color: '#fff' , textTransform : 'capitalize'}} >
+                             <Button onClick={()=> setSentGuestRequest(true)} variant="contained" sx={{ background: '#FE2C55',  boxShadow: 'none', color: '#fff' , textTransform : 'capitalize'}} >
                                           Join as Guest
                             </Button>
 
@@ -2834,6 +2852,8 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                 </DialogContent>
             </Dialog>
            <RankingSettingsModal rankingClick={rankingClick} isShowRanking={isShowRanking} open={openRating} onClose={() => setOpenRating(false)} />
+
+            { sentGuestRequest  && <GuestRequestCard />}
         </Box>
   );
 }

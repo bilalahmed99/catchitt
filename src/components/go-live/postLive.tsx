@@ -99,9 +99,9 @@ export default function PostLive() {
     const [openAddLiveGoal, setOpenAddLiveGoal] = useState(false);
      const [righSideEnable, setRighSideEnable] = useState(false);
 
-    const socketRef = useRef();
+    // const socketRef = useRef();
     const SERVER_URL = 'https://prodapi.seezitt.com';
-    const [isConnected, setIsConnected] = useState(false);
+    // const [isConnected, setIsConnected] = useState(false);
     const [profileData, setProfileData] = useState<any>([]);
     const authUser = JSON.parse(localStorage.getItem('profile')) || null;
     const [showGoLiveTogetherPanel, setShowGoLiveTogetherPanel] = useState(false);
@@ -260,6 +260,52 @@ export default function PostLive() {
         );
     };
 
+    const acceptLiveStreamRoom = (user:any) => {    
+        const payload = {
+            accessToken: token,
+            liveStreamRoomId: streamId,
+            userId: user.id,
+            name: user.name,
+            username: user.username,
+            avatar: user.avatar,
+            id: user.id,
+            status:'joined'
+        };
+         socket.emit('acceptJoinLiveStreamUserAsGuest', payload);
+         loadRoomDetails();
+    }
+
+      const sendInviteLiveStreamUser = (user: any) => {
+       
+        const sendInvite = {
+            userId: user.id,
+            liveStreamRoomId: streamId,
+            accessToken: token,
+            name: user.name,
+            username: user.username || '',
+            avatar: user.avatar,
+            id:user.id
+        };
+
+        socket.emit('sendInviteLiveStreamUser', sendInvite, (response: any) => {
+            console.log('invite live stream room response:', response);
+        });
+    }
+
+    const rejecctLiveStreamRoom = (user:any) => {
+       const payload = {
+            accessToken: token,
+            liveStreamRoomId: streamId,
+            userId: user.id,
+            name: user.name,
+            username: user.username,
+            avatar: user.avatar
+        };
+
+         socket.emit('rejectJoinLiveStreamUserAsGuest', payload);
+         loadRoomDetails();
+    }
+
     function removeUserFromLiveStreamRoom(streamId: string, userId: string)
     {
         const payload =
@@ -306,99 +352,109 @@ export default function PostLive() {
         joinLiveStreamRoom(streamId);
         leftLiveStreamRoom();
         removedUserFromLiveStreamRoom();
+        socketListners();
     }, []);
 
+    const socketListners = () => {
+        socket.on('sendJoinRequestLiveStreamUserAsGuest',(response) => {
+            console.log('response of join request live stream..')
+            console.log(response);
+            loadRoomDetails();
+        });
+    }
+
+
     
-      useEffect(() => {
-        startSocket();
-      }, []);
+    //   useEffect(() => {
+    //     startSocket();
+    //   }, []);
 
       
           
 
-     function startSocket() {
-        if ((socketRef.current as any) && (socketRef.current as any).connected) {
-            console.log('Socket already connected.');
-            return;
-        }
-        (socketRef.current as any) = io(SERVER_URL, {
-            // transports: ['websocket'],
-            transports: ['websocket'], // Use WebSocket transport
-            upgrade: false,            // Prevent transport upgrades
-            reconnection: true, // Enable reconnection (default is true)
-            reconnectionAttempts: 5, // Number of reconnection attempts before giving up
-            reconnectionDelay: 1000, // Time (ms) to wait before trying to reconnect
-        });
+    //  function startSocket() {
+    //     if ((socketRef.current as any) && (socketRef.current as any).connected) {
+    //         console.log('Socket already connected.');
+    //         return;
+    //     }
+    //     (socketRef.current as any) = io(SERVER_URL, {
+    //         // transports: ['websocket'],
+    //         transports: ['websocket'], // Use WebSocket transport
+    //         upgrade: false,            // Prevent transport upgrades
+    //         reconnection: true, // Enable reconnection (default is true)
+    //         reconnectionAttempts: 5, // Number of reconnection attempts before giving up
+    //         reconnectionDelay: 1000, // Time (ms) to wait before trying to reconnect
+    //     });
 
     
 
     
-        (socketRef.current as any).on('connect', () => {
-            setIsConnected(true);
-            console.log('Connected to socket server.', (socketRef.current as any));
-            const profileInfo1 = localStorage.getItem('profile');
-            const profileParsed = JSON.parse(profileInfo1);
-            if (profileInfo1) {
-                setProfileData(JSON.parse(profileInfo1));
-            }
+    //     (socketRef.current as any).on('connect', () => {
+    //         setIsConnected(true);
+    //         console.log('Connected to socket server.', (socketRef.current as any));
+    //         const profileInfo1 = localStorage.getItem('profile');
+    //         const profileParsed = JSON.parse(profileInfo1);
+    //         if (profileInfo1) {
+    //             setProfileData(JSON.parse(profileInfo1));
+    //         }
 
-            if(profileParsed){
-                console.log('profile data info', profileParsed);
-                console.log(profileParsed._id);
-                  let addUserObject = { userId: profileParsed._id, accessToken: token };
-                  let newAddUserObject = JSON.stringify(addUserObject);
-                  (socketRef.current as any).emit('add-user', newAddUserObject);
+    //         if(profileParsed){
+    //             console.log('profile data info', profileParsed);
+    //             console.log(profileParsed._id);
+    //               let addUserObject = { userId: profileParsed._id, accessToken: token };
+    //               let newAddUserObject = JSON.stringify(addUserObject);
+    //               (socketRef.current as any).emit('add-user', newAddUserObject);
 
-                let joinLiveStreamRoom: { userId: string, id: string, userFullName:string, userEmail:string, liveStreamRoomId: string; accessToken: string; name?: string; userName?: string; email?: string; userImage?: string } = {
-                    id: streamId,
-                    userId: profileParsed?._id || '',
-                    liveStreamRoomId: streamId,
-                    accessToken: token ?? '',
-                    userFullName: profileParsed?.name || '',
-                    name: profileParsed?.name,
-                    userName: profileParsed?.username, 
-                    userEmail: profileParsed?.email,
-                    userImage: profileParsed?.avatar || profileParsed?.cover,
-                };
+    //             let joinLiveStreamRoom: { userId: string, id: string, userFullName:string, userEmail:string, liveStreamRoomId: string; accessToken: string; name?: string; userName?: string; email?: string; userImage?: string } = {
+    //                 id: streamId,
+    //                 userId: profileParsed?._id || '',
+    //                 liveStreamRoomId: streamId,
+    //                 accessToken: token ?? '',
+    //                 userFullName: profileParsed?.name || '',
+    //                 name: profileParsed?.name,
+    //                 userName: profileParsed?.username, 
+    //                 userEmail: profileParsed?.email,
+    //                 userImage: profileParsed?.avatar || profileParsed?.cover,
+    //             };
                 
-                (socketRef.current as any).emit('joinLiveStreamRoom', joinLiveStreamRoom, (response: any) => {
-                    console.log('Joined live stream room response:', response);
-                });
-            }
+    //             (socketRef.current as any).emit('joinLiveStreamRoom', joinLiveStreamRoom, (response: any) => {
+    //                 console.log('Joined live stream room response:', response);
+    //             });
+    //         }
           
 
 
-            (socketRef.current as any).on('joinedliveStreamRoom', (data: any) => {
+    //         (socketRef.current as any).on('joinedliveStreamRoom', (data: any) => {
              
-            });
+    //         });
 
-            (socketRef.current as any).on('sendJoinRequestLiveStreamUserAsGuest', (response: any) => {
-              console.log('sendJoinRequestLiveStreamUserAsGuest response:', response);
-            });
+    //         (socketRef.current as any).on('sendJoinRequestLiveStreamUserAsGuest', (response: any) => {
+    //           console.log('sendJoinRequestLiveStreamUserAsGuest response:', response);
+    //         });
     
 
-            (socketRef.current as any).on('top-viewers', (response: any) => {
-              console.log('top viewers response:', response);
-            });
+    //         (socketRef.current as any).on('top-viewers', (response: any) => {
+    //           console.log('top viewers response:', response);
+    //         });
             
            
-        });
+    //     });
     
-        (socketRef.current as any).on('connect_error', (error: any) => {
-            console.error('Connection Error:', error);
-        });
+    //     (socketRef.current as any).on('connect_error', (error: any) => {
+    //         console.error('Connection Error:', error);
+    //     });
     
-        (socketRef.current as any).on('disconnect', () => {
-            setIsConnected(false);
-            console.log('Disconnected from socket server.');
-        });
+    //     (socketRef.current as any).on('disconnect', () => {
+    //         setIsConnected(false);
+    //         console.log('Disconnected from socket server.');
+    //     });
     
-        (socketRef.current as any).onclose = (event: any) => {
-            console.error('WebSocket closed:', event);
-        };
+    //     (socketRef.current as any).onclose = (event: any) => {
+    //         console.error('WebSocket closed:', event);
+    //     };
     
     
-      }
+    //   }
     
 
     function updateSettings(payload: any)
@@ -841,7 +897,7 @@ export default function PostLive() {
                     </Box>
                     
                     {/* Right Sidebar */}
-                                            {/* {profileDetails && showChatSideBar && <SidebarChat selectedLiveVideo={selectedLiveVideo} profileDetails={profileDetails} showFaqsSidebar={()=> {setShowFaqs(!showFaqs); setShowChatSideBar(false); console.log("back button clicked...")}} /> } */}
+                                            {/* {profileDetails && showChatSideBar && <SidebarChat selectedLiveVideo={selectedLiveVideo} profileDetails={profileDetails} showFaqsSidebar={()=> {setShowFaqs(!showFaqs); setShowChatSideBar(false); console.log("back button clicked...")}} socket={socket} /> } */}
 
                     {/* {showFaqs && <Box sx={{ width: 400, }}>
                         <LiveGoalFAQ onBack={() => {setShowFaqs(false); setShowChatSideBar(true)}} />
@@ -983,7 +1039,14 @@ export default function PostLive() {
                             onPinGoal={(goal: any) => setPinLiveGoal(goal)}
                         />
                         }
-                        { showGoLiveTogetherPanel && <GoLiveTogetherPanel post={selectedLiveVideo} onRemoveUser={(streamId: string, userId: string) => removeUserFromLiveStreamRoom(streamId, userId)} /> }
+                        { showGoLiveTogetherPanel && <GoLiveTogetherPanel 
+                            onAcceptJoinLiveSteam={acceptLiveStreamRoom}  // Pass function reference
+                            onRejecctLiveStreamRoom={rejecctLiveStreamRoom}  // Pass function reference
+                            post={selectedLiveVideo} 
+                            sendInviteLiveStreamUser={sendInviteLiveStreamUser}
+                            onRemoveUser={(streamId: string, userId: string) => removeUserFromLiveStreamRoom(streamId, userId)} 
+                            /> 
+                        }
                     </Box> 
                 </div>
             </div>

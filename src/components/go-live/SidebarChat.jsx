@@ -29,8 +29,7 @@ import { useSearchParams } from 'react-router-dom';
 import CustomMediaPicker from '../user-chat/components/CustomMediaPicker';
 import  styles  from './GoLive.module.scss';
 import TopViewersImage from '../../assets/postLive/TopViewers.png';
-
-
+import { socket } from '../../src/lib/socket';
 
 
 // Static data for top viewers
@@ -98,7 +97,7 @@ const staticOwner = {
 
 
 
-const SidebarChat = ({ selectedLiveVideo, showSidebar, onHideSidebar, profileDetails, showFaqsSidebar }) => {
+const SidebarChat = ({ selectedLiveVideo, showSidebar, onHideSidebar, profileDetails, showFaqsSidebar,  socket }) => {
   const [showTopViewers, setShowTopViewers] = useState(false);
   const [isShowRanking, setIsShowRanking] = useState(true);
   const [message, setMessage] = useState('');
@@ -201,72 +200,33 @@ const SidebarChat = ({ selectedLiveVideo, showSidebar, onHideSidebar, profileDet
     }
   };
 
-  
-    const handleSendMessage = () => {
-      if (!message.trim()) return; // Don't send empty messages
-      console.log('handle send message')
-      console.log(localStorage.getItem('token'));
-      console.log('profileData', profileData);
-      const userData = {
+  const handleSendMessage = () => {
+    if (!message.trim()) return;
+    
+    if (socket) {  // Use the passed socket instead of socketRef.current
+      const messageData = {
         userId: profileData?._id || '',
         userFullName: profileData?.name || '',
-        name: profileData?.name,
         userName: profileData?.username, 
         userEmail: profileData?.email,
         userImage: profileData?.avatar || profileData?.cover,
-        accessToken: localStorage.getItem('token')
+        accessToken: localStorage.getItem('token'),
+        message: message,
+        liveStreamRoomId: streamId
       };
-    
-      if (socketRef.current && isConnected) {
-        const liveStreamRoomId = streamId;
-
-       console.log('=== SENDING MESSAGE DEBUG INFO ===');
-        console.log('Socket connected:', socketRef.current?.connected);
-        console.log('Socket ID:', socketRef.current?.id);
-        console.log('Stream ID:', streamId);
-        console.log('Profile Data:', profileData);
-
-        const messageData = {
-          userId: profileData?._id || '',
-          userFullName: profileData?.name || '',
-          userName: profileData?.username, 
-          userEmail: profileData?.email,
-          userImage: profileData?.avatar || profileData?.cover,
-          accessToken: localStorage.getItem('token'),
-          message: message,
-          liveStreamRoomId: streamId
-        };
-
-        console.log('Message data being sent:', messageData);
-
-        if (socketRef.current?.connected) {
-          console.log('Attempting to emit message...');
-          socketRef.current.emit('sendMessageToliveStreamRoom', messageData, (response) => {
-            console.log('Callback Response:', response);
-            if (!response) {
-              console.warn('No response received from server');
-            }
-          });
-          
-          setMessage('');
-        } else {
-          console.error('Socket not connected');
+      console.log('here.. send message', messageData);
+      socket.emit('sendMessageToliveStreamRoom', JSON.stringify(messageData), (response) => {
+        console.log('Callback Response:', response);
+        if (!response) {
+          console.warn('No response received from server');
         }
-        // socketRef.current.emit('sendMessageToliveStreamRoom', { 
-        //   liveStreamRoomId: liveStreamRoomId, 
-        //   data: {
-        //     ...userData,
-        //     message,
-        //     liveStreamRoomId: liveStreamRoomId, 
-        //   }
-        // }, (response) => {
-        //   console.log('Callback Response:', response);
-        // });
-        setMessage('');       
-      } else {
-        console.error('Socket not connected');
-      }
-    };
+      });
+      
+      setMessage('');
+    } else {
+      console.error('Socket not available');
+    }
+  };
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -308,7 +268,7 @@ const SidebarChat = ({ selectedLiveVideo, showSidebar, onHideSidebar, profileDet
         };
     
         console.log('joinLiveStreamRoom', joinLiveStreamRoom);
-        socketRef.current.emit('joinLiveStreamRoom', joinLiveStreamRoom, (response) => {
+        socket.emit('joinLiveStreamRoom', joinLiveStreamRoom, (response) => {
           console.log('Joined live stream room response:', response);
         });
 
@@ -325,11 +285,11 @@ const SidebarChat = ({ selectedLiveVideo, showSidebar, onHideSidebar, profileDet
         };
 
         setTimeout(() => {
-  socketRef.current.emit('sendMessageToliveStreamRoom', data, (res) => {
+  socket.emit('sendMessageToliveStreamRoom', data, (res) => {
     console.log('📨 Message sent response:', res);
   });
     console.log('joinLiveStreamRoom', joinLiveStreamRoom);
-        socketRef.current.emit('joinLiveStreamRoom01', joinLiveStreamRoom, (response) => {
+        socket.emit('joinLiveStreamRoom01', joinLiveStreamRoom, (response) => {
           console.log('Joined live stream room response:', response);
         })
 }, 5000); // delay for room to be joined
@@ -342,43 +302,30 @@ const SidebarChat = ({ selectedLiveVideo, showSidebar, onHideSidebar, profileDet
     // }, [profileData]); 
   
     
-  useEffect(() => {
-    if (isConnected && profileData && profileData._id) {
-      joinRoom();
-    }
-  }, [isConnected, profileData]);
+    
+   useEffect(() => {
+        joinRoom();
+        // joinLiveStreamRoom(streamId);
+    }, []);
 
-  function startSocket() {
-      if (socketRef.current && socketRef.current.connected) {
-          console.log('Socket already connected.');
-          return;
-      }
-      socketRef.current = io(SERVER_URL, {
-          // transports: ['websocket'],
-          transports: ['websocket'], // Use WebSocket transport
-          upgrade: false,            // Prevent transport upgrades
-          reconnection: true, // Enable reconnection (default is true)
-          reconnectionAttempts: 5, // Number of reconnection attempts before giving up
-          reconnectionDelay: 1000, // Time (ms) to wait before trying to reconnect
+   useEffect(() => {
+      socketListerns();
+    }, []);
+
+    const socketListerns = () => {
+      socket.on('sent-gift', (data) => {
+            console.log(`Received message: ${JSON.stringify(data)}`);
+            const giftId = data?.gift?.id;
+            const gift = data?.gift;
+
+            if (giftId && gift) {
+              sendGift1(giftId, gift);
+            } else {
+              console.warn('Gift data is missing or malformed:', data);
+            }
       });
-
-      socketRef.current.on('connect', () => {
-          setIsConnected(true);
-          console.log('Connected to socket server.', socketRef.current);
-          // let addUserObject = { userId: sender, accessToken: token };
-          // let newAddUserObject = JSON.stringify(addUserObject);
-
-          // let addUserObject = { userId: profileData?._id, accessToken: token };
-          // console.log('addUserObject',addUserObject)
-          // let newAddUserObject = JSON.stringify(addUserObject);
-          // socketRef.current.emit('add-user', newAddUserObject);
-        
-          // joinRoom();
-         
-          
-          
-
-          socketRef.current.on('getMessageFromLiveStreamRoom', (data) => {
+      
+      socket.on('getMessageFromLiveStreamRoom', (data) => {
             console.log(`Received message: ${JSON.stringify(data)}`);
             setMessages(prev => [...prev, {
               id: Date.now().toString(),
@@ -390,19 +337,7 @@ const SidebarChat = ({ selectedLiveVideo, showSidebar, onHideSidebar, profileDet
             }]);
           });
 
-          socketRef.current.on('sent-gift', (data) => {
-            console.log(`Received message: ${JSON.stringify(data)}`);
-            const giftId = data?.gift?.id;
-            const gift = data?.gift;
-
-            if (giftId && gift) {
-              sendGift1(giftId, gift);
-            } else {
-              console.warn('Gift data is missing or malformed:', data);
-            }
-          });
-
-          socketRef.current.on('joinedliveStreamRoom', (data) => {
+           socket.on('joinedliveStreamRoom', (data) => {
             console.log('joined listner called..')
             // setTotalMembers(totalMembers+1);
             setNewJoiner(data);
@@ -410,49 +345,12 @@ const SidebarChat = ({ selectedLiveVideo, showSidebar, onHideSidebar, profileDet
               setNewJoiner(null);
             },10000)
             console.log(`Received message of joinedliveStreamRoom: ${JSON.stringify(data)}`);
-            // handleNewMessage(data); // Handle the incoming message
           });
 
-          // const topViewers = {
-          //   giftId: "640399f0aef73acc3bbca33e",
-          //   roomId: "8c29aab4-eb2e-4328-9089-4130148a932b"
-          // };
-          socketRef.current.on('top-viewers', (response) => {
+          socket.on('top-viewers', (response) => {
             console.log('top viewers response:', response);
           });
-      });
-
-      socketRef.current.on('connect_error', (error) => {
-          console.error('Connection Error:', error);
-      });
-
-      socketRef.current.on('disconnect', () => {
-          setIsConnected(false);
-          console.log('Disconnected from socket server.');
-      });
-
-      socketRef.current.onclose = (event) => {
-          console.error('WebSocket closed:', event);
-      };
-
-      socketRef.current.on('newMessage', (data) => {
-        setMessages(prev => [...prev, {
-          id: Date.now().toString(),
-          name: data.name,
-          userName: data.userName,
-          userImage: data.userImage,
-          text: data.text,
-          timestamp: new Date()
-        }]);
-      });
-  
     }
-  
-
-   useEffect(() => {
-      // loadProfile();
-      startSocket();
-    }, []);
 
   return (
     <Grid item  sx={{ zIndex:'9999', position: 'absolute', top: 0, right: 0, height: '100vh', width: '20.5rem', bgcolor: '#fafafa', transform: showSidebar ? "translateX(0)" : "translateX(100%)", borderLeft: '1px solid #ddd', p: 0 }}>
