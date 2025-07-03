@@ -64,15 +64,13 @@ const AboutMeSettings: React.FC<AboutMeSettingsProps> = ({ onBack, profileDetail
     <Box sx={{ maxWidth: 360, mx: 'auto',  position: 'fixed', right: 0, top: 0, height: '100vh', bgcolor: '#fff', zIndex: 2 }}>
       {/* Header */}
       <Box textAlign={'left'} display="flex" alignItems="center" justifyContent="space-between" mb={3} >
-        <Box display="flex" alignItems="center">
-          <IconButton onClick={onBack} size="small">
+           <IconButton onClick={onBack} size="small">
             <ArrowBackIosNewIcon fontSize="small" />
           </IconButton>
           <Typography variant="h6" fontWeight="bold" ml={1}>
             About me
           </Typography>
-        </Box>
-        <IconButton onClick={() => setShowFaqs(true)}>
+         <IconButton onClick={() => setShowFaqs(true)}>
           <HelpOutlineIcon />
         </IconButton>
       </Box>

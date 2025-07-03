@@ -352,7 +352,7 @@ export default function PostLive() {
                                 </Box>
 
                                 {/* Top Left Badge */}
-                                <Box
+                                {/* <Box
                                     sx={{
 
                                         backgroundColor: "rgba(0,0,0,0.5)",
@@ -375,7 +375,7 @@ export default function PostLive() {
                                         </defs>
                                     </svg>
                                     Popular LIVE
-                                </Box>
+                                </Box> */}
                             </Box>
                             {/* Top Right Viewer Info */}
                             <Box sx={{ position: "absolute", top: 16, right: 0 }}>

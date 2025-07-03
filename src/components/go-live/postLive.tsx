@@ -696,7 +696,7 @@ export default function PostLive() {
                                 </Box>
 
                                 {/* Top Left Badge */}
-                                <Box
+                                {/* <Box
                                     sx={{
 
                                         backgroundColor: "rgba(0,0,0,0.5)",
@@ -719,7 +719,7 @@ export default function PostLive() {
                                         </defs>
                                     </svg>
                                     Popular LIVE
-                                </Box>
+                                </Box> */}
                             </Box>
                             {/* Top Right Viewer Info */}
                             <Box sx={{ position: "absolute", top: 16, right: 0 }}>
@@ -935,7 +935,7 @@ export default function PostLive() {
                             }}
                         >
                             <Typography variant="h6" sx={{ fontWeight: 600, whiteSpace: 'nowrap', color: '#000' }}>
-                                Chillin' with the Crew – Family Edition
+                               {selectedLiveVideo?.details?.streamTitle}
                             </Typography>
                             <Box
                                 sx={{
@@ -945,8 +945,8 @@ export default function PostLive() {
                                 }}
                             >
                                 <Avatar
-                                    alt="MBY"
-                                    src={AvatarPostLive}
+                                    alt={selectedLiveVideo?.details?.owner?.name}
+                                    src={selectedLiveVideo?.details?.owner?.photo || AvatarPostLive}
                                     sx={{ width: 32, height: 32, border: '1px solid white' }}
                                 />
                                 <Box
@@ -957,11 +957,11 @@ export default function PostLive() {
                                     }}
                                 >
                                     <Typography variant="body2" sx={{ fontWeight: 600, lineHeight: 1, color: '#000' }}>
-                                        MBY
+                                        {selectedLiveVideo?.details?.owner?.name}
                                     </Typography>
-                                    <Typography variant="caption" sx={{ fontSize: '0.7rem', color: '#000' }}>
+                                    {/* <Typography variant="caption" sx={{ fontSize: '0.7rem', color: '#000' }}>
                                         1.9K
-                                    </Typography>
+                                    </Typography> */}
                                 </Box>
                             </Box>
                         </Box>

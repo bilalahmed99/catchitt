@@ -183,14 +183,14 @@ if (showMutedAccounts) {
           </ListItemSecondaryAction>
         </ListItem>
 
-        <ListItem button onClick={() => setShowStarComment(true)}>
+        {/* <ListItem button onClick={() => setShowStarComment(true)}>
           <ListItemText primary="Star Comment" />
           <ListItemSecondaryAction>
             <IconButton edge="end">
               <ArrowForwardIosIcon sx={{ fontSize: 16 }} />
             </IconButton>
           </ListItemSecondaryAction>
-        </ListItem>
+        </ListItem> */}
 
         <ListItem>
           <ListItemText primary="Show the most sent comment" />
@@ -213,14 +213,14 @@ if (showMutedAccounts) {
           </Typography>
         </Box>
 
-        <ListItem button >
+        {/* <ListItem button >
           <ListItemText primary="Mute duration" secondary="Entire LIVE" />
           <ListItemSecondaryAction>
             <IconButton edge="end">
               <ArrowForwardIosIcon sx={{ fontSize: 16 }} />
             </IconButton>
           </ListItemSecondaryAction>
-        </ListItem>
+        </ListItem> */}
 
         <ListItem button onClick={() => setShowMutedAccounts(true)}>
           <ListItemText primary="Blocked Accounts"  />
