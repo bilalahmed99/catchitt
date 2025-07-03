@@ -79,6 +79,7 @@ const AddMuteRulesComment: React.FC<AddMuteRulesCommentProps> = ({
   onBack,
   tempRule,
   setTempRule,
+  muteRules,
   setMuteRules,
   streamId,
   setShowAddMuteRule,
@@ -122,11 +123,21 @@ const AddMuteRulesComment: React.FC<AddMuteRulesCommentProps> = ({
         onBack={() => setShowNewAddMuteButton(false)}
         onConfirm={async () => {
           try {
+            // const newRule = { ...tempRule, duration: durationMap[selected] };
+            // setMuteRules(prev => [...prev, newRule]);
+            // const response = await updateSettings(streamId, { muteRules: [newRule] });
+            // setTempRule({ comment: '', duration: 0 }); // Reset
+            // setShowAddMuteRule(false);
+
             const newRule = { ...tempRule, duration: durationMap[selected] };
-            const response = await updateSettings(streamId, { muteRules: [newRule] }); // <- call API
-            setMuteRules(prev => [...prev, newRule]);
-            setTempRule({ comment: '', duration: 0 }); // Reset
-            setShowAddMuteRule(false);
+            const updatedRules = [...muteRules, newRule]; // Combine previous and new rules
+
+            setMuteRules(updatedRules); // Update state
+            const response = await updateSettings(streamId, { muteRules: updatedRules }); // Send all rules
+
+            setTempRule({ comment: '', duration: 0 }); // Reset input
+            setShowAddMuteRule(false); // Hide form
+
           } catch (err) {
             console.error("Failed to update settings:", err);
           }

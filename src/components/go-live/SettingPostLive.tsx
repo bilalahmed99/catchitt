@@ -193,10 +193,9 @@ const updateSettings = async (
     });
   }
 
-  // Set blockedKeywords
-  if ( settings.commentSettings && Array.isArray(settings.commentSettings.blockedKeywords)) {
+  if (settings.blockedKeywords) {
     data.commentSettings = data.commentSettings || {};
-    data.commentSettings.blockedKeywords = settings.commentSettings.blockedKeywords;
+    data.commentSettings.blockedKeywords = settings.blockedKeywords;
   }
 
   if (settings.muteRules) {

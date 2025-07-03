@@ -102,9 +102,9 @@ const Comments: React.FC<CommentsProps> = ({ updateSettings, onBack }) => {
         {
           console.log('block keywords in parent..')
           console.log(blockedKeywords);
-        updateSettings(id ?? '', {
-          blockedKeywords: blockedKeywords,
-        })
+          updateSettings(id ?? '', {
+            blockedKeywords: blockedKeywords,
+          })
       }
       } />;
   }

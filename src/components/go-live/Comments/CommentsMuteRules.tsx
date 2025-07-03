@@ -48,9 +48,9 @@ const MuteRules: React.FC<CommentsMuteRulesProps> = ({ onBack, updateSettings, s
     };
 
 
-  useEffect(() => {
-        saveAll();
-  }, [muteRules]);
+  // useEffect(() => {
+  //       saveAll();
+  // }, [muteRules]);
 
 const [tempRule, setTempRule] = useState<{ comment: string; duration: number }>({ comment: '', duration: 0 }); // for preserving input
 
@@ -59,6 +59,7 @@ const [tempRule, setTempRule] = useState<{ comment: string; duration: number }>(
     onBack={() => setShowAddMuteRule(false)}
     tempRule={tempRule}
     setTempRule={setTempRule}
+    muteRules={muteRules}
     setMuteRules={setMuteRules}
     streamId={streamId}
     setShowAddMuteRule={setShowAddMuteRule}
