@@ -124,7 +124,7 @@ const LiveGoalModal = ({ onConfirm, onLiveGoalAdded }: { onConfirm: any, onLiveG
               color: '#fff',
               p: 2,
               borderRadius: 2,
-              width: 400,
+              width: 360,
               mx: 'auto',
             }}
           >
@@ -275,7 +275,7 @@ const LiveGoalModal = ({ onConfirm, onLiveGoalAdded }: { onConfirm: any, onLiveG
         ) : (
           <Card
             sx={{
-              width: 400,
+              width: 360,
               bgcolor: "#1e1e1e",
               color: "#fff",
               borderRadius: 3,
@@ -364,7 +364,7 @@ const LiveGoalModal = ({ onConfirm, onLiveGoalAdded }: { onConfirm: any, onLiveG
         )} </>}
       {showLiveGoalAutomatically && <Card
         sx={{
-          width: 400,
+          width: 360,
           bgcolor: "#1e1e1e",
           color: "#fff",
           borderRadius: 3,
