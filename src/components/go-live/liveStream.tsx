@@ -21,6 +21,9 @@ const LiveStreaming = ({posts}: any) => {
   };
 
   const currentVideo = posts[currentVideoIndex];
+  const authUser = JSON.parse(localStorage.getItem('profile') || '{}') || null;
+  // console.log('my auth user...');
+  // console.log(authUser?._id);
 
   return (
     <Box
@@ -111,7 +114,11 @@ const LiveStreaming = ({posts}: any) => {
       </Box>
 
       {/* Center button overlay */}
-      <Link to={`/golive?streamId=${currentVideo?.id}`} reloadDocument={false} style={{ textDecoration: 'none' }}>
+      <Link to={
+    currentVideo?.owner?.id === authUser?._id
+      ? `/postlive?streamId=${currentVideo?.id}`
+      : `/golive?streamId=${currentVideo?.id}`
+  } reloadDocument={false} style={{ textDecoration: 'none' }}>
       <Button
         variant="contained"
         sx={{

@@ -63,7 +63,17 @@ const CustomSwitch = styled(Switch)(({ theme }) => ({
 }));
 
 // phase 2
-const GiftsData = [
+type GiftItem = {
+  title?: string;
+  description?: string;
+  rightdescription?: string;
+  id?: string;
+  type?: string;
+  image?: React.ReactNode;
+  value?: boolean;
+};
+
+const GiftsData: GiftItem[] = [
   // {
   //   title: 'Live Gifts',
   //   rightdescription: 'New Gift series',

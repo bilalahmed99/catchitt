@@ -27,6 +27,9 @@ function DiscoverLive() {
     }
   };
 
+  const authUser = JSON.parse(localStorage.getItem('profile') || '{}') || null;
+
+
   const [recommendedLiveVideos, setRecommendedLiveVideos] = useState<any>(
     {
       items: [],
@@ -284,7 +287,12 @@ useEffect(() => {
               <Grid container spacing={2}>
                   {(streams as any[]).map((stream: any) => (
                       <Grid item xs={12} sm={6} md={4} key={stream._id}>
-                        <Link to={`/golive?streamId=${stream.id}`} reloadDocument={false} style={{ textDecoration: 'none' }}>
+                        <Link 
+                         to={stream?.owner?.id === authUser?._id
+      ? `/postlive?streamId=${stream?.id}`
+      : `/golive?streamId=${stream.id}`}
+
+                         reloadDocument={false} style={{ textDecoration: 'none' }}>
                           <LiveStreamCard stream={stream} />
                         </Link>
                       </Grid>

@@ -171,8 +171,8 @@ const updateSettings = async (
                   onClick={() => item.type === 'link' && item.component && setActiveView(item.component as 'moderators' | 'comments' | 'AboutMe' | 'MutedAccounts' | 'BlockedAccounts')}
                   sx={{ py: 1.5, cursor: item.type === 'link' ? 'pointer' : 'default', alignItems: 'flex-start' }}
                   secondaryAction={
-                    item.type === 'switch' ? (
-                      <CustomSwitch edge="end" checked={item.value} />
+                    item.type === 'switch' && 'value' in item ? (
+                      <CustomSwitch edge="end" checked={Boolean(item.value)} />
                     ) : (
                       <IconButton edge="end">
                         <ChevronRightIcon />

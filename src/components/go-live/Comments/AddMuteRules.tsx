@@ -70,6 +70,7 @@ interface AddMuteRulesCommentProps {
   onBack: () => void;
   tempRule: { comment: string; duration: number };
   setTempRule: React.Dispatch<React.SetStateAction<{ comment: string; duration: number }>>;
+  muteRules: any[];
   setMuteRules: React.Dispatch<React.SetStateAction<any[]>>;
   streamId: string | null;
   setShowAddMuteRule: (val: boolean) => void;
