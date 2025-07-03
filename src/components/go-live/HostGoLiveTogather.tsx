@@ -16,59 +16,6 @@ interface PersonProps {
   avatar: string;
 }
 
-const peopleData = {
-  host: {
-    name: 'Zero_taeyeon',
-    role: 'Host',
-    avatar: 'https://i.pravatar.cc/150?img=32',
-  },
-  cohost: {
-    name: 'Cooper Lipshutz',
-    button: 'Follow',
-    avatar: 'https://i.pravatar.cc/150?img=12',
-  },
-  guestRequests: [
-    {
-      name: 'Roger Aminoff',
-      role: 'Friend',
-      button: 'Accept',
-      avatar: 'https://i.pravatar.cc/150?img=23',
-    },
-    {
-      name: 'Carter Kenter',
-      role: 'Friend',
-      button: 'Accept',
-      avatar: 'https://i.pravatar.cc/150?img=24',
-    },
-    {
-      name: 'Terry Arcand',
-      role: 'Friend',
-      button: 'Accept',
-      avatar: 'https://i.pravatar.cc/150?img=25',
-    },
-  ],
-  viewers: [
-    {
-      name: 'Tiana Stanton',
-      role: 'Friend',
-      button: 'Invite',
-      avatar: 'https://i.pravatar.cc/150?img=26',
-    },
-    {
-      name: 'Paityn Aminoff',
-      role: 'Friend',
-      button: 'Invite',
-      avatar: 'https://i.pravatar.cc/150?img=27',
-    },
-    {
-      name: 'Nolan Donin',
-      role: 'Friend',
-      button: 'Invite',
-      avatar: 'https://i.pravatar.cc/150?img=28',
-    },
-  ],
-};
-
 interface PersonRowProps {
   name: string;
   role?: string;
@@ -102,24 +49,7 @@ const PersonRow: React.FC<PersonRowProps> = ({ name, role, button, photo, avatar
       </Box>
     </Box>
     <Box display="flex" textAlign="left" alignItems="center" gap={1}>
-      {/* {button && ( */}
-        {/* <Button
-          variant="contained"
-          size="small"
-          sx={{
-            backgroundColor: '#FE2C55',
-            textTransform: 'none',
-            fontWeight: 600,
-            px: 3,
-            '&:hover': {
-              backgroundColor: '#d62849',
-
-            },
-          }}
-          onClick={sendInviteLiveStreamUser}
-        >
-          Invite
-        </Button> */}
+      
          <Button
             variant="contained"
             size="small"
@@ -209,7 +139,9 @@ interface GoLiveTogetherPanelProps {
   sendInviteLiveStreamUser: (person: any) => void; // Add this
   onToggleInvite?: () => void;  
   isInvited?: boolean;   
-  removeInviteLiveSteamUser: (person:any) => void;       
+  removeInviteLiveSteamUser: (person:any) => void;    
+  invitedUserIds: string[];
+  onBack?: () => void;
 }
 
 const GoLiveTogetherPanel: React.FC<GoLiveTogetherPanelProps> = ({
@@ -220,7 +152,9 @@ const GoLiveTogetherPanel: React.FC<GoLiveTogetherPanelProps> = ({
   sendInviteLiveStreamUser,
   onToggleInvite,
   isInvited,
-  removeInviteLiveSteamUser
+  removeInviteLiveSteamUser,
+  invitedUserIds,
+  onBack
 }) => {
     const [hiddenGuestIds, setHiddenGuestIds] = React.useState<string[]>([]);
     const hideGuestRow = (id: string) => {
@@ -228,19 +162,19 @@ const GoLiveTogetherPanel: React.FC<GoLiveTogetherPanelProps> = ({
       setVisibleGuestUsers((prev: any[]) => prev.filter(user => user._id !== id));
     };
     const [visibleGuestUsers, setVisibleGuestUsers] = React.useState(post?.details?.guestUsers || []);
-    const [invitedUserIds, setInvitedUserIds] = React.useState<string[]>([]);
+    // const [invitedUserIds, setInvitedUserIds] = React.useState<string[]>([]);
 
     const handleToggleInvite = (person: any) => {
       const isInvited = invitedUserIds.includes(person.id);
 
       if (isInvited) {
         // Remove
-        setInvitedUserIds(prev => prev.filter(id => id !== person.id));
+        // setInvitedUserIds(prev => prev.filter(id => id !== person.id));
         removeInviteLiveSteamUser(person);
         // onRemoveUser(post.details.id, person.id);
       } else {
         // Invite
-        setInvitedUserIds(prev => [...prev, person.id]);
+        // setInvitedUserIds(prev => [...prev, person.id]);
         sendInviteLiveStreamUser(person);
       }
     };
@@ -256,7 +190,7 @@ const GoLiveTogetherPanel: React.FC<GoLiveTogetherPanelProps> = ({
     >
       {/* Header */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2} pr={1} pb={1} borderBottom={'1px solid #eee'}>
-        <svg width="9" height="15" viewBox="0 0 9 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg onClick={onBack} width="9" height="15" viewBox="0 0 9 15" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M7.56641 1.61719L1.56641 7.61719L7.56641 13.6172" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
 
@@ -297,8 +231,7 @@ const GoLiveTogetherPanel: React.FC<GoLiveTogetherPanelProps> = ({
         </Box>
       </Box>
 
-      {/* Host */}
-      <Box
+      {/* <Box
     display="flex"
     alignItems="center"
     justifyContent="space-between"
@@ -404,10 +337,15 @@ const GoLiveTogetherPanel: React.FC<GoLiveTogetherPanelProps> = ({
             </svg>
         </IconButton>
     </Box>
-  </Box>
+  </Box> */}
+    <Typography fontSize="14px" textAlign="left" fontWeight={'600'}    color="text.secondary" mb={1}>
+        Guests
+    </Typography>
+  {post?.details?.guestUsers?.map((person:any, i:any) => (
+        <PersonRow key={i} {...person} sendInviteLiveStreamUser={()=> sendInviteLiveStreamUser(person)} onToggleInvite={() => handleToggleInvite(person)} isInvited={invitedUserIds.includes(person.id)} onRemove={() => onRemoveUser(post.details.id, person.id)} />
+      ))}
 
-      {/* Co-Host */}
-      <PersonRow {...peopleData.cohost} />
+      {/* <PersonRow {...peopleData.cohost} /> */}
 
       <Box pb={2} mt={2} borderTop={'4px solid #e0e0e0'}>
       </Box>

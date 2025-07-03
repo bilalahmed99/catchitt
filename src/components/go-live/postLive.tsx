@@ -75,6 +75,7 @@ export default function PostLive() {
         topViewersGifts?: any;
         [key: string]: any;
     };
+      const [invitedUserIds, setInvitedUserIds] = useState<string[]>([]);
     
     const [selectedLiveVideo, setSelectedLiveVideo] = useState<{
         details: LiveVideoDetails | null;
@@ -298,6 +299,7 @@ export default function PostLive() {
         socket.emit('sendInviteLiveStreamUser', sendInvite, (response: any) => {
             console.log('invite live stream room response:', response);
         });
+        setInvitedUserIds(prev => [...prev, user.id]);
     }
 
     const removeInviteLiveSteamUser = (user: any) => {
@@ -314,6 +316,7 @@ export default function PostLive() {
         socket.emit('removeInviteLiveStreamUserAsGuest', sendInvite, (response: any) => {
             console.log('invite live stream room response:', response);
         });
+        setInvitedUserIds(prev => prev.filter(id => id !== user.id));
     }
 
 
@@ -410,6 +413,7 @@ export default function PostLive() {
             console.log('response of rejected join request live stream..')
             console.log(response);
             loadRoomDetails();
+            setInvitedUserIds(prev => prev.filter(id => id !== response.id));
             // setShowGoLiveTogetherPanel(true);
         });
         
@@ -417,6 +421,7 @@ export default function PostLive() {
             console.log('response of accepted join request live stream..')
             console.log(response);
             loadRoomDetails();
+            setInvitedUserIds(prev => prev.filter(id => id !== response.id));
             // setShowGoLiveTogetherPanel(true);
         });
 
@@ -1122,6 +1127,8 @@ export default function PostLive() {
                             sendInviteLiveStreamUser={sendInviteLiveStreamUser}
                             removeInviteLiveSteamUser={removeInviteLiveSteamUser}
                             onRemoveUser={(streamId: string, userId: string) => removeUserFromLiveStreamRoom(streamId, userId)} 
+                            invitedUserIds={invitedUserIds}
+                            onBack={()=> setShowGoLiveTogetherPanel(!showGoLiveTogetherPanel)}
                             /> 
                         }
                     </Box> 
