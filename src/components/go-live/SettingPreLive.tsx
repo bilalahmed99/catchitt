@@ -80,6 +80,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ profileDetails, customPro
   const [allowComments, setAllowComments] = useState(true);
   const [showMostSent, setShowMostSent] = useState(true);
   const [blockedKeywords, setBlockedKeywords] = useState<{ keyword: string; blockSimilarVersion: boolean }[]>([]);
+  const [filterComments, setFilterComments] = useState([]);
   const updateSettings = async (
     id: string,
     settings: {
@@ -112,7 +113,9 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ profileDetails, customPro
     if (settings.filterComments) {
       data.commentSettings = data.commentSettings || {};
       data.commentSettings.filterComments = data.commentSettings.filterComments || {};
-
+      console.log(settings.filterComments);
+      console.log('filter comments....')
+      setFilterComments(data.commentSettings.filterComments || {});
       Object.entries(settings.filterComments).forEach(([key, value]) => {
         if (typeof value === 'boolean') {
           data.commentSettings.filterComments[key] = value;
@@ -134,16 +137,14 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ profileDetails, customPro
       console.warn("No update fields provided.");
       return;
     }
-
-    
     // ✅ send data to parent
   };
 
   useEffect(()=> {
     console.log('Sending to parent:', {allowComments, showMostSent});
     console.log(blockedKeywords);
-     onSettingsChange({allowComments, showMostSent,blockedKeywords});
-  },[allowComments, showMostSent,blockedKeywords])
+     onSettingsChange({allowComments, showMostSent,blockedKeywords, filterComments});
+  },[allowComments, showMostSent,blockedKeywords,filterComments])
 
 // const updateSettings = async (
 //   id: string,

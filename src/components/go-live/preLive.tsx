@@ -397,12 +397,7 @@ const Promote = () => (
             commentSettings: {
             allowComments: liveStreamSettings?.allowComments,
             duration: 0,
-            filterComments: {
-                spamComments: true,
-                unkindComments: true,
-                communityFlaggedComments: true,
-                showInFeed: true
-            },
+            filterComments: liveStreamSettings.filterComments,
             showMostSentComments: liveStreamSettings?.showMostSent,
             blockedKeyworkds:  liveStreamSettings?.blockedKeywords
             },
