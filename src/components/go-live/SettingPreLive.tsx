@@ -224,7 +224,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({ profileDetails, customPro
   return (
     <>
       {activeView === null ? (
-        <Box sx={{ maxWidth: 360, mx: 'auto', position: 'fixed', right: 0, top: 0, height: '100vh', bgcolor: '#fff', zIndex: 2 }}>
+        <Box sx={{ width: 360, mx: 'auto', position: 'fixed', right: 0, top: 0, height: '100vh', bgcolor: '#fff', zIndex: 2 }}>
           <Typography variant="h6" fontWeight={600} borderBottom="1px solid #EFEFEF" pb={1}>
             Settings
           </Typography>

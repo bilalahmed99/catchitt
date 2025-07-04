@@ -928,7 +928,7 @@ const Promote = () => (
                         </CardContent>
                     </Card> 
                     }
-                    {!openSettings && showEditLiveGoal && <EditLiveGoal liveGoals={liveGoals} addLiveGoalAutomatically={addLiveGoalAutomatically} onConfirm={()=> setShowEditLiveGoal(!showEditLiveGoal) } onLiveGoalAdded={(goals: any, addLiveGoalAutomatically: any) => { setShowEditLiveGoal(!showEditLiveGoal); setLiveGoals(goals); setAddLiveGoalAutomatically(addLiveGoalAutomatically) }} /> }
+                    {!openSettings && showEditLiveGoal && <EditLiveGoal  liveGoals={liveGoals} addLiveGoalAutomatically={addLiveGoalAutomatically} onConfirm={()=> setShowEditLiveGoal(!showEditLiveGoal) } onLiveGoalAdded={(goals: any, addLiveGoalAutomatically: any) => { setShowEditLiveGoal(!showEditLiveGoal); setLiveGoals(goals); setAddLiveGoalAutomatically(addLiveGoalAutomatically) }} /> }
                     
                     {openSettings &&
                         <SettingsPanel profileDetails={profileDetails} onSettingsChange={setLiveStreamSettings} customProps={{mutedUsers, setMutedUsers, blockedUsers, setBlockedUsers}} />
