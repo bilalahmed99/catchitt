@@ -26,10 +26,9 @@ export default function BlockedAccounts({ customProps, onBack }: { customProps: 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [showConfirmUnblock, setShowConfirmUnblock] = useState(false);
-  const [consumers, setConsumers] = useState<any>(customProps.consumers);
 
   const filteredUsers = customProps.blockedUsers.items.filter((user: any) => user.name.toLowerCase().includes(searchTerm.toLowerCase()) || user.username.toLowerCase().includes(searchTerm.toLowerCase()));
-  const filteredConsumers = consumers.filter((user: any) => user.name.toLowerCase().includes(searchTerm.toLowerCase()) || user.username.toLowerCase().includes(searchTerm.toLowerCase())).filter((item: any) => item.id !== localStorage.getItem('userId'));
+  const filteredConsumers = customProps.consumers.filter((user: any) => user.name.toLowerCase().includes(searchTerm.toLowerCase()) || user.username.toLowerCase().includes(searchTerm.toLowerCase())).filter((item: any) => item.id !== localStorage.getItem('userId') && !filteredUsers.some((user: any) => user.id === item.id));
 
   function toggleBlockedUser()
   {
@@ -47,35 +46,8 @@ export default function BlockedAccounts({ customProps, onBack }: { customProps: 
     fetch(endpoint, requestOptions)
     .catch((error) => console.error('Fetch error:', error));
 
-    customProps.setBlockedUsers((prev: any) => ({ ...prev, items: prev.items.filter((item: any) => item._id !== selectedUser._id) }));
-  };
-
-  function blockedUser(user: any)
-  {
-    let endpoint = `${process.env.VITE_API_URL}/profile/${user._id}/block`;
-    let requestOptions =
-    {
-      method: 'POST',
-      headers:
-      {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json',
-      },
-    };
-
-    fetch(endpoint, requestOptions)
-    .catch((error) => console.error('Fetch error:', error));
-
-    if(isPostLive)
-    {
-      setConsumers((prev: any) => prev.filter((item: any) => item._id !== user._id));
-      customProps.setBlockedUsers((prev: any) => ({ ...prev, items: [...prev.items, user] }));
-      removeUserFromLiveStreamRoom(user)
-    }
-    else
-    {
-      customProps.setBlockedUsers((prev: any) => ({ ...prev, items: prev.items.filter((item: any) => item._id !== user._id) }));
-    }
+    customProps.setBlockedUsers((prev: any) => ({ ...prev, items: prev.items.some((item: any) => item._id === selectedUser._id) ? prev.items.filter((item: any) => item._id !== selectedUser._id) : [...prev.items, selectedUser] }));
+    isPostLive && removeUserFromLiveStreamRoom(selectedUser)
   };
 
   function removeUserFromLiveStreamRoom(user: any)
@@ -191,7 +163,7 @@ export default function BlockedAccounts({ customProps, onBack }: { customProps: 
             <ListItem key={index} disableGutters secondaryAction={
               <Button
                 variant="outlined"
-                onClick={() => { setSelectedUser(user); blockedUser(user); }}
+                onClick={() => { setSelectedUser(user); setShowConfirmUnblock(true); }}
                 size="small"
                 sx={{
                   borderRadius: 2,
@@ -218,7 +190,7 @@ export default function BlockedAccounts({ customProps, onBack }: { customProps: 
           ))}
         </List>
       </Box>
-      {customProps.blockedUsers.items.length < 1 && (
+      {customProps.blockedUsers.items.length < 1 && customProps.consumers.length < 1 && (
       <Box
               sx={{
                 flexGrow: 1,
