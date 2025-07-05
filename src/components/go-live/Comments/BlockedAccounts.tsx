@@ -28,11 +28,11 @@ export default function BlockedAccounts({ customProps, onBack }: { customProps: 
   const [showConfirmUnblock, setShowConfirmUnblock] = useState(false);
 
   const filteredUsers = customProps.blockedUsers.items.filter((user: any) => user.name.toLowerCase().includes(searchTerm.toLowerCase()) || user.username.toLowerCase().includes(searchTerm.toLowerCase()));
-  const filteredConsumers = customProps.consumers.filter((user: any) => user.name.toLowerCase().includes(searchTerm.toLowerCase()) || user.username.toLowerCase().includes(searchTerm.toLowerCase())).filter((item: any) => item.id !== localStorage.getItem('userId') && !filteredUsers.some((user: any) => user.id === item.id));
+  const filteredConsumers = customProps.consumers.filter((user: any) => user.name.toLowerCase().includes(searchTerm.toLowerCase()) || user.username.toLowerCase().includes(searchTerm.toLowerCase())).filter((item: any) => item.id !== localStorage.getItem('userId') && !filteredUsers.some((user: any) => user.id === item.id || user._id === item._id || user._id === item.id || user.id === item._id));
 
   function toggleBlockedUser()
   {
-    let endpoint = `${process.env.VITE_API_URL}/profile/${selectedUser._id}/block`;
+    let endpoint = `${process.env.VITE_API_URL}/profile/${selectedUser.id ?? selectedUser._id}/block`;
     let requestOptions =
     {
       method: 'POST',
@@ -56,7 +56,7 @@ export default function BlockedAccounts({ customProps, onBack }: { customProps: 
     {
       accessToken: localStorage.getItem('token'),
       liveStreamRoomId: searchParams.get('streamId'),
-      userId: user._id,
+      userId: user.id ?? user._id,
     };
 
     socket.emit('removeUserFromLiveStreamRoom', payload);

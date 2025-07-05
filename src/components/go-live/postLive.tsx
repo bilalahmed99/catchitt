@@ -236,18 +236,22 @@ export default function PostLive() {
                     photo: data.userImage
                 };
 
-                selectedLiveVideo.details?.id === data.liveStreamRoomId && selectedLiveVideo.details?.consumers && setSelectedLiveVideo((prev: any) => ({
-                    ...prev,
-                    details:
-                    {
-                        ...prev.details,
-                        consumers:
-                        [
-                            ...prev.details.consumers.filter((item: any) => item.id !== newUser.id),
-                            newUser
-                        ]
-                    }
-                }));
+                setSelectedLiveVideo((prev: any) => {
+                    if (!prev.details) return prev;
+            
+                    return {
+                        ...prev,
+                        details:
+                        {
+                            ...prev.details,
+                            consumers:
+                            [
+                                ...prev.details.consumers.filter((item: any) => item.id !== newUser.id),
+                                newUser
+                            ]
+                        }
+                    };
+                });
             }
         );
     };
@@ -350,14 +354,18 @@ export default function PostLive() {
         socket.on('user-removed',
             (data: any) =>
             {
-                selectedLiveVideo.details?.consumers && setSelectedLiveVideo((prev: any) => ({
-                    ...prev,
-                    details:
-                    {
-                        ...prev.details,
-                        consumers: [...prev.details.consumers.filter((item: any) => item.id !== data.userId)]
-                    }
-                }));
+                setSelectedLiveVideo((prev: any) => {
+                    if (!prev.details) return prev;
+
+                    return {
+                        ...prev,
+                        details:
+                        {
+                            ...prev.details,
+                            consumers: (prev.details.consumers || []).filter((item: any) => item.id !== data.userId)
+                        }
+                    };
+                });
             }
         );
     };
