@@ -16,17 +16,20 @@ import {
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import SearchIcon from '@mui/icons-material/Search';
 import UnMuteButton from "./UnmuteButton";
+import { useSearchParams } from 'react-router-dom';
 
 export default function MutedAccounts({ customProps, onBack }: { customProps: any, onBack: () => void }) {
+  const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [showAddMuteButton, setShowAddMuteButton] = useState(false);
 
   const filteredUsers = customProps.mutedUsers.items.filter((user: any) => user.name.toLowerCase().includes(searchTerm.toLowerCase()) || user.username.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredConsumers = customProps.consumers.filter((user: any) => user.name.toLowerCase().includes(searchTerm.toLowerCase()) || user.username.toLowerCase().includes(searchTerm.toLowerCase())).filter((item: any) => item.id !== localStorage.getItem('userId') && !filteredUsers.some((user: any) => user.id === item.id || user._id === item._id || user._id === item.id || user.id === item._id));
 
   function toggleMuteUser()
   {
-    let endpoint = `${process.env.VITE_API_URL}/live-stream/roomId/mute/${selectedUser._id}`;
+    let endpoint = `${process.env.VITE_API_URL}/live-stream/${searchParams.get('streamId')}/mute/${selectedUser.id ?? selectedUser._id}`;
     let requestOptions =
     {
       method: 'POST',
@@ -40,7 +43,7 @@ export default function MutedAccounts({ customProps, onBack }: { customProps: an
     fetch(endpoint, requestOptions)
     .catch((error) => console.error('Fetch error:', error));
 
-    customProps.setMutedUsers((prev: any) => ({ ...prev, items: prev.items.filter((item: any) => item._id !== selectedUser._id) }));
+    customProps.setMutedUsers((prev: any) => ({ ...prev, items: prev.items.some((item: any) => item._id === selectedUser._id) ? prev.items.filter((item: any) => item._id !== selectedUser._id) : [...prev.items, selectedUser] }));
   };
 
   if(showAddMuteButton)
@@ -138,8 +141,39 @@ export default function MutedAccounts({ customProps, onBack }: { customProps: an
             </ListItem>
           ))}
         </List>
+        <List>
+          {filteredConsumers.map((user: any, index: number) => (
+            <ListItem key={index} disableGutters secondaryAction={
+              <Button
+                variant="outlined"
+                onClick={() => { setSelectedUser(user); setShowAddMuteButton(true); }}
+                size="small"
+                sx={{
+                  borderRadius: 2,
+                  textTransform: 'none',
+                  fontWeight: 'bold',
+                  fontSize: '0.75rem',
+                  px: 2,
+                  height: 32,
+                  color: '#000',
+                  borderColor: '#000'
+                }}
+              >
+                Mute
+              </Button>
+            }>
+              <ListItemAvatar>
+                <Avatar src={user.avatar} sx={{ width: 48, height: 48 }} />
+              </ListItemAvatar>
+              <ListItemText
+                primary={<Typography fontWeight="bold">{user.name}</Typography>}
+                secondary={<Typography variant="caption" color="text.secondary">{user.username}</Typography>}
+              />
+            </ListItem>
+          ))}
+        </List>
       </Box>
-      {customProps.mutedUsers.items.length < 1 && (
+      {customProps.mutedUsers.items.length < 1 && customProps.consumers.length < 1 && (
       <Box
               sx={{
                 flexGrow: 1,
