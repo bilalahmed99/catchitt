@@ -42,7 +42,7 @@ const topics: Topic[] = [
 
 const AddTopic: React.FC<AddTopicProps> = ({ onBack, postCategories,addToRoom }) => {
   return (
-    <Box sx={{ maxWidth: 360, mx: 'auto', position: 'relative' }}>
+    <Box sx={{ maxWidth: 360, mx: 'auto', position: 'fixed', top: 6 }}>
       {/* Header */}
       <Box display="flex" pb={1} alignItems="center" justifyContent={'center'} mb={2} borderBottom={'1px solid #E6E6E6'}>
         <IconButton onClick={onBack} sx={{position: 'absolute', left: 1, }}>

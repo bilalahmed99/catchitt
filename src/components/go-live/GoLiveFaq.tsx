@@ -37,25 +37,41 @@ const LiveGoalFAQ = ({ onBack }: LiveGoalFAQProps) => {
       sx={{
         backgroundColor: '#1e1e1e',
         color: '#fff',
-        p: 2,
         borderRadius: 3,
-        maxWidth: 400,
+        maxWidth: 350,
         mx: 'auto',
         fontFamily: 'Inter, sans-serif',
         textAlign: 'left',
-        position: 'relative',
+        position: 'fixed',
+        top: 6,
       }}
     >
       {/* Header */}
-      <Box display="flex" alignItems="center" justifyContent="center" mb={2}>
-        <IconButton onClick={onBack} sx={{ color: '#fff', position: 'absolute', top: 10, left: 8 }}>
+      <Box display="flex" alignItems="center" justifyContent="center" mb={2} px={2} height={50}>
+        <IconButton onClick={onBack} sx={{ color: '#fff', position: 'absolute', top: 6, left: 8 }}>
           <ArrowBackIosNewIcon fontSize="small" />
         </IconButton>
         <Typography variant="h6" textAlign="center" fontWeight="600" ml={1}>
           FAQs
         </Typography>
       </Box>
-
+      <Box  sx={{
+    maxHeight: 'calc(100vh - 5rem)',
+    overflowY: 'auto',
+    px: 2,
+    '&::-webkit-scrollbar': {
+      width: '6px',
+    },
+    '&::-webkit-scrollbar-track': {
+      background: 'transparent',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: '#ffffff',
+      borderRadius: '10px',
+    },
+    scrollbarWidth: 'thin', // For Firefox
+    scrollbarColor: '#ffffff transparent', // For Firefox
+  }}>
       {/* Question */}
       <Typography fontWeight="600" mb={1}>
         What is LIVE Goal?
@@ -132,6 +148,7 @@ const LiveGoalFAQ = ({ onBack }: LiveGoalFAQProps) => {
       <Typography variant="body2" color="grey.300">
         A LIVE goal will expire in 4 hours, so make sure your LIVE goal is attainable and not too challenging in the time limit.
       </Typography>
+      </Box>
     </Box>
   );
 };

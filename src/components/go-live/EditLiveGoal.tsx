@@ -23,6 +23,7 @@ import CircleIcon from "@mui/icons-material/Circle";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import LiveGoalFAQ from "./GoLiveFaq";
+import { fix } from 'mathjs';
 
 const CustomSwitch = styled(Switch)(({ theme }) => ({
   width: 42,
@@ -133,6 +134,8 @@ const [goalDescription, setGoalDescription] = useState(
         borderRadius: 2,
         width: 350,
         mx: 'auto',
+        position: 'fixed',
+        top: 6
       }}
     >
       <Box textAlign={'left'} display="flex" alignItems="center" justifyContent="space-between" mb={3} >
@@ -175,7 +178,24 @@ const [goalDescription, setGoalDescription] = useState(
         </Button>
       </Box>
 
-      <Grid container spacing={1}>
+      <Grid container spacing={1}
+      sx={{
+    maxHeight: 'calc(100vh - 22.5rem)',
+    overflowY: 'auto',
+    px: 2,
+    '&::-webkit-scrollbar': {
+      width: '6px',
+    },
+    '&::-webkit-scrollbar-track': {
+      background: 'transparent',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: '#ffffff',
+      borderRadius: '10px',
+    },
+    scrollbarWidth: 'thin', // For Firefox
+    scrollbarColor: '#ffffff transparent', // For Firefox
+  }}>
         {selectedGifts.map(
           (gift:any, i:any) => (
             <Grid item xs={6} key={i}>
@@ -221,9 +241,11 @@ const [goalDescription, setGoalDescription] = useState(
           )
         )}
         {selectedGifts.length < 1 &&
+        <Box sx={{backgroundColor: '#2D2D2D', py: 5, width: '100%', borderRadius: 1,mt: 1}}>
           <Typography fontWeight={700} sx={{ cursor: 'pointer'}} onClick={handleToggle}>
             + Add a gift goal
           </Typography>
+        </Box>
         }
       </Grid>
 
@@ -254,6 +276,8 @@ const [goalDescription, setGoalDescription] = useState(
         borderRadius: 3,
         padding: 2,
         textAlign: "center",
+        position: "fixed",
+        top: 6
       }}
     >
       <Typography variant="h6" sx={{ mb: 1 }}>
@@ -268,7 +292,23 @@ const [goalDescription, setGoalDescription] = useState(
       </Typography>
 
       {/* Grid of gifts */}
-      <Grid container spacing={2} justifyContent="center">
+      <Grid container spacing={2} justifyContent="center" sx={{
+    maxHeight: 'calc(100vh - 16rem)',
+    overflowY: 'auto',
+    px: 2,
+    '&::-webkit-scrollbar': {
+      width: '6px',
+    },
+    '&::-webkit-scrollbar-track': {
+      background: 'transparent',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: '#ffffff',
+      borderRadius: '10px',
+    },
+    scrollbarWidth: 'thin', // For Firefox
+    scrollbarColor: '#ffffff transparent', // For Firefox
+  }}>
         {gifts.items.map((gift: any, index: number) => (
           <Grid item xs={4} key={index}>
             <Box onClick={() => setSelectedGift(gift)} sx={{ cursor: 'pointer', backgroundColor: selectedGift?._id === gift._id ? '#2D2D2D' : 'transparent', '&:hover': { backgroundColor: '#2D2D2D' } }}>
@@ -342,6 +382,8 @@ const [goalDescription, setGoalDescription] = useState(
         color: "#fff",
         borderRadius: 3,
         padding: 2,
+        position: 'fixed',
+        top: 6,
         textAlign: "center",
       }}
     >
@@ -378,9 +420,26 @@ const [goalDescription, setGoalDescription] = useState(
           Gift
         </Button>
       </Box>
-
+        <Box sx={{
+    maxHeight: 'calc(100vh - 10rem)',
+    overflowY: 'auto',
+    px: 2,
+    '&::-webkit-scrollbar': {
+      width: '6px',
+    },
+    '&::-webkit-scrollbar-track': {
+      background: 'transparent',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: '#ffffff',
+      borderRadius: '10px',
+    },
+    scrollbarWidth: 'thin', // For Firefox
+    scrollbarColor: '#ffffff transparent', // For Firefox
+  }}>
       {/* Grid of gifts */}
-      <Grid container spacing={1}>
+      <Grid container spacing={1} 
+      >
         {selectedGifts.map(
           (gift: any, i: any) => (
             <Grid item xs={12} key={i}>
@@ -430,13 +489,15 @@ const [goalDescription, setGoalDescription] = useState(
           )
         )}
         {selectedGifts.length < 1 &&
+        <Box sx={{backgroundColor: '#2D2D2D', py: 5, width: '100%', borderRadius: 1,mt: 1}}>
           <Typography fontWeight={700} sx={{ cursor: 'pointer'}} onClick={() => { handleToggle; setShowLiveGoalAutomatically(false); } }>
             + Add a gift goal
           </Typography>
+        </Box>
         }
        
       </Grid>
-
+        </Box>
      <Box display="flex" justifyContent="space-between" alignItems="center" textAlign={"left"} mt={2}>
         <Box>
           <Typography variant="subtitle2" fontWeight={700}>Add this LIVE goal automatically</Typography>

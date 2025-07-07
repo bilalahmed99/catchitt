@@ -804,7 +804,7 @@ const Promote = () => (
                 <ExploreFilters show={showExplore} setShow={setShowExplore} />
                 </Box>
                 <Box >
-                    {!showEditLiveGoal && !showFaqs && !openSettings && !showTopics && <Card sx={{ width: 360, overflow: "hidden", p:  1, boxShadow: "none" }}>
+                    {!showEditLiveGoal && !showFaqs && !openSettings && !showTopics && <Card sx={{ width: 360, overflow: "hidden", pr:  1, boxShadow: "none" }}>
                         <Box onClick={handleClick} sx={{ position: "absolute" }}>
                             <CardMedia
                             sx={{

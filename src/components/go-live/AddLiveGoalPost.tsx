@@ -359,7 +359,7 @@ const AddLiveGoalModal = ({ liveGoals, profileDetails, onEdit, onLiveGoalAdded, 
         )} </>}
       {showLiveGoalAutomatically && <Card
         sx={{
-          width: 360,
+          width: 350,
           bgcolor: "#1e1e1e",
           color: "#fff",
           borderRadius: 3,

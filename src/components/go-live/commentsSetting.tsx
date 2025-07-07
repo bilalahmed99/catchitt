@@ -136,7 +136,7 @@ if (showMutedAccounts) {
             <path d="M7.69141 1.25L1.69141 7.25L7.69141 13.25" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </IconButton>
-        <Typography fontWeight="bold" variant="body1" sx={{ ml: 1 }}>
+        <Typography fontWeight="600" variant="body1" sx={{ ml: 1 }}>
           Comment Settings
         </Typography>
       </Box>
@@ -151,7 +151,7 @@ if (showMutedAccounts) {
         </Box>
 
         <ListItem>
-          <ListItemText primary="Allow comments" />
+          <ListItemText primary="Allow comments"  primaryTypographyProps={{ sx: { fontWeight: 600 } }}/>
           <ListItemSecondaryAction>
             <StyledSwitch
               edge="end"
@@ -166,7 +166,7 @@ if (showMutedAccounts) {
         </ListItem>
 
         <ListItem button onClick={() => setShowFilterScreen(true)}>
-          <ListItemText primary="Filter comments" secondary="On" />
+          <ListItemText primary="Filter comments" secondary="On" primaryTypographyProps={{ sx: { fontWeight: 600 } }} />
           <ListItemSecondaryAction>
             <IconButton edge="end">
               <ArrowForwardIosIcon sx={{ fontSize: 16 }} />
@@ -175,7 +175,7 @@ if (showMutedAccounts) {
         </ListItem>
 
         <ListItem button onClick={() => setShowBlockedKeywords(true)}>
-          <ListItemText primary="Blocked keywords" />
+          <ListItemText primary="Blocked keywords" primaryTypographyProps={{ sx: { fontWeight: 600 } }} />
           <ListItemSecondaryAction>
             <IconButton edge="end">
               <ArrowForwardIosIcon sx={{ fontSize: 16 }} />
@@ -193,7 +193,7 @@ if (showMutedAccounts) {
         </ListItem> */}
 
         <ListItem>
-          <ListItemText primary="Show the most sent comment" />
+          <ListItemText primary="Show the most sent comment" primaryTypographyProps={{ sx: { fontWeight: 600 } }} />
           <ListItemSecondaryAction>
             <StyledSwitch
               edge="end"
@@ -223,7 +223,7 @@ if (showMutedAccounts) {
         </ListItem> */}
 
         <ListItem button onClick={() => setShowMutedAccounts(true)}>
-          <ListItemText primary="Blocked Accounts"  />
+          <ListItemText primary="Blocked Accounts" primaryTypographyProps={{ sx: { fontWeight: 600 } }} />
           <ListItemSecondaryAction>
             <IconButton edge="end">
               <ArrowForwardIosIcon sx={{ fontSize: 16 }} />
@@ -232,6 +232,7 @@ if (showMutedAccounts) {
         </ListItem>
         <ListItem button onClick={() => setShowMuteRules(true)}>
           <ListItemText
+          primaryTypographyProps={{ sx: { fontWeight: 600 } }}
             primary="Mute rules"
             secondary="Add rules to mute viewers who comment specific words, phrases, and emojis."
           />

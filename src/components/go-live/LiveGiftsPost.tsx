@@ -128,7 +128,7 @@ const [goalDescription, setGoalDescription] = useState(
         color: '#fff',
         p: 2,
         borderRadius: 2,
-        width: 360,
+        width: 350,
         mx: 'auto',
       }}
     >
