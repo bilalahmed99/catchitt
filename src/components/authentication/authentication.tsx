@@ -1,9 +1,9 @@
 import { CircularProgress } from '@mui/material';
 import classNames from 'classnames';
-import i18next from 'i18next';
 import cookies from 'js-cookie';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../../assets/Logo.png';

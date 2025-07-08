@@ -6,7 +6,8 @@ import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import styles from '../account.module.scss';
-
+import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -70,6 +71,7 @@ interface ApiResponse {
 }
 
 const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, updateAccountSettings }) => {
+  const { t, i18n } = useTranslation();  
   const [value, setValue] = useState(0);
   const [selectedDownload, setSelectedDownload] = useState(downloadDataSettings.download);
   const [selectedFormat, setSelectedFormat] = useState(downloadDataSettings.format);
@@ -77,7 +79,6 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
   const [downloadRequests, setDownloadRequests] = useState<DownloadRequest[]>([]);
   const [loading, setLoading] = useState(true);
   var themeColor = window.localStorage.getItem('theme');
-
   const [darkTheme, setdarkTheme] = useState('');
   useEffect(() => {
       var themeColor = window.localStorage.getItem('theme');
@@ -260,7 +261,7 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
       <AppBar  position="static" className={`${darkTheme ? 'bg-transparent': 'bg-transparent'}`} color="default" sx={{ boxShadow: 'none',  }}>
         <CustomTabs className={`${darkTheme ? 'bg-transparent': ''} w-[94%] m-auto`} sx={{borderBottom: '1px solid #16182333'}} value={value} onChange={handleChange} aria-label="basic tabs example" variant="fullWidth">
           <Tab
-            label="Request data"
+            label={t('data.download.title')}
             id="simple-tab-0"
             aria-controls="simple-tabpanel-0"
             sx={{ 
@@ -274,7 +275,7 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
             }}
           />
           <Tab
-            label="Download data"
+            label={t('data.download.subtitle')}
             id="simple-tab-1"
             aria-controls="simple-tabpanel-1"
                     sx={{ 
@@ -292,10 +293,10 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
       </AppBar>
       <TabPanel value={value} index={0}>
         <span className="text-sm text-[#16182399]">
-          Request a copy of your data from all the Seezitt apps you use to back up your account or export it to other services.
+          {t('data.download.request.copy')}
         </span>
         <span className='text-sm text-[#16182399] mt-3 d-block font-medium'>
-          Select data to download
+          {t('data.download.select.title')}
         </span>
         <div className='w-100 border-bottom py-3'>
           <FormControlLabel
@@ -303,10 +304,9 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
               value="all_data"
               label={
                 <Box onClick={(e) => e.stopPropagation()} sx={{ cursor: 'pointer' }}>
-                  <p className='font-semibold'>All data</p>
+                  <p className='font-semibold'>{t('data.download.select.option.all')}</p>
                   <span className='text-xs text-[#16182399]'>
-                    Download all available information associated with your account. This file will include more data than if
-                    you select from the custom options.
+                    {t('data.download.select.option.all.description')}
                   </span>
                 </Box>
               }
@@ -345,9 +345,9 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
               value="custom"
               label={
                 <Box onClick={(e) => e.stopPropagation()} sx={{ cursor: 'pointer' }}>
-                  <p className='font-semibold'>Custom</p>
+                  <p className='font-semibold'>{t('data.download.select.option.custom')}</p>
                   <span className='text-xs text-[#16182399]'>
-                    Choose which information you want to include in your file.
+                    {t('data.download.select.option.custom.description')}
                   </span>
                 </Box>
               }
@@ -373,9 +373,9 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
               }
               label={
                 <Stack spacing={0.5}>
-                    <span>Profile and Posts</span>
+                    <span>{t('data.download.category.profile')}</span>
                     <FormHelperText sx={{ fontSize: '12px', color: 'gray' }}>
-                    Personal information, your followers, accounts you follow, your posts on Seezit
+                    {t('data.download.category.profile.description')}
                     </FormHelperText>
                   </Stack>
               }
@@ -392,9 +392,9 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
                 }
                 label={
                   <Stack spacing={0.5}>
-                    <span>Activity</span>
+                    <span>{t('data.download.category.activity')}</span>
                     <FormHelperText sx={{ fontSize: '12px', color: 'gray' }}>
-                      Likes, comments, favorites, browsing history
+                      {t('data.download.category.activity.description')}
                     </FormHelperText>
                   </Stack>
                 }
@@ -412,9 +412,9 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
               }
               label={
                 <Stack spacing={0.5}>
-                    <span>Message</span>
+                    <span>{t('data.download.category.message')}</span>
                     <FormHelperText sx={{ fontSize: '12px', color: 'gray' }}>
-                      Direct messages you’ve sent and received
+                      {t('data.download.category.message.description')}
                     </FormHelperText>
                   </Stack>
               }
@@ -423,7 +423,7 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
           </div>
         )}
 
-        <span className="text-sm text-[#16182399] mt-3 d-block font-medium">Select file format</span>
+        <span className="text-sm text-[#16182399] mt-3 d-block font-medium">{t('data.download.format.title')}</span>
 
         {/* TXT Radio Button */}
         <div className="w-100 border-bottom py-3">
@@ -432,8 +432,8 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
             value="txt"
             label={
               <Box onClick={(e) => e.stopPropagation()} sx={{ cursor: 'pointer' }}>
-                <p className="font-semibold">TXT</p>
-                <span className="text-xs text-[#16182399]">Easy-to-read text file</span>
+                <p className="font-semibold">{t('data.download.format.txt')}</p>
+                <span className="text-xs text-[#16182399]">{t('data.download.format.txt.description')}</span>
               </Box>
             }
             control={
@@ -453,9 +453,9 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
               value="json"
               label={
                 <Box onClick={(e) => e.stopPropagation()} sx={{ cursor: 'pointer' }}>
-                  <p className='font-semibold'>JSON</p>
+                  <p className='font-semibold'>{t('data.download.format.json')}</p>
                   <span className='text-xs text-[#16182399]'>
-                    Allows other services to import your file
+                    {t('data.download.format.json.description')}
                   </span>
                 </Box>
               }
@@ -469,7 +469,7 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
           className="bg-[#FE2C55] text-white font-semibold px-4 rounded-md w-full"
           onClick={handleRequestData}
         >
-          <p className="text-[rgb(255, 59, 92)] font-normal">Request data</p>
+          <p className="text-[rgb(255, 59, 92)] font-normal">{t('data.download.button.request')}</p>
         </button>
       </TabPanel>
       {/* <TabPanel value={value} index={1}>
@@ -502,22 +502,22 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
             </div> */}
             {/* <span className="text-[#FE2C55] cursor-pointer">Learn more</span> */}
             <p className="text-sm text-[#0000008F]">
-              When your file is ready for download, it'll be available for 4 days. If you submit another request, your existing file will expire. 
+              {t('data.download.expiry.notice')} 
             </p>
           </div>
 
           <div>
-            <h3 className="font-medium mb-3">Past requests</h3>
+            <h3 className="font-medium mb-3">{t('data.download.past.requests.title')}</h3>
             
             {loading ? (
-              <p>Loading...</p>
+              <p>{t('data.download.loading')}</p>
             ) : downloadRequests.length === 0 ? (
               <div className="text-center py-8">
                 <svg style={{ height: '3rem' }} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 53 53" fill="none">
                   {/* Your SVG path here */}
                 </svg>
-                <p className="h6 mt-4">No requests yet</p>
-                <span className="text-[#0000008F]">Start a request to download your data</span>
+                <p className="h6 mt-4">{t('data.download.empty.title')}</p>
+                <span className="text-[#0000008F]">{t('data.download.empty.description')}</span>
               </div>
             ) : (
               <div className="space-y-4">
@@ -525,7 +525,7 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
                   <div key={request._id} className="border-b pb-4">
                     <div className="flex justify-between items-start">
                       <div>
-                        <p className="font-medium">Requested on {formatDate(request.createdTime)}</p>
+                        <p className="font-medium">Requested on {t('data.download.request.time')} {formatDate(request.createdTime)}</p>
                         <p className={`text-sm ${
                           request.status === 'FAILED' ? 'text-red-500' : 
                           request.status === 'PENDING' ? 'text-yellow-500' :
@@ -550,7 +550,7 @@ const FullWidthTabs: React.FC<ManageAccountProps> = ({ downloadDataSettings, upd
                             document.body.removeChild(link);
                           }}
                         >
-                          Download data
+                         {t('data.download.subtitle')}
                         </button>
                       )}
                     </div>

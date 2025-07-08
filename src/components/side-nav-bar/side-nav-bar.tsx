@@ -11,6 +11,7 @@ import { openLogoutPopup } from '../../redux/reducers';
 import { SuggestedActivity } from '../../components/suggested-activity/suggested-activity';
 import Notifications from './../../shared/navbar/components/Notifications'
 import PopupForGetApp from '../../shared/components/PopupForGetApp';
+
 // import Search from '../../shared/navbar/components/Search';
 import { createIcon, defaultAvatar, logo, logoS, logoAuth, logoAuthWhite } from '../../icons';
 
