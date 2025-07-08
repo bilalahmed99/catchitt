@@ -75,6 +75,9 @@
   "and": "and",
   "Upload new": "Upload new",
   "Confirm": "Confirm",
+  "Allow your video to be saved for scheduled posting?": "Allow your video to be saved for scheduled posting?",
+  "When you schedule a video, the video is saved on our servers before it is posted.": "When you schedule a video, the video is saved on our servers before it is posted.",
+  "All videos posted to Seezitt must follow Seezitt Community Guidelines.": "All videos posted to Seezitt must follow Seezitt Community Guidelines.",
 
   "login.title": "Login to your account",
   "email.input": "Email",
