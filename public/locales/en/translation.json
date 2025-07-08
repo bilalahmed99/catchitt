@@ -22,6 +22,11 @@
   "Select video to upload": "Select video to upload",
   "drag and drop it here": "drag and drop it here",
   "Select video": "Select video",
+  "No file selected": "No file selected",
+  "Uploaded": "Uploaded",
+  "Duration": "Duration",
+  "Cancel": "Cancel",
+  "Replace": "Replace",
 
   "login.title": "Login to your account",
   "email.input": "Email",
