@@ -35,13 +35,13 @@ function UploadFile({ changeFileHandler }: any) {
             <div className={`w-[calc(100%-14rem)] ml-auto bg-white h-4/6 flex flex-col items-center px-[1rem] py-[1.5rem] gap-4 justify-center shadow-sm rounded-2xl`}>
                 <DndContainer
                     className="w-full h-full cursor-pointer"
-                    text="Select video to upload"
-                    orText="drag and drop it here"
+                    text={translate('Select video to upload')}
+                    orText={translate('drag and drop it here')}
                     accept="video/*"
                     onChangeFile={changeFileHandler}
                 >
                     <CustomButton
-                        text="Select video"
+                        text={translate('Select video')}
                         width="16.938rem !important"
                         rounded="0.5rem"
                     />
