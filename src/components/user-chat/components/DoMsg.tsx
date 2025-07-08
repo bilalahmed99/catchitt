@@ -29,6 +29,9 @@ import shark from '../../../assets/gifts/shark.svg';
 import coinsOnly from '../../../assets/gifts/coinsSingle.svg';
 import { caesium } from '../../../icons';
 import { ClickAwayListener } from '@mui/material';
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
+import cookies from 'js-cookie';
 
 // import commentEmoji from '../../../icons/commentEmoji.svg';
 import CloseIcon from '@mui/icons-material/Close';
@@ -85,6 +88,29 @@ const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme, data,cu
   const giftsContainerRef = useRef<HTMLDivElement>(null);
   const initialGiftsLoaded = useRef(false);
   const [openFiles, setOpenFiles] = useState(false);
+
+  interface Languages {
+        code: string;
+        name: string;
+        country_code: string;
+    }
+
+    const languages: Languages[] = [
+        {
+            code: 'en',
+            name: 'English',
+            country_code: 'gb',
+        },
+        {
+            code: 'ar',
+            name: 'العربية',
+            country_code: 'sa',
+        },
+    ];
+
+    const currentLanguageCode = cookies.get('i18next') || 'en';
+    const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
+    const { t, i18n } = useTranslation();
 
   const actions = [
     { icon: <CameraIcon />, label: 'Camera' },
@@ -479,7 +505,7 @@ const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme, data,cu
            onChange={handleChange}
             // onChange={(e: any) => { setMessage(e.target.value), setMessageType('Text') }}
             type="text"
-            placeholder="Write a message..."
+            placeholder={t('Write a message...')}
             value={!!uploadedFile ? '' : msg}
             style={{ width: '-webkit-fill-available', padding: '0.5rem' }}
             ref={inputRef} // Use the passed ref
@@ -504,7 +530,7 @@ const DoMsg = ({ onSubmit, msg, setMessage, setMessageType, isDarkTheme, data,cu
               </button> */}
               <div className='flex gap-1'>
                 <span style={{color: '#FF2C55'}}>
-                  <Link to="/coins/recharge" reloadDocument={false} style={{ textDecoration: 'none' }}>Recharge</Link>
+                  <Link to="/coins/recharge" reloadDocument={false} style={{ textDecoration: 'none' }}>{t('Recharge')}</Link>
                 </span>   
               <img style={{ height: '13px', marginTop: '5px' }} src={caesium} alt="Coin Icon" />                 
                 {balance}

@@ -12,6 +12,9 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
+import cookies from 'js-cookie';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -27,6 +30,29 @@ export default function ResponsiveDialog({ isDarkTheme }: any) {
   const API_KEY = process.env.VITE_API_URL;
   const [PrivacyValue, setPrivacyValue] = useState('Friends');
   const token = localStorage.getItem('token');
+
+   interface Languages {
+        code: string;
+        name: string;
+        country_code: string;
+    }
+
+    const languages: Languages[] = [
+        {
+            code: 'en',
+            name: 'English',
+            country_code: 'gb',
+        },
+        {
+            code: 'ar',
+            name: 'العربية',
+            country_code: 'sa',
+        },
+    ];
+
+    const currentLanguageCode = cookies.get('i18next') || 'en';
+    const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
+    const { t, i18n } = useTranslation();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -107,7 +133,7 @@ export default function ResponsiveDialog({ isDarkTheme }: any) {
       >
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography style={{ color: '#000 !important', fontSize: '24px', }} sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-            Message settings
+            {t('Message settings')}
           </Typography>
           <CloseIcon
             aria-label="close"
@@ -123,10 +149,10 @@ export default function ResponsiveDialog({ isDarkTheme }: any) {
         </div>
         <DialogContent dividers style={{ padding: '24px' }}>
           <Typography gutterBottom style={{ fontSize: '16px', fontWeight: 'bold' }}>
-            Who can send you direct messages
+            {t('Who can send you direct messages')}
           </Typography>
           <Typography gutterBottom style={{ fontSize: '12px' }}>
-            With any option, you can receive messages from users that you’ve sent messages to. Friends are your followers that you follow back.
+            {t('With any option, you can receive messages from users')}
           </Typography>
           <FormControl>
             <RadioGroup
@@ -149,8 +175,8 @@ export default function ResponsiveDialog({ isDarkTheme }: any) {
           </FormControl>
         </DialogContent>
         <DialogActions style={{ maxWidth: 'fit-content', marginLeft: 'auto', padding: '24px' }}>
-          <button style={{ color: isDarkTheme?'#fff':'rgb(22, 24, 35)', backgroundColor: isDarkTheme?'#282828':'', borderColor: 'rgba(22, 24, 35, 0.12)', minWidth: '165px', }} onClick={handleClose}>Cancel</button>
-          <button style={{ color: '#fff', backgroundColor: 'rgb(255, 59, 92)', minWidth: '165px' }} onClick={handleUserChatSetting} autoFocus>Save</button>
+          <button style={{ color: isDarkTheme?'#fff':'rgb(22, 24, 35)', backgroundColor: isDarkTheme?'#282828':'', borderColor: 'rgba(22, 24, 35, 0.12)', minWidth: '165px', }} onClick={handleClose}>{t('Cancel')}</button>
+          <button style={{ color: '#fff', backgroundColor: 'rgb(255, 59, 92)', minWidth: '165px' }} onClick={handleUserChatSetting} autoFocus>{t('Save')}</button>
         </DialogActions>
       </BootstrapDialog>
     </ThemeProvider>

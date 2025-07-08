@@ -1,4 +1,7 @@
 import { Star } from '@mui/icons-material';
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
+import cookies from 'js-cookie';
 import {
     avatar,
     copyMsg,
@@ -51,6 +54,29 @@ function Actions(props: any) {
 
     const loggedInUserId = localStorage.getItem('userId');
     const [playingVideo, setPlayingVideo] = useState('');
+
+    interface Languages {
+        code: string;
+        name: string;
+        country_code: string;
+    }
+
+    const languages: Languages[] = [
+        {
+            code: 'en',
+            name: 'English',
+            country_code: 'gb',
+        },
+        {
+            code: 'ar',
+            name: 'العربية',
+            country_code: 'sa',
+        },
+    ];
+
+    const currentLanguageCode = cookies.get('i18next') || 'en';
+    const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
+    const { t, i18n } = useTranslation();
 
      // Function to check if the URL is an image
     const isImage = (url:any) => {
@@ -171,7 +197,7 @@ function Actions(props: any) {
                                                 <path d="M10.9998 16.75L4.82784 19.995L6.00684 13.122L1.00684 8.25495L7.90684 7.25495L10.9928 1.00195L14.0788 7.25495L20.9788 8.25495L15.9788 13.122L17.1578 19.995L10.9998 16.75Z" stroke="#B6B6B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                             </svg>
                                             <p color="#222" className={style.dropdText}>
-                                                {item.stared ? 'UnStar' : 'Star'}
+                                                {item.stared ? t('UnStar') : t('Star')}
                                             </p>
                                         </div>
 
@@ -196,7 +222,7 @@ function Actions(props: any) {
                                                 </svg>
                                                 <p
                                                     className={style.dropdText} style={{ color: '#FF2C55'}} >
-                                                    Delete
+                                                    {t('Delete')}
                                                 </p>
                                         </div>
                                         {/* {item.isrecevied && ( */}
@@ -218,7 +244,7 @@ function Actions(props: any) {
                                                         <path d="M4.012 16.737C3.70534 16.5622 3.45027 16.3095 3.27258 16.0045C3.09488 15.6995 3.00085 15.353 3 15V5C3 3.9 3.9 3 5 3H15C15.75 3 16.158 3.385 16.5 4" stroke="#B6B6B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                                     </svg>
                                                     <p color="#222" className={style.dropdText}>
-                                                        Copy
+                                                        {t('Copy')}
                                                     </p>
                                                 </div>
                                             </>
@@ -243,7 +269,7 @@ function Actions(props: any) {
                                                 // }}
                                                 className={style.dropdText}
                                             >
-                                                Forward
+                                                {t('Forward')}
                                             </p>
                                         </div>
                                         <div
@@ -261,7 +287,7 @@ function Actions(props: any) {
                                             <path d="M8.99981 1V5C15.5748 6.028 18.0198 11.788 18.9998 17C19.0368 17.206 13.6158 11.038 8.99981 11V15L0.999811 8L8.99981 1Z" stroke="#B6B6B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                             </svg>
                                             <p className={style.dropdText}>
-                                                Reply
+                                                {t('Reply')}
                                             </p>
                                         </div>
                                     </div>

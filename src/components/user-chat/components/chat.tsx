@@ -21,6 +21,10 @@ import BlockPopup from '../../../shared/popups/BlockPopup';
 import { createTheme, ThemeProvider } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import AvatarUser from './avatarUser';
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
+import cookies from 'js-cookie';
+
 
 const options = [
     { text: 'Mute', icon: <NotificationsOffOutlinedIcon /> },
@@ -108,6 +112,30 @@ function UserChat(props: any) {
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
+
+    interface Languages {
+        code: string;
+        name: string;
+        country_code: string;
+    }
+
+    const languages: Languages[] = [
+        {
+            code: 'en',
+            name: 'English',
+            country_code: 'gb',
+        },
+        {
+            code: 'ar',
+            name: 'العربية',
+            country_code: 'sa',
+        },
+    ];
+
+    const currentLanguageCode = cookies.get('i18next') || 'en';
+    const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
+    const { t, i18n } = useTranslation();
+
     const handleClose = () => {
         setAnchorEl(null);
     };
@@ -269,7 +297,7 @@ function UserChat(props: any) {
                         </div>
                     </div>
                 ) : (
-                    <p>No messages yet</p>
+                    <p>{t('No messages yet')}</p>
                 )}
                 <div>
                     <IconButton
@@ -316,35 +344,37 @@ function UserChat(props: any) {
                         <div key="pintotop">
                             <MenuItem onClick={handlePin}>
                                 <PushPinOutlinedIcon />
-                                <span style={{ marginLeft: '8px', fontWeight: 'bold' }} >{ispined ? 'Remove Pin to top' : 'Pin to top'}</span>
+                                <span style={{ marginLeft: '8px', fontWeight: 'bold' }}>
+                                    {ispined ? t('Remove Pin to top') : t('Pin to top')}
+                                </span>
                             </MenuItem>
                             <Divider />
                         </div>
                         <div key="delete">
                             <MenuItem onClick={handleDeleteUserFromChat}>
                                 <DeleteOutlinedIcon />
-                                <span style={{ marginLeft: '8px', fontWeight: 'bold' }} >Delete chat</span>
+                                <span style={{ marginLeft: '8px', fontWeight: 'bold' }} >{t('Delete chat')}</span>
                             </MenuItem>
                             <Divider />
                         </div>
                         <div key="block">
                             <MenuItem onClick={handleBlock}>
                                 <BlockOutlinedIcon />
-                                <span style={{ marginLeft: '8px', fontWeight: 'bold' }} >{isBlocked ? 'Unblock' : 'Block'}</span>
+                                <span style={{ marginLeft: '8px', fontWeight: 'bold' }} >{isBlocked ? t('Unblock') : t('Block')}</span>
                             </MenuItem>
                             <Divider />
                         </div>
                         <div key="stared">
                             <MenuItem onClick={() => { setstaredmodal(true); handleClose() }}>
                                 <GradeIcon />
-                                <span style={{ marginLeft: '8px', fontWeight: 'bold' }} >Stared Message</span>
+                                <span style={{ marginLeft: '8px', fontWeight: 'bold' }} >{t('Stared Message')}</span>
                             </MenuItem>
                             <Divider />
                         </div>
                         <div key="profile">
                             <MenuItem onClick={() => navigate(`/profile/${userId}`)}>
                                 <AccountCircleOutlined />
-                                <span style={{ marginLeft: '8px', fontWeight: 'bold' }} >Profile</span>
+                                <span style={{ marginLeft: '8px', fontWeight: 'bold' }} >{t('Profile')}</span>
                             </MenuItem>
                             <Divider />
                         </div>

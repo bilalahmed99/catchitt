@@ -13,6 +13,9 @@ import Divider from '@mui/material/Divider';
 import { avatar, groupDefaultIcon, pinChat,defaultAvatar } from '../../../icons';
 import style from './chat.module.scss';
 import hook from '../hook/useChat';
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
+import cookies from 'js-cookie';
 
 import PopupForReport from '../../../components/profile/popups/PopupForReport';
 import BlockPopup from '../../../shared/popups/BlockPopup';
@@ -101,6 +104,29 @@ const ITEM_HEIGHT = 60;
         const handleClick = (event: React.MouseEvent<HTMLElement>) => {
             setAnchorEl(event.currentTarget);
         };
+
+        interface Languages {
+                code: string;
+                name: string;
+                country_code: string;
+            }
+        
+        const languages: Languages[] = [
+            {
+                code: 'en',
+                name: 'English',
+                country_code: 'gb',
+            },
+            {
+                code: 'ar',
+                name: 'العربية',
+                country_code: 'sa',
+            },
+        ];
+    
+        const currentLanguageCode = cookies.get('i18next') || 'en';
+        const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
+        const { t, i18n } = useTranslation();
         const handleClose = () => {
             setAnchorEl(null);
         }; 
@@ -198,7 +224,7 @@ const ITEM_HEIGHT = 60;
                     </div>
                 </div>
             ) : (
-                <p>No messages yet</p>
+                <p>{t('No messages yet')}</p>
             )}
             <div>
                 <IconButton

@@ -25,7 +25,31 @@
   "checkyouremail.text": "Check your Email",
   "wesentpassword.text": "We sent a password reset link to your email.",
   "didntreceiveemail.text": "Didn’t receive an email from us yet?",
-  "clicktoresend.text": "Click to resend email"
+  "clicktoresend.text": "Click to resend email",
+  "No messages yet" : "No messages yet",
+  "Messages" : "Messages",
+  "Write a message..." : "Write a message...",
+  "Pin to top" : "Pin to top",
+  "Remove Pin to top" : "Remove Pin to top",
+  "Delete chat" : "Delete chat",
+  "Block": "Block",
+  "Unblock": "Unblock",
+  "Star": "Star",
+  "UnStar": "UnStar",
+  "Delete": "Delete",
+  "Copy": "Copy",
+  "Stared Message": "Stared Message",
+  "Forward": "Forward",
+  "Reply": "Reply",
+  "Profile": "Profile",
+  "Search Messages" : "Search Messages",
+  "Message settings": "Message settings",
+  "Recharge": "Recharge",
+  "Who can send you direct messages": "Who can send you direct messages",
+  "With any option, you can receive messages from users": "With any option, you can receive messages from users that you’ve sent messages to. Friends are your followers that you follow back.",
+  "Save": "Save",
+  "Cancel": "Cancel"
+
 
 
 
