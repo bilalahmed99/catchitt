@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { AppBar, Tabs, Tab, Box, Typography, Modal, FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material";
 import { styled } from "@mui/material";
 import styles from '../account.module.scss';
-
+import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -48,6 +49,7 @@ const CustomTabs = styled(Tabs)({
 });
 
 const Ads: React.FC = () => {
+  const { t, i18n } = useTranslation();  
   const navigate = useNavigate();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false); 
@@ -169,12 +171,13 @@ const Ads: React.FC = () => {
       <TabPanel value={value} index={0}>  
         <div className='w-100 border-bottom py-3 mb-3'>
           <span className='text-sm font-medium text-[#16182399]'>
-          Inferred by <br /> Seezitt
+           {t('inferred.by')} <br /> {t("seezitt")}
           </span>
           <div className='d-flex justify-between cursor-pointer' onClick={() => navigate('/setting/ad_privacy/personalized_ads/inferred_by_topics')}>
                 <div >
                     <div className='text-left'>
-                      <p>View all</p>
+                     <p>{t('view.all')}</p>
+
                     </div>
                 </div>
                 <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -185,12 +188,13 @@ const Ads: React.FC = () => {
         </div>
         <div className='w-100 border-bottom py-3 mb-3'>
           <span className='text-sm font-medium text-[#16182399]'>
-            Your choices
+             {t("your.choices")}
           </span>
           <div className='d-flex justify-between cursor-pointer' onClick={() => navigate('/setting/ad_privacy/personalized_ads/your_choices_topics')}>
                 <div >
                     <div className='text-left'>
-                      <p>View all</p>
+                      <p>{t("view.all")}</p>
+
                     </div>
                 </div>
                 <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -200,13 +204,13 @@ const Ads: React.FC = () => {
         </div>
         <div className='w-100 border-bottom py-3 mb-3'>
           <span className='text-sm font-medium text-[#16182399]'>
-            All topics
+             {t("all.topics")}
           </span>
           {allCategories.items.map((category, index) => (
             <div className='d-flex justify-between mt-3 cursor-pointer' key={index} onClick={() => openModalList(category)}>
                 <div >
                     <div className='text-left'>
-                      <p>{category?.name}</p>
+                      <p>{t(category?.name)}</p>
                     </div>
                 </div>
                 <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -220,7 +224,7 @@ const Ads: React.FC = () => {
 
       <TabPanel value={value} index={1}>
         <Box className="w-100 border-bottom py-3 mb-3 cursor-pointer" onClick={handleOpen}>
-          <Typography className="text-sm font-medium text-[#16182399]">Gender</Typography>
+          <Typography className="text-sm font-medium text-[#16182399]">{t("gender")}</Typography>
           <Box className="d-flex justify-between mt-3 " >
             <Typography></Typography>
             <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -245,22 +249,22 @@ const Ads: React.FC = () => {
               <path d="M38.7 12.12a1 1 0 0 0 0-1.41l-1.4-1.42a1 1 0 0 0-1.42 0L24 21.17 12.12 9.3a1 1 0 0 0-1.41 0l-1.42 1.42a1 1 0 0 0 0 1.41L21.17 24 9.3 35.88a1 1 0 0 0 0 1.41l1.42 1.42a1 1 0 0 0 1.41 0L24 26.83 35.88 38.7a1 1 0 0 0 1.41 0l1.42-1.42a1 1 0 0 0 0-1.41L26.83 24 38.7 12.12Z"></path>
               </svg>
             </span>
-            <Typography id="modal-modal-title" sx={{ textAlign: 'center'}} variant="h5" component="p">{selectedTopic?.name}</Typography>
+            <Typography id="modal-modal-title" sx={{ textAlign: 'center'}} variant="h5" component="p">{t(selectedTopic?.name)}</Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2, fontSize: '16px' }}>
-              Personalized ads can be based on inferences that Seezitt has made about you. Changes can take up to 48 hours to take effect.
+              {t("personalized.ads.description")}
             </Typography>
             <RadioGroup value={isInterested} onChange={(event) => setIsInterested(event.target.value == 'true')}>
             <Box className="mt-3" display="flex" alignItems="center" justifyContent="space-between">
             <span>
-                <Typography>Interested</Typography>
-                <span className="text-sm">We'll try to show you more ads related to this topic.</span>
+                <Typography>{t("interested")}</Typography>
+                <span className="text-sm">{t("show_more_ads")}</span>
               </span>
               <FormControlLabel value="true" control={<Radio sx={{ color: '#FE2C55', '&.Mui-checked': { color: '#FE2C55' } }} />} label="" />
             </Box>
             <Box className="mt-3" display="flex" alignItems="center" justifyContent="space-between">
               <span>
-                <Typography>Not interested</Typography>
-                <span className="text-sm">We'll try to show you less ads related to this topic.</span>
+                <Typography>{t("not_interested")}</Typography>
+                <span className="text-sm">{t("show_less_ads")}</span>
               </span>
               <FormControlLabel value="false" control={<Radio sx={{ color: '#FE2C55', '&.Mui-checked': { color: '#FE2C55' } }} />} label="" />
             </Box>

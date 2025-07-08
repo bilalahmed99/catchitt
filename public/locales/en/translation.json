@@ -154,7 +154,20 @@
   "data.download.expiry.notice": "When your file is ready for download, it'll be available for 4 days. If you submit another request, your existing file will expire.",
   "data.download.past.requests.title": "Past requests",
   "data.download.loading": "Loading...",
-  "data.download.request.time": "Request on"
+  "data.download.request.time": "Request on",
+  "topic": "Topic",
+  "gender": "Gender",
+  "inferred.by": "Inferred by",
+  "seezitt": "Seezitt",
+  "view.all": "View all",
+  "your.choices": "Your choices",
+  "all.topics": "All topics",
+  "personalized.ads.description": "Personalized ads can be based on inferences that Seezitt has made about you. Changes can take up to 48 hours to take effect.",
+  "interested": "Interested",
+  "show.more.ads": "We'll try to show you more ads related to this topic.",
+  "not.interested": "Not interested",
+  "show.less.ads": "We'll try to show you less ads related to this topic."
+
 
 
 
