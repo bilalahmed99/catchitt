@@ -65,7 +65,16 @@
   "No followers available.": "No followers available.",
   "Save as draft": "Save as draft",
   "You can continue editing this video later from your drafts.": "You can continue editing this video later from your drafts.",
-
+  "Select cover": "Select cover",
+  "Upload cover": "Upload cover",
+  "Preview": "Preview",
+  "Drag and drop a file here": "Drag and drop a file here",
+  "Or": "Or",
+  "select a file": "select a file",
+  "Supported formats": "Supported formats",
+  "and": "and",
+  "Upload new": "Upload new",
+  "Confirm": "Confirm",
 
   "login.title": "Login to your account",
   "email.input": "Email",
