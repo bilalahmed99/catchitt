@@ -13,6 +13,9 @@ import { useNavigate } from 'react-router-dom';
 import { get, post } from '../../../axios/axiosClient';
 import defaultBanner from '../../../assets/default_banner.jpeg';
 import { block, myReportWhite, report, trippleDotIcon, whiteblock } from '../../../icons';
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
+import cookies from 'js-cookie';
 
 interface Props {
     setIsEmbedModalOpen: (value: boolean) => void;
@@ -53,6 +56,29 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
     const userId = profileData?._id;
     //@ts-ignore
     // const followings = useSelector((store) => store.reducers.followings);
+
+    interface Languages {
+                code: string;
+                name: string;
+                country_code: string;
+    }
+        
+    const languages: Languages[] = [
+        {
+            code: 'en',
+            name: 'English',
+            country_code: 'gb',
+        },
+        {
+            code: 'ar',
+            name: 'العربية',
+            country_code: 'sa',
+        },
+    ];
+
+    const currentLanguageCode = cookies.get('i18next') || 'en';
+    const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
+    const { t, i18n } = useTranslation();
 
     const followings1 = useSelector((store) => store.reducers.loadAllFollowers);
     console.log('all followers');
@@ -157,7 +183,7 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
                 </div>
                 <button style={{ width: 98, position: 'relative' }} className={styles.button}>
                     <ShareIcon />
-                    Share
+                    {t('Share')}
                     <COPY_AND_SEND_MENU setIsEmbedModalOpen={setIsEmbedModalOpen} copyHandler={copyHandler} userName={profileData?.username} />
                 </button>
             </div>
@@ -173,11 +199,11 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
                         className={styles.statContainer}
                     >
                         <p className={styles.boldText}>{profileData?.followingNumber}</p>
-                        <p className={styles.text}>Followers</p>
+                        <p className={styles.text}>{t('Followers')}</p>
                     </div>
                     <div onClick={() => setLikesModal(true)} className={styles.statContainer}>
                         <p className={styles.boldText}> {profileData?.likesNum}</p>
-                        <p className={styles.text}>Likes</p>
+                        <p className={styles.text}>{t('Likes')}</p>
                     </div>
                     {/* onClick={() => onFollowModalActive('following')} */}
                     <div
@@ -185,7 +211,7 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
                         className={styles.statContainer}
                     >
                         <p className={styles.boldText}>{profileData?.followersNumber}</p>
-                        <p className={styles.text}>Following</p>
+                        <p className={styles.text}>{t('Following')}</p>
                     </div>
                 </div>
                 <div className={styles.links}>
@@ -205,7 +231,7 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
                 <div className={styles.actions}>
                     {messageBtn &&
                         <button style={{ width: 112 }} className={styles.button} onClick={handleMessage}>
-                            Messages
+                            {t('Messages')}
                         </button>
                     }
                     {followings?.data?.length > 0 &&
@@ -218,7 +244,7 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
                             onClick={manageFollowBtn}
                         >
                             {!followBtnLoading ? (
-                                'Unfollow'
+                                t('Unfollow')
                             ) : (
                                 <CircularProgress style={{ width: 16, height: 16 }} />
                             )}
@@ -230,7 +256,7 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
                             onClick={manageFollowBtn}
                         >
                             {!followBtnLoading ? (
-                                'Follow'
+                                t('Follow')
                             ) : (
                                 <CircularProgress style={{ width: 16, height: 16 }} />
                             )}
@@ -279,11 +305,11 @@ const PublicProfileHeader: FunctionComponent<Props> = ({
                             <div className={`${styles['dropdown']} ${darktheme? 'bg-dark':''}`}>
                                 <div onClick={openReport}>
                                     <img src={darktheme? myReportWhite: report} alt="" />
-                                    <p className={styles['text5']}>Report</p>
+                                    <p className={styles['text5']}>{t('Report')}</p>
                                 </div>
                                 <div onClick={openBlock}>
                                     <img src={darktheme?whiteblock:block} alt="" />
-                                    <p className={styles['text5']}>Block</p>
+                                    <p className={styles['text5']}>{t('Block')}</p>
                                 </div>
                             </div>
                         ) : null}

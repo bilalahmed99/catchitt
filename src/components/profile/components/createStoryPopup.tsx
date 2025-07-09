@@ -6,6 +6,9 @@ import React from 'react';
 import AddIcon from '../svg-components/AddIcon';
 import style from './create-story-popup.module.scss';
 import settingsIcon from '../svg-components/cross-light-icon.svg';
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
+import cookies from 'js-cookie';
 
 interface CreateStoryPopupProps {
   open: boolean;
@@ -24,6 +27,30 @@ const CreateStoryPopup: React.FC<CreateStoryPopupProps> = ({ open, onCancel, onS
             setdarkTheme(false);
         }
     });
+
+    interface Languages {
+            code: string;
+            name: string;
+            country_code: string;
+    }
+        
+  const languages: Languages[] = [
+      {
+          code: 'en',
+          name: 'English',
+          country_code: 'gb',
+      },
+      {
+          code: 'ar',
+          name: 'العربية',
+          country_code: 'sa',
+      },
+  ];
+
+  const currentLanguageCode = cookies.get('i18next') || 'en';
+  const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
+  const { t, i18n } = useTranslation();
+
     return (
         <div>
             <Modal
@@ -53,9 +80,9 @@ const CreateStoryPopup: React.FC<CreateStoryPopupProps> = ({ open, onCancel, onS
                     >
                         <button onClick={onSelect} className={style.createStoryButton}>
                             <AddIcon />
-                            Create New Story
+                            {t('Create New Story')}
                         </button>
-                        <button onClick={onCancel} style={{ ...secondaryBtn, textTransform: 'none' }}>Cancel</button>
+                        <button onClick={onCancel} style={{ ...secondaryBtn, textTransform: 'none' }}>{t('Cancel')}</button>
                     </div>
                 </Box>
             </Modal>

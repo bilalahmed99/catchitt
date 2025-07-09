@@ -17,6 +17,9 @@ import CreateStoryPopup from './createStoryPopup';
 import styles from './profileHeader.module.scss';
 import { BASE_URL_FRONTEND } from '../../../utils/constants';
 import defaultBanner from '../../../assets/default_banner.jpeg';
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
+import cookies from 'js-cookie';
 
 interface Props {
     setIsEmbedModalOpen: (value: boolean) => void;
@@ -53,6 +56,7 @@ const ProfileHeader: FunctionComponent<Props> = ({
     const userName = useSelector((state: any) => state?.reducers?.profile?.username);
     const coverImg = useSelector((state: any) => state?.reducers?.profile?.cover);
     const [imgBase64, setImgBase64] = useState(coverImg != ''? coverImg: defaultBanner);
+
     try {
         const profileFromStorage = localStorage.getItem('profile');
         if (profileFromStorage) {
@@ -61,6 +65,29 @@ const ProfileHeader: FunctionComponent<Props> = ({
     } catch (error: any) {
         console.error('Error parsing JSON from localStorage:', error?.message);
     }
+
+    interface Languages {
+                code: string;
+                name: string;
+                country_code: string;
+    }
+        
+    const languages: Languages[] = [
+        {
+            code: 'en',
+            name: 'English',
+            country_code: 'gb',
+        },
+        {
+            code: 'ar',
+            name: 'العربية',
+            country_code: 'sa',
+        },
+    ];
+
+    const currentLanguageCode = cookies.get('i18next') || 'en';
+    const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
+    const { t, i18n } = useTranslation();
 
     const chooseNewCoverImg = () => {
         setSelectImagePopup(true);
@@ -250,7 +277,7 @@ const ProfileHeader: FunctionComponent<Props> = ({
                         className={styles.button}
                     >
                         <ShareIcon />
-                        Share
+                        {t('Share')}
                         <COPY_AND_SEND_MENU setIsEmbedModalOpen={setIsEmbedModalOpen} copyHandler={copyHandler} BASE_URL_FRONTEND={BASE_URL_FRONTEND} profileData={profileData} userName={userName} />
                     </button>
                 </div>
@@ -265,18 +292,18 @@ const ProfileHeader: FunctionComponent<Props> = ({
                             className={styles.statContainer}
                         >
                             <p className={styles.boldText} onClick={() => console.log(profileData)}>{profileData?.followingNumber ?? 0}</p>
-                            <p className={styles.text}>Following</p>
+                            <p className={styles.text}>{t('Following')}</p>
                         </div>
                         <div
                             onClick={() => onFollowModalActive('followers')}
                             className={styles.statContainer}
                         >
                             <p className={styles.boldText}>{profileData?.followersNumber ?? 0}</p>
-                            <p className={styles.text}>Followers</p>
+                            <p className={styles.text}>{t('Followers')}</p>
                         </div>
                         <div onClick={() => setLikesModal(true)} className={styles.statContainer}>
                             <p className={styles.boldText}> {profileData?.likesNum ?? 0}</p>
-                            <p className={styles.text}>Likes</p>
+                            <p className={styles.text}>{t('Likes')}</p>
                         </div>
                     </div>
                     <div className={styles.links}>
@@ -311,11 +338,11 @@ const ProfileHeader: FunctionComponent<Props> = ({
                     <div className={styles.actions}>
                         <button onClick={() => setProfileModal(true)} className={styles.button}>
                             <EditButtonIcon />
-                            Edit Profile
+                            {t('Edit Profile')}
                         </button>
                         <button onClick={() => setViewsModal(true)} className={styles.button2}>
                             <ProfileViewIcon />
-                            Profile Views
+                            {t('Profile Views')}
                         </button>
                     </div>
                 </div>

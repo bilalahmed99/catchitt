@@ -2,6 +2,9 @@ import { useState } from 'react';
 import ImgCrop from 'antd-img-crop';
 import { Upload } from 'antd';
 import ReactDOM from 'react-dom';
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
+import cookies from 'js-cookie';
 
 const getBase64FromFile = (file: any) => {
     return new Promise((resolve, reject) => {
@@ -37,6 +40,29 @@ const Cropbox = ({ onChangeImage }: any) => {
     const onChange = ({ fileList: newFileList }: any) => {
         setFileList(fileList);
     };
+
+    interface Languages {
+                code: string;
+                name: string;
+                country_code: string;
+    }
+        
+    const languages: Languages[] = [
+        {
+            code: 'en',
+            name: 'English',
+            country_code: 'gb',
+        },
+        {
+            code: 'ar',
+            name: 'العربية',
+            country_code: 'sa',
+        },
+    ];
+
+    const currentLanguageCode = cookies.get('i18next') || 'en';
+    const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
+    const { t, i18n } = useTranslation();
 
     const onPreview = async (file: any) => {
         const src = file.url || (await getSrcFromFile(file));
@@ -81,7 +107,7 @@ const Cropbox = ({ onChangeImage }: any) => {
                     onPreview={onPreview}
                     beforeUpload={beforeUpload}
                 >
-                    {fileList.length < 1 && '+ Upload'}
+                    {fileList.length < 1 && '+ ' + t('Upload')}
                 </Upload>
             </ImgCrop>
         </div>

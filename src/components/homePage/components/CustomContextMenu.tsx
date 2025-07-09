@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react';
 import { copyLink, notAllowed, report, saveVideo, send, repost, blackHeartOutline, blackCrossHeart } from '../../../icons';
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
+import cookies from 'js-cookie';
 
 
 function CustomContextMenu({ x, y, onClose, onDownload, onCopyLink,popupHandler, onVideoDetail,isSharedVideo, post = {} }: any) {
@@ -15,6 +18,29 @@ function CustomContextMenu({ x, y, onClose, onDownload, onCopyLink,popupHandler,
             document.removeEventListener('click', handleClickOutside);
         };
     }, [onClose]);
+
+    interface Languages {
+                code: string;
+                name: string;
+                country_code: string;
+    }
+        
+  const languages: Languages[] = [
+      {
+          code: 'en',
+          name: 'English',
+          country_code: 'gb',
+      },
+      {
+          code: 'ar',
+          name: 'العربية',
+          country_code: 'sa',
+      },
+  ];
+
+  const currentLanguageCode = cookies.get('i18next') || 'en';
+  const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
+  const { t, i18n } = useTranslation();
     
     return (
         <div className='custom-context-menu'
@@ -75,7 +101,7 @@ function CustomContextMenu({ x, y, onClose, onDownload, onCopyLink,popupHandler,
                     />
                 </svg>
 
-                <span className='pl-2'>Download video</span>
+                <span className='pl-2'>{t('Download video')}</span>
             </div>
             )}
             <div
@@ -122,7 +148,7 @@ function CustomContextMenu({ x, y, onClose, onDownload, onCopyLink,popupHandler,
                     />
                 </svg>
 
-                <span className='pl-2'>Copy link</span>
+                <span className='pl-2'>{t('Copy link')}</span>
             </div>
             <div
                 style={{
@@ -150,7 +176,7 @@ function CustomContextMenu({ x, y, onClose, onDownload, onCopyLink,popupHandler,
                         />
                     </svg>
 
-                <span className='pl-2'>Send to friends</span>
+                <span className='pl-2'>{t('Send to friends')}</span>
             </div>
             {isSharedVideo? '': <div
                 style={{
@@ -177,7 +203,7 @@ function CustomContextMenu({ x, y, onClose, onDownload, onCopyLink,popupHandler,
                         />
                     </svg>
 
-                <span className='pl-2'>View video details</span>
+                <span className='pl-2'>{t('View video details')}</span>
             </div> 
             }
         </div>

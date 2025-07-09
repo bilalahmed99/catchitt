@@ -35,6 +35,9 @@ import { activeLike, commentWhite, likeWhite, musicBlack, shareWhite } from '../
 import { showToastSuccess, STATUS_CODE } from '../../utils/constants';
 import { logPostStats } from '../../utils/helpers';
 import Tooltip from '@mui/material/Tooltip';
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
+import cookies from 'js-cookie';
 
 
 export const Profile = (props: any) => {
@@ -78,6 +81,29 @@ export const Profile = (props: any) => {
             showToastSuccess('Embed Code Copied.');
         });
     };
+
+    interface Languages {
+                code: string;
+                name: string;
+                country_code: string;
+    }
+        
+    const languages: Languages[] = [
+        {
+            code: 'en',
+            name: 'English',
+            country_code: 'gb',
+        },
+        {
+            code: 'ar',
+            name: 'العربية',
+            country_code: 'sa',
+        },
+    ];
+
+    const currentLanguageCode = cookies.get('i18next') || 'en';
+    const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
+    const { t, i18n } = useTranslation();
 
     // @ts-ignore
     const dispatch = useDispatch();
@@ -612,7 +638,7 @@ export const Profile = (props: any) => {
                     />
                     <div className={styles.tabs}>
                         {tabs.map((item) => (
-                              <Tooltip title={item.title} arrow key={item.key}>
+                              <Tooltip title={t(item.title)} arrow key={item.key}>
 
                             <div
                                 onClick={() => tabChangeHandler(item?.title)}
@@ -636,7 +662,7 @@ export const Profile = (props: any) => {
                                             `}
                                             onClick={() => {setActiveSort('latest'); sortData('latest')}}
                                         >
-                                            <span className={`${style.button} ${style.radiusLeft}`}>Latest</span>
+                                            <span className={`${style.button} ${style.radiusLeft}`}>{t('Latest')}</span>
                                         </div>
 
                                         {/* 'Popular' tab */}
@@ -647,7 +673,7 @@ export const Profile = (props: any) => {
                                             `}
                                             onClick={() => {setActiveSort('popular'); sortData('popular')}}
                                         >
-                                            <span className={style.button}>Popular</span>
+                                            <span className={style.button}>{t('Popular')}</span>
                                         </div>
 
                                         {/* 'Oldest' tab */}
@@ -658,7 +684,7 @@ export const Profile = (props: any) => {
                                             `}
                                             onClick={() => {setActiveSort('oldest'); sortData('oldest')}}
                                         >
-                                            <span className={`${style.button} ${style.radiusRight}`}>Oldest</span>
+                                            <span className={`${style.button} ${style.radiusRight}`}>{t('Oldest')}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -666,7 +692,7 @@ export const Profile = (props: any) => {
 
                     {/* Videoes Maping */}
                     <div className={styles.contentContainer} style={{ minHeight: '300px' }}>
-                        <p className={styles.title}>{activeTab}</p>
+                        <p className={styles.title}>{t(activeTab)}</p>
                         <div className={`${styles.posts}`}>
                             {(() => {
                                 switch (activeTab) {

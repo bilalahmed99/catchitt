@@ -52,6 +52,9 @@ import { EmojiObjects } from '@mui/icons-material';
 
 // import PopupForDeleteMedia from './popupForDeleteMedia';
 import { useAuthStore } from '../../../store/authStore';
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
+import cookies from 'js-cookie';
 
 
 export default function PopupForVideoPlayer({
@@ -83,6 +86,29 @@ export default function PopupForVideoPlayer({
 
     const [showContextMenu, setShowContextMenu] = useState(false);
     const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
+
+    interface Languages {
+                code: string;
+                name: string;
+                country_code: string;
+    }
+            
+    const languages: Languages[] = [
+        {
+            code: 'en',
+            name: 'English',
+            country_code: 'gb',
+        },
+        {
+            code: 'ar',
+            name: 'العربية',
+            country_code: 'sa',
+        },
+    ];
+
+    const currentLanguageCode = cookies.get('i18next') || 'en';
+    const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
+    const { t, i18n } = useTranslation();
 
 
 
@@ -192,7 +218,7 @@ export default function PopupForVideoPlayer({
             setShowContextMenu(false);
     
             try {
-                showToastSuccess('Video is downloading...');
+                showToastSuccess(t('Video is downloading...'));
                 
                 // Fetch the video data as a blob
                 const videoUrl = info?.reducedVideoUrl?.length > 0
@@ -238,7 +264,7 @@ export default function PopupForVideoPlayer({
         const handleCopyLink = (event: any) => {
             event.stopPropagation();
 
-            copyLinkHandlerWithId(info?.user?._id, info?.mediaId, 'Copied successfully')
+            copyLinkHandlerWithId(info?.user?._id, info?.mediaId, t('Copied successfully'))
             setShowContextMenu(false);
         };
     
@@ -1110,14 +1136,14 @@ export default function PopupForVideoPlayer({
                                             </div>
 
                                             {userId && (loggedUserId !== userId ? <div onClick={handleFollowClick} className="rounded-sm bg-[#FF3B5C] p-2 w-[6rem] h-[2.25rem] flex flex-row justify-center items-center cursor-pointer">
-                                                <p className="text-base text-white font-bold">
+                                                <p className="text-base text-white font-bold a">
                                                     {followLoading ? <CircularProgress
                                                         style={{
                                                             width: 18,
                                                             height: 18,
                                                             color: 'white',
                                                         }}
-                                                    /> : isFollowed ? 'Following' : 'Follow'}
+                                                    /> : isFollowed ? t('Following') : t('Follow')}
                                                 </p>
                                             </div> : <div>
                                                 <IconButton
@@ -1317,7 +1343,7 @@ export default function PopupForVideoPlayer({
                                             className="flex justify-center items-center hover:bg-[#1b1b1b] w-1/5 bg-[#252525] rounded-r-lg py-1.5 px-2 cursor-pointer"
                                         >
                                             <p className="text-white font-bold text-sm">
-                                                Copy Link
+                                                {t('Copy Link')}
                                             </p>
                                         </div>
                                     </div>
@@ -1362,7 +1388,7 @@ export default function PopupForVideoPlayer({
                                         <Paper elevation={3} sx={{ width: '100%', p: 2, height: '20rem', overflowY: 'auto' }}>
                                             <Box display="flex"  alignItems="center" mb={2}>
                                                 <Link to="/coins/recharge" reloadDocument={false}>
-                                                <Typography variant="h6" color="error">Recharge</Typography>
+                                                <Typography variant="h6" color="error">{t('Recharge')}</Typography>
                                                 </Link>
                                                 <Box display="flex" alignItems="center">
                                                     <img style={{ height: '25px', width: '25px', padding: '0.25rem'}} src={caesium} alt="Coin Icon" />
@@ -1453,7 +1479,7 @@ export default function PopupForVideoPlayer({
                                             className="flex justify-center items-center py-2 px-6 flex-1 cursor-pointer"
                                         >
                                             <p className="text-white text-sm font-bold">
-                                                Comments (<CountUp start={0} delay={0.1} duration={0.2} end={videoComments?.items?.length} />)
+                                                {t('Comments')} (<CountUp start={0} delay={0.1} duration={0.2} end={videoComments?.items?.length} />)
                                             </p>
                                         </div>
                                         {/* <div
@@ -1492,7 +1518,7 @@ export default function PopupForVideoPlayer({
                                         endMessage={
                                             <div className="flex flex-row justify-center items-center mt-3">
                                                 <p className="text-white font-normal text-sm">
-                                                    {videoComments?.totalItems === 0 ? 'Be the first to comment' : 'No more comments'}
+                                                    {videoComments?.totalItems === 0 ? t('Be the first to comment') : t('No more comments')}
                                                 </p>
                                             </div>
                                         }
@@ -1568,7 +1594,7 @@ export default function PopupForVideoPlayer({
                                                                             onClick={() => { setCurrentCommentIndex(comment_index); setIsReplyToCommentClicked(true) }}
                                                                             className="text-[#FFFFFF80] font-normal text-[0.938rem] cursor-pointer"
                                                                         >
-                                                                            Reply
+                                                                            {t('Reply')}
                                                                         </p>
                                                                         {comment_index === currentCommentIndex &&
                                                                             isReplyToCommentClicked && (
@@ -1583,7 +1609,7 @@ export default function PopupForVideoPlayer({
                                                                                                 )
                                                                                             }
                                                                                             maxLength={150}
-                                                                                            placeholder="Add comment..."
+                                                                                            placeholder={t("Add comment...")}
                                                                                             type="text"
                                                                                             className="bg-transparent placeholder-[#4d4e58 text-[#d5cbcb] w-full"
                                                                                             required
@@ -1637,7 +1663,7 @@ export default function PopupForVideoPlayer({
                                                                                                 : 'text-[#FFFFFF57]'
                                                                                                 } font-semibold text-base`}
                                                                                         >
-                                                                                            Post
+                                                                                            {t('Post')}
                                                                                         </p>
                                                                                     </div>
                                                                                     )}
@@ -1742,7 +1768,7 @@ export default function PopupForVideoPlayer({
                                                                             }}
                                                                             className="font-semibold text-base mb-1"
                                                                         >
-                                                                            Report
+                                                                            {t('Report')}
                                                                         </span>
                                                                     </div>
                                                                     {/* Tooltip arrow */}
@@ -1964,7 +1990,7 @@ export default function PopupForVideoPlayer({
                                                                                                     }}
                                                                                                     className="font-semibold text-base mb-1"
                                                                                                 >
-                                                                                                    Report
+                                                                                                    {t('Report')}
                                                                                                 </span>
                                                                                             </div>
                                                                                             {/* Tooltip arrow */}
@@ -2039,7 +2065,7 @@ export default function PopupForVideoPlayer({
                                                                         className="flex flex-row justify-end w-full items-center gap-2 text-left hover:underline decoration-[#16182380] cursor-pointer mt-[0.688rem]"
                                                                     >
                                                                         <p className="text-[#16182380] font-medium text-sm">
-                                                                            Hide
+                                                                            {t('Hide')}
                                                                         </p>
                                                                         <img
                                                                             className="w-2.5 h-2.5 object-contain cursor-pointer animate-bounce"
@@ -2059,7 +2085,7 @@ export default function PopupForVideoPlayer({
                                         ))}
                                     </InfiniteScroll>:<div className="flex flex-row justify-center items-center mt-3">
                                 <p className="font-bold text-xl text-white">
-                                    Comments are disabled
+                                    {t('Comments are disabled')}
                                 </p>
                             </div>}
 
@@ -2099,8 +2125,8 @@ export default function PopupForVideoPlayer({
                                                     onKeyDown={handleKeyDown}
                                                     maxLength={150}
                                                     placeholder={`${isUserLoggedIn()
-                                                        ? 'Add comment...'
-                                                        : 'Log in to comment'
+                                                        ? t('Add comment...')
+                                                        : t('Log in to comment')
                                                         }`}
                                                     type="text"
                                                     readOnly={!isUserLoggedIn()}
@@ -2157,7 +2183,7 @@ export default function PopupForVideoPlayer({
                                                                 width: 18,
                                                                 height: 18,
                                                                 color: 'red',
-                                                            }} /> : 'Post'}
+                                                            }} /> : t('Post')}
                                                     </p>
                                                 </div>
                                             )}

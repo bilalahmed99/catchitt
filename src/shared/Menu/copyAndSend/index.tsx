@@ -5,6 +5,10 @@ import Menu, { MenuProps } from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import * as React from 'react';
 import {useEffect} from 'react';
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
+import cookies from 'js-cookie';
+
 import {
     copyLink,
     send,
@@ -32,6 +36,29 @@ export default function COPY_AND_SEND_MENU({ setIsEmbedModalOpen, copyHandler, B
     const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
+
+    interface Languages {
+                code: string;
+                name: string;
+                country_code: string;
+    }
+        
+    const languages: Languages[] = [
+        {
+            code: 'en',
+            name: 'English',
+            country_code: 'gb',
+        },
+        {
+            code: 'ar',
+            name: 'العربية',
+            country_code: 'sa',
+        },
+    ];
+
+    const currentLanguageCode = cookies.get('i18next') || 'en';
+    const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
+    const { t, i18n } = useTranslation();
 
     const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
         setSelectedIndex(index);
@@ -195,37 +222,37 @@ export default function COPY_AND_SEND_MENU({ setIsEmbedModalOpen, copyHandler, B
                     <MenuItem onClick={handleClose} style={{ padding: '0px', margin: '0px' }}>
                         <div className={`${style.menuItem} ${isDarkTheme?'hover:bg-custom-dark-222':'hover:bg-slate-100'}`} onClick={copyLinkHandler}>
                             <img src={copyLink} />
-                            <p className={`${style.p} ${style.black_500}`}>Copy link</p>
+                            <p className={`${style.p} ${style.black_500}`}>{t('Copy link')}</p>
                         </div>
                     </MenuItem>
                     <MenuItem onClick={handleClose} style={{ padding: '0px', margin: '0px' }}>
                         <div className={`${style.menuItem} ${isDarkTheme?'hover:bg-custom-dark-222':'hover:bg-slate-100'}`} onClick={() => setIsEmbedModalOpen(true)}>
                             <img src={embedShare} />
-                            <p className={`${style.p} ${style.black_500}`}>Embed</p>
+                            <p className={`${style.p} ${style.black_500}`}>{t('Embed')}</p>
                         </div>
                     </MenuItem>
                     <MenuItem onClick={handleClose} style={{ padding: '0px', margin: '0px' }}>
                         <div className={`${style.menuItem} ${isDarkTheme?'hover:bg-custom-dark-222':'hover:bg-slate-100'}`} onClick={() => shareProfileby.whatsapp(userName)}>
                             <img src={whatsappShare} />
-                            <p className={`${style.p} ${style.black_500}`}>Whatsapp</p>
+                            <p className={`${style.p} ${style.black_500}`}>{t('Whatsapp')}</p>
                         </div>
                     </MenuItem>
                     <MenuItem onClick={handleClose} style={{ padding: '0px', margin: '0px' }}>
                         <div className={`${style.menuItem} ${isDarkTheme?'hover:bg-custom-dark-222':'hover:bg-slate-100'}`} onClick={() => shareProfileby.facebook(userName)}>
                             <img src={facebookShare} />
-                            <p className={`${style.p} ${style.black_500}`}>Facebook</p>
+                            <p className={`${style.p} ${style.black_500}`}>{t('Facebook')}</p>
                         </div>
                     </MenuItem>
                     <MenuItem onClick={handleClose} style={{ padding: '0px', margin: '0px' }}>
                         <div className={`${style.menuItem} ${isDarkTheme?'hover:bg-custom-dark-222':'hover:bg-slate-100'}`} onClick={() => shareProfileby.twitter(userName)}>
                             <img src={twitterShare} />
-                            <p className={`${style.p} ${style.black_500}`}>Twitter</p>
+                            <p className={`${style.p} ${style.black_500}`}>{t('Twitter')}</p>
                         </div>
                     </MenuItem>
                     <MenuItem onClick={handleClose} style={{ padding: '0px', margin: '0px' }}>
                         <div className={`${style.menuItem} ${isDarkTheme?'hover:bg-custom-dark-222':'hover:bg-slate-100'}`} onClick={() => shareProfileby.linkedin(userName)}>
                             <img src={linkedInShare} />
-                            <p className={`${style.p} ${style.black_500}`}>LinkedIn</p>
+                            <p className={`${style.p} ${style.black_500}`}>{t('LinkedIn')}</p>
                         </div>
                     </MenuItem>
                 </StyledMenu>
