@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface RankingSettingsModalProps {
   open: boolean;
@@ -21,6 +22,7 @@ interface RankingSettingsModalProps {
   isShowRanking: boolean;
 }
 export default function RankingSettingsModal({ open, onClose, rankingClick, isShowRanking }: RankingSettingsModalProps) {
+  const { t, i18n } = useTranslation();
   const [value, setValue] = useState(isShowRanking ? 'show' : 'hide');
   const API_KEY = process.env.VITE_API_URL;
   const token = localStorage.getItem('token');
@@ -92,10 +94,10 @@ export default function RankingSettingsModal({ open, onClose, rankingClick, isSh
       <DialogActions sx={{ px: 3, py: 2, borderTop: '1px solid #ccc' }}>
         <Button onClick={onClose} variant="outlined"  color="inherit" sx={{           color: themeColor === 'dark' ? '#fff' : '#000',
  textTransform: 'capitalize', px: 3, borderColor: '#ccc' }}>
-          Cancel
+          {t('livestream.cancel')}
         </Button>
         <Button variant="contained" onClick={() => { onClose(); rankingClickInternal(); }}   sx={{px:4, backgroundColor: '#F9184C', textTransform: 'capitalize' }}>
-          Save
+          {t('livestream.save')}
         </Button>
       </DialogActions>
     </Dialog>

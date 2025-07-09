@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import KeywordFilters from "./keyword-filters";
+import { useTranslation } from 'react-i18next';
 
 const API_KEY = process.env.VITE_API_URL;
 
@@ -9,6 +10,7 @@ interface KeywordsPageProps {
 }
 
 const KeywordsPage: React.FC<KeywordsPageProps> = ({ isAddKeywordPage }) => {
+  const { t, i18n } = useTranslation();
   const { token } = useSelector((store: any) => store?.reducers?.profile);
   const [keywords, setKeywords] = useState<any[]>([]);
   const [showAddKeyword, setShowAddKeyword] = useState(false);
@@ -86,7 +88,7 @@ const KeywordsPage: React.FC<KeywordsPageProps> = ({ isAddKeywordPage }) => {
         className="bg-[#FE2C55] text-white font-medium text-base px-4 py-2 mt-4 rounded-md"
         onClick={() => {setShowAddKeyword(true); isAddKeywordPage(true); setShowAddButton(false);}}
       >
-        + Add keyword
+        + {t('livestream.add_keyword')}
       </button>}
 
       {/* Show Add Keyword Form */}

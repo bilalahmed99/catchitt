@@ -10,13 +10,14 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Mangnifier from '../../assets/postLive/Magnifier.svg';
-
+import { useTranslation } from 'react-i18next';
 
 interface BlockedKeywordsFAQsProps {
     onClose: () => void;
 }
 
 const BlockedKeywordsFAQs = ({ onClose }: BlockedKeywordsFAQsProps) => {
+    const { t, i18n } = useTranslation();
     return (
         <Box sx={{
             maxWidth: 400,
@@ -43,7 +44,7 @@ const BlockedKeywordsFAQs = ({ onClose }: BlockedKeywordsFAQsProps) => {
                     <ArrowBackIosNewIcon sx={{ color: 'text.primary' }} />
                 </IconButton>
                 <Typography variant="h6" fontWeight={600} sx={{ flexGrow: 1, }}>
-                    Faqs
+                    {t('livestream.faqs')}
                 </Typography>
             </Box>
 
@@ -197,7 +198,7 @@ const BlockedKeywordsFAQs = ({ onClose }: BlockedKeywordsFAQsProps) => {
                             },
                         }}
                     >
-                        <Typography sx={{ fontSize: 14 }} fontWeight={500}>Block similar versions</Typography>
+                        <Typography sx={{ fontSize: 14 }} fontWeight={500}>{t('livestream.block_similar_versions')}</Typography>
                     </AccordionSummary>
                     <AccordionDetails 
                     sx={{

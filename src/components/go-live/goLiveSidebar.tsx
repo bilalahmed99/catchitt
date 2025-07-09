@@ -14,6 +14,7 @@ import PopupForGetApp from '../../shared/components/PopupForGetApp';
 // import Search from '../../shared/navbar/components/Search';
 import { createIcon, defaultAvatar, logo, logoS, logoAuth, logoAuthWhite } from '../../icons';
 import CustomButton from '../../shared/buttons/CustomButton';
+import { useTranslation } from 'react-i18next';
 
 export interface SideNavBarProps {
     className?: string;
@@ -24,6 +25,7 @@ export interface SideNavBarProps {
 export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps) => {
 
     const [logo, setLogo] = useState(logoAuth);
+    const { t, i18n } = useTranslation();
 
     useEffect(() => {
         var themeColor = window.localStorage.getItem('theme');
@@ -266,7 +268,7 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                         <path d="M6.85156 12.9661L9.85156 10.1328" stroke="black" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                     </span>
-                    <p className={`${styles.linkWord} font-medium`}>Back</p>
+                    <p className={`${styles.linkWord} font-medium`}>{t('livestream.goback')}</p>
                 </div>
                 <Link to="/live/discover" reloadDocument={false} style={{ textDecoration: 'none' }}>
                     <div
@@ -282,7 +284,7 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                             fill={`${pathname.includes('/live/discover') ? 'rgb(255, 59, 92)': textColor}`}
                             />
                         </svg>
-                        <p className={`${styles.linkWord} font-medium`}>Discover live</p>
+                        <p className={`${styles.linkWord} font-medium`}>{t('livestream.discover_live')}</p>
                     </div>
                 </Link>   
                 <Link to="/prelive" reloadDocument={false} style={{ textDecoration: 'none' }}>
@@ -304,7 +306,7 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                                 stroke={`${pathname.includes('/home') ? 'rgb(255, 59, 92)': textColor}`}  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             />
                             </svg>
-                        <p className={`${styles.linkWord} ${textColor} font-medium pl-0`}>Go live</p>
+                        <p className={`${styles.linkWord} ${textColor} font-medium pl-0`}>{t('livestream.go_live')}</p>
                     </div>
                 </Link>
 
@@ -323,7 +325,7 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                         <path d="M1.39502 9.58839V18.6154C1.39502 19.72 2.29045 20.6154 3.39502 20.6154H17.0251C18.1297 20.6154 19.0251 19.72 19.0251 18.6154V9.58839C19.0251 9.03259 18.7939 8.50185 18.3868 8.12346L11.5717 1.78903C10.8041 1.07559 9.61603 1.07559 8.84847 1.78903L2.03341 8.12346C1.6263 8.50185 1.39502 9.03259 1.39502 9.58839Z" stroke={`${pathname.includes('/home') ? 'rgb(255, 59, 92)': textColor}`}  stroke-width="2"/>
                         <path d="M7.53711 9.68782V16.816C7.53709 16.8952 7.55822 16.9731 7.59831 17.0414C7.63841 17.1098 7.69603 17.1663 7.76522 17.2049C7.83441 17.2436 7.91267 17.2631 7.99192 17.2615C8.07117 17.2598 8.14855 17.2371 8.21606 17.1955L14.0077 13.6315C14.0725 13.5916 14.1261 13.5358 14.1633 13.4693C14.2004 13.4029 14.2199 13.328 14.2199 13.2519C14.2199 13.1758 14.2004 13.1009 14.1633 13.0344C14.1261 12.968 14.0725 12.9122 14.0077 12.8723L8.21606 9.30825C8.14855 9.26671 8.07117 9.24394 7.99192 9.24228C7.91267 9.24063 7.83441 9.26015 7.76522 9.29883C7.69603 9.33751 7.63841 9.39395 7.59831 9.46233C7.55822 9.53071 7.53709 9.60855 7.53711 9.68782Z" fill={`${pathname.includes('/home') ? 'rgb(255, 59, 92)': textColor}`} />
                        </svg>
-                        <p className={`${styles.linkWord} ${textColor} font-medium pl-0`}>Creator tools</p>
+                        <p className={`${styles.linkWord} ${textColor} font-medium pl-0`}>{t('livestream.creater_tools')}</p>
                     </div>
                 </Link>
 
@@ -341,7 +343,7 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                             fill={`${pathname.includes('/live/discover') ? 'rgb(255, 59, 92)': textColor}`}
                             />
                         </svg>
-                        <p className={`${styles.linkWord} font-medium`}>Post go live</p>
+                        <p className={`${styles.linkWord} font-medium`}>{t('livestream.post_go_live')}</p>
                     </div>
                 </Link>
                 <Link to="/liveguest?streamId=bd48be41-ff16-4781-a290-992db0db76ba" reloadDocument={false} style={{ textDecoration: 'none' }}>
@@ -358,7 +360,7 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                             fill={`${pathname.includes('/liveguest?streamId=bd48be41-ff16-4781-a290-992db0db76ba') ? 'rgb(255, 59, 92)': textColor}`}
                             />
                         </svg>
-                        <p className={`${styles.linkWord} font-medium`}>Guest Live</p>
+                        <p className={`${styles.linkWord} font-medium`}>{t('livestream.guest_live')}</p>
                     </div>
                 </Link>
                 <span
@@ -467,7 +469,7 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f2f3f4")}
                              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                             >
-                                <p className='font-medium'>Get Coins </p>
+                                <p className='font-medium'>{t('livestream.get_coins')}</p>
                             </div>
                             {/* <div className='d-flex mt-4 cursor-pointer '>
                                 <p className='font-medium'>Create Seezitt effects </p>
@@ -503,7 +505,7 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f2f3f4")}
                              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
                             >
-                                <p className='font-medium'>Settings </p>
+                                <p className='font-medium'>{t('livestream.settings')} </p>
                             </div>
 
                             
@@ -533,7 +535,7 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                 <div className={` ${styles.sidebarLoginBox} `}>
                  { isUserLoggedIn() ? (
                     <>
-                        <p className={styles.sidebarTextStyle} ><b style={{fontWeight: '600'}}>Following</b>
+                        <p className={styles.sidebarTextStyle} ><b style={{fontWeight: '600'}}>{t('livestream.following')}</b>
                         {/* <br/> Accounts you follow will appear here */}
                         </p>
                         <SuggestedActivity showActivity={true} showSuggestedContent={true} className='py-3' />

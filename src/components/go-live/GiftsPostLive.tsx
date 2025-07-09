@@ -33,6 +33,7 @@ import AboutMe from './AboutSettings';
 
 
 import { styled } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
 
 const CustomSwitch = styled(Switch)(({ theme }) => ({
   width: 36,
@@ -165,6 +166,8 @@ const GiftsData: GiftItem[] = [
     
 
 const GiftsPanel = ({customProps}: {customProps: any}) => {
+
+  const { t, i18n } = useTranslation();
 
   const [profileDetails, setProfileDetails] = useState<any>({
       details: [],

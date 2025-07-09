@@ -51,6 +51,7 @@ import { dark } from '@mui/material/styles/createPalette';
 import { socket } from '../../src/lib/socket';
 import GuestRequestCard from './GuestRequestCard';
 import LiveInviteCard from './InviteGuestLive';
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -122,6 +123,7 @@ const shareOptions = [
 
 function LiveWithChat({ darkTheme }: { darkTheme?: any }) {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const [showTopViewers, setShowTopViewers] = useState(false);
 
 
@@ -2981,7 +2983,7 @@ const isGiftOpenMenu = Boolean(menuGiftAnchorEl);
                 <Box display="flex" justifyContent="space-between " borderTop={'1px solid #ccc'}>
                     <Button variant="outlined" sx={{
                       color : darkTheme ? '#fff' : '#000',width: '50%', borderRadius: 0, border: 'none', py: 2, '&:hover': { backgroundColor: 'rgba(22, 24, 35, 0.12)', border: 'none'}}} onClick={handleCloseReport}>
-                    Cancel
+                    {t('livestream.cancel')}
                     </Button>
                     <Button variant="contained" onClick={()=> submitReport()} sx={{  color : darkTheme ? '#fff' : 'inherit', width: '50%', borderRadius: 0, backgroundColor: 'rgba(22, 24, 35, 0.12)', fontWeight: '600', height: '100%', py: 2, '&:hover': { backgroundColor: 'rgba(22, 24, 35, 0.12)', border: 'none'}}} disabled={!selectedReason}>
                     Submit
