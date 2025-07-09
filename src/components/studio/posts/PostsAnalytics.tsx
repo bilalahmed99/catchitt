@@ -934,7 +934,7 @@ const handleMoreOptionsClose = () => {
         </Box>
 
         <TextField
-          placeholder="Search posts..."
+          placeholder={translate('Search posts')}
           size="small"
           variant="outlined"
           value={searchQuery}
