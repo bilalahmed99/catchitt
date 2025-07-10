@@ -14,6 +14,7 @@ import PopupForGetApp from '../../shared/components/PopupForGetApp';
 
 // import Search from '../../shared/navbar/components/Search';
 import { createIcon, defaultAvatar, logo, logoS, logoAuth, logoAuthWhite } from '../../icons';
+import LanguageModal from './languageModel';
 
 export interface SideNavBarProps {
     className?: string;
@@ -22,6 +23,8 @@ export interface SideNavBarProps {
 }
 
 export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps) => {
+    const [openLang, setOpenLang] = useState(false);
+    const [selectedLang, setSelectedLang] = useState('Arabic');
 
     const [logo, setLogo] = useState(logoAuth);
 
@@ -910,6 +913,17 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                                     </svg>
                                 </span>
                             </div> */}
+                            <div onClick={() => setOpenLang(true)} className='d-flex mt-2 p-2 cursor-pointer rounded-full  justify-between align-items-center'   
+                            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f2f3f4")}
+                            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                            >
+                                <p className='font-medium'>English </p>
+                                <span>
+                                    <svg width="8" height="15" viewBox="0 0 8 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1 1.26953L7 7.26953L1 13.2695" stroke="#D3D3D3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                            </div>
                             <div onClick={openThemeMenu} className='d-flex mt-2 p-2 cursor-pointer rounded-full  justify-between align-items-center'   
                             onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f2f3f4")}
                             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
@@ -1165,7 +1179,14 @@ export const SideNavBar = ({ className, settingsDropdownState }: SideNavBarProps
                 )} 
                  // end new theme 
                  */}
+
             </div>
+            <LanguageModal
+                open={openLang}
+                onClose={() => setOpenLang(false)}
+                selectedLang={selectedLang}
+                setSelectedLang={setSelectedLang}
+            />
         </div>
     );
 };
