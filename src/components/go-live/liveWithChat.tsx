@@ -1217,7 +1217,7 @@ const renderGiftRow = (gifts: any[]) => (
             }}
             onClick={() => {sendGift(gift);}}
           >
-            Send
+            {t('livestream.send')}
           </Button>
         </Box>
       ))}
