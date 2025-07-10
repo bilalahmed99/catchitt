@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { copyLink, notAllowed, report, saveVideo, send, repost, blackHeartOutline, blackCrossHeart } from '../../../icons';
+import { useTranslation } from 'react-i18next';
 
 
 function CustomContextMenu({ x, y, onClose, onDownload, onCopyLink,popupHandler, onVideoDetail,isSharedVideo, post = {} }: any) {
@@ -15,6 +16,7 @@ function CustomContextMenu({ x, y, onClose, onDownload, onCopyLink,popupHandler,
             document.removeEventListener('click', handleClickOutside);
         };
     }, [onClose]);
+    const { t, i18n } = useTranslation();
     
     return (
         <div className='custom-context-menu'
@@ -75,7 +77,7 @@ function CustomContextMenu({ x, y, onClose, onDownload, onCopyLink,popupHandler,
                     />
                 </svg>
 
-                <span className='pl-2'>Download video</span>
+                <span className='pl-2'>{t('DownloadVideo.text')}</span>
             </div>
             )}
             <div
@@ -122,7 +124,7 @@ function CustomContextMenu({ x, y, onClose, onDownload, onCopyLink,popupHandler,
                     />
                 </svg>
 
-                <span className='pl-2'>Copy link</span>
+                <span className='pl-2'>{t('Copylink.text')}</span>
             </div>
             <div
                 style={{
@@ -150,7 +152,7 @@ function CustomContextMenu({ x, y, onClose, onDownload, onCopyLink,popupHandler,
                         />
                     </svg>
 
-                <span className='pl-2'>Send to friends</span>
+                <span className='pl-2'>{t('SendtoFriends.text')}</span>
             </div>
             {isSharedVideo? '': <div
                 style={{
@@ -177,7 +179,7 @@ function CustomContextMenu({ x, y, onClose, onDownload, onCopyLink,popupHandler,
                         />
                     </svg>
 
-                <span className='pl-2'>View video details</span>
+                <span className='pl-2'>{t('Viewvideodetails.text')}</span>
             </div> 
             }
         </div>
