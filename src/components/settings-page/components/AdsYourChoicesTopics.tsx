@@ -158,7 +158,7 @@ const AdsYourChoicesTopics: React.FC = () => {
     <>
     <Box>
         <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0 font-semibold text-xl p-3`}>{t('your.choices')}</h4>
-        <span className='text-left px-3 text-[#000000A6] d-block text-sm'>{t('ads.topicsInterestInfo')}</span>
+        <span className='text-left px-3 text-[#000000A6] d-block text-sm'>{t('topicsInterestInfo')}</span>
         <span className='text-left px-3 text-[#000000A6] font-semibold d-block text-sm mt-3'>{t('manageTopics')}</span>
         {allCategories.items.map((category, index) => (
         <div className="px-3" key={index}>

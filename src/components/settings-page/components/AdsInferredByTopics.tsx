@@ -157,9 +157,9 @@ const AdsInferredByTopics: React.FC = () => {
   return (
     <>
     <Box>
-        <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0 font-semibold text-xl p-3`}>{t('ads.inferredBy')}</h4>
-        <span className='text-left px-3 text-[#000000A6] d-block text-sm'>{t('ads.personalizedDescription')}</span>
-        <span className='text-left px-3 text-[#000000A6] font-semibold d-block text-sm mt-3'>{t('ads.manageTopics')}</span>
+        <h4 className={`${darkTheme ? 'text-white' : 'text-black'} mb-0 font-semibold text-xl p-3`}>{t('inferredBy')}</h4>
+        <span className='text-left px-3 text-[#000000A6] d-block text-sm'>{t('personalizedDescription')}</span>
+        <span className='text-left px-3 text-[#000000A6] font-semibold d-block text-sm mt-3'>{t('manageTopics')}</span>
         {allCategories.items.map((category, index) => (
         <div className="px-3" key={index}>
           <div className={styles.accountCards} onClick={() => openModalList(category)}>
@@ -190,7 +190,7 @@ const AdsInferredByTopics: React.FC = () => {
             </span>
             <Typography id="modal-modal-title" sx={{ textAlign: 'center'}} variant="h5" component="p">{selectedTopic?.name}</Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2, fontSize: '16px' }}>
-              {t('ads.personalizedInferenceDelay')}
+              {t('personalizedInferenceDelay')}
             </Typography>
             <RadioGroup value={isInterested} onChange={(event) => setIsInterested(event.target.value == 'true')}>
             <Box className="mt-3" display="flex" alignItems="center" justifyContent="space-between">
