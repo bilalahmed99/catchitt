@@ -10,6 +10,9 @@ import { TopBar } from '../../top-bar/top-bar';
 import styles from './transaction-history-page.module.scss';
 import Layout from '../../../shared/layout';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
+import cookies from 'js-cookie';
 
 export interface TransactionHistoryPageProps {
     className?: string;
@@ -431,6 +434,29 @@ const TransactionHistoryPage = ({ className }: TransactionHistoryPageProps) => {
     const navigate = useNavigate();
     const [darkTheme, setdarkTheme] = useState('');
 
+    interface Languages {
+                  code: string;
+                  name: string;
+                  country_code: string;
+    }
+        
+    const languages: Languages[] = [
+        {
+            code: 'en',
+            name: 'English',
+            country_code: 'gb',
+        },
+        {
+            code: 'ar',
+            name: 'العربية',
+            country_code: 'sa',
+        },
+    ];
+
+    const currentLanguageCode = cookies.get('i18next') || 'en';
+    const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
+    const { t, i18n } = useTranslation();
+
     const handleGoBack = () => {
         navigate(-1); // Navigate back to the previous page
         setSettingsDropdown(true);
@@ -546,22 +572,22 @@ const TransactionHistoryPage = ({ className }: TransactionHistoryPageProps) => {
                             >
                                 <LeftArrow />
                             </IconButton>
-                            <h4 className={darkTheme !== '' ? 'text-white' : 'text-black'} >Transactions History</h4>
+                            <h4 className={darkTheme !== '' ? 'text-white' : 'text-black'} >{t('Transactions History')}</h4>
                         </div>
                         <div className='flex gap-3 justify-between mb-3 '>
                             <div>
-                                <label htmlFor='startDate'>start Date: </label>
+                                <label htmlFor='startDate'>{t('Start Date:')}</label>
                                 <input className={`py-1 px-2 rounded mx-1 ${darkTheme===''?'bg-gray-300':''}`} type="date" value={transactions.startDate} onChange={alterDate} name="startDate" id="startDate" />
                             </div>
                             <div>
-                                <label htmlFor='endDate'>End Date: </label>
+                                <label htmlFor='endDate'>{t('End Date:')}</label>
                                 <input className={`py-1 px-2 rounded mx-1 ${darkTheme===''?'bg-gray-300':''}`} type="date" value={transactions.endDate} onChange={alterDate} name="endDate" id="endDate" />
                             </div>
                         </div>
                         <div className={styles.tableHeader}>
-                            <h4 className={styles.sectionTitle}>Time & Date</h4>
-                            <h4 className={styles.sectionTitle}>Type</h4>
-                            <h4 className={styles.sectionTitle}>Amount</h4>
+                            <h4 className={styles.sectionTitle}>{t('Time & Date')}</h4>
+                            <h4 className={styles.sectionTitle}>{t('Type')}</h4>
+                            <h4 className={styles.sectionTitle}>{t('Amount')}</h4>
                         </div>
                         <InfiniteScroll
                             dataLength={transactions.items?.length}
