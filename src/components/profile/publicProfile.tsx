@@ -21,6 +21,9 @@ import { useUpdateEffect } from 'react-use';
 import EmbedSharePopup from '../../shared/components/EmbedSharePopup';
 import { showToastSuccess } from '../../utils/constants';
 import Tooltip from '@mui/material/Tooltip';
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
+import cookies from 'js-cookie';
 
 export const PublicProfile = (props: any) => {
     const [storyPopup, setStoryPopup] = useState(false);
@@ -46,6 +49,29 @@ export const PublicProfile = (props: any) => {
     const MemoizedStoriesOnPublicProfile = memo(publicProfileStories);
 
     const embedCode = `<blockquote class="your-embed-class" cite="https://web.seezitt.com/profile/${profileData?.username||''}" data-unique-id=${profileData?.username||''} data-embed-type="creator" style="max-width: 780px; min-width: 288px;" ><section> <a target="_blank" href="https://web.seezitt.com/profile/${profileData?.username||''}">@${profileData?.username||''}</a></section></blockquote>`;
+
+    interface Languages {
+                code: string;
+                name: string;
+                country_code: string;
+    }
+        
+    const languages: Languages[] = [
+        {
+            code: 'en',
+            name: 'English',
+            country_code: 'gb',
+        },
+        {
+            code: 'ar',
+            name: 'العربية',
+            country_code: 'sa',
+        },
+    ];
+
+    const currentLanguageCode = cookies.get('i18next') || 'en';
+    const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
+    const { t, i18n } = useTranslation();
 
      const copyEmbedCodeHandler = () => {
         navigator.clipboard.writeText(embedCode).then(() => {
@@ -260,7 +286,7 @@ export const PublicProfile = (props: any) => {
                     />
                     <div className={styles.tabs}>
                         {tabs.map((item) => (
-                            <Tooltip title={item.title} arrow key={item.key}>
+                            <Tooltip title={t(item.title)} arrow key={item.key}>
                             <div
                                 onClick={() => setActiveTab(item.title)}
                                 style={{
@@ -276,7 +302,7 @@ export const PublicProfile = (props: any) => {
                         ))}
                     </div>
                     <div className={`${styles.contentContainer}`}>
-                        <p className={styles.title}>{activeTab}</p>
+                        <p className={styles.title}>{t(activeTab)}</p>
                         {activeTab === 'Videos' ? (
                             <VideoesMaping videos={videosData} fetchMore={() => setVideosData({ ...videosData, page: videosData.page + 1 })} openVideoModal={onVideoModal} setEditVideo={undefined} isOwnVideo={undefined} />
                         ) : null}

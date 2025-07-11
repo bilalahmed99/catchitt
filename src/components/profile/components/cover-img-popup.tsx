@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import style from './select-profile-img.scss';
 import { Box, Modal, Button } from '@mui/material';
 import { defaultAvatar } from '../../../icons';
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
+import cookies from 'js-cookie';
 
 import CoverCropbox from './cover-cropbox';
 import settingsIcon from '../svg-components/cross-light-icon.svg';
@@ -22,6 +25,30 @@ const CoverImagePopup = ({ open, onCancel, onSelect }: any) => {
     const onImageCropped = (img: string) => {
         onSelect(img);
     };
+
+    interface Languages {
+                code: string;
+                name: string;
+                country_code: string;
+    }
+        
+  const languages: Languages[] = [
+      {
+          code: 'en',
+          name: 'English',
+          country_code: 'gb',
+      },
+      {
+          code: 'ar',
+          name: 'العربية',
+          country_code: 'sa',
+      },
+  ];
+
+  const currentLanguageCode = cookies.get('i18next') || 'en';
+  const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
+  const { t, i18n } = useTranslation();
+
     return (
         <Modal
             open={open}
@@ -55,7 +82,7 @@ const CoverImagePopup = ({ open, onCancel, onSelect }: any) => {
                         }}
                     >
                         <Button variant="contained" sx={secondaryBtn} onClick={onCancel}>
-                            Cancel
+                            {t('Cancel')}
                         </Button>
                     </div>
                 </div>

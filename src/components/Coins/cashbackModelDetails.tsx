@@ -21,9 +21,35 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { modelMininon, modelDiscountDivider, logoAuthWhite, modelCoins, bgModelIcon,} from "../../icons";
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
+import cookies from 'js-cookie';
 
 export default function CashBackWaveDialogDetails({ open , onClose }: { open: any; onClose: any;}) {
   const [tab, setTab] = React.useState(0);
+
+  interface Languages {
+    code: string;
+    name: string;
+    country_code: string;
+  }
+        
+  const languages: Languages[] = [
+      {
+          code: 'en',
+          name: 'English',
+          country_code: 'gb',
+      },
+      {
+          code: 'ar',
+          name: 'العربية',
+          country_code: 'sa',
+      },
+  ];
+
+  const currentLanguageCode = cookies.get('i18next') || 'en';
+  const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
+  const { t, i18n } = useTranslation();
 
   return (
     
@@ -64,7 +90,7 @@ export default function CashBackWaveDialogDetails({ open , onClose }: { open: an
                 }}
                 >
                 <Typography variant="h6" fontWeight="bold">
-                    Cash Back Wave
+                    {t('Cash Back Wave')}
                 </Typography>
                 <img style={{width: '20rem', margin: 'auto'}} src={modelCoins} alt="" />
                 </Box>
@@ -83,7 +109,7 @@ export default function CashBackWaveDialogDetails({ open , onClose }: { open: an
             />
             <Box >
                 <Typography fontSize={12} sx={{ color: "#fff" }} fontWeight="bold">
-                Estimated cash back received:
+                {t('Estimated cash back received:')}
                 </Typography>
                 <Typography sx={{ color: "#fff" }} fontSize={16} fontWeight="bold">
                     USD0.00
@@ -93,7 +119,7 @@ export default function CashBackWaveDialogDetails({ open , onClose }: { open: an
           {/* Referral Block */}
           <Box px={3} py={2}>
             <Typography fontWeight="bold" textAlign={"center"} fontSize={14}>
-                Invite friends to recharge and <b style={{ color: "#f7931e" }}>get up to 3% cash back</b> on their Coin purchases for 7 days
+                {t('Invite friends to recharge and')} <b style={{ color: "#f7931e" }}>{t('get up to 3% cash back')}</b> {t('on their Coin purchases for 7 days')}
             </Typography>
 
             {/* Code Box */}
@@ -119,7 +145,7 @@ export default function CashBackWaveDialogDetails({ open , onClose }: { open: an
                 variant="contained"
                 fullWidth
                 sx={{ mt: 2, backgroundColor: "#f7931e", textTransform: "none", borderRadius: 5 }}>
-                Share invitation link
+                {t('Share invitation link')}
             </Button>
           </Box>
         </Paper>
@@ -180,14 +206,14 @@ export default function CashBackWaveDialogDetails({ open , onClose }: { open: an
 
                 {/* Heading */}
                 <Typography textAlign="center" variant="h6" fontWeight="bold" gutterBottom>
-                Get rewards when you recharge
+                {t('Get rewards when you recharge')}
                 </Typography>
 
                 {/* Cashback Section */}
                 <Box display="flex" alignItems="flex-start" mb={3} position="relative" zIndex={1}>
                     <LockOutlinedIcon sx={{ mr: 2, mt: 0.5, backgroundColor: '#e4e6eb' , padding: 0.35, borderRadius: '50%' }} />
                 <Box width={"100%"}>
-                    <Typography fontWeight="500" >Get cash back when you recharge</Typography>
+                    <Typography fontWeight="500" >{t('Get cash back when you recharge')}</Typography>
                     <Box
                         display="flex"
                         alignItems="center"
@@ -206,7 +232,7 @@ export default function CashBackWaveDialogDetails({ open , onClose }: { open: an
                         5%
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                        Up to USD250 back on 1 order.
+                        {t('Up to USD250 back on 1 order.')}
                     </Typography>
                     </Box>
                 </Box>
@@ -218,7 +244,7 @@ export default function CashBackWaveDialogDetails({ open , onClose }: { open: an
                 <Box display="flex" alignItems="flex-start" position="relative" zIndex={1}>
                 <LockOutlinedIcon sx={{ mr: 2, mt: 0.5, backgroundColor: '#e4e6eb' , padding: 0.35, borderRadius: '50%' }}  />
                 <Box>
-                    <Typography fontWeight="500">Unlock special Gifts</Typography>
+                    <Typography fontWeight="500">{t('Unlock special Gifts')}</Typography>
 
                     <Box display="flex" mt={1}>
                     <img
@@ -228,7 +254,7 @@ export default function CashBackWaveDialogDetails({ open , onClose }: { open: an
                     />
                     <Box>
                         <Typography fontWeight="500" display="flex" alignItems="center">
-                        Sage’s Slash
+                        {t('Sage’s Slash')}
                         <Tooltip title="More info">
                             <InfoOutlinedIcon fontSize="small" sx={{ ml: 1 }} />
                         </Tooltip>
@@ -237,7 +263,7 @@ export default function CashBackWaveDialogDetails({ open , onClose }: { open: an
                         <span style={{ color: "#F4B400", fontWeight: 600 }}>🪙 399</span>
                         </Typography>
                         <Typography variant="caption" sx={{ lineHeight: 1.2 }} color="text.secondary">
-                        Sage could turn a single Coin into many with remarkable ease, as if he were slashing one Coin and creating more.
+                        {t('Sage could turn a single Coin into many with remarkable ease, as if he were slashing one Coin and creating more.')}
                         </Typography>
                     </Box>
                     </Box>
@@ -249,26 +275,21 @@ export default function CashBackWaveDialogDetails({ open , onClose }: { open: an
         {/* Tabs */}
         <Box sx={{ borderTop: "1px solid #ccc", mx:3 }}>
           <Tabs value={tab} onChange={(_, v) => setTab(v)} variant="fullWidth">
-            <Tab label="How it works" />
-            <Tab label="Rules" />
+            <Tab label={t('HOW IT WORKS')} />
+            <Tab label={t('RULES')} />
           </Tabs>
           <Box sx={{ p: 2 }}>
             {tab === 0 ? (
               <Typography fontSize={14}>
                 <ul  style={{ listStyle: "disc", padding: 10 }}>
                     <li className="pb-2">
-                       Log in to unlock your invitation link and code.
+                       {t('Log in to unlock your invitation link and code.')}
                     </li>
                     <li>
-                       Invite your eligible friends to recharge on
-                        seezitt.com/coin. After an eligible friend completes their
-                        first recharging via your invitation, you can get up to 0%
-                        in cash back on their following orders over the next 7
-                        days.
+                      {t('Invite your eligible friends to recharge on seezitt.com/coin. After an eligible friend completes their first recharging via your invitation, you can get up to 0% in cash back on their following orders over the next 7 days.')}
                     </li>
                     <li>
-                       Recharge at least 1000 Coins 3 times to unlock special
-                        Gifts. You can send them to the content you like.
+                      {t('Recharge at least 1000 Coins 3 times to unlock special Gifts. You can send them to the content you like.')}
                     </li>
                 </ul>
               </Typography>
@@ -276,18 +297,10 @@ export default function CashBackWaveDialogDetails({ open , onClose }: { open: an
               <Typography fontSize={14}>
                 <ul style={{ listStyle: "disc", padding: 10 }}>
                     <li className="pb-2">
-                        If your eligible friends have never recharged on
-                        seezitt.com/coin before the promotion, you’ll get 0% cash back on their website orders made through your
-                        invitation. If they have but never recharged from the
-                        home screen, you’ll get 0.0% cash back on their home
-                        screen orders made through your invitation.
+                      {t('recharge.rule1')}
                     </li>
                     <li>
-                        If your eligible friends have never recharged on
-                        seezitt.com/coin before the promotion, you’ll get 0% cash back on their website orders made through your
-                        invitation. If they have but never recharged from the
-                        home screen, you’ll get 0.0% cash back on their home
-                        screen orders made through your invitation.
+                      {t('recharge.rule2')}
                     </li>
                 </ul>
               </Typography>

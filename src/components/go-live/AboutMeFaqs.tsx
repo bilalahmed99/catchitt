@@ -15,25 +15,16 @@ const TopViewersFAQ: React.FC<AboutMeFaqs> = ({ onBack }) => {
     const { t, i18n } = useTranslation();
     return (
         <Box
-            sx={{
-                backgroundColor: '#fff',
-                color: '#000',
-                mx: 'auto',
-                textAlign: 'left',
-                position: 'relative',
-                height: '90vh',
-                display: 'flex',
-                flexDirection: 'column',
-                overflow: 'hidden',
-                mt: 1,
-            }}
+            sx={{ width: 360, mx: 'auto',  position: 'fixed', right: 0, top: 0, height: '100vh', bgcolor: '#fff', zIndex: 2, }}
         >
             <Box
                 mb={2}
                 sx={{
                     flexShrink: 0,
                     borderBottom: '1px solid #eee',
-                    pb: 1
+                    pb: 1,
+                    height: 50,
+                    pt: 1.5
                 }}
             >
                <Box

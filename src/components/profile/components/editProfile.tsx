@@ -10,6 +10,9 @@ import styles from './editProfile.module.scss';
 import SelectProfileImgPopup from './select-profile-img';
 import { getCountryPhoneLengthFromIso } from '../../../utils/helpers';
 import settingsIcon from '../svg-components/cross-light-icon.svg';
+import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
+import cookies from 'js-cookie';
 
 
 interface Props {
@@ -56,6 +59,29 @@ export default function EditProfile({ onCancel, onSave }: Props) {
     const [lightTheme, setlightTheme] = useState('bg-custom-light');
 
     const calenderRef = useRef<HTMLInputElement>(null);
+
+    interface Languages {
+                code: string;
+                name: string;
+                country_code: string;
+    }
+        
+  const languages: Languages[] = [
+      {
+          code: 'en',
+          name: 'English',
+          country_code: 'gb',
+      },
+      {
+          code: 'ar',
+          name: 'العربية',
+          country_code: 'sa',
+      },
+  ];
+
+  const currentLanguageCode = cookies.get('i18next') || 'en';
+  const currentLanguage = languages.find((l) => l.code === currentLanguageCode);
+  const { t, i18n } = useTranslation();
 
     useEffect(() => {
         var themeColor = window.localStorage.getItem('theme');
@@ -408,7 +434,7 @@ export default function EditProfile({ onCancel, onSave }: Props) {
                                                 className='h-8 w-8 object-contain cursor-pointer absolute top-8 right-8 rounded-full bg-[#54545480]'
                                                 src={settingsIcon} alt="" />            
                         </div>
-                        <div className={styles['div-2']}>Edit Profile</div>
+                        <div className={styles['div-2']}>{t('Edit Profile')}</div>
 
                         <div className={styles.profileBox}>
                             <Avatar
@@ -421,7 +447,7 @@ export default function EditProfile({ onCancel, onSave }: Props) {
                                 <EditProfileIcon />
                             </div>
                         </div>
-                        <div className={styles['div-3']}>Username</div>
+                        <div className={styles['div-3']}>{t('Username')}</div>
                         <input
                             disabled
                             placeholder=""
@@ -430,26 +456,25 @@ export default function EditProfile({ onCancel, onSave }: Props) {
                             onChange={(e) => setUsername(e.target.value)}
                         />
                         <div className={styles['div-5']}>
-                            Usernames can only contain letters, numbers, underscores, and periods.
-                            Changing your username will also change your profile link.
+                            {t('Usernames can only contain letters, numbers, underscores, and periods. Changing your username will also change your profile link.')}
                         </div>
-                        <div className={styles['div-6']}>Name</div>
+                        <div className={styles['div-6']}>{t('Name')}</div>
                         <input
                             className={styles['input-2']}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
                         <div className={styles['div-9']}>
-                            Your nickname can only be changed once every 7 days.
+                            {t('Your nickname can only be changed once every 7 days.')}
                         </div>
-                        <div className={styles['div-10']}>Bio</div>
+                        <div className={styles['div-10']}>{t('Bio')}</div>
                         <textarea
                             className={styles.textarea}
                             value={bio}
                             onChange={bioChangeHandler}
                         />
                         <div className={styles['div-11']}>{bio.length}/80</div>
-                        <div className={styles['div-12']}>Business Phone number</div>
+                        <div className={styles['div-12']}>{t('Business Phone number')}</div>
                         {/* <input
                             className={styles['input-3']}
                             value={phoneNumber}
@@ -496,7 +521,7 @@ export default function EditProfile({ onCancel, onSave }: Props) {
                                             />
                                             <input
                                                 type="text"
-                                                placeholder="Search"
+                                                placeholder={t('Search')}
                                                 className="w-full text-sm font-normal caret-red-500 bg-white"
                                                 value={
                                                     searchQuery
@@ -570,7 +595,7 @@ export default function EditProfile({ onCancel, onSave }: Props) {
                             <input
                                 className="w-2/3 bg-login-btn"
                                 type="text" // ✅ Change from "number" to "text" to enforce max length
-                                placeholder="Phone number"
+                                placeholder={t('Phone number')}
                                 value={phoneNumber}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                     const { value } = e.target;
@@ -582,7 +607,7 @@ export default function EditProfile({ onCancel, onSave }: Props) {
                                 }}
                             />
                         </div>
-                        <div className={styles['div-13']}>Email</div>
+                        <div className={styles['div-13']}>{t('Email')}</div>
                         <input
                             disabled
                             type="email"
@@ -590,13 +615,13 @@ export default function EditProfile({ onCancel, onSave }: Props) {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
-                        <div className={styles['div-14']}>Website</div>
+                        <div className={styles['div-14']}>{t('Website')}</div>
                         <input
                             className={styles['input-5']}
                             value={website}
                             onChange={(e) => setWebsite(e.target.value)}
                         />
-                        <div className={styles['div-15']}>Category</div>
+                        <div className={styles['div-15']}>{t('Category')}</div>
                         <select
                             className={styles.select}
                             value={category}
@@ -609,7 +634,7 @@ export default function EditProfile({ onCancel, onSave }: Props) {
                                 </option>
                             ))}
                         </select>
-                        <div className={styles['div-17']}>Birth Date</div>
+                        <div className={styles['div-17']}>{t('Birth Date')}</div>
                         <div className={`${styles.dateInputWrapper} mt-3`}>
                             <input
                                 className={`${styles['input-5']} w-full mt-0`}
@@ -621,7 +646,7 @@ export default function EditProfile({ onCancel, onSave }: Props) {
                             <span onClick={showSiblingCalender} className={styles.customIcon}>📅</span>
                         </div>
 
-                        <div className={styles['div-25']}>Country</div>
+                        <div className={styles['div-25']}>{t('Country')}</div>
                         <select
                             className={styles.select}
                             value={country}
@@ -638,10 +663,10 @@ export default function EditProfile({ onCancel, onSave }: Props) {
                         </select>
                         <div className={styles['div-27']}>
                             <div onClick={onCancel} className={styles['div-28']}>
-                                Cancel
+                                {t('Cancel')}
                             </div>
                             <button type="submit" style={{ background: '#DE0C0C', color: 'white' }}>
-                                Save
+                                {t('Save')}
                             </button>
                         </div>
                     </div>
