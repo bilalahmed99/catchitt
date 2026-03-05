@@ -1,6 +1,7 @@
 import {create} from 'zustand';
 
 interface AuthState {
+  // test this repo catchitt
   isLoggedIn: boolean;
   accountType: string | null;
   _id: string | null;
